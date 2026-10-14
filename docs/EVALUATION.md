@@ -54,6 +54,10 @@ All compared policies use the same validation and test seeds.
 4. both leg bodies horizontally between the helipad flags (x read from `env.unwrapped.helipad_x1/x2`);
 5. final |angle| ≤ 0.35 rad.
 
+**Leg naming.** Gymnasium documents observation 6 as the *left* leg and 7 as the *right* leg, but the
+first leg body (whose flag is observation 6) is created on the **+x** side (screen right). LunarLab keeps the
+documented indices and notes the physical side in its labels; the 3-D replay lights the matching foot.
+
 **Contact-flag quirk (gymnasium 1.4.0).** The environment keeps one boolean per leg: `BeginContact` sets it,
 `EndContact` clears it. When a leg slides across the joint between two terrain edge fixtures, the new contact
 begins before the old one ends, so the flag reads 0 while the leg is still on the ground. With Gymnasium's

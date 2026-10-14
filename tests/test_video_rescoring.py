@@ -76,3 +76,11 @@ def test_rescoring_matches_recorded_terms_and_flags_scope():
         assert pot["discounted"]["terms"]["potential_shaping"] == pytest.approx(-10.0 * phi0, abs=1e-4)
     assert set(hov["by_phase"]["hover_bonus"]) == {"hover", "airborne", "ground_contact", "final_step"}
     assert len(res["cumulative_original"]) == len(res["series_index"])
+
+
+def test_recorded_scene_matches_seed_rederivation():
+    from lunarlab.env import scene_for_seed
+
+    meta = record_demo("random", episode_seed=20_006)
+    t = read_json(find_recording(meta["recording_id"])[0])
+    assert t["scene"] == scene_for_seed(20_006)

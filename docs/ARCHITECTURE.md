@@ -43,6 +43,7 @@ server.
 | `lunarlab/server/` | FastAPI app, request schemas, security middleware, static UI |
 | `lunarlab/cli.py`, `doctor.py`, `benchmark.py` | command line, installation checks, throughput benchmark |
 | `frontend/src/` | React UI: `pages/` (one per view), `components/` (ui, charts, jobs, launch), `lib/` (API client, types, formatting) |
+| `frontend/src/components/Scene3D.tsx` | 3-D flight reconstruction (three.js, lazy-loaded): recorded pose, actions and contacts on the episode's real terrain (`GET /api/recordings/{id}/scene`) |
 | `tests/` | pytest suite; `frontend/e2e/` Playwright browser flows |
 
 ## Wrapper order and who sees which reward
@@ -155,4 +156,5 @@ There are no accounts; the safeguards are local-web hygiene:
 | Polling, not websockets | robust across reconnects; the UI never sits in the training loop |
 | Files as ground truth, SQLite as index | CLI and web share one data model; large artifacts never enter SQLite |
 | H.264 MP4 with a keyframe every 25 frames | browser-playable, frame-accurate seeking; JPEG-frame fallback is verified in tests |
+| 3-D view reconstructed from telemetry, footage kept | LunarLander is 2-D; the 3-D view uses only recorded data on the simulation plane (pose, actions, contacts, the env's own terrain `sky_polys` and flags) and labels depth, lighting, particles and model as illustrative |
 | Validation every 50k transitions on 10 seeds | checkpoint selection on original reward at modest cost (~20 passes per STANDARD run) |

@@ -614,6 +614,17 @@ def recording(recording_id: str) -> dict:
     return _recording(recording_id)[2]
 
 
+@router.get("/recordings/{recording_id}/scene")
+def recording_scene(recording_id: str) -> dict:
+    """Terrain and lander geometry for the 3-D replay of one recording."""
+    from lunarlab.env import scene_for_seed
+
+    _, _, data = _recording(recording_id)
+    if data.get("scene"):
+        return {**data["scene"], "source": "recorded with the episode"}
+    return {**scene_for_seed(data["episode_seed"]), "source": "re-derived from the episode seed"}
+
+
 @router.get("/recordings/{recording_id}/video")
 def recording_video(recording_id: str) -> FileResponse:
     _, vdir, data = _recording(recording_id)

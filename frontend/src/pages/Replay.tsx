@@ -1,6 +1,6 @@
 import clsx from 'clsx'
 import { ArrowLeftRight, ChevronFirst, ChevronLast, ChevronLeft, ChevronRight, Pause, Play } from 'lucide-react'
-import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { Suspense, lazy, memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router'
 import { CartesianGrid, Line, LineChart, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import { Legend } from '../components/charts'
@@ -10,6 +10,10 @@ import { fmt } from '../lib/format'
 import { useApi } from '../lib/hooks'
 import { SERIES, TERM_COLOR, TERM_LABEL } from '../lib/reward'
 import type { RecordingMeta, Telemetry, TelemetryRow } from '../lib/types'
+
+// The 3-D view pulls in three.js, so it loads only when used.
+const Scene3D = lazy(() => import('../components/Scene3D'))
+type View = '3d' | 'footage'
 
 const ACTIONS = [
   { key: 'noop', short: 'NOOP', label: 'Do nothing' },
@@ -434,6 +438,21 @@ export default function Replay() {
   }, [recordingId, items, navigate])
 
   const telemetry = useApi<Telemetry>(recordingId ? `/api/recordings/${recordingId}` : null)
+  const [view, setViewState] = useState<View>(() => {
+    try {
+      return localStorage.getItem('lunarlab.replayView') === 'footage' ? 'footage' : '3d'
+    } catch {
+      return '3d'
+    }
+  })
+  const setView = (v: View) => {
+    setViewState(v)
+    try {
+      localStorage.setItem('lunarlab.replayView', v)
+    } catch {
+      /* storage unavailable */
+    }
+  }
   const [compareId, setCompareId] = useState<string>('')
   const other = useApi<Telemetry>(compareId ? `/api/recordings/${compareId}` : null)
   useEffect(() => setCompareId(''), [recordingId])
@@ -515,8 +534,35 @@ export default function Replay() {
             <>
               <div className={clsx('grid gap-6', compareId ? '2xl:grid-cols-2' : '2xl:grid-cols-[minmax(0,1.35fr)_minmax(320px,1fr)]')}>
                 <div className="min-w-0 space-y-3">
-                  <FrameSurface t={t} frame={Math.min(pb.frame, t.n_frames - 1)} playing={pb.playing} speed={Number(pb.speed)} onFrame={otherIsMaster ? () => undefined : pb.setFrame} onEnded={() => !otherIsMaster && pb.setPlaying(false)} label={`Flight of ${t.policy.label}, episode seed ${t.episode_seed}`} />
+                  {!compareId && (
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <Segmented
+                        label="Replay view"
+                        value={view}
+                        onChange={setView}
+                        options={[
+                          { value: '3d', label: '3D view' },
+                          { value: 'footage', label: 'Simulator footage' },
+                        ]}
+                      />
+                      <span className="text-[11px] text-ink-3">
+                        {view === '3d' ? 'Reconstructed from recorded telemetry and the episode’s real terrain' : 'Actual Gymnasium frames'}
+                      </span>
+                    </div>
+                  )}
+                  {view === '3d' && !compareId ? (
+                    <Suspense fallback={<div className="flex items-center justify-center rounded-lg border border-line bg-black text-[13px] text-ink-3" style={{ aspectRatio: '3 / 2' }}>Loading 3-D view…</div>}>
+                      <Scene3D t={t} frame={Math.min(pb.frame, t.n_frames - 1)} playing={pb.playing} speed={Number(pb.speed)} onFrame={pb.setFrame} onEnded={() => pb.setPlaying(false)} onUnavailable={() => setView('footage')} label={`Flight of ${t.policy.label}, episode seed ${t.episode_seed}`} />
+                    </Suspense>
+                  ) : (
+                    <FrameSurface t={t} frame={Math.min(pb.frame, t.n_frames - 1)} playing={pb.playing} speed={Number(pb.speed)} onFrame={otherIsMaster ? () => undefined : pb.setFrame} onEnded={() => !otherIsMaster && pb.setPlaying(false)} label={`Flight of ${t.policy.label}, episode seed ${t.episode_seed}`} />
+                  )}
                   {!compareId && <Controls pb={pb} />}
+                  {view === '3d' && !compareId && (
+                    <p className="text-[11px] leading-relaxed text-ink-3">
+                      Position, tilt, engine firings, leg contacts, terrain profile, pad flags and outcome are the recorded data. LunarLander is a 2-D simulation: depth, lighting, particles and the lander model are illustrative. The faint cyan line marks the simulation plane.
+                    </p>
+                  )}
                 </div>
                 {compareId && other.data ? (
                   <div className="min-w-0 space-y-3">

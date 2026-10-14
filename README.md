@@ -31,9 +31,12 @@ on fixed episode seeds.
   documented reward-exploitation rule.
 - A **local job supervisor**: owned worker subprocesses, a queue, cooperative stop at safe boundaries,
   checkpoint resume with lineage, crash reconciliation, and verified process ownership before any kill.
-- **Flight Replay** of real simulator frames with frame-accurate telemetry (observations, actions, per-step
-  reward decomposition), side-by-side flights on a shared seed, and a **Reward Stress Test** that re-scores
-  a recorded trajectory under other reward designs (clearly labelled as re-scoring, not prediction).
+- **Flight Replay** with two synchronized views of every recorded flight: an immersive **3-D reconstruction**
+  (WebGL; the recorded position, tilt, engine firings and leg contacts on the episode's real terrain, with
+  chase / wide / orbit cameras) and the **actual simulator footage**. Both share frame-accurate telemetry
+  (observations, actions, per-step reward decomposition) and side-by-side flights on a shared seed.
+- A **Reward Stress Test** that re-scores a recorded trajectory under other reward designs (clearly labelled
+  as re-scoring, not prediction).
 
 ## Requirements
 
@@ -159,7 +162,7 @@ Nothing is deleted automatically. Checkpoints for a 64×64 MLP are about 150 KB 
 ## Tests
 
 ```powershell
-.venv\Scripts\python.exe -m pytest                       # 113 tests: unit, integration, real PPO, subprocesses
+.venv\Scripts\python.exe -m pytest                       # 115 tests: unit, integration, real PPO, subprocesses
 .venv\Scripts\python.exe -m ruff check lunarlab tests
 cd frontend; npm run typecheck; npm run lint; npm run build
 npx playwright test                                      # 7 browser flows on real backend (uses installed Edge)

@@ -105,10 +105,18 @@ OBSERVATION_FIELDS: tuple[ObservationField, ...] = (
         "20 * omega / FPS (= 0.4 * rad/s).",
     ),
     ObservationField(
-        6, "left_contact", "Left leg contact", "boolean", "1.0 while the left leg touches the ground."
+        6,
+        "left_contact",
+        "Left leg contact",
+        "boolean",
+        "1.0 while this leg's contact flag is set. Gymnasium calls it the left leg; physically it is the leg on the +x side (screen right).",
     ),
     ObservationField(
-        7, "right_contact", "Right leg contact", "boolean", "1.0 while the right leg touches the ground."
+        7,
+        "right_contact",
+        "Right leg contact",
+        "boolean",
+        "1.0 while this leg's contact flag is set. Gymnasium calls it the right leg; physically it is the leg on the -x side (screen left).",
     ),
 )
 OBS_KEYS = tuple(f.key for f in OBSERVATION_FIELDS)
@@ -322,3 +330,60 @@ def decompose_builtin_reward(
     }
     parts["residual"] = float(reward) - sum(parts.values())
     return parts
+
+
+# --------------------------------------------------------------------------- #
+# Scene geometry for the 3-D replay (read-only, from the installed implementation)
+# --------------------------------------------------------------------------- #
+
+
+def scene_geometry(env: gym.Env) -> dict[str, Any]:
+    """Terrain, helipad and lander dimensions of the current episode, in world units.
+
+    The terrain profile is the environment's own ``sky_polys`` (one segment per
+    terrain chunk), so a 3-D replay can show the exact ground the episode used.
+    ``obs_to_world`` converts observation x/y back to world coordinates.
+    """
+    m = _ll_module()
+    u = env.unwrapped
+    geo = geometry()
+    try:
+        polys = u.sky_polys
+        terrain = [[float(polys[0][0][0]), float(polys[0][0][1])]] + [
+            [float(p[1][0]), float(p[1][1])] for p in polys
+        ]
+        helipad = {"x1": float(u.helipad_x1), "x2": float(u.helipad_x2), "y": float(u.helipad_y)}
+        scale = float(m.SCALE)
+        return {
+            "units": "world (Box2D) units; the simulation is 2-D in the x-y plane",
+            "terrain": terrain,
+            "helipad": helipad,
+            "world": {"width": geo.world_w, "height": geo.world_h, "fps": geo.fps},
+            "obs_to_world": {
+                "x_scale": geo.world_w / 2,
+                "x_offset": geo.world_w / 2,
+                "y_scale": geo.world_h / 2,
+                "y_offset": helipad["y"] + geo.leg_down / scale,
+            },
+            "lander": {
+                "hull": [[x / scale, y / scale] for x, y in m.LANDER_POLY],
+                "leg_away": m.LEG_AWAY / scale,
+                "leg_down": m.LEG_DOWN / scale,
+                "leg_half_size": [m.LEG_W / scale, m.LEG_H / scale],
+                "main_engine": [0.0, -10.0 / scale],
+                # action 1 vents from the +x side, action 3 from the -x side (as in the env's particles)
+                "side_engine": [m.SIDE_ENGINE_AWAY / scale, m.SIDE_ENGINE_HEIGHT / scale],
+            },
+        }
+    except AttributeError as exc:
+        raise AdapterError(f"LunarLander scene geometry unavailable: {exc}") from exc
+
+
+def scene_for_seed(seed: int) -> dict[str, Any]:
+    """Re-derive an episode's scene from its seed (terrain depends only on the reset seed)."""
+    env = make_env()
+    try:
+        env.reset(seed=int(seed))
+        return scene_geometry(env)
+    finally:
+        env.close()

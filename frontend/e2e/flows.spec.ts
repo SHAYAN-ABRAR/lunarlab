@@ -34,17 +34,30 @@ test('watch a random agent: real recording opens in Flight Replay', async ({ pag
   await page.getByRole('button', { name: 'Watch Random Agent' }).first().click()
   await page.waitForURL(/\/replay\/.+/, { timeout: 120_000 })
   await expect(page.getByText('RANDOM').first()).toBeVisible()
-  await expect(page.locator('video')).toBeVisible()
+  // Default view: the 3-D reconstruction (WebGL canvas), clearly labelled as such.
+  await expect(page.locator('canvas')).toBeVisible({ timeout: 30_000 })
+  await expect(page.getByText('3-D RECONSTRUCTION')).toBeVisible()
   const slider = page.getByRole('slider', { name: 'Timeline (frame)' })
   await expect(slider).toHaveValue('0')
   await expect(page.getByText('Frame 0 is the reset state: no action yet.')).toBeVisible()
-  // Step forward with the keyboard, then play briefly.
+  // Step forward with the keyboard, then play briefly: the 3-D view drives the shared timeline.
   await page.locator('body').click({ position: { x: 5, y: 5 } })
   await page.keyboard.press('ArrowRight')
   await expect(slider).toHaveValue('1')
   await page.getByRole('button', { name: 'Play' }).click()
   await expect.poll(async () => Number(await slider.inputValue()), { timeout: 15_000 }).toBeGreaterThan(5)
   await page.getByRole('button', { name: 'Pause' }).click()
+  await page.getByRole('radio', { name: 'Wide' }).click()
+  // The actual simulator footage is one click away and keeps the same frame.
+  const at = await slider.inputValue()
+  await page.getByRole('radio', { name: 'Simulator footage' }).click()
+  await expect(page.locator('video')).toBeVisible()
+  await expect(slider).toHaveValue(at)
+  await page.getByRole('button', { name: 'Play' }).click()
+  await expect.poll(async () => Number(await slider.inputValue()), { timeout: 15_000 }).toBeGreaterThan(Number(at))
+  await page.getByRole('button', { name: 'Pause' }).click()
+  await page.getByRole('radio', { name: '3D view' }).click()
+  await expect(page.locator('canvas')).toBeVisible()
   expect(errors).toEqual([])
 })
 

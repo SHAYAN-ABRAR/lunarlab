@@ -35,12 +35,12 @@ _Last updated: 2026-10-15._
 
 | Check | Result |
 |---|---|
-| `python -m pytest` | **113 passed** (unit, real LunarLander integration, real PPO, real worker subprocesses, API) |
+| `python -m pytest` | **115 passed** (unit, real LunarLander integration, real PPO, real worker subprocesses, API) |
 | `ruff check lunarlab tests` / `ruff format --check` | clean |
 | `npm run typecheck` (tsc -b, strict) | clean |
 | `npm run lint` (oxlint, correctness + suspicious) | clean |
 | `npm run build` | OK |
-| `npx playwright test` (installed Edge, real backend on a disposable home) | **7 passed**: empty state, random-agent replay, config revisions, SMOKE job to completion, record+replay trained flight, STANDARD stop → resume → stop, compare/stress-test/learn |
+| `npx playwright test` (installed Edge, real backend on a disposable home) | **7 passed**: empty state, random-agent replay (3-D view, playback, footage toggle), config revisions, SMOKE job to completion, record+replay trained flight, STANDARD stop → resume → stop, compare/stress-test/learn |
 | `python -m lunarlab doctor` | 10/10 OK |
 | `scripts\setup.ps1`, `start.ps1 -Background`, duplicate start, `stop.ps1` (Windows PowerShell 5.1) | OK |
 | SB3 `check_env` on the wrapper with every preset | no warnings |
@@ -62,6 +62,17 @@ _Last updated: 2026-10-15._
 - Report: `reports/exp-20261014-215427-smoke-pipeline-check-2a9a/` (`report.html`, `report.md`, 4 figures,
   `portfolio_summary.md`, where all results correctly read "[not yet measured]").
 - `data/benchmark.json` (throughput, used for time estimates).
+
+## Added after the first delivery
+
+- **3-D Flight Replay** (`frontend/src/components/Scene3D.tsx`, lazy-loaded three.js 0.186): a reconstruction
+  from recorded telemetry on the episode's real terrain (the env's `sky_polys`, stored with new recordings
+  and re-derived from the seed for older ones; equality is tested). Chase, wide and orbit cameras, engine
+  plumes placed where the env emits its particles, exhaust and dust particles, leg-contact lights, an impact
+  burst on crashes, pad lights that turn green only for a strict pad landing, and a HUD. It is labelled as a
+  reconstruction; the simulator footage stays one click away on the same timeline.
+- Found while building it: Gymnasium's "left leg" flag (obs 6) belongs to the leg on the **+x** side; the
+  terrain under the pad is 3.30 (Gymnasium smooths with 0.33 rather than 1/3) while `helipad_y` is 3.333.
 
 ## Issues found and fixed during verification
 

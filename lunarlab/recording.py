@@ -29,7 +29,7 @@ from typing import Any
 import numpy as np
 
 from lunarlab.config import EvalProtocol
-from lunarlab.env import ACTIONS, OBSERVATION_FIELDS, environment_record, geometry, probe
+from lunarlab.env import ACTIONS, OBSERVATION_FIELDS, environment_record, geometry, probe, scene_geometry
 from lunarlab.evaluation import make_eval_env
 from lunarlab.policies import Policy
 from lunarlab.rewards.config import RewardConfig
@@ -195,6 +195,7 @@ def record_episode(
         obs, _ = env.reset(seed=int(episode_seed))
         policy.reset(int(episode_seed))
         p0 = probe(env)
+        scene = scene_geometry(env)
         initial_obs = [float(v) for v in obs]
         sink.add(env.render())
         while True:
@@ -246,6 +247,7 @@ def record_episode(
         "observation_fields": [f.__dict__ for f in OBSERVATION_FIELDS],
         "actions": [a.__dict__ for a in ACTIONS],
         "pad": {"x1_obs": p0.pad_x1_obs, "x2_obs": p0.pad_x2_obs},
+        "scene": scene,
         "reward_config": (reward.model_dump(mode="json") if reward else None),
         "reward_applied_during_recording": False,
         "terms_note": "Additional terms are what the training reward would have added on this episode, "

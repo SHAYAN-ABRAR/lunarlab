@@ -203,3 +203,26 @@ def test_evaluation_is_deterministic_for_fixed_seeds():
     a = evaluate_policy(RandomPolicy(4), seeds, protocol=p, reward=None, gamma=0.999)
     b = evaluate_policy(RandomPolicy(4), seeds, protocol=p, reward=None, gamma=0.999)
     assert [e["original_return"] for e in a["episodes"]] == [e["original_return"] for e in b["episodes"]]
+
+
+def test_scene_geometry_is_real_and_deterministic():
+    from lunarlab.env import scene_for_seed
+
+    a, b = scene_for_seed(20_000), scene_for_seed(20_000)
+    assert a == b  # terrain depends only on the reset seed
+    assert a != scene_for_seed(20_001)
+    xs = [p[0] for p in a["terrain"]]
+    assert xs == sorted(xs) and xs[0] == 0.0 and abs(xs[-1] - a["world"]["width"]) < 1e-9
+    pad = a["helipad"]
+    on_pad = [p[1] for p in a["terrain"] if pad["x1"] <= p[0] <= pad["x2"]]
+    # The pad section is flat. Gymnasium smooths heights with 0.33*(sum of 3 neighbours), not 1/3,
+    # so the physical ground there is 3.30 while helipad_y is 3.333; the terrain returned is the real edge.
+    assert on_pad and max(on_pad) - min(on_pad) < 1e-9
+    assert abs(on_pad[0] - 0.99 * pad["y"]) < 1e-9
+    o = a["obs_to_world"]
+    env = make_env()
+    obs, _ = env.reset(seed=20_000)
+    lander = env.unwrapped.lander.position
+    assert abs(obs[0] * o["x_scale"] + o["x_offset"] - lander[0]) < 1e-4
+    assert abs(obs[1] * o["y_scale"] + o["y_offset"] - lander[1]) < 1e-4
+    env.close()
