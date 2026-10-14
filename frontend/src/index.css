@@ -1,0 +1,141 @@
+@import "tailwindcss";
+@import "@fontsource/ibm-plex-sans/400.css";
+@import "@fontsource/ibm-plex-sans/500.css";
+@import "@fontsource/ibm-plex-sans/600.css";
+@import "@fontsource/ibm-plex-mono/400.css";
+@import "@fontsource/ibm-plex-mono/500.css";
+
+/*
+  LunarLab design tokens. Contrast measured (WCAG) on every surface:
+  ink >= 12.6:1, ink-2 >= 7.2:1, ink-3 >= 4.8:1, status colours >= 5.2:1.
+  Chart series colours were validated for CVD separation on --color-surface.
+*/
+@theme {
+  --font-sans: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+
+  --color-bg: #0a0f15;
+  --color-rail: #0d131b;
+  --color-surface: #111822;
+  --color-surface-2: #16202c;
+  --color-surface-3: #1c2836;
+  --color-line: #1f2b3a;
+  --color-line-strong: #2d3e52;
+  --color-grid: #1b2532;
+
+  --color-ink: #e7edf4;
+  --color-ink-2: #aab6c4;
+  --color-ink-3: #8494a8;
+
+  --color-accent: #3cc8d4;
+  --color-accent-strong: #6fdde6;
+  --color-accent-ink: #04191c;
+
+  --color-good: #3ecf7a;
+  --color-warn: #f5b544;
+  --color-crit: #f07272;
+
+  /* chart series: see src/lib/reward.ts for the validated assignments */
+  --color-s-blue: #3987e5;
+  --color-s-orange: #d95926;
+  --color-s-aqua: #199e70;
+}
+
+@layer base {
+  html {
+    color-scheme: dark;
+    background: var(--color-bg);
+  }
+  body {
+    background: var(--color-bg);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: 14px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+  ::selection {
+    background: color-mix(in srgb, var(--color-accent) 35%, transparent);
+  }
+  input[type="number"]::-webkit-inner-spin-button {
+    opacity: 0.5;
+  }
+  * {
+    scrollbar-color: var(--color-line-strong) transparent;
+  }
+}
+
+@layer components {
+  .num {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+  }
+  .eyebrow {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-ink-3);
+  }
+  .field {
+    width: 100%;
+    background: var(--color-bg);
+    border: 1px solid var(--color-line-strong);
+    border-radius: 6px;
+    padding: 6px 10px;
+    color: var(--color-ink);
+    font-size: 13px;
+  }
+  .field:hover {
+    border-color: #3a4e66;
+  }
+  .field:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+  .field[aria-invalid="true"] {
+    border-color: var(--color-crit);
+  }
+  .prose-lab p {
+    color: var(--color-ink-2);
+    margin: 0.5rem 0;
+    max-width: 78ch;
+  }
+  .prose-lab strong {
+    color: var(--color-ink);
+    font-weight: 600;
+  }
+  .prose-lab code {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    background: var(--color-surface-3);
+    border-radius: 4px;
+    padding: 1px 5px;
+    color: var(--color-ink);
+  }
+  .prose-lab ul {
+    list-style: disc;
+    padding-left: 1.25rem;
+    color: var(--color-ink-2);
+    max-width: 78ch;
+  }
+  .prose-lab li {
+    margin: 0.25rem 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

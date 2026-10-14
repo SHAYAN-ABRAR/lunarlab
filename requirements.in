@@ -1,0 +1,33 @@
+# LunarLab top-level Python dependencies.
+# Resolve with:  uv pip compile --universal --python-version 3.12 requirements.in -o requirements.lock
+#
+# NOTE ON BOX2D: gymnasium's [box2d] extra pins `box2d-py`, which ships only a
+# source distribution and needs SWIG + a C++ compiler on Windows. The `Box2D`
+# (pybox2d 2.3.10) package provides the same `Box2D` module as prebuilt
+# wheels for CPython 3.10-3.13, so we install it directly instead.
+
+# --- RL core ---
+gymnasium==1.4.0
+Box2D==2.3.10
+pygame==2.6.1
+stable-baselines3==2.9.0
+torch
+numpy
+pandas
+matplotlib
+pyyaml
+psutil
+
+# --- video ---
+imageio
+imageio-ffmpeg
+
+# --- backend ---
+fastapi
+uvicorn
+pydantic
+
+# --- dev / test ---
+pytest
+httpx
+ruff

@@ -1,0 +1,138 @@
+import { type Page, expect, test } from '@playwright/test'
+
+// End-to-end flows against the real backend (real PPO, real Box2D, real video encoding).
+// They run in order and share one disposable LunarLab home (see e2e/serve_e2e.py).
+test.describe.configure({ mode: 'serial' })
+
+function trackConsole(page: Page): string[] {
+  const errors: string[] = []
+  page.on('console', (m) => {
+    if (m.type() === 'error') errors.push(m.text())
+  })
+  page.on('pageerror', (e) => errors.push(e.message))
+  return errors
+}
+
+let smokeRunUrl = ''
+
+test('empty state offers a real first step', async ({ page }) => {
+  const errors = trackConsole(page)
+  await page.goto('/')
+  await expect(page.getByRole('heading', { name: 'Mission Overview' })).toBeVisible()
+  await expect(page.getByText('No experiments yet')).toBeVisible()
+  await expect(page.getByText('not trained').first()).toBeVisible()
+  await page.goto('/replay')
+  await expect(page.getByText('No flights recorded yet')).toBeVisible()
+  await page.goto('/compare')
+  await expect(page.getByText('Nothing to compare yet')).toBeVisible()
+  expect(errors).toEqual([])
+})
+
+test('watch a random agent: real recording opens in Flight Replay', async ({ page }) => {
+  const errors = trackConsole(page)
+  await page.goto('/')
+  await page.getByRole('button', { name: 'Watch Random Agent' }).first().click()
+  await page.waitForURL(/\/replay\/.+/, { timeout: 120_000 })
+  await expect(page.getByText('RANDOM').first()).toBeVisible()
+  await expect(page.locator('video')).toBeVisible()
+  const slider = page.getByRole('slider', { name: 'Timeline (frame)' })
+  await expect(slider).toHaveValue('0')
+  await expect(page.getByText('Frame 0 is the reset state: no action yet.')).toBeVisible()
+  // Step forward with the keyboard, then play briefly.
+  await page.locator('body').click({ position: { x: 5, y: 5 } })
+  await page.keyboard.press('ArrowRight')
+  await expect(slider).toHaveValue('1')
+  await page.getByRole('button', { name: 'Play' }).click()
+  await expect.poll(async () => Number(await slider.inputValue()), { timeout: 15_000 }).toBeGreaterThan(5)
+  await page.getByRole('button', { name: 'Pause' }).click()
+  expect(errors).toEqual([])
+})
+
+test('create a reward configuration revision', async ({ page }) => {
+  const errors = trackConsole(page)
+  await page.goto('/studio')
+  await page.getByRole('navigation', { name: 'Reward configurations' }).getByRole('button', { name: /Flawed hover bonus/ }).click()
+  await page.getByLabel('Name').fill('E2E hover')
+  await page.getByLabel('Bonus per eligible step').fill('0.5')
+  await expect(page.getByText(/0\.5 · 1\[ airborne/)).toBeVisible()
+  await page.getByRole('button', { name: 'Save as new configuration' }).click()
+  await expect(page.getByText(/Saved as “E2E hover” revision 1/)).toBeVisible()
+  // A second edit creates revision 2 of the same family; revision 1 stays unchanged.
+  await page.getByLabel('Bonus per eligible step').fill('0.25')
+  await page.getByRole('button', { name: 'Save as new revision' }).click()
+  await expect(page.getByText(/revision 2/).first()).toBeVisible()
+  expect(errors).toEqual([])
+})
+
+test('launch a SMOKE job, observe progress, inspect the result', async ({ page }) => {
+  const errors = trackConsole(page)
+  await page.goto('/training')
+  await page.getByRole('button', { name: 'Start training run' }).click()
+  await page.waitForURL(/\/runs\/.+/)
+  smokeRunUrl = page.url()
+  await expect(page.getByText('SMOKE · technical test')).toBeVisible()
+  await expect(page.getByText('completed').first()).toBeVisible({ timeout: 180_000 })
+  await expect(page.getByRole('cell', { name: 'final.zip' })).toBeVisible()
+  await expect(page.locator('td', { hasText: 'validation-selected' })).toBeVisible()
+  await expect(page.getByText('Episode return during training')).toBeVisible()
+  expect(errors).toEqual([])
+})
+
+test('record a trained flight and replay it', async ({ page }) => {
+  const errors = trackConsole(page)
+  await page.goto(smokeRunUrl)
+  await page.getByRole('button', { name: 'Record flight…' }).click()
+  await page.getByRole('dialog').getByRole('button', { name: 'Record' }).click()
+  const link = page.getByRole('link', { name: /Seed 20000/ })
+  await expect(link).toBeVisible({ timeout: 120_000 })
+  await link.click()
+  await page.waitForURL(/\/replay\/.+/)
+  await expect(page.getByText('PPO').first()).toBeVisible()
+  await expect(page.getByText(/Original baseline · seed 0/).first()).toBeVisible()
+  expect(errors).toEqual([])
+})
+
+test('stop a running STANDARD job at a safe boundary, then resume', async ({ page }) => {
+  const errors = trackConsole(page)
+  await page.goto('/training')
+  await page.getByRole('radio', { name: 'Standard' }).first().click()
+  await page.getByRole('spinbutton', { name: 'Training seed', exact: true }).fill('7')
+  await page.getByRole('button', { name: 'Start training run' }).click()
+  await page.waitForURL(/\/runs\/.+/)
+  const stop = page.getByRole('button', { name: 'Stop (writes checkpoint)' })
+  await expect(stop).toBeVisible({ timeout: 60_000 })
+  // Wait until real PPO updates have happened (validation at t=0 runs first).
+  const transitions = async () => Number(((await page.getByTestId('transitions').locator('.num').textContent()) ?? '0').replace(/[^\d]/g, ''))
+  await expect.poll(transitions, { timeout: 120_000 }).toBeGreaterThan(4096)
+  await stop.click()
+  await expect(page.getByText('stopped').first()).toBeVisible({ timeout: 120_000 })
+  const resume = page.getByRole('button', { name: 'Resume from latest checkpoint' })
+  await expect(resume).toBeVisible({ timeout: 30_000 })
+  await expect(page.getByRole('cell', { name: /^stop_\d+\.zip$/ })).toBeVisible()
+  const stoppedAt = await transitions()
+  await resume.click()
+  // Resume continues the same run from the stop checkpoint: counters keep growing from there.
+  await expect.poll(transitions, { timeout: 120_000 }).toBeGreaterThan(stoppedAt + 4096)
+  await page.getByRole('button', { name: 'Stop (writes checkpoint)' }).click()
+  // The second stop also ends at a safe boundary, so the training lane is free again.
+  await expect(page.getByRole('button', { name: 'Resume from latest checkpoint' })).toBeVisible({ timeout: 120_000 })
+  await expect(page.getByText(/segment 1 · resume · .* · stopped/)).toBeAttached({ timeout: 30_000 })
+  await expect(page.getByRole('cell', { name: /^stop_\d+\.zip$/ })).toHaveCount(2)
+  expect(errors).toEqual([])
+})
+
+test('compare and diagnose, learn', async ({ page }) => {
+  const errors = trackConsole(page)
+  await page.goto('/compare')
+  await expect(page.getByText('Is the agent earning more training reward without doing the actual landing task better?')).toBeVisible({ timeout: 30_000 })
+  await expect(page.getByText('Comparable', { exact: true })).toBeVisible()
+  // Adding the SMOKE run must flag the comparison.
+  await page.getByRole('checkbox', { name: /smoke/ }).check()
+  await expect(page.getByText('Includes SMOKE runs: technical tests, not trained agents.')).toBeVisible()
+  await page.goto('/stress-test')
+  await page.getByRole('button', { name: 'Re-score trajectory' }).click()
+  await expect(page.getByText('Returns under each reward')).toBeVisible()
+  await page.goto('/learn')
+  await expect(page.getByRole('cell', { name: 'Horizontal position' })).toBeVisible()
+  expect(errors).toEqual([])
+})
