@@ -84,6 +84,8 @@ function mulberry32(seed: number) {
   }
 }
 
+const SIDE_JETS = [[1, 1], [2, -1]] as const
+
 function additive(color: number, opacity: number): THREE.MeshBasicMaterial {
   return new THREE.MeshBasicMaterial({ color, transparent: true, opacity, blending: THREE.AdditiveBlending, depthWrite: false })
 }
@@ -158,12 +160,20 @@ class Particles {
     this.points.frustumCulled = false
   }
 
-  emit(p: THREE.Vector3, v: THREE.Vector3, life: number, color: [number, number, number]) {
+  /** Allocation-free: positions, velocities and colour are plain numbers. */
+  emit(px: number, py: number, pz: number, vx: number, vy: number, vz: number, life: number, r: number, g: number, b: number) {
     const i = this.next
     this.next = (this.next + 1) % this.life.length
-    this.pos.set([p.x, p.y, p.z], i * 3)
-    this.vel.set([v.x, v.y, v.z], i * 3)
-    this.base.set(color, i * 3)
+    const k = i * 3
+    this.pos[k] = px
+    this.pos[k + 1] = py
+    this.pos[k + 2] = pz
+    this.vel[k] = vx
+    this.vel[k + 1] = vy
+    this.vel[k + 2] = vz
+    this.base[k] = r
+    this.base[k + 1] = g
+    this.base[k + 2] = b
     this.life[i] = life
     this.maxLife[i] = life
   }
@@ -228,7 +238,6 @@ class LanderScene {
   private mainFlame = new THREE.Group()
   private sideFlames: THREE.Group[] = []
   private mainLight: THREE.PointLight
-  private impactLight: THREE.PointLight
   private feet: THREE.MeshStandardMaterial[] = []
   private padLights: THREE.MeshStandardMaterial
   private exhaust: Particles
@@ -252,7 +261,27 @@ class LanderScene {
   private snapCamera = true
   private intensities = [0, 0, 0] // main, +x side (action 1), -x side (action 3)
   private lookTarget = new THREE.Vector3()
-  private worldPos = new THREE.Vector3()
+  private lastReportAt = 0
+  // adaptive resolution: lowered automatically if frames take too long, restored when fast again
+  private basePixelRatio = Math.min(window.devicePixelRatio || 1, 1.5)
+  private quality = 1
+  private frameEma = 16.7
+  private qualityClock = 0
+  // scratch objects reused every frame (no per-frame allocations, so no GC hitches)
+  private scratchRot = new THREE.Euler()
+  private scratchV = new THREE.Vector3()
+  private scratchP = new THREE.Vector3()
+  private camLander = new THREE.Vector3()
+  private camDesired = new THREE.Vector3()
+  private camLook = new THREE.Vector3()
+  // ground heightmap: the exact vertex heights of the visible terrain mesh
+  private hm = new Float32Array(0)
+  private hmX0 = 0
+  private hmZ0 = 0
+  private hmDX = 1
+  private hmDZ = 1
+  private hmNX = 1
+  private hmNZ = 1
 
   private container: HTMLElement
   private t: Telemetry
@@ -277,7 +306,7 @@ class LanderScene {
     }
 
     this.renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' })
-    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+    this.renderer.setPixelRatio(this.basePixelRatio)
     this.renderer.shadowMap.enabled = true
     this.renderer.shadowMap.type = THREE.PCFShadowMap
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping
@@ -307,8 +336,6 @@ class LanderScene {
     this.mainLight = new THREE.PointLight(0xff9a4a, 0, 7, 2)
     this.mainLight.position.set(0, -0.8, 0)
     this.lander.add(this.mainLight)
-    this.impactLight = new THREE.PointLight(0xffa060, 0, 9, 2)
-    this.scene.add(this.impactLight)
 
     this.resize = new ResizeObserver(() => this.onResize())
     this.resize.observe(container)
@@ -380,7 +407,21 @@ class LanderScene {
     return lerp(h, this.padGround, inPad)
   }
 
-  private groundAt = (x: number, z: number): number => this.height(x, z)
+  private groundAt = (x: number, z: number): number => {
+    const fx = clamp((x - this.hmX0) / this.hmDX, 0, this.hmNX - 1.0001)
+    const fz = clamp((z - this.hmZ0) / this.hmDZ, 0, this.hmNZ - 1.0001)
+    const i = Math.floor(fx)
+    const j = Math.floor(fz)
+    const u = fx - i
+    const v = fz - j
+    const n = this.hmNX
+    const h = this.hm
+    const a = h[j * n + i]
+    const b = h[j * n + i + 1]
+    const c = h[(j + 1) * n + i]
+    const d = h[(j + 1) * n + i + 1]
+    return (a * (1 - u) + b * u) * (1 - v) + (c * (1 - u) + d * u) * v
+  }
 
   // ------------------------------------------------------------------ builders
   private buildSky() {
@@ -421,7 +462,7 @@ class LanderScene {
     sun.position.set(-14, 11, 12)
     sun.target.position.set(10, 3, 0)
     sun.castShadow = true
-    sun.shadow.mapSize.set(2048, 2048)
+    sun.shadow.mapSize.set(1024, 1024)
     const sc = sun.shadow.camera
     sc.left = -22
     sc.right = 22
@@ -435,7 +476,22 @@ class LanderScene {
   }
 
   private buildTerrain() {
-    const geo = new THREE.PlaneGeometry(96, 84, 320, 168)
+    // 0.4 x 0.75 cells: x vertices land on every terrain chunk point (chunks are 2 units wide) and
+    // one vertex row lies exactly on the simulation plane z = 0.
+    const width = 96
+    const depth = 84
+    const segX = 240
+    const segZ = 112
+    this.hmX0 = this.s.world.width / 2 - width / 2
+    this.hmZ0 = -27 - depth / 2
+    this.hmDX = width / segX
+    this.hmDZ = depth / segZ
+    this.hmNX = segX + 1
+    this.hmNZ = segZ + 1
+    this.hm = new Float32Array(this.hmNX * this.hmNZ)
+    for (let j = 0; j < this.hmNZ; j++)
+      for (let i = 0; i < this.hmNX; i++) this.hm[j * this.hmNX + i] = this.height(this.hmX0 + i * this.hmDX, this.hmZ0 + j * this.hmDZ)
+    const geo = new THREE.PlaneGeometry(width, depth, segX, segZ)
     geo.rotateX(-Math.PI / 2)
     geo.translate(this.s.world.width / 2, 0, -27)
     const p = geo.attributes.position as THREE.BufferAttribute
@@ -443,7 +499,7 @@ class LanderScene {
     for (let i = 0; i < p.count; i++) {
       const x = p.getX(i)
       const z = p.getZ(i)
-      const y = this.height(x, z)
+      const y = this.hm[i] // PlaneGeometry vertex order matches the heightmap layout
       p.setY(i, y)
       const n = this.noise(x * 1.3 + 5, z * 1.3)
       const fine = this.noise(x * 6.1 - 2, z * 6.1 + 8)
@@ -453,7 +509,7 @@ class LanderScene {
     }
     geo.setAttribute('color', new THREE.BufferAttribute(colors, 3))
     geo.computeVertexNormals()
-    const mesh = new THREE.Mesh(geo, new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.97, metalness: 0 }))
+    const mesh = new THREE.Mesh(geo, new THREE.MeshLambertMaterial({ vertexColors: true }))
     mesh.receiveShadow = true
     this.scene.add(mesh)
 
@@ -622,6 +678,7 @@ class LanderScene {
       this.snapCamera = this.mode !== 'orbit'
     }
     if (playing && !this.playing && this.frameFloat >= this.last) this.frameFloat = 0
+    if (!playing && this.playing) this.frameFloat = Math.floor(this.frameFloat + 1e-6)
     this.playing = playing
   }
 
@@ -657,22 +714,26 @@ class LanderScene {
   }
 
   private burst() {
-    const ep = this.t.episode
-    const row = this.t.rows[this.last]
-    const [x, y] = this.obsToWorld(row.obs)
+    if (this.t.episode.env_outcome !== 'crash') return
+    const [x, y] = this.obsToWorld(this.t.rows[this.last].obs)
     const g = this.groundAt(x, 0)
-    const at = new THREE.Vector3(x, Math.max(y - 0.4, g + 0.05), 0)
-    if (ep.env_outcome === 'crash') {
-      for (let i = 0; i < 90; i++) {
-        const a = this.rng() * Math.PI * 2
-        const sp = 1.5 + this.rng() * 4
-        this.exhaust.emit(at, new THREE.Vector3(Math.cos(a) * sp, 1 + this.rng() * 4.5, Math.sin(a) * sp), 0.6 + this.rng() * 0.8, [1, 0.62, 0.28])
-      }
-      for (let i = 0; i < 160; i++) {
-        const a = this.rng() * Math.PI * 2
-        const sp = 0.6 + this.rng() * 2.6
-        this.dust.emit(new THREE.Vector3(x, g + 0.1, 0), new THREE.Vector3(Math.cos(a) * sp, 0.4 + this.rng() * 1.6, Math.sin(a) * sp), 1.4 + this.rng() * 1.4, [0.42, 0.4, 0.38])
-      }
+    const ay = Math.max(y - 0.4, g + 0.05)
+    for (let i = 0; i < 90; i++) {
+      const a = this.rng() * Math.PI * 2
+      const sp = 1.5 + this.rng() * 4
+      this.exhaust.emit(x, ay, 0, Math.cos(a) * sp, 1 + this.rng() * 4.5, Math.sin(a) * sp, 0.6 + this.rng() * 0.8, 1, 0.62, 0.28)
+    }
+    for (let i = 0; i < 160; i++) {
+      const a = this.rng() * Math.PI * 2
+      const sp = 0.6 + this.rng() * 2.6
+      this.dust.emit(x, g + 0.1, 0, Math.cos(a) * sp, 0.4 + this.rng() * 1.6, Math.sin(a) * sp, 1.4 + this.rng() * 1.4, 0.42, 0.4, 0.38)
+    }
+  }
+
+  private onExhaustGroundHit = (px: number, py: number, pz: number) => {
+    if (this.rng() < 0.35) {
+      const ang = this.rng() * Math.PI * 2
+      this.dust.emit(px, py + 0.05, pz, Math.cos(ang) * 2, 0.3, Math.sin(ang) * 2, 1 + this.rng(), 0.3, 0.29, 0.27)
     }
   }
 
@@ -681,49 +742,49 @@ class LanderScene {
     this.raf = requestAnimationFrame(this.loop)
     this.timer.update(timestamp)
     const dt = Math.min(this.timer.getDelta(), 0.1)
-    const fps = this.t.fps
 
     // Advance the timeline.
     if (this.playing) {
-      this.frameFloat += dt * fps * this.speed
+      this.frameFloat += dt * this.t.fps * this.speed
       if (this.frameFloat >= this.last) {
         this.frameFloat = this.last
         this.playing = false
         this.endedAt = performance.now()
         this.burst()
-        this.report()
+        this.report(true)
         this.cb.onEnded()
       }
     }
-    this.report()
+    this.report(false)
 
     // Interpolated pose between telemetry rows.
     const rows = this.t.rows
+    const o = this.s.obs_to_world
     const i0 = Math.floor(this.frameFloat)
     const i1 = Math.min(i0 + 1, this.last)
     const a = this.frameFloat - i0
     const r0 = rows[i0]
     const r1 = rows[i1]
-    const [x0, y0] = this.obsToWorld(r0.obs)
-    const [x1, y1] = this.obsToWorld(r1.obs)
-    const x = lerp(x0, x1, a)
-    const y = lerp(y0, y1, a)
+    const x = lerp(r0.obs[0], r1.obs[0], a) * o.x_scale + o.x_offset
+    const y = lerp(r0.obs[1], r1.obs[1], a) * o.y_scale + o.y_offset
     const angle = lerp(r0.obs[4], r1.obs[4], a)
     this.lander.position.set(x, y, 0)
     this.lander.rotation.set(0, 0, angle)
-    this.lander.updateMatrixWorld()
 
     // Engines: the action applied in the step currently being shown.
     const action = a > 1e-3 ? r1.action : r0.action
-    const target = [action === 2 ? 1 : 0, action === 1 ? 1 : 0, action === 3 ? 1 : 0]
     const k = this.reducedMotion ? 1 : 1 - Math.exp(-dt * 28)
-    for (let j = 0; j < 3; j++) this.intensities[j] = this.playing ? lerp(this.intensities[j], target[j], k) : target[j]
+    const t0 = action === 2 ? 1 : 0
+    const t1 = action === 1 ? 1 : 0
+    const t2 = action === 3 ? 1 : 0
+    this.intensities[0] = this.playing ? lerp(this.intensities[0], t0, k) : t0
+    this.intensities[1] = this.playing ? lerp(this.intensities[1], t1, k) : t1
+    this.intensities[2] = this.playing ? lerp(this.intensities[2], t2, k) : t2
     const now = performance.now() / 1000
     const flicker = this.reducedMotion ? 1 : 0.88 + 0.12 * Math.sin(now * 61) + 0.06 * Math.sin(now * 23.7)
     const im = this.intensities[0]
     this.mainFlame.visible = im > 0.02
     this.mainFlame.scale.set(0.85 + 0.15 * im, im * flicker, 0.85 + 0.15 * im)
-    this.mainLight.intensity = 9 * im * flicker
     this.sideFlames[0].visible = this.intensities[1] > 0.02
     this.sideFlames[0].scale.setScalar(Math.max(0.01, this.intensities[1]) * flicker)
     this.sideFlames[1].visible = this.intensities[2] > 0.02
@@ -740,41 +801,62 @@ class LanderScene {
     this.padLights.emissive.setHex(padColor)
     this.padLights.emissiveIntensity = ended && ep.pad_landing && !this.reducedMotion ? 1.4 + 0.8 * Math.sin(now * 4) : 1.6
 
-    // Particles: advance only while the episode plays (or briefly after it ends).
+    // One dynamic light: the engine glow, or the brief impact flash at the end of a crash.
     const sinceEnd = this.endedAt > 0 ? (performance.now() - this.endedAt) / 1000 : Infinity
+    const flash = ep.env_outcome === 'crash' && sinceEnd < 1.2 ? 14 * (1 - sinceEnd / 1.2) : 0
+    this.mainLight.intensity = Math.max(9 * im * flicker, flash)
+
+    // Particles advance only while the episode plays (or briefly after it ends).
     const fxDt = this.playing ? dt * this.speed : sinceEnd < 4 ? dt : 0
     if (fxDt > 0) this.emitParticles(fxDt, x, y, angle)
-    this.exhaust.update(fxDt, this.groundAt, (px, py, pz) => {
-      if (this.rng() < 0.35) {
-        const ang = this.rng() * Math.PI * 2
-        this.dust.emit(new THREE.Vector3(px, py + 0.05, pz), new THREE.Vector3(Math.cos(ang) * 2, 0.3, Math.sin(ang) * 2), 1 + this.rng(), [0.3, 0.29, 0.27])
-      }
-    })
+    this.exhaust.update(fxDt, this.groundAt, this.onExhaustGroundHit)
     this.dust.update(fxDt, this.groundAt)
-    this.impactLight.position.set(x, this.groundAt(x, 0) + 0.6, 0.4)
-    this.impactLight.intensity = ep.env_outcome === 'crash' && sinceEnd < 1.2 ? 14 * (1 - sinceEnd / 1.2) : 0
 
     this.updateCamera(dt, x, y)
+    this.adaptQuality(dt)
     this.renderer.render(this.scene, this.camera)
   }
 
-  private report() {
+  /** Tell React which frame is shown: immediately when paused or seeking, at most ~20 Hz while playing.
+   *  The canvas itself still animates every display frame. */
+  private report(force: boolean) {
     const f = Math.min(this.last, Math.floor(this.frameFloat + 1e-6))
-    if (f !== this.lastReported) {
-      this.lastReported = f
-      this.cb.onFrame(f)
+    if (f === this.lastReported) return
+    const now = performance.now()
+    if (!force && this.playing && now - this.lastReportAt < 50) return
+    this.lastReported = f
+    this.lastReportAt = now
+    this.cb.onFrame(f)
+  }
+
+  /** Dynamic resolution: keep frame times near the display rate on weaker (integrated) GPUs. */
+  private adaptQuality(dt: number) {
+    this.frameEma = lerp(this.frameEma, dt * 1000, 0.05)
+    this.qualityClock += dt
+    if (this.qualityClock < 1.5) return
+    this.qualityClock = 0
+    let q = this.quality
+    if (this.frameEma > 20 && q > 0.7) q = Math.max(0.7, q - 0.1)
+    else if (this.frameEma < 17.5 && q < 1) q = Math.min(1, q + 0.05)
+    if (q !== this.quality) {
+      this.quality = q
+      this.renderer.setPixelRatio(this.basePixelRatio * q)
+      this.onResize()
     }
   }
 
   private emitParticles(dt: number, x: number, y: number, angle: number) {
-    const rot = new THREE.Euler(0, 0, angle)
+    const rot = this.scratchRot.set(0, 0, angle)
     const L = this.s.lander
     if (this.intensities[0] > 0.3) {
       const n = Math.round(240 * dt * this.intensities[0] + this.rng())
-      const nozzle = new THREE.Vector3(0, L.main_engine[1] - 0.25, 0).applyEuler(rot).add(this.worldPos.set(x, y, 0))
+      const nz = this.scratchP.set(0, L.main_engine[1] - 0.25, 0).applyEuler(rot)
+      const px = nz.x + x
+      const py = nz.y + y
+      const pz = nz.z
       for (let i = 0; i < n; i++) {
-        const v = new THREE.Vector3((this.rng() - 0.5) * 0.9, -5 - this.rng() * 3, (this.rng() - 0.5) * 0.9).applyEuler(rot)
-        this.exhaust.emit(nozzle, v, 0.3 + this.rng() * 0.35, [1, 0.72, 0.38])
+        const v = this.scratchV.set((this.rng() - 0.5) * 0.9, -5 - this.rng() * 3, (this.rng() - 0.5) * 0.9).applyEuler(rot)
+        this.exhaust.emit(px, py, pz, v.x, v.y, v.z, 0.3 + this.rng() * 0.35, 1, 0.72, 0.38)
       }
       // Engine wash: dust kicked up when the plume is close to the ground.
       const h = y - this.groundAt(x, 0)
@@ -785,38 +867,41 @@ class LanderScene {
           const sp = 1.6 + this.rng() * 2.4
           const gx = x + Math.cos(ang) * 0.3
           const gz = Math.sin(ang) * 0.3
-          this.dust.emit(new THREE.Vector3(gx, this.groundAt(gx, gz) + 0.06, gz), new THREE.Vector3(Math.cos(ang) * sp, 0.25 + this.rng() * 0.6, Math.sin(ang) * sp), 0.9 + this.rng() * 1.1, [0.36, 0.35, 0.33])
+          this.dust.emit(gx, this.groundAt(gx, gz) + 0.06, gz, Math.cos(ang) * sp, 0.25 + this.rng() * 0.6, Math.sin(ang) * sp, 0.9 + this.rng() * 1.1, 0.36, 0.35, 0.33)
         }
       }
     }
     const [sx, sy] = L.side_engine
-    for (const [j, side] of [[1, 1], [2, -1]] as const) {
+    for (const [j, side] of SIDE_JETS) {
       if (this.intensities[j] < 0.3) continue
       const n = Math.round(90 * dt + this.rng())
-      const at = new THREE.Vector3(side * (sx + 0.2), sy, 0).applyEuler(rot).add(this.worldPos.set(x, y, 0))
+      const at = this.scratchP.set(side * (sx + 0.2), sy, 0).applyEuler(rot)
+      const ax = at.x + x
+      const ay = at.y + y
+      const az = at.z
       for (let i = 0; i < n; i++) {
-        const v = new THREE.Vector3(side * (2.6 + this.rng() * 1.6), (this.rng() - 0.5) * 0.6, (this.rng() - 0.5) * 0.6).applyEuler(rot)
-        this.exhaust.emit(at, v, 0.18 + this.rng() * 0.15, [0.7, 0.85, 1])
+        const v = this.scratchV.set(side * (2.6 + this.rng() * 1.6), (this.rng() - 0.5) * 0.6, (this.rng() - 0.5) * 0.6).applyEuler(rot)
+        this.exhaust.emit(ax, ay, az, v.x, v.y, v.z, 0.18 + this.rng() * 0.15, 0.7, 0.85, 1)
       }
     }
   }
 
   private updateCamera(dt: number, x: number, y: number) {
-    const lander = new THREE.Vector3(x, y, 0)
+    const lander = this.camLander.set(x, y, 0)
     if (this.mode === 'orbit') {
       this.controls.target.lerp(lander, 1 - Math.exp(-dt * 5))
       this.controls.update()
       return
     }
-    let desired: THREE.Vector3
-    let look: THREE.Vector3
+    const desired = this.camDesired
+    const look = this.camLook
     if (this.mode === 'wide') {
       const W = this.s.world.width
-      desired = new THREE.Vector3(W / 2 + 2, 5.6, 16.5)
-      look = new THREE.Vector3(W / 2, 4.1, 0)
+      desired.set(W / 2 + 2, 5.6, 16.5)
+      look.set(W / 2, 4.1, 0)
     } else {
-      desired = lander.clone().add(new THREE.Vector3(2.6, 0.8, 7.4))
-      look = lander.clone().add(new THREE.Vector3(0, 0.1, 0))
+      desired.set(x + 2.6, y + 0.8, 7.4)
+      look.set(x, y + 0.1, 0)
       desired.y = Math.max(desired.y, this.groundAt(desired.x, desired.z) + 0.6)
     }
     if (this.snapCamera) {

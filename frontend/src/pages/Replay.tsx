@@ -142,6 +142,18 @@ function FrameSurface({ t, frame, playing, speed, onFrame, onEnded, label }: Sur
 const PLOT_LEFT = 56
 const PLOT_RIGHT = 12
 
+type ChartSeries = { key: string; label: string; color: string; dashed?: boolean }
+const SERIES_Y: ChartSeries[] = [{ key: 'y', label: 'y', color: SERIES.original }]
+const SERIES_V: ChartSeries[] = [
+  { key: 'vx', label: 'vx', color: '#3987e5' },
+  { key: 'vy', label: 'vy', color: '#d95926' },
+]
+const SERIES_ANGLE: ChartSeries[] = [{ key: 'angle', label: 'angle', color: SERIES.original }]
+const SERIES_W: ChartSeries[] = [{ key: 'w', label: 'angular velocity', color: SERIES.original }]
+const FMT_DEG = (v: number) => `${v.toFixed(0)}°`
+const FMT_0 = (v: number) => v.toFixed(0)
+const FMT_1 = (v: number) => v.toFixed(1)
+
 const TelemetryChart = memo(function TelemetryChart({
   data,
   series,
@@ -309,7 +321,7 @@ function RewardPanel({ row, termKeys }: { row: TelemetryRow; termKeys: string[] 
   )
 }
 
-function OutcomeCard({ t }: { t: Telemetry }) {
+const OutcomeCard = memo(function OutcomeCard({ t }: { t: Telemetry }) {
   const e = t.episode
   return (
     <div className="space-y-2">
@@ -333,7 +345,7 @@ function OutcomeCard({ t }: { t: Telemetry }) {
       </div>
     </div>
   )
-}
+})
 
 // --------------------------------------------------------------------------- //
 // Page
@@ -377,7 +389,7 @@ function Controls({ pb }: { pb: ReturnType<typeof usePlayback> }) {
   )
 }
 
-function RecordingList({ items, current }: { items: RecordingMeta[]; current?: string }) {
+const RecordingList = memo(function RecordingList({ items, current }: { items: RecordingMeta[]; current?: string }) {
   const [kind, setKind] = useState<'all' | 'random' | 'heuristic' | 'ppo'>('all')
   const shown = items.filter((r) => kind === 'all' || r.policy.kind === kind)
   return (
@@ -403,12 +415,22 @@ function RecordingList({ items, current }: { items: RecordingMeta[]; current?: s
       </ul>
     </div>
   )
-}
+})
 
 function chartData(t: Telemetry) {
   const termKeys = Object.keys(t.rows[t.rows.length - 1]?.terms ?? {})
+  const cumulativeSeries: ChartSeries[] = [
+    { key: 'cum_original', label: 'original', color: SERIES.original },
+    ...(termKeys.length ? [{ key: 'cum_training', label: 'training (rescored)', color: SERIES.shaped, dashed: true }] : []),
+  ]
+  const componentSeries: ChartSeries[] = [
+    { key: 'step_original', label: 'original', color: SERIES.original },
+    ...termKeys.map((k) => ({ key: `term_${k}`, label: TERM_LABEL[k] ?? k, color: TERM_COLOR[k] ?? '#8494a8', dashed: true })),
+  ]
   return {
     termKeys,
+    cumulativeSeries,
+    componentSeries,
     rows: t.rows.map((r, i) => {
       const last = i === t.rows.length - 1 && r.terminated
       const d: Record<string, number | null> = {
@@ -620,22 +642,22 @@ export default function Replay() {
               <div className="grid grid-cols-1 gap-6 2xl:grid-cols-[minmax(0,1.35fr)_minmax(320px,1fr)]">
                 <Card title="Telemetry" eyebrow="click a chart to seek" bodyClassName="p-4">
                   <div ref={chartsRef} className="grid grid-cols-1 gap-5 md:grid-cols-2">
-                    <TelemetryChart data={cd.rows} title="Height y (0 ≈ legs on pad)" series={[{ key: 'y', label: 'y', color: SERIES.original }]} refY={0} onSeek={pb.seek} />
-                    <TelemetryChart data={cd.rows} title="Velocity (scaled units)" series={[{ key: 'vx', label: 'vx', color: '#3987e5' }, { key: 'vy', label: 'vy', color: '#d95926' }]} refY={0} onSeek={pb.seek} />
-                    <TelemetryChart data={cd.rows} title="Tilt (degrees)" series={[{ key: 'angle', label: 'angle', color: SERIES.original }]} yFormat={(v) => `${v.toFixed(0)}°`} refY={0} onSeek={pb.seek} />
-                    <TelemetryChart data={cd.rows} title="Angular velocity (0.4·ω)" series={[{ key: 'w', label: 'angular velocity', color: SERIES.original }]} refY={0} onSeek={pb.seek} />
+                    <TelemetryChart data={cd.rows} title="Height y (0 ≈ legs on pad)" series={SERIES_Y} refY={0} onSeek={pb.seek} />
+                    <TelemetryChart data={cd.rows} title="Velocity (scaled units)" series={SERIES_V} refY={0} onSeek={pb.seek} />
+                    <TelemetryChart data={cd.rows} title="Tilt (degrees)" series={SERIES_ANGLE} yFormat={FMT_DEG} refY={0} onSeek={pb.seek} />
+                    <TelemetryChart data={cd.rows} title="Angular velocity (0.4·ω)" series={SERIES_W} refY={0} onSeek={pb.seek} />
                     <TelemetryChart
                       data={cd.rows}
                       title="Cumulative return"
-                      series={[{ key: 'cum_original', label: 'original', color: SERIES.original }, ...(cd.termKeys.length ? [{ key: 'cum_training', label: 'training (rescored)', color: SERIES.shaped, dashed: true }] : [])]}
-                      yFormat={(v) => v.toFixed(0)}
+                      series={cd.cumulativeSeries}
+                      yFormat={FMT_0}
                       onSeek={pb.seek}
                     />
                     <TelemetryChart
                       data={cd.rows}
                       title="Reward components per step (final step omitted)"
-                      series={[{ key: 'step_original', label: 'original', color: SERIES.original }, ...cd.termKeys.map((k) => ({ key: `term_${k}`, label: TERM_LABEL[k] ?? k, color: TERM_COLOR[k] ?? '#8494a8', dashed: true }))]}
-                      yFormat={(v) => v.toFixed(1)}
+                      series={cd.componentSeries}
+                      yFormat={FMT_1}
                       refY={0}
                       onSeek={pb.seek}
                     />
