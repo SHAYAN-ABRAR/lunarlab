@@ -6,6 +6,7 @@ import { CartesianGrid, Line, LineChart, ReferenceLine, ResponsiveContainer, Too
 import { Legend } from '../components/charts'
 import { DemoButton } from '../components/Launch'
 import { Badge, Card, EmptyState, ErrorBanner, KV, Notice, OutcomeBadge, PageHeader, PolicyBadge, Segmented, Spinner } from '../components/ui'
+import { apiUrl } from '../lib/api'
 import { fmt } from '../lib/format'
 import { useApi } from '../lib/hooks'
 import { SERIES, TERM_COLOR, TERM_LABEL } from '../lib/reward'
@@ -22,6 +23,12 @@ const ACTIONS = [
   { key: 'right', short: 'RIGHT', label: 'Fire right orientation engine' },
 ]
 const SPEEDS = ['0.25', '0.5', '1', '2', '4'] as const
+
+function policyTitle(r: RecordingMeta): string {
+  if (r.policy.kind === 'ppo' || r.policy.kind === 'dqn') return `${r.source.reward_name ?? ''} · s${r.source.training_seed ?? ''}`
+  if (r.policy.kind === 'human') return 'Your keyboard flight'
+  return r.policy.kind === 'random' ? 'Random policy' : 'Heuristic controller'
+}
 const BUILTIN_LABEL: Record<string, string> = {
   distance: 'Distance to pad (Δ)',
   speed: 'Speed (Δ)',
@@ -118,7 +125,7 @@ function FrameSurface({ t, frame, playing, speed, onFrame, onEnded, label }: Sur
       {isMp4 ? (
         <video
           ref={videoRef}
-          src={`/api/recordings/${t.recording_id}/video`}
+          src={apiUrl(`/api/recordings/${t.recording_id}/video`)}
           muted
           playsInline
           preload="auto"
@@ -129,7 +136,7 @@ function FrameSurface({ t, frame, playing, speed, onFrame, onEnded, label }: Sur
           }}
         />
       ) : (
-        <img src={`/api/recordings/${t.recording_id}/frames/${frame}`} alt={label} className="h-full w-full object-contain" />
+        <img src={apiUrl(`/api/recordings/${t.recording_id}/frames/${frame}`)} alt={label} className="h-full w-full object-contain" />
       )}
     </div>
   )
@@ -390,11 +397,19 @@ function Controls({ pb }: { pb: ReturnType<typeof usePlayback> }) {
 }
 
 const RecordingList = memo(function RecordingList({ items, current }: { items: RecordingMeta[]; current?: string }) {
-  const [kind, setKind] = useState<'all' | 'random' | 'heuristic' | 'ppo'>('all')
+  const [kind, setKind] = useState<'all' | 'random' | 'heuristic' | 'ppo' | 'dqn' | 'human'>('all')
   const shown = items.filter((r) => kind === 'all' || r.policy.kind === kind)
+  const has = (k: string) => items.some((r) => r.policy.kind === k)
   return (
     <div className="space-y-3">
-      <Segmented label="Filter recordings" value={kind} onChange={setKind} options={[{ value: 'all', label: 'All' }, { value: 'random', label: 'Random' }, { value: 'heuristic', label: 'Heuristic' }, { value: 'ppo', label: 'PPO' }]} />
+      <Segmented label="Filter recordings" value={kind} onChange={setKind} options={[
+          { value: 'all', label: 'All' },
+          { value: 'random', label: 'Random' },
+          { value: 'heuristic', label: 'Heuristic' },
+          { value: 'ppo', label: 'PPO' },
+          ...(has('dqn') ? [{ value: 'dqn' as const, label: 'DQN' }] : []),
+          ...(has('human') ? [{ value: 'human' as const, label: 'You' }] : []),
+        ]} />
       <ul className="max-h-[70vh] space-y-1 overflow-auto pr-1">
         {shown.map((r) => (
           <li key={r.recording_id}>
@@ -403,7 +418,7 @@ const RecordingList = memo(function RecordingList({ items, current }: { items: R
                 <PolicyBadge kind={r.policy.kind} />
                 <span className="num text-xs text-ink-2">{fmt.num(r.original_return, 1)}</span>
               </div>
-              <div className="mt-1 truncate text-[12.5px] text-ink">{r.policy.kind === 'ppo' ? `${r.source.reward_name ?? ''} · s${r.source.training_seed ?? ''}` : r.policy.kind === 'random' ? 'Random policy' : 'Heuristic controller'}</div>
+              <div className="mt-1 truncate text-[12.5px] text-ink">{policyTitle(r)}</div>
               <div className="mt-0.5 flex items-center justify-between gap-2 text-[11px] text-ink-3">
                 <span>seed {r.episode_seed} · {r.length} steps</span>
                 <span>{r.pad_landing ? 'pad landing' : r.env_outcome.replaceAll('_', ' ')}</span>
@@ -614,7 +629,7 @@ export default function Replay() {
                     <option value="">{sameSeed.length ? 'Compare with another flight…' : 'No other flight with this seed'}</option>
                     {sameSeed.map((r) => (
                       <option key={r.recording_id} value={r.recording_id}>
-                        {r.policy.kind.toUpperCase()} · {r.policy.kind === 'ppo' ? `${r.source.reward_name} s${r.source.training_seed}` : r.recording_id.slice(0, 15)} · {fmt.num(r.original_return, 0)}
+                        {r.policy.kind === 'human' ? 'YOU' : r.policy.kind.toUpperCase()} · {r.policy.kind === 'ppo' || r.policy.kind === 'dqn' ? `${r.source.reward_name} s${r.source.training_seed}` : r.recording_id.slice(0, 15)} · {fmt.num(r.original_return, 0)}
                       </option>
                     ))}
                   </select>

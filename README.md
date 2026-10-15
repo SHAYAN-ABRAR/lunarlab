@@ -1,42 +1,78 @@
 # LunarLab — Reward Shaping Mission Control
 
+[![CI](https://github.com/SHAYAN-ABRAR/lunarlab/actions/workflows/ci.yml/badge.svg)](https://github.com/SHAYAN-ABRAR/lunarlab/actions/workflows/ci.yml)
+[![Live demo](https://img.shields.io/badge/live%20demo-GitHub%20Pages-3cc8d4)](https://shayan-abrar.github.io/lunarlab/)
+![Python 3.12](https://img.shields.io/badge/python-3.12-3776ab)
+![Stable-Baselines3](https://img.shields.io/badge/RL-PPO%20%C2%B7%20DQN-555)
+
 A local-first laboratory for **honest reward-design experiments** on Gymnasium's `LunarLander-v3`
-(discrete actions) with Stable-Baselines3 PPO, plus a scientific mission-control web interface.
+(discrete actions) with Stable-Baselines3, plus a mission-control web interface: train, replay in 3-D,
+diagnose reward hacking, learn rewards from preferences, and fly the lander yourself.
 
-The story it lets you run, and actually measure:
+<p align="center">
+  <img src="docs/media/showcase.gif" width="720" alt="Four PPO policies trained with different rewards fly the same test episode: three land on the pad, the one trained with the flawed hover bonus hovers until the time limit">
+</p>
+<p align="center"><sub>Real simulator footage: the same held-out episode flown by PPO policies trained with four reward designs.
+The flawed hover bonus is exploited exactly as designed to be.</sub></p>
 
-**watch a random agent fail → train a baseline → introduce a bad reward → investigate reward hacking →
-apply a better reward design → compare the actual results.**
+**[Live demo](https://shayan-abrar.github.io/lunarlab/)** (a read-only snapshot of the real results) ·
+**[Results write-up](docs/RESULTS.md)** · [How it works](docs/ARCHITECTURE.md)
 
-Nothing in this project assumes how an experiment will turn out. Every number shown in the UI, the CLI or
-a report comes from stored training logs and from evaluations with the **unmodified environment reward**
-on fixed episode seeds.
+## Results at a glance
 
-> Status: the software is complete and verified (see [PROGRESS.md](PROGRESS.md)). Only bounded SMOKE runs
-> (≈8k transitions each) have been executed. The full multi-seed experiment has **not** been run, so there
-> are no claims yet about landing performance or reward hacking.
+38 policies, each evaluated on 100 held-out episodes with the unmodified environment reward
+([full results, method and caveats](docs/RESULTS.md)):
 
----
+![Final-test performance of every trained policy](docs/results/headline.png)
 
-## What it demonstrates
+| Group (PPO, 1M transitions) | Policies | IQM return [95% CI] | Pad landing | P(better than baseline) |
+|---|---:|---:|---:|---:|
+| Original reward | 5 | 268.6 [255, 272] | 98% | reference |
+| Time penalty | 5 | 265.3 [247, 269] | 94% | 0.32 [0.00, 0.72] |
+| **Flawed hover bonus** | 5 | **−33.1** [−54, 16] | **0%** | 0.00 |
+| Potential-based shaping | 5 | 262.3 [238, 274] | 94% | 0.36 [0.00, 0.76] |
+| Learned reward, 300 preference labels | 3 | −165.2 [−342, 151] | 12% | 0.00 |
+| Learned reward, 3,000 preference labels | 3 | 200.2 [183, 222] | 54% | 0.00 |
 
-- Reward terms as **pure, tested functions** behind a single Gymnasium wrapper; `training_reward =
-  original_reward + Σ additional terms` is checked on every transition.
-- Four reward presets: the original baseline, a time-penalty ablation, an **intentionally flawed hover
-  bonus**, and **potential-based shaping** `α(γΦ(s′) − Φ(s))` with the PPO discount, an absorbing terminal
-  potential, and correct time-limit truncation handling. The discounted telescoping identity is tested.
-- An **evaluation protocol** that doesn't flatter the agent: original reward only, disjoint validation and
-  test seed sets, deterministic policy, bootstrap and Wilson intervals, separate score / environment-success /
-  strict pad-landing / crash / out-of-bounds / time-limit rates, a preset-independent hover detector, and a
-  documented reward-exploitation rule.
-- A **local job supervisor**: owned worker subprocesses, a queue, cooperative stop at safe boundaries,
-  checkpoint resume with lineage, crash reconciliation, and verified process ownership before any kill.
-- **Flight Replay** with two synchronized views of every recorded flight: an immersive **3-D reconstruction**
-  (WebGL; the recorded position, tilt, engine firings and leg contacts on the episode's real terrain, with
-  chase / wide / orbit cameras) and the **actual simulator footage**. Both share frame-accurate telemetry
-  (observations, actions, per-step reward decomposition) and side-by-side flights on a shared seed.
-- A **Reward Stress Test** that re-scores a recorded trajectory under other reward designs (clearly labelled
-  as re-scoring, not prediction).
+- **Reward hacking, measured:** the hover-bonus policies landed in 0 of 500 test episodes and hit the time
+  limit in 80%, even at their best checkpoints by the real reward.
+- **Sound shaping is safe but not faster here:** time penalty and potential-based shaping solve the task as
+  well as the original reward; five seeds cannot order the three (every interval contains 0.5).
+- **RLHF in miniature:** with 3,000 simulated preference labels, PPO learned to land from a learned reward
+  alone; with 300, two of three runs drove the learned reward up while the true return stayed near −390.
+- **Robustness:** every policy degrades in wind it never saw (original reward: 266 calm → 93 in strong wind,
+  pad landing 98% → 22%), whatever the reward design.
+- **PPO vs DQN** (each at its reference budget, 1M vs 100k transitions): DQN policies varied far more
+  (155–270 for the original reward).
+
+Every number comes from stored evaluations, regenerated by `python -m lunarlab results`.
+
+## What's inside
+
+- **Reward lab.** Reward terms are pure, tested functions behind one Gymnasium wrapper, and
+  `training_reward = original_weight × original_reward + Σ terms` is checked on every transition. Presets:
+  the original reward, a time-penalty ablation, an **intentionally flawed hover bonus**, and
+  **potential-based shaping** `α(γΦ(s′) − Φ(s))` with the algorithm's discount, an absorbing terminal
+  potential and correct time-limit truncation.
+- **Evaluation that doesn't flatter the agent.** Original reward only, disjoint validation and test seeds,
+  validation-selected checkpoints frozen before the test, bootstrap and Wilson intervals, strict pad-landing /
+  crash / out-of-bounds / time-limit rates, a preset-independent hover detector and a documented
+  reward-exploitation rule.
+- **Statistics across seeds** (Agarwal et al., 2021): IQM, bootstrap intervals over training seeds,
+  probability of improvement and performance profiles, in the UI and in reports.
+- **Robustness tests:** frozen policies re-fly the same test episodes under wind, turbulence and heavier
+  gravity.
+- **Algorithm comparison:** DQN alongside PPO with the same wrapper, protocol and safe checkpoint loading.
+- **Learned rewards (RLHF in miniature):** preference datasets from real flights, a Bradley–Terry reward
+  model, PPO trained on the learned reward alone, and a page where *you* judge pairs of flights.
+- **Fly It Yourself:** keyboard (or touch) control of the real physics at 50 Hz, scored and recorded like any
+  policy, racing the ghost of a trained agent on the same terrain.
+- **Flight Replay** in an immersive 3-D reconstruction (recorded pose, engines and contacts on the episode's
+  real terrain) next to the actual simulator footage, with frame-accurate telemetry and per-step reward
+  decomposition; a **Reward Stress Test** re-scores recorded flights under other reward designs.
+- **Engineering:** a local job supervisor (owned worker processes, cooperative stop at safe boundaries,
+  resume with lineage, crash reconciliation), parallel experiment runs, weights-only model loading, loopback
+  binding and strict request validation, 162 Python tests and 9 browser flows, CI, and a static demo build.
 
 ## Requirements
 
@@ -85,6 +121,8 @@ On Linux, PyPI's torch wheel includes CUDA libraries (several GB). For a CPU-onl
    and save a new revision.
 5. When ready for real experiments: **Training Console → Multi-seed experiment suite** (4 presets × 3 seeds,
    STANDARD ≈ 1M transitions each). Run the throughput benchmark first for a time estimate.
+6. **Fly It Yourself:** pick a ghost (Gymnasium's heuristic or a trained run), press Start, and land with
+   ↑ / ← / →. Your flight is saved and opens in Flight Replay.
 
 ## CLI
 
@@ -112,12 +150,24 @@ Everything in the UI is also available from the command line (same core code):
 .venv\Scripts\python.exe -m lunarlab reward export --preset hover-bonus -o my-reward.yaml
 .venv\Scripts\python.exe -m lunarlab train --reward-config my-reward.yaml --profile smoke
 .venv\Scripts\python.exe -m lunarlab processes                     # list this project's server/worker processes
+.venv\Scripts\python.exe -m lunarlab suite ... --parallel 5             # train several runs at once
+.venv\Scripts\python.exe -m lunarlab suite --algo dqn ...               # the same experiment with DQN
+.venv\Scripts\python.exe -m lunarlab run-experiment --experiment-id <id> --parallel 4   # resume/finish + final tests
+.venv\Scripts\python.exe -m lunarlab robustness --experiment-id <id> --parallel 8
+.venv\Scripts\python.exe -m lunarlab rlhf-study --from-experiment <id> --pairs 300,3000 --parallel 6
+.venv\Scripts\python.exe -m lunarlab rlhf-dataset --from-experiment <id>   # or step by step:
+.venv\Scripts\python.exe -m lunarlab reward-model --dataset-id <ds> --pairs 3000 --include-human
+.venv\Scripts\python.exe -m lunarlab record-showcase --experiment-id <id> --references
+.venv\Scripts\python.exe -m lunarlab results --experiment-ids <id1>,<id2> --out docs/results
+.venv\Scripts\python.exe -m lunarlab export-demo --experiment-ids <id1>,<id2>   # snapshot for the static demo
 ```
 
 Profiles: `smoke` (8,192 transitions, technical test), `standard` (1,000,000 requested → 1,003,520 actual
 transitions, because PPO completes whole rollouts of 4,096), `extended` (3,000,000, explicit launch only).
 
 ### Reproducing the full experiment
+
+The exact commands behind [docs/RESULTS.md](docs/RESULTS.md) are listed at its end. The basic version:
 
 ```powershell
 .venv\Scripts\python.exe -m lunarlab benchmark                                   # ~1 min, for time estimates
@@ -126,10 +176,11 @@ transitions, because PPO completes whole rollouts of 4,096), `extended` (3,000,0
 .venv\Scripts\python.exe -m lunarlab report  --experiment-id <printed id>
 ```
 
-The suite trains 12 runs one at a time, then evaluates each run's validation-selected checkpoint once on the
-100 final-test seeds. Measured on the development laptop (i7-13620H), PPO with the default 4 in-process
-environments runs at about 5,100 transitions/s, so a STANDARD run takes roughly 5–10 minutes including
-validation passes and the whole suite roughly 1–2 hours. The laptop must stay awake.
+The suite trains the runs (one at a time, or `--parallel N` at once), then evaluates each run's
+validation-selected checkpoint once on the 100 final-test seeds. On the development laptop (i7-13620H) the
+benchmark's short bursts reach about 5,000 transitions/s, but sustained training ran at 2,100–2,400
+transitions/s for a single run (a STANDARD run in about 8–10 minutes) and 1,000–1,200 per run with five in
+parallel (the 20-run study took 81 minutes while a DQN study shared the CPU). The laptop must stay awake.
 
 ## Where things are stored
 
@@ -141,16 +192,23 @@ data/jobs/<job>/            worker log, status and result of each job
 runs/<run_id>/              config.yaml, metadata.json, status.json, events.jsonl, episodes.csv,
                             metrics.jsonl, evaluations/, checkpoints/, trajectories/, videos/
 reports/<id>/               report.md, report.html, figures, portfolio_summary.md
+data/flights/               keyboard flights (mp4 + telemetry, policy kind "human")
+data/preferences/<dataset>/ flight segments for preference learning, human labels (jsonl)
+data/reward_models/<id>/    learned reward models (npz weights + metadata with SHA-256)
+demo/api/                   the exported snapshot behind the static demo (committed)
 ```
 
 Nothing is deleted automatically. Checkpoints for a 64×64 MLP are about 150 KB each.
 
 ## Documentation
 
-- [docs/REWARDS.md](docs/REWARDS.md): the original reward, the four presets, formulas, assumptions, why
+- [docs/RESULTS.md](docs/RESULTS.md): the experiments, findings with intervals, figures, limitations and
+  the commands that reproduce them.
+- [docs/REWARDS.md](docs/REWARDS.md): the original reward, the four presets, learned rewards, formulas, assumptions, why
   shaped scores are not comparable, discounted-return reasoning, termination vs truncation.
 - [docs/EVALUATION.md](docs/EVALUATION.md): the protocol, outcome definitions (including an environment
-  contact-flag quirk), statistics, the reward-exploitation rule, and final-test freezing.
+  contact-flag quirk), statistics across seeds, robustness conditions, the reward-exploitation rule, and
+  final-test freezing.
 - [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md): codebase map, wrapper order, job supervisor, storage,
   security model, shutdown and resume behaviour, and design decisions.
 - [docs/TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md): Box2D/SWIG, Python versions, Node, ports,
@@ -162,10 +220,10 @@ Nothing is deleted automatically. Checkpoints for a 64×64 MLP are about 150 KB 
 ## Tests
 
 ```powershell
-.venv\Scripts\python.exe -m pytest                       # 115 tests: unit, integration, real PPO, subprocesses
+.venv\Scripts\python.exe -m pytest                       # 162 tests: unit, integration, real PPO/DQN, subprocesses
 .venv\Scripts\python.exe -m ruff check lunarlab tests
 cd frontend; npm run typecheck; npm run lint; npm run build
-npx playwright test                                      # 7 browser flows on real backend (uses installed Edge)
+npx playwright test                                      # 9 browser flows on real backend (uses installed Edge)
 ```
 
 ## Credits
@@ -177,7 +235,10 @@ npx playwright test                                      # 7 browser flows on re
 - Schulman et al., *Proximal Policy Optimization Algorithms*, 2017.
 - Ng, Harada & Russell, *Policy invariance under reward transformations: Theory and application to reward
   shaping*, ICML 1999.
+- Mnih et al., *Human-level control through deep reinforcement learning*, Nature 2015 (DQN).
+- Christiano et al., *Deep reinforcement learning from human preferences*, NeurIPS 2017.
+- Agarwal et al., *Deep Reinforcement Learning at the Edge of the Statistical Precipice*, NeurIPS 2021.
 - PyTorch, NumPy, pandas, Matplotlib, imageio/ffmpeg, FastAPI, Pydantic, React, Vite, Tailwind CSS,
-  Recharts, Lucide, IBM Plex.
+  Recharts, three.js, Lucide, IBM Plex.
 
 This is a 2-D simulation benchmark. Nothing here is evidence of real-world rocket-control capability.

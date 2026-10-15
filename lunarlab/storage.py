@@ -68,6 +68,13 @@ def demos_dir() -> Path:
     return p
 
 
+def flights_dir() -> Path:
+    """Keyboard flights (``lunarlab.play``): recordings with policy kind ``human``."""
+    p = data_dir() / "flights"
+    p.mkdir(parents=True, exist_ok=True)
+    return p
+
+
 def reports_dir() -> Path:
     p = home() / "reports"
     p.mkdir(parents=True, exist_ok=True)
@@ -133,7 +140,7 @@ def replace_file(src: str | Path, dst: Path, timeout_s: float = 15.0) -> None:
 
 
 def _replace_with_retry(src: str, dst: Path) -> None:
-    replace_file(src, dst, timeout_s=5.0)
+    replace_file(src, dst, timeout_s=30.0)
 
 
 def atomic_write_bytes(path: Path, data: bytes) -> None:

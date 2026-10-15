@@ -3,14 +3,17 @@
 A reward configuration is pure data validated by a fixed schema. There is no
 expression language and nothing from the editor is ever evaluated as code.
 
-    training_reward = original_reward + sum(enabled additional terms)
+    training_reward = original_weight * original_reward + sum(enabled additional terms)
 
-The original environment reward is always included unchanged. The additional
-terms are:
+``original_weight`` is 1 for every preset: the original environment reward is
+included unchanged. Only the learned-reward (RLHF) experiments set it to 0, so
+the agent optimises a reward model and never sees the environment's reward.
+The additional terms are:
 
 * ``time_penalty``      -cost on every transition
 * ``hover_bonus``       +bonus when the *resulting* state satisfies the eligibility predicate
 * ``potential_shaping`` alpha * (gamma * Phi(s') - Phi(s)), with Phi(terminal) = 0
+* ``learned_reward``    scale * r_model(s, a, s') from a reward model trained on preferences
 
 ``gamma`` for potential shaping is *not* part of the reward config: it is
 always the PPO discount of the run that uses the config, so the two cannot
@@ -23,11 +26,11 @@ import hashlib
 import json
 from typing import Literal
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 from lunarlab.hover import DEFAULT_BONUS_ELIGIBILITY, HoverThresholds
 
-TERM_KEYS: tuple[str, ...] = ("time_penalty", "hover_bonus", "potential_shaping")
+TERM_KEYS: tuple[str, ...] = ("time_penalty", "hover_bonus", "potential_shaping", "learned_reward")
 PresetName = Literal["baseline", "time-penalty", "hover-bonus", "potential", "custom"]
 PRESET_NAMES: tuple[str, ...] = ("baseline", "time-penalty", "hover-bonus", "potential")
 
@@ -63,6 +66,12 @@ class PotentialConfig(_Strict):
     weights: PotentialWeights = Field(default_factory=PotentialWeights)
 
 
+class LearnedRewardConfig(_Strict):
+    enabled: bool = False
+    model_id: str | None = Field(None, max_length=96, pattern=r"^[A-Za-z0-9][A-Za-z0-9_\-]*$")
+    scale: float = Field(1.0, gt=0.0, le=100.0, description="Multiplies the normalised model output.")
+
+
 class RewardConfig(_Strict):
     schema_version: Literal[1] = 1
     name: str = Field(..., min_length=1, max_length=64, pattern=r"^[A-Za-z0-9][A-Za-z0-9 _.\-]*$")
@@ -71,6 +80,16 @@ class RewardConfig(_Strict):
     time_penalty: TimePenaltyConfig = Field(default_factory=TimePenaltyConfig)
     hover_bonus: HoverBonusConfig = Field(default_factory=HoverBonusConfig)
     potential: PotentialConfig = Field(default_factory=PotentialConfig)
+    original_weight: float = Field(
+        1.0, ge=0.0, le=1.0, description="Weight of the original environment reward."
+    )
+    learned: LearnedRewardConfig = Field(default_factory=LearnedRewardConfig)
+
+    @model_validator(mode="after")
+    def _learned_needs_model(self) -> RewardConfig:
+        if self.learned.enabled and not self.learned.model_id:
+            raise ValueError("learned reward enabled without a model_id")
+        return self
 
     def active_terms(self) -> list[str]:
         out = []
@@ -80,12 +99,23 @@ class RewardConfig(_Strict):
             out.append("hover_bonus")
         if self.potential.enabled:
             out.append("potential_shaping")
+        if self.learned.enabled:
+            out.append("learned_reward")
         return out
 
     def reward_payload(self) -> dict:
-        """Only the fields that change the reward function (not name/description)."""
+        """Only the fields that change the reward function (not name/description).
+
+        Fields added after the first release are included only when they differ from their
+        defaults, so every earlier configuration keeps exactly the same content hash.
+        """
         d = self.model_dump(mode="json")
-        return {k: d[k] for k in ("schema_version", "time_penalty", "hover_bonus", "potential")}
+        out = {k: d[k] for k in ("schema_version", "time_penalty", "hover_bonus", "potential")}
+        if self.original_weight != 1.0:
+            out["original_weight"] = self.original_weight
+        if self.learned.enabled:
+            out["learned"] = d["learned"]
+        return out
 
     def content_hash(self) -> str:
         """Hash of the reward function itself. Two configs with equal hashes are the same reward."""
@@ -93,7 +123,7 @@ class RewardConfig(_Strict):
         return hashlib.sha256(canonical.encode()).hexdigest()[:16]
 
     def is_original(self) -> bool:
-        return not self.active_terms()
+        return not self.active_terms() and self.original_weight == 1.0
 
     def warnings(self) -> list[str]:
         """Design warnings shown in the Reward Studio (not validation errors)."""
@@ -122,6 +152,15 @@ class RewardConfig(_Strict):
             )
         if self.potential.enabled and self.potential.alpha >= 50:
             w.append("Large alpha: the shaping term may dominate the original reward early in training.")
+        if self.original_weight == 0 and not self.active_terms():
+            w.append(
+                "The original reward has weight 0 and no other term is enabled: there is nothing to learn from."
+            )
+        if self.original_weight == 0 and self.learned.enabled:
+            w.append(
+                "The agent never sees the environment reward and optimises the learned reward model only "
+                "(the RLHF setting). Where the model is wrong, the agent may exploit it."
+            )
         return w
 
 

@@ -36,15 +36,25 @@ def _ll_module():
     return lunar_lander
 
 
-def make_env(render_mode: str | None = None) -> gym.Env:
+ROBUSTNESS_KEYS = frozenset({"enable_wind", "wind_power", "turbulence_power", "gravity"})
+
+
+def make_env(render_mode: str | None = None, overrides: dict[str, Any] | None = None) -> gym.Env:
     """Create the standard environment.
 
     ``render_mode=None`` for training/evaluation, ``"rgb_array"`` for recording.
     The returned env includes the registered ``TimeLimit`` wrapper.
+
+    ``overrides`` (wind, turbulence, gravity) exist only for the separately labelled robustness
+    evaluations; training and every primary evaluation use the default physics.
     """
     if render_mode not in (None, "rgb_array"):
         raise ValueError("render_mode must be None or 'rgb_array'")
-    return gym.make(ENV_ID, render_mode=render_mode, **ENV_KWARGS)
+    extra = dict(overrides or {})
+    unknown = set(extra) - ROBUSTNESS_KEYS
+    if unknown:
+        raise ValueError(f"unsupported environment overrides: {sorted(unknown)}")
+    return gym.make(ENV_ID, render_mode=render_mode, **ENV_KWARGS, **extra)
 
 
 # --------------------------------------------------------------------------- #

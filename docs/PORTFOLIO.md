@@ -21,3 +21,15 @@ Suggested workflow:
 3. `python -m lunarlab report --experiment-id <printed id>`
 4. Use `portfolio_summary.md`, `report.html` and a side-by-side replay recorded on seed 20000. Pick the clip
    by seed, not by how dramatic it looks.
+
+## What this repository already shows
+
+- [docs/RESULTS.md](RESULTS.md): the full write-up of the three experiments (38 policies), with intervals,
+  figures and limitations. Every number there comes from `python -m lunarlab results`.
+- `docs/media/showcase.gif`: four reward designs on the same held-out episode (real footage, seed fixed in
+  advance, training seed 0 for every group).
+- The static demo (`demo/api` + the frontend built with `VITE_DEMO=1`): the real UI on the real results,
+  read-only, deployable to GitHub Pages by `.github/workflows/pages.yml`.
+
+When quoting a number, quote its interval and the number of policies behind it.
+

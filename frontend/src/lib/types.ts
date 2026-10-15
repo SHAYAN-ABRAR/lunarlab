@@ -70,6 +70,7 @@ export interface RunSummary {
   latest_test: EvalSummary | null
   frozen_for_test: { checkpoint: string; frozen_at: string } | null
   protocol_hash: string
+  algo?: 'ppo' | 'dqn'
   validation_history?: ValidationPoint[]
 }
 
@@ -154,7 +155,7 @@ export interface RecordingMeta {
   created_at: string
   run_id: string | null
   source: Record<string, unknown> & { type: string; kind?: string; run_id?: string; reward_name?: string; training_seed?: number; checkpoint?: string; profile?: string }
-  policy: { kind: 'random' | 'heuristic' | 'ppo'; label: string }
+  policy: { kind: 'random' | 'heuristic' | 'ppo' | 'dqn' | 'human'; label: string }
   episode_seed: number
   seed_split: 'validation' | 'test' | 'other'
   n_frames: number
@@ -277,3 +278,31 @@ export interface Experiment {
   rewards: { name: string; preset: Preset; hash: string }[]
   run_ids: string[]
 }
+
+// --------------------------------------------------------------------------- //
+// Keyboard flights
+// --------------------------------------------------------------------------- //
+
+export interface FlightEpisode {
+  original_return: number
+  env_outcome: string
+  pad_landing: boolean
+  length: number
+  actions: Record<string, number>
+}
+
+export interface GhostFlight {
+  opponent: string
+  label: string
+  source: { type: 'heuristic' } | { type: 'run'; run_id: string; checkpoint: string; checkpoint_transitions: number; reward_name: string; algo: string; training_seed: number }
+  rows: { obs: number[]; action: number | null }[]
+  episode: FlightEpisode
+}
+
+export interface FlightStepResult {
+  rows: TelemetryRow[]
+  done: boolean
+  recording?: RecordingMeta
+  episode?: FlightEpisode
+}
+

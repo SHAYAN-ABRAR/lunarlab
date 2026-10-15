@@ -2,8 +2,10 @@ import clsx from 'clsx'
 import {
   Activity,
   BookOpen,
+  Brain,
   Clapperboard,
   FlaskConical,
+  Gamepad2,
   GitCompareArrows,
   Gauge,
   Menu,
@@ -13,8 +15,11 @@ import {
 import { useEffect, useState } from 'react'
 import { NavLink, Route, Routes, useLocation } from 'react-router'
 import { SystemStatus } from './components/SystemStatus'
+import { DEMO, type DemoManifest, demoManifest } from './lib/demo'
 import Compare from './pages/Compare'
+import Fly from './pages/Fly'
 import Learn from './pages/Learn'
+import LearnedRewards from './pages/LearnedRewards'
 import NotFound from './pages/NotFound'
 import Overview from './pages/Overview'
 import Replay from './pages/Replay'
@@ -28,8 +33,10 @@ const NAV = [
   { to: '/training', label: 'Training Console', Icon: Activity },
   { to: '/studio', label: 'Reward Studio', Icon: SlidersHorizontal },
   { to: '/replay', label: 'Flight Replay', Icon: Clapperboard },
+  { to: '/fly', label: 'Fly It Yourself', Icon: Gamepad2 },
   { to: '/compare', label: 'Compare & Diagnose', Icon: GitCompareArrows },
   { to: '/stress-test', label: 'Reward Stress Test', Icon: FlaskConical },
+  { to: '/learned-rewards', label: 'Learned Rewards', Icon: Brain },
   { to: '/learn', label: 'Learn', Icon: BookOpen },
 ]
 
@@ -46,6 +53,27 @@ function Brand() {
         <div className="font-mono text-[15px] font-medium tracking-[0.2em] text-ink">LUNARLAB</div>
         <div className="text-[11px] text-ink-3">Reward Shaping Mission Control</div>
       </div>
+    </div>
+  )
+}
+
+const REPO_URL = import.meta.env.VITE_REPO_URL || 'https://github.com/SHAYAN-ABRAR/lunarlab'
+
+function DemoBanner() {
+  const [m, setM] = useState<DemoManifest | null>(null)
+  useEffect(() => {
+    demoManifest().then(setM, () => setM(null))
+  }, [])
+  return (
+    <div role="note" className="mb-6 flex flex-wrap items-center justify-between gap-3 rounded-[10px] border border-accent/30 bg-accent/5 px-4 py-3 text-[13px] text-ink-2">
+      <span>
+        <strong className="font-medium text-ink">Static demo.</strong> Real results from LunarLab experiments, frozen as a snapshot
+        {m ? ` on ${new Date(m.created_at).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })}` : ''}. Training,
+        recording, flying and saving labels need the local app.
+      </span>
+      <a href={REPO_URL} className="font-medium text-accent hover:underline">
+        Run it yourself →
+      </a>
     </div>
   )
 }
@@ -94,9 +122,7 @@ export default function App() {
       <aside className="sticky top-0 hidden h-screen flex-col border-r border-line bg-rail lg:flex">
         <Brand />
         <Nav />
-        <div className="mt-auto">
-          <SystemStatus />
-        </div>
+        <div className="mt-auto">{!DEMO && <SystemStatus />}</div>
       </aside>
       {/* Mobile header */}
       <div className="sticky top-0 z-30 flex items-center justify-between border-b border-line bg-rail/95 px-3 backdrop-blur lg:hidden">
@@ -108,11 +134,12 @@ export default function App() {
       {menuOpen && (
         <div className="fixed inset-x-0 top-[70px] z-30 border-b border-line bg-rail pb-4 lg:hidden">
           <Nav onNavigate={() => setMenuOpen(false)} />
-          <SystemStatus />
+          {!DEMO && <SystemStatus />}
         </div>
       )}
       <main id="main" className="min-w-0 px-4 py-6 sm:px-6 lg:px-10 lg:py-8">
         <div className="mx-auto max-w-[1600px]">
+          {DEMO && <DemoBanner />}
           <Routes>
             <Route path="/" element={<Overview />} />
             <Route path="/training" element={<Training />} />
@@ -120,8 +147,10 @@ export default function App() {
             <Route path="/studio" element={<RewardStudio />} />
             <Route path="/replay" element={<Replay />} />
             <Route path="/replay/:recordingId" element={<Replay />} />
+            <Route path="/fly" element={<Fly />} />
             <Route path="/compare" element={<Compare />} />
             <Route path="/stress-test" element={<StressTest />} />
+            <Route path="/learned-rewards" element={<LearnedRewards />} />
             <Route path="/learn" element={<Learn />} />
             <Route path="*" element={<NotFound />} />
           </Routes>

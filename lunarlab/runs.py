@@ -7,11 +7,11 @@ from typing import Any
 
 from lunarlab import sysinfo
 from lunarlab.config import (
+    DQNConfig,
     EvalProtocol,
     PPOConfig,
     RunConfig,
     TrainingConfig,
-    actual_budget,
 )
 from lunarlab.env import environment_record
 from lunarlab.rewards.config import RewardConfig
@@ -43,10 +43,12 @@ def create_run(
     label: str = "",
     reward_config_id: str | None = None,
     reward_revision: int | None = None,
+    algo: str = "ppo",
+    dqn: DQNConfig | None = None,
 ) -> RunConfig:
     ppo = ppo or PPOConfig()
     tag = reward.preset if reward.preset != "custom" else "custom"
-    run_id = new_id(tag, f"s{seed}", training.profile)
+    run_id = new_id(*([algo] if algo != "ppo" else []), tag, f"s{seed}", training.profile)
     cfg = RunConfig(
         run_id=run_id,
         experiment_id=experiment_id,
@@ -59,6 +61,8 @@ def create_run(
         training=training,
         seed=seed,
         eval_protocol=protocol or EvalProtocol(),
+        algo=algo,
+        dqn=dqn,
     )
     paths = RunPaths(run_id)
     if paths.root.exists():
@@ -79,8 +83,9 @@ def create_run(
         "eval_protocol_hash": cfg.eval_protocol.protocol_hash(),
         "seed": seed,
         "requested_transitions": training.total_transitions,
-        "planned_transitions": actual_budget(training.total_transitions, ppo.rollout_size),
-        "rollout_size": ppo.rollout_size,
+        "planned_transitions": cfg.planned_transitions,
+        "rollout_size": cfg.rollout_size,
+        "algo": algo,
         "environment": environment_record(),
         "system": sysinfo.snapshot(),
         "segments": [],
@@ -200,16 +205,19 @@ def resolve_checkpoint(run_id: str, which: str = "best") -> tuple[Path, dict]:
 def load_policy(run_id: str, which: str = "best", *, deterministic: bool = True):
     """Load a run's policy for inference (safe, weights-only)."""
     from lunarlab.env import make_env
-    from lunarlab.policies import PPOPolicy, load_policy_weights
+    from lunarlab.policies import SB3Policy, load_policy_weights
 
     cfg = load_config(run_id)
     path, entry = resolve_checkpoint(run_id, which)
     env = make_env()
     try:
-        net = load_policy_weights(path, cfg.ppo, env.observation_space, env.action_space)
+        net = load_policy_weights(
+            path, cfg.ppo, env.observation_space, env.action_space, algo=cfg.algo, dqn_cfg=cfg.dqn
+        )
     finally:
         env.close()
     label = (
-        f"PPO · {cfg.reward.name} · seed {cfg.seed} · {entry['name']} ({entry['transitions']:,} transitions)"
+        f"{cfg.algo.upper()} · {cfg.reward.name} · seed {cfg.seed} · {entry['name']} "
+        f"({entry['transitions']:,} transitions)"
     )
-    return PPOPolicy(net, deterministic=deterministic, label=label), entry
+    return SB3Policy(net, deterministic=deterministic, label=label, kind=cfg.algo), entry

@@ -63,11 +63,20 @@ class HeuristicPolicy:
         return int(self._heuristic(self._env, obs))
 
 
-def build_policy_network(ppo_cfg, observation_space, action_space):
-    """Construct an ActorCriticPolicy matching PPO's ``MlpPolicy`` for our config."""
+def build_policy_network(ppo_cfg, observation_space, action_space, *, algo: str = "ppo", dqn_cfg=None):
+    """Construct a network matching SB3's ``MlpPolicy`` for our config (PPO actor-critic or DQN Q-net)."""
     import torch.nn as nn
     from stable_baselines3.common.policies import ActorCriticPolicy
 
+    if algo == "dqn":
+        from stable_baselines3.dqn.policies import DQNPolicy
+
+        return DQNPolicy(
+            observation_space,
+            action_space,
+            lr_schedule=lambda _: dqn_cfg.learning_rate,
+            net_arch=list(dqn_cfg.net_arch),
+        )
     act = {"tanh": nn.Tanh, "relu": nn.ReLU}[ppo_cfg.activation]
     return ActorCriticPolicy(
         observation_space,
@@ -78,7 +87,9 @@ def build_policy_network(ppo_cfg, observation_space, action_space):
     )
 
 
-def load_policy_weights(path: Path, ppo_cfg, observation_space, action_space):
+def load_policy_weights(
+    path: Path, ppo_cfg, observation_space, action_space, *, algo: str = "ppo", dqn_cfg=None
+):
     """Load a checkpoint's policy tensors into a freshly built network (no unpickling)."""
     import torch
     from stable_baselines3.common.save_util import load_from_zip_file
@@ -86,17 +97,20 @@ def load_policy_weights(path: Path, ppo_cfg, observation_space, action_space):
     _, params, _ = load_from_zip_file(str(path), load_data=False, device="cpu")
     if not params or "policy" not in params:
         raise ValueError(f"{path.name} does not contain policy parameters")
-    net = build_policy_network(ppo_cfg, observation_space, action_space)
+    net = build_policy_network(ppo_cfg, observation_space, action_space, algo=algo, dqn_cfg=dqn_cfg)
     net.load_state_dict(params["policy"])
     net.set_training_mode(False)
     net.to(torch.device("cpu"))
     return net
 
 
-class PPOPolicy:
+class SB3Policy:
+    """A trained SB3 network (PPO actor-critic or DQN Q-network) acting greedily or stochastically."""
+
     kind = "ppo"
 
-    def __init__(self, network, *, deterministic: bool = True, label: str = "PPO") -> None:
+    def __init__(self, network, *, deterministic: bool = True, label: str = "PPO", kind: str = "ppo") -> None:
+        self.kind = kind
         self.network = network
         self.deterministic = deterministic
         self.label = label
@@ -107,3 +121,6 @@ class PPOPolicy:
     def act(self, obs: np.ndarray) -> int:
         action, _ = self.network.predict(obs, deterministic=self.deterministic)
         return int(np.asarray(action).item())
+
+
+PPOPolicy = SB3Policy  # backwards-compatible name

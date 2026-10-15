@@ -29,10 +29,13 @@ def plan_suite(
     *,
     n_envs: int | None = None,
     throughput_tps: float | None = None,
+    algo: str = "ppo",
+    training_overrides: dict | None = None,
 ) -> dict[str, Any]:
     ppo = PPOConfig(**({"n_envs": n_envs} if n_envs else {}))
-    training = training_for_profile(profile)
-    per_run = actual_budget(training.total_transitions, ppo.rollout_size)
+    training = training_for_profile(profile, **(training_overrides or {}))
+    rollout = 4 if algo == "dqn" else ppo.rollout_size  # DQN: train_freq 4 x 1 env
+    per_run = actual_budget(training.total_transitions, rollout)
     n_runs = len(presets) * len(seeds)
     total = per_run * n_runs
     est = (total / throughput_tps / 3600.0) if throughput_tps else None
@@ -64,6 +67,8 @@ def create_experiment(
     profile: str,
     description: str = "",
     n_envs: int | None = None,
+    algo: str = "ppo",
+    training_overrides: dict | None = None,
 ) -> dict[str, Any]:
     reward_list = list(rewards or []) + [preset(p) for p in (presets or [])]
     if not reward_list:
@@ -78,12 +83,13 @@ def create_experiment(
         for s in seeds:
             cfg = create_run(
                 reward=r,
-                training=training_for_profile(profile),
+                training=training_for_profile(profile, **(training_overrides or {})),
                 seed=s,
                 ppo=ppo,
                 protocol=protocol,
                 experiment_id=exp_id,
                 label=f"{name} · {r.name} · seed {s}",
+                algo=algo,
             )
             run_ids.append(cfg.run_id)
     exp = {
@@ -94,6 +100,7 @@ def create_experiment(
         "profile": profile,
         "seeds": seeds,
         "rewards": [{"name": r.name, "preset": r.preset, "hash": r.content_hash()} for r in reward_list],
+        "algo": algo,
         "ppo": ppo.model_dump(mode="json"),
         "protocol_hash": protocol.protocol_hash(),
         "run_ids": run_ids,

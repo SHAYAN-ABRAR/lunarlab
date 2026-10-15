@@ -74,6 +74,36 @@ class PPOConfig(_Strict):
         return self.model_dump(mode="json")
 
 
+class DQNConfig(_Strict):
+    """DQN settings: RL Baselines3 Zoo's LunarLander-v3 entry (hyperparams/dqn.yml).
+
+    Zoo tunes these for a 1e5-transition budget, and that is the budget the comparison study
+    uses: DQN's update-per-4-steps schedule makes it about 20x slower per transition than PPO
+    on CPU, so equal-experience runs (1e6) would take hours each. Budgets therefore differ
+    between the algorithms; comparisons report it.
+    """
+
+    n_envs: int = Field(1, ge=1, le=16)
+    learning_rate: float = Field(6.3e-4, gt=0.0, le=0.1)
+    batch_size: int = Field(128, ge=8, le=4096)
+    buffer_size: int = Field(50_000, ge=1_000, le=2_000_000)
+    learning_starts: int = Field(0, ge=0)
+    gamma: float = Field(0.99, gt=0.0, le=1.0)
+    target_update_interval: int = Field(250, ge=1)
+    train_freq: int = Field(4, ge=1, le=1000)
+    gradient_steps: int = Field(-1, ge=-1, le=1000)
+    exploration_fraction: float = Field(0.12, gt=0.0, le=1.0)
+    exploration_final_eps: float = Field(0.1, ge=0.0, le=1.0)
+    net_arch: list[int] = Field(default_factory=lambda: [256, 256], min_length=1, max_length=4)
+
+    @property
+    def rollout_size(self) -> int:
+        return self.train_freq * self.n_envs
+
+    def compatibility_key(self) -> dict:
+        return self.model_dump(mode="json")
+
+
 ProfileName = Literal["smoke", "standard", "extended", "custom"]
 
 
@@ -175,11 +205,17 @@ class RunConfig(_Strict):
     training: TrainingConfig = Field(default_factory=TrainingConfig)
     seed: int = Field(0, ge=0, le=999)
     eval_protocol: EvalProtocol = Field(default_factory=EvalProtocol)
+    algo: Literal["ppo", "dqn"] = "ppo"
+    dqn: DQNConfig | None = None
 
     @model_validator(mode="after")
     def _env_fixed(self) -> RunConfig:
         if self.env_id != ENV_ID or self.env_kwargs != ENV_KWARGS:
             raise ValueError(f"LunarLab experiments use {ENV_ID} with {ENV_KWARGS} only (default physics)")
+        if self.algo == "dqn" and self.dqn is None:
+            self.dqn = DQNConfig()
+        if self.algo == "ppo" and self.dqn is not None:
+            raise ValueError("dqn settings given for a PPO run")
         return self
 
     def config_hash(self) -> str:
@@ -187,13 +223,36 @@ class RunConfig(_Strict):
         d = self.model_dump(mode="json")
         for k in ("run_id", "experiment_id", "label", "created_at", "reward_config_id", "reward_revision"):
             d.pop(k, None)
+        if self.algo == "ppo":  # added after the first release: PPO runs hash exactly as before
+            d.pop("algo", None)
+            d.pop("dqn", None)
+        else:
+            d.pop("ppo", None)  # unused by DQN runs
         d["reward"] = self.reward.reward_payload()
         canonical = json.dumps(d, sort_keys=True, separators=(",", ":"))
         return hashlib.sha256(canonical.encode()).hexdigest()[:16]
 
+    # Algorithm-neutral accessors -------------------------------------------------
+    @property
+    def gamma(self) -> float:
+        return self.dqn.gamma if self.algo == "dqn" and self.dqn else self.ppo.gamma
+
+    @property
+    def n_envs(self) -> int:
+        return self.dqn.n_envs if self.algo == "dqn" and self.dqn else self.ppo.n_envs
+
+    @property
+    def rollout_size(self) -> int:
+        return self.dqn.rollout_size if self.algo == "dqn" and self.dqn else self.ppo.rollout_size
+
+    def algo_settings(self) -> dict:
+        return (
+            self.dqn.compatibility_key() if self.algo == "dqn" and self.dqn else self.ppo.compatibility_key()
+        )
+
     def worker_seeds(self, segment: int = 0) -> list[int]:
         base = TRAIN_WORKER_SEED_BASE + 1000 * self.seed + 100 * segment
-        return [base + i for i in range(self.ppo.n_envs)]
+        return [base + i for i in range(self.n_envs)]
 
     @property
     def requested_transitions(self) -> int:
@@ -201,7 +260,7 @@ class RunConfig(_Strict):
 
     @property
     def planned_transitions(self) -> int:
-        return actual_budget(self.training.total_transitions, self.ppo.rollout_size)
+        return actual_budget(self.training.total_transitions, self.rollout_size)
 
 
 def resume_compatibility(saved: RunConfig, requested: RunConfig) -> list[str]:
@@ -213,13 +272,11 @@ def resume_compatibility(saved: RunConfig, requested: RunConfig) -> list[str]:
         problems.append(
             "reward function differs — changing the reward is a new experiment, not a continuation"
         )
-    if saved.ppo.compatibility_key() != requested.ppo.compatibility_key():
-        diffs = [
-            k
-            for k, v in saved.ppo.compatibility_key().items()
-            if requested.ppo.compatibility_key().get(k) != v
-        ]
-        problems.append(f"PPO settings differ ({', '.join(diffs)})")
+    if saved.algo != requested.algo:
+        problems.append(f"algorithm differs ({saved.algo} vs {requested.algo})")
+    elif saved.algo_settings() != requested.algo_settings():
+        diffs = [k for k, v in saved.algo_settings().items() if requested.algo_settings().get(k) != v]
+        problems.append(f"{saved.algo.upper()} settings differ ({', '.join(diffs)})")
     if saved.seed != requested.seed:
         problems.append("training seed differs")
     if saved.eval_protocol.protocol_hash() != requested.eval_protocol.protocol_hash():

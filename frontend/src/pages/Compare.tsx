@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { Link, useSearchParams } from 'react-router'
 import { Legend, SeedDotPlot, StackedBars } from '../components/charts'
 import { useJobWatch } from '../components/Jobs'
+import { type RobustStats, RobustStatsCard, type RobustnessTable, RobustnessCard } from '../components/robust'
 import { Badge, Button, Card, EmptyState, ErrorBanner, Notice, PageHeader, Segmented, Spinner, StateBadge, Table } from '../components/ui'
 import { api, idempotencyKey } from '../lib/api'
 import { fmt } from '../lib/format'
@@ -13,6 +14,8 @@ import type { CurvePoint, EvalSummary, Experiment, Job, Preset, RunSummary } fro
 import { CartesianGrid, Line, LineChart, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 
 interface Group {
+  group_key?: string
+  algo?: string
   reward_hash: string
   reward_name: string
   reward_preset: Preset
@@ -43,6 +46,15 @@ interface CompareData {
   diagnostics: Diagnostic[]
   rules: Record<string, number>
   curves: Record<string, { points: CurvePoint[]; window: number; n_episodes: number }>
+  robust_stats?: RobustStats
+  robustness?: RobustnessTable
+}
+
+/** Short group label for compact charts: first two words of the reward name, keeping an algorithm prefix. */
+function shortName(name: string): string {
+  const m = /^([A-Z]+) · (.*)$/.exec(name)
+  const words = (m ? m[2] : name).split(' ').slice(0, 2).join(' ')
+  return m ? `${m[1]} ${words}` : words
 }
 
 function FlagBadge({ flag }: { flag: string }) {
@@ -146,7 +158,12 @@ export default function Compare() {
   const runs = useApi<RunSummary[]>('/api/runs')
   const experiments = useApi<Experiment[]>('/api/experiments')
   const [selected, setSelected] = useState<string[]>([])
-  const [split, setSplit] = useState<'test' | 'validation'>('validation')
+  const [split, setSplitState] = useState<'test' | 'validation'>('validation')
+  const [splitChosen, setSplitChosen] = useState(false)
+  const setSplit = (v: 'test' | 'validation') => {
+    setSplitChosen(true)
+    setSplitState(v)
+  }
   const [data, setData] = useState<CompareData | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
@@ -166,6 +183,13 @@ export default function Compare() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [runs.data, experiments.data, experimentId])
+
+  // Default split: the final test once every selected run that has been evaluated has a frozen test result.
+  useEffect(() => {
+    if (splitChosen || !runs.data) return
+    const chosen = runs.data.filter((r) => selected.includes(r.run_id) && (r.latest_test || r.latest_validation))
+    setSplitState(chosen.length > 0 && chosen.every((r) => r.latest_test) ? 'test' : 'validation')
+  }, [selected, runs.data, splitChosen])
 
   useEffect(() => {
     if (!selected.length) {
@@ -192,7 +216,7 @@ export default function Compare() {
         .map((d) => {
           const e = d.evaluation!
           return {
-            name: `${d.reward_name.split(' ').slice(0, 2).join(' ')} · s${d.seed}`,
+            name: `${shortName(d.reward_name)} · s${d.seed}`,
             pad: e.pad_landing_rate,
             off: Math.max(0, e.env_success_rate - e.pad_landing_rate),
             crash: e.crash_rate,
@@ -380,7 +404,7 @@ export default function Compare() {
               <SeedDotPlot
                 ariaLabel="Mean original return of each trained policy, grouped by reward"
                 groups={data.groups.map((g) => ({
-                  name: g.reward_name.split(' ').slice(0, 2).join(' '),
+                  name: shortName(g.reward_name),
                   color: PRESET_COLOR[g.reward_preset],
                   shape: PRESET_SHAPE[g.reward_preset],
                   points: g.per_seed.filter((p) => p.evaluation).map((p) => ({ seed: p.seed, value: p.evaluation!.mean_original_return, runId: p.run_id })),
@@ -392,7 +416,7 @@ export default function Compare() {
                   {data.groups.map((g) => {
                     const a = g.across_seeds.mean_original_return
                     return (
-                      <tr key={g.reward_hash}>
+                      <tr key={g.group_key ?? g.reward_hash}>
                         <td>{g.reward_name}</td>
                         <td className="num text-right">{g.n_evaluated_seeds}</td>
                         <td className="num text-right">{fmt.num(a?.mean, 1)}</td>
@@ -419,6 +443,12 @@ export default function Compare() {
               <p className="mt-2 text-xs text-ink-3">“At rest” is the environment’s own success signal (+100); strict pad landing additionally requires both legs between the flags, no body contact and an upright finish.</p>
             </Card>
           </div>
+
+          {data.robust_stats && (
+            <RobustStatsCard stats={data.robust_stats} styles={data.groups.map((g) => ({ name: g.reward_name, preset: g.reward_preset, algo: g.algo ?? 'ppo' }))} />
+          )}
+
+          {data.robustness && <RobustnessCard table={data.robustness} experimentId={experimentId || undefined} />}
 
           <Card title="Training curves (original reward)">
             <CurvesChart data={data} />

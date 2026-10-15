@@ -16,7 +16,7 @@ from pydantic import ValidationError
 
 from lunarlab import __version__
 from lunarlab.compare import compare_runs, run_summary, training_curve
-from lunarlab.config import PROFILES, EvalProtocol, PPOConfig, actual_budget, training_for_profile
+from lunarlab.config import PROFILES, EvalProtocol, PPOConfig, training_for_profile
 from lunarlab.db import Database
 from lunarlab.env import ACTIONS, OBSERVATION_FIELDS, environment_record
 from lunarlab.evaluation import list_evaluations
@@ -138,6 +138,7 @@ def light_summary(s: dict) -> dict:
         "latest_test",
         "frozen_for_test",
         "protocol_hash",
+        "algo",
     )
     return {k: s.get(k) for k in keep}
 
@@ -210,21 +211,22 @@ def overview(request: Request) -> dict:
     by_preset: dict[str, dict[str, Any]] = {}
     for r in runs:
         ev = r.get("latest_test") or r.get("latest_validation")
-        if r["profile"] == "smoke" or not ev:
-            continue
+        if r["profile"] == "smoke" or not ev or (r.get("algo") or "ppo") != "ppo":
+            continue  # the preset cards summarize PPO runs; other algorithms are compared on Compare
         slot = by_preset.setdefault(r["reward_preset"], {"runs": 0, "evaluations": []})
         slot["runs"] += 1
         slot["evaluations"].append(
             {
                 "run_id": r["run_id"],
                 "seed": r["seed"],
+                "profile": r["profile"],
                 "split": "test" if r.get("latest_test") else "validation",
                 "mean_original_return": ev["mean_original_return"],
                 "pad_landing_rate": ev["pad_landing_rate"],
             }
         )
     return {
-        "runs": runs[:12],
+        "runs": runs,  # light summaries; the preset cards need every run, the table shows the newest
         "n_runs": len(runs),
         "active_jobs": active,
         "recordings": len(list_recordings()),
@@ -379,7 +381,7 @@ def run_detail(run_id: str, request: Request) -> dict:
         "summary": cached_summary(run_id),
         "config": cfg.model_dump(mode="json"),
         "config_hash": cfg.config_hash(),
-        "rollout_size": cfg.ppo.rollout_size,
+        "rollout_size": cfg.rollout_size,
         "metadata": meta,
         "status": read_json(paths.status, default={}),
         "manifest": read_manifest(paths),
@@ -625,6 +627,88 @@ def recording_scene(recording_id: str) -> dict:
     return {**scene_for_seed(data["episode_seed"]), "source": "re-derived from the episode seed"}
 
 
+# --------------------------------------------------------------------------- #
+# Fly it yourself (keyboard flights; each step is ~1 ms of physics + one video frame)
+# --------------------------------------------------------------------------- #
+
+
+@router.post("/flights", status_code=201)
+def flight_start(body: S.FlightStart) -> dict:
+    from lunarlab.play import FlightError, start_flight
+
+    try:
+        return start_flight(body.seed, body.opponent)
+    except FlightError as exc:
+        raise HTTPException(400, str(exc)) from exc
+
+
+@router.post("/flights/{session_id}/step")
+def flight_step(session_id: str, body: S.FlightStep) -> dict:
+    from lunarlab.play import FlightError, step_flight
+
+    try:
+        return step_flight(session_id, body.actions)
+    except KeyError as exc:
+        raise HTTPException(404, "flight not found (finished, abandoned or expired)") from exc
+    except FlightError as exc:
+        raise HTTPException(400, str(exc)) from exc
+
+
+@router.delete("/flights/{session_id}")
+def flight_abandon(session_id: str) -> dict:
+    from lunarlab.play import abandon_flight
+
+    return {"abandoned": abandon_flight(session_id)}
+
+
+# --------------------------------------------------------------------------- #
+# Learned rewards (RLHF in miniature): preference datasets, human labels, reward models
+# --------------------------------------------------------------------------- #
+
+
+def _dataset_or_404(dataset_id: str) -> str:
+    from lunarlab.preferences.data import dataset_path
+
+    try:
+        path = dataset_path(dataset_id)
+    except ValueError as exc:
+        raise HTTPException(400, "invalid dataset id") from exc
+    if not (path / "segments.npz").exists():
+        raise HTTPException(404, "unknown preference dataset")
+    return dataset_id
+
+
+@router.get("/preferences")
+def preference_datasets() -> list[dict]:
+    from lunarlab.preferences.data import list_datasets
+
+    return list_datasets()
+
+
+@router.get("/preferences/{dataset_id}/pair")
+def preference_pair(dataset_id: str) -> dict:
+    from lunarlab.preferences.data import random_pair
+
+    return random_pair(_dataset_or_404(dataset_id))
+
+
+@router.post("/preferences/{dataset_id}/labels", status_code=201)
+def preference_label(dataset_id: str, body: S.PreferenceLabel) -> dict:
+    from lunarlab.preferences.data import label_and_reveal
+
+    try:
+        return label_and_reveal(_dataset_or_404(dataset_id), body.i, body.j, body.choice)
+    except ValueError as exc:
+        raise HTTPException(400, str(exc)) from exc
+
+
+@router.get("/reward-models")
+def reward_models() -> list[dict]:
+    from lunarlab.preferences.model import list_models
+
+    return [{k: v for k, v in m.items() if k != "history"} for m in list_models()]
+
+
 @router.get("/recordings/{recording_id}/video")
 def recording_video(recording_id: str) -> FileResponse:
     _, vdir, data = _recording(recording_id)
@@ -795,7 +879,7 @@ def run_estimate(run_id: str) -> dict:
     cfg = load_config(run_id)
     bench = read_json(data_dir() / "benchmark.json", default={}) or {}
     tps = (bench.get("default_config") or {}).get("ppo_tps")
-    planned = actual_budget(cfg.training.total_transitions, cfg.ppo.rollout_size)
+    planned = cfg.planned_transitions
     return {
         "planned_transitions": planned,
         "throughput_tps": tps,

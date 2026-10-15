@@ -164,6 +164,155 @@ def seed_split(seed: int, protocol: EvalProtocol) -> str:
     return "other"
 
 
+class EpisodeRecorder:
+    """One episode under evaluation conditions, stepped one action at a time.
+
+    Renders a video frame per step and collects the telemetry rows; ``finish()`` verifies the
+    video and writes the telemetry document. Used for policies (``record_episode``) and for
+    keyboard flights (``lunarlab.play``), so both produce identical recordings.
+    """
+
+    def __init__(
+        self,
+        *,
+        policy_kind: str,
+        policy_label: str,
+        episode_seed: int,
+        out_dir: Path,
+        video_dir: Path,
+        reward: RewardConfig | None,
+        gamma: float,
+        protocol: EvalProtocol,
+        source: dict[str, Any],
+        prefer: str = "auto",
+    ) -> None:
+        out_dir.mkdir(parents=True, exist_ok=True)
+        video_dir.mkdir(parents=True, exist_ok=True)
+        self.recording_id = new_id(policy_kind, f"seed{episode_seed}")
+        self.policy = {"kind": policy_kind, "label": policy_label}
+        self.episode_seed = int(episode_seed)
+        self.out_dir = out_dir
+        self.reward = reward
+        self.gamma = gamma
+        self.protocol = protocol
+        self.source = source
+        self.fps = int(geometry().fps)
+        use_mp4 = prefer == "mp4" or (prefer == "auto" and mp4_available()[0])
+        if prefer == "mp4" and not mp4_available()[0]:
+            raise RecordingError(f"MP4 encoder unavailable: {mp4_available()[1]}")
+        self.env = make_eval_env(protocol, reward, gamma, render_mode="rgb_array", record_steps=True)
+        try:
+            self.sink = (
+                Mp4Sink(video_dir / f"{self.recording_id}.mp4", self.fps)
+                if use_mp4
+                else JpegFramesSink(video_dir / f"{self.recording_id}_frames", self.fps)
+            )
+        except BaseException:
+            self.env.close()
+            raise
+        self.done = False
+        self.episode: dict | None = None
+        try:
+            self.obs, _ = self.env.reset(seed=self.episode_seed)
+            self.pad = probe(self.env)
+            self.scene = scene_geometry(self.env)
+            self.initial_obs = [float(v) for v in self.obs]
+            self.sink.add(self.env.render())
+        except BaseException:
+            self.abort()
+            raise
+
+    @property
+    def steps(self) -> list[dict]:
+        return self.env.steps
+
+    def row0(self) -> dict:
+        zero_terms = {k: 0.0 for k in (self.env.steps[0]["terms"] if self.env.steps else {})}
+        return {
+            "t": 0,
+            "action": None,
+            "obs": self.initial_obs,
+            "original_reward": 0.0,
+            "terms": zero_terms,
+            "training_reward": 0.0,
+            "cum_original": 0.0,
+            "cum_training": 0.0,
+            "builtin": None,
+            "hover": False,
+            "terminated": False,
+            "truncated": False,
+        }
+
+    def step(self, action: int) -> dict:
+        """Apply one action; returns the new telemetry row."""
+        if self.done:
+            raise RecordingError("episode already ended")
+        try:
+            self.obs, _, terminated, truncated, info = self.env.step(int(action))
+            self.sink.add(self.env.render())
+        except BaseException:
+            self.abort()
+            raise
+        if terminated or truncated:
+            self.done = True
+            self.episode = info["lunarlab_episode"]
+        return self.env.steps[-1]
+
+    def finish(self) -> dict:
+        """Close and verify the video, write telemetry + summary. Returns the summary."""
+        if not self.done or self.episode is None:
+            raise RecordingError("episode has not ended")
+        try:
+            self.sink.close()
+        except BaseException:
+            self.abort()
+            raise
+        steps = self.env.steps
+        self.env.close()
+        n_frames = len(steps) + 1
+        check = verify_video(self.sink.path, n_frames, self.sink.format)
+        if not check["verified"]:
+            raise RecordingError(f"video verification failed: {check}")
+        telemetry = {
+            "schema": TELEMETRY_SCHEMA,
+            "recording_id": self.recording_id,
+            "created_at": utc_now(),
+            "source": self.source,
+            "policy": self.policy,
+            "episode_seed": self.episode_seed,
+            "seed_split": seed_split(self.episode_seed, self.protocol),
+            "fps": self.fps,
+            "n_frames": n_frames,
+            "indexing": "frame k = state after k steps (frame 0 = reset); row k's action/reward produced frame k; time = k/fps",
+            "observation_fields": [f.__dict__ for f in OBSERVATION_FIELDS],
+            "actions": [a.__dict__ for a in ACTIONS],
+            "pad": {"x1_obs": self.pad.pad_x1_obs, "x2_obs": self.pad.pad_x2_obs},
+            "scene": self.scene,
+            "reward_config": (self.reward.model_dump(mode="json") if self.reward else None),
+            "reward_applied_during_recording": False,
+            "terms_note": "Additional terms are what the training reward would have added on this episode, "
+            "computed with the same pure functions as training. The policy acted on observations only.",
+            "gamma": self.gamma,
+            "protocol_hash": self.protocol.protocol_hash(),
+            "hover_detector": self.protocol.hover_detector.model_dump(mode="json"),
+            "environment": environment_record(),
+            "video": {"format": self.sink.format, "file": self.sink.path.name, **check},
+            "episode": self.episode,
+            "rows": [self.row0(), *steps],
+        }
+        atomic_write_json(self.out_dir / f"{self.recording_id}.json", telemetry)
+        meta = recording_meta(telemetry)
+        atomic_write_json(self.out_dir / f"{self.recording_id}.meta.json", meta)
+        return meta
+
+    def abort(self) -> None:
+        """Discard everything (partial video included)."""
+        with contextlib.suppress(Exception):
+            self.sink.abort()
+        with contextlib.suppress(Exception):
+            self.env.close()
+
+
 def record_episode(
     policy: Policy,
     *,
@@ -177,93 +326,26 @@ def record_episode(
     prefer: str = "auto",
 ) -> dict:
     """Fly one episode with ``policy`` and save video + telemetry. Returns the summary."""
-    out_dir.mkdir(parents=True, exist_ok=True)
-    video_dir.mkdir(parents=True, exist_ok=True)
-    rec_id = new_id(policy.kind, f"seed{episode_seed}")
-    fps = int(geometry().fps)
-    use_mp4 = prefer == "mp4" or (prefer == "auto" and mp4_available()[0])
-    if prefer == "mp4" and not mp4_available()[0]:
-        raise RecordingError(f"MP4 encoder unavailable: {mp4_available()[1]}")
-
-    env = make_eval_env(protocol, reward, gamma, render_mode="rgb_array", record_steps=True)
-    sink = (
-        Mp4Sink(video_dir / f"{rec_id}.mp4", fps)
-        if use_mp4
-        else JpegFramesSink(video_dir / f"{rec_id}_frames", fps)
+    rec = EpisodeRecorder(
+        policy_kind=policy.kind,
+        policy_label=policy.label,
+        episode_seed=episode_seed,
+        out_dir=out_dir,
+        video_dir=video_dir,
+        reward=reward,
+        gamma=gamma,
+        protocol=protocol,
+        source=source,
+        prefer=prefer,
     )
     try:
-        obs, _ = env.reset(seed=int(episode_seed))
         policy.reset(int(episode_seed))
-        p0 = probe(env)
-        scene = scene_geometry(env)
-        initial_obs = [float(v) for v in obs]
-        sink.add(env.render())
-        while True:
-            obs, _, terminated, truncated, info = env.step(policy.act(obs))
-            sink.add(env.render())
-            if terminated or truncated:
-                episode = info["lunarlab_episode"]
-                break
-        sink.close()
+        while not rec.done:
+            rec.step(policy.act(rec.obs))
     except BaseException:
-        sink.abort()
-        env.close()
+        rec.abort()
         raise
-    steps = env.steps
-    env.close()
-
-    n_frames = len(steps) + 1
-    check = verify_video(sink.path, n_frames, sink.format)
-    if not check["verified"]:
-        raise RecordingError(f"video verification failed: {check}")
-
-    zero_terms = {k: 0.0 for k in (steps[0]["terms"] if steps else {})}
-    row0 = {
-        "t": 0,
-        "action": None,
-        "obs": initial_obs,
-        "original_reward": 0.0,
-        "terms": zero_terms,
-        "training_reward": 0.0,
-        "cum_original": 0.0,
-        "cum_training": 0.0,
-        "builtin": None,
-        "hover": False,
-        "terminated": False,
-        "truncated": False,
-    }
-    rows = [row0, *steps]
-    telemetry = {
-        "schema": TELEMETRY_SCHEMA,
-        "recording_id": rec_id,
-        "created_at": utc_now(),
-        "source": source,
-        "policy": {"kind": policy.kind, "label": policy.label},
-        "episode_seed": int(episode_seed),
-        "seed_split": seed_split(int(episode_seed), protocol),
-        "fps": fps,
-        "n_frames": n_frames,
-        "indexing": "frame k = state after k steps (frame 0 = reset); row k's action/reward produced frame k; time = k/fps",
-        "observation_fields": [f.__dict__ for f in OBSERVATION_FIELDS],
-        "actions": [a.__dict__ for a in ACTIONS],
-        "pad": {"x1_obs": p0.pad_x1_obs, "x2_obs": p0.pad_x2_obs},
-        "scene": scene,
-        "reward_config": (reward.model_dump(mode="json") if reward else None),
-        "reward_applied_during_recording": False,
-        "terms_note": "Additional terms are what the training reward would have added on this episode, "
-        "computed with the same pure functions as training. The policy acted on observations only.",
-        "gamma": gamma,
-        "protocol_hash": protocol.protocol_hash(),
-        "hover_detector": protocol.hover_detector.model_dump(mode="json"),
-        "environment": environment_record(),
-        "video": {"format": sink.format, "file": sink.path.name, **check},
-        "episode": episode,
-        "rows": rows,
-    }
-    atomic_write_json(out_dir / f"{rec_id}.json", telemetry)
-    meta = recording_meta(telemetry)
-    atomic_write_json(out_dir / f"{rec_id}.meta.json", meta)
-    return meta
+    return rec.finish()
 
 
 def recording_meta(t: dict) -> dict:
@@ -350,7 +432,7 @@ def record_run(run_id: str, *, episode_seed: int, checkpoint: str = "best") -> d
         out_dir=paths.trajectories,
         video_dir=paths.videos,
         reward=cfg.reward,
-        gamma=cfg.ppo.gamma,
+        gamma=cfg.gamma,
         protocol=cfg.eval_protocol,
         source=source,
     )
@@ -360,9 +442,12 @@ def record_run(run_id: str, *, episode_seed: int, checkpoint: str = "best") -> d
 
 def _recording_dirs() -> list[tuple[Path, Path, str | None]]:
     """(telemetry dir, video dir, run_id) for every place recordings live."""
-    from lunarlab.storage import demos_dir, list_run_ids, runs_dir
+    from lunarlab.storage import demos_dir, flights_dir, list_run_ids, runs_dir
 
-    out: list[tuple[Path, Path, str | None]] = [(demos_dir(), demos_dir(), None)]
+    out: list[tuple[Path, Path, str | None]] = [
+        (demos_dir(), demos_dir(), None),
+        (flights_dir(), flights_dir(), None),
+    ]
     for rid in list_run_ids():
         root = runs_dir() / rid
         out.append((root / "trajectories", root / "videos", rid))

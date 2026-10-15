@@ -75,7 +75,10 @@ def run_summary(run_id: str) -> dict[str, Any]:
         "state": status.get("state", "created"),
         "completed": completed,
         "config_hash": meta.get("config_hash"),
+        "algo": cfg.algo,
+        "algo_key": {"algo": cfg.algo, **cfg.algo_settings()},
         "ppo_key": cfg.ppo.compatibility_key(),
+        "robustness": _robustness(run_id),
         "protocol_hash": cfg.eval_protocol.protocol_hash(),
         "env": {"id": cfg.env_id, "kwargs": cfg.env_kwargs},
         "best_validation": manifest.get("best_validation"),
@@ -85,6 +88,16 @@ def run_summary(run_id: str) -> dict[str, Any]:
         "frozen_for_test": meta.get("frozen_for_test"),
         "evidence": evidence_level(cfg.training.profile, completed, latest_test, trained),
     }
+
+
+def _robustness(run_id: str) -> dict:
+    from lunarlab.robustness import latest_robustness
+
+    return latest_robustness(run_id)
+
+
+def display_name(reward_name: str, algo: str) -> str:
+    return reward_name if algo == "ppo" else f"{algo.upper()} · {reward_name}"
 
 
 def evidence_level(
@@ -110,18 +123,24 @@ def compatibility(summaries: list[dict]) -> dict[str, Any]:
 
     if len(distinct(lambda s: s["env"])) > 1:
         issues.append("Different environments or physics settings.")
-    if len(distinct(lambda s: s["ppo_key"])) > 1:
-        diff_keys = sorted(
-            {
-                k
-                for s in summaries
-                for k, v in s["ppo_key"].items()
-                if any(o["ppo_key"].get(k) != v for o in summaries)
-            }
+    algos = sorted({s.get("algo", "ppo") for s in summaries})
+    if len(algos) > 1:
+        issues.append(
+            f"Different algorithms ({', '.join(a.upper() for a in algos)}): read this as an algorithm comparison; "
+            "their settings and budgets differ by design."
         )
-        issues.append(f"Different PPO settings: {', '.join(diff_keys)}.")
-    if len(distinct(lambda s: s["planned_transitions"])) > 1:
-        issues.append("Different training budgets (transitions).")
+    for algo in algos:
+        same = [s for s in summaries if s.get("algo", "ppo") == algo]
+        keys = [s.get("algo_key", s["ppo_key"]) for s in same]
+        if len({repr(k) for k in keys}) > 1:
+            diff_keys = sorted(
+                {k for key in keys for k, v in key.items() if any(o.get(k) != v for o in keys)}
+            )
+            issues.append(f"Different {algo.upper()} settings: {', '.join(diff_keys)}.")
+    for algo in algos:
+        budgets = {s["planned_transitions"] for s in summaries if s.get("algo", "ppo") == algo}
+        if len(budgets) > 1:
+            issues.append(f"Different training budgets within {algo.upper()} runs (transitions).")
     if len(distinct(lambda s: s["protocol_hash"])) > 1:
         issues.append(
             "Different evaluation protocols (seeds or thresholds); results are not on the same episodes."
@@ -139,7 +158,7 @@ def group_by_reward(summaries: list[dict], split: str = "test") -> list[dict]:
     """One group per reward function. Each seed is listed; across-seed stats are descriptive."""
     groups: dict[str, list[dict]] = defaultdict(list)
     for s in summaries:
-        groups[s["reward_hash"]].append(s)
+        groups[f"{s.get('algo', 'ppo')}:{s['reward_hash']}"].append(s)
     out = []
     metrics = (
         "mean_original_return",
@@ -177,10 +196,13 @@ def group_by_reward(summaries: list[dict], split: str = "test") -> list[dict]:
             ]
             across[m] = describe(vals)
         n_eval = sum(1 for ps in per_seed if ps["evaluation"])
+        algo = runs[0].get("algo", "ppo")
         out.append(
             {
-                "reward_hash": h,
-                "reward_name": runs[0]["reward_name"],
+                "group_key": h,
+                "algo": algo,
+                "reward_hash": runs[0]["reward_hash"],
+                "reward_name": display_name(runs[0]["reward_name"], algo),
                 "reward_preset": runs[0]["reward_preset"],
                 "active_terms": runs[0]["active_terms"],
                 "n_runs": len(runs),
@@ -196,12 +218,8 @@ def group_by_reward(summaries: list[dict], split: str = "test") -> list[dict]:
                 ),
             }
         )
-    return sorted(
-        out,
-        key=lambda g: ["baseline", "time-penalty", "hover-bonus", "potential", "custom"].index(
-            g["reward_preset"]
-        ),
-    )
+    order = ["baseline", "time-penalty", "hover-bonus", "potential", "custom"]
+    return sorted(out, key=lambda g: (g["algo"] != "ppo", g["algo"], order.index(g["reward_preset"])))
 
 
 def exploitation_assessment(ev: dict | None, baseline_pad_rate: float | None) -> dict[str, Any]:
@@ -234,8 +252,11 @@ def exploitation_assessment(ev: dict | None, baseline_pad_rate: float | None) ->
 def compare_runs(run_ids: list[str], split: str = "test") -> dict[str, Any]:
     summaries = [run_summary(r) for r in run_ids]
     groups = group_by_reward(summaries, split)
-    base = next((g for g in groups if g["reward_preset"] == "baseline" and g["n_evaluated_seeds"]), None)
-    base_pad = base["across_seeds"]["pad_landing_rate"]["mean"] if base else None
+    base_pad_by_algo = {
+        g["algo"]: g["across_seeds"]["pad_landing_rate"]["mean"]
+        for g in groups
+        if g["reward_preset"] == "baseline" and g["n_evaluated_seeds"]
+    }
     diagnostics = []
     for s in summaries:
         ev = s["latest_test"] if split == "test" else s["latest_validation"]
@@ -245,15 +266,16 @@ def compare_runs(run_ids: list[str], split: str = "test") -> dict[str, Any]:
                 "reasons": ["SMOKE run: a technical pipeline test, not a trained agent"],
             }
         elif s["active_terms"]:
-            assessment = exploitation_assessment(ev, base_pad)
+            assessment = exploitation_assessment(ev, base_pad_by_algo.get(s.get("algo", "ppo")))
         else:
             assessment = {"flag": "not applicable", "reasons": ["original reward: no additional terms"]}
         diagnostics.append(
             {
                 "run_id": s["run_id"],
                 "seed": s["seed"],
-                "reward_name": s["reward_name"],
+                "reward_name": display_name(s["reward_name"], s.get("algo", "ppo")),
                 "reward_preset": s["reward_preset"],
+                "algo": s.get("algo", "ppo"),
                 "evaluation": ev,
                 "training_trend": training_trend(s["run_id"]),
                 **assessment,
@@ -265,6 +287,8 @@ def compare_runs(run_ids: list[str], split: str = "test") -> dict[str, Any]:
         "compatibility": compatibility(summaries),
         "groups": groups,
         "diagnostics": diagnostics,
+        "robust_stats": robust_statistics(groups),
+        "robustness": robustness_table(groups, summaries),
         "rules": {
             "min_term_gain": MIN_TERM_GAIN,
             "hover_rate": EXPLOIT_HOVER_RATE,
@@ -355,3 +379,89 @@ def experiment_run_ids(experiment_id: str) -> list[str]:
 
 def path_for(run_id: str) -> Path:
     return RunPaths(run_id).root
+
+
+# --------------------------------------------------------------------------- #
+# Robust aggregate statistics and robustness tables
+# --------------------------------------------------------------------------- #
+
+
+def _episode_returns(run_id: str, file: str | None) -> list[float]:
+    if not file:
+        return []
+    data = read_json(RunPaths(run_id).evaluations / file, default=None) or {}
+    return [float(e["original_return"]) for e in data.get("episodes", [])]
+
+
+def robust_statistics(groups: list[dict]) -> dict:
+    """IQM, bootstrap intervals over training seeds, P(improvement) vs the first group, performance
+    profiles. Only groups with at least one evaluated run are included."""
+    from lunarlab.rl_stats import summarize_groups
+
+    payload: dict[str, dict] = {}
+    for g in groups:
+        evaluated = [ps for ps in g["per_seed"] if ps["evaluation"]]
+        if not evaluated:
+            continue
+        name = g["reward_name"]
+        if name in payload:  # two different rewards with the same display name
+            name = f"{name} ({g['reward_hash'][:6]})"
+        payload[name] = {
+            "run_scores": [ps["evaluation"]["mean_original_return"] for ps in evaluated],
+            "pad_rates": [ps["evaluation"]["pad_landing_rate"] for ps in evaluated],
+            "episode_returns": [
+                _episode_returns(ps["run_id"], ps["evaluation"].get("file")) for ps in evaluated
+            ],
+        }
+    if not payload:
+        return {"groups": {}, "probability_of_improvement": {}, "reference": None}
+    return summarize_groups(payload)
+
+
+def robustness_table(groups: list[dict], summaries: list[dict]) -> dict:
+    """Per group and condition: per-seed results and the across-seed mean (calm = final test)."""
+    from lunarlab.robustness import CONDITIONS
+
+    by_id = {s["run_id"]: s for s in summaries}
+    rows = []
+    for g in groups:
+        conds: dict[str, dict] = {}
+        for cond in ["calm", *CONDITIONS]:
+            vals = []
+            for ps in g["per_seed"]:
+                s = by_id[ps["run_id"]]
+                ev = s["latest_test"] if cond == "calm" else s.get("robustness", {}).get(cond)
+                if ev:
+                    vals.append(
+                        {
+                            "seed": ps["seed"],
+                            "mean_original_return": ev["mean_original_return"],
+                            "pad_landing_rate": ev["pad_landing_rate"],
+                            "crash_rate": ev["crash_rate"],
+                        }
+                    )
+            if vals:
+                conds[cond] = {
+                    "per_seed": vals,
+                    "mean_original_return": float(np.mean([v["mean_original_return"] for v in vals])),
+                    "pad_landing_rate": float(np.mean([v["pad_landing_rate"] for v in vals])),
+                    "crash_rate": float(np.mean([v["crash_rate"] for v in vals])),
+                    "n_seeds": len(vals),
+                }
+        if len(conds) > 1:
+            rows.append(
+                {
+                    "reward_name": g["reward_name"],
+                    "reward_preset": g["reward_preset"],
+                    "algo": g["algo"],
+                    "conditions": conds,
+                }
+            )
+    return {
+        "conditions": {
+            "calm": "Calm (default physics, final test)",
+            **{k: v["label"] for k, v in CONDITIONS.items()},
+        },
+        "rows": rows,
+        "note": "Same final-test episode seeds (first 50 for perturbed conditions); frozen checkpoints; original reward.",
+    }

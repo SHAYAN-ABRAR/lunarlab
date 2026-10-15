@@ -18,6 +18,8 @@ import collections
 import contextlib
 import functools
 import os
+import secrets
+import shutil
 import signal
 import threading
 import time
@@ -73,6 +75,7 @@ EPISODE_FIELDS = [
     "a_main",
     "a_right",
 ]
+DQN_DIAG_EVERY = 10_000  # DQN updates every few steps; log its diagnostics every 10k transitions
 PPO_DIAGNOSTIC_KEYS = (
     "train/approx_kl",
     "train/clip_fraction",
@@ -83,6 +86,7 @@ PPO_DIAGNOSTIC_KEYS = (
     "train/learning_rate",
     "train/clip_range",
     "train/loss",
+    "rollout/exploration_rate",
 )
 
 EXIT_COMPLETED, EXIT_FAILED, EXIT_BUSY, EXIT_STOPPED, EXIT_INTERRUPTED = 0, 1, 2, 3, 4
@@ -121,11 +125,11 @@ def build_vec_env(cfg: RunConfig, kind: str | None = None):
     fn = functools.partial(
         _build_training_env,
         cfg.reward.model_dump(mode="json"),
-        cfg.ppo.gamma,
+        cfg.gamma,
         cfg.eval_protocol.hover_detector.model_dump(mode="json"),
         cfg.eval_protocol.pad_landing.model_dump(mode="json"),
     )
-    fns = [fn for _ in range(cfg.ppo.n_envs)]
+    fns = [fn for _ in range(cfg.n_envs)]
     if (kind or cfg.training.vec_env) == "subproc":
         return SubprocVecEnv(fns, start_method="spawn")
     return DummyVecEnv(fns)
@@ -133,8 +137,28 @@ def build_vec_env(cfg: RunConfig, kind: str | None = None):
 
 def build_model(cfg: RunConfig, venv, device: str):
     import torch.nn as nn
-    from stable_baselines3 import PPO
+    from stable_baselines3 import DQN, PPO
 
+    if cfg.algo == "dqn":
+        d = cfg.dqn
+        return DQN(
+            "MlpPolicy",
+            venv,
+            learning_rate=d.learning_rate,
+            batch_size=d.batch_size,
+            buffer_size=d.buffer_size,
+            learning_starts=d.learning_starts,
+            gamma=d.gamma,
+            target_update_interval=d.target_update_interval,
+            train_freq=d.train_freq,
+            gradient_steps=d.gradient_steps,
+            exploration_fraction=d.exploration_fraction,
+            exploration_final_eps=d.exploration_final_eps,
+            policy_kwargs={"net_arch": list(d.net_arch)},
+            seed=cfg.seed,
+            device=device,
+            verbose=0,
+        )
     p = cfg.ppo
     return PPO(
         "MlpPolicy",
@@ -246,6 +270,7 @@ def _make_callback_class():
             self.proc = psutil.Process()
             self.proc.cpu_percent(None)
             self.last_diag_updates = -1
+            self.last_diag_transitions = 0
             self.last_validation_at: int | None = None
 
         # -------------------------------------------------------------- #
@@ -255,6 +280,7 @@ def _make_callback_class():
             self.next_ckpt = (n // self.ckpt_every + 1) * self.ckpt_every
             self.next_val = 0 if self.validate_at_start else (n // self.val_every + 1) * self.val_every
             self.last_diag_updates = self.model._n_updates
+            self.last_diag_transitions = n
             self.phase = "collecting"
             self.write_status(force=True)
 
@@ -312,20 +338,27 @@ def _make_callback_class():
         def _on_training_end(self) -> None:
             self.episodes.flush()
             if not self.stop_requested:
-                self.capture_update_diagnostics()
+                self.capture_update_diagnostics(force=True)
 
         # -------------------------------------------------------------- #
-        def capture_update_diagnostics(self) -> None:
+        def capture_update_diagnostics(self, force: bool = False) -> None:
             n_updates = self.model._n_updates
             if n_updates == self.last_diag_updates:
                 return
+            if (
+                self.ctx.cfg.algo == "dqn"
+                and not force
+                and self.model.num_timesteps - self.last_diag_transitions < DQN_DIAG_EVERY
+            ):
+                return
+            self.last_diag_transitions = self.model.num_timesteps
             self.last_diag_updates = n_updates
             self.updates_done += 1
             vals = self.model.logger.name_to_value
             row: dict[str, Any] = {
                 "time": utc_now(),
                 "segment": self.ctx.segment,
-                "update": n_updates // max(self.ctx.cfg.ppo.n_epochs, 1),
+                "update": n_updates // max(getattr(self.model, "n_epochs", 1), 1),
                 "transitions": self.model.num_timesteps,
                 "elapsed_s": round(time.monotonic() - self.t0, 2),
             }
@@ -369,7 +402,7 @@ def _make_callback_class():
                 config_hash=self.ctx.cfg.config_hash(),
                 extra=extra,
             )
-            log_event(self.ctx.paths, "info", f"{kind} checkpoint saved", file=name, transitions=n)
+            log_event(self.ctx.paths, "info", f"{kind} checkpoint saved", file=entry["name"], transitions=n)
             self.phase = prev_phase
             return entry
 
@@ -380,7 +413,9 @@ def _make_callback_class():
                 return
             self.phase = "validating"
             self.write_status(force=True)
-            policy = PPOPolicy(self.model.policy, deterministic=cfg.eval_protocol.deterministic, label="live")
+            policy = PPOPolicy(
+                self.model.policy, deterministic=cfg.eval_protocol.deterministic, label="live", kind=cfg.algo
+            )
 
             def should_stop() -> bool:
                 if self.ctx.paths.stop_request.exists():
@@ -396,7 +431,7 @@ def _make_callback_class():
                     cfg.eval_protocol.validation_seeds,
                     protocol=cfg.eval_protocol,
                     reward=cfg.reward,
-                    gamma=cfg.ppo.gamma,
+                    gamma=cfg.gamma,
                     should_stop=should_stop,
                 )
             except EvaluationAborted:
@@ -496,15 +531,31 @@ def save_model_atomic(
     extra: dict | None = None,
 ) -> dict:
     final = paths.checkpoints / name
-    tmp = paths.checkpoints / f"{name}.tmp"
+    tmp = paths.checkpoints / f"{name}.{secrets.token_hex(3)}.tmp"
     model.save(str(tmp))
-    replace_file(tmp, final)
+    try:
+        replace_file(tmp, final, timeout_s=60.0)
+    except PermissionError:
+        # Windows: another process (typically a real-time antivirus scan of the new file) kept a
+        # file locked for a whole minute. Keep the run alive: store this checkpoint under a unique
+        # name instead. Checkpoints are always resolved through the manifest, which records it.
+        final = paths.checkpoints / f"{final.stem}-{transitions:010d}-{secrets.token_hex(2)}{final.suffix}"
+        shutil.copyfile(tmp, final)
+        with contextlib.suppress(OSError):
+            tmp.unlink()
+        log_event(
+            paths,
+            "warning",
+            "checkpoint file was locked by another process; saved under a unique name",
+            file=final.name,
+            kind=kind,
+        )
     return register_checkpoint(
         paths,
         final,
         kind=kind,
         transitions=transitions,
-        updates=model._n_updates // max(model.n_epochs, 1),
+        updates=model._n_updates // max(getattr(model, "n_epochs", 1), 1),
         segment=segment,
         extra={"config_hash": config_hash, "sb3_n_updates": int(model._n_updates), **(extra or {})},
     )
@@ -669,7 +720,9 @@ def _train_locked(
             model.set_parameters(str(ckpt_path), exact_match=True, device=device)
             model.num_timesteps = int(parent_entry["transitions"])
             model._n_updates = int(
-                parent_entry.get("sb3_n_updates", parent_entry["updates"] * cfg.ppo.n_epochs)
+                parent_entry.get(
+                    "sb3_n_updates", parent_entry["updates"] * max(getattr(model, "n_epochs", 1), 1)
+                )
             )
             best = read_manifest(paths).get("best_validation")
             best_val = best.get("validation_mean_original_return") if best else None
@@ -687,7 +740,7 @@ def _train_locked(
         if not quiet:
             print(
                 f"[lunarlab] {cfg.run_id}: training to {target:,} transitions "
-                f"({remaining:,} remaining) on {device}, {cfg.ppo.n_envs} envs ({cfg.training.vec_env})",
+                f"({remaining:,} remaining) on {device}, {cfg.algo.upper()}, {cfg.n_envs} env(s) ({cfg.training.vec_env})",
                 flush=True,
             )
         model.learn(

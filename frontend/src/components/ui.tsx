@@ -208,8 +208,8 @@ export function OutcomeBadge({ outcome, pad }: { outcome: string; pad?: boolean 
 }
 
 export function PolicyBadge({ kind }: { kind: string }) {
-  const tone: Tone = kind === 'ppo' ? 'info' : kind === 'heuristic' ? 'warn' : 'neutral'
-  return <Badge tone={tone} className="font-mono uppercase tracking-wide">{kind === 'ppo' ? 'PPO' : kind}</Badge>
+  const tone: Tone = kind === 'ppo' || kind === 'dqn' ? 'info' : kind === 'heuristic' ? 'warn' : kind === 'human' ? 'good' : 'neutral'
+  return <Badge tone={tone} className="font-mono uppercase tracking-wide">{kind === 'human' ? 'you' : kind}</Badge>
 }
 
 // --------------------------------------------------------------------------- //

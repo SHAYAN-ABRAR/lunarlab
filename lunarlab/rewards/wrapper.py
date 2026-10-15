@@ -70,6 +70,11 @@ class LunarLabRewardWrapper(gym.Wrapper):
         self.initial_obs: np.ndarray | None = None
         self.last_episode: dict[str, Any] | None = None
         self._config_hash = config.content_hash()
+        self._learned = None
+        if config.learned.enabled:
+            from lunarlab.preferences.model import load_reward_model
+
+            self._learned = load_reward_model(str(config.learned.model_id))
 
     # ------------------------------------------------------------------ #
     def reset(self, *, seed: int | None = None, options: dict[str, Any] | None = None):
@@ -97,8 +102,9 @@ class LunarLabRewardWrapper(gym.Wrapper):
             truncated=bool(truncated),
             config=self.config,
             gamma=self.gamma,
+            learned_model=self._learned,
         )
-        shaped = training_reward(original, terms)
+        shaped = training_reward(original, terms, self.config.original_weight)
         hovering = self._acc.add(original=original, terms=terms, training=shaped, action=a, next_obs=obs)
 
         info = dict(info)

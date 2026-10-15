@@ -91,6 +91,50 @@ reports what the run's training reward *would* have paid on these episodes (resc
   than 5 seeds, across-seed summaries are labelled *descriptive only*. Episodes from different seeds are never
   pooled as if they came from many independent training runs.
 
+## Aggregate statistics across training seeds
+
+Following Agarwal et al., *Deep Reinforcement Learning at the Edge of the Statistical Precipice* (NeurIPS
+2021), the Compare page and `docs/RESULTS.md` summarize a group of independently trained policies with:
+
+- **IQM** (interquartile mean) of the per-policy mean original returns, computed exactly like rliable
+  (`scipy.stats.trim_mean(x, 0.25)`: drop `int(0.25 n)` policies from each end, average the rest);
+- **95% percentile-bootstrap intervals over policies** (5,000 resamples of training seeds), for the IQM, the
+  mean and the pad-landing rate. Policies are the resampled unit, because training seeds are what differs
+  between independent experiments; evaluation episodes are not resampled here;
+- **probability of improvement** P(X > Y): the Mann–Whitney statistic over all pairs of policies
+  (ties count ½), against the first group shown (the PPO original-reward baseline), with a bootstrap interval
+  that resamples both groups. An interval that contains 0.5 means the data cannot order the two groups;
+- **performance profiles**: the fraction of test episodes whose original return exceeds τ, for every τ on a
+  shared grid, pooling a group's policies, with a 95% band from resampling policies.
+
+With 3–5 policies per group, these intervals are wide. That is the honest result.
+
+## Robustness (separate, labelled evaluations)
+
+`python -m lunarlab robustness --experiment-id <id>` flies each run's **frozen** checkpoint (the one the
+final test used) on the **first 50 final-test seeds** under physics it never trained on, with the original
+reward:
+
+| Condition | Change |
+|---|---|
+| `wind-5` | `enable_wind=True, wind_power=5, turbulence_power=0.5` |
+| `wind-10` | `enable_wind=True, wind_power=10, turbulence_power=1.0` |
+| `wind-15` | `enable_wind=True, wind_power=15, turbulence_power=1.5` (Gymnasium's default wind strength) |
+| `gravity-11.5` | `gravity=-11.5` (default −10) |
+
+The terrain and the initial push depend only on the episode seed, so each condition replays the same 50
+episodes as the calm test. Results are stored as `evaluations/robustness-<condition>-….json` with split
+`robustness:<condition>`; they never replace or change the final-test result, and nothing is selected or
+tuned on them. Training and every primary evaluation keep the default physics (`make_env` accepts only these
+four keys as overrides).
+
+## Algorithm comparison (PPO vs DQN)
+
+DQN runs use the same environment, reward wrapper, evaluation protocol and validation-based checkpoint
+selection, with RL Baselines3 Zoo's LunarLander hyperparameters and Zoo's **100,000-transition** budget
+(PPO: 1,000,000). The budgets differ on purpose (see ARCHITECTURE.md); comparisons flag this, so read
+PPO-vs-DQN results as "each algorithm with its reference settings", not "equal experience".
+
 ## Reward-exploitation rule
 
 The diagnostic asks: *is the agent earning more training reward without doing the actual landing task
@@ -111,3 +155,7 @@ shown as context only.
 
 Recordings are single episodes on chosen seeds, evaluated under the same conditions. The UI shows each
 recording's seed and split. Consult the outcome rates before treating any clip as typical.
+`python -m lunarlab record-showcase --experiment-id <id> --references` records one policy per group (training
+seed 0 by default) and the heuristic/random references on the same episode seeds, for side-by-side replays.
+Keyboard flights (Fly It Yourself) are recorded the same way, with policy kind `human`, on seeds from
+40,000–49,999 unless the player chooses one.

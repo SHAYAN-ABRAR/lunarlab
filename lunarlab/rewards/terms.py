@@ -60,14 +60,16 @@ def compute_terms(
     truncated: bool,
     config: RewardConfig,
     gamma: float,
+    learned_model=None,
 ) -> dict[str, float]:
     """Additional reward terms for one transition (s, a, s').
 
     Returns only the *enabled* terms. The original environment reward is not
-    included here; the caller adds it:  training = original + sum(terms).
+    included here; the caller adds it:
+    training = original_weight * original + sum(terms).
+    ``learned_model`` is required when the learned-reward term is enabled.
     """
     del truncated  # truncation needs no special case: see potential_shaping
-    del action  # no current term depends on the action; kept for a stable signature
     terms: dict[str, float] = {}
     if config.time_penalty.enabled:
         terms["time_penalty"] = -float(config.time_penalty.cost_per_step)
@@ -83,9 +85,13 @@ def compute_terms(
             gamma=gamma,
             weights=config.potential.weights,
         )
+    if config.learned.enabled:
+        if learned_model is None:
+            raise ValueError("learned reward term enabled but no reward model was supplied")
+        terms["learned_reward"] = float(config.learned.scale) * learned_model(obs, int(action), next_obs)
     return terms
 
 
-def training_reward(original: float, terms: dict[str, float]) -> float:
-    """The invariant: training_reward = original_reward + sum(additional terms)."""
-    return float(original) + float(sum(terms.values()))
+def training_reward(original: float, terms: dict[str, float], original_weight: float = 1.0) -> float:
+    """The invariant: training_reward = original_weight * original_reward + sum(additional terms)."""
+    return float(original_weight) * float(original) + float(sum(terms.values()))

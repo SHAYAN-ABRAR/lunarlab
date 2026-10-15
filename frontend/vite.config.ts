@@ -5,7 +5,9 @@ import { defineConfig } from 'vite'
 // The production build is served by the FastAPI backend (same origin).
 // In development (`npm run dev`), /api is proxied to the backend on 127.0.0.1:8765;
 // start the backend with LUNARLAB_DEV=1 so it accepts the dev-server origin.
+// VITE_BASE: public path for the static demo build (e.g. /lunarlab/ on GitHub Pages).
 export default defineConfig({
+  base: process.env.VITE_BASE || '/',
   plugins: [react(), tailwindcss()],
   server: {
     host: '127.0.0.1',

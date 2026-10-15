@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Literal
+from typing import Annotated, Literal
 
 from pydantic import BaseModel, ConfigDict, Field
 
@@ -125,3 +125,18 @@ class BenchmarkRequest(_Strict):
     n_envs: list[int] = Field(default_factory=lambda: [1, 2, 4, 8], min_length=1, max_length=5)
     ppo: bool = True
     idempotency_key: str | None = IdemKey
+
+
+class FlightStart(_Strict):
+    seed: int | None = Field(None, ge=0, le=2**31 - 1)
+    opponent: str | None = Field(None, max_length=120, pattern=r"^[A-Za-z0-9_\-]+$")
+
+
+class FlightStep(_Strict):
+    actions: list[Annotated[int, Field(ge=0, le=3)]] = Field(..., min_length=1, max_length=50)
+
+
+class PreferenceLabel(_Strict):
+    i: int = Field(..., ge=0, le=10_000_000)
+    j: int = Field(..., ge=0, le=10_000_000)
+    choice: Literal["a", "b", "tie"]

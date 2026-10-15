@@ -196,3 +196,88 @@ def test_experiment_plan_warns_for_large_suites(client):
     ).json()
     assert not cmp["compatibility"]["compatible"]  # smoke runs are flagged
     assert {g["reward_preset"] for g in cmp["groups"]} == {"baseline", "potential"}
+
+
+@pytest.mark.slow
+def test_keyboard_flight_is_recorded_like_any_episode(client):
+    r = client.post("/api/flights", json={"seed": 40_001, "opponent": "heuristic"}, headers=H)
+    assert r.status_code == 201, r.text
+    f = r.json()
+    assert f["seed"] == 40_001 and f["seed_split"] == "flight"
+    assert f["scene"]["terrain"] and f["row"]["t"] == 0
+    ghost = f["ghost"]
+    assert ghost["source"]["type"] == "heuristic" and len(ghost["rows"]) == ghost["episode"]["length"] + 1
+    sid = f["session_id"]
+
+    assert client.post(f"/api/flights/{sid}/step", json={"actions": [7]}, headers=H).status_code == 422
+    assert client.post(f"/api/flights/{sid}/step", json={"actions": []}, headers=H).status_code == 422
+    rows, done = [], False
+    for _ in range(40):  # doing nothing: the lander falls and the episode ends
+        out = client.post(f"/api/flights/{sid}/step", json={"actions": [0] * 50}, headers=H).json()
+        rows += out["rows"]
+        if out["done"]:
+            done = True
+            break
+    assert done
+    assert [row["t"] for row in rows] == list(range(1, len(rows) + 1))
+    rec = out["recording"]
+    assert rec["policy"]["kind"] == "human" and rec["length"] == len(rows)
+    assert out["episode"]["original_return"] == pytest.approx(rows[-1]["cum_original"])
+    listed = {m["recording_id"]: m for m in client.get("/api/recordings").json()}
+    assert rec["recording_id"] in listed
+    tele = client.get(f"/api/recordings/{rec['recording_id']}").json()
+    assert tele["source"]["type"] == "flight" and tele["source"]["opponent"]["type"] == "heuristic"
+    assert client.get(f"/api/recordings/{rec['recording_id']}/scene").status_code == 200
+    # the session is closed once the episode has ended
+    assert client.post(f"/api/flights/{sid}/step", json={"actions": [0]}, headers=H).status_code == 404
+
+
+def test_flight_validation(client):
+    assert client.post("/api/flights", json={"opponent": "../etc"}, headers=H).status_code == 422
+    assert (
+        client.post(
+            "/api/flights", json={"opponent": "20260101-000000-missing-s0-smoke-abcd"}, headers=H
+        ).status_code
+        == 400
+    )
+    assert client.post("/api/flights", json={"seed": -1}, headers=H).status_code == 422
+    assert client.delete("/api/flights/nope", headers=H).json() == {"abandoned": False}
+    f = client.post("/api/flights", json={}, headers=H).json()
+    assert 40_000 <= f["seed"] < 50_000 and f["ghost"] is None
+    assert client.delete(f"/api/flights/{f['session_id']}", headers=H).json() == {"abandoned": True}
+    assert (
+        client.post(f"/api/flights/{f['session_id']}/step", json={"actions": [0]}, headers=H).status_code
+        == 404
+    )
+
+
+def test_preference_labelling_endpoints(client):
+    from lunarlab.env import make_env
+    from lunarlab.policies import HeuristicPolicy, RandomPolicy
+    from lunarlab.preferences.data import create_dataset
+
+    ds = create_dataset(
+        [("random", RandomPolicy(0)), ("heuristic", HeuristicPolicy(make_env()))], episodes_per_policy=2
+    )
+    listed = client.get("/api/preferences").json()
+    assert [d["dataset_id"] for d in listed] == [ds] and listed[0]["human_labels"] == 0
+    pair = client.get(f"/api/preferences/{ds}/pair").json()
+    assert pair["i"] != pair["j"]
+    assert len(pair["a"]["obs"]) == len(pair["a"]["actions"]) + 1 and pair["a"]["scene"]["terrain"]
+    assert "source" not in pair["a"]  # the labeller judges the flight, not its origin
+    body = {"i": pair["i"], "j": pair["j"], "choice": "a"}
+    r = client.post(f"/api/preferences/{ds}/labels", json=body, headers=H)
+    assert r.status_code == 201, r.text
+    out = r.json()
+    assert out["n_labels"] == 1 and out["agrees"] == (out["reward_prefers"] == "a")
+    assert (
+        client.post(f"/api/preferences/{ds}/labels", json={**body, "choice": "maybe"}, headers=H).status_code
+        == 422
+    )
+    assert (
+        client.post(f"/api/preferences/{ds}/labels", json={**body, "j": pair["i"]}, headers=H).status_code
+        == 400
+    )
+    assert client.get("/api/preferences/nope/pair").status_code == 404
+    assert client.get("/api/preferences/..%2F..%2Fetc/pair").status_code in (400, 404)
+    assert client.get("/api/reward-models").json() == []

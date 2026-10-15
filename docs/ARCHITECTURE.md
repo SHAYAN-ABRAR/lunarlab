@@ -13,7 +13,7 @@
   lunarlab core ── training · evaluation · recording · rescoring · reports
                 │
                 ▼
-  files: runs/<run_id>/…, data/demos, data/jobs, reports/        (ground truth for run content)
+  files: runs/<run_id>/…, data/demos, data/flights, data/preferences, data/reward_models, data/jobs, reports/
 ```
 
 The CLI (`python -m lunarlab …`) calls the same core functions directly. The RL package never imports the web
@@ -38,12 +38,23 @@ server.
 | `lunarlab/rescoring.py` | Reward Stress Test |
 | `lunarlab/compare.py` | run summaries, compatibility, per-seed grouping, exploitation rule, training curves |
 | `lunarlab/report.py` | Markdown/HTML report, figures, portfolio summary |
+| `lunarlab/results.py` | figures and tables for `docs/RESULTS.md` (final-test data only) |
+| `lunarlab/rl_stats.py` | IQM, bootstrap intervals over training seeds, probability of improvement, performance profiles |
+| `lunarlab/robustness.py` | frozen checkpoints under wind / turbulence / heavier gravity (separate `robustness:<condition>` evaluations) |
+| `lunarlab/preferences/` | RLHF in miniature: segment datasets and labels (`data.py`), reward-model inference and registry (`model.py`), Bradley–Terry training (`train.py`) |
+| `lunarlab/play.py` | keyboard flights: server-stepped episodes recorded like any policy, opponent ghosts |
+| `lunarlab/parallel.py` | several runs of an experiment in parallel worker processes (CLI) |
+| `lunarlab/demo.py` | static snapshot of the API for the hosted read-only demo |
 | `lunarlab/runs.py`, `storage.py` | run creation, metadata, checkpoint manifest (SHA-256), atomic writes, path safety |
 | `lunarlab/jobs.py`, `db.py`, `locks.py`, `procs.py` | job supervisor, SQLite, file locks, verified process discovery |
 | `lunarlab/server/` | FastAPI app, request schemas, security middleware, static UI |
 | `lunarlab/cli.py`, `doctor.py`, `benchmark.py` | command line, installation checks, throughput benchmark |
 | `frontend/src/` | React UI: `pages/` (one per view), `components/` (ui, charts, jobs, launch), `lib/` (API client, types, formatting) |
-| `frontend/src/components/Scene3D.tsx` | 3-D flight reconstruction (three.js, lazy-loaded): recorded pose, actions and contacts on the episode's real terrain (`GET /api/recordings/{id}/scene`) |
+| `frontend/src/components/Scene3D.tsx` | 3-D flight reconstruction (three.js, lazy-loaded): recorded pose, actions and contacts on the episode's real terrain (`GET /api/recordings/{id}/scene`); also drives live flights and ghosts |
+| `frontend/src/components/FlightScene.tsx`, `pages/Fly.tsx` | Fly It Yourself: keyboard/touch controls, live 3-D view, opponent ghost, logbook |
+| `frontend/src/pages/LearnedRewards.tsx` | preference labelling (two animated segments, reveal of the true returns), reward-model registry |
+| `frontend/src/components/robust.tsx` | Compare cards: aggregate statistics, performance profiles, robustness table |
+| `frontend/src/lib/demo.ts` | static demo mode: answers requests from the exported snapshot |
 | `tests/` | pytest suite; `frontend/e2e/` Playwright browser flows |
 
 ## Wrapper order and who sees which reward
@@ -76,13 +87,34 @@ needed for outcomes (body contact, sleep state, helipad flags, leg positions) ar
   so LunarLab reads `logger.name_to_value` at the next rollout start (with `log_interval=None`) and attributes
   each row to the update that produced it.
 - Checkpoints: periodic, `stop`, `final`, and `best_validation` (selected by validation original return).
-  Each is written to a temp file, atomically replaced (with retries for Windows sharing violations such as
-  antivirus scans), and registered in `checkpoints/manifest.json` with its SHA-256.
+  Each is written to a uniquely named temp file, atomically replaced (retrying for up to 60 s on Windows
+  sharing violations such as antivirus scans), and registered in `checkpoints/manifest.json` with its
+  SHA-256. If the destination stays locked for a whole minute, the checkpoint is stored under a unique name
+  instead (`best_validation-<transitions>-<hex>.zip`) and the manifest records it; every reader resolves
+  checkpoints through the manifest. (Before this fallback existed, one STANDARD run of the study failed on
+  such a lock and was resumed from its last periodic checkpoint; its lineage shows the second segment.)
 - **Loading never unpickles.** SB3 zips contain cloudpickled objects in their `data` entry. LunarLab rebuilds
   the policy from the run's own `config.yaml` and loads only tensors through
   `load_from_zip_file(load_data=False)` (`torch.load(weights_only=True)`), and only for files listed in a
   manifest whose hash still matches. Resume uses `PPO(...).set_parameters(...)`, which follows the same safe
   path. No endpoint accepts uploaded model files.
+
+### DQN
+
+`RunConfig.algo` selects PPO (default) or DQN. DQN uses RL Baselines3 Zoo's LunarLander entry
+(`lr 6.3e-4, batch 128, buffer 50k, learning_starts 0, γ 0.99, target update 250, train_freq 4,
+gradient_steps -1, exploration 0.12 → 0.1, net [256, 256]`), the same reward wrapper, evaluation protocol,
+checkpointing and safe weight loading (`DQNPolicy` rebuilt from the config, tensors only). PPO run configs
+hash exactly as before the field existed, so older runs stay resumable. DQN's diagnostics are recorded every
+10k transitions (it updates every 4 steps; logging each update would dominate the log).
+
+### Parallel experiments (CLI)
+
+`suite --parallel N` and `run-experiment --parallel N` run up to N runs of one experiment at a time, each in
+its own `python -m lunarlab train-run` process with one torch/OMP thread, logs in `runs/<id>/worker.log`.
+Interrupted or failed runs resume from their latest checkpoint on the next `run-experiment`, and every
+unfrozen run is then evaluated once on the final-test seeds. On the 10-core development laptop, 5 PPO runs
+in parallel sustained about 1,000–1,200 transitions/s each.
 
 ## Stop, resume and lineage
 
@@ -125,6 +157,41 @@ needed for outcomes (body contact, sleep state, helipad flags, leg positions) ar
 - While the laptop sleeps, all processes are suspended and continue on wake. Nothing runs while it is off.
   A heartbeat older than 60 s is shown as a warning.
 
+## Learned rewards (RLHF in miniature)
+
+```
+policies (random, heuristic, PPO checkpoints at 100k/300k/600k/final of baseline and hover-bonus runs)
+  → 40-step segments (data/preferences/<dataset>/segments.npz, episode seeds from 30,000)
+  → pairs labelled by a Bradley–Terry simulated human on the true segment return (beta = 0.05)
+    (+ optional human labels from the UI, data/preferences/<dataset>/human_labels.jsonl)
+  → reward model r(s, a, s') : MLP 20-64-64-1 tanh, BCE on summed segment rewards, early stopping
+    (data/reward_models/<model>/model.npz + meta.json with SHA-256; immutable)
+  → reward config with original_weight 0 and the learned term only → PPO → evaluation on the true reward
+```
+
+The invariant generalizes to `training_reward = original_weight × original_reward + Σ terms` (weight 1 for
+all presets). Reward models are evaluated in NumPy inside the wrapper; their weights are plain arrays loaded
+with `allow_pickle=False` after a hash check, so a reward model cannot execute code.
+
+## Keyboard flights
+
+`POST /api/flights` creates a session that holds one `EpisodeRecorder` (the same class `record_episode`
+uses): the evaluation environment with the original reward, a video sink and the telemetry rows. The page
+sends the actions due since its last request (`POST /api/flights/{id}/step`, at most 50 per request, one
+request in flight); the server steps the real physics and returns the new rows, which the 3-D engine plays
+with a two-frame buffer. When the episode ends the recording is verified and saved in `data/flights/` with
+policy kind `human`. Sessions expire after 10 idle minutes (at most 4 at a time). An opponent's whole flight
+on the same seed is computed up front without rendering and drawn as a translucent ghost.
+
+## Static demo
+
+`python -m lunarlab export-demo --experiment-ids …` calls the API in-process and writes every GET response
+the UI needs (plus precomputed comparisons, recording videos and sample preference pairs) to `demo/api/`,
+filtered to the chosen experiments and with absolute local paths scrubbed. A frontend build with
+`VITE_DEMO=1` answers requests from those files (`frontend/src/lib/demo.ts`) and disables everything that
+would need the backend. `.github/workflows/pages.yml` publishes it to GitHub Pages;
+`scripts/build-demo.ps1` builds and serves the same thing locally.
+
 ## Storage and reproducibility
 
 Each run directory contains its exact `config.yaml` (immutable), `metadata.json` (config hash, reward
@@ -158,3 +225,7 @@ There are no accounts; the safeguards are local-web hygiene:
 | H.264 MP4 with a keyframe every 25 frames | browser-playable, frame-accurate seeking; JPEG-frame fallback is verified in tests |
 | 3-D view reconstructed from telemetry, footage kept | LunarLander is 2-D; the 3-D view uses only recorded data on the simulation plane (pose, actions, contacts, the env's own terrain `sky_polys` and flags) and labels depth, lighting, particles and model as illustrative |
 | Validation every 50k transitions on 10 seeds | checkpoint selection on original reward at modest cost (~20 passes per STANDARD run) |
+| DQN at Zoo's 100k-transition budget | DQN updates every 4 steps and ran at ~100 transitions/s per process here, so 1M transitions would take hours per run; comparisons show the different budgets |
+| Simulated preferences (Bradley–Terry on the true return) | makes the RLHF experiment reproducible and lets accuracy be measured against the noise-free order; human labels are supported and stored separately |
+| Robustness on 50 test seeds per condition | identical terrain and initial push across conditions isolate the effect of the physics change |
+| Static snapshot instead of a hosted backend | the demo costs nothing to host, cannot be abused, and shows exactly the stored results |

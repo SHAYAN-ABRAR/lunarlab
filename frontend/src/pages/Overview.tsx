@@ -15,7 +15,7 @@ interface OverviewData {
   active_jobs: Job[]
   recordings: number
   experiments: Experiment[]
-  by_preset: Record<string, { runs: number; evaluations: { run_id: string; seed: number; split: string; mean_original_return: number; pad_landing_rate: number }[] }>
+  by_preset: Record<string, { runs: number; evaluations: { run_id: string; seed: number; profile: string; split: string; mean_original_return: number; pad_landing_rate: number }[] }>
   readiness: Record<string, { ok: boolean; detail: string } | boolean>
   queue_paused: boolean
 }
@@ -23,7 +23,7 @@ interface OverviewData {
 type StepState = 'done' | 'active' | 'todo'
 
 function presetStatus(preset: Preset, runs: RunSummary[], jobs: Job[]) {
-  const mine = runs.filter((r) => r.reward_preset === preset)
+  const mine = runs.filter((r) => r.reward_preset === preset && (r.algo ?? 'ppo') === 'ppo')
   const real = mine.filter((r) => r.profile !== 'smoke')
   const training = mine.some((r) => r.state === 'running') || jobs.some((j) => mine.some((r) => r.run_id === j.run_id) && (j.kind === 'train' || j.kind === 'resume'))
   const evaluated = real.filter((r) => r.latest_test || r.latest_validation)
@@ -118,7 +118,13 @@ export default function Overview() {
           const s = st(p)
           const evs = data?.by_preset[p]?.evaluations ?? []
           const testEvs = evs.filter((e) => e.split === 'test')
-          const shown = testEvs.length ? testEvs : evs
+          const pool = testEvs.length ? testEvs : evs
+          // One training budget per card: the profile with the most evaluated runs.
+          const counts = new Map<string, number>()
+          for (const e of pool) counts.set(e.profile, (counts.get(e.profile) ?? 0) + 1)
+          const profile = [...counts.entries()].toSorted((a, b) => b[1] - a[1])[0]?.[0]
+          const shown = pool.filter((e) => e.profile === profile)
+          const others = pool.length - shown.length
           const mean = shown.length ? shown.reduce((a, e) => a + e.mean_original_return, 0) / shown.length : null
           const pad = shown.length ? shown.reduce((a, e) => a + e.pad_landing_rate, 0) / shown.length : null
           return (
@@ -149,7 +155,7 @@ export default function Overview() {
               </div>
               <p className="mt-2 text-[11px] text-ink-3">
                 {shown.length
-                  ? `Mean over ${shown.length} trained seed(s), ${testEvs.length ? 'final test' : 'validation'} split. ${shown.length < 3 ? 'Too few seeds for conclusions.' : ''}`
+                  ? `Mean over ${shown.length} ${String(profile).toUpperCase()} seed(s), ${testEvs.length ? 'final test' : 'validation'} split.${others ? ` ${others} run(s) with another budget not included.` : ''} ${shown.length < 3 ? 'Too few seeds for conclusions.' : ''}`
                   : 'No non-smoke evaluation yet.'}
               </p>
             </Card>

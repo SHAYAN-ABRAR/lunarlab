@@ -205,3 +205,36 @@ def test_stop_requested_while_job_starting_is_honoured_not_discarded():
     # A request addressed to a different (earlier) job is stale: it is cleared and training proceeds.
     request_stop(paths, reason="user", source="test", job_id="job-20260101-000000-old-0002")
     assert train(cfg.run_id, job_id="job-20260101-000000-b-0003", quiet=True) == EXIT_COMPLETED
+
+
+def test_locked_checkpoint_file_falls_back_to_a_unique_name(monkeypatch):
+    """Windows: if a scanner keeps the destination locked, the run must not fail."""
+    import lunarlab.training as tr
+
+    cfg = small_run(total=256)
+    venv = tr.build_vec_env(cfg)
+    try:
+        model = tr.build_model(cfg, venv, "cpu")
+
+        def locked(*_a, **_k):
+            raise PermissionError(5, "Access is denied")
+
+        monkeypatch.setattr(tr, "replace_file", locked)
+        paths = RunPaths(cfg.run_id)
+        entry = tr.save_model_atomic(
+            model,
+            paths,
+            "best_validation.zip",
+            kind="best_validation",
+            transitions=128,
+            segment=0,
+            config_hash=cfg.config_hash(),
+        )
+    finally:
+        venv.close()
+    assert entry["name"].startswith("best_validation-0000000128-") and entry["name"].endswith(".zip")
+    assert read_manifest(paths)["best_validation"]["name"] == entry["name"]
+    assert not list(paths.checkpoints.glob("*.tmp"))
+    path, resolved = resolve_checkpoint(cfg.run_id, "best")
+    assert path.name == entry["name"] and resolved["sha256"] == entry["sha256"]
+    assert any(e["level"] == "warning" for e in read_jsonl(paths.events))

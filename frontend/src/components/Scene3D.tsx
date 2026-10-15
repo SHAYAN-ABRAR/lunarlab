@@ -6,6 +6,9 @@
  * `sky_polys` for this seed), the helipad flags and the episode outcome. What is illustrative: depth
  * (LunarLander is a 2-D simulation; the ground beyond the simulation plane, the far mountains, the sky),
  * lighting, particles and the lander model. The simulation plane is marked with a faint line.
+ *
+ * The same engine drives live keyboard flights (``live``: rows arrive from the server as the episode
+ * is simulated) and can draw an opponent's flight on the same episode seed as a translucent ghost.
  */
 import clsx from 'clsx'
 import { Camera, Move3d, Orbit } from 'lucide-react'
@@ -14,7 +17,7 @@ import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { fmt } from '../lib/format'
 import { useApi, usePrefersReducedMotion } from '../lib/hooks'
-import type { Telemetry } from '../lib/types'
+import type { Telemetry, TelemetryRow } from '../lib/types'
 
 export interface SceneData {
   terrain: [number, number][]
@@ -33,6 +36,21 @@ export interface SceneData {
 }
 
 export type CameraMode = 'chase' | 'wide' | 'orbit'
+
+/** An opponent's flight on the same episode seed (positions and actions per step). */
+export interface GhostTrack {
+  label: string
+  rows: { obs: number[]; action: number | null }[]
+}
+
+export interface SceneOptions {
+  /** Live flight: rows are appended with pushRows(); the view follows the newest one. */
+  live?: boolean
+  ghost?: GhostTrack | null
+}
+
+/** The ghost flies just behind the simulation plane so both landers stay visible. */
+const GHOST_Z = -1.1
 
 interface Props {
   t: Telemetry
@@ -229,7 +247,7 @@ interface EngineCallbacks {
   onEnded: () => void
 }
 
-class LanderScene {
+export class LanderScene {
   private renderer: THREE.WebGLRenderer
   private scene = new THREE.Scene()
   private camera: THREE.PerspectiveCamera
@@ -249,6 +267,12 @@ class LanderScene {
   private craters: [number, number, number, number][] = [] // x, z, radius, depth (decorative, off the simulation plane)
   private rng: () => number
   private disposed = false
+  // live flights and ghosts
+  private live = false
+  private liveEnded = false
+  private ghost: THREE.Group | null = null
+  private ghostTrack: GhostTrack | null = null
+  private ghostFlames: THREE.Object3D[] = []
 
   // playback state
   frameFloat = 0
@@ -289,8 +313,10 @@ class LanderScene {
   private cb: EngineCallbacks
   private reducedMotion: boolean
 
-  constructor(canvas: HTMLCanvasElement, container: HTMLElement, t: Telemetry, s: SceneData, cb: EngineCallbacks, reducedMotion: boolean) {
+  constructor(canvas: HTMLCanvasElement, container: HTMLElement, t: Telemetry, s: SceneData, cb: EngineCallbacks, reducedMotion: boolean, opts: SceneOptions = {}) {
     this.container = container
+    this.live = !!opts.live
+    this.playing = this.live
     this.t = t
     this.s = s
     this.cb = cb
@@ -332,6 +358,7 @@ class LanderScene {
     this.buildTerrain()
     this.padLights = this.buildPad()
     this.buildLander(glow, blueGlow)
+    if (opts.ghost && opts.ghost.rows.length) this.buildGhost(opts.ghost)
 
     this.mainLight = new THREE.PointLight(0xff9a4a, 0, 7, 2)
     this.mainLight.position.set(0, -0.8, 0)
@@ -657,7 +684,48 @@ class LanderScene {
     this.scene.add(this.lander)
   }
 
+  /** A translucent copy of the lander (no shadows, lights or glow sprites) for the opponent. */
+  private buildGhost(track: GhostTrack) {
+    this.ghostTrack = track
+    const g = this.lander.clone(true)
+    const body = new THREE.MeshBasicMaterial({ color: 0x8fdcff, transparent: true, opacity: 0.3, depthWrite: false })
+    const flame = additive(0x9fe4ff, 0.4)
+    g.traverse((o) => {
+      o.castShadow = false
+      o.receiveShadow = false
+      if ((o as THREE.Sprite).isSprite) o.visible = false
+      else if ((o as THREE.Mesh).isMesh) {
+        const m = o as THREE.Mesh
+        m.material = (m.material as THREE.Material).blending === THREE.AdditiveBlending ? flame : body
+      }
+    })
+    // Flame groups, in the order they were added: main, +x side jet (action 1), -x side jet (action 3).
+    this.ghostFlames = g.children.filter((c) => (c as THREE.Group).isGroup)
+    this.ghost = g
+    this.scene.add(g)
+  }
+
   // ------------------------------------------------------------------ public control
+  /** Live flights: append the rows the server returned. */
+  pushRows(rows: TelemetryRow[]) {
+    for (const r of rows) this.t.rows.push(r)
+  }
+
+  /** Live flights: the episode has ended; play out the remaining rows, then the ending. */
+  endLive(episode: Telemetry['episode']) {
+    this.t.episode = episode
+    this.liveEnded = true
+  }
+
+  /** Live flights: freeze the view (and its particles) while the player pauses. */
+  setPaused(paused: boolean) {
+    if (this.live && this.endedAt < 0) this.playing = !paused
+  }
+
+  setSpeed(speed: number) {
+    this.speed = speed
+  }
+
   setCameraMode(mode: CameraMode) {
     this.mode = mode
     this.controls.enabled = mode === 'orbit'
@@ -744,7 +812,8 @@ class LanderScene {
     const dt = Math.min(this.timer.getDelta(), 0.1)
 
     // Advance the timeline.
-    if (this.playing) {
+    if (this.live) this.advanceLive(dt)
+    else if (this.playing) {
       this.frameFloat += dt * this.t.fps * this.speed
       if (this.frameFloat >= this.last) {
         this.frameFloat = this.last
@@ -770,6 +839,7 @@ class LanderScene {
     const angle = lerp(r0.obs[4], r1.obs[4], a)
     this.lander.position.set(x, y, 0)
     this.lander.rotation.set(0, 0, angle)
+    if (this.ghost) this.updateGhost()
 
     // Engines: the action applied in the step currently being shown.
     const action = a > 1e-3 ? r1.action : r0.action
@@ -794,7 +864,7 @@ class LanderScene {
     const shown = rows[Math.round(this.frameFloat)]
     this.feet[0]?.emissive.setHex(shown.obs[6] > 0.5 ? 0x2bd46f : 0x000000)
     this.feet[1]?.emissive.setHex(shown.obs[7] > 0.5 ? 0x2bd46f : 0x000000)
-    const ended = Math.round(this.frameFloat) >= this.last
+    const ended = this.live ? this.endedAt > 0 : Math.round(this.frameFloat) >= this.last
     const ep = this.t.episode
     const padColor = ended ? (ep.pad_landing ? 0x3ecf7a : ep.env_outcome === 'at_rest' ? 0xf5b544 : 0x3cc8d4) : 0x3cc8d4
     this.padLights.color.setHex(padColor)
@@ -815,6 +885,46 @@ class LanderScene {
     this.updateCamera(dt, x, y)
     this.adaptQuality(dt)
     this.renderer.render(this.scene, this.camera)
+  }
+
+  /** Live flights: follow the newest row with a ~2-frame buffer (smooth despite network jitter). */
+  private advanceLive(dt: number) {
+    this.last = this.t.rows.length - 1
+    if (this.endedAt > 0 || !this.playing) return
+    let lag = this.last - this.frameFloat
+    if (lag > 12) {
+      this.frameFloat = this.last - 2 // fell far behind (hidden tab, slow response): jump, don't fast-forward
+      lag = 2
+    }
+    const rate = this.liveEnded ? Math.max(1, 0.6 + 0.2 * lag) : clamp(0.6 + 0.2 * lag, 0.5, 2.5)
+    this.frameFloat = Math.min(this.last, this.frameFloat + dt * this.t.fps * this.speed * rate)
+    if (this.liveEnded && this.frameFloat >= this.last) {
+      this.playing = false
+      this.endedAt = performance.now()
+      this.burst()
+      this.report(true)
+      this.cb.onEnded()
+    }
+  }
+
+  /** The opponent at the same step count (holding its final pose once its episode has ended). */
+  private updateGhost() {
+    const rows = this.ghostTrack!.rows
+    const o = this.s.obs_to_world
+    const gl = rows.length - 1
+    const f = Math.min(this.frameFloat, gl)
+    const i0 = Math.floor(f)
+    const i1 = Math.min(i0 + 1, gl)
+    const a = f - i0
+    const q0 = rows[i0].obs
+    const q1 = rows[i1].obs
+    this.ghost!.position.set(lerp(q0[0], q1[0], a) * o.x_scale + o.x_offset, lerp(q0[1], q1[1], a) * o.y_scale + o.y_offset, GHOST_Z)
+    this.ghost!.rotation.set(0, 0, lerp(q0[4], q1[4], a))
+    const action = f >= gl ? null : a > 1e-3 ? rows[i1].action : rows[i0].action
+    const [main, plusX, minusX] = this.ghostFlames
+    if (main) main.visible = action === 2
+    if (plusX) plusX.visible = action === 1
+    if (minusX) minusX.visible = action === 3
   }
 
   /** Tell React which frame is shown: immediately when paused or seeking, at most ~20 Hz while playing.
@@ -938,13 +1048,7 @@ export default function Scene3D({ t, frame, playing, speed, onFrame, onEnded, la
   const cbRef = useRef({ onFrame, onEnded })
   cbRef.current = { onFrame, onEnded }
   const reduced = usePrefersReducedMotion()
-  const [mode, setMode] = useState<CameraMode>(() => {
-    try {
-      return (localStorage.getItem('lunarlab.camera') as CameraMode) || 'chase'
-    } catch {
-      return 'chase'
-    }
-  })
+  const [mode, setMode] = useCameraMode()
   const [failed, setFailed] = useState<string | null>(null)
 
   useEffect(() => {
@@ -976,22 +1080,10 @@ export default function Scene3D({ t, frame, playing, speed, onFrame, onEnded, la
 
   useEffect(() => {
     engineRef.current?.setCameraMode(mode)
-    try {
-      localStorage.setItem('lunarlab.camera', mode)
-    } catch {
-      /* storage unavailable: preference is per session */
-    }
   }, [mode])
 
   const row = t.rows[Math.min(frame, t.rows.length - 1)]
   const last = frame >= t.n_frames - 1
-  const ep = t.episode
-  const banner = ep.pad_landing ? { text: 'Pad landing', tone: 'border-good/50 text-good' } : OUTCOME_BANNER[ep.env_outcome] ?? OUTCOME_BANNER.unknown
-  const engines = [
-    { key: 'L', on: row.action === 3, title: 'Side jet on the −x side (action 3)' },
-    { key: 'MAIN', on: row.action === 2, title: 'Main engine (action 2)' },
-    { key: 'R', on: row.action === 1, title: 'Side jet on the +x side (action 1)' },
-  ]
 
   return (
     <div ref={containerRef} className="relative overflow-hidden rounded-lg border border-line bg-black" style={{ aspectRatio: '3 / 2' }}>
@@ -1020,36 +1112,83 @@ export default function Scene3D({ t, frame, playing, speed, onFrame, onEnded, la
             <div className="tracking-[0.18em] text-accent">3-D RECONSTRUCTION</div>
             <div className="text-[10px] text-ink-3">recorded telemetry · real terrain · 2-D physics</div>
           </div>
-          <div className="pointer-events-auto flex rounded-md border border-white/10 bg-black/45 p-0.5 backdrop-blur-sm" role="radiogroup" aria-label="Camera">
-            {([
-              ['chase', 'Chase', Camera],
-              ['wide', 'Wide', Move3d],
-              ['orbit', 'Orbit', Orbit],
-            ] as const).map(([value, text, Icon]) => (
-              <button
-                key={value}
-                type="button"
-                role="radio"
-                aria-checked={mode === value}
-                onClick={() => setMode(value)}
-                className={clsx('inline-flex items-center gap-1 rounded px-2 py-1 text-[11px] transition-colors', mode === value ? 'bg-white/15 text-ink' : 'text-ink-3 hover:text-ink')}
-                title={value === 'orbit' ? 'Drag to rotate, scroll to zoom' : undefined}
-              >
-                <Icon className="size-3.5" aria-hidden />
-                {text}
-              </button>
-            ))}
-          </div>
+          <CameraSwitch mode={mode} onChange={setMode} />
         </div>
 
-        {last && (
-          <div className="absolute left-1/2 top-[42%] -translate-x-1/2 -translate-y-1/2">
-            <div className={clsx('rounded-md border bg-black/55 px-4 py-2 text-center text-sm font-medium uppercase tracking-[0.2em] backdrop-blur-sm', banner.tone)}>
-              {banner.text}
-            </div>
-          </div>
-        )}
+        {last && <OutcomeBanner episode={t.episode} />}
 
+        <TelemetryHud row={row} />
+      </div>
+    </div>
+  )
+}
+
+// --------------------------------------------------------------------------- //
+// Shared HUD pieces (also used by the live flight view)
+// --------------------------------------------------------------------------- //
+
+export function useCameraMode(): [CameraMode, (m: CameraMode) => void] {
+  const [mode, setMode] = useState<CameraMode>(() => {
+    try {
+      return (localStorage.getItem('lunarlab.camera') as CameraMode) || 'chase'
+    } catch {
+      return 'chase'
+    }
+  })
+  const update = (m: CameraMode) => {
+    setMode(m)
+    try {
+      localStorage.setItem('lunarlab.camera', m)
+    } catch {
+      /* storage unavailable: preference is per session */
+    }
+  }
+  return [mode, update]
+}
+
+export function CameraSwitch({ mode, onChange }: { mode: CameraMode; onChange: (m: CameraMode) => void }) {
+  return (
+    <div className="pointer-events-auto flex rounded-md border border-white/10 bg-black/45 p-0.5 backdrop-blur-sm" role="radiogroup" aria-label="Camera">
+      {([
+        ['chase', 'Chase', Camera],
+        ['wide', 'Wide', Move3d],
+        ['orbit', 'Orbit', Orbit],
+      ] as const).map(([value, text, Icon]) => (
+        <button
+          key={value}
+          type="button"
+          role="radio"
+          aria-checked={mode === value}
+          onClick={() => onChange(value)}
+          className={clsx('inline-flex items-center gap-1 rounded px-2 py-1 text-[11px] transition-colors', mode === value ? 'bg-white/15 text-ink' : 'text-ink-3 hover:text-ink')}
+          title={value === 'orbit' ? 'Drag to rotate, scroll to zoom' : undefined}
+        >
+          <Icon className="size-3.5" aria-hidden />
+          {text}
+        </button>
+      ))}
+    </div>
+  )
+}
+
+export function OutcomeBanner({ episode }: { episode: Pick<Telemetry['episode'], 'pad_landing' | 'env_outcome'> }) {
+  const banner = episode.pad_landing ? { text: 'Pad landing', tone: 'border-good/50 text-good' } : OUTCOME_BANNER[episode.env_outcome] ?? OUTCOME_BANNER.unknown
+  return (
+    <div className="absolute left-1/2 top-[42%] -translate-x-1/2 -translate-y-1/2">
+      <div className={clsx('rounded-md border bg-black/55 px-4 py-2 text-center text-sm font-medium uppercase tracking-[0.2em] backdrop-blur-sm', banner.tone)}>
+        {banner.text}
+      </div>
+    </div>
+  )
+}
+
+export function TelemetryHud({ row }: { row: TelemetryRow }) {
+  const engines = [
+    { key: 'L', on: row.action === 3, title: 'Side jet on the −x side (action 3)' },
+    { key: 'MAIN', on: row.action === 2, title: 'Main engine (action 2)' },
+    { key: 'R', on: row.action === 1, title: 'Side jet on the +x side (action 1)' },
+  ]
+  return (
         <div className="absolute inset-x-3 bottom-3 flex items-end justify-between gap-3">
           <div className="grid grid-cols-2 gap-x-4 gap-y-0.5 rounded-md border border-white/10 bg-black/45 px-3 py-2 backdrop-blur-sm sm:grid-cols-4">
             <span className="text-ink-3">ALT y</span>
@@ -1077,7 +1216,5 @@ export default function Scene3D({ t, frame, playing, speed, onFrame, onEnded, la
             </div>
           </div>
         </div>
-      </div>
-    </div>
   )
 }

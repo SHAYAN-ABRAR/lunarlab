@@ -114,6 +114,7 @@ def cmd_train(args) -> int:
         training=training,
         seed=args.seed,
         ppo=ppo,
+        algo=args.algo,
         label=args.label or "",
         experiment_id=args.experiment_id,
     )
@@ -266,7 +267,23 @@ def cmd_suite(args) -> int:
     seeds = _ints(args.seeds)
     bench = read_json(data_dir() / "benchmark.json", default={}) or {}
     tps = (bench.get("default_config") or {}).get("ppo_tps")
-    plan = plan_suite(presets, seeds, args.profile, throughput_tps=tps)
+    overrides = {
+        k: v
+        for k, v in {
+            "total_transitions": args.total_transitions,
+            "checkpoint_every": args.checkpoint_every,
+            "validation_every": args.validation_every,
+        }.items()
+        if v
+    }
+    plan = plan_suite(
+        presets,
+        seeds,
+        args.profile,
+        throughput_tps=tps if args.algo == "ppo" else None,
+        algo=args.algo,
+        training_overrides=overrides,
+    )
     print(
         f"Suite: {len(presets)} reward(s) × {len(seeds)} seed(s) = {plan['n_runs']} runs, "
         f"{plan['transitions_per_run']:,} transitions each ({plan['total_transitions']:,} total)."
@@ -279,10 +296,19 @@ def cmd_suite(args) -> int:
         print(f"  ! {w}")
     if not _confirm("Create and run this suite now?", args.yes):
         return 1
-    exp = create_experiment(name=args.name, presets=presets, seeds=seeds, profile=args.profile)
+    exp = create_experiment(
+        name=args.name,
+        presets=presets,
+        seeds=seeds,
+        profile=args.profile,
+        algo=args.algo,
+        training_overrides=overrides,
+    )
     print(f"Experiment {exp['experiment_id']} with runs:\n  " + "\n  ".join(exp["run_ids"]))
     if args.create_only:
         return 0
+    if args.parallel > 1:
+        return _run_experiment_parallel(exp["experiment_id"], args.parallel, test=not args.no_test)
     for rid in exp["run_ids"]:
         code = train(rid)
         if code != EXIT_COMPLETED:
@@ -296,6 +322,243 @@ def cmd_suite(args) -> int:
             print(f"Final test evaluation (validation-selected checkpoint) for {rid} ...", flush=True)
             evaluate_run(rid, "test", checkpoint="best")
     print(f"\nDone. Compare with: python -m lunarlab compare --experiment-id {exp['experiment_id']}")
+    return 0
+
+
+def _run_experiment_parallel(experiment_id: str, workers: int, *, test: bool) -> int:
+    """Train every unfinished run of an experiment (fresh runs train, interrupted ones resume),
+    then evaluate each completed run once on the final-test seeds."""
+    from lunarlab.experiments import load_experiment
+    from lunarlab.parallel import run_parallel
+    from lunarlab.runs import read_manifest
+    from lunarlab.storage import RunPaths
+
+    exp = load_experiment(experiment_id)
+    jobs = []
+    for rid in exp["run_ids"]:
+        ckpts = read_manifest(RunPaths(rid))["checkpoints"]
+        if any(c["kind"] == "final" for c in ckpts):
+            continue
+        jobs.append(("resume" if ckpts else "train", rid))
+    print(f"Training {len(jobs)} run(s) with up to {workers} in parallel ...", flush=True)
+    codes = run_parallel(jobs, workers=workers)
+    failed = [rid for rid, c in codes.items() if c != 0]
+    if failed:
+        print(
+            f"{len(failed)} run(s) did not complete: {failed}. Rerun `python -m lunarlab run-experiment "
+            f"--experiment-id {experiment_id}` to resume them."
+        )
+        return 1
+    if test:
+        from lunarlab.runs import load_metadata
+
+        todo = [("test", rid) for rid in exp["run_ids"] if not load_metadata(rid).get("frozen_for_test")]
+        print(f"Final-test evaluation of {len(todo)} run(s) ...", flush=True)
+        test_codes = run_parallel(todo, workers=workers)
+        if any(c != 0 for c in test_codes.values()):
+            return 1
+    print(f"\nDone. Compare with: python -m lunarlab compare --experiment-id {experiment_id}")
+    return 0
+
+
+def cmd_run_experiment(args) -> int:
+    return _run_experiment_parallel(args.experiment_id, args.parallel, test=not args.no_test)
+
+
+def cmd_train_run(args) -> int:
+    """Train an existing, never-started run (e.g. one created with --create-only)."""
+    from lunarlab.training import train
+
+    return train(args.run_id)
+
+
+def cmd_robustness(args) -> int:
+    """Evaluate frozen checkpoints under wind / heavy gravity (separate from the calm final test)."""
+    from lunarlab.parallel import run_parallel
+    from lunarlab.robustness import CONDITIONS
+
+    ids = _resolve_run_ids(args)
+    conds = _strs(args.conditions) if args.conditions else list(CONDITIONS)
+    bad = [c for c in conds if c not in CONDITIONS]
+    if bad:
+        raise SystemExit(f"unknown condition(s): {bad}; choose from {', '.join(CONDITIONS)}")
+    print(f"Robustness: {len(ids)} run(s) x {len(conds)} condition(s), {args.episodes} episodes each")
+    jobs = [("robustness", rid) for rid in ids]
+    codes = run_parallel(
+        jobs,
+        workers=args.parallel,
+        extra_args=["--conditions", ",".join(conds), "--episodes", str(args.episodes)],
+    )
+    return 0 if all(c == 0 for c in codes.values()) else 1
+
+
+def cmd_robustness_run(args) -> int:
+    from lunarlab.evaluation import summarize_for_index
+    from lunarlab.robustness import evaluate_robustness
+
+    for cond in _strs(args.conditions):
+        r = evaluate_robustness(args.run_id, cond, episodes=args.episodes)
+        s = summarize_for_index(r)
+        print(
+            f"{cond}: mean original return {s['mean_original_return']:.1f}, pad landing {s['pad_landing_rate']:.2f}",
+            flush=True,
+        )
+    return 0
+
+
+def _stage_checkpoints(run_id: str, targets: list[int]) -> list[dict]:
+    """Checkpoints of a run nearest to the target transition counts (plus its final one)."""
+    from lunarlab.runs import read_manifest
+    from lunarlab.storage import RunPaths
+
+    ckpts = [c for c in read_manifest(RunPaths(run_id))["checkpoints"] if c["kind"] in ("periodic", "final")]
+    chosen: dict[str, dict] = {}
+    for t in targets:
+        if ckpts:
+            c = min(ckpts, key=lambda c: abs(c["transitions"] - t))
+            chosen[c["name"]] = c
+    final = next((c for c in ckpts if c["kind"] == "final"), None)
+    if final:
+        chosen[final["name"]] = final
+    return sorted(chosen.values(), key=lambda c: c["transitions"])
+
+
+def _rlhf_dataset(from_experiment: str | None, source_seeds: str, episodes: int) -> str:
+    """Collect preference segments from random, heuristic and (optionally) PPO checkpoints."""
+    from lunarlab.compare import experiment_run_ids
+    from lunarlab.env import make_env
+    from lunarlab.policies import HeuristicPolicy, RandomPolicy
+    from lunarlab.preferences.data import create_dataset
+    from lunarlab.runs import load_config, load_policy
+
+    policies = [
+        ("random-0", RandomPolicy(0)),
+        ("random-1", RandomPolicy(1)),
+        ("heuristic", HeuristicPolicy(make_env())),
+    ]
+    if from_experiment:
+        seeds_used = set(_ints(source_seeds))
+        for rid in experiment_run_ids(from_experiment):
+            cfg = load_config(rid)
+            if cfg.reward.preset not in ("baseline", "hover-bonus") or cfg.seed not in seeds_used:
+                continue
+            for c in _stage_checkpoints(rid, [100_000, 300_000, 600_000]):
+                pol, _ = load_policy(rid, c["name"], deterministic=False)
+                policies.append((f"PPO {cfg.reward.name} s{cfg.seed} @{c['transitions'] // 1000}k", pol))
+    print(f"Collecting segments from {len(policies)} policies x {episodes} episodes ...", flush=True)
+    dataset_id = create_dataset(policies, episodes_per_policy=episodes, name="rlhf")
+    print(f"Dataset {dataset_id}", flush=True)
+    return dataset_id
+
+
+def _rlhf_reward_model(dataset_id: str, pairs: int, *, seed: int, include_human: bool) -> dict:
+    from lunarlab.preferences.train import train_reward_model
+
+    meta = train_reward_model(
+        dataset_id, n_pairs=pairs, seed=seed, include_human=include_human, name=f"rm-{pairs}"
+    )
+    m = meta["metrics"]
+    print(
+        f"Reward model {meta['model_id']}: {meta['n_train_pairs']} training pairs ({meta['n_human_labels']} human), "
+        f"accuracy vs true order {m['val_accuracy_vs_true_order']:.3f}, segment-return correlation "
+        f"{m['segment_return_correlation']:.3f}, step-reward correlation {m['step_reward_correlation']:.3f}",
+        flush=True,
+    )
+    return meta
+
+
+def cmd_rlhf_dataset(args) -> int:
+    _rlhf_dataset(args.from_experiment, args.source_seeds, args.episodes)
+    return 0
+
+
+def cmd_reward_model(args) -> int:
+    _rlhf_reward_model(args.dataset_id, args.pairs, seed=args.seed, include_human=args.include_human)
+    return 0
+
+
+def cmd_rlhf_study(args) -> int:
+    """RLHF in miniature: preferences -> reward models -> PPO on the learned reward -> true evaluation."""
+    from lunarlab.experiments import create_experiment
+
+    dataset_id = args.dataset_id or _rlhf_dataset(args.from_experiment, args.source_seeds, args.episodes)
+    rewards = []
+    for n in _ints(args.pairs):
+        meta = _rlhf_reward_model(dataset_id, n, seed=args.rm_seed, include_human=args.include_human)
+        rewards.append(
+            RewardConfig.model_validate(
+                {
+                    "name": f"Learned reward {n} pairs",
+                    "preset": "custom",
+                    "description": (
+                        f"RLHF: PPO trained only on reward model {meta['model_id']} (fitted to {meta['n_train_pairs']} "
+                        "preference labels). The environment reward has weight 0."
+                    ),
+                    "original_weight": 0.0,
+                    "learned": {"enabled": True, "model_id": meta["model_id"], "scale": 1.0},
+                }
+            )
+        )
+    exp = create_experiment(
+        name=args.name,
+        rewards=rewards,
+        seeds=_ints(args.seeds),
+        profile=args.profile,
+        description=f"Learned-reward (RLHF) study on dataset {dataset_id}.",
+    )
+    print(f"Experiment {exp['experiment_id']}: {len(exp['run_ids'])} runs", flush=True)
+    if args.create_only:
+        return 0
+    return _run_experiment_parallel(exp["experiment_id"], args.parallel, test=True)
+
+
+def cmd_record_showcase(args) -> int:
+    """Side-by-side replays: one policy per reward group (and the heuristic/random references),
+    all flying the same episode seeds."""
+    from lunarlab.compare import experiment_run_ids
+    from lunarlab.recording import list_recordings, record_demo, record_run
+    from lunarlab.runs import load_config, load_metadata
+
+    seeds = _ints(args.seeds)
+    have = {(m.get("run_id"), m["policy"]["kind"], m["episode_seed"]) for m in list_recordings()}
+    for rid in experiment_run_ids(args.experiment_id):
+        cfg = load_config(rid)
+        if cfg.seed != args.training_seed:
+            continue
+        frozen = load_metadata(rid).get("frozen_for_test")
+        for s in seeds:
+            if (rid, cfg.algo, s) in have:
+                continue
+            meta = record_run(rid, episode_seed=s, checkpoint=frozen["checkpoint"] if frozen else "best")
+            print(
+                f"{cfg.algo.upper()} {cfg.reward.name} seed {cfg.seed} on episode {s}: return "
+                f"{meta['original_return']:.1f}, {meta['env_outcome']}",
+                flush=True,
+            )
+    if args.references:
+        for kind in ("heuristic", "random"):
+            for s in seeds:
+                if (None, kind, s) not in have:
+                    meta = record_demo(kind, episode_seed=s)
+                    print(f"{kind} on episode {s}: return {meta['original_return']:.1f}", flush=True)
+    return 0
+
+
+def cmd_results(args) -> int:
+    from lunarlab.results import build_results
+
+    build_results(_strs(args.experiment_ids), Path(args.out))
+    return 0
+
+
+def cmd_export_demo(args) -> int:
+    from lunarlab.demo import export_demo
+
+    export_demo(
+        Path(args.out),
+        experiment_ids=_strs(args.experiment_ids),
+        extra_run_ids=_strs(args.run_ids) if args.run_ids else None,
+    )
     return 0
 
 
@@ -480,6 +743,9 @@ def build_parser() -> argparse.ArgumentParser:
     t.add_argument("--experiment-id")
     t.add_argument("--label")
     t.add_argument("--yes", action="store_true", help="skip confirmation for EXTENDED")
+    t.add_argument(
+        "--algo", choices=["ppo", "dqn"], default="ppo", help="PPO (default) or DQN (Zoo settings)"
+    )
     t.set_defaults(fn=cmd_train)
 
     r = sub.add_parser("resume", help="continue a stopped/interrupted run from a checkpoint")
@@ -527,7 +793,97 @@ def build_parser() -> argparse.ArgumentParser:
         "--create-only", action="store_true", help="create the runs; train them later (e.g. from the UI)"
     )
     su.add_argument("--no-test", action="store_true", help="skip the final test evaluation")
+    su.add_argument("--parallel", type=int, default=1, help="train up to N runs at once (one CPU core each)")
+    su.add_argument("--algo", choices=["ppo", "dqn"], default="ppo")
+    su.add_argument("--total-transitions", type=int, help="override the profile's budget (labelled 'custom')")
+    su.add_argument("--checkpoint-every", type=int)
+    su.add_argument("--validation-every", type=int)
     su.set_defaults(fn=cmd_suite)
+
+    re_ = sub.add_parser(
+        "run-experiment", help="train/resume the unfinished runs of an experiment, then final-test them"
+    )
+    re_.add_argument("--experiment-id", required=True)
+    re_.add_argument("--parallel", type=int, default=1)
+    re_.add_argument("--no-test", action="store_true")
+    re_.set_defaults(fn=cmd_run_experiment)
+
+    rd = sub.add_parser("rlhf-dataset", help="collect flight segments for preference labelling")
+    rd.add_argument(
+        "--from-experiment", help="also use checkpoints of this experiment's baseline/hover-bonus runs"
+    )
+    rd.add_argument("--source-seeds", default="0,1")
+    rd.add_argument("--episodes", type=int, default=20, help="episodes per source policy")
+    rd.set_defaults(fn=cmd_rlhf_dataset)
+
+    rm = sub.add_parser("reward-model", help="fit a reward model to a dataset's preferences")
+    rm.add_argument("--dataset-id", required=True)
+    rm.add_argument("--pairs", type=int, default=3000, help="simulated-human comparisons")
+    rm.add_argument("--include-human", action="store_true", help="also use the labels given in the UI")
+    rm.add_argument("--seed", type=int, default=0)
+    rm.set_defaults(fn=cmd_reward_model)
+
+    rl = sub.add_parser("rlhf-study", help="preferences -> reward models -> PPO on the learned reward")
+    rl.add_argument("--dataset-id", help="reuse an existing dataset instead of collecting a new one")
+    rl.add_argument(
+        "--from-experiment",
+        help="use checkpoints of this experiment's baseline/hover-bonus runs as data sources",
+    )
+    rl.add_argument("--source-seeds", default="0,1")
+    rl.add_argument("--episodes", type=int, default=20, help="episodes per source policy")
+    rl.add_argument("--pairs", default="300,3000", help="comparison counts, one reward model each")
+    rl.add_argument("--include-human", action="store_true", help="also use the labels given in the UI")
+    rl.add_argument("--rm-seed", type=int, default=0)
+    rl.add_argument("--seeds", default="0,1,2", help="PPO training seeds per reward model")
+    rl.add_argument("--profile", choices=list(PROFILES), default="standard")
+    rl.add_argument("--name", default="rlhf-study")
+    rl.add_argument("--parallel", type=int, default=1)
+    rl.add_argument("--create-only", action="store_true")
+    rl.set_defaults(fn=cmd_rlhf_study)
+
+    sc = sub.add_parser(
+        "record-showcase", help="record every reward group's policy on the same episode seeds"
+    )
+    sc.add_argument("--experiment-id", required=True)
+    sc.add_argument("--seeds", default="20000,20001", help="episode seeds (final-test seeds start at 20000)")
+    sc.add_argument(
+        "--training-seed", type=int, default=0, help="which training seed's policy to record per group"
+    )
+    sc.add_argument("--references", action="store_true", help="also record the heuristic and random policies")
+    sc.set_defaults(fn=cmd_record_showcase)
+
+    rr = sub.add_parser("results", help="figures and tables for the results write-up (final-test data only)")
+    rr.add_argument("--experiment-ids", required=True)
+    rr.add_argument("--out", default="docs/results")
+    rr.set_defaults(fn=cmd_results)
+
+    ed = sub.add_parser(
+        "export-demo", help="write a static, read-only snapshot of results for the hosted demo"
+    )
+    ed.add_argument("--experiment-ids", required=True)
+    ed.add_argument("--run-ids", help="additional runs to include")
+    ed.add_argument("--out", default="demo/api")
+    ed.set_defaults(fn=cmd_export_demo)
+
+    rb = sub.add_parser(
+        "robustness", help="evaluate frozen checkpoints under wind/gravity they never trained on"
+    )
+    rb.add_argument("--experiment-id")
+    rb.add_argument("--run-ids")
+    rb.add_argument("--conditions", help="comma-separated; default: all")
+    rb.add_argument("--episodes", type=int, default=50)
+    rb.add_argument("--parallel", type=int, default=1)
+    rb.set_defaults(fn=cmd_robustness)
+
+    rbr = sub.add_parser("robustness-run", help=argparse.SUPPRESS)
+    rbr.add_argument("--run-id", required=True)
+    rbr.add_argument("--conditions", required=True)
+    rbr.add_argument("--episodes", type=int, default=50)
+    rbr.set_defaults(fn=cmd_robustness_run)
+
+    tr_ = sub.add_parser("train-run", help="train an existing run that has not been started yet")
+    tr_.add_argument("--run-id", required=True)
+    tr_.set_defaults(fn=cmd_train_run)
 
     sw = sub.add_parser("sweep", help="explicit development sweep over hover-bonus weights")
     sw.add_argument("--bonus", default="0.25,0.5,1,2")

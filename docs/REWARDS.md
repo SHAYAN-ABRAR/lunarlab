@@ -117,6 +117,23 @@ A visible consequence: because Φ ≤ 0 and Φ(terminal) = 0, the final transiti
 `F = −α·Φ(s) > 0`. That step cancels the potential collected so far; the episode as a whole is not rewarded
 for crashing. The Stress Test shows this as the "final step" phase.
 
+### E. Learned reward (RLHF in miniature)
+
+Not a preset: reward configurations created by `python -m lunarlab rlhf-study` (or by hand) with
+`original_weight: 0` and `learned: {enabled: true, model_id: <id>, scale: 1}`. PPO then optimizes only
+`scale × r̂(s, a, s′)`, the output of a reward model fitted to pairwise preferences between 40-step flight
+segments (see ARCHITECTURE.md). The general invariant is
+
+```
+training_reward = original_weight × original_reward + Σ additional terms
+```
+
+with `original_weight = 1` for every preset (their content hashes are unchanged by this field). Evaluation is
+unaffected: it always reports the original reward. The model's per-step output is normalized to zero mean and
+unit standard deviation on the training segments, so its scale is arbitrary; only its ordering of
+trajectories was trained. Nothing constrains its sign on states the dataset never covered, which is exactly
+where an optimizing policy can find unintended reward.
+
 ## Termination vs truncation
 
 - **terminated** (crash, out of bounds, at rest): the episode really ended. SB3 does not bootstrap and

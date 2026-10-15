@@ -1,5 +1,8 @@
 // Tiny typed client. Every mutating request carries X-LunarLab: 1, which the backend requires
 // (a custom header cannot be sent cross-origin without a CORS preflight the server never approves).
+// In the static demo build (VITE_DEMO=1) requests are answered from exported snapshot files.
+
+import { DEMO, demoRequest, demoUrl } from './demo'
 
 export class ApiError extends Error {
   status: number
@@ -29,6 +32,14 @@ function formatDetail(detail: unknown): string {
 }
 
 async function request<T>(method: string, path: string, body?: unknown, signal?: AbortSignal): Promise<T> {
+  if (DEMO) {
+    try {
+      return await demoRequest<T>(method, path, body)
+    } catch (e) {
+      const err = e as Error & { status?: number; detail?: unknown }
+      throw new ApiError(err.status ?? 0, err.detail ?? err.message)
+    }
+  }
   let res: Response
   try {
     res = await fetch(path, {
@@ -60,11 +71,18 @@ async function request<T>(method: string, path: string, body?: unknown, signal?:
 export const api = {
   get: <T>(path: string, signal?: AbortSignal) => request<T>('GET', path, undefined, signal),
   post: <T>(path: string, body: unknown = {}) => request<T>('POST', path, body),
+  del: <T>(path: string) => request<T>('DELETE', path),
   text: async (path: string): Promise<string> => {
     const res = await fetch(path)
     if (!res.ok) throw new ApiError(res.status, await res.text())
     return res.text()
   },
+}
+
+/** URL for media and downloads (video, frames, files): the snapshot copy in the static demo. */
+export function apiUrl(path: string): string {
+  if (!DEMO) return path
+  return demoUrl(path, path.endsWith('/video') ? 'mp4' : 'json')
 }
 
 export function idempotencyKey(): string {

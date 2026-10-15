@@ -33,9 +33,10 @@ def make_eval_env(
     *,
     render_mode: str | None = None,
     record_steps: bool = False,
+    env_overrides: dict | None = None,
 ) -> LunarLabRewardWrapper:
     return LunarLabRewardWrapper(
-        make_env(render_mode=render_mode),
+        make_env(render_mode=render_mode, overrides=env_overrides),
         reward or preset("baseline"),
         gamma,
         apply=False,  # evaluation reward is ALWAYS the original reward
@@ -70,8 +71,9 @@ def evaluate_policy(
     gamma: float,
     progress: Callable[[int, int], None] | None = None,
     should_stop: Callable[[], bool] | None = None,
+    env_overrides: dict | None = None,
 ) -> dict[str, Any]:
-    env = make_eval_env(protocol, reward, gamma)
+    env = make_eval_env(protocol, reward, gamma, env_overrides=env_overrides)
     episodes: list[dict] = []
     t0 = time.perf_counter()
     try:
@@ -207,7 +209,7 @@ def evaluate_run(
         seeds,
         protocol=protocol,
         reward=cfg.reward,
-        gamma=cfg.ppo.gamma,
+        gamma=cfg.gamma,
         progress=progress,
         should_stop=should_stop,
     )

@@ -14,6 +14,10 @@ const SECTIONS = [
   ['potential', 'Potential-based shaping'],
   ['termination', 'Termination vs truncation'],
   ['evaluation', 'Evaluation protocol'],
+  ['statistics', 'Statistics across seeds'],
+  ['robustness', 'Robustness'],
+  ['learned', 'Learned rewards (RLHF)'],
+  ['dqn', 'PPO and DQN'],
   ['credits', 'References & credits'],
 ] as const
 
@@ -143,6 +147,32 @@ export default function Learn() {
             </ul>
           </Section>
 
+          <Section id="statistics" title="Statistics across training seeds" see={<Link className="text-accent hover:underline" to="/compare">the aggregate card on Compare &amp; Diagnose</Link>}>
+            <p>Two policies trained with the same reward but different seeds can behave very differently, so a comparison of reward designs needs several trained policies per design, and the unit of evidence is the <strong>policy</strong>, not the episode.</p>
+            <ul>
+              <li><strong>IQM</strong> (interquartile mean): the mean of the middle 50% of policies. Less sensitive to one lucky or unlucky seed than the mean, more efficient than the median.</li>
+              <li><strong>Bootstrap intervals over policies</strong>: resample the trained policies (not the episodes) to see how much the IQM could move with another set of seeds.</li>
+              <li><strong>Probability of improvement</strong>: the chance that a random policy of design A outscores a random policy of design B. An interval containing 0.5 means the data cannot order them.</li>
+              <li><strong>Performance profiles</strong>: for every threshold τ, the fraction of test episodes scoring above τ. A whole curve instead of one number.</li>
+            </ul>
+            <p>These follow Agarwal et al. (NeurIPS 2021). With 3–5 policies per group, the intervals are wide; that is the honest result.</p>
+          </Section>
+
+          <Section id="robustness" title="Robustness: physics the agent never saw" see={<Link className="text-accent hover:underline" to="/compare">the robustness table on Compare &amp; Diagnose</Link>}>
+            <p>Every policy trains in calm, default physics. A robustness evaluation takes its frozen checkpoint and re-flies the same test episodes (identical terrain and initial push) with wind and turbulence switched on, or with stronger gravity. Nothing is tuned on these results, and they never replace the calm final test.</p>
+            <p>A policy can be excellent on its training distribution and fragile outside it. Comparing reward designs under the same perturbations shows whether a design changes that.</p>
+          </Section>
+
+          <Section id="learned" title="Learned rewards: RLHF in miniature" see={<Link className="text-accent hover:underline" to="/learned-rewards">label flights yourself on Learned Rewards</Link>}>
+            <p>Instead of writing a reward, learn one from comparisons. Short flight segments are shown in pairs; whoever labels them (here a simulated human, or you) says which looks better. A small network r(s, a, s′) is trained so that the segment it scores higher is the preferred one (the Bradley–Terry model). PPO is then trained on that learned reward <strong>alone</strong>, and judged by the environment’s real reward.</p>
+            <p>The learned reward is only constrained where the labelled segments were. A policy optimizing it can find states nobody labelled where it pays generously: the learned (proxy) return goes up while the true return does not. That is reward-model over-optimization, the same failure mode large-scale RLHF has to manage, visible here in a few minutes of CPU time.</p>
+          </Section>
+
+          <Section id="dqn" title="PPO and DQN">
+            <p><strong>PPO</strong> (on-policy) collects fresh rollouts with the current policy, then takes a few clipped gradient steps on them and throws them away. <strong>DQN</strong> (off-policy) learns action values from a replay buffer of past transitions and acts ε-greedily. Both use the same reward wrapper, evaluation protocol and checkpoint selection here, each with RL Baselines3 Zoo’s LunarLander settings and budget (PPO 1M transitions, DQN 100k), so a comparison reads “each algorithm at its reference settings”, not “equal experience”.</p>
+            <p>The discount matters for reward design: DQN uses γ = 0.99 and PPO γ = 0.999. A per-step bonus paid for 900 steps is worth about 100 at γ = 0.99 but about 594 at γ = 0.999 (see the calculator in Reward Studio), so the same flawed bonus can be much more tempting to one agent than to the other.</p>
+          </Section>
+
           <Section id="credits" title="References & credits">
             <ul>
               <li>Inspired by Hari’s (@harixganesh) article on reward shaping in LunarLander.</li>
@@ -150,7 +180,10 @@ export default function Learn() {
               <li>Stable-Baselines3 (DLR-RM) — PPO; RL Baselines3 Zoo for the reference hyperparameters.</li>
               <li>Schulman et al., “Proximal Policy Optimization Algorithms”, 2017.</li>
               <li>Ng, Harada &amp; Russell, “Policy invariance under reward transformations: theory and application to reward shaping”, ICML 1999.</li>
-              <li>PyTorch, NumPy, pandas, Matplotlib, FastAPI, React, Vite, Tailwind CSS, Recharts, Lucide icons, IBM Plex typefaces.</li>
+              <li>Mnih et al., “Human-level control through deep reinforcement learning”, Nature 2015.</li>
+              <li>Christiano et al., “Deep reinforcement learning from human preferences”, NeurIPS 2017.</li>
+              <li>Agarwal et al., “Deep reinforcement learning at the edge of the statistical precipice”, NeurIPS 2021.</li>
+              <li>PyTorch, NumPy, pandas, Matplotlib, FastAPI, React, Vite, Tailwind CSS, Recharts, three.js, Lucide icons, IBM Plex typefaces.</li>
             </ul>
             <p>This is a 2-D simulation benchmark. Results here say nothing about real-world rocket control.</p>
           </Section>

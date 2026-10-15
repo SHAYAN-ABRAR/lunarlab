@@ -1,5 +1,7 @@
 # LunarLab top-level Python dependencies.
 # Resolve with:  uv pip compile --universal --python-version 3.12 requirements.in -o requirements.lock
+# CI (Linux, CPU-only PyTorch, no CUDA wheels):
+#   uv pip compile requirements.in --python-version 3.12 --python-platform x86_64-unknown-linux-gnu --torch-backend cpu -o requirements-ci.lock
 #
 # NOTE ON BOX2D: gymnasium's [box2d] extra pins `box2d-py`, which ships only a
 # source distribution and needs SWIG + a C++ compiler on Windows. The `Box2D`

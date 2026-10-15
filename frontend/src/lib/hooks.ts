@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { ApiError, api } from './api'
+import { DEMO } from './demo'
 
 export interface Resource<T> {
   data: T | undefined
@@ -12,7 +13,8 @@ export interface Resource<T> {
  * Fetch a resource and optionally poll it. Polling pauses while the tab is hidden, so an
  * unattended browser never hammers the backend. Training never depends on the browser.
  */
-export function useApi<T>(path: string | null, pollMs?: number): Resource<T> {
+export function useApi<T>(path: string | null, pollMsLive?: number): Resource<T> {
+  const pollMs = DEMO ? undefined : pollMsLive // a static snapshot never changes
   const [data, setData] = useState<T | undefined>(undefined)
   const [error, setError] = useState<ApiError | null>(null)
   const [loading, setLoading] = useState<boolean>(path !== null)

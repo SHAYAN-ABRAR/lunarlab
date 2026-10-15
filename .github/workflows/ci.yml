@@ -1,0 +1,96 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  SDL_VIDEODRIVER: dummy
+  SDL_AUDIODRIVER: dummy
+
+jobs:
+  python:
+    name: Python · lint + tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.12"
+      - name: Install (CPU-only PyTorch, exact versions)
+        run: |
+          uv venv .venv
+          uv pip install --python .venv/bin/python -r requirements-ci.lock --torch-backend cpu
+          uv pip install --python .venv/bin/python -e . --no-deps
+      - name: Ruff
+        run: .venv/bin/python -m ruff check lunarlab tests
+      - name: Pytest (unit, integration and slow tests with real PPO updates)
+        run: .venv/bin/python -m pytest -q
+
+  frontend:
+    name: Frontend · typecheck + lint + build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run build
+
+  e2e:
+    name: Browser end-to-end (real backend)
+    needs: [python, frontend]
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - name: Install backend
+        run: |
+          uv venv .venv
+          uv pip install --python .venv/bin/python -r requirements-ci.lock --torch-backend cpu
+          uv pip install --python .venv/bin/python -e . --no-deps
+      - name: Build frontend
+        working-directory: frontend
+        run: |
+          npm ci
+          npm run build
+          npx playwright install --with-deps chromium
+      - name: Playwright
+        working-directory: frontend
+        env:
+          PW_CHANNEL: chromium
+        run: npx playwright test
+      - name: Upload Playwright traces
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-traces
+          path: frontend/test-results
+          retention-days: 7

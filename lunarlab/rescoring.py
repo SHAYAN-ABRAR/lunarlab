@@ -65,6 +65,11 @@ def rescore(
     phase_steps = {p: int(masks[p].sum()) for p in PHASES}
     results = []
     for cfg in configs:
+        learned = None
+        if cfg.learned.enabled:
+            from lunarlab.preferences.model import load_reward_model
+
+            learned = load_reward_model(str(cfg.learned.model_id))
         term_series: dict[str, np.ndarray] = {}
         for k in range(1, T + 1):
             terms = compute_terms(
@@ -75,11 +80,12 @@ def rescore(
                 truncated=bool(rows[k]["truncated"]),
                 config=cfg,
                 gamma=gamma,
+                learned_model=learned,
             )
             for name, v in terms.items():
                 term_series.setdefault(name, np.zeros(T))[k - 1] = v
         extra = sum(term_series.values()) if term_series else np.zeros(T)
-        training = original + extra
+        training = cfg.original_weight * original + extra
         cum_training = np.concatenate([[0.0], np.cumsum(training)])
         by_phase = {}
         for name, series in {"original": original, **term_series}.items():
