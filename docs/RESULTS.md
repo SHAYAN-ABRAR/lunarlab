@@ -101,6 +101,8 @@ of each PPO group. Real simulator footage:
 ![Four reward designs on the same episode](media/showcase.gif)
 
 The hover-bonus policy's episode ends at the 1,000-step time limit (20 s); the GIF shows the first 12 s.
+The README shows the same four flights in the 3-D replay (`media/showcase-3d.webp`), rendered frame by frame
+from the recorded telemetry by `frontend/tools/capture3d.mjs` and composed with `python -m lunarlab showcase`.
 
 ## Limitations
 

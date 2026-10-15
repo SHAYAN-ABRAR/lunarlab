@@ -539,3 +539,30 @@ def test_results_figures_and_tables_from_final_test_data(tmp_path):
     md = (tmp_path / "results" / "tables.md").read_text(encoding="utf-8")
     assert "| Original baseline | 2 |" in md and "reference" in md
     assert md.count("`2") >= 4  # one row per policy (run ids start with the date)
+
+
+@pytest.mark.slow
+def test_showcase_composes_footage_and_captured_3d_frames(tmp_path):
+    import json
+
+    from PIL import Image
+
+    from lunarlab.recording import record_demo
+    from lunarlab.results import make_showcase
+
+    rec = record_demo("random", episode_seed=20_000)
+    rid = rec["recording_id"]
+    gif = make_showcase([rid], ["random"], tmp_path / "footage.gif", cols=1, tile=(150, 100))
+    assert gif["frames"] > 5 and (tmp_path / "footage.gif").stat().st_size > 1000
+    # frames as written by frontend/tools/capture3d.mjs
+    d = tmp_path / "frames" / rid
+    d.mkdir(parents=True)
+    for k in range(6):
+        Image.new("RGB", (120, 80), (40 * k, 20, 0)).save(d / f"{k:05d}.jpg")
+    (d / "meta.json").write_text(json.dumps({"frames": 6, "episode_end_frame": 4, "dt": 0.06}))
+    out = make_showcase(
+        [rid], ["random"], tmp_path / "replay.webp", frames_dir=tmp_path / "frames", cols=1, tile=(120, 80)
+    )
+    im = Image.open(tmp_path / "replay.webp")
+    assert im.format == "WEBP" and im.n_frames == 6
+    assert out["endings"][0].endswith(f"return {rec['original_return']:.0f}")

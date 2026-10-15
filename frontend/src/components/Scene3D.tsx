@@ -273,6 +273,9 @@ export class LanderScene {
   private ghost: THREE.Group | null = null
   private ghostTrack: GhostTrack | null = null
   private ghostFlames: THREE.Object3D[] = []
+  // capture mode: deterministic fixed-step rendering for exported animations (see startCapture)
+  private capturing = false
+  private manualMs = 0
 
   // playback state
   frameFloat = 0
@@ -369,6 +372,10 @@ export class LanderScene {
     this.onResize()
     this.timer.connect(document)
     this.raf = requestAnimationFrame(this.loop)
+  }
+
+  private nowMs(): number {
+    return this.capturing ? this.manualMs : performance.now()
   }
 
   // ------------------------------------------------------------------ geometry helpers
@@ -726,6 +733,41 @@ export class LanderScene {
     this.speed = speed
   }
 
+  /**
+   * Deterministic export (used by frontend/tools/capture3d.mjs): stop the display loop, fix the render
+   * size, restart the episode, and from then on render only on captureFrame(). Time-based effects use a
+   * simulated clock, so the same recording always produces the same frames.
+   */
+  startCapture(width: number, height: number) {
+    cancelAnimationFrame(this.raf)
+    this.resize.disconnect()
+    this.capturing = true
+    this.manualMs = 0
+    this.renderer.setPixelRatio(1)
+    this.renderer.setSize(width, height, false)
+    this.camera.aspect = width / height
+    this.camera.updateProjectionMatrix()
+    this.exhaust.clear()
+    this.dust.clear()
+    this.frameFloat = 0
+    this.endedAt = -1
+    this.speed = 1
+    this.playing = true
+    this.snapCamera = this.mode !== 'orbit'
+  }
+
+  /** Advance by dt seconds of playback, render, and return the frame as a data URL. */
+  captureFrame(dt: number, type = 'image/jpeg', quality = 0.92): string {
+    this.manualMs += dt * 1000
+    this.tick(dt)
+    return this.renderer.domElement.toDataURL(type, quality)
+  }
+
+  /** Capture state: the frame index reached and whether the episode has ended. */
+  captureState(): { frame: number; ended: boolean; last: number } {
+    return { frame: this.frameFloat, ended: this.endedAt >= 0 && !this.playing, last: this.last }
+  }
+
   setCameraMode(mode: CameraMode) {
     this.mode = mode
     this.controls.enabled = mode === 'orbit'
@@ -733,6 +775,7 @@ export class LanderScene {
   }
 
   sync(frame: number, playing: boolean, speed: number) {
+    if (this.capturing) return
     this.speed = speed
     const current = Math.floor(this.frameFloat + 1e-6)
     if (frame !== this.lastReported && frame !== current) {
@@ -741,7 +784,7 @@ export class LanderScene {
       this.lastReported = frame
       this.exhaust.clear()
       this.dust.clear()
-      this.endedAt = frame >= this.last ? performance.now() : -1
+      this.endedAt = frame >= this.last ? this.nowMs() : -1
       if (frame >= this.last) this.burst()
       this.snapCamera = this.mode !== 'orbit'
     }
@@ -809,8 +852,11 @@ export class LanderScene {
     if (this.disposed) return
     this.raf = requestAnimationFrame(this.loop)
     this.timer.update(timestamp)
-    const dt = Math.min(this.timer.getDelta(), 0.1)
+    this.tick(Math.min(this.timer.getDelta(), 0.1))
+  }
 
+  /** One frame: advance the timeline by dt seconds, update the scene and render it. */
+  private tick(dt: number) {
     // Advance the timeline.
     if (this.live) this.advanceLive(dt)
     else if (this.playing) {
@@ -818,7 +864,7 @@ export class LanderScene {
       if (this.frameFloat >= this.last) {
         this.frameFloat = this.last
         this.playing = false
-        this.endedAt = performance.now()
+        this.endedAt = this.nowMs()
         this.burst()
         this.report(true)
         this.cb.onEnded()
@@ -850,7 +896,7 @@ export class LanderScene {
     this.intensities[0] = this.playing ? lerp(this.intensities[0], t0, k) : t0
     this.intensities[1] = this.playing ? lerp(this.intensities[1], t1, k) : t1
     this.intensities[2] = this.playing ? lerp(this.intensities[2], t2, k) : t2
-    const now = performance.now() / 1000
+    const now = this.nowMs() / 1000
     const flicker = this.reducedMotion ? 1 : 0.88 + 0.12 * Math.sin(now * 61) + 0.06 * Math.sin(now * 23.7)
     const im = this.intensities[0]
     this.mainFlame.visible = im > 0.02
@@ -872,7 +918,7 @@ export class LanderScene {
     this.padLights.emissiveIntensity = ended && ep.pad_landing && !this.reducedMotion ? 1.4 + 0.8 * Math.sin(now * 4) : 1.6
 
     // One dynamic light: the engine glow, or the brief impact flash at the end of a crash.
-    const sinceEnd = this.endedAt > 0 ? (performance.now() - this.endedAt) / 1000 : Infinity
+    const sinceEnd = this.endedAt > 0 ? (this.nowMs() - this.endedAt) / 1000 : Infinity
     const flash = ep.env_outcome === 'crash' && sinceEnd < 1.2 ? 14 * (1 - sinceEnd / 1.2) : 0
     this.mainLight.intensity = Math.max(9 * im * flicker, flash)
 
@@ -883,7 +929,7 @@ export class LanderScene {
     this.dust.update(fxDt, this.groundAt)
 
     this.updateCamera(dt, x, y)
-    this.adaptQuality(dt)
+    if (!this.capturing) this.adaptQuality(dt)
     this.renderer.render(this.scene, this.camera)
   }
 
@@ -900,7 +946,7 @@ export class LanderScene {
     this.frameFloat = Math.min(this.last, this.frameFloat + dt * this.t.fps * this.speed * rate)
     if (this.liveEnded && this.frameFloat >= this.last) {
       this.playing = false
-      this.endedAt = performance.now()
+      this.endedAt = this.nowMs()
       this.burst()
       this.report(true)
       this.cb.onEnded()
@@ -932,6 +978,7 @@ export class LanderScene {
   private report(force: boolean) {
     const f = Math.min(this.last, Math.floor(this.frameFloat + 1e-6))
     if (f === this.lastReported) return
+    if (this.capturing) return
     const now = performance.now()
     if (!force && this.playing && now - this.lastReportAt < 50) return
     this.lastReported = f
@@ -1066,6 +1113,9 @@ export default function Scene3D({ t, frame, playing, speed, onFrame, onEnded, la
     engine.setCameraMode(mode)
     engine.sync(frame, playing, speed)
     engineRef.current = engine
+    if (new URLSearchParams(window.location.search).has('capture')) {
+      ;(window as unknown as { lunarlabCapture?: LanderScene }).lunarlabCapture = engine
+    }
     return () => {
       engine.dispose()
       engineRef.current = null

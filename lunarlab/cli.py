@@ -551,6 +551,26 @@ def cmd_results(args) -> int:
     return 0
 
 
+def cmd_showcase(args) -> int:
+    from lunarlab.results import make_showcase
+
+    ids, labels = _strs(args.recordings), [x.strip() for x in args.labels.split("|")]
+    if len(ids) != len(labels):
+        raise SystemExit("give one label per recording (labels are separated by '|')")
+    r = make_showcase(
+        ids,
+        labels,
+        Path(args.out),
+        frames_dir=Path(args.frames_dir) if args.frames_dir else None,
+        tile=(args.tile_width, args.tile_width * 2 // 3),
+        max_steps=args.max_steps,
+        colors=args.colors,
+        quality=args.quality,
+    )
+    print(f"{r['file']}: {r['frames']} frames, {r['bytes'] / 1e6:.1f} MB")
+    return 0
+
+
 def cmd_export_demo(args) -> int:
     from lunarlab.demo import export_demo
 
@@ -856,6 +876,19 @@ def build_parser() -> argparse.ArgumentParser:
     rr.add_argument("--experiment-ids", required=True)
     rr.add_argument("--out", default="docs/results")
     rr.set_defaults(fn=cmd_results)
+
+    sg = sub.add_parser("showcase", help="compose recorded flights side by side (GIF or animated WebP)")
+    sg.add_argument("--recordings", required=True, help="comma-separated recording ids")
+    sg.add_argument("--labels", required=True, help="one label per recording, separated by '|'")
+    sg.add_argument(
+        "--frames-dir", help="3-D frames from frontend/tools/capture3d.mjs (default: simulator footage)"
+    )
+    sg.add_argument("--out", required=True, help=".gif or .webp")
+    sg.add_argument("--tile-width", type=int, default=360)
+    sg.add_argument("--max-steps", type=int, default=600, help="footage only: cut long episodes here")
+    sg.add_argument("--colors", type=int, default=96, help="GIF palette size")
+    sg.add_argument("--quality", type=int, default=70, help="WebP quality (0-100)")
+    sg.set_defaults(fn=cmd_showcase)
 
     ed = sub.add_parser(
         "export-demo", help="write a static, read-only snapshot of results for the hosted demo"

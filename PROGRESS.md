@@ -57,12 +57,12 @@ _Last updated: 2026-10-16._
 
 | Check | Result |
 |---|---|
-| `python -m pytest` | **162 passed** (unit, real LunarLander integration, real PPO and DQN, learned rewards, robustness, statistics, keyboard flights, demo export, real worker subprocesses, API) |
+| `python -m pytest` | **163 passed** (unit, real LunarLander integration, real PPO and DQN, learned rewards, robustness, statistics, keyboard flights, demo export, showcase media, real worker subprocesses, API) |
 | `ruff check lunarlab tests` / `ruff format --check` | clean |
 | `npm run typecheck` (tsc -b, strict) | clean |
 | `npm run lint` (oxlint, correctness + suspicious) | clean |
 | `npm run build` | OK |
-| `npx playwright test` (installed Edge, real backend on a disposable home) | **9 passed**: empty state, random-agent replay (3-D view, playback, footage toggle), config revisions, SMOKE job to completion, record+replay trained flight, STANDARD stop → resume → stop, compare/stress-test/learn, a keyboard flight against the heuristic ghost to its recording, learned-rewards and robustness empty states |
+| `npx playwright test` (installed Edge, real backend on a disposable home) | **10 passed**: empty state, random-agent replay (3-D view, playback, footage toggle), config revisions, SMOKE job to completion, record+replay trained flight, STANDARD stop → resume → stop, compare/stress-test/learn, a keyboard flight against the heuristic ghost to its recording, learned-rewards and robustness empty states, deterministic 3-D capture mode |
 | Static demo (built with `VITE_DEMO=1`, served under `/lunarlab/` with a GitHub-Pages-style 404 fallback) | overview, compare (final test, robust statistics, robustness), deep-linked replay with video, preference labelling with reveal, fly page disabled with an explanation; no console errors; no horizontal overflow at 390 px |
 | `python -m lunarlab doctor` | 10/10 OK |
 | `scripts\setup.ps1`, `start.ps1 -Background`, duplicate start, `stop.ps1` (Windows PowerShell 5.1) | OK |

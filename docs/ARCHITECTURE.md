@@ -192,6 +192,14 @@ filtered to the chosen experiments and with absolute local paths scrubbed. A fro
 would need the backend. `.github/workflows/pages.yml` publishes it to GitHub Pages;
 `scripts/build-demo.ps1` builds and serves the same thing locally.
 
+## Showcase media
+
+`python -m lunarlab showcase` composes recorded flights side by side, as a GIF or an animated WebP. By default
+it uses each recording's simulator footage. For the 3-D version, `frontend/tools/capture3d.mjs` first opens
+each replay with `?capture=1`: the engine's display loop stops, a simulated clock replaces wall time, and
+every frame advances playback by a fixed step (`startCapture` / `captureFrame` in `Scene3D.tsx`), so the
+same recording always renders the same frames, independent of the machine's frame rate.
+
 ## Storage and reproducibility
 
 Each run directory contains its exact `config.yaml` (immutable), `metadata.json` (config hash, reward

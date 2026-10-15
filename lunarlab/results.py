@@ -409,21 +409,29 @@ def build_results(experiment_ids: list[str], out_dir: Path, echo=print) -> dict:
 # --------------------------------------------------------------------------- #
 
 
-def make_showcase_gif(
+def make_showcase(
     recording_ids: list[str],
     labels: list[str],
     out: Path,
     *,
+    frames_dir: Path | None = None,
     cols: int = 2,
     tile: tuple[int, int] = (360, 240),
     step: int = 3,
     max_steps: int = 750,
     frame_ms: int = 60,
+    colors: int = 96,
+    quality: int = 70,
 ) -> dict:
-    """Compose real simulator footage (MP4 recordings) into one looping GIF.
+    """Compose several recorded flights side by side into one looping animation.
 
-    Every ``step``-th frame is kept (50 fps footage → ~16.7 fps); flights that end early hold their
-    last frame with the outcome and the episode's original return.
+    The format follows ``out``'s extension: ``.gif`` (palette of ``colors``) or ``.webp`` (lossy,
+    ``quality``; far smaller for the shaded 3-D frames).
+
+    Frames come from the real simulator footage (each recording's MP4; every ``step``-th frame is kept,
+    50 fps → ~16.7 fps), or, with ``frames_dir``, from the 3-D reconstruction captured by
+    ``frontend/tools/capture3d.mjs`` (``<frames_dir>/<recording id>/*.jpg`` + ``meta.json``). When a
+    flight's episode ends, its tile shows the outcome and the episode's original return.
     """
     import imageio.v2 as imageio
     from PIL import Image, ImageDraw, ImageFont
@@ -433,32 +441,44 @@ def make_showcase_gif(
 
     font = ImageFont.load_default(size=15)
     small = ImageFont.load_default(size=13)
-    clips, endings = [], []
+    names = {"at_rest": "at rest", "timeout": "time limit", "out_of_bounds": "out of bounds"}
+    clips, ends, endings = [], [], []
     for rid in recording_ids:
         tpath, vdir = find_recording(rid)
         tele = read_json(tpath)
         fps = float(tele["fps"])
-        reader = imageio.get_reader(str(vdir / tele["video"]["file"]))
-        frames = []
-        try:
-            for i, fr in enumerate(reader):
-                if i > max_steps:
-                    break
-                if i % step == 0:
-                    frames.append(Image.fromarray(fr).resize(tile, Image.Resampling.LANCZOS))
-        finally:
-            reader.close()
         ep = tele["episode"]
-        names = {"at_rest": "at rest", "timeout": "time limit", "out_of_bounds": "out of bounds"}
+        frames = []
+        if frames_dir is not None:
+            meta = read_json(frames_dir / rid / "meta.json")
+            for f in sorted((frames_dir / rid).glob("*.jpg")):
+                frames.append(Image.open(f).convert("RGB").resize(tile, Image.Resampling.LANCZOS))
+            end = meta["episode_end_frame"] if meta.get("episode_end_frame") is not None else len(frames) - 1
+            clip_s = (meta["frames"] - 1) * float(meta["dt"])
+            cut = meta.get("episode_end_frame") is None
+        else:
+            reader = imageio.get_reader(str(vdir / tele["video"]["file"]))
+            try:
+                for i, fr in enumerate(reader):
+                    if i > max_steps:
+                        break
+                    if i % step == 0:
+                        frames.append(Image.fromarray(fr).resize(tile, Image.Resampling.LANCZOS))
+            finally:
+                reader.close()
+            end = len(frames) - 1
+            clip_s = max_steps / fps
+            cut = ep["length"] > max_steps
         outcome = (
             "pad landing"
             if ep.get("pad_landing")
             else names.get(ep.get("env_outcome"), str(ep.get("env_outcome")))
         )
         ending = f"{outcome} · return {ep['original_return']:.0f}"
-        if ep["length"] > max_steps:  # the clip is cut; say how the full episode ended
-            ending = f"{outcome} at {ep['length'] / fps:.0f} s · return {ep['original_return']:.0f} · clip: {max_steps / fps:.0f} s"
+        if cut:  # the clip stops before the episode does; say how the full episode ended
+            ending = f"{outcome} at {ep['length'] / fps:.0f} s · return {ep['original_return']:.0f} · clip: {clip_s:.0f} s"
         clips.append(frames)
+        ends.append(end)
         endings.append(ending)
     n = max(len(c) for c in clips)
     rows = (len(clips) + cols - 1) // cols
@@ -467,22 +487,36 @@ def make_showcase_gif(
     for k in range(n):
         canvas = Image.new("RGB", (W, H), (0, 0, 0))
         draw = ImageDraw.Draw(canvas)
-        for j, (clip, label, ending) in enumerate(zip(clips, labels, endings, strict=True)):
+        for j, (clip, end, label, ending) in enumerate(zip(clips, ends, labels, endings, strict=True)):
             x0, y0 = (j % cols) * tile[0], (j // cols) * tile[1]
             canvas.paste(clip[min(k, len(clip) - 1)], (x0, y0))
             draw.rectangle([x0, y0, x0 + tile[0], y0 + 24], fill=(8, 12, 18))
             draw.text((x0 + 8, y0 + 4), label, fill=(230, 237, 244), font=font)
-            if k >= len(clip) - 1:
+            if k >= end:
                 draw.rectangle([x0, y0 + tile[1] - 24, x0 + tile[0], y0 + tile[1]], fill=(8, 12, 18))
                 draw.text((x0 + 8, y0 + tile[1] - 20), ending, fill=(245, 181, 68), font=small)
             draw.rectangle([x0, y0, x0 + tile[0] - 1, y0 + tile[1] - 1], outline=(40, 52, 68))
         out_frames.append(canvas)
-    out_frames += [out_frames[-1]] * int(2500 / frame_ms)  # hold the final frame ~2.5 s
-    pal = [
-        f.quantize(colors=96, method=Image.Quantize.MEDIANCUT, dither=Image.Dither.NONE) for f in out_frames
-    ]
+    durations = [frame_ms] * len(out_frames)
+    durations[-1] = 2500  # hold the final frame
     out.parent.mkdir(parents=True, exist_ok=True)
-    pal[0].save(
-        out, save_all=True, append_images=pal[1:], duration=frame_ms, loop=0, optimize=True, disposal=1
-    )
-    return {"file": str(out), "frames": len(pal), "bytes": out.stat().st_size, "endings": endings}
+    if out.suffix.lower() == ".webp":
+        out_frames[0].save(
+            out,
+            format="WEBP",
+            save_all=True,
+            append_images=out_frames[1:],
+            duration=durations,
+            loop=0,
+            quality=quality,
+            method=6,
+        )
+    else:
+        pal = [
+            f.quantize(colors=colors, method=Image.Quantize.MEDIANCUT, dither=Image.Dither.NONE)
+            for f in out_frames
+        ]
+        pal[0].save(
+            out, save_all=True, append_images=pal[1:], duration=durations, loop=0, optimize=True, disposal=1
+        )
+    return {"file": str(out), "frames": len(out_frames), "bytes": out.stat().st_size, "endings": endings}

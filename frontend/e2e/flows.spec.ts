@@ -182,3 +182,22 @@ test('learned rewards and robust statistics pages explain what is missing', asyn
   await expect(page.getByText('python -m lunarlab robustness', { exact: false })).toBeVisible()
   expect(errors).toEqual([])
 })
+
+test('3-D capture mode renders fixed time steps on demand', async ({ page }) => {
+  const errors = trackConsole(page)
+  const recordings = (await (await page.request.get('/api/recordings')).json()) as { recording_id: string }[]
+  await page.goto(`/replay/${recordings[0].recording_id}?capture=1`)
+  type Capture = { startCapture(w: number, h: number): void; captureFrame(dt: number): string; captureState(): { frame: number } }
+  await page.waitForFunction(() => Boolean((globalThis as unknown as { lunarlabCapture?: Capture }).lunarlabCapture), null, { timeout: 30_000 })
+  const result = await page.evaluate(() => {
+    const s = (globalThis as unknown as { lunarlabCapture: Capture }).lunarlabCapture
+    s.startCapture(240, 160)
+    const first = s.captureFrame(0.06)
+    s.captureFrame(0.06)
+    return { prefix: first.slice(0, 23), size: first.length, frame: s.captureState().frame }
+  })
+  expect(result.prefix).toBe('data:image/jpeg;base64,')
+  expect(result.size).toBeGreaterThan(1000)
+  expect(result.frame).toBeCloseTo(6, 5) // 2 frames × 0.06 s × 50 steps/s
+  expect(errors).toEqual([])
+})
