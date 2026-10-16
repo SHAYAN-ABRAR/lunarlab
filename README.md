@@ -82,8 +82,8 @@ none of them affected the published results: no number above changed
   runs, tuning applied on used test seeds) are labelled exploratory, and `--holdout-seeds` reserves untouched
   test seeds for confirmatory results.
 - **Provenance:** training segments, evaluations and results now record the code revision, and demo exports
-  are either release snapshots (clean tree, file and dependency-lock digests) or labelled drafts. The current
-  live snapshot was exported from uncommitted changes, so it is labelled a draft.
+  are either release snapshots (clean tree, file and dependency-lock digests) or labelled drafts. The live demo
+  is a release snapshot.
 - A **Windows CI** job now covers the install, file locks, paths with spaces and the PowerShell scripts, and
   three statements above were worded more carefully (sound shaping, the learned reward's role, what a
   P(better) of 0.00 means).

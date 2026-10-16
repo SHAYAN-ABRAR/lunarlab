@@ -46,7 +46,9 @@ fix) and documented in [docs/AUDIT_FIXES.md](docs/AUDIT_FIXES.md); release and m
 | `npx playwright test` | **15 passed** (10 earlier flows + 5 audit flows on a pre-built fixture home) |
 | Windows CI job's steps, run locally on Windows 11 (fresh venv in a path with spaces) | doctor 10/10; 125 tests passed; scripts parse; start → health → stop OK |
 | CI on GitHub, commit `938ad31` | Linux: lint and all tests, frontend, browser end-to-end (15 flows) passed; demo deployed. Windows: install, doctor and 126 tests passed; the PowerShell 7 parse found a defect in `scripts/setup.ps1` from the first commit (fixed in the next commit, see docs/AUDIT_FIXES.md) |
+| CI on GitHub, commit `ad1ee9f` | all jobs passed, including Windows (127 tests, PowerShell 7 parse, start → health → stop) |
 | Evidence integrity (1,665 files under runs/, data/, reports/, docs/results/, docs/media/, demo/api/) | all byte-identical before/after (combined SHA-256 `91ca8609…737f`); 2 derived report files added |
+| Demo snapshot re-exported as a release of `ad1ee9f` (same 3 experiments + 1 run) | no value changed (new fields and provenance only); other evidence byte-identical; all 12 pages of a local demo-mode build load without errors |
 
 ## Portfolio extensions (2026-10-15/16)
 

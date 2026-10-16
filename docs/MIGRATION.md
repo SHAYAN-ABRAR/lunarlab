@@ -35,8 +35,9 @@ New CLI commands: `warm-restart`, `test-status`, `freeze-migrate`, `reclassify-o
 - Every existing checkpoint still loads for evaluation, recording and replay (weights-only, as before).
 - PPO periodic and stop checkpoints written earlier remain resumable under the PPO contract.
 - All existing evaluation files, recordings and experiment definitions are read unchanged.
-- The published snapshot in `demo/api/` was not re-exported and keeps its original provenance; the demo banner
-  now shows it as a draft (it was exported with uncommitted changes).
+- The published snapshot in `demo/api/` was re-exported after the repair as a release snapshot of revision
+  `ad1ee9f` (the earlier one had been exported with uncommitted changes and showed as a draft). Same experiments
+  and runs; no value changed, the re-export only added the new fields and the provenance manifest.
 
 ## New files LunarLab writes
 
@@ -65,7 +66,8 @@ Nothing below runs automatically, and nothing was run on the published data duri
    ```powershell
    .venv\Scripts\python.exe -m lunarlab reclassify-outcomes --experiment-id <id> --out <folder>
    ```
-3. **A release demo snapshot**: commit first, then `export-demo --experiment-ids …` (without `--draft`).
+3. **A release demo snapshot**: commit first, then `export-demo --experiment-ids …` (without `--draft`). Done
+   for the published snapshot on 2026-10-17 (revision `ad1ee9f`).
 
 ## Deleting run folders
 

@@ -218,8 +218,11 @@ classifier version, evaluation-code revision where recorded). Results JSON recor
 
 **Tests executed.** `tests/test_provenance.py` (3), the existing export test (now a draft).
 
-**Historical data.** `demo/api/` was not re-exported: its manifest keeps its original provenance (commit
-`7f25084`, `uncommitted_changes: true`), which the demo banner now shows as a draft snapshot.
+**Historical data.** During the repair `demo/api/` was not re-exported (its manifest recorded commit `7f25084` with
+`uncommitted_changes: true`, which the demo banner showed as a draft). Once the repair was committed it was
+re-exported as a release snapshot of revision `ad1ee9f`, with the same experiments and runs: no value changed (the
+new fields and the provenance manifest were added), and every other evidence file was byte-identical before and
+after the export.
 
 ## 7. Scientific wording (audit §9): confirmed, corrected
 
@@ -255,6 +258,7 @@ evaluation files, trajectories or recordings were modified, and no migration was
 | The same files after the repair | 1,665 unchanged, 0 changed, 0 missing; combined digest identical |
 | Added | `docs/results/outcome_reclassification_v2.json` and `.md` (derived, with source digests) |
 | Incident | a local launch test of `start.ps1` with an isolated home overwrote the project's one-line `data/backend.log` (a server banner, not evidence); it was restored byte-for-byte (SHA-256 verified) and the script was fixed |
+| Release re-export of `demo/api/` after the repair (revision `ad1ee9f`) | 51 of its 382 files rewritten with added fields and the new manifest, no value changed; the other 1,285 evidence files byte-identical before and after |
 | Read-only checks on real data with the repaired code | 44 runs load; 43 legacy freeze records resolve with intact tested bytes; 38 published runs show a completed final test; 199 evaluation files reported as classifier v1; `freeze-migrate --all --dry-run`: 43 migratable |
 
 ## Verification summary
