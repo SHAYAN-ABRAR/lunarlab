@@ -6,6 +6,14 @@ exported experiments, runs and recordings, and absolute local paths are scrubbed
 
 File names: ``demo_name("/api/runs/x/curve")`` maps an API path (with its query string) to a
 flat, URL-safe name; the frontend's demo mode applies the same mapping.
+
+Provenance (manifest ``demo.json``, schema 2). A **release** export requires a clean, attributable
+source tree (changes inside the output directory itself do not count) and records the full export
+revision. ``draft=True`` (``export-demo --draft``) allows uncommitted changes and labels the snapshot
+as a draft everywhere it is shown. The manifest also records the dependency-lock digests, the metric,
+protocol and schema versions, every exported file's SHA-256, and per run the training-code revisions
+and the evaluation files used (with their digests and evaluation-code revisions where recorded).
+Snapshots exported earlier keep the provenance they were written with.
 """
 
 from __future__ import annotations
@@ -20,6 +28,7 @@ from typing import Any
 
 import numpy as np
 
+from lunarlab.runs import RunError
 from lunarlab.storage import project_root, utc_now
 
 _SAFE = re.compile(r"[A-Za-z0-9.\-]")
@@ -101,11 +110,120 @@ def _git_commit() -> str | None:
         return None
 
 
+class DemoExportError(RunError):
+    """A release export was asked for from a source tree that cannot be attributed to a revision."""
+
+
+def dirty_paths(porcelain: str, exclude: str | None) -> list[str]:
+    """Changed paths from ``git status --porcelain``, ignoring those under ``exclude`` (repo-relative)."""
+    out = []
+    for line in porcelain.splitlines():
+        if len(line) < 4:
+            continue
+        path = line[3:].strip().strip('"')
+        if " -> " in path:
+            path = path.split(" -> ", 1)[1].strip('"')
+        if exclude and (path == exclude.rstrip("/") or path.startswith(exclude.rstrip("/") + "/")):
+            continue
+        out.append(path)
+    return out
+
+
+def source_state(exclude: Path | None = None) -> dict[str, Any]:
+    """Full revision of the exporting source tree and whether it has uncommitted changes."""
+    root = project_root()
+    try:
+        rev = subprocess.run(
+            ["git", "rev-parse", "HEAD"], cwd=root, capture_output=True, text=True, timeout=10
+        )
+        st = subprocess.run(
+            ["git", "status", "--porcelain"], cwd=root, capture_output=True, text=True, timeout=30
+        )
+    except (OSError, subprocess.SubprocessError) as exc:
+        return {"available": False, "reason": str(exc)[:200]}
+    if rev.returncode != 0 or st.returncode != 0:
+        return {"available": False, "reason": (rev.stderr or st.stderr).strip()[:200] or "not a git checkout"}
+    rel = None
+    if exclude is not None:
+        try:
+            rel = exclude.resolve().relative_to(root.resolve()).as_posix()
+        except ValueError:
+            rel = None  # outside the repository: cannot make it dirty
+    changed = dirty_paths(st.stdout, rel)
+    return {
+        "available": True,
+        "revision": rev.stdout.strip(),
+        "dirty": bool(changed),
+        "changed_paths": len(changed),
+    }
+
+
+def _sha(data: bytes) -> str:
+    import hashlib
+
+    return hashlib.sha256(data).hexdigest()
+
+
+def _run_sources(run_ids: list[str]) -> dict[str, Any]:
+    from lunarlab.runs import load_config, load_metadata
+    from lunarlab.storage import RunPaths, read_json, sha256_file
+
+    out: dict[str, Any] = {}
+    for rid in run_ids:
+        meta = load_metadata(rid)
+        cfg = load_config(rid)
+        evals = []
+        for p in sorted(RunPaths(rid).evaluations.glob("*.json")):
+            r = read_json(p, default=None) or {}
+            if "aggregate" not in r:
+                continue
+            evals.append(
+                {
+                    "file": p.name,
+                    "split": r.get("split"),
+                    "sha256": sha256_file(p),
+                    "outcome_classifier_version": r["aggregate"].get("outcome_classifier_version", 1),
+                    "evaluation_code": r.get("code"),  # absent for evaluations made before it was recorded
+                }
+            )
+        out[rid] = {
+            "config_hash": meta.get("config_hash"),
+            "protocol_hash": cfg.eval_protocol.protocol_hash(),
+            "training_code_at_creation": (meta.get("system") or {}).get("git"),
+            "training_code_per_segment": [s.get("code") for s in meta.get("segments", [])],
+            "frozen_for_test": meta.get("frozen_for_test"),
+            "evaluations": evals,
+        }
+    return out
+
+
 def export_demo(
-    out: Path, *, experiment_ids: list[str], extra_run_ids: list[str] | None = None, echo=print
+    out: Path,
+    *,
+    experiment_ids: list[str],
+    extra_run_ids: list[str] | None = None,
+    echo=print,
+    draft: bool = False,
 ) -> dict:
-    """Write the snapshot to ``out`` (a directory that becomes ``demo-api/`` on the site)."""
+    """Write the snapshot to ``out`` (a directory that becomes ``demo-api/`` on the site).
+
+    Refuses (``DemoExportError``) when the source tree has uncommitted changes outside ``out`` or is not
+    a git checkout, unless ``draft`` is set; a draft is labelled as such in its manifest and the UI.
+    """
     from fastapi.testclient import TestClient
+
+    source = source_state(exclude=out)
+    if not draft and (not source.get("available") or source.get("dirty")):
+        detail = (
+            f"{source.get('changed_paths')} changed path(s) outside {out}"
+            if source.get("available")
+            else source.get("reason", "no git revision")
+        )
+        raise DemoExportError(
+            "a release export needs a clean, attributable source tree (" + detail + "). Commit the "
+            "changes first, or export a clearly labelled draft with --draft."
+        )
+    hashes: dict[str, str] = {}
 
     from lunarlab.compare import experiment_run_ids
     from lunarlab.preferences.data import SegmentSet, _segment_json, dataset_path, list_datasets
@@ -135,6 +253,8 @@ def export_demo(
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(text, encoding="utf-8")
         n_bytes += len(text)
+        if name != "demo":
+            hashes[f"{name}.json"] = _sha(text.encode("utf-8"))
 
     exp_runs: dict[str, list[str]] = {e: experiment_run_ids(e) for e in experiment_ids}
     run_ids = sorted({r for ids in exp_runs.values() for r in ids} | set(extra_run_ids or []))
@@ -226,6 +346,7 @@ def export_demo(
                 dst = out / f"{demo_name(f'/api/recordings/{rid}/video')}.mp4"
                 shutil.copyfile(src, dst)
                 n_video += src.stat().st_size
+                hashes[dst.name] = _sha(dst.read_bytes())
 
         echo("Comparisons ...")
         selections = [list(ids) for ids in exp_runs.values()]
@@ -282,10 +403,36 @@ def export_demo(
             if d["dataset_id"] in {x["dataset_id"] for x in datasets}
         )
 
+    from lunarlab.config import CONFIG_SCHEMA_VERSION
+    from lunarlab.continuation import VERSION as CONTINUATION_VERSION
+    from lunarlab.freeze import FROZEN_SCHEMA
+    from lunarlab.outcomes import OUTCOME_CLASSIFIER_VERSION
+
+    root = project_root()
+    sources = _run_sources(run_ids)
     manifest = {
+        "schema_version": 2,
+        "kind": "draft" if draft else "release",
         "created_at": utc_now(),
-        "commit": _git_commit(),
-        "uncommitted_changes": _git_dirty(),
+        "export_revision": source.get("revision"),
+        "export_source_clean": bool(source.get("available") and not source.get("dirty")),
+        "export_source_changed_paths": source.get("changed_paths"),
+        "commit": (source.get("revision") or "")[:7] or _git_commit(),
+        "uncommitted_changes": bool(source.get("dirty")) if source.get("available") else None,
+        "dependency_locks": {
+            name: _sha((root / name).read_bytes())
+            for name in ("requirements.lock", "requirements-ci.lock", "frontend/package-lock.json")
+            if (root / name).exists()
+        },
+        "versions": {
+            "outcome_classifier": OUTCOME_CLASSIFIER_VERSION,
+            "frozen_for_test_schema": FROZEN_SCHEMA,
+            "run_config_schema": CONFIG_SCHEMA_VERSION,
+            "dqn_continuation": CONTINUATION_VERSION,
+            "eval_protocols": sorted({v["protocol_hash"] for v in sources.values()}),
+        },
+        "sources": sources,
+        "files": dict(sorted(hashes.items())),
         "experiments": list(exp_runs),
         "runs": len(run_ids),
         "recordings": len(keep_recs),

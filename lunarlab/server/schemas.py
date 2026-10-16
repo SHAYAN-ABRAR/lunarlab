@@ -65,6 +65,16 @@ class ResumeRequest(_Strict):
     idempotency_key: str | None = IdemKey
 
 
+class WarmRestartRequest(_Strict):
+    """A NEW run initialised from a checkpoint's weights. ``confirm`` must be true."""
+
+    checkpoint: str = Field("latest", max_length=80, pattern=r"^[A-Za-z0-9_.\-]+$")
+    confirm: bool = False
+    start: bool = False
+    label: str | None = Field(None, max_length=120)
+    idempotency_key: str | None = IdemKey
+
+
 class EvaluateRequest(_Strict):
     split: Literal["validation", "test"]
     checkpoint: str = Field("best", max_length=80, pattern=r"^[A-Za-z0-9_.\-]+$")

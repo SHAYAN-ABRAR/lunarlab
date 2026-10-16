@@ -1,6 +1,6 @@
 # Progress
 
-_Last updated: 2026-10-16._
+_Last updated: 2026-10-17._
 
 ## Status
 
@@ -13,6 +13,40 @@ _Last updated: 2026-10-16._
 | Learned rewards (RLHF in miniature): 2 reward models × 3 seeds | **done** |
 | Static demo, CI workflow, results write-up | live at https://shayan-abrar.github.io/lunarlab/; CI and demo deploys pass on GitHub |
 | Six enhancements (leakage fix, varied physics, active preference learning, Optuna tuning, policy diagnostics, PPO–DQN comparisons) | **built and verified** with tests and smoke experiments; the leakage refit and the active-learning study were measured, the other full studies have not been run ([commands](docs/RESULTS.md#studies-built-but-not-yet-run)) |
+| Audit repair (DQN continuation, final-test freezing, outcome classifier v2, protocol validation, Windows CI, provenance, wording) | **implemented and verified locally** on branch `audit-fixes`, not committed ([docs/AUDIT_FIXES.md](docs/AUDIT_FIXES.md)); the new Windows CI job has not run on GitHub |
+
+## Audit repair (2026-10-17)
+
+Findings of an audit of commit `3782ab1` were reproduced, fixed with regression tests (each failed before the
+fix) and documented in [docs/AUDIT_FIXES.md](docs/AUDIT_FIXES.md); release and migration notes in
+[docs/MIGRATION.md](docs/MIGRATION.md).
+
+- **DQN continuation:** resumable DQN checkpoints carry the replay buffer and algorithm state (validated
+  numeric archive and JSON, digest-checked); crash-safe checkpoint bundles; DQN stops at rollout boundaries;
+  older DQN checkpoints offer a confirmed warm restart (new run, lineage recorded) instead of a fake resume.
+- **Final-test freezing:** immutable read-only frozen copy, no further training under the run ID (core, worker,
+  API, CLI, UI), run lock for final tests, attempts recorded, incomplete tests retried, legacy migration command,
+  test exposure and exploratory labels, `--holdout-seeds`.
+- **Outcome classifier v2:** geography kept apart from landing quality; legacy results labelled with derived
+  values. Re-examination of all 11,500 published evaluation episodes: no episode changes category.
+- **Protocol validation:** strict seed types, distinct and disjoint seed lists, the supported environment; the
+  instantiated environment recorded with every evaluation.
+- **Windows:** new CI job (install as `setup.ps1`, doctor, Windows-sensitive tests with paths containing
+  spaces, PowerShell parse, start/stop scripts) and `tests/test_windows.py`.
+- **Provenance:** release vs draft demo exports with full manifest; training, evaluation and analysis code
+  revisions recorded.
+- **Wording:** no equivalence claims from overlapping intervals; what shaping theory does and does not cover;
+  degenerate P(improvement) explained; learned-reward pipeline described accurately.
+
+| Check (2026-10-17, branch `audit-fixes`) | Result |
+|---|---|
+| `python -m pytest` | **269 passed** (204 earlier + 65 new) |
+| `ruff check lunarlab tests` / `ruff format --check lunarlab tests` | clean |
+| `npm run typecheck` / `npm run lint` / `npm run build` | clean / clean / OK |
+| `npx playwright test` | **15 passed** (10 earlier flows + 5 audit flows on a pre-built fixture home) |
+| Windows CI job's steps, run locally on Windows 11 (fresh venv in a path with spaces) | doctor 10/10; 125 tests passed; scripts parse; start → health → stop OK |
+| Windows CI job on GitHub | **not run** (nothing pushed) |
+| Evidence integrity (1,665 files under runs/, data/, reports/, docs/results/, docs/media/, demo/api/) | all byte-identical before/after (combined SHA-256 `91ca8609…737f`); 2 derived report files added |
 
 ## Portfolio extensions (2026-10-15/16)
 
@@ -81,7 +115,7 @@ _Last updated: 2026-10-16._
 6. **Diagnostics, rescoring, reports, portfolio summary** (evidence-gated).
 7. **Verification and docs**: see below; README, docs/, walkthrough.
 
-## Test evidence (executed, all passing)
+## Test evidence (executed, all passing; at commit 3782ab1, before the audit repair)
 
 | Check | Result |
 |---|---|

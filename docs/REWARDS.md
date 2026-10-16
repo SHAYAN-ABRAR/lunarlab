@@ -105,8 +105,9 @@ whole-episode shaping contribution is at most α·3.25 = 32.5, modest beside the
 terminal and its own dense shaping of ~100–200. The weights favour being centred, slow and upright, and
 roughly mirror the components the original reward already values, without changing what is optimal.
 
-Why it is "safe" in theory (Ng, Harada & Russell, 1999): the discounted sum over a terminated episode
-telescopes to `−α·Φ(s₀)`, which depends only on the start state, so optimal policies are unchanged. Tested
+What the theory says (Ng, Harada & Russell, 1999): the discounted sum over a terminated episode telescopes
+to `−α·Φ(s₀)`, which depends only on the start state, so the set of optimal policies of the discounted problem
+is unchanged. Tested
 in `tests/test_rewards.py` for several γ, for both termination and truncation.
 
 What it does **not** promise: faster learning, better finite-budget PPO results, or a better undiscounted

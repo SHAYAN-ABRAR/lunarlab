@@ -113,7 +113,7 @@ export default function StressTest() {
             {rec && (
               <div className="flex flex-wrap items-center gap-2">
                 <PolicyBadge kind={rec.policy.kind} />
-                <OutcomeBadge outcome={rec.env_outcome} pad={rec.pad_landing} />
+                <OutcomeBadge outcome={rec.env_outcome} pad={rec.pad_landing} category={rec.landing_category} />
                 <Link to={`/replay/${rec.recording_id}`} className="text-xs text-accent hover:underline">open in replay</Link>
               </div>
             )}

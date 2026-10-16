@@ -175,6 +175,7 @@ def create_study(
         "base_ppo": base_ppo or {},
         "base_dqn": base_dqn or {},
         "objective": OBJECTIVE,
+        **_exposure_fields(),
     }
     study_dir(study_id).mkdir(parents=True, exist_ok=False)
     atomic_write_json(study_dir(study_id) / "study.json", spec)
@@ -483,8 +484,25 @@ def list_studies() -> list[dict[str, Any]]:
     return out
 
 
+def _exposure_fields() -> dict[str, Any]:
+    """Whether the final-test seeds that apply_best's runs will use had already been seen."""
+    from lunarlab.config import EvalProtocol
+    from lunarlab.lineage import first_test_exposure
+
+    exposure = first_test_exposure(EvalProtocol())
+    return {
+        "test_set_previously_exposed": exposure is not None,
+        "test_exposure": exposure,
+    }
+
+
 def apply_best(
-    study_id: str, *, seeds: list[int], profile: str = "standard", experiment_name: str | None = None
+    study_id: str,
+    *,
+    seeds: list[int],
+    profile: str = "standard",
+    experiment_name: str | None = None,
+    protocol=None,
 ) -> dict[str, Any]:
     """Create normal (not tuning) runs with the best trial's settings, ready to train and final-test."""
     from lunarlab.config import training_for_profile
@@ -517,6 +535,28 @@ def apply_best(
         variants=[variant],
         ppo_overrides=ppo.model_dump(mode="json") if summary["algo"] == "ppo" else None,
         dqn_overrides=dqn.model_dump(mode="json") if dqn else None,
+        protocol=protocol,
     )
     training_for_profile(profile)  # validate the profile name
+    # Settings chosen by a study are exploratory on test seeds that were already used for a final test
+    # when these runs were created; a holdout of untouched seeds keeps them confirmatory.
+    from lunarlab.config import EvalProtocol
+    from lunarlab.lineage import first_test_exposure
+    from lunarlab.runs import update_metadata
+
+    exposure = first_test_exposure(protocol or EvalProtocol())
+    exposed = exposure is not None
+
+    for rid in exp["run_ids"]:
+        update_metadata(
+            rid,
+            selection={
+                "kind": "tuning",
+                "study_id": study_id,
+                "trial": best["number"],
+                "test_set_previously_exposed": bool(exposed),
+                "test_exposure": exposure,
+            },
+        )
+    exp["test_set_previously_exposed"] = bool(exposed)
     return exp

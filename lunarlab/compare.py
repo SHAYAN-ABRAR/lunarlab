@@ -36,6 +36,7 @@ import numpy as np
 import pandas as pd
 
 from lunarlab.evaluation import list_evaluations
+from lunarlab.lineage import evidence_note, evidence_role
 from lunarlab.runs import load_config, load_metadata, read_manifest
 from lunarlab.stats import describe
 from lunarlab.storage import RunPaths, list_run_ids, read_json, read_jsonl
@@ -95,6 +96,65 @@ def run_summary(run_id: str) -> dict[str, Any]:
         "frozen_for_test": meta.get("frozen_for_test"),
         "evidence": evidence_level(cfg.training.profile, completed, latest_test, trained),
         "training_conditions": _training_conditions(meta),
+        "protocol_valid": not cfg.eval_protocol.problems(),
+        "protocol_problems": cfg.eval_protocol.problems(),
+        "test_status": _test_status_light(run_id),
+        "evidence_role": evidence_role(meta),
+        "evidence_note": evidence_note(meta),
+        "lineage": meta.get("lineage"),
+        "resume": _resume_info(cfg, meta, manifest, completed),
+    }
+
+
+def _test_status_light(run_id: str) -> dict[str, Any]:
+    from lunarlab.freeze import test_status
+
+    s = test_status(run_id)
+    return {
+        "frozen": s["frozen"],
+        "immutable_artifact": s["immutable_artifact"],
+        "completed": s["completed"],
+        "completed_count": s["completed_count"],
+        "last_state": s["last_state"],
+        "needs_retry": s["needs_retry"],
+        "attempts": len(s["attempts"]),
+    }
+
+
+def _resume_info(cfg, meta: dict, manifest: dict, completed: bool) -> dict[str, Any]:
+    """Whether this run can CONTINUE (genuine resume), and if not, why and what to do instead."""
+    from lunarlab.runs import is_resumable, legacy_dqn_resume_message
+
+    if completed:
+        return {"available": False, "reason": "completed"}
+    if meta.get("frozen_for_test"):
+        return {
+            "available": False,
+            "reason": "frozen",
+            "message": "Frozen for the final test: this run never trains again. A warm restart creates a new "
+            "run instead; its results on the same test seeds are exploratory.",
+            "warm_restart_available": True,
+        }
+    cands = [c for c in manifest.get("checkpoints", []) if c["kind"] in ("periodic", "stop")]
+    if not cands:
+        return {"available": False, "reason": "no_checkpoint"}
+    newest = max(cands, key=lambda c: c["transitions"])
+    if is_resumable(newest, cfg.algo):
+        cont = newest.get("continuation") or {}
+        return {
+            "available": True,
+            "checkpoint": newest["name"],
+            "transitions": newest["transitions"],
+            "contract": cont.get("contract")
+            or "policy and value networks, optimizer state and counters (written before the contract was "
+            "named); environments restart; random-number streams are not restored",
+        }
+    return {
+        "available": False,
+        "reason": "legacy_dqn",
+        "checkpoint": newest["name"],
+        "message": legacy_dqn_resume_message(cfg.run_id, newest["name"]),
+        "warm_restart_available": True,
     }
 
 
@@ -153,6 +213,8 @@ def variant_suffix(cfg) -> str:
         parts.append(f"gamma {cfg.gamma:g}")
     if cfg.physics.enabled:
         parts.append("randomized physics")
+    if cfg.warm_start is not None:
+        parts.append("warm restart")
     return " · ".join(parts)
 
 
@@ -164,7 +226,8 @@ def variant_key(cfg) -> str:
             json.dumps(cfg.physics.model_dump(mode="json"), sort_keys=True).encode()
         ).hexdigest()[:8]
     )
-    return f"g{cfg.gamma:g}|{phys}"
+    warm = f"|warm-{cfg.warm_start.checkpoint_sha256[:8]}" if cfg.warm_start is not None else ""
+    return f"g{cfg.gamma:g}|{phys}{warm}"
 
 
 def display_name(reward_name: str, algo: str, variant: str = "") -> str:

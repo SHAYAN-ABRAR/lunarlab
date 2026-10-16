@@ -334,6 +334,36 @@ def cmd_report(args) -> int:
     return 0
 
 
+def _holdout_protocol(spec: str | None):
+    """``START:COUNT`` -> an evaluation protocol whose final-test seeds are START..START+COUNT-1."""
+    if not spec:
+        return None
+    from lunarlab.config import EvalProtocol
+
+    try:
+        start, count = (int(x) for x in spec.split(":"))
+    except ValueError as exc:
+        raise SystemExit("--holdout-seeds takes START:COUNT, e.g. 30000:100") from exc
+    if count < 1:
+        raise SystemExit("--holdout-seeds needs COUNT >= 1")
+    protocol = EvalProtocol(test_seeds=list(range(start, start + count)))
+    protocol.require_valid()
+    return protocol
+
+
+def _exposure_note(protocol) -> None:
+    from lunarlab.config import EvalProtocol
+    from lunarlab.lineage import first_test_exposure
+
+    exposure = first_test_exposure(protocol or EvalProtocol())
+    if exposure:
+        print(
+            "  note: these final-test seeds were already used for a final test (first by run "
+            f"{exposure.get('run_id')}). If this design was chosen after seeing such results, treat its final test "
+            "as exploratory, or define an untouched holdout with --holdout-seeds START:COUNT."
+        )
+
+
 def cmd_suite(args) -> int:
     from lunarlab.benchmark import run_benchmark  # noqa: F401  (documented alternative for estimates)
     from lunarlab.evaluation import evaluate_run
@@ -390,6 +420,8 @@ def cmd_suite(args) -> int:
         print(f"  ! {w}")
     if not _confirm("Create and run this suite now?", args.yes):
         return 1
+    holdout = _holdout_protocol(args.holdout_seeds)
+    _exposure_note(holdout)
     exp = create_experiment(
         name=args.name,
         presets=presets,
@@ -397,6 +429,7 @@ def cmd_suite(args) -> int:
         profile=args.profile,
         training_overrides=overrides,
         variants=variants,
+        protocol=holdout,
     )
     print(f"Experiment {exp['experiment_id']} with runs:\n  " + "\n  ".join(exp["run_ids"]))
     if args.create_only:
@@ -444,9 +477,11 @@ def _run_experiment_parallel(experiment_id: str, workers: int, *, test: bool) ->
         )
         return 1
     if test:
-        from lunarlab.runs import load_metadata
+        from lunarlab.freeze import pending_final_tests
 
-        todo = [("test", rid) for rid in exp["run_ids"] if not load_metadata(rid).get("frozen_for_test")]
+        # A freeze alone is not a completed test: interrupted or failed attempts are retried on the
+        # same frozen checkpoint.
+        todo = [("test", rid) for rid in pending_final_tests(exp["run_ids"])]
         print(f"Final-test evaluation of {len(todo)} run(s) ...", flush=True)
         test_codes = run_parallel(todo, workers=workers)
         if any(c != 0 for c in test_codes.values()):
@@ -778,12 +813,22 @@ def cmd_tune_apply(args) -> int:
 
     try:
         exp = apply_best(
-            args.study_id, seeds=_ints(args.seeds), profile=args.profile, experiment_name=args.name
+            args.study_id,
+            seeds=_ints(args.seeds),
+            profile=args.profile,
+            experiment_name=args.name,
+            protocol=_holdout_protocol(args.holdout_seeds),
         )
     except TuningError as exc:
         raise SystemExit(str(exc)) from exc
     print(f"Experiment {exp['experiment_id']}: {len(exp['run_ids'])} normal run(s) with the best settings")
     print(f"  {exp['description']}")
+    if exp["test_set_previously_exposed"]:
+        print(
+            "  These runs are EXPLORATORY: their final-test seeds were already used for a final test, so "
+            "selecting settings and then testing on them is not a held-out test. For a confirmatory result, "
+            "apply again with --holdout-seeds START:COUNT (seeds never used before)."
+        )
     if args.create_only:
         return 0
     return _run_experiment_parallel(exp["experiment_id"], args.parallel, test=True)
@@ -794,7 +839,7 @@ def cmd_record_showcase(args) -> int:
     all flying the same episode seeds."""
     from lunarlab.compare import experiment_run_ids
     from lunarlab.recording import list_recordings, record_demo, record_run
-    from lunarlab.runs import load_config, load_metadata
+    from lunarlab.runs import load_config
 
     seeds = _ints(args.seeds)
     have = {(m.get("run_id"), m["policy"]["kind"], m["episode_seed"]) for m in list_recordings()}
@@ -802,11 +847,10 @@ def cmd_record_showcase(args) -> int:
         cfg = load_config(rid)
         if cfg.seed != args.training_seed:
             continue
-        frozen = load_metadata(rid).get("frozen_for_test")
         for s in seeds:
             if (rid, cfg.algo, s) in have:
                 continue
-            meta = record_run(rid, episode_seed=s, checkpoint=frozen["checkpoint"] if frozen else "best")
+            meta = record_run(rid, episode_seed=s, checkpoint="final-test")
             print(
                 f"{cfg.algo.upper()} {cfg.reward.name} seed {cfg.seed} on episode {s}: return "
                 f"{meta['original_return']:.1f}, {meta['env_outcome']}",
@@ -819,6 +863,112 @@ def cmd_record_showcase(args) -> int:
                     meta = record_demo(kind, episode_seed=s)
                     print(f"{kind} on episode {s}: return {meta['original_return']:.1f}", flush=True)
     return 0
+
+
+def cmd_warm_restart(args) -> int:
+    """A NEW run initialised from a checkpoint's weights (never presented as a resume)."""
+    from lunarlab.lineage import create_warm_restart
+    from lunarlab.runs import load_metadata
+
+    child = create_warm_restart(args.run_id, args.checkpoint, confirm=args.confirm, label=args.label)
+    lineage = load_metadata(child.run_id)["lineage"]
+    print(f"Created warm restart {child.run_id} from {args.run_id} ({lineage['parent_checkpoint']}).")
+    print("  preserved: " + "; ".join(lineage["preserved"]))
+    print("  reset:     " + "; ".join(lineage["reset"]))
+    print("  note:      " + lineage["note"])
+    if args.train:
+        from lunarlab.training import train
+
+        return train(child.run_id)
+    print(f"Train it with: python -m lunarlab train-run --run-id {child.run_id}")
+    return 0
+
+
+def cmd_test_status(args) -> int:
+    from lunarlab.freeze import test_status
+
+    s = test_status(args.run_id)
+    f = s["frozen_for_test"] or {}
+    print(
+        f"frozen:     {'yes' if s['frozen'] else 'no'}"
+        + (f" ({f.get('checkpoint')}, {f.get('frozen_at')})" if f else "")
+    )
+    if s["frozen"]:
+        print(
+            f"artifact:   {f.get('artifact') or 'legacy record (no immutable copy yet: see freeze-migrate)'}"
+        )
+    print(f"completed:  {'yes' if s['completed'] else 'no'} ({s['completed_count']} completed final test(s))")
+    for a in s["attempts"]:
+        print(
+            f"  attempt {a['attempt']}: {a['state']} {a.get('started_at', '')} {a.get('file') or a.get('error') or ''}"
+        )
+    if s["needs_retry"]:
+        print(
+            f"Retry with: python -m lunarlab evaluate --run-id {args.run_id} --split test (same frozen checkpoint)"
+        )
+    return 0
+
+
+def cmd_freeze_migrate(args) -> int:
+    """Explicit, logged migration of legacy freeze records to immutable artifacts (or a dry run)."""
+    from lunarlab.freeze import migrate_legacy_freeze, resolve_frozen_checkpoint
+    from lunarlab.runs import RunError, load_metadata
+    from lunarlab.storage import list_run_ids
+
+    ids = list_run_ids() if args.all else _resolve_run_ids(args)
+    bad = 0
+    for rid in ids:
+        frozen = load_metadata(rid).get("frozen_for_test")
+        if not frozen or frozen.get("artifact"):
+            continue
+        if args.dry_run:
+            try:
+                resolve_frozen_checkpoint(rid)
+                print(f"{rid}: migratable (tested bytes intact: {frozen['checkpoint']})")
+            except RunError as exc:
+                bad += 1
+                print(f"{rid}: NOT migratable: {exc}")
+            continue
+        report = migrate_legacy_freeze(rid)
+        bad += not report["migrated"]
+        print(
+            f"{rid}: {'migrated -> ' + report['artifact'] if report['migrated'] else 'not migrated: ' + report['reason']}"
+        )
+    return 1 if bad else 0
+
+
+def cmd_reclassify_outcomes(args) -> int:
+    from lunarlab.reclassify import reclassification_report, write_report
+
+    run_ids = (
+        [r for e in _strs(args.experiment_ids) for r in _experiment_runs(e)] if args.experiment_ids else []
+    )
+    if args.experiment_id:
+        run_ids += _experiment_runs(args.experiment_id)
+    if args.run_ids:
+        run_ids += _strs(args.run_ids)
+    if not run_ids:
+        raise SystemExit("pass --experiment-ids, --experiment-id or --run-ids")
+    report = reclassification_report(list(dict.fromkeys(run_ids)))
+    s = report["summary"]
+    print(
+        f"{s['evaluation_files']} version-1 evaluation file(s), {s['episodes']:,} episodes: "
+        f"v1 'landed_off_pad' {s['v1_landed_off_pad']}, v2 landed not within the pad "
+        f"{s['v2_landed_not_within_pad']}, v2 on the pad but not strict {s['v2_on_pad_not_strict']}, "
+        f"relabelled {s['relabelled_episodes']} (strict pad landings unchanged: {s['pad_landings']})."
+    )
+    if args.out:
+        for p in write_report(report, Path(args.out)):
+            print(f"wrote {p}")
+    else:
+        print("Dry run: nothing written (pass --out DIR to write the derived report).")
+    return 0
+
+
+def _experiment_runs(experiment_id: str) -> list[str]:
+    from lunarlab.compare import experiment_run_ids
+
+    return experiment_run_ids(experiment_id)
 
 
 def cmd_results(args) -> int:
@@ -851,10 +1001,15 @@ def cmd_showcase(args) -> int:
 def cmd_export_demo(args) -> int:
     from lunarlab.demo import export_demo
 
-    export_demo(
+    manifest = export_demo(
         Path(args.out),
         experiment_ids=_strs(args.experiment_ids),
         extra_run_ids=_strs(args.run_ids) if args.run_ids else None,
+        draft=args.draft,
+    )
+    print(
+        f"{manifest['kind']} export of revision {manifest['export_revision'] or 'unknown'}"
+        + ("" if manifest["export_source_clean"] else " (with uncommitted changes: labelled draft)")
     )
     return 0
 
@@ -1098,6 +1253,10 @@ def build_parser() -> argparse.ArgumentParser:
         "--algos", help="several algorithms, e.g. ppo,dqn: one variant each, with exactly matched budgets"
     )
     su.add_argument("--gammas", help="discount-factor ablation, e.g. 0.99,0.999: one variant per value")
+    su.add_argument(
+        "--holdout-seeds",
+        help="START:COUNT final-test seeds never used before (an untouched holdout for confirmatory claims)",
+    )
     _add_physics_args(su, choices=["fixed", "randomized", "both"])
     su.add_argument("--total-transitions", type=int, help="override the profile's budget (labelled 'custom')")
     su.add_argument("--checkpoint-every", type=int)
@@ -1209,6 +1368,10 @@ def build_parser() -> argparse.ArgumentParser:
     ta.add_argument("--name")
     ta.add_argument("--parallel", type=int, default=1)
     ta.add_argument("--create-only", action="store_true")
+    ta.add_argument(
+        "--holdout-seeds",
+        help="START:COUNT final-test seeds never used before (keeps the new runs confirmatory)",
+    )
     ta.set_defaults(fn=cmd_tune_apply)
 
     sc = sub.add_parser(
@@ -1240,12 +1403,52 @@ def build_parser() -> argparse.ArgumentParser:
     sg.add_argument("--quality", type=int, default=70, help="WebP quality (0-100)")
     sg.set_defaults(fn=cmd_showcase)
 
+    wr = sub.add_parser(
+        "warm-restart",
+        help="create a NEW run initialised from a checkpoint's weights (not a resume; lineage recorded)",
+    )
+    wr.add_argument("--run-id", required=True)
+    wr.add_argument("--checkpoint", default="latest", help="manifest name, latest, final, best or frozen")
+    wr.add_argument("--confirm", action="store_true", help="required: confirms this is a new run")
+    wr.add_argument("--label")
+    wr.add_argument("--train", action="store_true", help="start training the new run right away")
+    wr.set_defaults(fn=cmd_warm_restart)
+
+    ts = sub.add_parser("test-status", help="frozen checkpoint, final-test attempts and completion of a run")
+    ts.add_argument("--run-id", required=True)
+    ts.set_defaults(fn=cmd_test_status)
+
+    fm = sub.add_parser(
+        "freeze-migrate",
+        help="give legacy freeze records an immutable artifact (only if the bytes are intact)",
+    )
+    fm.add_argument("--experiment-id")
+    fm.add_argument("--run-ids")
+    fm.add_argument("--all", action="store_true")
+    fm.add_argument("--dry-run", action="store_true", help="report what would happen; change nothing")
+    fm.set_defaults(fn=cmd_freeze_migrate)
+
+    rc = sub.add_parser(
+        "reclassify-outcomes",
+        help="derived outcome-classifier-v2 report for version-1 evaluations (files are never modified)",
+    )
+    rc.add_argument("--experiment-ids")
+    rc.add_argument("--experiment-id")
+    rc.add_argument("--run-ids")
+    rc.add_argument("--out", help="directory for the derived report; without it nothing is written")
+    rc.set_defaults(fn=cmd_reclassify_outcomes)
+
     ed = sub.add_parser(
         "export-demo", help="write a static, read-only snapshot of results for the hosted demo"
     )
     ed.add_argument("--experiment-ids", required=True)
     ed.add_argument("--run-ids", help="additional runs to include")
     ed.add_argument("--out", default="demo/api")
+    ed.add_argument(
+        "--draft",
+        action="store_true",
+        help="allow uncommitted source changes; the snapshot is labelled a draft (a release export refuses them)",
+    )
     ed.set_defaults(fn=cmd_export_demo)
 
     rb = sub.add_parser(
@@ -1321,4 +1524,11 @@ def main(argv: list[str] | None = None) -> int:
         if hasattr(stream, "reconfigure"):
             stream.reconfigure(errors="replace")
     args = build_parser().parse_args(argv)
-    return int(args.fn(args) or 0)
+    from lunarlab.config import ProtocolError
+    from lunarlab.runs import RunError
+
+    try:
+        return int(args.fn(args) or 0)
+    except (RunError, ProtocolError) as exc:
+        print(f"error: {exc}", file=sys.stderr, flush=True)
+        return 1

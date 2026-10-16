@@ -410,7 +410,7 @@ const OutcomeCard = memo(function OutcomeCard({ t }: { t: Telemetry }) {
     <div className="space-y-2">
       <div className="flex flex-wrap items-center gap-2">
         <PolicyBadge kind={t.policy.kind} />
-        <OutcomeBadge outcome={e.env_outcome} pad={e.pad_landing} />
+        <OutcomeBadge outcome={e.env_outcome} pad={e.pad_landing} category={typeof e.landing_category === 'string' ? e.landing_category : undefined} />
         <Badge tone="neutral">
           seed {t.episode_seed} · {t.seed_split === 'other' ? 'not in a protocol split' : `${t.seed_split} seed`}
         </Badge>

@@ -134,9 +134,21 @@ export function RobustStatsCard({ stats, styles }: { stats: RobustStats; styles:
         </tbody>
       </Table>
       <p className="mt-2 text-xs text-ink-3">
-        P(improvement) is green when its whole interval is above 0.5 and red when it is below; otherwise the data cannot tell the groups apart.
+        P(improvement) is P(X &gt; Y) + ½·P(X = Y) over every pair of policies (the Mann–Whitney statistic); its interval resamples the training runs of both groups. It
+        is green when its whole interval is above 0.5 and red when it is below; otherwise the data cannot tell the groups apart. An interval containing 0.5 does not
+        establish that the groups are equally good.
         {few && ' With fewer than 5 policies per group, intervals are wide: that is the honest result.'}
       </p>
+      {names.some((n) => {
+        const p = stats.probability_of_improvement[n]
+        return n !== stats.reference && p?.p != null && (p.p === 0 || p.p === 1)
+      }) && (
+        <p className="mt-2 text-xs text-warn">
+          A value of 0.00 [0.00, 0.00] (or 1.00 [1.00, 1.00]) means complete separation in this sample: every policy of one group scored below every policy of the other.
+          The empirical bootstrap can then only resample that ordering, so the interval collapses. With so few training runs it is not evidence that a future run has
+          literally no chance of doing better.
+        </p>
+      )}
       <h3 className="mb-2 mt-6 text-[13px] font-medium text-ink">Performance profiles</h3>
       <PerformanceProfiles stats={stats} styles={styles} />
     </Card>

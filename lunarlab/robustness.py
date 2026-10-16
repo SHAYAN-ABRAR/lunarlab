@@ -35,14 +35,14 @@ DEFAULT_EPISODES = 50
 
 def evaluate_robustness(run_id: str, condition: str, *, episodes: int = DEFAULT_EPISODES) -> dict[str, Any]:
     from lunarlab.evaluation import evaluate_policy, summarize_for_index
-    from lunarlab.runs import load_config, load_metadata, load_policy, log_event
+    from lunarlab.outcomes import OUTCOME_CLASSIFIER_VERSION
+    from lunarlab.runs import load_config, load_policy, log_event
 
     if condition not in CONDITIONS:
         raise ValueError(f"unknown condition {condition!r}; choose from {', '.join(CONDITIONS)}")
     cfg = load_config(run_id)
-    frozen = load_metadata(run_id).get("frozen_for_test")
-    checkpoint = frozen["checkpoint"] if frozen else "best"
-    policy, entry = load_policy(run_id, checkpoint, deterministic=cfg.eval_protocol.deterministic)
+    # The frozen bytes for a frozen run (never a mutable name), else the validation-selected checkpoint.
+    policy, entry = load_policy(run_id, "final-test", deterministic=cfg.eval_protocol.deterministic)
     seeds = list(cfg.eval_protocol.test_seeds)[:episodes]
     env_overrides = CONDITIONS[condition]["env"]
     res = evaluate_policy(
@@ -68,6 +68,7 @@ def evaluate_robustness(run_id: str, condition: str, *, episodes: int = DEFAULT_
         "protocol_hash": cfg.eval_protocol.protocol_hash(),
         "reward_preset": cfg.reward.preset,
         "reward_hash": cfg.reward.content_hash(),
+        "outcome_classifier_version": OUTCOME_CLASSIFIER_VERSION,
         **res,
     }
     name = f"robustness-{condition}-{entry['name'].removesuffix('.zip')}-{stamp.replace(':', '').replace('+0000', 'Z')}.json"

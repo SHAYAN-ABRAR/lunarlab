@@ -419,7 +419,10 @@ def tables_markdown(data: dict) -> str:
         "### Aggregate per group",
         "",
         f"P(improvement) is against **{rs.get('reference')}**: the probability that a randomly chosen policy of the "
-        "group scores higher than a randomly chosen reference policy. Intervals: 95% bootstrap over policies.",
+        "group scores higher than a randomly chosen reference policy (Mann–Whitney). Intervals: 95% bootstrap over "
+        "policies (training runs). 0.00 [0.00, 0.00] means complete separation in these few runs, for which the "
+        "empirical bootstrap interval collapses; it is not a zero probability for future runs. An interval that "
+        "contains 0.5 does not show that two groups are equally good.",
         "",
         "| Group | Policies | IQM [95% CI] | Mean [95% CI] | Pad landing | Env. success | Crash | Time limit | P(improvement) [95% CI] |",
         "|---|---:|---:|---:|---:|---:|---:|---:|---:|",
@@ -564,6 +567,14 @@ def build_results(experiment_ids: list[str], out_dir: Path, echo=print) -> dict:
             "gamma_ablation",
             "wall_clock",
         )
+    }
+    from lunarlab.outcomes import OUTCOME_CLASSIFIER_VERSION
+    from lunarlab.sysinfo import git_state
+
+    slim["generated_by"] = {
+        "analysis_code": git_state(),  # the revision that produced these figures and tables
+        "outcome_classifier_version_of_this_code": OUTCOME_CLASSIFIER_VERSION,
+        "note": "evaluation results keep the classifier version they were recorded with",
     }
     atomic_write_text(
         out_dir / "results.json",

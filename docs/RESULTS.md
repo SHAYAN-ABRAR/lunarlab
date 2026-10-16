@@ -25,13 +25,20 @@ episodes in the hover band. IQM original return **−33.1** [95% CI −54, 16] v
 original reward. These are the *best* checkpoints these runs produced by the original reward's own measure
 (validation picked checkpoints from as early as 53k transitions); later checkpoints of these runs scored
 lower on validation.
-P(improvement) over the baseline: 0.00 [0.00, 0.00].
+P(improvement) over the baseline: 0.00 [0.00, 0.00]: every hover-bonus policy scored below every baseline
+policy, a complete separation of five runs against five, for which the empirical bootstrap interval can only
+collapse. It is not evidence that a future run has literally no chance of doing better.
 
-**2. The two sound designs did not beat the original reward at 1M transitions.** Time penalty: IQM 265.3
-[247, 269], pad landing 94%. Potential-based shaping: IQM 262.3 [238, 274], pad landing 94%. Original
-reward: 268.6 [255, 272], 98%. P(improvement) over the baseline is 0.32 [0.00, 0.72] and 0.36 [0.00, 0.76]:
-both intervals contain 0.5, so five seeds cannot order these three designs. Potential-based shaping did what
-the theory promises (no exploitation, same task solved), but its learning curve is not clearly faster here.
+**2. No clear evidence that the two sound designs improved on the original reward at 1M transitions.**
+Time penalty: IQM 265.3 [247, 269], pad landing 94%. Potential-based shaping: IQM 262.3 [238, 274], pad landing
+94%. Original reward: 268.6 [255, 272], 98%. P(improvement) over the baseline is 0.32 [0.00, 0.72] and 0.36
+[0.00, 0.76]: both intervals contain 0.5, so under this training budget the results do not show clear evidence
+of improvement over the baseline, and five training seeds do not establish that the three designs are equally
+good either. The theory (Ng, Harada & Russell, 1999) says potential-based shaping leaves the optimal policies of
+the discounted problem unchanged; it says nothing about learning speed, about what PPO finds in 1M
+transitions, about the undiscounted test return or about changed physics. Empirically, its policies met no
+criterion of the reward-exploitation rule and landed on the pad in 94% of test episodes; its learning curve was
+not clearly faster.
 
 ![Learning curves](results/learning_curves.png)
 
@@ -45,15 +52,18 @@ evaluations, not training logs, and are unchanged, as is the conclusion above.
 **3. Learning a reward from preferences works, if there are enough labels.** Reward models were fitted to
 pairwise preferences between 40-step flight segments (1,115 segments from random, heuristic and PPO policies
 at several training stages; a simulated human prefers the segment with the higher true return, with
-Bradley–Terry noise). PPO was then trained on the learned reward **alone** (environment reward weight 0):
+Bradley–Terry noise). PPO was then trained with the learned reward as its **only training signal**
+(environment reward weight 0). The original reward still entered the pipeline twice: the simulated labeller's
+preferences compare true returns, and each run's checkpoint was selected on validation episodes by the original
+reward.
 
 | Reward model | Accuracy vs true order | Segment-return correlation | Per-step correlation | PPO result (3 seeds) |
 |---|---:|---:|---:|---|
 | 300 labels | 0.734 | 0.800 | 0.129 | IQM −165.2; returns 151, −305, −342 |
 | 3,000 labels | 0.765 | 0.834 | 0.166 | IQM **200.2** [183, 222]; 81% success, 54% pad landing |
 
-With 3,000 labels, every policy learned to land from preferences alone, though below the original-reward
-baseline (P(improvement) 0.00). With 300 labels, two of three runs show **reward-model over-optimization**:
+With 3,000 labels, every policy learned to land with the learned reward as its training signal, though below
+the original-reward baseline (P(improvement) 0.00: complete separation of three runs against five). With 300 labels, two of three runs show **reward-model over-optimization**:
 their learned (proxy) return rose from about 0 to 118–145 during training while their true return stayed
 around −390 (they crash or fly out of bounds). Both reward models rank segments similarly well; what differs
 is how well the per-step signal holds up where the policy goes, which the next figure shows.
@@ -126,7 +136,11 @@ Reward-model accuracy only; no PPO policy was trained on these ensembles (study
 | DQN · potential-based shaping | 3 | 207.2 [150, 245] | 207.2 [150, 245] | 61% | 75% | 20% | 5% | 0.00 [0.00, 0.00] |
 
 IQM = interquartile mean of the per-policy mean returns (with 3 policies it equals the mean). Intervals are
-95% bootstraps over policies. Rates are means over policies. For the per-policy numbers, with intervals over
+95% bootstraps over policies (the resampling unit is the training run). Rates are means over policies.
+P(improvement) is P(X > Y) + ½·P(X = Y) over all pairs of policies (Mann–Whitney); 0.00 [0.00, 0.00] means
+complete separation in these few runs, where the empirical bootstrap interval collapses, not a zero probability
+for future runs. An interval that contains 0.5 means the data cannot order two groups; it does not show that they
+are equally good. For the per-policy numbers, with intervals over
 episodes, see [results/tables.md](results/tables.md).
 
 A single EXTENDED baseline run (3M transitions, training seed 99, not part of the study) scored 272.4
@@ -159,6 +173,20 @@ from the recorded telemetry by `frontend/tools/capture3d.mjs` and composed with 
   lock (fixed since; see ARCHITECTURE.md) and was resumed from its last periodic checkpoint. A resumed run is
   not bit-identical to an uninterrupted one; its lineage is recorded in its metadata.
 - **2-D simulation.** Nothing here says anything about real rockets.
+
+## Correction: outcome classification (2026-10-17)
+
+LunarLab's outcome classifier was revised (version 2, see EVALUATION.md). Version 1 marked *every* clean
+landing at rest that was not a strict pad landing as "landed off pad", including a lander resting between the
+flags that only failed the angle or leg-contact criterion. The definition of a **strict pad landing** did not
+change, and none of the numbers above used the "off pad" field. All published evaluation files were
+re-examined from their stored episode fields without modifying them
+([results/outcome_reclassification_v2.md](results/outcome_reclassification_v2.md), with each source file's
+SHA-256): 191 files and 11,500 episodes, 5,071 strict pad landings, 1,625 episodes "landed off pad" under
+version 1 and the same 1,625 under version 2. No episode in these results was an on-pad landing that version 1
+mislabelled; the defect existed in the code (regression tests reproduce it) but did not affect this data.
+Version 1 did not store leg positions, so version 2's "landed off pad" cannot separate straddling from
+outside for these files.
 
 ## Reproduce
 

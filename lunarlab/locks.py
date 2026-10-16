@@ -67,3 +67,29 @@ class FileLock:
 
     def __exit__(self, *exc) -> None:
         self.release()
+
+
+@contextlib.contextmanager
+def hold(path: Path, *, timeout_s: float = 30.0, poll_s: float = 0.02):
+    """Hold ``path``'s lock for a short critical section, waiting up to ``timeout_s`` for it.
+
+    For read-modify-write of small shared files (run metadata, checkpoint manifests) written by
+    different processes. Lock order: a process may take this lock while holding a run's worker lock,
+    never the other way round, so the two cannot deadlock.
+    """
+    import time
+
+    deadline = time.monotonic() + timeout_s
+    lock = FileLock(path)
+    while True:
+        try:
+            lock.acquire()
+            break
+        except LockBusy:
+            if time.monotonic() >= deadline:
+                raise
+            time.sleep(poll_s)
+    try:
+        yield lock
+    finally:
+        lock.release()

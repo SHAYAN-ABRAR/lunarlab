@@ -15,7 +15,7 @@ import json
 import math
 from typing import Literal
 
-from pydantic import BaseModel, ConfigDict, Field, model_validator
+from pydantic import BaseModel, ConfigDict, Field, StrictInt, model_validator
 
 from lunarlab.env import ENV_ID, ENV_KWARGS
 from lunarlab.hover import DEFAULT_DETECTOR, HoverThresholds
@@ -28,10 +28,16 @@ CONFIG_SCHEMA_VERSION = 1
 VALIDATION_SEEDS = tuple(range(10_000, 10_010))  # 10 fixed validation episodes
 TEST_SEEDS = tuple(range(20_000, 20_100))  # 100 fixed final-test episodes
 TRAIN_WORKER_SEED_BASE = 1_000_000  # worker seeds: base + 1000*seed + 100*segment + rank
+# Evaluation episode seeds must stay below the training worker seeds so the two never meet.
+EVAL_SEED_MAX = TRAIN_WORKER_SEED_BASE - 1
 
 
 class _Strict(BaseModel):
     model_config = ConfigDict(extra="forbid")
+
+
+class ProtocolError(ValueError):
+    """An evaluation protocol that must not be used for new runs, training or evaluations."""
 
 
 class PPOConfig(_Strict):
@@ -198,15 +204,24 @@ def actual_budget(requested: int, rollout_size: int) -> int:
 
 
 class EvalProtocol(_Strict):
-    """Everything that defines how a policy is measured. Persisted with every evaluation."""
+    """Everything that defines how a policy is measured. Persisted with every evaluation.
+
+    Seeds are strict integers (``True``, ``"7"`` or ``3.0`` are refused, never coerced). Semantic rules
+    (distinct seeds, disjoint validation and test lists, the supported range, the one supported
+    environment) are reported by :meth:`problems` instead of failing at load time, so historical
+    artifacts with an invalid protocol can still be opened and inspected; :meth:`require_valid` refuses
+    such a protocol for any new run, training segment or evaluation.
+    """
 
     protocol_id: str = "lunarlab-eval-v1"
     env_id: str = ENV_ID
     env_kwargs: dict = Field(default_factory=lambda: dict(ENV_KWARGS))
-    validation_seeds: list[int] = Field(
+    validation_seeds: list[StrictInt] = Field(
         default_factory=lambda: list(VALIDATION_SEEDS), min_length=1, max_length=1000
     )
-    test_seeds: list[int] = Field(default_factory=lambda: list(TEST_SEEDS), min_length=1, max_length=5000)
+    test_seeds: list[StrictInt] = Field(
+        default_factory=lambda: list(TEST_SEEDS), min_length=1, max_length=5000
+    )
     deterministic: bool = True
     score_threshold: float = 200.0
     hover_detector: HoverThresholds = Field(default_factory=lambda: DEFAULT_DETECTOR.model_copy())
@@ -220,12 +235,59 @@ class EvalProtocol(_Strict):
         canonical = json.dumps(self.model_dump(mode="json"), sort_keys=True, separators=(",", ":"))
         return hashlib.sha256(canonical.encode()).hexdigest()[:16]
 
+    def problems(self) -> list[str]:
+        """Why this protocol cannot be used for new work (empty when it is valid)."""
+        out: list[str] = []
+        for name, seeds in (("validation", self.validation_seeds), ("test", self.test_seeds)):
+            dup = sorted({s for s in seeds if seeds.count(s) > 1})
+            if dup:
+                out.append(f"duplicate {name} seeds {dup[:5]}: each evaluation episode must be distinct")
+            bad = sorted(s for s in seeds if not 0 <= s <= EVAL_SEED_MAX)
+            if bad:
+                out.append(
+                    f"{name} seeds out of range {bad[:5]}: use 0..{EVAL_SEED_MAX:,} (training worker seeds "
+                    f"start at {TRAIN_WORKER_SEED_BASE:,})"
+                )
+        overlap = sorted(set(self.validation_seeds) & set(self.test_seeds))
+        if overlap:
+            out.append(
+                f"validation and test seeds overlap {overlap[:5]}: checkpoints would be selected on test "
+                "episodes, so the final test would not be held out"
+            )
+        if self.env_id != ENV_ID:
+            out.append(f"unsupported environment {self.env_id!r}: LunarLab evaluates {ENV_ID} only")
+        if self.env_kwargs != ENV_KWARGS:
+            out.append(
+                f"unsupported env_kwargs {self.env_kwargs}: the evaluation environment is always {ENV_ID} "
+                f"with {ENV_KWARGS} (default physics). Wind and gravity changes belong to the separately "
+                "labelled robustness conditions, never to the evaluation protocol"
+            )
+        return out
+
+    def require_valid(self) -> None:
+        problems = self.problems()
+        if problems:
+            raise ProtocolError("invalid evaluation protocol: " + "; ".join(problems))
+
     def seeds_for(self, split: str) -> list[int]:
         if split == "validation":
             return list(self.validation_seeds)
         if split == "test":
             return list(self.test_seeds)
         raise ValueError("split must be 'validation' or 'test'")
+
+
+class WarmStart(_Strict):
+    """A warm restart: a NEW run whose networks (and optimizer state) start from another run's checkpoint.
+
+    It is not a continuation of that run. Everything else (replay buffer, counters, exploration schedule,
+    environment state, random-number streams) starts fresh; ``metadata.json -> lineage`` lists both.
+    """
+
+    parent_run_id: str
+    checkpoint: str
+    checkpoint_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    parent_config_hash: str
 
 
 class RunConfig(_Strict):
@@ -246,6 +308,7 @@ class RunConfig(_Strict):
     algo: Literal["ppo", "dqn"] = "ppo"
     dqn: DQNConfig | None = None
     physics: PhysicsRandomization = Field(default_factory=PhysicsRandomization)
+    warm_start: WarmStart | None = None
 
     @model_validator(mode="after")
     def _env_fixed(self) -> RunConfig:
@@ -269,6 +332,8 @@ class RunConfig(_Strict):
             d.pop("ppo", None)  # unused by DQN runs
         if not self.physics.enabled:  # added later too: fixed-physics runs hash exactly as before
             d.pop("physics", None)
+        if self.warm_start is None:  # added with warm restarts: every other run hashes as before
+            d.pop("warm_start", None)
         d["reward"] = self.reward.reward_payload()
         canonical = json.dumps(d, sort_keys=True, separators=(",", ":"))
         return hashlib.sha256(canonical.encode()).hexdigest()[:16]

@@ -69,7 +69,7 @@ def _opponent_policy(opponent: str):
 
         policy = HeuristicPolicy(make_env())  # reads only env.continuous
         return policy, EvalProtocol(), PPOConfig().gamma, {"type": "heuristic"}
-    from lunarlab.runs import RunError, load_config, load_metadata, load_policy
+    from lunarlab.runs import RunError, load_config, load_policy
     from lunarlab.storage import RunPaths
 
     try:
@@ -79,13 +79,8 @@ def _opponent_policy(opponent: str):
     if not paths.exists():
         raise FlightError(f"unknown run {opponent}")
     cfg = load_config(opponent)
-    frozen = load_metadata(opponent).get("frozen_for_test")
     try:
-        policy, entry = load_policy(
-            opponent,
-            frozen["checkpoint"] if frozen else "best",
-            deterministic=cfg.eval_protocol.deterministic,
-        )
+        policy, entry = load_policy(opponent, "final-test", deterministic=cfg.eval_protocol.deterministic)
     except (RunError, FileNotFoundError, KeyError) as exc:
         raise FlightError(f"run {opponent} has no usable checkpoint yet") from exc
     info = {

@@ -282,7 +282,13 @@ class RunPaths:
 
     @property
     def lock(self) -> Path:
+        """Held by whoever may change the run's model artifacts: training, and freezing/final testing."""
         return self.root / ".worker.lock"
+
+    @property
+    def metadata_lock(self) -> Path:
+        """Short critical sections around metadata.json / manifest.json read-modify-write."""
+        return self.root / ".metadata.lock"
 
     @property
     def evaluations(self) -> Path:
@@ -299,6 +305,11 @@ class RunPaths:
     @property
     def checkpoint_manifest(self) -> Path:
         return self.checkpoints / "manifest.json"
+
+    @property
+    def frozen(self) -> Path:
+        """Immutable, content-addressed copies of checkpoints frozen for the final test."""
+        return self.checkpoints / "frozen"
 
     @property
     def trajectories(self) -> Path:

@@ -20,11 +20,21 @@ export default defineConfig({
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
   },
-  webServer: {
-    command: `${python} e2e/serve_e2e.py`,
-    url: 'http://127.0.0.1:8766/api/health',
-    reuseExistingServer: false,
-    timeout: 90_000,
-    stdout: 'pipe',
-  },
+  webServer: [
+    {
+      command: `${python} e2e/serve_e2e.py`,
+      url: 'http://127.0.0.1:8766/api/health',
+      reuseExistingServer: false,
+      timeout: 90_000,
+      stdout: 'pipe',
+    },
+    {
+      // Pre-built fixture runs for the audit-repair flows (tiny trainings: allow a few minutes).
+      command: `${python} e2e/serve_e2e_audit.py`,
+      url: 'http://127.0.0.1:8767/api/health',
+      reuseExistingServer: false,
+      timeout: 300_000,
+      stdout: 'pipe',
+    },
+  ],
 })

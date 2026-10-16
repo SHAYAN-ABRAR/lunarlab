@@ -48,8 +48,34 @@ own. Click *Resume queue* in the sidebar, or cancel them.
 process is gone, the supervisor marks the job interrupted within a few seconds.
 
 **`PermissionError` / "Access is denied" when replacing a file** — on Windows, antivirus real-time scanning
-briefly opens freshly written files. LunarLab retries replacements for up to 15 s. If it persists, exclude
-the project folder from real-time scanning, or check that no other program holds the file open.
+briefly opens freshly written files. LunarLab retries replacements (up to 60 s for checkpoints); a checkpoint
+whose destination stays locked is saved under a unique name instead, and the manifest records it. A failed save
+never registers a partial checkpoint. If it persists, exclude the project folder from real-time scanning, or
+check that no other program holds the file open.
+
+**"Resume unavailable: this DQN checkpoint has no replay state"** — the checkpoint was written before LunarLab
+stored DQN replay buffers (or its replay files were pruned). It still works for evaluation and recordings.
+Resuming would restart DQN with an empty buffer, which is not a continuation, so it is refused. Use *Warm
+restart as a new run…* (or `python -m lunarlab warm-restart --run-id <id> --confirm`): a new run starts from
+these weights, with its lineage recorded.
+
+**"…does not match its recorded SHA-256"** — a checkpoint, continuation or frozen file changed after it was
+written. LunarLab refuses to use it (it never substitutes another file). Restore the file from a backup, or
+resume from an earlier resumable checkpoint (`resume --checkpoint <name>`).
+
+**"This run is frozen for the final test"** — after its first final test, a run never trains again under its
+run ID. Retry an interrupted final test with *Retry final test…* (same frozen checkpoint), or create a warm
+restart for further training (its results on the same test seeds are exploratory).
+
+**"The run is busy" for a final test** — the run is training, or another final test of it is running. Run it
+once that has finished.
+
+**Deleting a run folder fails on a few files** — checkpoints frozen for the final test
+(`runs/<id>/checkpoints/frozen/*.zip`) are read-only on purpose. Clear the attribute first, e.g. in PowerShell:
+`Get-ChildItem runs\<id> -Recurse -File | ForEach-Object { $_.IsReadOnly = $false }`.
+
+**A release `export-demo` is refused** — release exports need a clean, committed source tree (changes inside the
+output folder do not count). Commit first, or pass `--draft` for a snapshot labelled as a draft.
 
 ## Video
 

@@ -256,6 +256,30 @@ def check_adapter() -> dict[str, Any]:
         env.close()
 
 
+def instantiated_environment(env: gym.Env, overrides: dict[str, Any] | None = None) -> dict[str, Any]:
+    """What an evaluation actually ran: id, keyword arguments and the effective physics of ``env``."""
+    spec = env.spec
+    u = env.unwrapped
+    over = dict(overrides or {})
+    kwargs = {
+        k: v for k, v in dict(spec.kwargs if spec else {}).items() if k not in over and k != "render_mode"
+    }
+    return {
+        "env_id": spec.id if spec else None,
+        "kwargs": kwargs,
+        "overrides": over,
+        "max_episode_steps": int(spec.max_episode_steps) if spec and spec.max_episode_steps else None,
+        "effective": {
+            "continuous": bool(getattr(u, "continuous", False)),
+            "gravity": float(u.gravity),
+            "enable_wind": bool(u.enable_wind),
+            "wind_power": float(u.wind_power),
+            "turbulence_power": float(u.turbulence_power),
+        },
+        "gymnasium_version": gym.__version__,
+    }
+
+
 def environment_record() -> dict[str, Any]:
     """Everything we store about the environment with each run."""
     env = make_env()

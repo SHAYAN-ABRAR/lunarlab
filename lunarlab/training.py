@@ -6,10 +6,25 @@ PPO completes whole rollouts, so the actual budget is rounded up to a multiple
 of ``n_envs * n_steps`` and recorded.
 
 Stopping is cooperative. The supervisor (or Ctrl+C in a terminal) creates
-``control/stop_requested.json``; the callback notices within ~0.25 s and ends
-the current rollout. The partially collected rollout is discarded, the counters
-are rolled back to the last completed PPO update, and a ``stop`` checkpoint is
-written from the weights of that update. That is the safe boundary.
+``control/stop_requested.json``; the callback notices within ~0.25 s. The safe
+boundary is the start of a rollout, right after the previous update:
+
+* PPO stops at once; the partially collected rollout is discarded (never trained
+  on), counters roll back to the last update, and the discarded environment
+  interactions are recorded in the segment (``discarded_interactions``).
+* DQN stores every transition in its replay buffer as it goes and trains after
+  each rollout of ``train_freq`` steps, so it keeps collecting until the current
+  rollout is complete and trained on, and stops at the first step of the next
+  one: that single step (one interaction per environment) is neither stored nor
+  trained on, and is recorded as discarded.
+
+Checkpoints are written as bundles (``save_model_atomic``): every file goes to a
+temporary name, is validated, moved into place under a name the manifest does
+not yet reference, and only then is the manifest entry published, which is the
+commit point. A failed or interrupted save leaves the previous checkpoints valid.
+Periodic and stop checkpoints are resumable (DQN ones carry the replay buffer and
+algorithm state, see ``lunarlab.continuation``); validation-selected and final
+checkpoints are inference checkpoints.
 """
 
 from __future__ import annotations
@@ -37,13 +52,15 @@ from lunarlab.locks import FileLock, LockBusy
 from lunarlab.physics import PHYSICS_FIELDS
 from lunarlab.rewards.config import TERM_KEYS
 from lunarlab.runs import (
+    DQN_CONTINUATION_FORMAT,
+    PPO_CONTINUATION_FORMAT,
     RunError,
     load_config,
     load_metadata,
     log_event,
     read_manifest,
     register_checkpoint,
-    resolve_checkpoint,
+    resolve_resume_checkpoint,
     update_metadata,
 )
 from lunarlab.storage import (
@@ -53,6 +70,7 @@ from lunarlab.storage import (
     atomic_write_json,
     read_json,
     replace_file,
+    sha256_file,
     utc_now,
 )
 
@@ -92,6 +110,19 @@ PPO_DIAGNOSTIC_KEYS = (
 )
 
 EXIT_COMPLETED, EXIT_FAILED, EXIT_BUSY, EXIT_STOPPED, EXIT_INTERRUPTED = 0, 1, 2, 3, 4
+REPLACE_TIMEOUT_S = 60.0  # how long a locked destination file is retried before using a unique name
+KEEP_CONTINUATIONS = 2  # DQN replay/state files kept for the most recent resumable checkpoints
+PPO_CONTRACT = (
+    "policy and value networks, optimizer state, transition and update counters; a partial rollout at "
+    "a stop is discarded and recorded; environments restart from new episodes; random-number streams "
+    "are not restored, so a resumed run is not bit-identical to an uninterrupted one"
+)
+DQN_CONTRACT = (
+    "online and target Q-networks, optimizer state, replay buffer (with position and wrap state), "
+    "transition, update and target-update counters, exploration rate and schedule basis; "
+    "environments restart from new episodes; random-number streams are not restored, so a resumed run "
+    "is not bit-identical to an uninterrupted one"
+)
 
 
 # --------------------------------------------------------------------------- #
@@ -345,6 +376,11 @@ def _make_callback_class():
                     self.stop_requested = True
                     self.stop_reason = req.get("reason", "user")
             if self.stop_requested:
+                if self.ctx.cfg.algo == "dqn" and self.locals.get("num_collected_steps", 1) != 1:
+                    # DQN already stored this rollout's transitions in its replay buffer: finish the
+                    # rollout and its gradient steps, stop at the first step of the next one.
+                    self.phase = "stopping"
+                    return True
                 self.phase = "stopping"
                 self.write_status(force=True)
                 return False
@@ -406,8 +442,10 @@ def _make_callback_class():
                 "periodic": f"ckpt_{n:010d}.zip",
                 "final": "final.zip",
                 "stop": f"stop_{n:010d}.zip",
-                "best_validation": "best_validation.zip",
+                # One file per selection: the manifest's best entry moves, no referenced file is rewritten.
+                "best_validation": f"best_validation-{n:010d}.zip",
             }[kind]
+            resumable = kind in ("periodic", "stop")
             entry = save_model_atomic(
                 self.model,
                 self.ctx.paths,
@@ -417,6 +455,8 @@ def _make_callback_class():
                 segment=self.ctx.segment,
                 config_hash=self.ctx.cfg.config_hash(),
                 extra=extra,
+                continuation=(self.ctx.cfg.algo if resumable else None),
+                total_timesteps_basis=self.ctx.target,
             )
             log_event(self.ctx.paths, "info", f"{kind} checkpoint saved", file=entry["name"], transitions=n)
             self.phase = prev_phase
@@ -545,6 +585,51 @@ def _make_callback_class():
     return LunarLabCallback
 
 
+def _unique_name(dst: Path, transitions: int) -> Path:
+    tag = f"{transitions:010d}"
+    stem = dst.name.removesuffix(dst.suffix)
+    token = secrets.token_hex(2)
+    return dst.with_name(
+        f"{stem}-{token}{dst.suffix}" if tag in stem else f"{stem}-{tag}-{token}{dst.suffix}"
+    )
+
+
+def _referenced_names(paths: RunPaths) -> set[str]:
+    names = set()
+    for c in read_manifest(paths).get("checkpoints", []):
+        names.add(c["name"])
+        cont = c.get("continuation") or {}
+        names.update(v for k, v in cont.items() if k.endswith("_file") and isinstance(v, str))
+    return names
+
+
+def _finalize(
+    src: Path, dst: Path, paths: RunPaths, *, kind: str, transitions: int, referenced: set[str]
+) -> Path:
+    """Move a staged file into place. A name the manifest already references is never rewritten (its
+    bytes back a valid checkpoint), and a destination that stays locked gets a unique name instead."""
+    if dst.name in referenced:
+        dst = _unique_name(dst, transitions)
+    try:
+        replace_file(src, dst, timeout_s=REPLACE_TIMEOUT_S)
+    except PermissionError:
+        # Windows: another process (typically a real-time antivirus scan of the new file) kept the
+        # destination locked. Keep the run alive: store this file under a unique name instead.
+        # Checkpoints are always resolved through the manifest, which records the actual name.
+        dst = _unique_name(dst, transitions)
+        shutil.copyfile(src, dst)
+        with contextlib.suppress(OSError):
+            src.unlink()
+        log_event(
+            paths,
+            "warning",
+            "checkpoint file was locked by another process; saved under a unique name",
+            file=dst.name,
+            kind=kind,
+        )
+    return dst
+
+
 def save_model_atomic(
     model,
     paths: RunPaths,
@@ -555,36 +640,105 @@ def save_model_atomic(
     segment: int,
     config_hash: str,
     extra: dict | None = None,
+    continuation: str | None = None,
+    total_timesteps_basis: int | None = None,
 ) -> dict:
-    final = paths.checkpoints / name
+    """Write a checkpoint bundle crash-safely; the manifest entry is published last (the commit point).
+
+    ``continuation``: ``None`` for an inference checkpoint, ``"ppo"`` or ``"dqn"`` for a resumable one
+    (DQN adds its replay buffer and algorithm state, ``lunarlab.continuation``).
+    """
+    staged: list[tuple[Path, str]] = []
+    digests: dict[str, str] = {}
+    cont_info: dict[str, Any] | None = None
     tmp = paths.checkpoints / f"{name}.{secrets.token_hex(3)}.tmp"
-    model.save(str(tmp))
     try:
-        replace_file(tmp, final, timeout_s=60.0)
-    except PermissionError:
-        # Windows: another process (typically a real-time antivirus scan of the new file) kept a
-        # file locked for a whole minute. Keep the run alive: store this checkpoint under a unique
-        # name instead. Checkpoints are always resolved through the manifest, which records it.
-        final = paths.checkpoints / f"{final.stem}-{transitions:010d}-{secrets.token_hex(2)}{final.suffix}"
-        shutil.copyfile(tmp, final)
-        with contextlib.suppress(OSError):
-            tmp.unlink()
-        log_event(
-            paths,
-            "warning",
-            "checkpoint file was locked by another process; saved under a unique name",
-            file=final.name,
-            kind=kind,
+        model.save(str(tmp))
+        staged.append((tmp, name))
+        digests[name] = sha256_file(tmp)
+        if continuation == "dqn":
+            from lunarlab.continuation import stage_dqn_continuation
+
+            st = stage_dqn_continuation(
+                model,
+                paths.checkpoints,
+                Path(name).stem,
+                total_timesteps_basis=int(total_timesteps_basis or 0),
+            )
+            for src, target in st["files"]:
+                staged.append((src, target))
+                digests[target] = sha256_file(src)
+            cont_info = st
+        referenced = _referenced_names(paths)
+        finals: dict[str, Path] = {}
+        for src, target in list(staged):
+            finals[target] = _finalize(
+                src,
+                paths.checkpoints / target,
+                paths,
+                kind=kind,
+                transitions=transitions,
+                referenced=referenced,
+            )
+            staged.remove((src, target))
+        for target, path in finals.items():
+            if sha256_file(path) != digests[target]:
+                raise RunError(f"checkpoint component {path.name} changed while it was being saved")
+    except BaseException:
+        for src, _ in staged:  # nothing staged is ever registered; previous checkpoints stay valid
+            with contextlib.suppress(OSError):
+                src.unlink()
+        raise
+    meta: dict[str, Any] = {
+        "config_hash": config_hash,
+        "sb3_n_updates": int(model._n_updates),
+        **(extra or {}),
+    }
+    if continuation == "dqn" and cont_info is not None:
+        stem = Path(name).stem
+        replay, state = finals[f"{stem}.replay.npz"], finals[f"{stem}.state.json"]
+        meta.update(
+            role="resumable",
+            resumable=True,
+            continuation={
+                "format": DQN_CONTINUATION_FORMAT,
+                "version": 1,
+                "contract": DQN_CONTRACT,
+                "replay_file": replay.name,
+                "replay_sha256": digests[f"{stem}.replay.npz"],
+                "replay_bytes": replay.stat().st_size,
+                "replay_rows": cont_info["replay_rows"],
+                "state_file": state.name,
+                "state_sha256": digests[f"{stem}.state.json"],
+                "state_bytes": state.stat().st_size,
+            },
         )
-    return register_checkpoint(
+    elif continuation == "ppo":
+        meta.update(
+            role="resumable",
+            resumable=True,
+            continuation={"format": PPO_CONTINUATION_FORMAT, "version": 1, "contract": PPO_CONTRACT},
+        )
+    else:
+        meta.update(role="inference", resumable=False)
+    entry = register_checkpoint(
         paths,
-        final,
+        finals[name],
         kind=kind,
         transitions=transitions,
         updates=model._n_updates // max(getattr(model, "n_epochs", 1), 1),
         segment=segment,
-        extra={"config_hash": config_hash, "sb3_n_updates": int(model._n_updates), **(extra or {})},
+        extra=meta,
     )
+    if continuation == "dqn":
+        from lunarlab.continuation import prune_continuations
+
+        removed = prune_continuations(paths, keep=KEEP_CONTINUATIONS, now=utc_now())
+        if removed:
+            log_event(
+                paths, "info", "superseded DQN continuation files removed (weights kept)", files=removed
+            )
+    return entry
 
 
 # --------------------------------------------------------------------------- #
@@ -672,6 +826,16 @@ def train(
         lock.release()
 
 
+def _code_revision() -> dict | None:
+    """The source revision this segment trained with (provenance), or None outside a git checkout."""
+    try:
+        from lunarlab.sysinfo import git_state
+
+        return git_state()
+    except Exception:  # noqa: BLE001 - provenance must never stop training
+        return None
+
+
 def _parallel_slots() -> int | None:
     """How many runs the launcher of this process trains at the same time (``--parallel N``, or the app's
     training lane); None when it was started on its own. Wall-clock times depend on it."""
@@ -697,6 +861,19 @@ def _train_locked(
 
     torch.set_num_threads(cfg.training.torch_threads)
     meta = load_metadata(cfg.run_id)
+    # Checked here, under the run lock, so a job accepted before a freeze can never train afterwards.
+    frozen = meta.get("frozen_for_test")
+    if frozen:
+        raise RunError(
+            f"this run was frozen for the final test on {frozen.get('frozen_at')} "
+            f"({frozen.get('checkpoint')}); a frozen run never trains again under the same run ID. "
+            "To train further, create a warm restart (a new run with its lineage recorded); its results "
+            "on the same test seeds are exploratory, not a new held-out test."
+        )
+    try:
+        cfg.eval_protocol.require_valid()
+    except ValueError as exc:
+        raise RunError(f"{exc}. This run can be inspected, but not trained.") from exc
     segments = list(meta.get("segments", []))
     segment = len(segments)
     started_at = utc_now()
@@ -719,16 +896,19 @@ def _train_locked(
         paths.stop_request.unlink()
 
     parent_entry = None
+    warm_path = None
     if resume:
         if any(c["kind"] == "final" for c in read_manifest(paths)["checkpoints"]):
             raise RunError("run already completed; nothing to resume")
-        ckpt_path, parent_entry = resolve_checkpoint(cfg.run_id, checkpoint)
-        if parent_entry.get("kind") == "best_validation":
-            raise RunError("resume from a periodic/stop checkpoint, not the validation-selected copy")
+        ckpt_path, parent_entry = resolve_resume_checkpoint(cfg.run_id, checkpoint, cfg.algo)
         if parent_entry.get("config_hash") != cfg.config_hash():
             raise RunError("checkpoint was produced by a different configuration; refusing to resume")
     elif segments or read_manifest(paths)["checkpoints"]:
         raise RunError("run already has training history; use resume instead of starting again")
+    elif cfg.warm_start is not None:
+        from lunarlab.lineage import resolve_warm_start
+
+        warm_path = resolve_warm_start(cfg)
 
     device = resolve_device(cfg.training.device)
     seeds = cfg.worker_seeds(segment)
@@ -746,6 +926,8 @@ def _train_locked(
         "device": device,
         "torch_threads": cfg.training.torch_threads,
         "parallel_slots": _parallel_slots(),
+        "code": _code_revision(),
+        "continuation": (parent_entry.get("continuation") or {}).get("format") if parent_entry else None,
         "end_state": None,
     }
     segments.append(seg_record)
@@ -771,6 +953,7 @@ def _train_locked(
         venv.seed(seeds[0])
         best_val = None
         if resume:
+            # Weights-only: the online/target networks and the optimizer state (no pickled objects).
             model.set_parameters(str(ckpt_path), exact_match=True, device=device)
             model.num_timesteps = int(parent_entry["transitions"])
             model._n_updates = int(
@@ -778,8 +961,29 @@ def _train_locked(
                     "sb3_n_updates", parent_entry["updates"] * max(getattr(model, "n_epochs", 1), 1)
                 )
             )
+            if cfg.algo == "dqn":
+                from lunarlab.continuation import restore_dqn_continuation
+
+                restored = restore_dqn_continuation(model, paths, parent_entry, total_timesteps_basis=target)
+                log_event(
+                    paths,
+                    "info",
+                    "DQN continuation state restored",
+                    replay_rows=restored["replay"]["rows"],
+                    exploration_rate=restored["exploration_rate"],
+                    n_calls=restored["n_calls"],
+                )
             best = read_manifest(paths).get("best_validation")
             best_val = best.get("validation_mean_original_return") if best else None
+        elif warm_path is not None:
+            model.set_parameters(str(warm_path), exact_match=True, device=device)
+            log_event(
+                paths,
+                "info",
+                "warm restart: networks and optimizer state initialised from the parent checkpoint",
+                parent_run_id=cfg.warm_start.parent_run_id,
+                parent_checkpoint=cfg.warm_start.checkpoint,
+            )
         ctx = TrainingContext(
             cfg=cfg,
             paths=paths,
@@ -807,9 +1011,15 @@ def _train_locked(
             total_timesteps=remaining, callback=callback, reset_num_timesteps=False, log_interval=None
         )
 
+        interactions = int(model.num_timesteps) - int(seg_record["start_transitions"])
+        seg_record["env_interactions"] = interactions
+        seg_record["discarded_interactions"] = 0
         if callback.stop_requested:
-            # Roll back to the last completed update: the partial rollout was never trained on.
+            # Roll back to the safe boundary. PPO: the partial rollout was never trained on. DQN: only the
+            # first step of a new rollout was taken; it was neither stored nor trained on. Either way the
+            # environment interactions happened, so they are recorded rather than silently dropped.
             discarded = model.num_timesteps - callback.boundary_transitions
+            seg_record["discarded_interactions"] = int(discarded)
             model.num_timesteps = callback.boundary_transitions
             callback.save_checkpoint("stop", transitions=model.num_timesteps)
             final_state = "interrupted" if callback.stop_reason == "shutdown" else "stopped"

@@ -30,10 +30,14 @@ server.
 | `lunarlab/rewards/accounting.py` | per-episode accumulator (original/training/discounted returns, actions, hover) |
 | `lunarlab/rewards/wrapper.py` | the single reward wrapper (training, evaluation telemetry, recording) |
 | `lunarlab/rewards/analysis.py` | discounted-return calculators shown in the Reward Studio |
-| `lunarlab/outcomes.py` | terminal-outcome classification and strict pad landing |
+| `lunarlab/outcomes.py` | terminal-outcome classification (version 2: pad geography kept apart from landing quality) and strict pad landing |
+| `lunarlab/continuation.py` | DQN continuation bundles: replay buffer and algorithm state, strictly validated and digest-checked |
+| `lunarlab/freeze.py` | final-test freezing: immutable artifact, shared resolver, test attempts, legacy migration |
+| `lunarlab/lineage.py` | warm restarts, test exposure registry, evidence role (confirmatory / exploratory) |
+| `lunarlab/reclassify.py` | derived outcome-classifier-v2 reports for version-1 evaluation files (never modified) |
 | `lunarlab/config.py` | PPO settings, budget profiles, evaluation protocol, run config, resume compatibility |
 | `lunarlab/training.py` | PPO training, callback (episodes, heartbeat, diagnostics, checkpoints, validation, stop), resume |
-| `lunarlab/evaluation.py` | evaluation with the original reward, aggregation, test freezing |
+| `lunarlab/evaluation.py` | evaluation with the original reward, aggregation, final tests under the run lock |
 | `lunarlab/recording.py` | video + telemetry recording, MP4/JPEG sinks, verification, recording library |
 | `lunarlab/rescoring.py` | Reward Stress Test |
 | `lunarlab/compare.py` | run summaries, compatibility, per-seed grouping, exploitation rule, training curves |
@@ -144,14 +148,57 @@ learning curves are only comparable between runs that trained under the same loa
 
 ## Stop, resume and lineage
 
+### Checkpoint contract
+
+| Kind | Contents | Use |
+|---|---|---|
+| **Inference checkpoint** | SB3 `.zip`, loaded weights-only (`final`, `best_validation-<n>`) | evaluate, record, replay, fly against |
+| **Resumable training checkpoint** | PPO: `.zip` (policy, value net, optimizer state) + counters in the manifest. DQN: the same plus a continuation bundle (below) | continue the **same** run (`periodic`, `stop`) |
+| **Warm restart** | a *new* run whose networks and optimizer state start from a checkpoint | further training under a new run ID, compared separately |
+
+Each manifest entry records `role`, `resumable` and, for resumable ones, `continuation` (format and the
+contract in words). PPO periodic/stop entries written before this contract was named remain resumable under
+the same terms; DQN entries without a continuation bundle are inference checkpoints only.
+
+**DQN continuation bundle** (`lunarlab/continuation.py`). SB3 2.9.0 keeps the online and target Q-networks
+and the Adam state in the `.zip`, but the replay buffer and several counters outside it. Stored next to every
+periodic and stop DQN checkpoint: `<ckpt>.replay.npz` (observations, next observations, actions, rewards, dones,
+timeouts, only the filled rows) and `<ckpt>.state.json` (`pos`, `full`, buffer layout and dtypes, `n_envs`,
+`num_timesteps`, `_n_updates`, `_n_calls` (target-update phase), `_episode_num`, `exploration_rate`,
+`_current_progress_remaining`, the schedule basis, SB3 version, the replay archive's digest). Loading: sizes and
+SHA-256 digests against the manifest; the JSON validated strictly; every `.npy` header checked for name, shape
+and dtype before any array data is read (bounded memory, `allow_pickle=False`, object dtypes refused); layout
+checked against the model; values checked (finite observations and rewards, 0/1 flags, actions in range). The
+state is applied before `learn()`, so the first resumed action already uses the scheduled exploration rate. A
+digest proves integrity against the manifest, not that a file from elsewhere is trustworthy; no API endpoint
+accepts these files. All but the two most recent continuation bundles of a run are pruned (weights kept).
+
+**Crash-safe bundles** (`training.save_model_atomic`). Every component is written to a temporary name and
+validated, then moved to a name the manifest does not reference (a referenced file is never rewritten, so a
+validation-selected checkpoint is `best_validation-<transitions>.zip`, one per selection; a destination that
+stays locked, e.g. by an antivirus scan, gets a unique name), re-checked against its digest, and only then is
+the manifest entry published under the metadata lock: the commit point. A failure at any step removes the
+temporary files and registers nothing, so the previous checkpoints stay valid.
+
+### Stop and resume
+
 - **Stop** is cooperative: a control file (`runs/<id>/control/stop_requested.json`) is polled about every
-  0.25 s. The partially collected rollout is discarded and counters roll back to the last completed PPO
-  update. A `stop_*.zip` is written from those weights (the safe boundary). Ctrl+C in a CLI training
-  terminal does the same; a second Ctrl+C aborts without a stop checkpoint.
-- **Resume** continues the *same* run from a periodic or stop checkpoint, after verifying the file hash
-  and that the checkpoint's config hash equals the run's. Cumulative counters are restored, and a new segment
-  (parent checkpoint, new worker seeds, PID, job id) is appended to `metadata.json`. Training-episode rows
-  that an earlier segment logged after the resume point are excluded from curves.
+  0.25 s. The safe boundary is the start of a rollout, right after the previous update. PPO stops at once: the
+  partially collected rollout is discarded and counters roll back to the last completed update. DQN has already
+  stored that rollout's transitions in its replay buffer, so it finishes the rollout and its gradient steps and
+  stops at the first step of the next one (that single step is neither stored nor trained on). Either way the
+  segment records `env_interactions` and `discarded_interactions`, and a `stop_*` checkpoint is written at the
+  boundary. Ctrl+C in a CLI training terminal does the same; a second Ctrl+C aborts without a stop checkpoint.
+- **Resume** continues the *same* run from a resumable checkpoint, after verifying the file hash, the
+  continuation bundle (DQN) and that the checkpoint's config hash equals the run's. Cumulative counters (and,
+  for DQN, the replay buffer, target-update phase and exploration state) are restored, and a new segment
+  (parent checkpoint, new worker seeds, PID, job id, code revision) is appended to `metadata.json`.
+  Training-episode rows that an earlier segment logged after the resume point are excluded from curves.
+- **Warm restart** (`lineage.create_warm_restart`; CLI `warm-restart --confirm`, API `POST
+  /api/runs/{id}/warm-restart` with `confirm: true`, a confirmation dialog in the UI) creates a new run with
+  `RunConfig.warm_start` (parent run, checkpoint, digest) and `metadata.json -> lineage` listing what was
+  preserved and what was reset. Its config hash differs from the parent's, and comparisons give it its own
+  `warm restart` variant. A warm restart of a tested run is labelled exploratory.
 - Changing the reward (or PPO settings) is a **new experiment**, not a continuation, and is refused for resume.
 - A resumed run is **not bit-for-bit identical** to an uninterrupted one: environment states, the rollout
   in progress and RNG streams at the interruption are not restored (new worker seeds are used on purpose).
@@ -271,13 +318,72 @@ each replay with `?capture=1`: the engine's display loop stops, a simulated cloc
 every frame advances playback by a fixed step (`startCapture` / `captureFrame` in `Scene3D.tsx`), so the
 same recording always renders the same frames, independent of the machine's frame rate.
 
+## Final-test freezing, locks and test exposure
+
+The first final-test evaluation of a run (under its worker lock) copies the selected checkpoint to
+`checkpoints/frozen/<sha256>.zip`, verifies the copy and makes it read-only, and records
+`metadata.json -> frozen_for_test` (schema 2: artifact, digest, transitions, config, reward and protocol
+identities, the source manifest entry). Afterwards:
+
+- the run never trains again under its run ID: `_train_locked` refuses under the worker lock (so a job
+  accepted earlier cannot bypass a freeze), the API answers 409 and the CLI exits with an explanation;
+- the final test, robustness evaluations, showcase recordings and ghost flights all load the frozen bytes
+  through `freeze.resolve_final_checkpoint`, which verifies the digest every time; a missing or altered
+  artifact is refused, never replaced by another checkpoint;
+- every attempt is recorded in `metadata.json -> test_attempts` (`started`, then `completed`, `interrupted` or
+  `failed`). Only a completed attempt counts as a final test (`freeze.test_status`, `pending_final_tests`);
+  `run-experiment` and the UI retry incomplete ones on the same frozen checkpoint.
+
+**Locks.** `runs/<id>/.worker.lock` is held for the whole of a training segment and of a final-test evaluation
+(including the freeze): a run cannot be frozen while it trains, and two final tests cannot overlap (the second
+is refused as busy). `runs/<id>/.metadata.lock` guards each read-modify-write of `metadata.json` and the
+checkpoint manifest, for a few milliseconds, across processes. Order: the worker lock may be held while taking
+the metadata lock, never the reverse, so they cannot deadlock. Locks are OS file locks released if the holder
+dies.
+
+**Legacy freeze records** (schema 1: a checkpoint name and digest) resolve only while that file still has the
+recorded bytes. `python -m lunarlab freeze-migrate` (dry run first) creates the immutable copy explicitly and
+logs it; it never substitutes another checkpoint.
+
+**Test exposure.** Every completed final test is appended to `data/test_exposure.jsonl` with its test seeds.
+`lineage.evidence_role` labels a run **exploratory** when its design was influenced by an already-seen final
+test: a warm restart of a tested run, or a run created by `tune-apply` on test seeds that had already been used
+(any overlap counts). `--holdout-seeds START:COUNT` (on `suite` and `tune-apply`) defines a protocol with
+untouched test seeds for confirmatory results.
+
+## Outcome classification and protocol validity
+
+Outcome classifier version 2 (`lunarlab/outcomes.py`, see EVALUATION.md) records `pad_geography`,
+`landing_category`, `strict_failures`, leg and pad coordinates and `outcome_classifier_version` in every new
+episode, aggregate and result. Version-1 results are never rewritten: `evaluation.summarize_for_index` marks
+them and adds `derived_v2` rates derived from their stored episode fields, and `reclassify-outcomes` writes a
+separate derived report with the source files' digests.
+
+`EvalProtocol` seeds are strict integers; `problems()` reports duplicates, validation/test overlap, seeds
+outside 0..999,999 and any environment other than `LunarLander-v3` with `{continuous: False}`. Historical
+configurations still load and are marked; no invalid protocol can create a run, train or evaluate. Every
+evaluation records the instantiated environment (`env.instantiated_environment`: id, kwargs, robustness
+overrides, effective physics) and refuses to report under the protocol's environment if it differs from the
+declaration.
+
+## Provenance
+
+- training: the source revision at run creation (`metadata.json -> system.git`) and per segment
+  (`segments[i].code`);
+- evaluation: `code` in every result file written from now on;
+- analysis: `generated_by.analysis_code` in `docs/results/results.json` when regenerated;
+- demo export: manifest schema 2 (`demo.py`): `kind` release or draft, full export revision, dependency-lock
+  digests, metric/protocol/schema versions, per-run sources and every exported file's SHA-256. A release export
+  refuses a dirty or unattributable tree (changes inside the output folder do not count); `--draft` labels the
+  snapshot a draft. Snapshots exported earlier keep the provenance they were written with.
+
 ## Storage and reproducibility
 
 Each run directory contains its exact `config.yaml` (immutable), `metadata.json` (config hash, reward
 preset, revision and hash, seeds, environment spec, Python/package versions, hardware, git state when
 available, segments and lineage, test freeze), `status.json`, `events.jsonl` (rotated after 2 MB),
-`episodes.csv`, `metrics.jsonl`, evaluations, checkpoints, trajectories and videos. Status and manifests
-use atomic writes. An `episodes.csv` keeps the columns it was created with: a run resumed by a newer LunarLab
+`episodes.csv`, `metrics.jsonl`, evaluations, checkpoints (with DQN continuation bundles and, once frozen,
+`checkpoints/frozen/<sha256>.zip`, read-only), trajectories and videos. Status and manifests use atomic writes. An `episodes.csv` keeps the columns it was created with: a run resumed by a newer LunarLab
 that logs more columns writes its rows in the file's own layout. One published run was resumed before that
 rule and has rows of two widths; the reader maps each row by its width instead of skipping the file. SQLite holds only metadata and is never written per physics step. Timestamps are stored
 in UTC and displayed in local time. Nothing is deleted automatically.

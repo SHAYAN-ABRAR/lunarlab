@@ -416,7 +416,7 @@ export default function Fly() {
                   <td className="num">{r.episode_seed}</td>
                   <td className={clsx('num text-right', r.original_return >= 200 ? 'text-good' : r.original_return < 0 ? 'text-crit' : 'text-ink')}>{fmt.num(r.original_return, 1)}</td>
                   <td>
-                    <OutcomeBadge outcome={r.env_outcome} pad={r.pad_landing} />
+                    <OutcomeBadge outcome={r.env_outcome} pad={r.pad_landing} category={r.landing_category} />
                   </td>
                   <td className="num text-right">{fmt.num(r.length / r.fps, 1)} s</td>
                   <td className="text-right">

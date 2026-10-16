@@ -144,9 +144,11 @@ def create_experiment(
     variants: list[dict[str, Any]] | None = None,
     ppo_overrides: dict | None = None,
     dqn_overrides: dict | None = None,
+    protocol: EvalProtocol | None = None,
 ) -> dict[str, Any]:
     """``ppo_overrides`` / ``dqn_overrides`` replace the reference settings for every run (e.g. the best
-    settings of a tuning study); a variant's discount factor still takes precedence."""
+    settings of a tuning study); a variant's discount factor still takes precedence. ``protocol`` sets
+    another evaluation protocol for every run, e.g. a holdout with test seeds never used before."""
     reward_list = list(rewards or []) + [preset(p) for p in (presets or [])]
     if not reward_list:
         raise ValueError("an experiment needs at least one reward configuration")
@@ -155,7 +157,11 @@ def create_experiment(
     variants = variants or build_variants(algos=[algo])
     overrides = matched_overrides(profile, variants, n_envs, training_overrides)
     exp_id = new_id(name or "experiment", prefix="exp")
-    protocol = EvalProtocol()
+    protocol = protocol or EvalProtocol()
+    protocol.require_valid()
+    from lunarlab.lineage import first_test_exposure
+
+    exposure = first_test_exposure(protocol)
     run_ids = []
     for r in reward_list:
         for v in variants:
@@ -186,6 +192,14 @@ def create_experiment(
         "created_at": utc_now(),
         "profile": profile,
         "seeds": seeds,
+        "eval_protocol_hash": protocol.protocol_hash(),
+        "test_seeds": {
+            "first": min(protocol.test_seeds),
+            "last": max(protocol.test_seeds),
+            "count": len(protocol.test_seeds),
+        },
+        # Informational: had these test seeds already been used for a final test when this was created?
+        "test_seeds_previously_exposed": exposure is not None,
         "rewards": [{"name": r.name, "preset": r.preset, "hash": r.content_hash()} for r in reward_list],
         "algo": first["algo"] if len({v["algo"] for v in variants}) == 1 else "mixed",
         "ppo": PPOConfig(**{**(ppo_overrides or {}), **({"n_envs": n_envs} if n_envs else {})}).model_dump(

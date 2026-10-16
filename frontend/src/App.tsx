@@ -73,6 +73,9 @@ function DemoBanner() {
         <strong className="font-medium text-ink">Static demo.</strong> Real results from LunarLab experiments, frozen as a snapshot
         {m ? ` on ${new Date(m.created_at).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })}` : ''}. Training,
         recording, flying and saving labels need the local app.
+        {m && (m.kind === 'draft' || m.uncommitted_changes) && (
+          <span className="text-warn"> Draft snapshot: exported from a source tree with uncommitted changes{m.commit ? ` (based on ${m.commit})` : ''}.</span>
+        )}
       </span>
       <a href={REPO_URL} className="font-medium text-accent hover:underline">
         Run it yourself →

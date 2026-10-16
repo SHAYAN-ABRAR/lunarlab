@@ -29,10 +29,44 @@ All compared policies use the same validation and test seeds.
 - Validation runs at the start of training and every `validation_every` transitions (STANDARD: 50k). The
   **validation-selected checkpoint** maximises the mean **original** return on validation seeds. Shaped
   reward never selects checkpoints.
-- The first test evaluation of a run **freezes** its selected checkpoint (file name, SHA-256 and config hash
-  are recorded in `metadata.json → frozen_for_test`). Later test evaluations are flagged as repeats, and
-  evaluating a *different* checkpoint on the test seeds is refused.
+- The first test evaluation of a run **freezes** its selected checkpoint: an immutable, read-only copy
+  `checkpoints/frozen/<sha256>.zip` is made and recorded in `metadata.json → frozen_for_test` with its digest
+  and the configuration, reward and protocol identities. From then on the run never trains again under its run
+  ID, and every final-test evaluation, robustness evaluation, showcase recording and ghost flight uses those
+  exact bytes (verified on every use; a missing or altered artifact is refused, never replaced). Evaluating a
+  *different* checkpoint on the test seeds is refused.
+- **Frozen is not tested.** Each final-test attempt is recorded as started, then completed, interrupted or
+  failed (`test_attempts`). Only a completed attempt is a final test; an interrupted or failed one is retried on
+  the same frozen checkpoint. Later completed tests are flagged as repeats.
+- Final tests run under the run's worker lock: never while the run trains, never two at once.
 - Development sweeps compare on the validation split only.
+
+### Test exposure, exploratory results and holdouts
+
+Once a final-test result on a set of test seeds has been seen, those seeds are no longer unseen for decisions
+made afterwards. Creating a new run does not change that. LunarLab records every completed final test in
+`data/test_exposure.jsonl` and labels a run **exploratory** when its design was influenced by an already-seen
+final test:
+
+- a warm restart of a run whose final test was run (post-test lineage);
+- a run created by `tune-apply` whose test seeds had already been used for a final test (any overlap counts).
+
+Exploratory results on the same test seeds are not new held-out evidence. A confirmatory claim needs a
+protocol whose test seeds were never used: `--holdout-seeds START:COUNT` on `suite` or `tune-apply`, chosen
+before looking at any result on them. Other new runs are not labelled automatically, because LunarLab cannot
+know whether their design was chosen after seeing earlier test results; `suite` prints a note when its test
+seeds were used before.
+
+### Protocol validity
+
+Evaluation seeds are strict integers (no booleans, strings or floats). A protocol is refused for new runs,
+training and evaluations if a seed list has duplicates, the validation and test lists overlap, a seed lies
+outside 0..999,999 (training worker seeds start at 1,000,000), or the environment is anything but
+`LunarLander-v3` with `{continuous: False}`. Historical configurations with such a protocol still load and are
+marked invalid. Every evaluation records the environment that actually ran (id, keyword arguments, robustness
+overrides and the effective gravity, wind and turbulence read back from the instantiated environment) and
+refuses to report a protocol evaluation whose environment differs from the declaration. Robustness conditions
+are recorded as explicit overrides, separately from the protocol.
 
 ## Outcome definitions
 
@@ -69,6 +103,29 @@ Reference point (Gymnasium's hand-coded heuristic, 100 test seeds): environment 
 92%, strict pad landing 73%. The remaining 19 rest upright with a leg outside the flags. A score threshold
 and a landing outcome measure different things, so both are always shown.
 
+### Landing categories (outcome classifier version 2)
+
+Where the lander came to rest is kept apart from how well it landed. `pad_geography`: `within` (both leg
+bodies between the flags), `straddling` (one between them, one beyond), `outside`, or `unknown` when a leg or
+pad coordinate is missing or not finite (never guessed). Every episode gets exactly one `landing_category`:
+
+| Category | Meaning |
+|---|---|
+| `strict_pad_landing` | all five conditions above |
+| `on_pad_not_strict` | at rest, no body contact, both legs between the flags, but the final angle or the leg-contact condition failed |
+| `landed_not_within_pad` | at rest, no body contact, not wholly between the flags (`straddling` or `outside`); shown as "landed off pad" |
+| `at_rest_after_body_contact` | the environment's `at_rest` after the body touched the ground; never a pad landing |
+| `at_rest_geometry_unknown` | at rest, no body contact, position unknown |
+| `crash`, `out_of_bounds`, `timeout`, `unknown` | the environment outcome |
+
+`strict_failures` lists every strict condition an episode failed. The strict pad-landing definition did not
+change. Classifier version 1 called *every* clean at-rest episode that was not a strict pad landing "landed off
+pad", including tilted landings on the pad. Results carry their classifier version; version-1 results are
+shown as legacy, with version-2 rates derived from their stored episode fields (labelled as derived, files
+unchanged; version 1 did not store leg positions, so straddling and outside are not told apart there). The
+re-examination of all published results found no on-pad episode that version 1 had mislabelled
+([results/outcome_reclassification_v2.md](results/outcome_reclassification_v2.md)).
+
 ## Hover detector
 
 Independent of any reward preset and identical for every agent (protocol thresholds, not the reward's):
@@ -103,7 +160,11 @@ Following Agarwal et al., *Deep Reinforcement Learning at the Edge of the Statis
   between independent experiments; evaluation episodes are not resampled here;
 - **probability of improvement** P(X > Y): the Mann–Whitney statistic over all pairs of policies
   (ties count ½), against the first group shown (the PPO original-reward baseline), with a bootstrap interval
-  that resamples both groups. An interval that contains 0.5 means the data cannot order the two groups;
+  that resamples both groups' training runs. 0.00 [0.00, 0.00] (or 1.00 [1.00, 1.00]) means complete
+  separation in the observed runs: every policy of one group scored below every policy of the other, so the
+  empirical bootstrap can only resample that ordering. With 3–5 runs per group it is not evidence that a future
+  run has literally no chance of doing better. An interval that contains 0.5 means the data cannot order the two
+  groups, and it does not show that they are equally good either;
 - **performance profiles**: the fraction of test episodes whose original return exceeds τ, for every τ on a
   shared grid, pooling a group's policies, with a 95% band from resampling policies.
 

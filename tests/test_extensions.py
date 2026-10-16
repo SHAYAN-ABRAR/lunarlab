@@ -491,8 +491,9 @@ def test_export_demo_writes_a_filtered_scrubbed_snapshot(tmp_path, lab_home):
     other = create_experiment(name="not-exported", rewards=[preset("potential")], seeds=[0], profile="smoke")
 
     out = tmp_path / "site" / "demo-api"
-    manifest = export_demo(out, experiment_ids=[exp["experiment_id"]], echo=lambda *_: None)
-    assert manifest["runs"] == 1 and manifest["recordings"] == 1
+    # A draft: the developer's tree may have uncommitted changes (release exports refuse them).
+    manifest = export_demo(out, experiment_ids=[exp["experiment_id"]], echo=lambda *_: None, draft=True)
+    assert manifest["runs"] == 1 and manifest["recordings"] == 1 and manifest["kind"] == "draft"
     runs = json.loads((out / f"{demo_name('/api/runs')}.json").read_text())
     assert [r["run_id"] for r in runs] == [rid]  # the other experiment's run is filtered out
     assert other["run_ids"][0] not in (out / f"{demo_name('/api/overview')}.json").read_text()

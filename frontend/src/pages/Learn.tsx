@@ -164,7 +164,7 @@ export default function Learn() {
           </Section>
 
           <Section id="learned" title="Learned rewards: RLHF in miniature" see={<Link className="text-accent hover:underline" to="/learned-rewards">label flights yourself on Learned Rewards</Link>}>
-            <p>Instead of writing a reward, learn one from comparisons. Short flight segments are shown in pairs; whoever labels them (here a simulated human, or you) says which looks better. A small network r(s, a, s′) is trained so that the segment it scores higher is the preferred one (the Bradley–Terry model). PPO is then trained on that learned reward <strong>alone</strong>, and judged by the environment’s real reward.</p>
+            <p>Instead of writing a reward, learn one from comparisons. Short flight segments are shown in pairs; whoever labels them (here a simulated human, or you) says which looks better. A small network r(s, a, s′) is trained so that the segment it scores higher is the preferred one (the Bradley–Terry model). PPO is then trained with that learned reward as its <strong>only training signal</strong>, and judged by the environment’s real reward. The real reward still enters twice: a simulated labeller compares true returns, and checkpoints are chosen on validation episodes by the real reward.</p>
             <p>The learned reward is only constrained where the labelled segments were. A policy optimizing it can find states nobody labelled where it pays generously: the learned (proxy) return goes up while the true return does not. That is reward-model over-optimization, the same failure mode large-scale RLHF has to manage, visible here in a few minutes of CPU time.</p>
           </Section>
 

@@ -31,6 +31,10 @@ export function demoUrl(path: string, ext = 'json'): string {
 
 export interface DemoManifest {
   created_at: string
+  /** schema 2: 'release' requires a clean source tree; older snapshots have no kind */
+  kind?: 'release' | 'draft'
+  export_revision?: string | null
+  uncommitted_changes?: boolean | null
   commit: string | null
   experiments: string[]
   runs: number

@@ -1,4 +1,4 @@
-import { ArrowLeft, Camera, Download, FlaskConical, Play, ShieldCheck, Square } from 'lucide-react'
+import { ArrowLeft, Camera, Download, FlaskConical, GitBranch, Play, ShieldCheck, Square } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { Link, useParams } from 'react-router'
 import { LineChartPanel, Sparkline } from '../components/charts'
@@ -28,6 +28,26 @@ import { useApi } from '../lib/hooks'
 import { PRESET_COLOR, SERIES, formulaLines } from '../lib/reward'
 import type { CheckpointEntry, CurvePoint, EvalSummary, Job, MetricRow, RecordingMeta, RunStatus, RunSummary, RewardConfig, ValidationPoint } from '../lib/types'
 
+interface TestAttempt {
+  attempt: number
+  state: 'started' | 'completed' | 'interrupted' | 'failed'
+  started_at: string
+  ended_at?: string
+  file?: string
+  error?: string
+}
+
+interface TestStatus {
+  frozen: boolean
+  frozen_for_test: { checkpoint: string; frozen_at: string; artifact?: string; checkpoint_sha256: string } | null
+  immutable_artifact: boolean
+  attempts: TestAttempt[]
+  completed: boolean
+  completed_count: number
+  last_state: string | null
+  needs_retry: boolean
+}
+
 interface RunDetailData {
   summary: RunSummary
   config: {
@@ -43,7 +63,9 @@ interface RunDetailData {
   }
   config_hash: string
   rollout_size: number
-  metadata: Record<string, unknown> & { segments: Record<string, unknown>[]; system: Record<string, unknown>; environment: Record<string, unknown>; frozen_for_test: { checkpoint: string; frozen_at: string } | null }
+  metadata: Record<string, unknown> & { segments: Record<string, unknown>[]; system: Record<string, unknown>; environment: Record<string, unknown>; frozen_for_test: { checkpoint: string; frozen_at: string; artifact?: string } | null }
+  test_status?: TestStatus
+  warm_restart?: { preserved: string[]; reset: string[] }
   status: RunStatus
   manifest: { checkpoints: CheckpointEntry[]; best_validation: CheckpointEntry | null }
   evaluations: EvalSummary[]
@@ -59,6 +81,9 @@ function RunActions({ d, onChanged }: { d: RunDetailData; onChanged: () => void 
   const [seed, setSeed] = useState(20000)
   const [ckpt, setCkpt] = useState('best')
   const [watch, setWatch] = useState<string | null>(null)
+  const [warmOpen, setWarmOpen] = useState(false)
+  const [warmStart, setWarmStart] = useState(false)
+  const [warmChild, setWarmChild] = useState<string | null>(null)
   useJobWatch(watch, () => {
     setWatch(null)
     onChanged()
@@ -68,10 +93,36 @@ function RunActions({ d, onChanged }: { d: RunDetailData; onChanged: () => void 
   const activeJob = d.jobs.find((j) => ['queued', 'starting', 'running', 'stop_requested'].includes(j.state))
   const statusRunning = d.status.state === 'running' && (secondsSince(d.status.updated_at) ?? 999) < 60
   const hasCkpt = d.manifest.checkpoints.length > 0
-  const completed = d.manifest.checkpoints.some((c) => c.kind === 'final')
-  const resumable = !completed && !activeJob && !statusRunning && d.manifest.checkpoints.some((c) => ['periodic', 'stop'].includes(c.kind))
-  const neverStarted = !hasCkpt && !activeJob && !statusRunning && (d.metadata.segments ?? []).length === 0
+  const resume = d.summary.resume
+  const idle = !activeJob && !statusRunning
+  // The server decides whether a GENUINE resume is possible (frozen runs and DQN checkpoints without
+  // replay state never resume); the worker checks again under the run lock.
+  const resumable = idle && !!resume?.available
+  const frozen = !!d.metadata.frozen_for_test
+  const ts = d.test_status
+  const neverStarted = !hasCkpt && idle && (d.metadata.segments ?? []).length === 0 && !frozen
   const hasBest = !!d.manifest.best_validation
+  const warmAllowed = idle && hasCkpt && !!resume?.warm_restart_available
+
+  const warmRestart = async () => {
+    setBusy('warm')
+    setError(null)
+    try {
+      const res = await api.post<{ run: { run_id: string }; job: Job | null }>(`/api/runs/${runId}/warm-restart`, {
+        checkpoint: frozen ? 'frozen' : 'latest',
+        confirm: true,
+        start: warmStart,
+        idempotency_key: idempotencyKey(),
+      })
+      setWarmOpen(false)
+      setWarmChild(res.run.run_id)
+      onChanged()
+    } catch (e) {
+      setError((e as Error).message)
+    } finally {
+      setBusy(null)
+    }
+  }
 
   const call = async (label: string, path: string, body?: unknown) => {
     setBusy(label)
@@ -102,8 +153,19 @@ function RunActions({ d, onChanged }: { d: RunDetailData; onChanged: () => void 
           </Button>
         )}
         {resumable && (
-          <Button variant="primary" icon={<Play className="size-4" />} pending={busy === 'resume'} onClick={() => call('resume', `/api/runs/${runId}/resume`, { checkpoint: 'latest', idempotency_key: idempotencyKey() })}>
+          <Button
+            variant="primary"
+            icon={<Play className="size-4" />}
+            pending={busy === 'resume'}
+            title={resume?.contract ? `Continues this run from ${resume.checkpoint}: ${resume.contract}` : undefined}
+            onClick={() => call('resume', `/api/runs/${runId}/resume`, { checkpoint: 'latest', idempotency_key: idempotencyKey() })}
+          >
             Resume from latest checkpoint
+          </Button>
+        )}
+        {warmAllowed && (
+          <Button icon={<GitBranch className="size-4" />} onClick={() => setWarmOpen(true)}>
+            Warm restart as a new run…
           </Button>
         )}
         <Button
@@ -115,8 +177,8 @@ function RunActions({ d, onChanged }: { d: RunDetailData; onChanged: () => void 
         >
           Evaluate (validation)
         </Button>
-        <Button icon={<ShieldCheck className="size-4" />} disabled={!hasBest || !!activeJob} title={!hasBest ? 'Needs a validation-selected checkpoint' : undefined} onClick={() => setTestOpen(true)}>
-          Final test…
+        <Button icon={<ShieldCheck className="size-4" />} disabled={(!hasBest && !frozen) || !!activeJob} title={!hasBest && !frozen ? 'Needs a validation-selected checkpoint' : undefined} onClick={() => setTestOpen(true)}>
+          {ts?.needs_retry ? 'Retry final test…' : 'Final test…'}
         </Button>
         <Button icon={<Camera className="size-4" />} disabled={!hasCkpt || !!activeJob} title={!hasCkpt ? 'No checkpoint yet' : undefined} onClick={() => setRecOpen(true)}>
           Record flight…
@@ -126,14 +188,67 @@ function RunActions({ d, onChanged }: { d: RunDetailData; onChanged: () => void 
         </a>
       </div>
       {watch && <p className="text-xs text-ink-3">Job submitted — progress appears under “Jobs for this run”.</p>}
+      {warmChild && (
+        <Notice tone="good" title="Warm restart created">
+          New run <Link to={`/runs/${warmChild}`} className="num text-accent hover:underline">{warmChild}</Link>. It is compared separately from this run.
+        </Notice>
+      )}
+      {resume?.reason === 'legacy_dqn' && idle && (
+        <Notice tone="warn" title="Resume unavailable: this DQN checkpoint has no replay state">
+          {resume.message}
+        </Notice>
+      )}
+      {frozen && (
+        <Notice tone="info" title="Frozen for the final test">
+          Since {fmt.time(d.metadata.frozen_for_test!.frozen_at)} this run never trains again under its run ID; evaluation, recordings and replays use the frozen
+          checkpoint {d.metadata.frozen_for_test!.checkpoint}
+          {d.metadata.frozen_for_test!.artifact ? ` (immutable copy ${d.metadata.frozen_for_test!.artifact})` : ' (legacy record: no immutable copy yet, see freeze-migrate)'}.{' '}
+          {ts?.completed
+            ? `Final test completed${ts.completed_count > 1 ? ` (${ts.completed_count} evaluations)` : ''}.`
+            : ts?.last_state
+              ? `The last final-test attempt was ${ts.last_state}: no completed final test yet. Retry it on the same frozen checkpoint.`
+              : 'No completed final test yet.'}
+        </Notice>
+      )}
       <ErrorBanner error={error} />
+      <Dialog
+        open={warmOpen}
+        title="Create a warm restart?"
+        onClose={() => setWarmOpen(false)}
+        actions={
+          <Button variant="primary" pending={busy === 'warm'} onClick={warmRestart}>
+            Create new run
+          </Button>
+        }
+      >
+        <div className="space-y-3">
+          <p>
+            A warm restart is a <strong className="text-ink">new run</strong> whose networks start from {frozen ? 'the frozen checkpoint' : `checkpoint ${resume?.checkpoint ?? 'latest'}`} of this
+            run. It is not a continuation: it gets its own run ID, its lineage is recorded, and comparisons keep it apart from uninterrupted runs.
+          </p>
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+            <div>
+              <div className="eyebrow mb-1">Preserved</div>
+              <ul className="list-disc space-y-0.5 pl-4 text-[13px] text-ink-2">{(d.warm_restart?.preserved ?? []).map((x) => <li key={x}>{x}</li>)}</ul>
+            </div>
+            <div>
+              <div className="eyebrow mb-1">Reset</div>
+              <ul className="list-disc space-y-0.5 pl-4 text-[13px] text-ink-2">{(d.warm_restart?.reset ?? []).map((x) => <li key={x}>{x}</li>)}</ul>
+            </div>
+          </div>
+          {frozen && <Notice tone="warn">This run was frozen for its final test. Results of the new run on the same test seeds are exploratory, not a new held-out test.</Notice>}
+          <label className="flex items-center gap-2 text-[13px] text-ink-2">
+            <input type="checkbox" className="accent-[#3cc8d4]" checked={warmStart} onChange={(e) => setWarmStart(e.target.checked)} /> Start training the new run now
+          </label>
+        </div>
+      </Dialog>
       <Dialog
         open={testOpen}
         title="Run the final test evaluation?"
         onClose={() => setTestOpen(false)}
         actions={
           <Button variant="primary" pending={busy === 'test'} onClick={() => { setTestOpen(false); call('test', `/api/runs/${runId}/evaluate`, { split: 'test', checkpoint: 'best', confirm_test: true, idempotency_key: idempotencyKey() }) }}>
-            Freeze and evaluate
+            {frozen ? 'Evaluate the frozen checkpoint' : 'Freeze and evaluate'}
           </Button>
         }
       >
@@ -142,8 +257,16 @@ function RunActions({ d, onChanged }: { d: RunDetailData; onChanged: () => void 
             The validation-selected checkpoint ({d.manifest.best_validation?.name ?? '—'}, {fmt.int(d.manifest.best_validation?.transitions)} transitions) is evaluated on the{' '}
             {(d.config.eval_protocol.test_seeds as number[]).length} fixed test seeds with the original reward and a deterministic policy.
           </p>
-          <p>The first test evaluation freezes this checkpoint for the run. Later test evaluations are flagged as repeats. Do not tune rewards or PPO settings on test results.</p>
-          {d.metadata.frozen_for_test && <Notice tone="warn">Already frozen on {fmt.time(d.metadata.frozen_for_test.frozen_at)} with {d.metadata.frozen_for_test.checkpoint}. This will be a repeat evaluation.</Notice>}
+          <p>
+            The first test evaluation freezes this checkpoint: an immutable copy is kept, the run never trains again, and every later final-test evaluation, robustness
+            evaluation and recording uses those exact bytes. Do not tune rewards or algorithm settings on test results.
+          </p>
+          {d.metadata.frozen_for_test && (
+            <Notice tone="warn">
+              Already frozen on {fmt.time(d.metadata.frozen_for_test.frozen_at)} with {d.metadata.frozen_for_test.checkpoint}.{' '}
+              {ts?.needs_retry ? 'No final test has completed yet: this retries it on the same frozen checkpoint.' : 'This will be a repeat evaluation.'}
+            </Notice>
+          )}
           {d.summary.profile === 'smoke' && <Notice tone="warn">This is a SMOKE run: a technical test, not a trained agent.</Notice>}
         </div>
       </Dialog>
@@ -178,7 +301,18 @@ function RunActions({ d, onChanged }: { d: RunDetailData; onChanged: () => void 
   )
 }
 
+function LegacyMark({ e }: { e: EvalSummary }) {
+  if ((e.outcome_classifier_version ?? 1) >= 2) return null
+  return (
+    <span className="ml-1 text-warn" title="Recorded with outcome classifier v1. The stored file is unchanged; v2 categories are derived from its episode fields.">
+      †
+    </span>
+  )
+}
+
 function EvalRow({ e }: { e: EvalSummary }) {
+  const v2 = (e.outcome_classifier_version ?? 1) >= 2
+  const onPad = v2 ? e.on_pad_not_strict_rate : e.derived_v2?.on_pad_not_strict_rate
   return (
     <tr>
       <td>
@@ -194,6 +328,10 @@ function EvalRow({ e }: { e: EvalSummary }) {
       <td className="num text-right">{fmt.pct(e.score_rate)}</td>
       <td className="num text-right">{fmt.pct(e.env_success_rate)}</td>
       <td className="num text-right">{fmt.pct(e.pad_landing_rate)}</td>
+      <td className="num text-right">
+        {fmt.pct(onPad)}
+        <LegacyMark e={e} />
+      </td>
       <td className="num text-right">{fmt.pct(e.crash_rate)} / {fmt.pct(e.out_of_bounds_rate)} / {fmt.pct(e.timeout_rate)}</td>
       <td className="num text-right">{fmt.num(e.hover_fraction_mean, 3)}</td>
       <td className="text-xs text-ink-3">{fmt.time(e.created_at)}</td>
@@ -238,6 +376,12 @@ export default function RunDetail() {
             <span className="text-ink-3">· seed {s.seed}</span>
             <StateBadge state={st.state ?? s.state} />
             <EvidenceBadge evidence={s.evidence} />
+            {s.evidence_role === 'exploratory' && (
+              <span title={s.evidence_note ?? undefined}>
+                <Badge tone="warn">exploratory</Badge>
+              </span>
+            )}
+            {s.protocol_valid === false && <Badge tone="crit">invalid protocol</Badge>}
             {smoke && <Badge tone="warn">SMOKE · technical test</Badge>}
           </div>
           <p className="num mt-1 truncate text-xs text-ink-3">
@@ -245,6 +389,21 @@ export default function RunDetail() {
           </p>
         </div>
       </div>
+      {s.lineage && (
+        <div className="mb-4">
+          <Notice tone={s.lineage.post_test ? 'warn' : 'info'} title={`Warm restart of ${s.lineage.parent_run_id}`}>
+            Initialised from <Link to={`/runs/${s.lineage.parent_run_id}`} className="text-accent hover:underline">{s.lineage.parent_checkpoint}</Link> of that run. Preserved:{' '}
+            {s.lineage.preserved.join('; ')}. Reset: {s.lineage.reset.join('; ')}. {s.lineage.note}
+          </Notice>
+        </div>
+      )}
+      {s.protocol_valid === false && (
+        <div className="mb-4">
+          <Notice tone="warn" title="Invalid evaluation protocol">
+            {(s.protocol_problems ?? []).join(' ')} This run can be inspected but not trained or evaluated.
+          </Notice>
+        </div>
+      )}
       {smoke && (
         <div className="mb-4">
           <Notice tone="warn" title="SMOKE profile">
@@ -361,6 +520,7 @@ export default function RunDetail() {
                   <th className="text-right">≥200</th>
                   <th className="text-right">At rest</th>
                   <th className="text-right">Pad</th>
+                  <th className="text-right" title="Came to rest with both legs between the flags but failed another strict criterion (angle or leg contact)">On pad, not strict</th>
                   <th className="text-right">Crash / OOB / limit</th>
                   <th className="text-right">Hover</th>
                   <th>When</th>
@@ -373,6 +533,17 @@ export default function RunDetail() {
               </tbody>
             </Table>
           )}
+          {d.evaluations.some((e) => (e.outcome_classifier_version ?? 1) < 2) && (
+            <p className="mt-2 text-xs text-ink-3">
+              † Legacy outcome metric: evaluated with outcome classifier v1, which called any clean at-rest landing that was not a strict pad landing “off pad”, even on the pad.
+              The stored result is unchanged; the value shown is derived from its episode fields (v1 did not store leg positions).
+            </p>
+          )}
+          {d.test_status && d.test_status.attempts.length > 0 && (
+            <p className="mt-2 text-xs text-ink-3">
+              Final-test attempts: {d.test_status.attempts.map((a) => `#${a.attempt + 1} ${a.state}`).join(' · ')}
+            </p>
+          )}
         </Card>
       </div>
 
@@ -383,6 +554,7 @@ export default function RunDetail() {
               <tr>
                 <th>File</th>
                 <th>Kind</th>
+                <th>Use</th>
                 <th className="text-right">Transitions</th>
                 <th>SHA-256</th>
               </tr>
@@ -390,14 +562,23 @@ export default function RunDetail() {
             <tbody>
               {d.manifest.checkpoints.length === 0 && (
                 <tr>
-                  <td colSpan={4} className="text-ink-3">No checkpoints yet.</td>
+                  <td colSpan={5} className="text-ink-3">No checkpoints yet.</td>
                 </tr>
               )}
               {d.manifest.checkpoints.map((c) => (
                 <tr key={c.name}>
                   <td className="num text-xs">{c.name}</td>
                   <td>
-                    <Badge tone={c.kind === 'best_validation' ? 'good' : c.kind === 'final' ? 'info' : 'neutral'}>{c.kind === 'best_validation' ? 'validation-selected' : c.kind}</Badge>
+                    {c.kind === 'best_validation' && c.name !== d.manifest.best_validation?.name ? (
+                      <span title="Selected by an earlier validation; a later checkpoint scored higher. Kept unchanged (checkpoint files are never rewritten).">
+                        <Badge tone="neutral">earlier best</Badge>
+                      </span>
+                    ) : (
+                      <Badge tone={c.kind === 'best_validation' ? 'good' : c.kind === 'final' ? 'info' : 'neutral'}>{c.kind === 'best_validation' ? 'validation-selected' : c.kind}</Badge>
+                    )}
+                  </td>
+                  <td className="text-xs text-ink-2" title={c.continuation?.contract}>
+                    {c.usable_as ?? '—'}
                   </td>
                   <td className="num text-right">{fmt.int(c.transitions)}</td>
                   <td className="num text-[11px] text-ink-3" title={c.sha256}>{c.sha256.slice(0, 10)}…</td>
@@ -418,7 +599,7 @@ export default function RunDetail() {
                     Seed {r.episode_seed} · {String(r.source.checkpoint ?? '')}
                   </Link>
                   <div className="flex items-center gap-2">
-                    <OutcomeBadge outcome={r.env_outcome} pad={r.pad_landing} />
+                    <OutcomeBadge outcome={r.env_outcome} pad={r.pad_landing} category={r.landing_category} />
                     <span className="num text-xs text-ink-2">{fmt.num(r.original_return, 1)}</span>
                   </div>
                 </li>
@@ -476,6 +657,11 @@ export default function RunDetail() {
                     segment {String(seg.index)} · {String(seg.kind)} · {fmt.int(Number(seg.start_transitions))} → {seg.end_transitions !== undefined ? fmt.int(Number(seg.end_transitions)) : '…'} · {String(seg.end_state ?? 'running')}
                   </div>
                   {seg.parent_checkpoint ? <div className="num text-ink-3">parent checkpoint {String(seg.parent_checkpoint)}</div> : null}
+                  {seg.discarded_interactions ? (
+                    <div className="num text-ink-3">
+                      {fmt.int(Number(seg.discarded_interactions))} environment interaction(s) after the last safe boundary were discarded at the stop (not trained on)
+                    </div>
+                  ) : null}
                 </div>
               ))}
               <pre className="num max-h-60 overflow-auto rounded bg-bg p-2 text-[11px] text-ink-3">{JSON.stringify({ system: d.metadata.system }, null, 1)}</pre>

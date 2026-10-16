@@ -193,10 +193,27 @@ export function EvidenceBadge({ evidence }: { evidence: string }) {
   return <Badge tone={map[evidence] ?? 'neutral'}>{evidence}</Badge>
 }
 
-export function OutcomeBadge({ outcome, pad }: { outcome: string; pad?: boolean }) {
+const LANDING_LABELS: Record<string, [Tone, string, string]> = {
+  on_pad_not_strict: ['info', 'on pad, not strict', 'Came to rest with both legs between the flags, but failed another strict criterion (final angle, or no leg contact seen).'],
+  landed_not_within_pad: ['info', 'landed off pad', 'Came to rest cleanly, not wholly between the flags (beside the pad or straddling its edge).'],
+  at_rest_after_body_contact: ['warn', 'at rest after body contact', 'The environment reports at rest, but the body touched the ground first: never a pad landing.'],
+  at_rest_geometry_unknown: ['neutral', 'at rest, position unknown', 'Leg or pad coordinates were not available: where it landed is not guessed.'],
+}
+
+/** Episode outcome. ``category`` (outcome classifier v2) keeps where it landed apart from how well;
+ *  without it (older records) a non-strict landing is only "at rest, not strict pad", never "off pad". */
+export function OutcomeBadge({ outcome, pad, category }: { outcome: string; pad?: boolean; category?: string }) {
   if (pad) return <Badge tone="good" icon={<CheckCircle2 className="size-3.5" aria-hidden />}>pad landing</Badge>
+  const landing = category ? LANDING_LABELS[category] : undefined
+  if (landing) {
+    return (
+      <span title={landing[2]}>
+        <Badge tone={landing[0]} icon={<CircleDashed className="size-3.5" aria-hidden />}>{landing[1]}</Badge>
+      </span>
+    )
+  }
   const m: Record<string, [Tone, string]> = {
-    at_rest: ['info', 'at rest (off pad)'],
+    at_rest: ['info', 'at rest, not strict pad'],
     crash: ['crit', 'crash'],
     out_of_bounds: ['crit', 'out of bounds'],
     timeout: ['warn', 'time limit'],

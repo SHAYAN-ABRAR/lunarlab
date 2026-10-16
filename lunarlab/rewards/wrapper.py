@@ -32,7 +32,7 @@ import numpy as np
 
 from lunarlab.env import decompose_builtin_reward, probe
 from lunarlab.hover import DEFAULT_DETECTOR, HoverThresholds
-from lunarlab.outcomes import PadLandingCriteria, classify_outcome
+from lunarlab.outcomes import OUTCOME_CLASSIFIER_VERSION, PadLandingCriteria, classify_outcome
 from lunarlab.rewards.accounting import EpisodeAccumulator
 from lunarlab.rewards.config import RewardConfig
 from lunarlab.rewards.terms import compute_terms, training_reward
@@ -145,7 +145,14 @@ class LunarLabRewardWrapper(gym.Wrapper):
                 summary.update(outcome.to_dict())
             else:
                 summary.update(
-                    {"env_outcome": "unknown", "terminated": bool(terminated), "truncated": bool(truncated)}
+                    {
+                        "env_outcome": "unknown",
+                        "terminated": bool(terminated),
+                        "truncated": bool(truncated),
+                        "landing_category": "unknown",
+                        "pad_geography": "unknown",
+                        "outcome_classifier_version": OUTCOME_CLASSIFIER_VERSION,
+                    }
                 )
             summary["final_obs"] = [float(v) for v in obs]
             if "lunarlab_physics" in info:  # set by PhysicsRandomizer (training under varied physics)

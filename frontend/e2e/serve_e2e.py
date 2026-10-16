@@ -6,11 +6,20 @@ tests never read or modify real experiment data.
 
 import os
 import shutil
+import stat
 import sys
 from pathlib import Path
 
+
+def _remove_read_only(func, path, _exc):
+    """Frozen final-test artifacts are read-only; clear the flag so the disposable home can be removed."""
+    os.chmod(path, stat.S_IWRITE)
+    func(path)
+
+
 home = Path(__file__).resolve().parent.parent / ".e2e-home"
-shutil.rmtree(home, ignore_errors=True)
+if home.exists():
+    shutil.rmtree(home, onexc=_remove_read_only)
 home.mkdir(parents=True)
 os.environ["LUNARLAB_HOME"] = str(home)
 

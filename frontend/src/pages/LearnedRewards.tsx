@@ -344,8 +344,9 @@ export default function LearnedRewards() {
         title="Learned Rewards"
         subtitle={
           <>
-            RLHF in miniature. Short flight segments are compared in pairs, a small network learns a reward that agrees with the preferences, and PPO is trained on that learned reward
-            alone. The trained policies are then judged by the environment&apos;s real reward, which shows how much of the task the learned reward captured.
+            RLHF in miniature. Short flight segments are compared in pairs, a small network learns a reward that agrees with the preferences, and PPO is trained with that learned reward
+            as its only training signal (checkpoints are still chosen on validation episodes by the real reward). The trained policies are then judged by the environment&apos;s
+            real reward, which shows how much of the task the learned reward captured.
           </>
         }
       />
@@ -563,7 +564,7 @@ export default function LearnedRewards() {
 
       {studies.data && studies.data.length > 0 && <ActiveStudies study={studies.data[0]} />}
 
-      <Notice title="Did PPO learn to land from preferences alone?">
+      <Notice title="Did PPO learn to land from the learned reward?">
         {rlhfExperiments.length ? (
           <>
             The policies trained on learned rewards are evaluated like every other run.{' '}

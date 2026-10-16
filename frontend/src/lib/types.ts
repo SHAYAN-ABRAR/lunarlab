@@ -32,6 +32,59 @@ export interface EvalSummary {
   mean_length: number
   main_engine_fraction: number
   training_return_rescored_mean: number
+  checkpoint_sha256?: string
+  /** 2 = classifier v2 (geography kept apart from landing quality); 1 = legacy result */
+  outcome_classifier_version?: number
+  on_pad_not_strict_rate?: number | null
+  landed_not_within_pad_rate?: number | null
+  at_rest_after_body_contact_rate?: number | null
+  at_rest_geometry_unknown_rate?: number | null
+  /** Legacy (v1) results only: v2 categories derived from the stored episode fields; the file is unchanged */
+  derived_v2?: DerivedOutcomes
+}
+
+export interface DerivedOutcomes {
+  strict_pad_landing_rate: number
+  on_pad_not_strict_rate: number
+  landed_not_within_pad_rate: number
+  at_rest_after_body_contact_rate: number
+  at_rest_geometry_unknown_rate: number
+  n_episodes: number
+  v1_landed_off_pad_rate: number
+  derived_from_classifier_version: number
+  note: string
+}
+
+export interface TestStatusLight {
+  frozen: boolean
+  immutable_artifact: boolean
+  completed: boolean
+  completed_count: number
+  last_state: string | null
+  needs_retry: boolean
+  attempts: number
+}
+
+export interface ResumeInfo {
+  available: boolean
+  reason?: 'completed' | 'frozen' | 'no_checkpoint' | 'legacy_dqn'
+  checkpoint?: string
+  transitions?: number
+  contract?: string
+  message?: string
+  warm_restart_available?: boolean
+}
+
+export interface Lineage {
+  kind: 'warm_restart'
+  parent_run_id: string
+  parent_checkpoint: string
+  parent_checkpoint_sha256: string
+  parent_transitions: number | null
+  preserved: string[]
+  reset: string[]
+  post_test: boolean
+  note: string
 }
 
 export interface CheckpointEntry {
@@ -45,6 +98,11 @@ export interface CheckpointEntry {
   size_bytes: number
   validation_mean_original_return?: number
   validation_pad_landing_rate?: number
+  role?: 'resumable' | 'inference'
+  resumable?: boolean
+  /** set by the run detail API: resumable / inference / inference (legacy: no continuation state) */
+  usable_as?: string
+  continuation?: { format: string; version: number; contract?: string; replay_rows?: number; pruned_at?: string }
 }
 
 export interface RunSummary {
@@ -68,13 +126,20 @@ export interface RunSummary {
   best_validation: CheckpointEntry | null
   latest_validation: EvalSummary | null
   latest_test: EvalSummary | null
-  frozen_for_test: { checkpoint: string; frozen_at: string } | null
+  frozen_for_test: { checkpoint: string; frozen_at: string; artifact?: string; checkpoint_sha256?: string } | null
   protocol_hash: string
   algo?: 'ppo' | 'dqn'
   gamma?: number
   variant?: string
   physics_label?: string
   validation_history?: ValidationPoint[]
+  test_status?: TestStatusLight
+  evidence_role?: 'confirmatory' | 'exploratory'
+  evidence_note?: string | null
+  resume?: ResumeInfo
+  protocol_valid?: boolean
+  protocol_problems?: string[]
+  lineage?: Lineage | null
 }
 
 export interface ValidationPoint extends EvalSummary {
@@ -169,6 +234,7 @@ export interface RecordingMeta {
   training_return: number
   env_outcome: string
   pad_landing: boolean
+  landing_category?: string
   length: number
   hover_fraction: number
   reward_preset: Preset | null

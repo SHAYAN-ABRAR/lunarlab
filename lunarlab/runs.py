@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from collections.abc import Callable
 from pathlib import Path
 from typing import Any
 
@@ -13,8 +14,10 @@ from lunarlab.config import (
     PPOConfig,
     RunConfig,
     TrainingConfig,
+    WarmStart,
 )
 from lunarlab.env import environment_record
+from lunarlab.locks import hold
 from lunarlab.rewards.config import RewardConfig
 from lunarlab.storage import (
     RunPaths,
@@ -47,9 +50,13 @@ def create_run(
     algo: str = "ppo",
     dqn: DQNConfig | None = None,
     physics: PhysicsRandomization | None = None,
+    warm_start: WarmStart | None = None,
+    lineage: dict | None = None,
 ) -> RunConfig:
     ppo = ppo or PPOConfig()
     physics = physics or PhysicsRandomization()
+    protocol = protocol or EvalProtocol()
+    protocol.require_valid()  # a new run never starts with overlapping or duplicate seeds
     tag = reward.preset if reward.preset != "custom" else "custom"
     run_id = new_id(
         *([algo] if algo != "ppo" else []),
@@ -69,10 +76,11 @@ def create_run(
         ppo=ppo,
         training=training,
         seed=seed,
-        eval_protocol=protocol or EvalProtocol(),
+        eval_protocol=protocol,
         algo=algo,
         dqn=dqn,
         physics=physics,
+        warm_start=warm_start,
     )
     paths = RunPaths(run_id)
     if paths.root.exists():
@@ -101,6 +109,7 @@ def create_run(
         "segments": [],
         "frozen_for_test": None,
         "test_evaluations": 0,
+        **({"lineage": lineage} if lineage else {}),
     }
     atomic_write_json(paths.metadata, meta)
     atomic_write_json(paths.status, {"run_id": run_id, "state": "created", "updated_at": utc_now()})
@@ -120,10 +129,16 @@ def load_metadata(run_id: str) -> dict:
 
 
 def update_metadata(run_id: str, **updates: Any) -> dict:
+    return mutate_metadata(run_id, lambda meta: meta.update(updates))
+
+
+def mutate_metadata(run_id: str, change: Callable[[dict], Any]) -> dict:
+    """Read-modify-write ``metadata.json`` under the run's metadata lock (safe across processes)."""
     paths = RunPaths(run_id)
-    meta = read_json(paths.metadata, default={}) or {}
-    meta.update(updates)
-    atomic_write_json(paths.metadata, meta)
+    with hold(paths.metadata_lock):
+        meta = read_json(paths.metadata, default={}) or {}
+        change(meta)
+        atomic_write_json(paths.metadata, meta)
     return meta
 
 
@@ -150,7 +165,6 @@ def register_checkpoint(
     segment: int,
     extra: dict | None = None,
 ) -> dict:
-    manifest = read_manifest(paths)
     entry = {
         "name": file.name,
         "kind": kind,
@@ -162,11 +176,88 @@ def register_checkpoint(
         "size_bytes": file.stat().st_size,
         **(extra or {}),
     }
-    manifest["checkpoints"] = [c for c in manifest["checkpoints"] if c["name"] != file.name] + [entry]
-    if kind == "best_validation":
-        manifest["best_validation"] = entry
-    atomic_write_json(paths.checkpoint_manifest, manifest)
+
+    def add(manifest: dict) -> None:
+        manifest["checkpoints"] = [c for c in manifest["checkpoints"] if c["name"] != file.name] + [entry]
+        if kind == "best_validation":
+            manifest["best_validation"] = entry
+
+    mutate_manifest(paths, add)
     return entry
+
+
+def mutate_manifest(paths: RunPaths, change: Callable[[dict], Any]) -> dict:
+    """Read-modify-write the checkpoint manifest under the run's metadata lock. The manifest is the
+    commit point of a checkpoint: an entry appears only after every file it names is complete."""
+    with hold(paths.metadata_lock):
+        manifest = read_manifest(paths)
+        change(manifest)
+        atomic_write_json(paths.checkpoint_manifest, manifest)
+    return manifest
+
+
+DQN_CONTINUATION_FORMAT = "lunarlab.dqn-continuation"
+PPO_CONTINUATION_FORMAT = "lunarlab.ppo-continuation"
+
+
+def is_resumable(entry: dict, algo: str) -> bool:
+    """Whether a checkpoint can CONTINUE its run (see docs/ARCHITECTURE.md, checkpoint contract).
+
+    PPO: periodic and stop checkpoints (weights, optimizer state, counters; also those written before
+    the contract was named). DQN: only checkpoints that carry a complete continuation bundle
+    (replay buffer and algorithm state); older DQN checkpoints are inference checkpoints."""
+    if entry.get("kind") not in ("periodic", "stop"):
+        return False
+    if algo == "dqn":
+        cont = entry.get("continuation") or {}
+        return bool(
+            entry.get("resumable") is True
+            and cont.get("format") == DQN_CONTINUATION_FORMAT
+            and not cont.get("pruned_at")
+        )
+    return entry.get("resumable", True) is not False
+
+
+def legacy_dqn_resume_message(run_id: str, name: str) -> str:
+    return (
+        f"checkpoint {name} has no replay buffer or DQN training state (written before LunarLab stored "
+        "them, or its continuation files were pruned). It still works for evaluation, recordings and replay, "
+        "but resuming from it would restart DQN with an empty replay buffer and reset counters, which is "
+        "not a continuation of this run. Use a warm restart instead: a new run initialised from these "
+        "weights, with its lineage recorded (python -m lunarlab warm-restart --run-id "
+        f"{run_id} --checkpoint {name} --confirm)."
+    )
+
+
+def resolve_resume_checkpoint(run_id: str, which: str, algo: str) -> tuple[Path, dict]:
+    """The checkpoint a resume continues from, verified, or a RunError that says what to do instead."""
+    entries = read_manifest(RunPaths(run_id)).get("checkpoints", [])
+    if which == "latest":
+        candidates = [(i, c) for i, c in enumerate(entries) if c["kind"] in ("periodic", "stop")]
+        if not candidates:
+            raise RunError("no resumable checkpoint (no periodic or stop checkpoint yet)")
+        usable = [(i, c) for i, c in candidates if is_resumable(c, algo)]
+        newest = max(candidates, key=lambda ic: (ic[1]["transitions"], ic[0]))[1]
+        if not usable or (algo == "dqn" and not is_resumable(newest, algo)):
+            raise RunError(legacy_dqn_resume_message(run_id, newest["name"]))
+        name = max(usable, key=lambda ic: (ic[1]["transitions"], ic[0]))[1]["name"]
+    else:
+        entry = next((c for c in entries if c["name"] == which), None)
+        if entry is None:
+            raise RunError(f"checkpoint {which!r} is not in this run's manifest")
+        if entry["kind"] == "best_validation":
+            raise RunError("resume from a periodic/stop checkpoint, not the validation-selected copy")
+        if entry["kind"] == "final":
+            raise RunError("run already completed; nothing to resume")
+        if not is_resumable(entry, algo):
+            raise RunError(legacy_dqn_resume_message(run_id, entry["name"]))
+        name = entry["name"]
+    path, entry = resolve_checkpoint(run_id, name)
+    if algo == "dqn":  # refuse early if the replay/state files are missing or altered
+        from lunarlab.continuation import verify_continuation_files
+
+        verify_continuation_files(RunPaths(run_id), entry)
+    return path, entry
 
 
 def resolve_checkpoint(run_id: str, which: str = "best") -> tuple[Path, dict]:
@@ -213,12 +304,21 @@ def resolve_checkpoint(run_id: str, which: str = "best") -> tuple[Path, dict]:
 
 
 def load_policy(run_id: str, which: str = "best", *, deterministic: bool = True):
-    """Load a run's policy for inference (safe, weights-only)."""
+    """Load a run's policy for inference (safe, weights-only).
+
+    ``which="frozen"`` loads the immutable copy frozen for the final test (verified against its digest);
+    ``which="final-test"`` does the same, and falls back to the validation-selected checkpoint for a run
+    that has not been frozen yet."""
     from lunarlab.env import make_env
     from lunarlab.policies import SB3Policy, load_policy_weights
 
     cfg = load_config(run_id)
-    path, entry = resolve_checkpoint(run_id, which)
+    if which in ("frozen", "final-test"):
+        from lunarlab.freeze import resolve_final_checkpoint
+
+        path, entry = resolve_final_checkpoint(run_id, require_frozen=which == "frozen")
+    else:
+        path, entry = resolve_checkpoint(run_id, which)
     env = make_env()
     try:
         net = load_policy_weights(

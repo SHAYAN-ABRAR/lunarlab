@@ -27,7 +27,8 @@ Set-StrictMode -Version Latest
 
 $Root = Split-Path -Parent $PSScriptRoot
 $VenvPython = (Join-Path $Root '.venv\Scripts\python.exe')
-$info = Join-Path $Root 'data\backend.json'
+$HomeDir = if ($env:LUNARLAB_HOME) { $env:LUNARLAB_HOME } else { $Root }
+$info = Join-Path $HomeDir 'data\backend.json'
 
 function Test-Health([string]$BaseUrl) {
     try { return ((Invoke-RestMethod -Uri "$BaseUrl/api/health" -TimeoutSec 2).status -eq 'ok') } catch { return $false }

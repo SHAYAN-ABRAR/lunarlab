@@ -151,6 +151,22 @@ def test_apply_best_creates_normal_testable_runs():
         assert cfg.reward.potential.alpha == pytest.approx(best["params"]["reward.potential.alpha"])
         assert cfg.ppo.n_envs == 2  # the study's base settings carry over
         assert "tuning" not in load_metadata(rid)
+        selection = load_metadata(rid)["selection"]
+        assert selection["study_id"] == spec["study_id"] and selection["test_set_previously_exposed"] is False
+
+
+def test_a_study_started_after_a_final_test_on_the_same_seeds_is_exploratory():
+    from lunarlab.config import EvalProtocol
+    from lunarlab.lineage import evidence_role, record_test_exposure
+    from lunarlab.tuning import create_study
+
+    assert (
+        create_study(name="before", n_trials=1, trial_transitions=512)["test_set_previously_exposed"] is False
+    )
+    record_test_exposure(EvalProtocol(), "20261015-000000-baseline-s0-standard-aaaa", "test-x.json")
+    after = create_study(name="after", n_trials=1, trial_transitions=512)
+    assert after["test_set_previously_exposed"] is True and after["test_exposure"]["run_id"].endswith("aaaa")
+    assert evidence_role({"selection": {"test_set_previously_exposed": True}}) == "exploratory"
 
 
 def test_tuning_api():

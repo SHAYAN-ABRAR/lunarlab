@@ -150,6 +150,10 @@ def light_summary(s: dict) -> dict:
         "latest_validation",
         "latest_test",
         "frozen_for_test",
+        "test_status",
+        "evidence_role",
+        "resume",
+        "protocol_valid",
         "protocol_hash",
         "algo",
         "gamma",
@@ -401,14 +405,24 @@ def run_detail(run_id: str, request: Request) -> dict:
     meta = load_metadata(run_id)
     run_jobs = [j for j in db(request).list_jobs(limit=500) if j["run_id"] == run_id][:20]
     recs = [r for r in list_recordings() if r.get("run_id") == run_id]
+    from lunarlab.continuation import describe_entry
+    from lunarlab.freeze import test_status
+
+    manifest = read_manifest(paths)
+    for c in manifest.get("checkpoints", []):
+        c["usable_as"] = describe_entry(c, cfg.algo)["role"]
+    from lunarlab.lineage import PRESERVED, RESET
+
     return {
         "summary": cached_summary(run_id),
+        "test_status": test_status(run_id),
+        "warm_restart": {"preserved": PRESERVED[cfg.algo], "reset": RESET[cfg.algo]},
         "config": cfg.model_dump(mode="json"),
         "config_hash": cfg.config_hash(),
         "rollout_size": cfg.rollout_size,
         "metadata": meta,
         "status": read_json(paths.status, default={}),
-        "manifest": read_manifest(paths),
+        "manifest": manifest,
         "evaluations": list_evaluations(run_id),
         "jobs": run_jobs,
         "recordings": recs,
@@ -458,9 +472,26 @@ def run_config_file(run_id: str) -> FileResponse:
     return FileResponse(paths.config, media_type="application/x-yaml", filename=f"{run_id}-config.yaml")
 
 
+def _training_allowed(run_id: str) -> None:
+    """Early, user-facing refusals; the worker checks again under the run lock before training."""
+    meta = load_metadata(run_id)
+    frozen = meta.get("frozen_for_test")
+    if frozen:
+        raise HTTPException(
+            409,
+            f"this run is frozen for the final test (since {frozen.get('frozen_at')}): it never trains again "
+            "under the same run ID. A warm restart creates a new run instead; its results on the same test "
+            "seeds are exploratory, not a new held-out test.",
+        )
+    problems = load_config(run_id).eval_protocol.problems()
+    if problems:
+        raise HTTPException(409, "invalid evaluation protocol: " + "; ".join(problems))
+
+
 @router.post("/runs/{run_id}/train")
 def run_train(run_id: str, request: Request, body: S.ResumeRequest | None = None) -> dict:
     _run_or_404(run_id)
+    _training_allowed(run_id)
     if read_manifest(RunPaths(run_id))["checkpoints"]:
         raise HTTPException(409, "run already has checkpoints; use resume")
     return _submit(request, "train", run_id=run_id, key=body.idempotency_key if body else None)
@@ -468,18 +499,40 @@ def run_train(run_id: str, request: Request, body: S.ResumeRequest | None = None
 
 @router.post("/runs/{run_id}/resume")
 def run_resume(run_id: str, body: S.ResumeRequest, request: Request) -> dict:
-    _run_or_404(run_id)
-    try:
-        from lunarlab.runs import resolve_checkpoint
+    from lunarlab.runs import resolve_resume_checkpoint
 
-        _, entry = resolve_checkpoint(run_id, body.checkpoint)
-    except RunError as exc:
-        raise HTTPException(409, str(exc)) from exc
+    _run_or_404(run_id)
+    _training_allowed(run_id)
     if any(c["kind"] == "final" for c in read_manifest(RunPaths(run_id))["checkpoints"]):
         raise HTTPException(409, "run already completed")
+    try:
+        _, entry = resolve_resume_checkpoint(run_id, body.checkpoint, load_config(run_id).algo)
+    except RunError as exc:
+        raise HTTPException(409, str(exc)) from exc
     return _submit(
         request, "resume", run_id=run_id, params={"checkpoint": entry["name"]}, key=body.idempotency_key
     )
+
+
+@router.post("/runs/{run_id}/warm-restart", status_code=201)
+def run_warm_restart(run_id: str, body: S.WarmRestartRequest, request: Request) -> dict:
+    """Create a NEW run from this run's checkpoint (requires ``confirm``); optionally start it."""
+    from lunarlab.lineage import create_warm_restart
+
+    _run_or_404(run_id)
+    if not body.confirm:
+        raise HTTPException(400, "a warm restart creates a new run; confirm it explicitly (confirm: true)")
+    with _create_lock:
+        try:
+            child = create_warm_restart(run_id, body.checkpoint, confirm=True, label=body.label)
+        except RunError as exc:
+            raise HTTPException(409, str(exc)) from exc
+        job = _submit(request, "train", run_id=child.run_id, key=body.idempotency_key) if body.start else None
+    return {
+        "run": light_summary(cached_summary(child.run_id)),
+        "lineage": load_metadata(child.run_id)["lineage"],
+        "job": job,
+    }
 
 
 @router.post("/runs/{run_id}/stop")

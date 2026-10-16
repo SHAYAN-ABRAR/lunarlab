@@ -28,7 +28,9 @@ Set-StrictMode -Version Latest
 
 $Root = Split-Path -Parent $PSScriptRoot
 $VenvPython = Join-Path $Root '.venv\Scripts\python.exe'
-$Data = Join-Path $Root 'data'
+# The server keeps its data (and backend.json) under LUNARLAB_HOME when that is set, the project folder otherwise.
+$HomeDir = if ($env:LUNARLAB_HOME) { $env:LUNARLAB_HOME } else { $Root }
+$Data = Join-Path $HomeDir 'data'
 $Url = "http://127.0.0.1:$Port"
 
 function Fail([string]$Message) { Write-Host "ERROR: $Message" -ForegroundColor Red; exit 1 }

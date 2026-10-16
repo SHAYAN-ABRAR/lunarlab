@@ -292,10 +292,22 @@ export default function Compare() {
         .filter((d) => d.evaluation)
         .map((d) => {
           const e = d.evaluation!
+          const v2 = (e.outcome_classifier_version ?? 1) >= 2
+          // Classifier v2 keeps where the lander came to rest apart from how well it landed. Older results
+          // use categories derived from their stored episode fields (marked †); without those, only the
+          // undivided "at rest, not strict pad" remainder is shown.
+          const src = v2
+            ? { onpad: e.on_pad_not_strict_rate, off: e.landed_not_within_pad_rate, body: e.at_rest_after_body_contact_rate, unk: e.at_rest_geometry_unknown_rate }
+            : e.derived_v2
+              ? { onpad: e.derived_v2.on_pad_not_strict_rate, off: e.derived_v2.landed_not_within_pad_rate, body: e.derived_v2.at_rest_after_body_contact_rate, unk: e.derived_v2.at_rest_geometry_unknown_rate }
+              : null
           return {
-            name: `${shortName(d.reward_name)} · s${d.seed}`,
+            name: `${shortName(d.reward_name)} · s${d.seed}${v2 ? '' : ' †'}`,
             pad: e.pad_landing_rate,
-            off: Math.max(0, e.env_success_rate - e.pad_landing_rate),
+            onpad: src ? (src.onpad ?? 0) : 0,
+            off: src ? (src.off ?? 0) : 0,
+            body: src ? (src.body ?? 0) : 0,
+            rest: src ? (src.unk ?? 0) : Math.max(0, e.env_success_rate - e.pad_landing_rate),
             crash: e.crash_rate,
             oob: e.out_of_bounds_rate,
             timeout: e.timeout_rate,
@@ -511,13 +523,22 @@ export default function Compare() {
                 rows={outcomeRows}
                 parts={[
                   { key: 'pad', label: 'Strict pad landing', color: '#3987e5' },
-                  { key: 'off', label: 'At rest, not strict pad', color: '#199e70' },
+                  { key: 'onpad', label: 'On pad, not strict', color: '#5bb8c9' },
+                  { key: 'off', label: 'Landed off pad', color: '#199e70' },
+                  { key: 'body', label: 'At rest after body contact', color: '#b07aa1' },
+                  { key: 'rest', label: 'At rest, other', color: '#8494a8' },
                   { key: 'crash', label: 'Crash', color: '#d95926' },
                   { key: 'oob', label: 'Out of bounds', color: '#9085e9' },
                   { key: 'timeout', label: 'Time limit', color: '#c98500' },
                 ]}
               />
-              <p className="mt-2 text-xs text-ink-3">“At rest” is the environment’s own success signal (+100); strict pad landing additionally requires both legs between the flags, no body contact and an upright finish.</p>
+              <p className="mt-2 text-xs text-ink-3">
+                “At rest” is the environment’s own success signal (+100). A strict pad landing additionally requires both legs between the flags, no body contact, leg contact
+                seen and an upright finish; “on pad, not strict” came to rest between the flags but failed the angle or contact criterion, “landed off pad” is not wholly between
+                them (beside the pad or straddling its edge).
+                {outcomeRows.some((r) => r.name.endsWith('†')) &&
+                  ' † Evaluated with outcome classifier v1: the stored results are unchanged and these categories are derived from their episode fields (v1 did not store leg positions).'}
+              </p>
             </Card>
           </div>
 
