@@ -91,7 +91,7 @@ else {
         }
     }
     if (-not $created) {
-        Fail ("No Python 3.12 or 3.13 found. Install one of them (python.org installer, or `uv python install 3.12`) " +
+        Fail ("No Python 3.12 or 3.13 found. Install one of them (python.org installer, or 'uv python install 3.12') " +
               "and run this script again. Python 3.14 is not supported yet: Box2D and pygame have no Windows wheels for it.")
     }
 }

@@ -10,6 +10,7 @@ Most tests inject the failure (any OS); the ``real_process`` tests use a second 
 from __future__ import annotations
 
 import os
+import shutil
 import subprocess
 import sys
 import time
@@ -258,15 +259,37 @@ def test_atomic_json_write_keeps_the_old_file_when_the_replace_fails(tmp_path, m
 @windows_only
 def test_powershell_scripts_parse():
     root = Path(__file__).resolve().parent.parent
+    # Windows PowerShell 5.1, and PowerShell 7 when it is installed (CI parses with 7 as well).
+    shells = ["powershell"] + (["pwsh"] if shutil.which("pwsh") else [])
+    for shell in shells:
+        for script in sorted((root / "scripts").glob("*.ps1")):
+            cmd = (
+                "$errs = $null; [System.Management.Automation.Language.Parser]::ParseFile("
+                f"'{script}', [ref]$null, [ref]$errs) | Out-Null; if ($errs.Count) {{ $errs | ForEach-Object {{ $_.Message }}; exit 1 }}"
+            )
+            res = subprocess.run(
+                [shell, "-NoProfile", "-NonInteractive", "-Command", cmd], capture_output=True, text=True
+            )
+            assert res.returncode == 0, f"{shell} {script.name}: {res.stdout} {res.stderr}"
+
+
+@windows_only
+def test_powershell_scripts_avoid_escapes_that_powershell_7_reads_differently():
+    # Windows PowerShell 5.1 reads `u and `e in double-quoted strings as plain letters; PowerShell 7 reads them as
+    # Unicode and escape-character sequences, and a malformed `u is a parse error there (the whole script fails).
+    root = Path(__file__).resolve().parent.parent
     for script in sorted((root / "scripts").glob("*.ps1")):
         cmd = (
-            "$errs = $null; [System.Management.Automation.Language.Parser]::ParseFile("
-            f"'{script}', [ref]$null, [ref]$errs) | Out-Null; if ($errs.Count) {{ $errs | ForEach-Object {{ $_.Message }}; exit 1 }}"
+            "$tokens = $null; $errs = $null; [System.Management.Automation.Language.Parser]::ParseFile("
+            f"'{script}', [ref]$tokens, [ref]$errs) | Out-Null; "
+            "$tokens | Where-Object { $_.Kind -like '*Expandable' -and $_.Text -cmatch '`[ue]' } | "
+            "ForEach-Object { 'line ' + $_.Extent.StartLineNumber + ': ' + $_.Text }"
         )
         res = subprocess.run(
             ["powershell", "-NoProfile", "-NonInteractive", "-Command", cmd], capture_output=True, text=True
         )
-        assert res.returncode == 0, f"{script.name}: {res.stdout} {res.stderr}"
+        assert res.returncode == 0, f"{script.name}: {res.stderr}"
+        assert res.stdout.strip() == "", f"{script.name}: {res.stdout}"
 
 
 @pytest.mark.slow

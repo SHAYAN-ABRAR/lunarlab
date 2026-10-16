@@ -126,7 +126,7 @@ none of them affected the published results: no number above changed
 - **Engineering:** a local job supervisor (owned worker processes, cooperative stop at safe boundaries,
   resume with lineage, crash reconciliation), parallel experiment runs, weights-only model loading, loopback
   binding and strict request validation, crash-safe checkpoint bundles with full DQN continuation (replay
-  buffer included), 269 Python tests and 15 browser flows, Linux and Windows CI, and a static demo build
+  buffer included), 270 Python tests and 15 browser flows, Linux and Windows CI, and a static demo build
   whose snapshots record their exact provenance.
 
 ## Requirements
@@ -299,7 +299,7 @@ a 64×64 MLP are about 150 KB each; a DQN replay file with the default 50k buffe
 ## Tests
 
 ```powershell
-.venv\Scripts\python.exe -m pytest                       # 269 tests: unit, integration, real PPO/DQN, subprocesses
+.venv\Scripts\python.exe -m pytest                       # 270 tests: unit, integration, real PPO/DQN, subprocesses
 .venv\Scripts\python.exe -m ruff check lunarlab tests
 cd frontend; npm run typecheck; npm run lint; npm run build
 npx playwright test                                      # 15 browser flows on real backends (uses installed Edge)

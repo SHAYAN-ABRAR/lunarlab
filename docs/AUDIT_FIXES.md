@@ -189,12 +189,17 @@ Windows because it looks for torch on PyTorch's own index), runs `lunarlab docto
 H.264 encoding, SQLite, torch), the Windows-sensitive tests with temporary paths containing spaces, a PowerShell
 parse of every script, and `start.ps1` / `stop.ps1` against Windows PowerShell 5.1.
 
-**Windows workflow added: yes. Executed on GitHub: no** (nothing was pushed). Every step was executed locally on
-Windows 11 instead: a fresh virtual environment in a folder whose path contains spaces, `doctor` 10/10, the job's
-test selection (125 passed), the script parse, and start → health → stop on port 8799 with an isolated home.
-`tests/test_windows.py`: 8 passed locally (fault-injected locks, a real second process holding a destination
+**Windows workflow added: yes.** Before the push, every step was executed locally on Windows 11: a fresh virtual
+environment in a folder whose path contains spaces, `doctor` 10/10, the job's test selection (125 passed), the
+script parse (Windows PowerShell 5.1), and start → health → stop on port 8799 with an isolated home.
+`tests/test_windows.py`: 9 passed locally (fault-injected locks, a real second process holding a destination
 file, a failed bundle save registering nothing, the read-only frozen artifact, a second process holding the run
-lock, atomic JSON replacement, stop/resume and final test under a path with spaces).
+lock, atomic JSON replacement, stop/resume and final test under a path with spaces, the script parse, escape
+sequences that PowerShell 7 reads differently).
+
+**First run on GitHub** (commit `938ad31`): install, `doctor` and the job's tests (126 passed) succeeded; the
+PowerShell 7 parse step failed on a defect in `scripts/setup.ps1` that dates from the first commit and that the
+local 5.1 parse could not see (table below), so the start/stop step did not run. Fixed in the following commit.
 
 ## 6. Provenance (audit §8): confirmed, improved
 
@@ -237,6 +242,7 @@ No number was changed. RESULTS.md has a dated correction section for the outcome
 | The e2e home could not be deleted once it contained a read-only frozen artifact | cleanup clears the read-only flag |
 | `reclassify-outcomes` ignored `--run-ids` together with `--experiment-ids` | both combined |
 | `start.ps1` / `stop.ps1` used the project folder's `data\` for `backend.log` and `backend.json` even when `LUNARLAB_HOME` pointed elsewhere (found when a launch test with an isolated home overwrote the project's one-line `backend.log`; restored byte-for-byte, SHA-256 verified) | both scripts use `LUNARLAB_HOME\data` when it is set |
+| `scripts/setup.ps1` wrapped a command in Markdown backticks inside a double-quoted string. Windows PowerShell 5.1 silently dropped them; PowerShell 7 reads `` `u `` as the start of a Unicode escape, so the whole script failed to parse there (found by the new Windows CI job) | single quotes; the parse test also uses `pwsh` when installed, and a new test flags `` `u `` and `` `e `` in double-quoted strings with the 5.1 tokenizer |
 
 ## Protection of existing evidence
 
@@ -255,5 +261,6 @@ evaluation files, trajectories or recordings were modified, and no migration was
 
 See the final section of [MIGRATION.md](MIGRATION.md) for the commands. Executed: full `pytest`, `ruff check`,
 `ruff format --check`, `npm run typecheck`, `npm run lint`, `npm run build`, Playwright (15 flows including the
-5 new audit flows), the Windows job's steps locally. Not executed: the GitHub-hosted Windows job and the Linux CI
-run of the new tests (both run on the next push).
+5 new audit flows), the Windows job's steps locally. On GitHub (commit `938ad31`): the Linux jobs (lint and all
+tests, frontend, browser end-to-end) and the demo deployment passed; the Windows job's first run found the
+`setup.ps1` defect above.

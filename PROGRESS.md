@@ -38,14 +38,14 @@ fix) and documented in [docs/AUDIT_FIXES.md](docs/AUDIT_FIXES.md); release and m
 - **Wording:** no equivalence claims from overlapping intervals; what shaping theory does and does not cover;
   degenerate P(improvement) explained; learned-reward pipeline described accurately.
 
-| Check (2026-10-17, branch `audit-fixes`) | Result |
+| Check (2026-10-17) | Result |
 |---|---|
-| `python -m pytest` | **269 passed** (204 earlier + 65 new) |
+| `python -m pytest` | **270 passed** (204 earlier + 66 new) |
 | `ruff check lunarlab tests` / `ruff format --check lunarlab tests` | clean |
 | `npm run typecheck` / `npm run lint` / `npm run build` | clean / clean / OK |
 | `npx playwright test` | **15 passed** (10 earlier flows + 5 audit flows on a pre-built fixture home) |
 | Windows CI job's steps, run locally on Windows 11 (fresh venv in a path with spaces) | doctor 10/10; 125 tests passed; scripts parse; start → health → stop OK |
-| Windows CI job on GitHub | **not run** (nothing pushed) |
+| CI on GitHub, commit `938ad31` | Linux: lint and all tests, frontend, browser end-to-end (15 flows) passed; demo deployed. Windows: install, doctor and 126 tests passed; the PowerShell 7 parse found a defect in `scripts/setup.ps1` from the first commit (fixed in the next commit, see docs/AUDIT_FIXES.md) |
 | Evidence integrity (1,665 files under runs/, data/, reports/, docs/results/, docs/media/, demo/api/) | all byte-identical before/after (combined SHA-256 `91ca8609…737f`); 2 derived report files added |
 
 ## Portfolio extensions (2026-10-15/16)
