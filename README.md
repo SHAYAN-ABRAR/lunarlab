@@ -252,22 +252,5 @@ cd frontend; npm run typecheck; npm run lint; npm run build
 npx playwright test                                      # 10 browser flows on real backend (uses installed Edge)
 ```
 
-## Credits
 
-- Inspired by the reward-shaping article by **Hari (@harixganesh)**.
-- [Gymnasium](https://gymnasium.farama.org/) (Farama Foundation): `LunarLander-v3`, Box2D, rendering.
-- [Stable-Baselines3](https://stable-baselines3.readthedocs.io/) (DLR-RM): PPO and DQN, and
-  [RL Baselines3 Zoo](https://github.com/DLR-RM/rl-baselines3-zoo) for reference hyperparameters.
-- Schulman et al., *Proximal Policy Optimization Algorithms*, 2017.
-- Ng, Harada & Russell, *Policy invariance under reward transformations: Theory and application to reward
-  shaping*, ICML 1999.
-- Mnih et al., *Human-level control through deep reinforcement learning*, Nature 2015 (DQN).
-- Christiano et al., *Deep reinforcement learning from human preferences*, NeurIPS 2017.
-- Agarwal et al., *Deep Reinforcement Learning at the Edge of the Statistical Precipice*, NeurIPS 2021.
-- Tobin et al., *Domain Randomization for Transferring Deep Neural Networks from Simulation to the Real
-  World*, IROS 2017.
-- Akiba et al., *Optuna: A Next-generation Hyperparameter Optimization Framework*, KDD 2019.
-- PyTorch, NumPy, pandas, Matplotlib, Optuna, imageio/ffmpeg, FastAPI, Pydantic, React, Vite, Tailwind CSS,
-  Recharts, three.js, Lucide, IBM Plex.
-
-This is a 2-D simulation benchmark. Nothing here is evidence of real-world rocket-control capability.
+This is a 2D/3D simulation benchmark. Nothing here is evidence of real-world rocket-control capability.
