@@ -134,3 +134,52 @@ def test_atomic_json_roundtrip(tmp_path):
     atomic_write_json(p, {"a": np.float32(1.5), "b": [np.int64(2)]})
     assert read_json(p) == {"a": 1.5, "b": [2]}
     assert not list(tmp_path.glob("*.tmp"))
+
+
+def test_csv_appender_keeps_an_existing_files_header(tmp_path):
+    """Regression: a run resumed by code that logs an extra column must not misalign episodes.csv."""
+    import pandas as pd
+
+    from lunarlab.storage import CsvAppender
+
+    path = tmp_path / "episodes.csv"
+    older = CsvAppender(path, ["episode", "a", "c"])
+    older.add({"episode": 0, "a": 1, "c": 3})
+    older.flush()
+    newer = CsvAppender(path, ["episode", "a", "b", "c"])  # newer layout: a column in the middle
+    newer.add({"episode": 1, "a": 1, "b": 2, "c": 3})
+    newer.flush()
+    df = pd.read_csv(path)
+    assert list(df.columns) == ["episode", "a", "c"]
+    assert df["episode"].tolist() == [0, 1] and df["c"].tolist() == [3, 3]
+
+
+def test_mixed_width_episode_log_is_recovered_without_rewriting_it(tmp_path):
+    """Files written before that fix: rows after the resume have the newer layout under the older header."""
+    import csv
+
+    import pandas as pd
+
+    from lunarlab.compare import _read_mixed_episodes
+    from lunarlab.training import EPISODE_FIELDS
+
+    assert "term_learned_reward" in EPISODE_FIELDS
+    older = [f for f in EPISODE_FIELDS if f != "term_learned_reward"]
+
+    def row(fields):  # each column holds its position in the current layout, so misalignment shows
+        return ["landed" if f == "env_outcome" else EPISODE_FIELDS.index(f) for f in fields]
+
+    path = tmp_path / "episodes.csv"
+    with open(path, "w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        w.writerows([older, row(older), row(older), row(EPISODE_FIELDS)])
+    before = path.read_bytes()
+    with pytest.raises(pd.errors.ParserError):
+        pd.read_csv(path)
+
+    df = _read_mixed_episodes(path)
+    assert len(df) == 3 and path.read_bytes() == before
+    for f in older:
+        expected = "landed" if f == "env_outcome" else EPISODE_FIELDS.index(f)
+        assert df[f].tolist() == [expected] * 3, f
+    assert df["term_learned_reward"].isna().tolist() == [True, True, False]

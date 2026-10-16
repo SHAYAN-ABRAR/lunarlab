@@ -1,4 +1,4 @@
-_Generated 2026-10-15T20:50:40+00:00 by `python -m lunarlab results` from stored final-test evaluations (100 held-out episode seeds per policy, frozen validation-selected checkpoints, original reward)._
+_Generated 2026-10-16T13:59:14+00:00 by `python -m lunarlab results` from stored final-test evaluations (100 held-out episode seeds per policy, frozen validation-selected checkpoints, original reward)._
 
 ### Aggregate per group
 

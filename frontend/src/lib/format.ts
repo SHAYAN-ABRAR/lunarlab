@@ -1,7 +1,8 @@
 export const fmt = {
   num(v: number | null | undefined, digits = 1): string {
     if (v === null || v === undefined || Number.isNaN(v)) return '—'
-    return v.toLocaleString(undefined, { minimumFractionDigits: digits, maximumFractionDigits: digits })
+    const s = v.toLocaleString(undefined, { minimumFractionDigits: digits, maximumFractionDigits: digits })
+    return /^-0([.,]0+)?$/.test(s) ? s.slice(1) : s // −0.4 rounds to "0", not "-0"
   },
   signed(v: number | null | undefined, digits = 1): string {
     if (v === null || v === undefined || Number.isNaN(v)) return '—'

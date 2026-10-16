@@ -45,6 +45,24 @@ def bootstrap_ci(values, stat=iqm, *, reps: int = BOOTSTRAP_REPS, level: float =
     return [float(lo), float(hi)]
 
 
+def bootstrap_difference_ci(
+    x, y, stat=np.mean, *, reps: int = BOOTSTRAP_REPS, level: float = 0.95, seed: int = 0
+):
+    """Interval for stat(X) - stat(Y) between two independent groups of runs, resampling each group's
+    runs separately."""
+    x = np.asarray(x, dtype=float)
+    y = np.asarray(y, dtype=float)
+    if x.size < 2 or y.size < 2:
+        return None
+    rng = np.random.default_rng(seed)
+    d = [
+        stat(x[rng.integers(0, x.size, x.size)]) - stat(y[rng.integers(0, y.size, y.size)])
+        for _ in range(reps)
+    ]
+    lo, hi = np.quantile(d, [(1 - level) / 2, 1 - (1 - level) / 2])
+    return [float(lo), float(hi)]
+
+
 def probability_of_improvement(x, y) -> float | None:
     """P(X > Y) + 0.5 P(X = Y) over all pairs of runs (Mann–Whitney U / (n·m))."""
     x = np.asarray(x, dtype=float)

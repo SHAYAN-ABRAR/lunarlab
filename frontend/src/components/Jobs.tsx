@@ -15,6 +15,8 @@ const KIND_LABEL: Record<Job['kind'], string> = {
   record_demo: 'Demo recording',
   report: 'Report',
   benchmark: 'Throughput benchmark',
+  reward_ensemble: 'Reward-model ensemble',
+  tune: 'Tuning study',
 }
 
 export const FINAL_JOB_STATES = ['stopped', 'completed', 'failed', 'interrupted']

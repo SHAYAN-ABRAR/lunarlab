@@ -65,11 +65,12 @@ let labels = 0
 
 /** The demo counterpart of one API request. Errors carry .status like ApiError (wrapped by the caller). */
 export async function demoRequest<T>(method: string, path: string, body?: unknown): Promise<T> {
-  const pair = /^\/api\/preferences\/([^/]+)\/pair$/.exec(path)
+  const pair = /^\/api\/preferences\/([^/]+)\/pair(\?.*)?$/.exec(path)
   if (method === 'GET' && pair) {
     const n = (await demoManifest()).preference_pairs[pair[1]] ?? 0
     if (!n) throw Object.assign(new Error('No demo pairs for this dataset.'), { status: 404, detail: null })
-    const p = await file<DemoPair>(`${ROOT}${demoName(path)}-${Math.floor(Math.random() * n)}.json`, 'Missing demo pair.')
+    const base = path.replace(/\?.*$/, '')
+    const p = await file<DemoPair>(`${ROOT}${demoName(base)}-${Math.floor(Math.random() * n)}.json`, 'Missing demo pair.')
     lastPair.set(p.dataset_id, p)
     return p as T
   }

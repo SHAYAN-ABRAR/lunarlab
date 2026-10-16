@@ -35,6 +35,13 @@ the theory promises (no exploitation, same task solved), but its learning curve 
 
 ![Learning curves](results/learning_curves.png)
 
+*Correction (2026-10-16):* the learning-curve figure first published here averaged potential-based shaping over
+4 of its 5 seeds. Seed 1 stopped on a Windows file lock and was resumed by a newer LunarLab that logged one
+more column per episode; the mixed rows made its training log unreadable to the figure code, which skipped it
+without saying so. The log is now read row by row (and a resumed run keeps its log's original columns), so the
+figure includes all five seeds: the mean curve ends at 214 instead of 234. Final-test results come from
+evaluations, not training logs, and are unchanged, as is the conclusion above.
+
 **3. Learning a reward from preferences works, if there are enough labels.** Reward models were fitted to
 pairwise preferences between 40-step flight segments (1,115 segments from random, heuristic and PPO policies
 at several training stages; a simulated human prefers the segment with the higher true return, with
@@ -51,6 +58,15 @@ their learned (proxy) return rose from about 0 to 118–145 during training whil
 around −390 (they crash or fly out of bounds). Both reward models rank segments similarly well; what differs
 is how well the per-step signal holds up where the policy goes, which the next figure shows.
 
+*Correction (2026-10-16):* the reward models above were validated on a split by **segment**, so overlapping
+windows of one episode could sit on both sides and flatter the validation metrics (their training data was not
+affected: no human labels were used). Validation is now split by whole episode. Re-fitting the same two
+configurations on the same dataset with the episode split gives accuracy vs true order **0.685** (300 labels)
+and **0.780** (3,000 labels), one refit each (`python -m lunarlab reward-model --dataset-id
+ds-20261015-235812-rlhf-5029 --pairs 300`, or `--pairs 3000`; deterministic). They are measured on 200 and 595
+validation pairs, standard errors of about 0.03 and 0.02, so neither difference from the table is conclusive.
+The PPO results are evaluations on the environment and are unaffected.
+
 ![Learned reward: proxy vs true return](results/learned_reward.png)
 
 **4. Every policy degrades in wind it never saw; reward design barely changes that.** Mean original return of
@@ -66,9 +82,33 @@ PPO's 250–273 at 1M transitions. The comparison is between each algorithm at i
 equal experience. One difference is worth a hypothesis: the hover bonus hurt DQN much less (IQM 109.6; one
 policy landed in 84% of episodes). DQN discounts with γ = 0.99, PPO with γ = 0.999: a 900-step hover is
 worth about 100 bonus units at γ = 0.99 and about 594 at γ = 0.999 (the Reward Studio calculator shows the
-same arithmetic). Budget and algorithm also differ, so this experiment does not isolate γ.
+same arithmetic). Budget and algorithm also differ, so this experiment does not isolate γ. The
+discount-factor ablation added since (both algorithms at both discount factors, matched budgets; commands
+below) is built to isolate it. It has not been run yet.
 
 ![Performance profiles](results/performance_profiles.png)
+
+**6. Choosing labels by ensemble disagreement did not beat choosing them at random.** On the same 1,115
+segments and simulated human as finding 3, reward-model ensembles (5 bootstrap members) started from 100
+random labels and received 100 more per round, chosen either at random or as the pairs the ensemble disagreed
+on most (largest spread of the members' P(A ≻ B) among 2,000 random candidate pairs). Five seeds per strategy;
+each seed's initial labels are shared by both strategies. Accuracy against the true order on pairs from
+held-out episodes, mean over seeds (min–max over seeds):
+
+| Labels | Random | Disagreement |
+|---:|---:|---:|
+| 100 | 0.651 (0.599–0.696) | same labels |
+| 200 | 0.729 (0.701–0.751) | 0.721 (0.712–0.736) |
+| 400 | 0.747 (0.731–0.784) | 0.724 (0.681–0.766) |
+| 700 | 0.757 (0.741–0.771) | 0.737 (0.710–0.784) |
+| 1,000 | 0.755 (0.714–0.789) | 0.750 (0.732–0.781) |
+
+Random selection was ahead at every count after the first round, by 0.005–0.023, always within the spread
+between seeds: in this setup, active selection did not save labels. One possible reason, not tested here: the
+simulated human is noisiest on pairs with close returns, which are also the pairs an ensemble disagrees on.
+Reward-model accuracy only; no PPO policy was trained on these ensembles (study
+`al-20261016-132738-active-3c64`, `python -m lunarlab rlhf-active --dataset-id ds-20261015-235812-rlhf-5029
+--seeds 0,1,2,3,4`).
 
 ## Aggregate results
 
@@ -133,3 +173,31 @@ from the recorded telemetry by `frontend/tools/capture3d.mjs` and composed with 
 
 Training is deterministic for a given seed on the same machine and library versions; across machines, small
 numerical differences change individual runs, so expect the same picture rather than the same digits.
+
+## Studies built but not yet run
+
+These features were verified with small smoke experiments (technical tests whose numbers mean nothing); the
+studies below would produce findings, and none of their results exist yet. Times are rough, for the
+development laptop.
+
+```powershell
+# PPO vs DQN at matched budgets, crossed with the discount factor (the 2 x 2 ablation behind finding 5's
+# hypothesis): 2 rewards x 4 variants x 5 seeds = 40 runs of 303,104 transitions each. DQN ran at 48-98
+# transitions/s per run in the published experiment, so a DQN run takes about 1-1.75 h: roughly 4-7 h with 6 in parallel.
+.venv\Scripts\python.exe -m lunarlab suite --presets baseline,hover-bonus --algos ppo,dqn --gammas 0.99,0.999 --seeds 0,1,2,3,4 --total-transitions 300000 --name gamma-ablation --parallel 6 --yes
+.venv\Scripts\python.exe -m lunarlab compare --experiment-id <id>      # ablation table; results draws algorithm_comparison.png
+
+# Fixed vs randomized training physics, evaluated calm and windy: 20 PPO runs at 1M (~1.5 h with 5 in parallel).
+.venv\Scripts\python.exe -m lunarlab suite --presets baseline,potential --physics both --seeds 0,1,2,3,4 --profile standard --name physics-study --parallel 5 --yes
+.venv\Scripts\python.exe -m lunarlab robustness --experiment-id <id> --parallel 8
+
+# Active vs random labels, carried through to PPO: 6 ensembles, then 12 PPO runs at 1M on them (the published
+# learned-reward runs took ~20 min each with 6 in parallel; 5-member ensembles cost more per step).
+.venv\Scripts\python.exe -m lunarlab rlhf-active --dataset-id ds-20261015-235812-rlhf-5029 --seeds 0,1,2 --register
+.venv\Scripts\python.exe -m lunarlab rlhf-study --reward-models <the 6 printed ids> --seeds 0,1 --parallel 6
+
+# Tuning on validation, then fresh runs of the best settings for the final test. 30 trials of 303,104
+# transitions, one at a time: up to ~3 h, less when trials are pruned.
+.venv\Scripts\python.exe -m lunarlab tune --algo ppo --preset potential --trials 30 --transitions 300000 --name potential-tuning
+.venv\Scripts\python.exe -m lunarlab tune-apply --study-id <id> --seeds 0,1,2,3,4 --profile standard --parallel 5
+```

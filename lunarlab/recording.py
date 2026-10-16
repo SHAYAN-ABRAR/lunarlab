@@ -243,8 +243,9 @@ class EpisodeRecorder:
             "truncated": False,
         }
 
-    def step(self, action: int) -> dict:
-        """Apply one action; returns the new telemetry row."""
+    def step(self, action: int, policy_info: dict | None = None) -> dict:
+        """Apply one action; returns the new telemetry row. ``policy_info`` (what the policy computed on
+        the observation it acted on) is stored in the row as ``policy``."""
         if self.done:
             raise RecordingError("episode already ended")
         try:
@@ -253,10 +254,13 @@ class EpisodeRecorder:
         except BaseException:
             self.abort()
             raise
+        row = self.env.steps[-1]
+        if policy_info is not None:
+            row["policy"] = policy_info
         if terminated or truncated:
             self.done = True
             self.episode = info["lunarlab_episode"]
-        return self.env.steps[-1]
+        return row
 
     def finish(self) -> dict:
         """Close and verify the video, write telemetry + summary. Returns the summary."""
@@ -298,6 +302,7 @@ class EpisodeRecorder:
             "environment": environment_record(),
             "video": {"format": self.sink.format, "file": self.sink.path.name, **check},
             "episode": self.episode,
+            **({"policy_diagnostics": _diagnostics_note(steps)} if any("policy" in r for r in steps) else {}),
             "rows": [self.row0(), *steps],
         }
         atomic_write_json(self.out_dir / f"{self.recording_id}.json", telemetry)
@@ -311,6 +316,25 @@ class EpisodeRecorder:
             self.sink.abort()
         with contextlib.suppress(Exception):
             self.env.close()
+
+
+def _diagnostics_note(steps: list[dict]) -> dict:
+    first = next(r["policy"] for r in steps if "policy" in r)
+    if "q" in first:
+        fields = {
+            "q": "action values Q(s, a) for NOOP, LEFT, MAIN, RIGHT (the greedy action has the largest)"
+        }
+    else:
+        fields = {
+            "probs": "action probabilities for NOOP, LEFT, MAIN, RIGHT",
+            "entropy": "entropy of that distribution in nats (uniform over 4 actions: ln 4 = 1.386)",
+            "value": "the critic's state value V(s): expected discounted return of the TRAINING reward",
+        }
+    return {
+        "fields": fields,
+        "indexing": "row k holds what the network computed on the observation of frame k-1, the one row k's "
+        "action was chosen from",
+    }
 
 
 def record_episode(
@@ -338,10 +362,12 @@ def record_episode(
         source=source,
         prefer=prefer,
     )
+    diagnostics = getattr(policy, "diagnostics", None)  # trained SB3 policies only
     try:
         policy.reset(int(episode_seed))
         while not rec.done:
-            rec.step(policy.act(rec.obs))
+            info = diagnostics(rec.obs) if diagnostics else None
+            rec.step(policy.act(rec.obs), policy_info=info)
     except BaseException:
         rec.abort()
         raise

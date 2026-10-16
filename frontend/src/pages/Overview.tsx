@@ -23,7 +23,7 @@ interface OverviewData {
 type StepState = 'done' | 'active' | 'todo'
 
 function presetStatus(preset: Preset, runs: RunSummary[], jobs: Job[]) {
-  const mine = runs.filter((r) => r.reward_preset === preset && (r.algo ?? 'ppo') === 'ppo')
+  const mine = runs.filter((r) => r.reward_preset === preset && (r.algo ?? 'ppo') === 'ppo' && !r.variant)
   const real = mine.filter((r) => r.profile !== 'smoke')
   const training = mine.some((r) => r.state === 'running') || jobs.some((j) => mine.some((r) => r.run_id === j.run_id) && (j.kind === 'train' || j.kind === 'resume'))
   const evaluated = real.filter((r) => r.latest_test || r.latest_validation)

@@ -71,6 +71,9 @@ export interface RunSummary {
   frozen_for_test: { checkpoint: string; frozen_at: string } | null
   protocol_hash: string
   algo?: 'ppo' | 'dqn'
+  gamma?: number
+  variant?: string
+  physics_label?: string
   validation_history?: ValidationPoint[]
 }
 
@@ -83,7 +86,7 @@ export interface ValidationPoint extends EvalSummary {
 
 export interface Job {
   id: string
-  kind: 'train' | 'resume' | 'evaluate' | 'record' | 'record_demo' | 'report' | 'benchmark'
+  kind: 'train' | 'resume' | 'evaluate' | 'record' | 'record_demo' | 'report' | 'benchmark' | 'reward_ensemble' | 'tune'
   lane: string
   run_id: string | null
   params: Record<string, unknown> | null
@@ -127,6 +130,7 @@ export interface RunStatus {
 export interface CurvePoint {
   episode: number
   transitions: number
+  elapsed_s?: number | null
   original_return: number
   training_return: number
   length: number
@@ -170,9 +174,17 @@ export interface RecordingMeta {
   reward_preset: Preset | null
 }
 
+export interface PolicyInfo {
+  probs?: number[]
+  entropy?: number
+  value?: number
+  q?: number[]
+}
+
 export interface TelemetryRow {
   t: number
   action: number | null
+  policy?: PolicyInfo
   obs: number[]
   original_reward: number
   terms: Record<string, number>
@@ -191,6 +203,7 @@ export interface Telemetry extends Omit<RecordingMeta, 'original_return' | 'trai
   reward_config: RewardConfig | null
   terms_note: string
   gamma: number
+  policy_diagnostics?: { fields: Record<string, string>; indexing: string }
   episode: Record<string, unknown> & {
     original_return: number
     training_return: number

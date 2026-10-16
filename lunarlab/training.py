@@ -24,6 +24,7 @@ import signal
 import threading
 import time
 import traceback
+from collections.abc import Callable
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
@@ -33,6 +34,7 @@ import psutil
 
 from lunarlab.config import RunConfig
 from lunarlab.locks import FileLock, LockBusy
+from lunarlab.physics import PHYSICS_FIELDS
 from lunarlab.rewards.config import TERM_KEYS
 from lunarlab.runs import (
     RunError,
@@ -97,16 +99,23 @@ EXIT_COMPLETED, EXIT_FAILED, EXIT_BUSY, EXIT_STOPPED, EXIT_INTERRUPTED = 0, 1, 2
 # --------------------------------------------------------------------------- #
 
 
-def _build_training_env(reward_json: dict, gamma: float, detector_json: dict, pad_json: dict):
+def _build_training_env(
+    reward_json: dict, gamma: float, detector_json: dict, pad_json: dict, physics_json: dict | None = None
+):
     from stable_baselines3.common.monitor import Monitor
 
+    from lunarlab.config import PhysicsRandomization
     from lunarlab.env import make_env
     from lunarlab.hover import HoverThresholds
     from lunarlab.outcomes import PadLandingCriteria
+    from lunarlab.physics import PhysicsRandomizer
     from lunarlab.rewards.config import RewardConfig
     from lunarlab.rewards.wrapper import LunarLabRewardWrapper
 
     env = make_env(render_mode=None)
+    physics = PhysicsRandomization.model_validate(physics_json or {})
+    if physics.enabled:  # per-episode wind / turbulence / gravity, below the reward wrapper
+        env = PhysicsRandomizer(env, physics)
     env = LunarLabRewardWrapper(
         env,
         RewardConfig.model_validate(reward_json),
@@ -128,6 +137,7 @@ def build_vec_env(cfg: RunConfig, kind: str | None = None):
         cfg.gamma,
         cfg.eval_protocol.hover_detector.model_dump(mode="json"),
         cfg.eval_protocol.pad_landing.model_dump(mode="json"),
+        cfg.physics.model_dump(mode="json"),
     )
     fns = [fn for _ in range(cfg.n_envs)]
     if (kind or cfg.training.vec_env) == "subproc":
@@ -208,6 +218,9 @@ class TrainingContext:
     job_id: str | None
     started_at: str
     target: int
+    # Called after every validation with (transitions, mean original return); returning True asks the
+    # run to stop at the next safe boundary (used by tuning to prune or cancel a trial).
+    on_validation: Callable[[int, float], bool] | None = None
 
 
 def _flatten_episode(
@@ -233,6 +246,8 @@ def _flatten_episode(
         row[f"term_{k}"] = round(ep["term_returns"].get(k, 0.0), 5)
     for k, v in ep["actions"].items():
         row[f"a_{k}"] = v
+    for k, v in (ep.get("physics") or {}).items():  # randomized-physics runs only
+        row[k] = int(v) if isinstance(v, bool) else round(float(v), 4)
     return row
 
 
@@ -249,7 +264,8 @@ def _make_callback_class():
             super().__init__(verbose=0)
             self.ctx = ctx
             tc = ctx.cfg.training
-            self.episodes = CsvAppender(ctx.paths.episodes, EPISODE_FIELDS)
+            fields = EPISODE_FIELDS + (list(PHYSICS_FIELDS) if ctx.cfg.physics.enabled else [])
+            self.episodes = CsvAppender(ctx.paths.episodes, fields)
             self.episode_index = first_episode
             self.best_val = best_val
             self.validate_at_start = validate_at_start
@@ -468,6 +484,16 @@ def _make_callback_class():
                         "validation_n_episodes": summary["n_episodes"],
                     },
                 )
+            hook = self.ctx.on_validation
+            if hook is not None and hook(n, mean) and not self.stop_requested:
+                self.stop_requested = True
+                self.stop_reason = "caller"
+                log_event(
+                    self.ctx.paths,
+                    "info",
+                    "stop requested after validation by the caller (tuning)",
+                    transitions=n,
+                )
 
         def write_status(self, force: bool = False, state: str = "running", **extra: Any) -> None:
             now = time.monotonic()
@@ -620,6 +646,7 @@ def train(
     checkpoint: str = "latest",
     job_id: str | None = None,
     quiet: bool = False,
+    on_validation: Callable[[int, float], bool] | None = None,
 ) -> int:
     """Train (or continue) a run. Returns a worker exit code."""
     paths = RunPaths(run_id)
@@ -632,13 +659,39 @@ def train(
         return EXIT_BUSY
     try:
         with _SigintToStop(paths):
-            return _train_locked(cfg, paths, resume=resume, checkpoint=checkpoint, job_id=job_id, quiet=quiet)
+            return _train_locked(
+                cfg,
+                paths,
+                resume=resume,
+                checkpoint=checkpoint,
+                job_id=job_id,
+                quiet=quiet,
+                on_validation=on_validation,
+            )
     finally:
         lock.release()
 
 
+def _parallel_slots() -> int | None:
+    """How many runs the launcher of this process trains at the same time (``--parallel N``, or the app's
+    training lane); None when it was started on its own. Wall-clock times depend on it."""
+    from lunarlab.parallel import PARALLEL_SLOTS_ENV
+
+    try:
+        return max(1, int(os.environ[PARALLEL_SLOTS_ENV]))
+    except (KeyError, ValueError):
+        return None
+
+
 def _train_locked(
-    cfg: RunConfig, paths: RunPaths, *, resume: bool, checkpoint: str, job_id: str | None, quiet: bool
+    cfg: RunConfig,
+    paths: RunPaths,
+    *,
+    resume: bool,
+    checkpoint: str,
+    job_id: str | None,
+    quiet: bool,
+    on_validation: Callable[[int, float], bool] | None = None,
 ) -> int:
     import torch
 
@@ -692,6 +745,7 @@ def _train_locked(
         "vec_env": cfg.training.vec_env,
         "device": device,
         "torch_threads": cfg.training.torch_threads,
+        "parallel_slots": _parallel_slots(),
         "end_state": None,
     }
     segments.append(seg_record)
@@ -727,7 +781,13 @@ def _train_locked(
             best = read_manifest(paths).get("best_validation")
             best_val = best.get("validation_mean_original_return") if best else None
         ctx = TrainingContext(
-            cfg=cfg, paths=paths, segment=segment, job_id=job_id, started_at=started_at, target=target
+            cfg=cfg,
+            paths=paths,
+            segment=segment,
+            job_id=job_id,
+            started_at=started_at,
+            target=target,
+            on_validation=on_validation,
         )
         Callback = _make_callback_class()
         callback = Callback(

@@ -157,6 +157,12 @@ const SERIES_V: ChartSeries[] = [
 ]
 const SERIES_ANGLE: ChartSeries[] = [{ key: 'angle', label: 'angle', color: SERIES.original }]
 const SERIES_W: ChartSeries[] = [{ key: 'w', label: 'angular velocity', color: SERIES.original }]
+const ACTION_COLORS = ['#8494a8', '#3987e5', '#d95926', '#199e70'] // NOOP, LEFT, MAIN, RIGHT
+const SERIES_PROBS: ChartSeries[] = ['noop', 'left', 'main', 'right'].map((k, i) => ({ key: `p_${k}`, label: `P(${k.toUpperCase()})`, color: ACTION_COLORS[i] }))
+const SERIES_Q: ChartSeries[] = ['noop', 'left', 'main', 'right'].map((k, i) => ({ key: `q_${k}`, label: `Q(s, ${k.toUpperCase()})`, color: ACTION_COLORS[i] }))
+const SERIES_ENTROPY: ChartSeries[] = [{ key: 'entropy', label: 'entropy (nats)', color: SERIES.original }]
+const SERIES_VALUE: ChartSeries[] = [{ key: 'value', label: 'V(s)', color: SERIES.shaped }]
+const FMT_PCT = (v: number) => `${Math.round(v * 100)}%`
 const FMT_DEG = (v: number) => `${v.toFixed(0)}°`
 const FMT_0 = (v: number) => v.toFixed(0)
 const FMT_1 = (v: number) => v.toFixed(1)
@@ -260,6 +266,76 @@ function ActionIndicator({ action }: { action: number | null }) {
         ))}
       </div>
       <p className="mt-1 text-[11px] text-ink-3">{action === null ? 'Frame 0 is the reset state: no action yet.' : ACTIONS[action].label}</p>
+    </div>
+  )
+}
+
+/** What the network computed for the decision in this step (PPO: probabilities, entropy, value; DQN: Q-values). */
+function PolicyPanel({ t, row }: { t: Telemetry; row: TelemetryRow }) {
+  const learned = t.policy.kind === 'ppo' || t.policy.kind === 'dqn'
+  if (!learned) return null
+  if (!t.policy_diagnostics)
+    return (
+      <div>
+        <div className="eyebrow mb-1">Policy</div>
+        <p className="text-[11px] text-ink-3">Not recorded for this flight (recorded before LunarLab stored policy diagnostics). Record the run again to see probabilities and values.</p>
+      </div>
+    )
+  const p = row.policy
+  if (!p) return (
+    <div>
+      <div className="eyebrow mb-1">Policy</div>
+      <p className="text-[11px] text-ink-3">Frame 0 is the reset state: the first decision belongs to step 1.</p>
+    </div>
+  )
+  const chosen = row.action ?? -1
+  if (p.q) {
+    const lo = Math.min(...p.q)
+    const hi = Math.max(...p.q)
+    return (
+      <div>
+        <div className="eyebrow mb-1">Policy · action values Q(s, a)</div>
+        <div className="space-y-1">
+          {p.q.map((q, i) => (
+            <div key={i} className="grid grid-cols-[44px_minmax(0,1fr)_64px] items-center gap-2 text-[11.5px]">
+              <span className={clsx('font-mono', i === chosen ? 'text-ink' : 'text-ink-3')}>{ACTIONS[i].short}</span>
+              <div className="h-2 rounded-sm bg-surface-3">
+                <div className="h-2 rounded-sm" style={{ width: `${hi > lo ? 8 + (92 * (q - lo)) / (hi - lo) : 100}%`, background: ACTION_COLORS[i], opacity: i === chosen ? 1 : 0.55 }} />
+              </div>
+              <span className={clsx('num text-right', i === chosen ? 'text-ink' : 'text-ink-2')}>{fmt.num(q, 2)}</span>
+            </div>
+          ))}
+        </div>
+        <p className="mt-1 text-[11px] text-ink-3">
+          Greedy choice: the largest value. Gap to the runner-up: {fmt.num(hi - [...p.q].toSorted((a, b) => b - a)[1], 2)}. Bars span this step’s lowest to highest value, so small gaps look large.
+        </p>
+      </div>
+    )
+  }
+  return (
+    <div>
+      <div className="eyebrow mb-1">Policy · action probabilities</div>
+      <div className="space-y-1">
+        {(p.probs ?? []).map((pr, i) => (
+          <div key={i} className="grid grid-cols-[44px_minmax(0,1fr)_48px] items-center gap-2 text-[11.5px]">
+            <span className={clsx('font-mono', i === chosen ? 'text-ink' : 'text-ink-3')}>{ACTIONS[i].short}</span>
+            <div className="h-2 rounded-sm bg-surface-3">
+              <div className="h-2 rounded-sm" style={{ width: `${Math.max(1, pr * 100)}%`, background: ACTION_COLORS[i], opacity: i === chosen ? 1 : 0.55 }} />
+            </div>
+            <span className={clsx('num text-right', i === chosen ? 'text-ink' : 'text-ink-2')}>{fmt.pct(pr, 1)}</span>
+          </div>
+        ))}
+      </div>
+      <div className="mt-1.5 grid grid-cols-2 gap-3">
+        <div>
+          <div className="text-[11px] text-ink-3" title="ln 4 = 1.386 is a uniform choice; 0 is certain">Entropy (max 1.386)</div>
+          <div className="num text-[13px] text-ink">{fmt.num(p.entropy, 3)}</div>
+        </div>
+        <div>
+          <div className="text-[11px] text-ink-3" title="The critic's estimate of the discounted TRAINING-reward return from here">Value V(s)</div>
+          <div className="num text-[13px] text-ink">{fmt.num(p.value, 1)}</div>
+        </div>
+      </div>
     </div>
   )
 }
@@ -442,10 +518,13 @@ function chartData(t: Telemetry) {
     { key: 'step_original', label: 'original', color: SERIES.original },
     ...termKeys.map((k) => ({ key: `term_${k}`, label: TERM_LABEL[k] ?? k, color: TERM_COLOR[k] ?? '#8494a8', dashed: true })),
   ]
+  const first = t.rows.find((r) => r.policy)?.policy
+  const policyKind: 'ppo' | 'dqn' | null = first ? (first.q ? 'dqn' : 'ppo') : null
   return {
     termKeys,
     cumulativeSeries,
     componentSeries,
+    policyKind,
     rows: t.rows.map((r, i) => {
       const last = i === t.rows.length - 1 && r.terminated
       const d: Record<string, number | null> = {
@@ -460,6 +539,13 @@ function chartData(t: Telemetry) {
         step_original: i === 0 || last ? null : r.original_reward,
       }
       termKeys.forEach((k) => (d[`term_${k}`] = i === 0 ? null : r.terms[k] ?? 0))
+      const p = r.policy
+      ;['noop', 'left', 'main', 'right'].forEach((k, a) => {
+        d[`p_${k}`] = p?.probs ? p.probs[a] : null
+        d[`q_${k}`] = p?.q ? p.q[a] : null
+      })
+      d.entropy = p?.entropy ?? null
+      d.value = p?.value ?? null
       return d
     }),
   }
@@ -612,6 +698,7 @@ export default function Replay() {
                       <span>t = {fmt.num(row.t / t.fps, 2)} s (sim)</span>
                     </div>
                     <ActionIndicator action={row.action} />
+                    <PolicyPanel t={t} row={row} />
                     {row.hover && <Badge tone="info">hover detector: hovering</Badge>}
                     {(row.terminated || row.truncated) && <Badge tone="warn">{row.terminated ? 'terminated' : 'truncated (time limit)'}</Badge>}
                     <ObsPanel row={row} />
@@ -676,7 +763,18 @@ export default function Replay() {
                       refY={0}
                       onSeek={pb.seek}
                     />
+                    {cd.policyKind === 'ppo' && (
+                      <>
+                        <TelemetryChart data={cd.rows} title="Policy: action probabilities" series={SERIES_PROBS} yFormat={FMT_PCT} onSeek={pb.seek} />
+                        <TelemetryChart data={cd.rows} title="Policy entropy (nats; uniform = 1.386)" series={SERIES_ENTROPY} yFormat={(v) => v.toFixed(2)} refY={1.386} onSeek={pb.seek} />
+                        <TelemetryChart data={cd.rows} title="Critic value V(s) (training-reward scale)" series={SERIES_VALUE} yFormat={FMT_0} onSeek={pb.seek} />
+                      </>
+                    )}
+                    {cd.policyKind === 'dqn' && (
+                      <TelemetryChart data={cd.rows} title="Action values Q(s, a)" series={SERIES_Q} yFormat={FMT_1} onSeek={pb.seek} />
+                    )}
                   </div>
+                  {t.policy_diagnostics && <p className="mt-3 text-[11px] text-ink-3">Policy charts: {t.policy_diagnostics.indexing}.</p>}
                 </Card>
                 <div className="space-y-6">
                   <Card title="Outcome">

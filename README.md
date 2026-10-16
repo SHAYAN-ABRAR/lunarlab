@@ -153,11 +153,17 @@ Everything in the UI is also available from the command line (same core code):
 .venv\Scripts\python.exe -m lunarlab processes                     # list this project's server/worker processes
 .venv\Scripts\python.exe -m lunarlab suite ... --parallel 5             # train several runs at once
 .venv\Scripts\python.exe -m lunarlab suite --algo dqn ...               # the same experiment with DQN
+.venv\Scripts\python.exe -m lunarlab suite --algos ppo,dqn --gammas 0.99,0.999 ...   # matched budgets + discount-factor ablation
+.venv\Scripts\python.exe -m lunarlab suite --presets baseline --physics both ...   # fixed vs randomized training physics
+.venv\Scripts\python.exe -m lunarlab train --preset baseline --physics randomized --wind-power 0,10 --gravity=-11,-9
 .venv\Scripts\python.exe -m lunarlab run-experiment --experiment-id <id> --parallel 4   # resume/finish + final tests
 .venv\Scripts\python.exe -m lunarlab robustness --experiment-id <id> --parallel 8
 .venv\Scripts\python.exe -m lunarlab rlhf-study --from-experiment <id> --pairs 300,3000 --parallel 6
 .venv\Scripts\python.exe -m lunarlab rlhf-dataset --from-experiment <id>   # or step by step:
-.venv\Scripts\python.exe -m lunarlab reward-model --dataset-id <ds> --pairs 3000 --include-human
+.venv\Scripts\python.exe -m lunarlab reward-model --dataset-id <ds> --pairs 3000 --include-human --members 5
+.venv\Scripts\python.exe -m lunarlab rlhf-active --dataset-id <ds> --seeds 0,1,2,3,4   # active vs random label selection
+.venv\Scripts\python.exe -m lunarlab tune --algo ppo --preset potential --trials 20 --transitions 200000   # Optuna, validation only
+.venv\Scripts\python.exe -m lunarlab tune-status --study-id <id>        # tune-resume / tune-cancel / tune-apply as well
 .venv\Scripts\python.exe -m lunarlab record-showcase --experiment-id <id> --references
 .venv\Scripts\python.exe -m lunarlab results --experiment-ids <id1>,<id2> --out docs/results
 .venv\Scripts\python.exe -m lunarlab export-demo --experiment-ids <id1>,<id2>   # snapshot for the static demo

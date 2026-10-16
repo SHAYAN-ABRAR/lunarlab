@@ -148,6 +148,8 @@ class LunarLabRewardWrapper(gym.Wrapper):
                     {"env_outcome": "unknown", "terminated": bool(terminated), "truncated": bool(truncated)}
                 )
             summary["final_obs"] = [float(v) for v in obs]
+            if "lunarlab_physics" in info:  # set by PhysicsRandomizer (training under varied physics)
+                summary["physics"] = dict(info["lunarlab_physics"])
             info["lunarlab_episode"] = summary
             self.last_episode = summary
             self._needs_reset = True

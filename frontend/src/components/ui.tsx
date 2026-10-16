@@ -446,7 +446,7 @@ export function Dialog({
 export function Table({ children, className }: { children: ReactNode; className?: string }) {
   return (
     <div className={clsx('overflow-x-auto', className)}>
-      <table className="w-full border-collapse text-[13px] [&_td]:border-b [&_td]:border-line/70 [&_td]:px-3 [&_td]:py-2 [&_th]:border-b [&_th]:border-line [&_th]:px-3 [&_th]:py-2 [&_th]:text-left [&_th]:text-[11px] [&_th]:font-medium [&_th]:uppercase [&_th]:tracking-wider [&_th]:text-ink-3 [&_tr:last-child_td]:border-0">
+      <table className="w-full border-collapse text-[13px] [&_td]:border-b [&_td]:border-line/70 [&_td]:px-3 [&_td]:py-2 [&_th]:border-b [&_th]:border-line [&_th]:px-3 [&_th]:py-2 [:where(&_th)]:text-left [&_th]:text-[11px] [&_th]:font-medium [&_th]:uppercase [&_th]:tracking-wider [&_th]:text-ink-3 [&_tr:last-child_td]:border-0">
         {children}
       </table>
     </div>

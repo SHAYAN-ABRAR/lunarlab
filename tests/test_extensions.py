@@ -400,27 +400,29 @@ def test_summarize_groups_uses_first_group_as_reference():
 
 @pytest.mark.slow
 def test_rlhf_study_creates_learned_reward_runs_that_train():
-    import argparse
-
-    from lunarlab.cli import cmd_rlhf_study
+    from lunarlab.cli import build_parser, cmd_rlhf_study
     from lunarlab.experiments import list_experiments
     from lunarlab.runs import load_config, read_manifest
     from lunarlab.storage import RunPaths
     from lunarlab.training import EXIT_COMPLETED, train
 
-    args = argparse.Namespace(
-        dataset_id=None,
-        from_experiment=None,
-        source_seeds="0",
-        episodes=4,
-        pairs="200",
-        include_human=False,
-        rm_seed=0,
-        seeds="0",
-        profile="smoke",
-        name="rlhf-test",
-        parallel=1,
-        create_only=True,
+    args = build_parser().parse_args(
+        [
+            "rlhf-study",
+            "--source-seeds",
+            "0",
+            "--episodes",
+            "4",
+            "--pairs",
+            "200",
+            "--seeds",
+            "0",
+            "--profile",
+            "smoke",
+            "--name",
+            "rlhf-test",
+            "--create-only",
+        ]
     )
     assert cmd_rlhf_study(args) == 0
     (exp,) = list_experiments()

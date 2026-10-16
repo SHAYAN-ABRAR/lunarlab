@@ -92,8 +92,64 @@ class RewardModel:
         return path
 
 
-def load_model_file(path: Path, model_id: str = "") -> RewardModel:
+@dataclass
+class RewardEnsemble:
+    """Several reward networks trained on bootstrap resamples of the same labels.
+
+    The reward is the mean of the members' normalized outputs (Christiano et al., 2017); how much the
+    members disagree about a pair is what active preference learning queries first."""
+
+    members: list[RewardModel]
+    model_id: str = ""
+
+    def __call__(self, obs: np.ndarray, action: int, next_obs: np.ndarray) -> float:
+        x = features(obs, action, next_obs)[None, :]
+        return float(np.mean([m.batch(x)[0] for m in self.members]))
+
+    def batch(self, x: np.ndarray) -> np.ndarray:
+        return np.mean([m.batch(x) for m in self.members], axis=0)
+
+    def member_raw(self, x: np.ndarray) -> np.ndarray:
+        """(members, ...) raw outputs: the per-step logits each member was trained with."""
+        return np.stack([m.raw(x) for m in self.members])
+
+    def save(self, directory: Path) -> Path:
+        directory.mkdir(parents=True, exist_ok=False)
+        first = self.members[0]
+        arrays = {"mu": first.mu, "sigma": first.sigma, "n_members": np.int64(len(self.members))}
+        for k, m in enumerate(self.members):
+            arrays[f"m{k}_n_layers"] = np.int64(len(m.weights))
+            arrays[f"m{k}_out_mean"] = np.float64(m.out_mean)
+            arrays[f"m{k}_out_std"] = np.float64(m.out_std)
+            for i, (w, b) in enumerate(m.weights):
+                arrays[f"m{k}_w{i}"] = w.astype(np.float32)
+                arrays[f"m{k}_b{i}"] = b.astype(np.float32)
+        path = directory / "model.npz"
+        np.savez(path, **arrays)
+        return path
+
+
+def load_model_file(path: Path, model_id: str = "") -> RewardModel | RewardEnsemble:
     with np.load(path, allow_pickle=False) as z:
+        if "n_members" in z.files:  # an ensemble (shared input normalization)
+            mu, sigma = z["mu"].astype(np.float32), z["sigma"].astype(np.float32)
+            members = []
+            for k in range(int(z["n_members"])):
+                n = int(z[f"m{k}_n_layers"])
+                members.append(
+                    RewardModel(
+                        mu=mu,
+                        sigma=sigma,
+                        weights=[
+                            (z[f"m{k}_w{i}"].astype(np.float32), z[f"m{k}_b{i}"].astype(np.float32))
+                            for i in range(n)
+                        ],
+                        out_mean=float(z[f"m{k}_out_mean"]),
+                        out_std=float(z[f"m{k}_out_std"]),
+                        model_id=model_id,
+                    )
+                )
+            return RewardEnsemble(members=members, model_id=model_id)
         n = int(z["n_layers"])
         weights = [(z[f"w{i}"].astype(np.float32), z[f"b{i}"].astype(np.float32)) for i in range(n)]
         return RewardModel(
@@ -107,7 +163,7 @@ def load_model_file(path: Path, model_id: str = "") -> RewardModel:
 
 
 @lru_cache(maxsize=16)
-def load_reward_model(model_id: str) -> RewardModel:
+def load_reward_model(model_id: str) -> RewardModel | RewardEnsemble:
     """Load a registered reward model and verify it against the SHA-256 recorded at training time."""
     d = model_path(model_id)
     path = d / "model.npz"

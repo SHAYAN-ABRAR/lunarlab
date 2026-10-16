@@ -9,8 +9,10 @@ the same numbers the Compare page shows. Nothing is typed in by hand.
 
 from __future__ import annotations
 
+import functools
 import json
 import warnings
+from collections import defaultdict
 from pathlib import Path
 from typing import Any
 
@@ -26,6 +28,9 @@ from lunarlab.robustness import CONDITIONS  # noqa: E402
 from lunarlab.storage import atomic_write_text, utc_now  # noqa: E402
 
 LEARNED_COLORS = ["#8a63d2", "#4d4d4d", "#b07aa1"]  # learned-reward groups (custom preset)
+ALGO_COLORS = {"ppo": "#3987e5", "dqn": "#d95926"}
+# Variants of one reward and algorithm (discount factor, training physics) keep the reward's colour.
+VARIANT_LINESTYLES = ["-", (0, (6, 3)), (0, (2, 2)), (0, (8, 3, 2, 3))]
 plt.rcParams.update({"font.size": 9, "axes.titlesize": 10, "axes.titleweight": "bold", "figure.dpi": 100})
 
 
@@ -44,9 +49,17 @@ def _group_style(g: dict, groups: list[dict]) -> dict[str, Any]:
         color = LEARNED_COLORS[learned.index(g) % len(LEARNED_COLORS)]
         return {"color": color, "ls": "-", "marker": "P", "hollow": False}
     preset = g["reward_preset"]
+    siblings = [
+        x
+        for x in groups
+        if not _is_learned(x) and x["reward_hash"] == g["reward_hash"] and x["algo"] == g["algo"]
+    ]
+    ls = PRESET_LINESTYLES.get(preset, "-")
+    if len(siblings) > 1:
+        ls = VARIANT_LINESTYLES[siblings.index(g) % len(VARIANT_LINESTYLES)]
     return {
         "color": PRESET_COLORS.get(preset, "#888"),
-        "ls": PRESET_LINESTYLES.get(preset, "-"),
+        "ls": ls,
         "marker": PRESET_MARKERS.get(preset, "o"),
         "hollow": g.get("algo", "ppo") != "ppo",
     }
@@ -110,21 +123,36 @@ def fig_headline(data: dict, out: Path) -> bool:
     return True
 
 
+@functools.lru_cache(maxsize=1024)
+def _curve_points(run_id: str) -> list[dict]:
+    return training_curve(run_id)["points"]
+
+
 def _mean_curve(
-    run_ids: list[str], key: str, grid: np.ndarray
+    run_ids: list[str],
+    key: str,
+    grid: np.ndarray,
+    *,
+    x_key: str = "transitions",
+    require_all: bool = False,
 ) -> tuple[np.ndarray, np.ndarray, np.ndarray] | None:
+    """Mean, min and max over runs of ``key`` interpolated on ``grid`` (x = ``x_key``). With
+    ``require_all`` a grid point is drawn only while every run has data there, so a mean is never
+    carried by the slowest runs alone."""
     ys = []
     for rid in run_ids:
-        pts = training_curve(rid)["points"]
+        pts = [p for p in _curve_points(rid) if p.get(x_key) is not None]
         if len(pts) < 2:
             continue
-        x = np.array([p["transitions"] for p in pts], float)
+        x = np.array([p[x_key] for p in pts], float)
         y = np.array([p[key] for p in pts], float)
         yi = np.interp(grid, x, y, left=np.nan, right=np.nan)
         ys.append(yi)
     if not ys:
         return None
     a = np.vstack(ys)
+    if require_all:
+        return a.mean(axis=0), a.min(axis=0), a.max(axis=0)
     with warnings.catch_warnings():  # grid points outside every run's range stay NaN (not drawn)
         warnings.simplefilter("ignore", RuntimeWarning)
         return np.nanmean(a, axis=0), np.nanmin(a, axis=0), np.nanmax(a, axis=0)
@@ -163,6 +191,85 @@ def fig_curves(data: dict, out: Path) -> bool:
         ax.legend(fontsize=7, frameon=False, loc="lower right")
         _style(ax)
     fig.tight_layout()
+    fig.savefig(out, dpi=160)
+    plt.close(fig)
+    return True
+
+
+def algorithm_rows(data: dict) -> list[list[dict]]:
+    """Reward designs trained with more than one algorithm at one shared budget (matched-budget
+    comparisons), each as its list of groups (algorithm x discount factor x training physics)."""
+    budget = {s["run_id"]: s["planned_transitions"] for s in data["runs"]}
+    by_reward: dict[str, list[dict]] = defaultdict(list)
+    for g in data["groups"]:
+        if g["per_seed"]:
+            by_reward[g["reward_hash"]].append(g)
+    return [
+        gs
+        for gs in by_reward.values()
+        if len({g["algo"] for g in gs}) > 1
+        and len({budget.get(ps["run_id"]) for g in gs for ps in g["per_seed"]}) == 1
+    ]
+
+
+def fig_algorithms(data: dict, out: Path) -> bool:
+    """Matched-budget algorithm comparison: learning curves against transitions and wall-clock time."""
+    rows = algorithm_rows(data)[:5]
+    if not rows:
+        return False
+    names = {s["run_id"]: s["reward_name"] for s in data["runs"]}
+    fig, axes = plt.subplots(len(rows), 2, figsize=(11.2, 3.4 * len(rows)), squeeze=False)
+    for (ax_t, ax_w), gs in zip(axes, rows, strict=True):
+        ids = [[ps["run_id"] for ps in g["per_seed"]] for g in gs]
+        budget = max(ps["checkpoint_transitions"] for g in gs for ps in g["per_seed"])
+        t_end = max(
+            (
+                p["elapsed_s"]
+                for rs in ids
+                for r in rs
+                for p in _curve_points(r)
+                if p.get("elapsed_s") is not None
+            ),
+            default=0.0,
+        )
+        scale, unit = (3600.0, "hours") if t_end > 2 * 3600 else (60.0, "minutes")
+        n_variant: dict[str, int] = defaultdict(int)
+        for g, rs in zip(gs, ids, strict=True):
+            ls = VARIANT_LINESTYLES[n_variant[g["algo"]] % len(VARIANT_LINESTYLES)]
+            n_variant[g["algo"]] += 1
+            color = ALGO_COLORS.get(g["algo"], "#888")
+            label = g["algo"].upper() + (f" · {g['variant']}" if g["variant"] else "") + f" (n={len(rs)})"
+            for ax, x_key, grid, xs in (
+                (ax_t, "transitions", np.linspace(0, budget, 200), None),
+                (ax_w, "elapsed_s", np.linspace(0, t_end, 200), scale),
+            ):
+                res = _mean_curve(rs, "original_return", grid, x_key=x_key, require_all=x_key == "elapsed_s")
+                if res is None:
+                    continue
+                x = grid / xs if xs else grid
+                ax.fill_between(x, res[1], res[2], color=color, alpha=0.10, lw=0)
+                ax.plot(x, res[0], color=color, ls=ls, lw=1.8, label=label)
+        reward = names.get(ids[0][0], gs[0]["base_name"])
+        ax_t.set_title(f"{reward}: against environment transitions", loc="left")
+        ax_w.set_title(f"{reward}: against wall-clock training time", loc="left")
+        ax_t.set_xlabel("environment transitions (same budget for every run)")
+        ax_w.set_xlabel(f"wall-clock training time ({unit})")
+        ax_t.set_ylabel("original return\n(rolling mean, 100 episodes)")
+        for ax in (ax_t, ax_w):
+            ax.axhline(200, color="#777", ls="--", lw=1)
+            ax.set_ylim(bottom=max(ax.get_ylim()[0], -600))
+            ax.legend(fontsize=7, frameon=False, loc="lower right")
+            _style(ax)
+    fig.text(
+        0.99,
+        0.005,
+        "line: mean over training seeds, band: min-max · time curves stop when a group's first seed finished · "
+        "wall-clock time depends on the machine and on how many runs trained at once",
+        ha="right",
+        fontsize=7,
+        color="#666",
+    )
+    fig.tight_layout(rect=(0, 0.02, 1, 1))
     fig.savefig(out, dpi=160)
     plt.close(fig)
     return True
@@ -373,19 +480,70 @@ def tables_markdown(data: dict) -> str:
                 f"{e['mean_original_return']:.1f}{_ci(e.get('ci'))} | {_p(e['pad_landing_rate'])} | {_p(e['env_success_rate'])} | "
                 f"{_p(e['crash_rate'])} | {_p(e['timeout_rate'])} | {_f(e.get('hover_fraction_mean'), 3)} |"
             )
+    L += _ablation_markdown(data.get("gamma_ablation") or [])
+    if algorithm_rows(data) and data.get("wall_clock", {}).get("notes"):
+        L += [
+            "",
+            "Wall-clock context (algorithm-comparison figure): " + " ".join(data["wall_clock"]["notes"]),
+        ]
     if not data["compatibility"]["compatible"]:
         L += ["", "Comparability notes: " + " ".join(data["compatibility"]["issues"])]
     return "\n".join(L) + "\n"
 
 
+def _signed(v, d=0) -> str:
+    return "—" if v is None else f"{v:+.{d}f}"
+
+
+def _ablation_markdown(blocks: list[dict]) -> list[str]:
+    L: list[str] = []
+    for b in blocks:
+        L += [
+            "",
+            f"### Discount-factor ablation: {b['reward_name']} (training physics: {b['physics_label']})",
+            "",
+            "Mean over training seeds of each policy's final-test mean original return, with a 95% bootstrap "
+            "interval over seeds. Differences resample each cell's seeds.",
+            "",
+            "| Algorithm | γ | Policies | Mean [95% CI] | Pad landing |",
+            "|---|---:|---:|---:|---:|",
+        ]
+        for c in b["cells"]:
+            ref = " (reference γ)" if c["reference"] else ""
+            L.append(
+                f"| {c['algo'].upper()}{ref} | {c['gamma']:g} | {c['n_seeds']} | {_f(c['mean'])}{_ci(c['mean_ci'])} | "
+                f"{_p(c['pad_landing_rate'])} |"
+            )
+        rows = [
+            (f"{e['algo'].upper()}: γ {e['gamma']:g} − γ {e['vs_gamma']:g}", e) for e in b["gamma_effects"]
+        ]
+        rows += [(f"PPO − DQN at γ {e['gamma']:g}", e) for e in b["algorithm_effects"]]
+        if b["reference_setups"]:
+            r = b["reference_setups"]
+            rows.append((f"PPO (γ {r['ppo_gamma']:g}) − DQN (γ {r['dqn_gamma']:g}): both differ", r))
+        L += ["", "| Contrast | Difference [95% CI] | P(first higher) [95% CI] |", "|---|---:|---:|"]
+        for label, e in rows:
+            p = (
+                "—"
+                if e["p_improvement"] is None
+                else f"{e['p_improvement']:.2f}{_ci(e['p_improvement_ci'], 2)}"
+            )
+            L.append(f"| {label} | {_signed(e['difference'])}{_ci(e['ci'])} | {p} |")
+        if b["caveats"]:
+            L += ["", "Notes: " + " ".join(b["caveats"])]
+    return L
+
+
 def build_results(experiment_ids: list[str], out_dir: Path, echo=print) -> dict:
     out_dir.mkdir(parents=True, exist_ok=True)
+    _curve_points.cache_clear()
     run_ids = [r for e in experiment_ids for r in experiment_run_ids(e)]
     data = compare_runs(run_ids, split="test")
     figs = {}
     for name, fn in (
         ("headline", fig_headline),
         ("learning_curves", fig_curves),
+        ("algorithm_comparison", fig_algorithms),
         ("performance_profiles", fig_profiles),
         ("robustness", fig_robustness),
         ("learned_reward", fig_learned),
@@ -395,7 +553,18 @@ def build_results(experiment_ids: list[str], out_dir: Path, echo=print) -> dict:
             figs[name] = path.name
             echo(f"figure {path}")
     atomic_write_text(out_dir / "tables.md", tables_markdown(data))
-    slim = {k: data[k] for k in ("split", "compatibility", "groups", "robust_stats", "robustness")}
+    slim = {
+        k: data[k]
+        for k in (
+            "split",
+            "compatibility",
+            "groups",
+            "robust_stats",
+            "robustness",
+            "gamma_ablation",
+            "wall_clock",
+        )
+    }
     atomic_write_text(
         out_dir / "results.json",
         json.dumps({"experiments": experiment_ids, "generated_at": utc_now(), **slim}, indent=1, default=str),

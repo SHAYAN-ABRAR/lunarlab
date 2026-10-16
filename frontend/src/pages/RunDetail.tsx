@@ -30,7 +30,17 @@ import type { CheckpointEntry, CurvePoint, EvalSummary, Job, MetricRow, Recordin
 
 interface RunDetailData {
   summary: RunSummary
-  config: { reward: RewardConfig; ppo: Record<string, unknown>; training: Record<string, unknown>; seed: number; eval_protocol: Record<string, unknown>; env_id: string; env_kwargs: Record<string, unknown> }
+  config: {
+    reward: RewardConfig
+    ppo: Record<string, unknown>
+    dqn?: Record<string, unknown> | null
+    algo?: 'ppo' | 'dqn'
+    training: Record<string, unknown>
+    seed: number
+    eval_protocol: Record<string, unknown>
+    env_id: string
+    env_kwargs: Record<string, unknown>
+  }
   config_hash: string
   rollout_size: number
   metadata: Record<string, unknown> & { segments: Record<string, unknown>[]; system: Record<string, unknown>; environment: Record<string, unknown>; frozen_for_test: { checkpoint: string; frozen_at: string } | null }
@@ -430,16 +440,24 @@ export default function RunDetail() {
 
       <div className="grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
         <Card title="Configuration" eyebrow="exact config.yaml of this run">
-          <pre className="num mb-4 overflow-x-auto rounded-md border border-line bg-bg p-3 text-[12px] leading-relaxed text-ink-2">{formulaLines(cfg.reward, Number(cfg.ppo.gamma)).join('\n')}</pre>
+          <pre className="num mb-4 overflow-x-auto rounded-md border border-line bg-bg p-3 text-[12px] leading-relaxed text-ink-2">{formulaLines(cfg.reward, Number(cfg.algo === 'dqn' && cfg.dqn ? cfg.dqn.gamma : cfg.ppo.gamma)).join('\n')}</pre>
           <div className="grid grid-cols-1 gap-x-8 sm:grid-cols-2 xl:grid-cols-1 2xl:grid-cols-2">
             <div>
-              {['n_envs', 'n_steps', 'batch_size', 'learning_rate', 'gamma', 'gae_lambda', 'n_epochs', 'ent_coef', 'clip_range'].map((k) => (
-                <KV key={k} k={k} v={String(cfg.ppo[k])} />
-              ))}
-              <KV k="policy / value net" v={`${JSON.stringify(cfg.ppo.net_arch_pi)} / ${JSON.stringify(cfg.ppo.net_arch_vf)} ${String(cfg.ppo.activation)}`} />
+              <KV k="algorithm" v={(cfg.algo ?? 'ppo').toUpperCase()} />
+              {cfg.algo === 'dqn' && cfg.dqn ? (
+                Object.entries(cfg.dqn).map(([k, v]) => <KV key={k} k={k} v={Array.isArray(v) ? JSON.stringify(v) : String(v)} />)
+              ) : (
+                <>
+                  {['n_envs', 'n_steps', 'batch_size', 'learning_rate', 'gamma', 'gae_lambda', 'n_epochs', 'ent_coef', 'clip_range'].map((k) => (
+                    <KV key={k} k={k} v={String(cfg.ppo[k])} />
+                  ))}
+                  <KV k="policy / value net" v={`${JSON.stringify(cfg.ppo.net_arch_pi)} / ${JSON.stringify(cfg.ppo.net_arch_vf)} ${String(cfg.ppo.activation)}`} />
+                </>
+              )}
             </div>
             <div>
               <KV k="environment" v={cfg.env_id} />
+              <KV k="training physics" v={d.summary.physics_label ?? 'fixed (default physics)'} mono={false} />
               <KV k="action space" v={cfg.env_kwargs.continuous ? 'continuous' : 'discrete (4 actions)'} />
               <KV k="max episode steps" v={String(d.metadata.environment?.max_episode_steps ?? '—')} />
               <KV k="training seed" v={String(cfg.seed)} />

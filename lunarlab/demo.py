@@ -239,6 +239,15 @@ def export_demo(
 
         datasets = save("/api/preferences")
         save("/api/reward-models")
+        for d in datasets:
+            save(f"/api/preferences/{d['dataset_id']}/active-studies")
+        from lunarlab.tuning import REWARD_PARAMS
+
+        for study in save("/api/tuning"):
+            save(f"/api/tuning/{study['study_id']}")
+        for algo in ("ppo", "dqn"):
+            for p in REWARD_PARAMS:
+                save(f"/api/tuning/space?algo={algo}&preset={p}")
         pairs: dict[str, int] = {}
         for d in datasets:
             ds = d["dataset_id"]

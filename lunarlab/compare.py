@@ -26,6 +26,8 @@ reward hacking; it is expected whenever bonuses are added.
 
 from __future__ import annotations
 
+import hashlib
+import json
 from collections import defaultdict
 from pathlib import Path
 from typing import Any
@@ -76,6 +78,11 @@ def run_summary(run_id: str) -> dict[str, Any]:
         "completed": completed,
         "config_hash": meta.get("config_hash"),
         "algo": cfg.algo,
+        "gamma": cfg.gamma,
+        "physics": cfg.physics.model_dump(mode="json"),
+        "physics_label": cfg.physics.describe(),
+        "variant": variant_suffix(cfg),
+        "variant_key": variant_key(cfg),
         "algo_key": {"algo": cfg.algo, **cfg.algo_settings()},
         "ppo_key": cfg.ppo.compatibility_key(),
         "robustness": _robustness(run_id),
@@ -87,7 +94,46 @@ def run_summary(run_id: str) -> dict[str, Any]:
         "latest_test": latest_test,
         "frozen_for_test": meta.get("frozen_for_test"),
         "evidence": evidence_level(cfg.training.profile, completed, latest_test, trained),
+        "training_conditions": _training_conditions(meta),
     }
+
+
+def _training_conditions(meta: dict) -> dict[str, Any]:
+    """What a run's wall-clock training time depended on besides its configuration (0 = not recorded)."""
+    segs = meta.get("segments", [])
+    return {
+        "cpu": ((meta.get("system") or {}).get("hardware") or {}).get("cpu"),
+        "segments": len(segs),
+        "parallel_slots": sorted({int(s.get("parallel_slots") or 0) for s in segs}),
+        "device": sorted({str(s.get("device")) for s in segs}),
+        "torch_threads": sorted({int(s.get("torch_threads") or 0) for s in segs}),
+    }
+
+
+def wall_clock_notes(summaries: list[dict]) -> list[str]:
+    """Differences between runs that change wall-clock training time without changing what was learned.
+    Elapsed-time curves compare speed fairly only when there are none."""
+    conds = [s.get("training_conditions") or {} for s in summaries]
+    notes = []
+    cpus = {str(c.get("cpu")) for c in conds}
+    if len(cpus) > 1:
+        notes.append(f"Trained on different machines ({', '.join(sorted(cpus))}).")
+    slots = set().union(*[c.get("parallel_slots", [0]) for c in conds]) if conds else set()
+    if slots == {0}:
+        notes.append(
+            "How many runs trained at the same time was not recorded for these runs "
+            "(LunarLab records it for runs trained from now on)."
+        )
+    elif len(slots) > 1:
+        parts = [f"{v} at a time" if v else "not recorded" for v in sorted(slots)]
+        notes.append(f"Trained alongside different numbers of runs ({', '.join(parts)}).")
+    if len(set().union(*[set(c.get("device", [])) for c in conds])) > 1:
+        notes.append("Trained on different devices.")
+    if len(set().union(*[set(c.get("torch_threads", [])) for c in conds])) > 1:
+        notes.append("Trained with different numbers of torch threads.")
+    if any(c.get("segments", 1) > 1 for c in conds):
+        notes.append("Includes resumed runs: pauses between their segments are not counted.")
+    return notes
 
 
 def _robustness(run_id: str) -> dict:
@@ -96,8 +142,34 @@ def _robustness(run_id: str) -> dict:
     return latest_robustness(run_id)
 
 
-def display_name(reward_name: str, algo: str) -> str:
-    return reward_name if algo == "ppo" else f"{algo.upper()} · {reward_name}"
+REFERENCE_GAMMA = {"ppo": 0.999, "dqn": 0.99}  # each algorithm's Zoo setting
+
+
+def variant_suffix(cfg) -> str:
+    """What sets a run apart from its algorithm's reference setup: a non-reference discount factor
+    and/or randomized training physics ('' for the reference setup)."""
+    parts = []
+    if abs(cfg.gamma - REFERENCE_GAMMA[cfg.algo]) > 1e-12:
+        parts.append(f"gamma {cfg.gamma:g}")
+    if cfg.physics.enabled:
+        parts.append("randomized physics")
+    return " · ".join(parts)
+
+
+def variant_key(cfg) -> str:
+    phys = (
+        "fixed"
+        if not cfg.physics.enabled
+        else hashlib.sha256(
+            json.dumps(cfg.physics.model_dump(mode="json"), sort_keys=True).encode()
+        ).hexdigest()[:8]
+    )
+    return f"g{cfg.gamma:g}|{phys}"
+
+
+def display_name(reward_name: str, algo: str, variant: str = "") -> str:
+    base = reward_name if algo == "ppo" else f"{algo.upper()} · {reward_name}"
+    return f"{base} · {variant}" if variant else base
 
 
 def evidence_level(
@@ -125,9 +197,21 @@ def compatibility(summaries: list[dict]) -> dict[str, Any]:
         issues.append("Different environments or physics settings.")
     algos = sorted({s.get("algo", "ppo") for s in summaries})
     if len(algos) > 1:
+        names = ", ".join(a.upper() for a in algos)
+        if len({s["planned_transitions"] for s in summaries}) == 1:
+            issues.append(
+                f"Different algorithms ({names}) at the same transition budget: read this as a matched-budget "
+                "algorithm comparison; each algorithm keeps its own reference settings."
+            )
+        else:
+            issues.append(
+                f"Different algorithms ({names}): read this as an algorithm comparison; "
+                "their settings and budgets differ by design."
+            )
+    if len({bool((s.get("physics") or {}).get("enabled")) for s in summaries}) > 1:
         issues.append(
-            f"Different algorithms ({', '.join(a.upper() for a in algos)}): read this as an algorithm comparison; "
-            "their settings and budgets differ by design."
+            "Different training physics (fixed and randomized): read this as a training-physics comparison. "
+            "Validation and the final test use default physics for every run."
         )
     for algo in algos:
         same = [s for s in summaries if s.get("algo", "ppo") == algo]
@@ -136,7 +220,14 @@ def compatibility(summaries: list[dict]) -> dict[str, Any]:
             diff_keys = sorted(
                 {k for key in keys for k, v in key.items() if any(o.get(k) != v for o in keys)}
             )
-            issues.append(f"Different {algo.upper()} settings: {', '.join(diff_keys)}.")
+            if diff_keys == ["gamma"]:
+                gammas = ", ".join(f"{g:g}" for g in sorted({k["gamma"] for k in keys}))
+                issues.append(
+                    f"Different {algo.upper()} discount factors (gamma {gammas}), all other settings equal: "
+                    "read this as a discount-factor ablation."
+                )
+            else:
+                issues.append(f"Different {algo.upper()} settings: {', '.join(diff_keys)}.")
     for algo in algos:
         budgets = {s["planned_transitions"] for s in summaries if s.get("algo", "ppo") == algo}
         if len(budgets) > 1:
@@ -158,7 +249,7 @@ def group_by_reward(summaries: list[dict], split: str = "test") -> list[dict]:
     """One group per reward function. Each seed is listed; across-seed stats are descriptive."""
     groups: dict[str, list[dict]] = defaultdict(list)
     for s in summaries:
-        groups[f"{s.get('algo', 'ppo')}:{s['reward_hash']}"].append(s)
+        groups[f"{s.get('algo', 'ppo')}:{s['reward_hash']}:{s.get('variant_key', '')}"].append(s)
     out = []
     metrics = (
         "mean_original_return",
@@ -201,8 +292,14 @@ def group_by_reward(summaries: list[dict], split: str = "test") -> list[dict]:
             {
                 "group_key": h,
                 "algo": algo,
+                "gamma": runs[0].get("gamma"),
+                "variant": runs[0].get("variant", ""),
+                "variant_key": runs[0].get("variant_key", ""),
+                "physics_randomized": bool((runs[0].get("physics") or {}).get("enabled")),
+                "physics_label": runs[0].get("physics_label", "fixed (default physics)"),
                 "reward_hash": runs[0]["reward_hash"],
-                "reward_name": display_name(runs[0]["reward_name"], algo),
+                "base_name": display_name(runs[0]["reward_name"], algo),
+                "reward_name": display_name(runs[0]["reward_name"], algo, runs[0].get("variant", "")),
                 "reward_preset": runs[0]["reward_preset"],
                 "active_terms": runs[0]["active_terms"],
                 "n_runs": len(runs),
@@ -219,7 +316,16 @@ def group_by_reward(summaries: list[dict], split: str = "test") -> list[dict]:
             }
         )
     order = ["baseline", "time-penalty", "hover-bonus", "potential", "custom"]
-    return sorted(out, key=lambda g: (g["algo"] != "ppo", g["algo"], order.index(g["reward_preset"])))
+    return sorted(
+        out,
+        key=lambda g: (
+            g["algo"] != "ppo",
+            g["algo"],
+            order.index(g["reward_preset"]),
+            g["reward_hash"],
+            g["variant"],
+        ),
+    )
 
 
 def exploitation_assessment(ev: dict | None, baseline_pad_rate: float | None) -> dict[str, Any]:
@@ -252,11 +358,13 @@ def exploitation_assessment(ev: dict | None, baseline_pad_rate: float | None) ->
 def compare_runs(run_ids: list[str], split: str = "test") -> dict[str, Any]:
     summaries = [run_summary(r) for r in run_ids]
     groups = group_by_reward(summaries, split)
-    base_pad_by_algo = {
-        g["algo"]: g["across_seeds"]["pad_landing_rate"]["mean"]
-        for g in groups
-        if g["reward_preset"] == "baseline" and g["n_evaluated_seeds"]
-    }
+    base_pad: dict[str, float] = {}
+    for g in groups:
+        if g["reward_preset"] == "baseline" and g["n_evaluated_seeds"]:
+            rate = g["across_seeds"]["pad_landing_rate"]["mean"]
+            base_pad[f"{g['algo']}|{g['variant_key']}"] = rate
+            if not g["variant"]:
+                base_pad.setdefault(g["algo"], rate)
     diagnostics = []
     for s in summaries:
         ev = s["latest_test"] if split == "test" else s["latest_validation"]
@@ -266,14 +374,17 @@ def compare_runs(run_ids: list[str], split: str = "test") -> dict[str, Any]:
                 "reasons": ["SMOKE run: a technical pipeline test, not a trained agent"],
             }
         elif s["active_terms"]:
-            assessment = exploitation_assessment(ev, base_pad_by_algo.get(s.get("algo", "ppo")))
+            algo = s.get("algo", "ppo")
+            assessment = exploitation_assessment(
+                ev, base_pad.get(f"{algo}|{s.get('variant_key', '')}", base_pad.get(algo))
+            )
         else:
             assessment = {"flag": "not applicable", "reasons": ["original reward: no additional terms"]}
         diagnostics.append(
             {
                 "run_id": s["run_id"],
                 "seed": s["seed"],
-                "reward_name": display_name(s["reward_name"], s.get("algo", "ppo")),
+                "reward_name": display_name(s["reward_name"], s.get("algo", "ppo"), s.get("variant", "")),
                 "reward_preset": s["reward_preset"],
                 "algo": s.get("algo", "ppo"),
                 "evaluation": ev,
@@ -289,6 +400,9 @@ def compare_runs(run_ids: list[str], split: str = "test") -> dict[str, Any]:
         "diagnostics": diagnostics,
         "robust_stats": robust_statistics(groups),
         "robustness": robustness_table(groups, summaries),
+        "physics_comparison": physics_comparison(groups, summaries),
+        "gamma_ablation": gamma_ablation(groups, summaries),
+        "wall_clock": {"notes": wall_clock_notes(summaries)},
         "rules": {
             "min_term_gain": MIN_TERM_GAIN,
             "hover_rate": EXPLOIT_HOVER_RATE,
@@ -315,8 +429,10 @@ def load_episodes(run_id: str) -> pd.DataFrame:
         return pd.DataFrame()
     try:
         df = pd.read_csv(paths.episodes)
-    except (pd.errors.EmptyDataError, pd.errors.ParserError):
+    except pd.errors.EmptyDataError:
         return pd.DataFrame()
+    except pd.errors.ParserError:
+        df = _read_mixed_episodes(paths.episodes)
     if df.empty:
         return df
     segs = load_metadata(run_id).get("segments", [])
@@ -327,10 +443,55 @@ def load_episodes(run_id: str) -> pd.DataFrame:
     return df[keep].reset_index(drop=True)
 
 
+def elapsed_seconds(df: pd.DataFrame) -> pd.Series:
+    """Wall-clock training time at each episode, accumulated over the run's segments.
+
+    ``wall_time_s`` restarts with every segment (resume); each segment is offset by the time the kept part
+    of the earlier segments took. Includes validation passes; depends on the machine and on how many runs
+    shared it."""
+    wall = df["wall_time_s"].astype(float)
+    if "segment" not in df:
+        return wall
+    out = wall.copy()
+    offset = 0.0
+    for seg in sorted(df["segment"].unique()):
+        mask = df["segment"] == seg
+        out[mask] = wall[mask] + offset
+        offset += float(wall[mask].max())
+    return out
+
+
+def _read_mixed_episodes(path: Path) -> pd.DataFrame:
+    """Recover an episodes.csv whose later rows have more columns than its header.
+
+    Before CsvAppender kept a file's own header, a run resumed by a newer LunarLab could append rows in
+    the newer column layout under the older header. Each row is read with whichever known layout matches
+    its width: the file's header, or the current layout (with or without physics columns). Rows that match
+    neither are dropped. The file itself is left untouched."""
+    import csv
+
+    from lunarlab.physics import PHYSICS_FIELDS
+    from lunarlab.training import EPISODE_FIELDS
+
+    layouts: dict[int, list[str]] = {}
+    with open(path, newline="", encoding="utf-8") as f:
+        reader = csv.reader(f)
+        header = next(reader, None) or []
+        for cols in (list(EPISODE_FIELDS) + list(PHYSICS_FIELDS), list(EPISODE_FIELDS), header):
+            layouts[len(cols)] = cols
+        rows = [dict(zip(layouts[len(r)], r, strict=True)) for r in reader if len(r) in layouts]
+    df = pd.DataFrame(rows)
+    for c in df.columns:
+        if c != "env_outcome":
+            df[c] = pd.to_numeric(df[c], errors="coerce")
+    return df
+
+
 def training_curve(run_id: str, window: int = 100, max_points: int = 400) -> dict[str, Any]:
     df = load_episodes(run_id)
     if df.empty:
         return {"points": [], "window": window, "n_episodes": 0}
+    elapsed = elapsed_seconds(df) if "wall_time_s" in df else None
     roll = (
         df[["original_return", "training_return", "length", "pad_landing", "hover_steps"]]
         .rolling(window, min_periods=1)
@@ -346,6 +507,7 @@ def training_curve(run_id: str, window: int = 100, max_points: int = 400) -> dic
         {
             "episode": int(df["episode"].iloc[i]),
             "transitions": int(df["transitions"].iloc[i]),
+            "elapsed_s": None if elapsed is None else round(float(elapsed.iloc[i]), 2),
             "original_return": float(roll["original_return"].iloc[i]),
             "training_return": float(roll["training_return"].iloc[i]),
             "length": float(roll["length"].iloc[i]),
@@ -465,3 +627,195 @@ def robustness_table(groups: list[dict], summaries: list[dict]) -> dict:
         "rows": rows,
         "note": "Same final-test episode seeds (first 50 for perturbed conditions); frozen checkpoints; original reward.",
     }
+
+
+def physics_comparison(groups: list[dict], summaries: list[dict]) -> list[dict]:
+    """Fixed vs randomized training physics, for every algorithm/reward/discount that has both,
+    across the calm final test and the robustness conditions (frozen checkpoints, original reward).
+    Each difference of means over policies has a 95% interval that resamples each side's policies."""
+    from lunarlab.rl_stats import bootstrap_difference_ci
+    from lunarlab.robustness import CONDITIONS
+
+    def per_seed(cell: dict | None) -> list[float]:
+        return [v["mean_original_return"] for v in (cell or {}).get("per_seed", [])]
+
+    table = robustness_table(groups, summaries)
+    rows_by_name = {r["reward_name"]: r for r in table["rows"]}
+    pairs: dict[tuple, dict[str, dict]] = defaultdict(dict)
+    for g in groups:
+        key = (g["algo"], g["reward_hash"], round(g.get("gamma") or 0.0, 6))
+        pairs[key]["randomized" if g["physics_randomized"] else "fixed"] = g
+    out = []
+    for (algo, _h, _g), sides in pairs.items():
+        if "fixed" not in sides or "randomized" not in sides:
+            continue
+        fixed, rand = sides["fixed"], sides["randomized"]
+        conds = []
+        for cond in ["calm", *CONDITIONS]:
+            fv = (rows_by_name.get(fixed["reward_name"]) or {}).get("conditions", {}).get(cond)
+            rv = (rows_by_name.get(rand["reward_name"]) or {}).get("conditions", {}).get(cond)
+            conds.append(
+                {
+                    "condition": cond,
+                    "fixed": fv,
+                    "randomized": rv,
+                    "difference": (
+                        rv["mean_original_return"] - fv["mean_original_return"] if fv and rv else None
+                    ),
+                    "ci": bootstrap_difference_ci(per_seed(rv), per_seed(fv)) if fv and rv else None,
+                }
+            )
+        out.append(
+            {
+                "name": fixed["base_name"] + (f" · {fixed['variant']}" if fixed["variant"] else ""),
+                "algo": algo,
+                "reward_preset": fixed["reward_preset"],
+                "fixed_group": fixed["reward_name"],
+                "randomized_group": rand["reward_name"],
+                "randomized_physics": rand["physics_label"],
+                "n_fixed": fixed["n_evaluated_seeds"],
+                "n_randomized": rand["n_evaluated_seeds"],
+                "conditions": conds,
+            }
+        )
+    return out
+
+
+def _scores(g: dict, key: str = "mean_original_return") -> list[float]:
+    return [
+        ps["evaluation"][key]
+        for ps in g["per_seed"]
+        if ps["evaluation"] and ps["evaluation"].get(key) is not None
+    ]
+
+
+def _effect(x: list[float], y: list[float]) -> dict[str, Any]:
+    """mean(x) - mean(y) over training seeds, an interval resampling each side's seeds, and the
+    probability that a run from x scores higher than a run from y."""
+    from lunarlab.rl_stats import (
+        bootstrap_difference_ci,
+        probability_of_improvement,
+        probability_of_improvement_ci,
+    )
+
+    return {
+        "difference": float(np.mean(x) - np.mean(y)) if x and y else None,
+        "ci": bootstrap_difference_ci(x, y),
+        "p_improvement": probability_of_improvement(x, y),
+        "p_improvement_ci": probability_of_improvement_ci(x, y),
+    }
+
+
+def _ablation_caveats(cells: list[dict], by_id: dict[str, dict]) -> list[str]:
+    runs = [by_id[rid] for c in cells for rid in c["run_ids"] if rid in by_id]
+    notes = []
+    if len({r["planned_transitions"] for r in runs}) > 1:
+        notes.append("Training budgets differ between cells: not a matched-budget comparison.")
+    for algo in sorted({r["algo"] for r in runs}):
+        settings = {
+            json.dumps({k: v for k, v in r["algo_key"].items() if k != "gamma"}, sort_keys=True)
+            for r in runs
+            if r["algo"] == algo
+        }
+        if len(settings) > 1:
+            notes.append(f"{algo.upper()} settings other than the discount factor differ between cells.")
+    if len({r["protocol_hash"] for r in runs}) > 1:
+        notes.append("Evaluation protocols differ between cells.")
+    if any(r["profile"] == "smoke" for r in runs):
+        notes.append("Includes SMOKE runs: technical tests, not trained agents.")
+    fewest = min(c["n_seeds"] for c in cells)
+    if fewest < 5:
+        notes.append(
+            f"As few as {fewest} evaluated training seed(s) in a cell: intervals are wide and the "
+            "differences are descriptive only."
+        )
+    return notes
+
+
+def gamma_ablation(groups: list[dict], summaries: list[dict]) -> list[dict]:
+    """The discount factor's effect, kept apart from the algorithm's.
+
+    PPO and DQN at their reference settings differ in two ways at once: the algorithm and its discount
+    factor (0.999 vs 0.99). For every reward design and training physics trained at more than one
+    discount factor, or with both algorithms at the same one, this lists each algorithm x gamma cell
+    (the final score of every training seed), the effect of gamma within each algorithm (against its
+    reference gamma, or the lowest gamma trained) and PPO - DQN at each matched gamma. Differences are
+    in mean original return over training seeds; intervals resample each cell's seeds."""
+    from lunarlab.rl_stats import bootstrap_ci, iqm
+
+    by_id = {s["run_id"]: s for s in summaries}
+    blocks: dict[tuple, list[dict]] = defaultdict(list)
+    for g in groups:
+        if g.get("gamma") is None:
+            continue
+        vk = g.get("variant_key", "")
+        blocks[(g["reward_hash"], vk.split("|", 1)[1] if "|" in vk else "fixed")].append(g)
+    out = []
+    for gs in blocks.values():
+        cells = []
+        for g in sorted(gs, key=lambda g: (g["algo"] != "ppo", g["algo"], g["gamma"])):
+            x = _scores(g)
+            pads = _scores(g, "pad_landing_rate")
+            cells.append(
+                {
+                    "algo": g["algo"],
+                    "gamma": g["gamma"],
+                    "group": g["reward_name"],
+                    "reference": abs(g["gamma"] - REFERENCE_GAMMA.get(g["algo"], -1.0)) < 1e-12,
+                    "run_ids": [ps["run_id"] for ps in g["per_seed"]],
+                    "n_seeds": len(x),
+                    "scores": x,
+                    "mean": float(np.mean(x)) if x else None,
+                    "mean_ci": bootstrap_ci(x, np.mean),
+                    "iqm": iqm(x),
+                    "pad_landing_rate": float(np.mean(pads)) if pads else None,
+                }
+            )
+        by_algo: dict[str, list[dict]] = defaultdict(list)
+        by_gamma: dict[float, dict[str, dict]] = defaultdict(dict)
+        for c in cells:
+            by_algo[c["algo"]].append(c)
+            by_gamma[round(c["gamma"], 6)][c["algo"]] = c
+        gamma_effects = []
+        for algo, cs in by_algo.items():
+            ref = next((c for c in cs if c["reference"]), cs[0])
+            gamma_effects += [
+                {
+                    "algo": algo,
+                    "gamma": c["gamma"],
+                    "vs_gamma": ref["gamma"],
+                    **_effect(c["scores"], ref["scores"]),
+                }
+                for c in cs
+                if c is not ref
+            ]
+        algorithm_effects = [
+            {"gamma": gamma, **_effect(cs["ppo"]["scores"], cs["dqn"]["scores"])}
+            for gamma, cs in sorted(by_gamma.items())
+            if "ppo" in cs and "dqn" in cs
+        ]
+        if not gamma_effects and not algorithm_effects:
+            continue
+        refs = {c["algo"]: c for c in cells if c["reference"]}
+        first = by_id.get(cells[0]["run_ids"][0], {})
+        out.append(
+            {
+                "reward_name": first.get("reward_name", gs[0]["base_name"]),
+                "reward_preset": gs[0]["reward_preset"],
+                "physics_label": gs[0]["physics_label"],
+                "cells": cells,
+                "gamma_effects": gamma_effects,
+                "algorithm_effects": algorithm_effects,
+                "reference_setups": (
+                    {
+                        "ppo_gamma": refs["ppo"]["gamma"],
+                        "dqn_gamma": refs["dqn"]["gamma"],
+                        **_effect(refs["ppo"]["scores"], refs["dqn"]["scores"]),
+                    }
+                    if "ppo" in refs and "dqn" in refs
+                    else None
+                ),
+                "caveats": _ablation_caveats(cells, by_id),
+            }
+        )
+    return out

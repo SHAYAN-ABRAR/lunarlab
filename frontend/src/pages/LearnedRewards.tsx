@@ -1,13 +1,16 @@
 import clsx from 'clsx'
-import { Brain, Equal, SkipForward } from 'lucide-react'
+import { Brain, Equal, Network, SkipForward } from 'lucide-react'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router'
-import { Badge, Button, Card, EmptyState, ErrorBanner, Notice, PageHeader, Spinner, Table } from '../components/ui'
-import { api } from '../lib/api'
+import { Area, CartesianGrid, ComposedChart, Line, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
+import { Legend } from '../components/charts'
+import { useJobWatch } from '../components/Jobs'
+import { Badge, Button, Card, EmptyState, ErrorBanner, Field, Notice, NumberInput, PageHeader, Segmented, Spinner, Table } from '../components/ui'
+import { api, idempotencyKey } from '../lib/api'
 import { DEMO } from '../lib/demo'
 import { fmt } from '../lib/format'
 import { useApi, usePrefersReducedMotion } from '../lib/hooks'
-import type { Experiment } from '../lib/types'
+import type { Experiment, Job } from '../lib/types'
 
 interface Dataset {
   dataset_id: string
@@ -33,12 +36,49 @@ interface Segment {
   }
 }
 
+type Strategy = 'random' | 'disagreement'
+
+interface Progress {
+  labels: number
+  usable_for_training: number
+  in_validation_episodes: number
+  excluded: number
+  training_segments: number
+  possible_pairs: number
+  since_ensemble: number | null
+  ensemble: { model_id: string; created_at: string; members: number; n_human_labels: number; n_simulated_pairs: number; metrics: { val_accuracy_vs_true_order: number | null } } | null
+  strategies: Record<Strategy, boolean>
+}
+
+interface CurvePointAgg {
+  labels: number
+  mean: number
+  min: number
+  max: number
+  n_seeds: number
+}
+
+interface ActiveStudy {
+  study_id: string
+  created_at: string
+  strategies: string[]
+  seeds: number[]
+  params: { budget?: number; initial?: number; batch?: number; members?: number; candidates?: number }
+  summary: Record<string, CurvePointAgg[]>
+}
+
+const STRATEGY_COLOR: Record<string, string> = { random: '#8494a8', disagreement: '#3987e5' }
+
 interface Pair {
   dataset_id: string
   i: number
   j: number
   a: Segment
   b: Segment
+  strategy?: Strategy
+  score?: number | null
+  candidates?: number
+  median_score?: number
 }
 
 interface Reveal {
@@ -56,6 +96,8 @@ interface RewardModelMeta {
   n_pairs_requested: number
   n_train_pairs: number
   n_human_labels: number
+  n_human_excluded?: number
+  split?: { method: string; train_episodes: number; val_episodes: number }
   beta: number
   architecture: string
   metrics: {
@@ -217,6 +259,18 @@ export default function LearnedRewards() {
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [tally, setTally] = useState({ n: 0, agree: 0 })
+  const [strategy, setStrategy] = useState<Strategy>('random')
+  const [simulated, setSimulated] = useState(0)
+  const [ensembleJob, setEnsembleJob] = useState<string | null>(null)
+  const progress = useApi<Progress>(datasetId && !DEMO ? `/api/preferences/${datasetId}/progress` : null)
+  const studies = useApi<ActiveStudy[]>(datasetId ? `/api/preferences/${datasetId}/active-studies` : null)
+  const reloadProgress = progress.reload
+  useJobWatch(ensembleJob, (j: Job) => {
+    setEnsembleJob(null)
+    if (j.state !== 'completed') setError(j.error ?? `ensemble job ${j.state}`)
+    reloadProgress()
+    models.reload()
+  })
 
   useEffect(() => {
     if (!datasetId && datasets.data?.length) setDatasetId(datasets.data[0].dataset_id)
@@ -228,17 +282,27 @@ export default function LearnedRewards() {
     setError(null)
     setReveal(null)
     try {
-      setPair(await api.get<Pair>(`/api/preferences/${datasetId}/pair`))
+      setPair(await api.get<Pair>(`/api/preferences/${datasetId}/pair?strategy=${strategy}`))
     } catch (e) {
       setError((e as Error).message)
     } finally {
       setBusy(false)
     }
-  }, [datasetId])
+  }, [datasetId, strategy])
 
   useEffect(() => {
     if (datasetId) next()
   }, [datasetId, next])
+
+  const fitEnsemble = async () => {
+    setError(null)
+    try {
+      const job = await api.post<Job>(`/api/preferences/${datasetId}/ensemble`, { simulated_pairs: simulated, members: 5, idempotency_key: idempotencyKey() })
+      setEnsembleJob(job.id)
+    } catch (e) {
+      setError((e as Error).message)
+    }
+  }
 
   const choose = useCallback(
     async (choice: 'a' | 'b' | 'tie') => {
@@ -247,6 +311,7 @@ export default function LearnedRewards() {
       try {
         const r = await api.post<Reveal>(`/api/preferences/${pair.dataset_id}/labels`, { i: pair.i, j: pair.j, choice })
         setReveal({ ...r, choice })
+        reloadProgress()
         if (choice !== 'tie') setTally((t) => ({ n: t.n + 1, agree: t.agree + (r.agrees ? 1 : 0) }))
       } catch (e) {
         setError((e as Error).message)
@@ -254,7 +319,7 @@ export default function LearnedRewards() {
         setBusy(false)
       }
     },
-    [pair, reveal, busy],
+    [pair, reveal, busy, reloadProgress],
   )
 
   useEffect(() => {
@@ -323,8 +388,80 @@ export default function LearnedRewards() {
           </EmptyState>
         )}
         <ErrorBanner error={error} />
+        {datasets.data && datasets.data.length > 0 && (
+          <div className="mb-5 grid grid-cols-1 gap-4 rounded-md border border-line bg-bg/40 p-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
+            <div className="space-y-2">
+              <Field label="Which pairs to show">
+                <Segmented
+                  label="Pair selection strategy"
+                  value={strategy}
+                  onChange={setStrategy}
+                  options={[
+                    { value: 'random', label: 'Random pairs' },
+                    { value: 'disagreement', label: 'Where the ensemble disagrees', disabled: DEMO || !progress.data?.strategies.disagreement },
+                  ]}
+                />
+              </Field>
+              <p className="text-xs text-ink-3">
+                {strategy === 'random'
+                  ? 'Uniformly random pairs of training segments (the baseline). '
+                  : 'Among 2,000 random candidate pairs, the one the reward-model ensemble disagrees about most (spread of its members’ P(A preferred)). '}
+                A pair you have labelled is never shown again; pairs always come from training episodes.
+              </p>
+            </div>
+            <div className="space-y-2 text-[13px]">
+              {DEMO ? (
+                <p className="text-xs text-ink-3">The labelling progress and the ensemble live in the local app.</p>
+              ) : progress.data ? (
+                <>
+                  <div className="flex flex-wrap gap-x-4 gap-y-1">
+                    <span>
+                      <span className="num text-ink">{progress.data.labels}</span> <span className="text-ink-3">labels</span>
+                    </span>
+                    <span>
+                      <span className="num text-ink">{progress.data.usable_for_training}</span> <span className="text-ink-3">usable for training</span>
+                    </span>
+                    {progress.data.in_validation_episodes + progress.data.excluded > 0 && (
+                      <span className="text-ink-3" title="Older labels whose segments lie in validation episodes are kept out of training">
+                        {progress.data.in_validation_episodes + progress.data.excluded} kept out of training
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-xs text-ink-3">
+                    {progress.data.ensemble
+                      ? `Labelling ensemble: ${progress.data.ensemble.members} networks fitted on ${progress.data.ensemble.n_human_labels} of your labels${progress.data.ensemble.n_simulated_pairs ? ` + ${progress.data.ensemble.n_simulated_pairs} simulated` : ''} (${fmt.ago(progress.data.ensemble.created_at)}); ${progress.data.since_ensemble ?? 0} new labels since.`
+                      : 'No labelling ensemble yet: fit one (from at least 10 labelled pairs) to unlock the disagreement strategy.'}
+                  </p>
+                  <div className="flex flex-wrap items-end gap-2">
+                    <div className="w-36">
+                      <Field label="+ simulated labels" htmlFor="ens-sim">
+                        <NumberInput id="ens-sim" value={simulated} onChange={(v) => setSimulated(Number.isFinite(v) ? Math.max(0, Math.min(5000, Math.round(v))) : 0)} min={0} max={5000} step={50} />
+                      </Field>
+                    </div>
+                    <Button size="sm" icon={<Network className="size-4" aria-hidden />} pending={!!ensembleJob} onClick={fitEnsemble}>
+                      {progress.data.ensemble ? 'Refit ensemble' : 'Fit ensemble'}
+                    </Button>
+                  </div>
+                </>
+              ) : (
+                <Spinner label="Loading progress" />
+              )}
+            </div>
+          </div>
+        )}
         {pair && (
           <>
+            {pair.strategy === 'disagreement' && pair.score != null && (
+              <p className="mb-3 text-xs text-ink-2">
+                Ensemble disagreement on this pair: <span className="num text-ink">{fmt.num(pair.score, 3)}</span>
+                {pair.median_score != null && (
+                  <span className="text-ink-3">
+                    {' '}
+                    (median over {fmt.int(pair.candidates ?? 0)} candidates: {fmt.num(pair.median_score, 3)})
+                  </span>
+                )}
+              </p>
+            )}
             <p className="mb-4 max-w-[100ch] text-[13px] text-ink-2">
               Judge the landing attempt: getting closer to the pad between the flags, slowing down, staying upright and touching down gently are good; crashing, drifting away and wasting fuel are
               bad. The source policy and the score stay hidden until you answer. Keys: <kbd className="font-mono">←</kbd> / <kbd className="font-mono">→</kbd> pick a side,{' '}
@@ -391,6 +528,7 @@ export default function LearnedRewards() {
                   <th>Model</th>
                   <th className="text-right">Training pairs</th>
                   <th className="text-right">Human labels</th>
+                  <th title="How validation data was held out">Validation split</th>
                   <th className="text-right" title="Validation pairs ordered like the noisy simulated human">Acc. vs labels</th>
                   <th className="text-right" title="Validation pairs ordered like the true segment returns">Acc. vs true order</th>
                   <th className="text-right" title="Correlation of summed predicted reward with the true segment return">Return corr.</th>
@@ -403,6 +541,9 @@ export default function LearnedRewards() {
                     <td className="num text-xs">{m.model_id}</td>
                     <td className="num text-right">{fmt.int(m.n_train_pairs)}</td>
                     <td className="num text-right">{m.n_human_labels}</td>
+                    <td className="text-xs text-ink-2">
+                      {m.split ? `${m.split.val_episodes} of ${m.split.train_episodes + m.split.val_episodes} episodes` : <span title="Trained before validation was split by episode: overlapping windows could sit on both sides">by segment (older)</span>}
+                    </td>
                     <td className="num text-right">{fmt.pct(m.metrics.val_accuracy_vs_labels, 1)}</td>
                     <td className="num text-right">{fmt.pct(m.metrics.val_accuracy_vs_true_order, 1)}</td>
                     <td className="num text-right">{fmt.num(m.metrics.segment_return_correlation, 2)}</td>
@@ -420,6 +561,8 @@ export default function LearnedRewards() {
         )}
       </Card>
 
+      {studies.data && studies.data.length > 0 && <ActiveStudies study={studies.data[0]} />}
+
       <Notice title="Did PPO learn to land from preferences alone?">
         {rlhfExperiments.length ? (
           <>
@@ -435,5 +578,77 @@ export default function LearnedRewards() {
         )}
       </Notice>
     </div>
+  )
+}
+
+function ActiveStudies({ study }: { study: ActiveStudy }) {
+  const strategies = Object.keys(study.summary)
+  const labels = [...new Set(strategies.flatMap((k) => study.summary[k].map((p) => p.labels)))].toSorted((a, b) => a - b)
+  const rows = labels.map((n) => {
+    const row: Record<string, number | [number, number]> = { labels: n }
+    for (const k of strategies) {
+      const pt = study.summary[k].find((p) => p.labels === n)
+      if (pt) {
+        row[k] = pt.mean
+        row[`${k}_band`] = [pt.min, pt.max]
+      }
+    }
+    return row
+  })
+  const last = Object.fromEntries(strategies.map((k) => [k, study.summary[k][study.summary[k].length - 1]]))
+  return (
+    <Card title="Active vs random selection" eyebrow={`simulated labeller · ${study.seeds.length} seeds · ${fmt.time(study.created_at)}`}>
+      <p className="mb-3 max-w-[110ch] text-[13px] text-ink-2">
+        Reward-model accuracy against the true order of held-out validation pairs, as labels accumulate. Each seed starts both strategies from the same {study.params.initial ?? '?'} random
+        labels; then every round adds {study.params.batch ?? '?'} labels chosen at random or where a {study.params.members ?? '?'}-network ensemble disagrees most. Band: min–max over seeds.
+      </p>
+      <figure aria-label="Validation accuracy against the number of labels, per selection strategy">
+        <Legend items={strategies.map((k) => ({ label: k === 'disagreement' ? 'ensemble disagreement' : k, color: STRATEGY_COLOR[k] ?? '#8494a8' }))} />
+        <div style={{ height: 240 }}>
+          <ResponsiveContainer width="100%" height="100%">
+            <ComposedChart data={rows} margin={{ top: 6, right: 12, bottom: 16, left: 4 }}>
+              <CartesianGrid stroke="#1b2532" vertical={false} />
+              <XAxis dataKey="labels" type="number" domain={['dataMin', 'dataMax']} tick={{ fill: '#8494a8', fontSize: 11, fontFamily: 'IBM Plex Mono' }} stroke="#2d3e52" tickLine={false} label={{ value: 'labels', position: 'insideBottom', offset: -10, fill: '#8494a8', fontSize: 11 }} />
+              <YAxis domain={['auto', 'auto']} tick={{ fill: '#8494a8', fontSize: 11, fontFamily: 'IBM Plex Mono' }} stroke="#2d3e52" tickLine={false} width={44} tickFormatter={(v) => fmt.pct(v)} />
+              <Tooltip
+                isAnimationActive={false}
+                content={({ active, payload, label }) =>
+                  active && payload?.length ? (
+                    <div className="rounded-md border border-line-strong bg-surface-2/95 px-3 py-2 text-xs shadow-xl">
+                      <div className="num mb-1 text-ink-3">{label} labels</div>
+                      {payload
+                        .filter((p) => !String(p.dataKey).endsWith('_band'))
+                        .map((p) => (
+                          <div key={String(p.dataKey)} className="num flex justify-between gap-4">
+                            <span className="text-ink-2">{String(p.dataKey)}</span>
+                            <span className="text-ink">{fmt.pct(Number(p.value), 1)}</span>
+                          </div>
+                        ))}
+                    </div>
+                  ) : null
+                }
+              />
+              {strategies.map((k) => (
+                <Area key={`${k}_band`} dataKey={`${k}_band`} stroke="none" fill={STRATEGY_COLOR[k] ?? '#8494a8'} fillOpacity={0.12} isAnimationActive={false} legendType="none" />
+              ))}
+              {strategies.map((k) => (
+                <Line key={k} dataKey={k} stroke={STRATEGY_COLOR[k] ?? '#8494a8'} strokeWidth={2} dot={{ r: 2.5 }} isAnimationActive={false} />
+              ))}
+            </ComposedChart>
+          </ResponsiveContainer>
+        </div>
+      </figure>
+      <p className="mt-2 text-xs text-ink-3">
+        After {last[strategies[0]]?.labels ?? '?'} labels:{' '}
+        {strategies.map((k, i) => (
+          <span key={k}>
+            {i > 0 && ' · '}
+            {k} {fmt.pct(last[k]?.mean, 1)} (seeds {fmt.pct(last[k]?.min, 1)}–{fmt.pct(last[k]?.max, 1)})
+          </span>
+        ))}
+        . These are reward-model accuracies; whether a policy trained on either model lands better is a separate (PPO) experiment:{' '}
+        <span className="font-mono">rlhf-active --register</span>, then <span className="font-mono">rlhf-study --reward-models</span>.
+      </p>
+    </Card>
   )
 }

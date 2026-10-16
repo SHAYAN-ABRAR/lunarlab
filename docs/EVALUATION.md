@@ -128,12 +128,81 @@ episodes as the calm test. Results are stored as `evaluations/robustness-<condit
 tuned on them. Training and every primary evaluation keep the default physics (`make_env` accepts only these
 four keys as overrides).
 
+## Training under varied physics
+
+A run can train with per-episode randomized physics (`train --physics randomized`, `suite --physics both`, or
+*Training physics* in the Training Console). Before every training episode, `lunarlab/physics.py` draws:
+wind on with probability `wind_probability` (default 0.8); if on, wind power uniform in `wind_power`
+(default 0–10) and turbulence uniform in `turbulence_power` (default 0–1); gravity uniform in `gravity`
+(default −11 to −9). The draw is seeded from the worker's episode seed, so a run is reproducible, and it is
+logged per episode (`wind`, `wind_power`, `turbulence_power`, `gravity` columns of `episodes.csv`).
+
+What stays the same for every run, fixed or randomized: validation (checkpoint selection) and the final test
+fly **default physics**, and the robustness conditions above evaluate the frozen checkpoint. With the default
+ranges, `wind-5`, `wind-10` and the calm test lie inside the training distribution, while `wind-15` and
+`gravity-11.5` lie outside it. Compare & Diagnose pairs fixed and randomized groups of the same algorithm,
+reward and discount and shows both across the calm test and every robustness condition, each difference with
+a 95% bootstrap interval that resamples each side's policies (coloured only when it excludes zero).
+
+## Automatic tuning and the test set
+
+Tuning (`python -m lunarlab tune`, or *Automatic Tuning* in the UI) uses **validation only**. Every trial is
+a normal run trained with the sampled settings, the same training seed as every other trial of the study
+(common random numbers), and validated every `validation_every` transitions on the protocol's 10 validation
+seeds with default physics and the original reward. Each validation is reported to Optuna; after the warm-up
+(`warmup_transitions`, and `startup_trials` complete trials), a median pruner may stop a trial whose
+validation return is below the median of earlier trials at the same point. A trial's value is its best
+validation return, the criterion that also selects a run's checkpoint.
+
+Trial runs carry `tuning: {study_id, trial}` in their metadata and are **refused** by the final-test
+evaluation. `tune-apply` (or *Normal runs from best*) creates fresh, unmarked runs from the best settings with
+new training seeds and a normal budget; only those are trained to completion and evaluated on the test seeds.
+Selecting the maximum of many noisy validation scores flatters the winner, which is exactly why its test
+result has to come from these fresh runs.
+
 ## Algorithm comparison (PPO vs DQN)
 
 DQN runs use the same environment, reward wrapper, evaluation protocol and validation-based checkpoint
-selection, with RL Baselines3 Zoo's LunarLander hyperparameters and Zoo's **100,000-transition** budget
-(PPO: 1,000,000). The budgets differ on purpose (see ARCHITECTURE.md); comparisons flag this, so read
-PPO-vs-DQN results as "each algorithm with its reference settings", not "equal experience".
+selection, with RL Baselines3 Zoo's LunarLander hyperparameters. Compare & Diagnose says which of two kinds of
+comparison a selection is:
+
+- **Each algorithm at its reference setup** (the published DQN experiment): Zoo's **100,000-transition**
+  budget for DQN, 1,000,000 for PPO. Read it as "each algorithm with its reference settings", not "equal
+  experience".
+- **Matched budgets** (`suite --algos ppo,dqn`, or several algorithms in the Training Console's experiment
+  form): one experiment, the same rewards and training seeds for both algorithms, and the budget rounded up to
+  a multiple of every algorithm's rollout, so every run trains on exactly the same number of transitions
+  (300,000 requested → 303,104; 1,000,000 → 1,003,520).
+
+Learning curves can be read against **transitions** (sample efficiency) or **wall-clock time** (cost on this
+machine): the Compare page switches the axis, and `results` draws both for every reward trained by several
+algorithms at one budget (`algorithm_comparison.png`). Wall-clock time runs from the start of each training
+segment's loop, validation passes and checkpoint saves included; pauses between the segments of a resumed run
+are not counted. It depends on the machine and on how many runs trained at the same time, so it compares
+speed only between runs trained under the same conditions. Every training segment records how many runs its
+launcher trained at once (`parallel_slots`: `--parallel N`, or the app's training lane), and Compare lists
+every difference between the selected runs (machine, runs in parallel, device, threads) under the time axis.
+In `results`, a group's time curve stops when its first seed finished, so its mean is never carried by the
+slowest seeds alone. Every group has several independently trained policies (training seeds), and all
+statistics are computed over them as described above.
+
+### Discount-factor ablation
+
+PPO's reference discount factor is 0.999 and DQN's is 0.99, so the reference-setup comparison changes the
+algorithm and γ at once. `suite --algos ppo,dqn --gammas 0.99,0.999` trains the 2 × 2 design: both
+algorithms at both discount factors, with the same rewards, seeds, budget and evaluation, and every other
+setting at its reference value. For every reward and training physics with such a contrast, Compare &
+Diagnose, `compare` and `results` report:
+
+- each algorithm × γ cell: the mean over training seeds of every policy's final-test mean original return,
+  with a 95% bootstrap interval over seeds, and the pad-landing rate;
+- the effect of γ within each algorithm, against that algorithm's reference γ;
+- PPO − DQN at each matched γ and, for contrast, at their reference settings (where both differ);
+- for each difference, a 95% interval that resamples each cell's seeds independently, and P(first higher).
+
+A difference counts as evidence only when its interval excludes zero (the Compare page colours only those).
+The cells come from groups that differ in γ alone; when budgets, other hyperparameters or protocols differ
+between cells, or a cell has fewer than five seeds, the table says so.
 
 ## Reward-exploitation rule
 
@@ -155,6 +224,17 @@ shown as context only.
 
 Recordings are single episodes on chosen seeds, evaluated under the same conditions. The UI shows each
 recording's seed and split. Consult the outcome rates before treating any clip as typical.
+Recordings of trained policies also store, for every step, what the network computed on the observation it
+acted on (row *k* holds the decision that produced frame *k*): PPO's action probabilities, their entropy and
+the critic's value V(s); DQN's Q-values. They are computed separately from choosing the action, so recorded
+actions are unchanged (with deterministic evaluation the action is the most probable / highest-valued one,
+which the tests check). Values are stored rounded (probabilities to 5 decimals, Q-values and V(s) to 4), so a
+near-tie can show two equal values; the chosen action is always one of the largest. In a smooth deterministic
+descent PPO's entropy is often close to uniform (ln 4 ≈ 1.39): the policy is nearly indifferent there and
+decisive where it matters. As a check, for the potential-shaping seed-0 policy the entropy these diagnostics
+compute, averaged over states visited with *sampled* actions (10 episodes), is 0.721, against 0.724 logged by
+SB3 in its last update; averaged over deterministic flights it is 1.16. V(s) estimates the discounted *training*-reward return, so for a shaped reward it is on
+the shaped scale. Recordings made before this existed have no such fields; Flight Replay says so.
 `python -m lunarlab record-showcase --experiment-id <id> --references` records one policy per group (training
 seed 0 by default) and the heuristic/random references on the same episode seeds, for side-by-side replays.
 Keyboard flights (Fly It Yourself) are recorded the same way, with policy kind `human`, on seeds from

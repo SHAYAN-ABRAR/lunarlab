@@ -4,7 +4,16 @@ import { useEffect, useMemo, useState } from 'react'
 import { Link, useSearchParams } from 'react-router'
 import { Legend, SeedDotPlot, StackedBars } from '../components/charts'
 import { useJobWatch } from '../components/Jobs'
-import { type RobustStats, RobustStatsCard, type RobustnessTable, RobustnessCard } from '../components/robust'
+import {
+  type GammaAblation,
+  GammaAblationCard,
+  type PhysicsComparison,
+  PhysicsComparisonCard,
+  type RobustStats,
+  RobustStatsCard,
+  type RobustnessTable,
+  RobustnessCard,
+} from '../components/robust'
 import { Badge, Button, Card, EmptyState, ErrorBanner, Notice, PageHeader, Segmented, Spinner, StateBadge, Table } from '../components/ui'
 import { api, idempotencyKey } from '../lib/api'
 import { fmt } from '../lib/format'
@@ -16,6 +25,8 @@ import { CartesianGrid, Line, LineChart, ReferenceLine, ResponsiveContainer, Too
 interface Group {
   group_key?: string
   algo?: string
+  gamma?: number | null
+  variant?: string
   reward_hash: string
   reward_name: string
   reward_preset: Preset
@@ -48,6 +59,9 @@ interface CompareData {
   curves: Record<string, { points: CurvePoint[]; window: number; n_episodes: number }>
   robust_stats?: RobustStats
   robustness?: RobustnessTable
+  physics_comparison?: PhysicsComparison[]
+  gamma_ablation?: GammaAblation[]
+  wall_clock?: { notes: string[] }
 }
 
 /** Short group label for compact charts: first two words of the reward name, keeping an algorithm prefix. */
@@ -64,23 +78,73 @@ function FlagBadge({ flag }: { flag: string }) {
   return <Badge tone="neutral" icon={<CircleSlash className="size-3.5" aria-hidden />}>{flag}</Badge>
 }
 
+/** Groups of the same reward (algorithms, discount factors, training physics) get their own colours. */
+const GROUP_PALETTE = ['#3987e5', '#c98500', '#d55181', '#008300', '#9085e9', '#5bb8c9', '#d95926', '#8494a8']
+
+type CurveAxis = 'transitions' | 'elapsed_s'
+
+function axisTime(s: number): string {
+  if (s >= 3600) return `${(s / 3600).toFixed(s % 3600 === 0 ? 0 : 1)}h`
+  if (s >= 60) return `${Math.round(s / 60)}m`
+  return `${Math.round(s)}s`
+}
+
 function CurvesChart({ data }: { data: CompareData }) {
+  const [axis, setAxis] = useState<CurveAxis>('transitions')
+  // Preset colours while every preset is one group; otherwise one colour per group, DQN dashed.
+  const byPreset = new Set(data.groups.map((g) => g.reward_preset)).size === data.groups.length
+  const groupOf = new Map(data.groups.flatMap((g, i) => g.per_seed.map((p) => [p.run_id, { g, i }] as const)))
   const series = data.runs
     .filter((r) => data.curves[r.run_id]?.points.length)
-    .map((r) => ({ id: r.run_id, label: `${r.reward_name} · s${r.seed}`, color: PRESET_COLOR[r.reward_preset], dashed: PRESET_DASH[r.reward_preset], points: data.curves[r.run_id].points }))
+    .map((r) => {
+      const hit = groupOf.get(r.run_id)
+      const group = hit?.g.reward_name ?? r.reward_name
+      const all = data.curves[r.run_id].points
+      return {
+        id: r.run_id,
+        group,
+        label: `${group} · s${r.seed}`,
+        color: byPreset || !hit ? PRESET_COLOR[r.reward_preset] : GROUP_PALETTE[hit.i % GROUP_PALETTE.length],
+        dashed: byPreset || !hit ? PRESET_DASH[r.reward_preset] : hit.g.algo === 'dqn' ? '6 3' : undefined,
+        points: axis === 'transitions' ? all : all.filter((p) => p.elapsed_s != null),
+      }
+    })
+    .filter((s) => s.points.length)
   if (!series.length) return <div className="py-8 text-center text-[13px] text-ink-3">No training episodes recorded for these runs yet.</div>
-  const legendItems = [...new Map(series.map((s) => [s.color, { label: s.label.split(' · ')[0], color: s.color, dashed: !!s.dashed }])).values()]
+  const legendItems = [...new Map(series.map((s) => [s.group, { label: s.group, color: s.color, dashed: !!s.dashed }])).values()]
+  const notes = data.wall_clock?.notes ?? []
   return (
     <figure aria-label="Original episode return during training for each selected run">
       <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
         <Legend items={legendItems} />
-        <span className="text-[11px] text-ink-3">one line per training seed · rolling mean of 100 training episodes</span>
+        <div className="flex flex-wrap items-center gap-3">
+          <span className="text-[11px] text-ink-3">one line per training seed · rolling mean of 100 training episodes</span>
+          <Segmented<CurveAxis>
+            label="Training-curve x-axis"
+            value={axis}
+            onChange={setAxis}
+            options={[
+              { value: 'transitions', label: 'Transitions' },
+              { value: 'elapsed_s', label: 'Wall-clock time' },
+            ]}
+          />
+        </div>
       </div>
       <div style={{ height: 280 }}>
         <ResponsiveContainer width="100%" height="100%">
           <LineChart margin={{ top: 6, right: 12, bottom: 16, left: 4 }}>
             <CartesianGrid stroke="#1b2532" vertical={false} />
-            <XAxis dataKey="transitions" type="number" domain={['dataMin', 'dataMax']} allowDuplicatedCategory={false} tick={{ fill: '#8494a8', fontSize: 11, fontFamily: 'IBM Plex Mono' }} tickFormatter={(v) => fmt.compact(v)} stroke="#2d3e52" tickLine={false} label={{ value: 'transitions', position: 'insideBottom', offset: -10, fill: '#8494a8', fontSize: 11 }} />
+            <XAxis
+              dataKey={axis}
+              type="number"
+              domain={['dataMin', 'dataMax']}
+              allowDuplicatedCategory={false}
+              tick={{ fill: '#8494a8', fontSize: 11, fontFamily: 'IBM Plex Mono' }}
+              tickFormatter={(v: number) => (axis === 'transitions' ? fmt.compact(v) : axisTime(v))}
+              stroke="#2d3e52"
+              tickLine={false}
+              label={{ value: axis === 'transitions' ? 'transitions' : 'wall-clock training time', position: 'insideBottom', offset: -10, fill: '#8494a8', fontSize: 11 }}
+            />
             <YAxis tick={{ fill: '#8494a8', fontSize: 11, fontFamily: 'IBM Plex Mono' }} stroke="#2d3e52" tickLine={false} width={52} />
             <ReferenceLine y={200} stroke="#5b6f88" strokeDasharray="3 4" />
             <Tooltip
@@ -88,7 +152,7 @@ function CurvesChart({ data }: { data: CompareData }) {
               content={({ active, payload, label }) =>
                 active && payload?.length ? (
                   <div className="rounded-md border border-line-strong bg-surface-2/95 px-3 py-2 text-xs shadow-xl">
-                    <div className="num mb-1 text-ink-3">transitions ≈ {fmt.compact(Number(label))}</div>
+                    <div className="num mb-1 text-ink-3">{axis === 'transitions' ? `transitions ≈ ${fmt.compact(Number(label))}` : `time ≈ ${fmt.duration(Number(label))}`}</div>
                     {payload.slice(0, 12).map((p) => (
                       <div key={String(p.name)} className="num flex justify-between gap-4">
                         <span className="text-ink-2">{p.name}</span>
@@ -105,6 +169,19 @@ function CurvesChart({ data }: { data: CompareData }) {
           </LineChart>
         </ResponsiveContainer>
       </div>
+      {axis === 'elapsed_s' && (
+        <figcaption className="mt-2 text-xs text-ink-3">
+          Wall-clock time from the start of training, including validation passes. It depends on the machine and on how many runs trained at the same time, so it compares speed only
+          between runs trained under the same conditions.
+          {notes.length > 0 && (
+            <ul className="mt-1 list-disc space-y-0.5 pl-5 text-warn">
+              {notes.map((n) => (
+                <li key={n}>{n}</li>
+              ))}
+            </ul>
+          )}
+        </figcaption>
+      )}
     </figure>
   )
 }
@@ -449,6 +526,10 @@ export default function Compare() {
           )}
 
           {data.robustness && <RobustnessCard table={data.robustness} experimentId={experimentId || undefined} />}
+
+          {data.physics_comparison && data.robustness && <PhysicsComparisonCard rows={data.physics_comparison} conditions={data.robustness.conditions} />}
+
+          {data.gamma_ablation && <GammaAblationCard blocks={data.gamma_ablation} />}
 
           <Card title="Training curves (original reward)">
             <CurvesChart data={data} />

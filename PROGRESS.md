@@ -11,7 +11,8 @@ _Last updated: 2026-10-16._
 | Full experiment: 4 reward designs × 5 seeds, PPO, STANDARD | **done**, final-tested, robustness-tested ([docs/RESULTS.md](docs/RESULTS.md)) |
 | Algorithm comparison: 4 designs × 3 seeds, DQN at 100k | **done** |
 | Learned rewards (RLHF in miniature): 2 reward models × 3 seeds | **done** |
-| Static demo, CI workflow, results write-up | built and verified locally; the hosted demo and CI badges need the repository to be public (or Pages enabled on a paid plan) |
+| Static demo, CI workflow, results write-up | live at https://shayan-abrar.github.io/lunarlab/; CI and demo deploys pass on GitHub |
+| Six enhancements (leakage fix, varied physics, active preference learning, Optuna tuning, policy diagnostics, PPO–DQN comparisons) | **built and verified** with tests and smoke experiments; the leakage refit and the active-learning study were measured, the other full studies have not been run ([commands](docs/RESULTS.md#studies-built-but-not-yet-run)) |
 
 ## Portfolio extensions (2026-10-15/16)
 
@@ -31,6 +32,33 @@ _Last updated: 2026-10-16._
   opponent ghost and a logbook.
 - **Parallel experiments** (`--parallel N`), `run-experiment` to resume and final-test an experiment,
   `record-showcase`, `export-demo` and a static demo mode of the UI (`VITE_DEMO=1`), CI and Pages workflows.
+
+## Enhancements (2026-10-16)
+
+1. **Preference validation leakage fixed.** Reward-model validation now splits by whole episode (seeded,
+   20%), segments and pairs of one episode stay on one side, human labels that straddle the split are
+   excluded, and duplicate labels are refused. Refit on the published dataset: accuracy vs true order 0.685
+   (300 labels) and 0.780 (3,000 labels) instead of 0.734 / 0.765, one refit each (correction in RESULTS.md).
+2. **Training under varied physics.** Per-episode wind, turbulence and gravity drawn from configurable ranges,
+   seeded from the episode seed and logged per episode; `train/suite --physics`, the Training Console, and a
+   Compare card for fixed vs randomized training across the calm test and every robustness condition, with
+   difference intervals. Smoke-verified; no full study yet.
+3. **Active preference learning.** Bootstrap reward-model ensembles; the next pair to label can be the one the
+   ensemble disagrees on most, or random (the baseline); labelled pairs are never shown again; labelling
+   progress and the strategy are on Learned Rewards. Measured (5 seeds, 1,000 simulated labels):
+   disagreement did **not** beat random (RESULTS.md finding 6).
+4. **Automatic tuning with Optuna.** PPO/DQN hyperparameters and reward weights, bounded trial budgets,
+   studies persisted in SQLite, resume and cancel, median pruning after a warm-up, a trial table and curves,
+   and fresh normal runs from the best settings. Validation only: trial runs are refused by the final test.
+   Smoke-verified (5 trials).
+5. **Policy diagnostics in Flight Replay.** PPO action probabilities, entropy and V(s), DQN Q-values, per step
+   and on the shared timeline; older recordings say they have none. Ten new policy recordings on test episode
+   20002 (one per group, plus heuristic and random references) carry them in the demo. Cross-check: entropy
+   over sampled rollouts 0.721 vs 0.724 logged by SB3.
+6. **PPO–DQN comparisons.** Matched transition budgets, learning curves against transitions and wall-clock
+   time (Compare toggle; `results` draws `algorithm_comparison.png`), several training seeds per cell, and a
+   separate discount-factor ablation (Compare card, `compare`, `results`) with difference intervals. Each
+   training segment records how many runs trained at once. Smoke-verified with an 8-run 2 × 2 suite.
 
 ## Completed
 
@@ -57,13 +85,14 @@ _Last updated: 2026-10-16._
 
 | Check | Result |
 |---|---|
-| `python -m pytest` | **163 passed** (unit, real LunarLander integration, real PPO and DQN, learned rewards, robustness, statistics, keyboard flights, demo export, showcase media, real worker subprocesses, API) |
+| `python -m pytest` | **204 passed** (unit, real LunarLander integration, real PPO and DQN, learned rewards incl. episode split and active learning, varied physics, Optuna tuning with pruning and cancel, policy diagnostics, comparisons and the γ ablation, robustness, statistics, keyboard flights, demo export, showcase media, real worker subprocesses, API) |
 | `ruff check lunarlab tests` / `ruff format --check` | clean |
 | `npm run typecheck` (tsc -b, strict) | clean |
 | `npm run lint` (oxlint, correctness + suspicious) | clean |
 | `npm run build` | OK |
 | `npx playwright test` (installed Edge, real backend on a disposable home) | **10 passed**: empty state, random-agent replay (3-D view, playback, footage toggle), config revisions, SMOKE job to completion, record+replay trained flight, STANDARD stop → resume → stop, compare/stress-test/learn, a keyboard flight against the heuristic ghost to its recording, learned-rewards and robustness empty states, deterministic 3-D capture mode |
 | Static demo (built with `VITE_DEMO=1`, served under `/lunarlab/` with a GitHub-Pages-style 404 fallback) | overview, compare (final test, robust statistics, robustness), deep-linked replay with video, preference labelling with reveal, fly page disabled with an explanation; no console errors; no horizontal overflow at 390 px |
+| New screens in Edge against real backends (2026-10-16) | γ-ablation card, transitions / wall-clock curves, fixed-vs-randomized card, launch and suite forms, tuning study with trials, labelling progress and ensemble, active-learning chart, PPO and DQN policy panels; no console errors |
 | `python -m lunarlab doctor` | 10/10 OK |
 | `scripts\setup.ps1`, `start.ps1 -Background`, duplicate start, `stop.ps1` (Windows PowerShell 5.1) | OK |
 | SB3 `check_env` on the wrapper with every preset | no warnings |
@@ -99,6 +128,13 @@ _Last updated: 2026-10-16._
 
 ## Issues found and fixed during verification
 
+- (2026-10-16) The published learning-curve figure silently averaged potential shaping over 4 of 5 seeds:
+  the resumed seed-1 run's `episodes.csv` mixed two column layouts (newer code added a column), which the
+  reader skipped. The writer now keeps a file's own header, the reader maps rows by width, the figure was
+  regenerated, and RESULTS.md has a correction (tests added).
+- (2026-10-16) Right-aligned numeric table headers were left-aligned everywhere (the table's default
+  alignment had higher CSS specificity); a rounded −0.4 displayed as "-0".
+
 - (2026-10-15) One STANDARD run (potential shaping, seed 1) failed at 200,704 transitions: replacing
   `best_validation.zip` hit `WinError 5` for longer than the 15 s retry window while the machine was fully
   loaded. Checkpoints now use unique temp names, retry for 60 s, and fall back to a unique file name recorded
@@ -124,15 +160,20 @@ _Last updated: 2026-10-16._
 
 - Few seeds (5 per PPO design, 3 per DQN and learned-reward group): see the limitations in
   [docs/RESULTS.md](docs/RESULTS.md).
-- DQN ran at Zoo's 100k-transition budget, PPO at 1M; the comparison is not at equal experience.
+- In the published runs DQN ran at Zoo's 100k-transition budget and PPO at 1M; matched-budget runs and the
+  discount-factor ablation are built and smoke-tested but have not been run at full scale.
+- Wall-clock curves of the published runs cannot be compared fairly: how many runs trained at once was not
+  recorded then (it is now).
+- Active learning was compared on reward-model accuracy only, with a simulated labeller.
 - Preference labels in the study come from a simulated human; human labels are collected and can be mixed
   in (`--include-human`) but no study with real labels has been run.
 - A resumed run is not bit-for-bit identical to an uninterrupted run (documented; one study run was resumed).
 - GPU training is optional and untested here (CPU torch build installed; CPU is faster for this MLP).
-- CI (`.github/workflows/ci.yml`) has not run on GitHub yet; the hosted demo needs Pages enabled.
 
 ## Next steps
 
-- Make the repository public (or enable Pages) so the demo and badges work; check the first CI run.
+- Run the studies listed in [docs/RESULTS.md](docs/RESULTS.md#studies-built-but-not-yet-run) (γ ablation at
+  matched budgets, varied physics, active labels carried through to PPO, tuning) and add their results.
+- Push to publish the refreshed demo snapshot (`demo/api`).
 - Optional: label a few hundred pairs yourself on Learned Rewards and train a reward model with
   `--include-human` to compare real and simulated preferences.

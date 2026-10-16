@@ -34,6 +34,7 @@ from typing import Any
 import psutil
 
 from lunarlab.db import ACTIVE_STATES, Database
+from lunarlab.parallel import PARALLEL_SLOTS_ENV
 from lunarlab.storage import (
     RunPaths,
     atomic_write_json,
@@ -60,6 +61,8 @@ KIND_LANES = {
     "record_demo": "analysis",
     "report": "analysis",
     "benchmark": "analysis",
+    "reward_ensemble": "analysis",
+    "tune": "train",
 }
 LANE_LIMITS = {"train": 1, "analysis": 1}
 EXIT_STATE = {EXIT_COMPLETED: "completed", EXIT_STOPPED: "stopped", EXIT_INTERRUPTED: "interrupted"}
@@ -373,6 +376,7 @@ class JobManager:
                 "PYTHONIOENCODING": "utf-8",
                 "OMP_NUM_THREADS": "1",
                 "MKL_NUM_THREADS": "1",
+                PARALLEL_SLOTS_ENV: str(LANE_LIMITS[job["lane"]]),
             }
         )
         kwargs: dict[str, Any] = {}
@@ -544,6 +548,33 @@ def run_worker(job_id: str) -> int:
             status(state="running", note="measuring throughput")
             result = run_benchmark(
                 n_envs_list=tuple(params.get("n_envs", [1, 2, 4, 8])), ppo=bool(params.get("ppo", True))
+            )
+            code = EXIT_COMPLETED
+        elif kind == "tune":
+            from lunarlab.tuning import run_study
+
+            status(state="running", note="tuning study")
+            summary = run_study(
+                params["study_id"],
+                n_trials=params.get("n_trials"),
+                timeout_s=params.get("timeout_s"),
+                should_stop=should_stop,
+            )
+            result = {
+                "study_id": params["study_id"],
+                "finished": summary.get("finished"),
+                "best": (summary.get("best") or {}).get("value"),
+                "state": (summary.get("status") or {}).get("state"),
+            }
+            code = EXIT_STOPPED if result["state"] == "stopped" and should_stop() else EXIT_COMPLETED
+        elif kind == "reward_ensemble":
+            from lunarlab.preferences.active import train_labelling_ensemble
+
+            status(state="running", note="fitting the labelling ensemble")
+            result = train_labelling_ensemble(
+                params["dataset_id"],
+                simulated_pairs=int(params.get("simulated_pairs", 0)),
+                members=int(params.get("members", 5)),
             )
             code = EXIT_COMPLETED
         elif kind == "report":

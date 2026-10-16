@@ -269,3 +269,258 @@ export function RobustnessCard({ table, experimentId }: { table: RobustnessTable
     </Card>
   )
 }
+
+export interface PhysicsComparison {
+  name: string
+  algo: string
+  reward_preset: Preset
+  fixed_group: string
+  randomized_group: string
+  randomized_physics: string
+  n_fixed: number
+  n_randomized: number
+  conditions: {
+    condition: string
+    fixed: { mean_original_return: number; pad_landing_rate: number; n_seeds: number } | null
+    randomized: { mean_original_return: number; pad_landing_rate: number; n_seeds: number } | null
+    difference: number | null
+    ci?: CI
+  }[]
+}
+
+function Cell({ v }: { v: { mean_original_return: number; pad_landing_rate: number; n_seeds: number } | null }) {
+  if (!v) return <span className="text-ink-3">—</span>
+  return (
+    <>
+      <div className="num text-ink">{fmt.num(v.mean_original_return, 0)}</div>
+      <div className="text-[11px] text-ink-3">
+        pad {fmt.pct(v.pad_landing_rate)} · n={v.n_seeds}
+      </div>
+    </>
+  )
+}
+
+export function PhysicsComparisonCard({ rows, conditions }: { rows: PhysicsComparison[]; conditions: Record<string, string> }) {
+  if (!rows.length) return null
+  return (
+    <Card title="Training physics: fixed vs randomized" eyebrow="same rewards and seeds · evaluated on calm and windy physics">
+      <p className="mb-4 max-w-[110ch] text-[13px] text-ink-2">
+        Runs trained with randomized wind, turbulence and gravity next to runs trained on default physics. Both are selected on calm validation episodes and then fly the same
+        evaluation episodes: the calm final test and the robustness conditions. Differences are between means over policies, with 95% bootstrap intervals that resample each
+        side’s policies; a difference is coloured only when its interval excludes zero. With few policies per side, read them with the per-seed dots of the robustness card.
+      </p>
+      <div className="space-y-6">
+        {rows.map((r) => (
+          <div key={r.name}>
+            <h3 className="mb-1 flex flex-wrap items-center gap-2 text-[13px] font-medium text-ink">
+              <span className="inline-block size-2 rounded-full" style={{ background: PRESET_COLOR[r.reward_preset] }} />
+              {r.name}
+            </h3>
+            <p className="mb-2 text-xs text-ink-3">
+              Randomized side: {r.randomized_physics.replace(/^randomized:\s*/, '')} · {r.n_fixed} fixed and {r.n_randomized} randomized policies evaluated
+            </p>
+            <Table>
+              <thead>
+                <tr>
+                  <th>Evaluation condition</th>
+                  <th className="text-right">Fixed-physics training</th>
+                  <th className="text-right">Randomized training</th>
+                  <th className="text-right">Difference (randomized − fixed)</th>
+                </tr>
+              </thead>
+              <tbody>
+                {r.conditions.map((c) => (
+                  <tr key={c.condition} className="align-top">
+                    <td title={conditions[c.condition]}>
+                      <span className="font-mono text-xs">{c.condition}</span>
+                      <div className="text-[11px] text-ink-3">{conditions[c.condition]}</div>
+                    </td>
+                    <td className="text-right">
+                      <Cell v={c.fixed} />
+                    </td>
+                    <td className="text-right">
+                      <Cell v={c.randomized} />
+                    </td>
+                    <td className={clsx('num text-right', c.difference == null ? 'text-ink-3' : !c.ci ? 'text-ink' : c.ci[0] > 0 ? 'text-good' : c.ci[1] < 0 ? 'text-crit' : 'text-ink')}>
+                      {c.difference == null ? '—' : fmt.signed(c.difference, 0)}
+                      {c.ci && (
+                        <div className="text-[11px] text-ink-3">
+                          [{fmt.signed(c.ci[0], 0)}, {fmt.signed(c.ci[1], 0)}]
+                        </div>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+          </div>
+        ))}
+      </div>
+      <p className="mt-3 text-xs text-ink-3">Missing cells: that side has no evaluation for the condition yet (run the final test and `python -m lunarlab robustness`).</p>
+    </Card>
+  )
+}
+
+interface Effect {
+  difference: number | null
+  ci: CI
+  p_improvement: number | null
+  p_improvement_ci: CI
+}
+
+interface AblationCellData {
+  algo: string
+  gamma: number
+  group: string
+  reference: boolean
+  n_seeds: number
+  scores: number[]
+  mean: number | null
+  mean_ci: CI
+  iqm: number | null
+  pad_landing_rate: number | null
+}
+
+export interface GammaAblation {
+  reward_name: string
+  reward_preset: Preset
+  physics_label: string
+  cells: AblationCellData[]
+  gamma_effects: (Effect & { algo: string; gamma: number; vs_gamma: number })[]
+  algorithm_effects: (Effect & { gamma: number })[]
+  reference_setups: (Effect & { ppo_gamma: number; dqn_gamma: number }) | null
+  caveats: string[]
+}
+
+function AblationCell({ c }: { c: AblationCellData }) {
+  return (
+    <>
+      <div className="num text-ink">
+        {fmt.num(c.mean, 0)}
+        {c.mean_ci && (
+          <span className="text-ink-3">
+            {' '}
+            [{fmt.num(c.mean_ci[0], 0)}, {fmt.num(c.mean_ci[1], 0)}]
+          </span>
+        )}
+      </div>
+      <div className="text-[11px] text-ink-3">
+        {c.n_seeds} seed{c.n_seeds === 1 ? '' : 's'} · pad {fmt.pct(c.pad_landing_rate)}
+        {c.reference && ' · reference γ'}
+      </div>
+    </>
+  )
+}
+
+/** Coloured only when the interval excludes zero; the sign alone is not evidence. */
+function effectTone(e: Effect): string {
+  if (!e.ci) return 'text-ink'
+  return e.ci[0] > 0 ? 'text-good' : e.ci[1] < 0 ? 'text-crit' : 'text-ink'
+}
+
+function EffectRow({ label, note, e }: { label: string; note: string; e: Effect }) {
+  return (
+    <tr className="align-top">
+      <td>
+        {label}
+        <div className="text-[11px] text-ink-3">{note}</div>
+      </td>
+      <td className={clsx('num text-right', effectTone(e))}>{fmt.signed(e.difference, 0)}</td>
+      <td className="num text-right text-ink-2">{e.ci ? `[${fmt.signed(e.ci[0], 0)}, ${fmt.signed(e.ci[1], 0)}]` : '—'}</td>
+      <td className="num text-right text-ink-2">
+        {fmt.num(e.p_improvement, 2)}
+        {e.p_improvement_ci && (
+          <span className="text-ink-3">
+            {' '}
+            [{fmt.num(e.p_improvement_ci[0], 2)}, {fmt.num(e.p_improvement_ci[1], 2)}]
+          </span>
+        )}
+      </td>
+    </tr>
+  )
+}
+
+export function GammaAblationCard({ blocks }: { blocks: GammaAblation[] }) {
+  if (!blocks.length) return null
+  return (
+    <Card title="Discount factor: controlled ablation" eyebrow="algorithm × discount factor · same rewards, budget, seeds and evaluation">
+      <p className="mb-4 max-w-[110ch] text-[13px] text-ink-2">
+        PPO’s reference discount factor is 0.999 and DQN’s is 0.99, so PPO against DQN at their reference settings changes two things at once. Here the discount factor is varied on its
+        own: its effect within each algorithm, and PPO against DQN at the same γ. Cells are means over training seeds of each policy’s mean original return on the final test, with 95%
+        bootstrap intervals over seeds; differences resample each cell’s seeds. A difference is coloured only when its interval excludes zero.
+      </p>
+      <div className="space-y-6">
+        {blocks.map((b) => {
+          const algos = [...new Set(b.cells.map((c) => c.algo))]
+          const gammas = [...new Set(b.cells.map((c) => c.gamma))].toSorted((x, y) => x - y)
+          return (
+            <div key={`${b.reward_name}|${b.physics_label}`}>
+              <h3 className="mb-1 flex flex-wrap items-center gap-2 text-[13px] font-medium text-ink">
+                <span className="inline-block size-2 rounded-full" style={{ background: PRESET_COLOR[b.reward_preset] }} />
+                {b.reward_name}
+              </h3>
+              <p className="mb-2 text-xs text-ink-3">Training physics: {b.physics_label}</p>
+              <Table>
+                <thead>
+                  <tr>
+                    <th>Algorithm</th>
+                    {gammas.map((g) => (
+                      <th key={g} className="text-right">
+                        <span className="normal-case">γ</span> = {g}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {algos.map((a) => (
+                    <tr key={a} className="align-top">
+                      <td className="font-mono text-xs uppercase">{a}</td>
+                      {gammas.map((g) => {
+                        const c = b.cells.find((x) => x.algo === a && x.gamma === g)
+                        return <td key={g} className="text-right">{c ? <AblationCell c={c} /> : <span className="text-ink-3">not trained</span>}</td>
+                      })}
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
+              <Table className="mt-3">
+                <thead>
+                  <tr>
+                    <th>Contrast</th>
+                    <th className="text-right">Difference</th>
+                    <th className="text-right">95% interval</th>
+                    <th className="text-right" title="Probability that a policy from the first cell scores higher than one from the second">
+                      P(first higher)
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {b.gamma_effects.map((e) => (
+                    <EffectRow key={`g-${e.algo}-${e.gamma}`} label={`${e.algo.toUpperCase()}: γ ${e.gamma} − γ ${e.vs_gamma}`} note="the discount factor alone" e={e} />
+                  ))}
+                  {b.algorithm_effects.map((e) => (
+                    <EffectRow key={`a-${e.gamma}`} label={`PPO − DQN at γ ${e.gamma}`} note="the algorithm at a matched discount factor" e={e} />
+                  ))}
+                  {b.reference_setups && (
+                    <EffectRow
+                      label={`PPO (γ ${b.reference_setups.ppo_gamma}) − DQN (γ ${b.reference_setups.dqn_gamma})`}
+                      note="reference settings: algorithm and discount factor both differ"
+                      e={b.reference_setups}
+                    />
+                  )}
+                </tbody>
+              </Table>
+              {b.caveats.length > 0 && (
+                <ul className="mt-2 list-disc space-y-0.5 pl-5 text-xs text-warn">
+                  {b.caveats.map((c) => (
+                    <li key={c}>{c}</li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          )
+        })}
+      </div>
+    </Card>
+  )
+}

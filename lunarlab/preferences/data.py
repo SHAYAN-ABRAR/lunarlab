@@ -13,6 +13,12 @@ from the UI are stored next to the dataset and can be mixed in.
 
 Episode seeds for collection start at 30,000, disjoint from training workers, validation
 (10,000+) and final test (20,000+).
+
+Train/validation isolation is by **whole episode**: segments cut from one episode overlap in
+time and look alike, so all of them sit on the same side of the split. The split is a fixed
+property of the dataset (``split_by_episode`` with the default seed), so pairs shown to people
+for labelling are drawn from training episodes only, and labels that touch validation episodes
+are never used for training.
 """
 
 from __future__ import annotations
@@ -37,6 +43,8 @@ from lunarlab.storage import (
 
 SEGMENT_LEN = 40
 COLLECTION_SEED_BASE = 30_000
+VAL_FRACTION = 0.2  # fraction of *episodes* held out for validation
+SPLIT_SEED = 0  # the dataset's fixed split; reward models and the labelling UI share it
 
 
 def datasets_dir() -> Path:
@@ -91,6 +99,82 @@ class SegmentSet:
                 start=z["start"],
                 sources=list(meta["sources"]),
             )
+
+
+@dataclass(frozen=True)
+class EpisodeSplit:
+    """Segment indices of the training and validation episodes (sorted, disjoint)."""
+
+    train: np.ndarray
+    val: np.ndarray
+    train_episodes: int
+    val_episodes: int
+    seed: int
+    val_fraction: float
+
+    def describe(self) -> dict:
+        return {
+            "method": "episode",
+            "seed": self.seed,
+            "val_fraction": self.val_fraction,
+            "train_episodes": self.train_episodes,
+            "val_episodes": self.val_episodes,
+            "train_segments": int(self.train.size),
+            "val_segments": int(self.val.size),
+        }
+
+
+def episode_ids(seg: SegmentSet) -> np.ndarray:
+    """One integer per segment identifying its episode (policy source + episode seed)."""
+    keys = np.stack([seg.source.astype(np.int64), seg.episode_seed.astype(np.int64)], axis=1)
+    _, inverse = np.unique(keys, axis=0, return_inverse=True)
+    return inverse.reshape(-1)
+
+
+def split_by_episode(
+    seg: SegmentSet, *, val_fraction: float = VAL_FRACTION, seed: int = SPLIT_SEED
+) -> EpisodeSplit:
+    """Hold out whole episodes for validation (deterministic for a given dataset and seed)."""
+    ep = episode_ids(seg)
+    n_ep = int(ep.max()) + 1 if ep.size else 0
+    if n_ep < 2:
+        raise ValueError("a preference dataset needs segments from at least 2 episodes to split")
+    n_val = min(n_ep - 1, max(1, int(round(val_fraction * n_ep))))
+    order = np.random.default_rng(seed).permutation(n_ep)
+    val_mask = np.isin(ep, order[:n_val])
+    return EpisodeSplit(
+        train=np.flatnonzero(~val_mask),
+        val=np.flatnonzero(val_mask),
+        train_episodes=n_ep - n_val,
+        val_episodes=n_val,
+        seed=seed,
+        val_fraction=val_fraction,
+    )
+
+
+def label_value(choice: str) -> float:
+    return 1.0 if choice == "a" else 0.0 if choice == "b" else 0.5
+
+
+def partition_labels(labels: list[dict], split: EpisodeSplit) -> dict[str, list[dict]]:
+    """Sort labelled pairs by where their segments lie: both in training episodes ('train'),
+    both in validation episodes ('val'), or one on each side ('excluded': never used)."""
+    train_set = frozenset(int(x) for x in split.train)
+    val_set = frozenset(int(x) for x in split.val)
+    out: dict[str, list[dict]] = {"train": [], "val": [], "excluded": []}
+    for lab in labels:
+        i, j = int(lab["i"]), int(lab["j"])
+        if i in train_set and j in train_set:
+            out["train"].append(lab)
+        elif i in val_set and j in val_set:
+            out["val"].append(lab)
+        else:
+            out["excluded"].append(lab)
+    return out
+
+
+class DuplicateLabel(ValueError):
+    """The pair (in either order) has already been labelled."""
 
 
 def run_episode_record(policy: Policy, seed: int) -> tuple[np.ndarray, np.ndarray, np.ndarray, bool]:
@@ -233,6 +317,9 @@ def add_human_label(dataset_id: str, i: int, j: int, choice: str) -> dict:
     n = int(meta["n_segments"])
     if not (0 <= i < n and 0 <= j < n) or i == j:
         raise ValueError("invalid segment indices")
+    key = (min(i, j), max(i, j))
+    if any((min(h["i"], h["j"]), max(h["i"], h["j"])) == key for h in human_labels(dataset_id)):
+        raise DuplicateLabel("this pair has already been labelled")
     entry = {"i": int(i), "j": int(j), "choice": choice, "time": utc_now()}
     append_jsonl(dataset_path(dataset_id) / "human_labels.jsonl", entry)
     return entry
@@ -277,10 +364,14 @@ def segment_payload(dataset_id: str, index: int) -> dict:
 
 
 def random_pair(dataset_id: str, rng: np.random.Generator | None = None) -> dict:
-    """Two different segments for a human to compare (sources and returns hidden)."""
+    """Two different segments for a human to compare (sources and returns hidden).
+
+    Both come from the dataset's training episodes, so a label given here can be used to fit a
+    reward model without touching validation data."""
     seg = SegmentSet.load(dataset_path(dataset_id))
+    split = split_by_episode(seg)
     rng = rng or np.random.default_rng()
-    i, j = (int(x) for x in rng.choice(len(seg), size=2, replace=False))
+    i, j = (int(x) for x in rng.choice(split.train, size=2, replace=False))
     return {"dataset_id": dataset_id, "i": i, "j": j, "a": _segment_json(seg, i), "b": _segment_json(seg, j)}
 
 

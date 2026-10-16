@@ -346,7 +346,11 @@ def list_run_ids() -> list[str]:
 
 
 class CsvAppender:
-    """Append rows to a CSV with a fixed header, buffering between flushes."""
+    """Append rows to a CSV with a fixed header, buffering between flushes.
+
+    An existing file keeps its own header: rows are written in that file's columns (columns it does not
+    have are dropped). A run resumed by a newer LunarLab whose rows have more columns therefore stays a
+    well-formed CSV."""
 
     def __init__(self, path: Path, fieldnames: Iterable[str]) -> None:
         self.path = path
@@ -356,6 +360,11 @@ class CsvAppender:
             path.parent.mkdir(parents=True, exist_ok=True)
             with open(path, "w", newline="", encoding="utf-8") as f:
                 csv.DictWriter(f, fieldnames=self.fieldnames).writeheader()
+        else:
+            with open(path, newline="", encoding="utf-8") as f:
+                header = next(csv.reader(f), None)
+            if header:
+                self.fieldnames = header
 
     def add(self, row: dict) -> None:
         self._buffer.append(row)

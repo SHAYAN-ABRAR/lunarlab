@@ -6,6 +6,7 @@ from typing import Annotated, Literal
 
 from pydantic import BaseModel, ConfigDict, Field
 
+from lunarlab.config import PhysicsRandomization
 from lunarlab.rewards.config import RewardConfig
 
 ProfileName = Literal["smoke", "standard", "extended"]
@@ -51,6 +52,9 @@ class RunCreate(_Strict):
     vec_env: Literal["dummy", "subproc"] | None = None
     label: str = Field("", max_length=120)
     experiment_id: str | None = Field(None, max_length=120)
+    algo: Literal["ppo", "dqn"] = "ppo"
+    gamma: float | None = Field(None, gt=0.9, lt=1.0)
+    physics: PhysicsRandomization | None = None  # enabled=true: randomized training physics
     start: bool = True
     confirm_extended: bool = False
     idempotency_key: str | None = IdemKey
@@ -92,6 +96,12 @@ class SuitePlan(_Strict):
     config_ids: list[str] = Field(default_factory=list, max_length=12)
     seeds: list[int] = Field(..., min_length=1, max_length=10)
     profile: ProfileName = "standard"
+    total_transitions: int | None = Field(None, ge=4096, le=20_000_000)
+    # variants: algorithms (matched budgets when several), discount factors, training physics
+    algos: list[Literal["ppo", "dqn"]] = Field(default_factory=lambda: ["ppo"], min_length=1, max_length=2)
+    gammas: list[float] = Field(default_factory=list, max_length=3)
+    physics: Literal["fixed", "randomized", "both"] = "fixed"
+    physics_config: PhysicsRandomization | None = None
 
 
 class SuiteCreate(SuitePlan):
@@ -134,6 +144,33 @@ class FlightStart(_Strict):
 
 class FlightStep(_Strict):
     actions: list[Annotated[int, Field(ge=0, le=3)]] = Field(..., min_length=1, max_length=50)
+
+
+class TuningCreate(_Strict):
+    name: str = Field("study", min_length=1, max_length=48, pattern=r"^[A-Za-z0-9][A-Za-z0-9 _.\-]*$")
+    algo: Literal["ppo", "dqn"] = "ppo"
+    preset: PresetName = "baseline"
+    params: list[str] = Field(default_factory=list, max_length=12)
+    n_trials: int = Field(20, ge=1, le=200)
+    trial_transitions: int = Field(200_000, ge=4096, le=3_000_000)
+    validation_every: int = Field(25_000, ge=4096, le=1_000_000)
+    warmup_transitions: int | None = Field(None, ge=0, le=3_000_000)
+    startup_trials: int = Field(4, ge=0, le=50)
+    seed: int = Field(0, ge=0, le=10_000)
+    start: bool = True
+    idempotency_key: str | None = IdemKey
+
+
+class TuningApply(_Strict):
+    seeds: list[int] = Field(default_factory=lambda: [0, 1, 2], min_length=1, max_length=10)
+    profile: ProfileName = "standard"
+    start: bool = True
+
+
+class EnsembleRequest(_Strict):
+    simulated_pairs: int = Field(0, ge=0, le=5000)
+    members: int = Field(5, ge=2, le=10)
+    idempotency_key: str | None = IdemKey
 
 
 class PreferenceLabel(_Strict):

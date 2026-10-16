@@ -117,6 +117,44 @@ class TrainingConfig(_Strict):
     torch_threads: int = Field(1, ge=1, le=64)
 
 
+class PhysicsRandomization(_Strict):
+    """Per-episode variation of wind, turbulence and gravity while TRAINING (off by default).
+
+    Before every training episode, the physics are drawn from these ranges by a generator seeded
+    from that worker's episode seed, so a run is reproducible. An episode has wind with probability
+    ``wind_probability``; wind and turbulence strengths are then uniform in their ranges (both are 0
+    without wind). Gravity is uniform in its range for every episode. Validation (checkpoint
+    selection) and the final test always use default physics, for every run.
+    """
+
+    enabled: bool = False
+    wind_probability: float = Field(0.8, ge=0.0, le=1.0)
+    wind_power: tuple[float, float] = (0.0, 10.0)
+    turbulence_power: tuple[float, float] = (0.0, 1.0)
+    gravity: tuple[float, float] = (-11.0, -9.0)
+
+    @model_validator(mode="after")
+    def _ranges(self) -> PhysicsRandomization:
+        bounds = {"wind_power": (0.0, 20.0), "turbulence_power": (0.0, 2.0)}
+        for name, (lo_ok, hi_ok) in bounds.items():
+            lo, hi = getattr(self, name)
+            if not lo_ok <= lo <= hi <= hi_ok:
+                raise ValueError(f"{name} range must satisfy {lo_ok} <= low <= high <= {hi_ok}")
+        lo, hi = self.gravity
+        if not -12.0 < lo <= hi < 0.0:
+            raise ValueError("gravity range must satisfy -12 < low <= high < 0 (Gymnasium's limits)")
+        return self
+
+    def describe(self) -> str:
+        if not self.enabled:
+            return "fixed (default physics)"
+        w, t, g = self.wind_power, self.turbulence_power, self.gravity
+        return (
+            f"randomized: wind on {self.wind_probability:.0%} of episodes, power {w[0]:g}–{w[1]:g}, "
+            f"turbulence {t[0]:g}–{t[1]:g}; gravity {g[0]:g} to {g[1]:g}"
+        )
+
+
 PROFILES: dict[str, dict] = {
     "smoke": {
         "total_transitions": 8_192,
@@ -207,6 +245,7 @@ class RunConfig(_Strict):
     eval_protocol: EvalProtocol = Field(default_factory=EvalProtocol)
     algo: Literal["ppo", "dqn"] = "ppo"
     dqn: DQNConfig | None = None
+    physics: PhysicsRandomization = Field(default_factory=PhysicsRandomization)
 
     @model_validator(mode="after")
     def _env_fixed(self) -> RunConfig:
@@ -228,6 +267,8 @@ class RunConfig(_Strict):
             d.pop("dqn", None)
         else:
             d.pop("ppo", None)  # unused by DQN runs
+        if not self.physics.enabled:  # added later too: fixed-physics runs hash exactly as before
+            d.pop("physics", None)
         d["reward"] = self.reward.reward_payload()
         canonical = json.dumps(d, sort_keys=True, separators=(",", ":"))
         return hashlib.sha256(canonical.encode()).hexdigest()[:16]
@@ -277,6 +318,8 @@ def resume_compatibility(saved: RunConfig, requested: RunConfig) -> list[str]:
     elif saved.algo_settings() != requested.algo_settings():
         diffs = [k for k, v in saved.algo_settings().items() if requested.algo_settings().get(k) != v]
         problems.append(f"{saved.algo.upper()} settings differ ({', '.join(diffs)})")
+    if saved.physics != requested.physics:
+        problems.append("training physics differ (randomization is part of the experiment)")
     if saved.seed != requested.seed:
         problems.append("training seed differs")
     if saved.eval_protocol.protocol_hash() != requested.eval_protocol.protocol_hash():

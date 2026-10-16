@@ -122,5 +122,23 @@ class SB3Policy:
         action, _ = self.network.predict(obs, deterministic=self.deterministic)
         return int(np.asarray(action).item())
 
+    def diagnostics(self, obs: np.ndarray) -> dict:
+        """What the network computes for ``obs``, separately from choosing the action: PPO's action
+        probabilities, their entropy (nats) and the critic's state value; DQN's Q-values."""
+        import torch
+
+        with torch.no_grad():
+            obs_t, _ = self.network.obs_to_tensor(obs)
+            if self.kind == "dqn":
+                q = self.network.q_net(obs_t)[0].cpu().numpy()
+                return {"q": [round(float(v), 4) for v in q]}
+            dist = self.network.get_distribution(obs_t)
+            probs = dist.distribution.probs[0].cpu().numpy()
+            return {
+                "probs": [round(float(x), 5) for x in probs],
+                "entropy": round(float(dist.entropy()[0]), 5),
+                "value": round(float(self.network.predict_values(obs_t)[0, 0]), 4),
+            }
+
 
 PPOPolicy = SB3Policy  # backwards-compatible name

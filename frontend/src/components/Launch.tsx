@@ -7,6 +7,7 @@ import { useApi } from '../lib/hooks'
 import { PRESET_COLOR, PRESET_LABEL } from '../lib/reward'
 import type { Job, Meta, Preset, RewardConfigRow, RunSummary, SystemInfo } from '../lib/types'
 import { useJobWatch } from './Jobs'
+import { DEFAULT_PHYSICS, PhysicsFields, type PhysicsRanges, physicsError, physicsPayload } from './Physics'
 import { Button, Dialog, ErrorBanner, Field, Notice, NumberInput, Segmented } from './ui'
 
 type Profile = 'smoke' | 'standard' | 'extended'
@@ -50,6 +51,10 @@ export function LaunchForm({ initialPreset = 'baseline', initialConfigId, compac
   const [advanced, setAdvanced] = useState(false)
   const [nEnvs, setNEnvs] = useState(4)
   const [vecEnv, setVecEnv] = useState<'dummy' | 'subproc'>('dummy')
+  const [algo, setAlgo] = useState<'ppo' | 'dqn'>('ppo')
+  const [gammaText, setGammaText] = useState('')
+  const [physicsMode, setPhysicsMode] = useState<'fixed' | 'randomized'>('fixed')
+  const [physics, setPhysics] = useState<PhysicsRanges>(DEFAULT_PHYSICS)
   const [confirmExtended, setConfirmExtended] = useState(false)
   const [pending, setPending] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -57,6 +62,9 @@ export function LaunchForm({ initialPreset = 'baseline', initialConfigId, compac
 
   const custom = useMemo(() => (configs.data ?? []).filter((c) => !c.builtin), [configs.data])
   const seedInvalid = !Number.isInteger(seed) || seed < 0 || seed > 999
+  const gamma = gammaText.trim() === '' ? null : Number(gammaText)
+  const gammaInvalid = gamma !== null && !(gamma > 0.9 && gamma < 1)
+  const physicsInvalid = physicsMode === 'randomized' && physicsError(physics) !== null
 
   const submit = async (confirmed = false) => {
     if (profile === 'extended' && !confirmed) {
@@ -72,7 +80,10 @@ export function LaunchForm({ initialPreset = 'baseline', initialConfigId, compac
       if (advanced) {
         body.n_envs = nEnvs
         body.vec_env = vecEnv
+        body.algo = algo
+        if (gamma !== null) body.gamma = gamma
       }
+      if (physicsMode === 'randomized') body.physics = physicsPayload(physics)
       const res = await api.post<{ run: RunSummary; job: Job }>('/api/runs', body)
       navigate(`/runs/${res.run.run_id}`)
     } catch (e) {
@@ -123,9 +134,35 @@ export function LaunchForm({ initialPreset = 'baseline', initialConfigId, compac
         </Field>
       </div>
       <ProfileInfo profile={profile} meta={meta.data} sys={sys.data} />
+      <Field label="Training physics">
+        <Segmented
+          label="Training physics"
+          value={physicsMode}
+          onChange={setPhysicsMode}
+          options={[
+            { value: 'fixed', label: 'Fixed (default)' },
+            { value: 'randomized', label: 'Randomized wind & gravity' },
+          ]}
+        />
+      </Field>
+      {physicsMode === 'randomized' && <PhysicsFields value={physics} onChange={setPhysics} idPrefix="launch-physics" />}
       <details open={advanced} onToggle={(e) => setAdvanced((e.target as HTMLDetailsElement).open)} className="rounded-md border border-line px-3 py-2">
-        <summary className="cursor-pointer text-[13px] text-ink-2">Advanced: vectorization</summary>
+        <summary className="cursor-pointer text-[13px] text-ink-2">Advanced: algorithm, discount, vectorization</summary>
         <div className="mt-3 grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <Field label="Algorithm" hint="DQN uses RL Baselines3 Zoo's LunarLander settings.">
+            <Segmented
+              label="Algorithm"
+              value={algo}
+              onChange={setAlgo}
+              options={[
+                { value: 'ppo', label: 'PPO' },
+                { value: 'dqn', label: 'DQN' },
+              ]}
+            />
+          </Field>
+          <Field label="Discount factor γ" htmlFor="launch-gamma" hint={`Empty: the algorithm's reference value (${algo === 'ppo' ? '0.999' : '0.99'}).`} error={gammaInvalid ? 'Between 0.9 and 1 (exclusive).' : null}>
+            <input id="launch-gamma" className="field num" inputMode="decimal" placeholder={algo === 'ppo' ? '0.999' : '0.99'} value={gammaText} onChange={(e) => setGammaText(e.target.value)} aria-invalid={gammaInvalid || undefined} />
+          </Field>
           <Field label="Parallel environments (n_envs)" htmlFor="launch-nenvs" hint="Changes the rollout size (n_envs × 1024). Keep 4 for comparable experiments.">
             <NumberInput id="launch-nenvs" value={nEnvs} onChange={setNEnvs} min={1} max={16} step={1} />
           </Field>
@@ -144,7 +181,7 @@ export function LaunchForm({ initialPreset = 'baseline', initialConfigId, compac
       </details>
       <ErrorBanner error={error} />
       <div className="flex flex-wrap items-center gap-3">
-        <Button variant="primary" icon={<Play className="size-4" />} pending={pending} disabled={seedInvalid} onClick={() => submit()}>
+        <Button variant="primary" icon={<Play className="size-4" />} pending={pending} disabled={seedInvalid || gammaInvalid || physicsInvalid} onClick={() => submit()}>
           Start training run
         </Button>
         <span className="text-xs text-ink-3">Runs in a separate worker process; one training job at a time, others queue.</span>

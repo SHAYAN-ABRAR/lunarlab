@@ -10,6 +10,7 @@ import {
   Gauge,
   Menu,
   SlidersHorizontal,
+  Wand2,
   X,
 } from 'lucide-react'
 import { useEffect, useState } from 'react'
@@ -27,10 +28,12 @@ import RewardStudio from './pages/RewardStudio'
 import RunDetail from './pages/RunDetail'
 import StressTest from './pages/StressTest'
 import Training from './pages/Training'
+import Tuning from './pages/Tuning'
 
 const NAV = [
   { to: '/', label: 'Mission Overview', Icon: Gauge, end: true },
   { to: '/training', label: 'Training Console', Icon: Activity },
+  { to: '/tuning', label: 'Automatic Tuning', Icon: Wand2 },
   { to: '/studio', label: 'Reward Studio', Icon: SlidersHorizontal },
   { to: '/replay', label: 'Flight Replay', Icon: Clapperboard },
   { to: '/fly', label: 'Fly It Yourself', Icon: Gamepad2 },
@@ -143,6 +146,7 @@ export default function App() {
           <Routes>
             <Route path="/" element={<Overview />} />
             <Route path="/training" element={<Training />} />
+            <Route path="/tuning" element={<Tuning />} />
             <Route path="/runs/:runId" element={<RunDetail />} />
             <Route path="/studio" element={<RewardStudio />} />
             <Route path="/replay" element={<Replay />} />

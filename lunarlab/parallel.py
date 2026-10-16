@@ -15,6 +15,8 @@ from collections.abc import Callable
 
 from lunarlab.storage import RunPaths, project_root
 
+PARALLEL_SLOTS_ENV = "LUNARLAB_PARALLEL_SLOTS"
+
 
 def _command(action: str, run_id: str, extra_args: list[str] | None = None) -> list[str]:
     base = [sys.executable, "-m", "lunarlab"]
@@ -48,7 +50,13 @@ def run_parallel(
     codes: dict[str, int] = {}
     env = os.environ.copy()
     env.update(
-        {"OMP_NUM_THREADS": "1", "MKL_NUM_THREADS": "1", "PYTHONUNBUFFERED": "1", "PYTHONIOENCODING": "utf-8"}
+        {
+            "OMP_NUM_THREADS": "1",
+            "MKL_NUM_THREADS": "1",
+            "PYTHONUNBUFFERED": "1",
+            "PYTHONIOENCODING": "utf-8",
+            PARALLEL_SLOTS_ENV: str(workers),  # recorded with each training segment (wall-clock context)
+        }
     )
     t0 = time.monotonic()
     while pending or running:

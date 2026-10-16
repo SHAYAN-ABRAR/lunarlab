@@ -185,6 +185,11 @@ def evaluate_run(
     repeat_index = 0
     if split == "test":
         meta = load_metadata(run_id)
+        if meta.get("tuning"):
+            raise RunError(
+                "this run is a tuning trial: trials are judged on validation only and never evaluated on the "
+                "final-test seeds. Create a normal run from the study's best settings and test that one."
+            )
         frozen = meta.get("frozen_for_test")
         if frozen is None:
             frozen = {

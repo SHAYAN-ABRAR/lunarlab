@@ -16,11 +16,24 @@ from pydantic import ValidationError
 
 from lunarlab import __version__
 from lunarlab.compare import compare_runs, run_summary, training_curve
-from lunarlab.config import PROFILES, EvalProtocol, PPOConfig, training_for_profile
+from lunarlab.config import (
+    PROFILES,
+    DQNConfig,
+    EvalProtocol,
+    PhysicsRandomization,
+    PPOConfig,
+    training_for_profile,
+)
 from lunarlab.db import Database
 from lunarlab.env import ACTIONS, OBSERVATION_FIELDS, environment_record
 from lunarlab.evaluation import list_evaluations
-from lunarlab.experiments import create_experiment, list_experiments, load_experiment, plan_suite
+from lunarlab.experiments import (
+    build_variants,
+    create_experiment,
+    list_experiments,
+    load_experiment,
+    plan_suite,
+)
 from lunarlab.jobs import JobConflict, JobManager, JobNotFound, job_dir, tail
 from lunarlab.recording import find_recording, list_recordings
 from lunarlab.rescoring import rescore
@@ -139,6 +152,9 @@ def light_summary(s: dict) -> dict:
         "frozen_for_test",
         "protocol_hash",
         "algo",
+        "gamma",
+        "variant",
+        "physics_label",
     )
     return {k: s.get(k) for k in keep}
 
@@ -211,7 +227,7 @@ def overview(request: Request) -> dict:
     by_preset: dict[str, dict[str, Any]] = {}
     for r in runs:
         ev = r.get("latest_test") or r.get("latest_validation")
-        if r["profile"] == "smoke" or not ev or (r.get("algo") or "ppo") != "ppo":
+        if r["profile"] == "smoke" or not ev or (r.get("algo") or "ppo") != "ppo" or r.get("variant"):
             continue  # the preset cards summarize PPO runs; other algorithms are compared on Compare
         slot = by_preset.setdefault(r["reward_preset"], {"runs": 0, "evaluations": []})
         slot["runs"] += 1
@@ -350,7 +366,12 @@ def create_run_endpoint(body: S.RunCreate, request: Request) -> dict:
     training = training_for_profile(
         body.profile, total_transitions=body.total_transitions, vec_env=body.vec_env
     )
-    ppo = PPOConfig(**({"n_envs": body.n_envs} if body.n_envs else {}))
+    gamma = {"gamma": body.gamma} if body.gamma is not None else {}
+    ppo = PPOConfig(
+        **({"n_envs": body.n_envs} if body.n_envs else {}), **(gamma if body.algo == "ppo" else {})
+    )
+    dqn = DQNConfig(**gamma) if body.algo == "dqn" else None
+    physics = body.physics or PhysicsRandomization()
     with _create_lock:
         if body.idempotency_key:
             existing = db(request).job_by_idempotency_key(body.idempotency_key)
@@ -365,6 +386,9 @@ def create_run_endpoint(body: S.RunCreate, request: Request) -> dict:
             experiment_id=body.experiment_id,
             reward_config_id=ref_id,
             reward_revision=rev,
+            algo=body.algo,
+            dqn=dqn,
+            physics=physics,
         )
         job = _submit(request, "train", run_id=cfg.run_id, key=body.idempotency_key) if body.start else None
     return {"run": light_summary(cached_summary(cfg.run_id)), "job": job}
@@ -686,18 +710,53 @@ def preference_datasets() -> list[dict]:
 
 
 @router.get("/preferences/{dataset_id}/pair")
-def preference_pair(dataset_id: str) -> dict:
-    from lunarlab.preferences.data import random_pair
+def preference_pair(dataset_id: str, strategy: str = "random") -> dict:
+    """The next pair to label: never one already labelled; ``disagreement`` picks, among random candidate
+    pairs from training episodes, the one the labelling ensemble disagrees about most."""
+    from lunarlab.preferences.active import next_pair
+    from lunarlab.preferences.data import SegmentSet, _segment_json, dataset_path
 
-    return random_pair(_dataset_or_404(dataset_id))
+    ds = _dataset_or_404(dataset_id)
+    try:
+        sel = next_pair(ds, strategy)
+    except ValueError as exc:
+        raise HTTPException(400, str(exc)) from exc
+    except LookupError as exc:
+        raise HTTPException(409, str(exc)) from exc
+    seg = SegmentSet.load(dataset_path(ds))
+    return {"dataset_id": ds, **sel, "a": _segment_json(seg, sel["i"]), "b": _segment_json(seg, sel["j"])}
+
+
+@router.get("/preferences/{dataset_id}/progress")
+def preference_progress(dataset_id: str) -> dict:
+    from lunarlab.preferences.active import labelling_progress
+
+    return labelling_progress(_dataset_or_404(dataset_id))
+
+
+@router.post("/preferences/{dataset_id}/ensemble")
+def preference_ensemble(dataset_id: str, body: S.EnsembleRequest, request: Request) -> dict:
+    """Fit the labelling ensemble (used by the disagreement strategy) as an analysis job."""
+    ds = _dataset_or_404(dataset_id)
+    params = {"dataset_id": ds, "simulated_pairs": body.simulated_pairs, "members": body.members}
+    return _submit(request, "reward_ensemble", params=params, key=body.idempotency_key)
+
+
+@router.get("/preferences/{dataset_id}/active-studies")
+def preference_active_studies(dataset_id: str) -> list[dict]:
+    from lunarlab.preferences.active import list_active_studies
+
+    return list_active_studies(_dataset_or_404(dataset_id))
 
 
 @router.post("/preferences/{dataset_id}/labels", status_code=201)
 def preference_label(dataset_id: str, body: S.PreferenceLabel) -> dict:
-    from lunarlab.preferences.data import label_and_reveal
+    from lunarlab.preferences.data import DuplicateLabel, label_and_reveal
 
     try:
         return label_and_reveal(_dataset_or_404(dataset_id), body.i, body.j, body.choice)
+    except DuplicateLabel as exc:
+        raise HTTPException(409, str(exc)) from exc
     except ValueError as exc:
         raise HTTPException(400, str(exc)) from exc
 
@@ -707,6 +766,114 @@ def reward_models() -> list[dict]:
     from lunarlab.preferences.model import list_models
 
     return [{k: v for k, v in m.items() if k != "history"} for m in list_models()]
+
+
+# --------------------------------------------------------------------------- #
+# Automatic tuning (Optuna): validation only; trial runs are never final-tested
+# --------------------------------------------------------------------------- #
+
+
+def _study_or_404(study_id: str) -> dict:
+    from lunarlab.tuning import load_spec
+
+    try:
+        return load_spec(study_id)
+    except (KeyError, ValueError) as exc:
+        raise HTTPException(404, "unknown tuning study") from exc
+
+
+def _active_tune_jobs(request: Request, study_id: str) -> list[dict]:
+    active = db(request).list_jobs(states=("queued", "starting", "running", "stop_requested"))
+    return [j for j in active if j["kind"] == "tune" and (j.get("params") or {}).get("study_id") == study_id]
+
+
+@router.get("/tuning/space")
+def tuning_space(algo: str = "ppo", preset: str = "baseline") -> dict:
+    from lunarlab.tuning import DEFAULT_PARAMS, REWARD_PARAMS, SPACE, allowed_params
+
+    if algo not in ("ppo", "dqn") or preset not in REWARD_PARAMS:
+        raise HTTPException(400, "unknown algorithm or preset")
+    names = allowed_params(algo, preset)
+    return {
+        "params": {n: SPACE[n] for n in names},
+        "defaults": DEFAULT_PARAMS[algo] + REWARD_PARAMS[preset][:1],
+    }
+
+
+@router.get("/tuning")
+def tuning_studies() -> list[dict]:
+    from lunarlab.tuning import list_studies
+
+    return list_studies()
+
+
+@router.post("/tuning", status_code=201)
+def tuning_create(body: S.TuningCreate, request: Request) -> dict:
+    from lunarlab.tuning import TuningError, create_study
+
+    try:
+        spec = create_study(
+            name=body.name,
+            algo=body.algo,
+            preset_name=body.preset,
+            params=body.params or None,
+            n_trials=body.n_trials,
+            trial_transitions=body.trial_transitions,
+            validation_every=body.validation_every,
+            warmup_transitions=body.warmup_transitions,
+            startup_trials=body.startup_trials,
+            sampler_seed=body.seed,
+        )
+    except TuningError as exc:
+        raise HTTPException(400, str(exc)) from exc
+    job = (
+        _submit(request, "tune", params={"study_id": spec["study_id"]}, key=body.idempotency_key)
+        if body.start
+        else None
+    )
+    return {"study": spec, "job": job}
+
+
+@router.get("/tuning/{study_id}")
+def tuning_study(study_id: str, request: Request) -> dict:
+    from lunarlab.tuning import study_summary
+
+    _study_or_404(study_id)
+    return study_summary(study_id) | {"jobs": _active_tune_jobs(request, study_id)}
+
+
+@router.post("/tuning/{study_id}/resume")
+def tuning_resume(study_id: str, request: Request) -> dict:
+    _study_or_404(study_id)
+    if _active_tune_jobs(request, study_id):
+        raise HTTPException(409, "this study already has a queued or running tuning job")
+    return _submit(request, "tune", params={"study_id": study_id})
+
+
+@router.post("/tuning/{study_id}/cancel")
+def tuning_cancel(study_id: str, request: Request) -> dict:
+    from lunarlab.tuning import request_cancel
+
+    _study_or_404(study_id)
+    stopped = [
+        jobs(request).request_stop(j["id"], reason="tuning cancelled")
+        for j in _active_tune_jobs(request, study_id)
+    ]
+    return {"status": request_cancel(study_id), "jobs": stopped}
+
+
+@router.post("/tuning/{study_id}/apply", status_code=201)
+def tuning_apply(study_id: str, body: S.TuningApply, request: Request) -> dict:
+    """Normal runs (never tuning trials) with the best settings, ready to train and final-test."""
+    from lunarlab.tuning import TuningError, apply_best
+
+    _study_or_404(study_id)
+    try:
+        exp = apply_best(study_id, seeds=body.seeds, profile=body.profile)
+    except TuningError as exc:
+        raise HTTPException(409, str(exc)) from exc
+    submitted = [_submit(request, "train", run_id=rid) for rid in exp["run_ids"]] if body.start else []
+    return exp | {"jobs": submitted}
 
 
 @router.get("/recordings/{recording_id}/video")
@@ -775,12 +942,34 @@ def _suite_rewards(body: S.SuitePlan, request: Request) -> list[RewardConfig]:
     return out
 
 
+def _suite_variants(body: S.SuitePlan) -> tuple[list[dict], dict]:
+    try:
+        variants = build_variants(
+            algos=list(dict.fromkeys(body.algos)),
+            physics=body.physics,
+            physics_config=body.physics_config,
+            gammas=list(dict.fromkeys(body.gammas)) or None,
+        )
+    except ValueError as exc:
+        raise HTTPException(400, str(exc)) from exc
+    overrides = {"total_transitions": body.total_transitions} if body.total_transitions else {}
+    return variants, overrides
+
+
 @router.post("/experiments/plan")
 def experiment_plan(body: S.SuitePlan, request: Request) -> dict:
     rewards = _suite_rewards(body, request)
+    variants, overrides = _suite_variants(body)
     bench = read_json(data_dir() / "benchmark.json", default={}) or {}
     tps = (bench.get("default_config") or {}).get("ppo_tps")
-    plan = plan_suite([r.preset for r in rewards], body.seeds, body.profile, throughput_tps=tps)
+    plan = plan_suite(
+        [r.preset for r in rewards],
+        body.seeds,
+        body.profile,
+        throughput_tps=tps,
+        training_overrides=overrides,
+        variants=variants,
+    )
     plan["throughput_source"] = "data/benchmark.json" if tps else None
     return plan
 
@@ -788,13 +977,22 @@ def experiment_plan(body: S.SuitePlan, request: Request) -> dict:
 @router.post("/experiments", status_code=201)
 def experiment_create(body: S.SuiteCreate, request: Request) -> dict:
     rewards = _suite_rewards(body, request)
-    plan = plan_suite([r.preset for r in rewards], body.seeds, body.profile)
+    variants, overrides = _suite_variants(body)
+    plan = plan_suite(
+        [r.preset for r in rewards], body.seeds, body.profile, training_overrides=overrides, variants=variants
+    )
     if plan["n_runs"] > 6 and not body.confirm_large:
         raise HTTPException(400, f"this creates {plan['n_runs']} runs; confirm_large=true is required")
     if body.profile == "extended" and not body.confirm_large:
         raise HTTPException(400, "EXTENDED suites need explicit confirmation")
     exp = create_experiment(
-        name=body.name, rewards=rewards, seeds=body.seeds, profile=body.profile, description=body.description
+        name=body.name,
+        rewards=rewards,
+        seeds=body.seeds,
+        profile=body.profile,
+        description=body.description,
+        training_overrides=overrides,
+        variants=variants,
     )
     submitted = []
     if body.start:

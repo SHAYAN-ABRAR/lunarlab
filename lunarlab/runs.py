@@ -9,6 +9,7 @@ from lunarlab import sysinfo
 from lunarlab.config import (
     DQNConfig,
     EvalProtocol,
+    PhysicsRandomization,
     PPOConfig,
     RunConfig,
     TrainingConfig,
@@ -45,10 +46,18 @@ def create_run(
     reward_revision: int | None = None,
     algo: str = "ppo",
     dqn: DQNConfig | None = None,
+    physics: PhysicsRandomization | None = None,
 ) -> RunConfig:
     ppo = ppo or PPOConfig()
+    physics = physics or PhysicsRandomization()
     tag = reward.preset if reward.preset != "custom" else "custom"
-    run_id = new_id(*([algo] if algo != "ppo" else []), tag, f"s{seed}", training.profile)
+    run_id = new_id(
+        *([algo] if algo != "ppo" else []),
+        tag,
+        *(["rand"] if physics.enabled else []),
+        f"s{seed}",
+        training.profile,
+    )
     cfg = RunConfig(
         run_id=run_id,
         experiment_id=experiment_id,
@@ -63,6 +72,7 @@ def create_run(
         eval_protocol=protocol or EvalProtocol(),
         algo=algo,
         dqn=dqn,
+        physics=physics,
     )
     paths = RunPaths(run_id)
     if paths.root.exists():

@@ -108,13 +108,39 @@ checkpointing and safe weight loading (`DQNPolicy` rebuilt from the config, tens
 hash exactly as before the field existed, so older runs stay resumable. DQN's diagnostics are recorded every
 10k transitions (it updates every 4 steps; logging each update would dominate the log).
 
+### Experiment variants
+
+An experiment is *rewards × variants × seeds*. A variant fixes the algorithm, its discount factor and the
+training physics (`lunarlab/experiments.py: build_variants`); the default is a single variant, which is how
+earlier experiments were built. With several algorithms the budget is rounded up to a multiple of every
+algorithm's rollout, so PPO and DQN train on exactly the same number of transitions. Compare & Diagnose groups
+runs by algorithm, reward and variant (discount factor and training physics), and names a group by what sets
+it apart from the algorithm's reference setup ("· gamma 0.99", "· randomized physics").
+
+Groups of one reward and training physics that differ in γ, or in the algorithm at one γ, form the
+discount-factor ablation (`compare.py: gamma_ablation`): algorithm × γ cells, within-algorithm γ effects,
+PPO − DQN at matched γ, and a difference interval that resamples each cell's seeds
+(`rl_stats.bootstrap_difference_ci`). Training curves carry `elapsed_s`, the wall-clock time accumulated over
+a run's segments (`compare.py: elapsed_seconds`), next to `transitions`.
+
+### Training under varied physics
+
+`PhysicsRandomizer` (`lunarlab/physics.py`) wraps LunarLander directly, below the reward wrapper. It sets
+`enable_wind`, `wind_power`, `turbulence_power` and `gravity` on the unwrapped environment before each reset:
+Gymnasium reads gravity when the episode's world is created and wind at every step, and draws terrain and the
+initial push before the wind phase, so the episode seed still fixes the terrain. The `physics` section of a
+run config is part of its hash only when enabled, so fixed-physics runs hash exactly as before (all stored runs
+were re-checked), and resuming with different physics is refused.
+
 ### Parallel experiments (CLI)
 
 `suite --parallel N` and `run-experiment --parallel N` run up to N runs of one experiment at a time, each in
 its own `python -m lunarlab train-run` process with one torch/OMP thread, logs in `runs/<id>/worker.log`.
 Interrupted or failed runs resume from their latest checkpoint on the next `run-experiment`, and every
 unfrozen run is then evaluated once on the final-test seeds. On the 10-core development laptop, 5 PPO runs
-in parallel sustained about 1,000–1,200 transitions/s each.
+in parallel sustained about 1,000–1,200 transitions/s each. Workers get `LUNARLAB_PARALLEL_SLOTS=N` (the job
+supervisor sets its lane's limit), and each training segment stores it as `parallel_slots`: wall-clock
+learning curves are only comparable between runs that trained under the same load.
 
 ## Stop, resume and lineage
 
@@ -164,14 +190,50 @@ policies (random, heuristic, PPO checkpoints at 100k/300k/600k/final of baseline
   → 40-step segments (data/preferences/<dataset>/segments.npz, episode seeds from 30,000)
   → pairs labelled by a Bradley–Terry simulated human on the true segment return (beta = 0.05)
     (+ optional human labels from the UI, data/preferences/<dataset>/human_labels.jsonl)
+  → fixed train/validation split by whole episode (segments of one episode overlap, so they never straddle it)
   → reward model r(s, a, s') : MLP 20-64-64-1 tanh, BCE on summed segment rewards, early stopping
     (data/reward_models/<model>/model.npz + meta.json with SHA-256; immutable)
   → reward config with original_weight 0 and the learned term only → PPO → evaluation on the true reward
 ```
 
+Human labels are sorted by where their two segments lie: both in training episodes → used for training; both in
+validation episodes → reported as accuracy against people; one on each side → never used (counted in the model's
+metadata). Pairs shown in the labelling UI come from training episodes only.
+
 The invariant generalizes to `training_reward = original_weight × original_reward + Σ terms` (weight 1 for
 all presets). Reward models are evaluated in NumPy inside the wrapper; their weights are plain arrays loaded
 with `allow_pickle=False` after a hash check, so a reward model cannot execute code.
+
+### Active preference learning
+
+`lunarlab/preferences/active.py` adds reward-model **ensembles** (several networks fitted on bootstrap
+resamples of the same labels; the reward is the mean of the members' normalized outputs, saved as one
+hash-checked `model.npz`) and two ways to choose the next pair: `random` (the baseline) and `disagreement`
+(among 2,000 random candidate pairs of training segments, the one where the members' Bradley–Terry
+probabilities P(A preferred) have the largest standard deviation). A pair is never labelled twice, in either
+order: selection excludes labelled pairs and the label endpoint refuses duplicates (409).
+
+* `python -m lunarlab rlhf-active` simulates the loop for both strategies over several seeds with the
+  Bradley–Terry labeller, deterministic per pair (the same pair always gets the same answer, whichever
+  strategy asks), from the same initial random labels per seed, and saves the learning curves (accuracy vs
+  true order on a fixed set of validation pairs) with the dataset in `active/`. `--register` keeps the final
+  ensembles as reward models; `rlhf-study --reward-models <ids>` then trains PPO on them.
+* In the UI, *Learned Rewards* shows the chosen strategy, labelling progress (labels, labels usable for
+  training, labels since the ensemble was fitted) and the disagreement score of the current pair. *Fit
+  ensemble* runs a `reward_ensemble` job on your labels from training episodes (optionally plus simulated
+  ones) and makes it the dataset's labelling ensemble (`labelling.json`).
+
+## Automatic tuning (Optuna)
+
+`lunarlab/tuning.py` defines a bounded search space (PPO or DQN settings and the reward weights of the chosen
+preset; bounds sit inside each config's own validation limits), a TPE sampler and a median pruner. A study
+lives in `data/tuning/<study_id>/`: `study.json` (definition), `optuna.sqlite3` (Optuna's RDB storage) and
+`status.json`. Trials train in the tuning process through `train(run_id, on_validation=...)`: after each
+validation the callback reports to Optuna and can ask the run to stop at the next safe boundary (pruned or
+cancelled). Cancelling (`tune-cancel`, the UI, or stopping the `tune` job) also signals the running trial's run
+directly, so it stops within seconds rather than at its next validation. Resuming loads the storage, marks
+trials left RUNNING by a crashed session as failed, and continues until `n_trials` trials have completed or
+been pruned. `tune` jobs use the training lane, so they never run alongside another training job.
 
 ## Keyboard flights
 
@@ -192,6 +254,15 @@ filtered to the chosen experiments and with absolute local paths scrubbed. A fro
 would need the backend. `.github/workflows/pages.yml` publishes it to GitHub Pages;
 `scripts/build-demo.ps1` builds and serves the same thing locally.
 
+## Policy diagnostics in recordings
+
+`SB3Policy.diagnostics(obs)` evaluates the same network the action came from, in `torch.no_grad()`:
+`get_distribution(obs)` (probabilities and entropy) and `predict_values(obs)` for PPO, `q_net(obs)` for DQN.
+`record_episode` stores the result in the telemetry row of the step it decided (`row["policy"]`) and adds a
+`policy_diagnostics` description to the telemetry. Flight Replay shows the current step's distribution or
+values next to the action and charts them on the shared, click-to-seek timeline; recordings without the
+fields (older ones, demonstrations, keyboard flights) simply have no policy charts.
+
 ## Showcase media
 
 `python -m lunarlab showcase` composes recorded flights side by side, as a GIF or an animated WebP. By default
@@ -206,7 +277,9 @@ Each run directory contains its exact `config.yaml` (immutable), `metadata.json`
 preset, revision and hash, seeds, environment spec, Python/package versions, hardware, git state when
 available, segments and lineage, test freeze), `status.json`, `events.jsonl` (rotated after 2 MB),
 `episodes.csv`, `metrics.jsonl`, evaluations, checkpoints, trajectories and videos. Status and manifests
-use atomic writes. SQLite holds only metadata and is never written per physics step. Timestamps are stored
+use atomic writes. An `episodes.csv` keeps the columns it was created with: a run resumed by a newer LunarLab
+that logs more columns writes its rows in the file's own layout. One published run was resumed before that
+rule and has rows of two widths; the reader maps each row by its width instead of skipping the file. SQLite holds only metadata and is never written per physics step. Timestamps are stored
 in UTC and displayed in local time. Nothing is deleted automatically.
 
 ## Local security model
