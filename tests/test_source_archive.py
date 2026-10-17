@@ -78,6 +78,15 @@ def test_byte_exact_evidence_is_never_converted():
     assert b._byte_exact(paths) == set(paths[:2])
 
 
+def test_a_revision_packs_the_bytes_git_stores_on_every_platform():
+    """git archive applies core.autocrlf (CRLF on Windows checkouts); the builder turns that off."""
+    b = _builder()
+    files, source = b.collect("HEAD")
+    assert source["mode"] == "revision"
+    for path in ("LICENSE", "README.md", "lunarlab/__init__.py"):
+        assert b"\r\n" not in files[path], path
+
+
 def test_working_tree_text_is_normalised_like_git():
     b = _builder()
     assert b._as_git_stores(b"a\r\nb\r\n") == b"a\nb\n"

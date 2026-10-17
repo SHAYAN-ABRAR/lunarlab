@@ -36,7 +36,7 @@ generality not demonstrated, no property-based tests, no supplied artifacts, ras
 | CI | coverage report, docs/headers/manuscript checks, reproduction reports (Linux and Windows), source-archive job, Windows on Python 3.12 and 3.13 | `.github/workflows/ci.yml` |
 | Fixes found on the way | `setup.ps1`-style help broken by the new license header (blank line now required, tested); argparse output made width-independent for the API reference; one over-strong sentence in `docs/RESULTS.md` reworded | `scripts/*.ps1`, `tools/gen_api_docs.py`, `docs/RESULTS.md` |
 
-**Tests added** (178 new; 448 in total): release metadata and licensing
+**Tests added** (179 new; 449 in total): release metadata and licensing
 (`test_project_metadata.py`), documented commands parse (`test_docs.py`), the tutorial executed in order
 (`test_tutorial.py`), reproducibility commands and tamper detection (`test_reproduce.py`), DQN continuation
 refusals (`test_continuation_validation.py`), property-based invariants of shaping, accounting, statistics and
@@ -54,8 +54,8 @@ were not altered beyond docstrings, the version option and new commands; the dem
 
 | Measure | Result |
 |---|---|
-| Statement + branch coverage | **82.9 %** (before: 75.2 %); reward, audit, training, continuation, freezing, outcome, evaluation and statistics modules 84–100 %, result export, run storage and provenance modules (`results`, `demo`, `runs`, `storage`, `lineage`, `sysinfo`) 67–89 %; per-module table and reasons for the remaining gaps in `reports/jmlr/coverage/SUMMARY.md` |
-| Python tests | **448 passed** (Windows 11, Python 3.12); fast suite 375 passed on Python 3.13 |
+| Statement + branch coverage | **82.9 %** (before: 75.2 %); reward, audit, training, continuation, freezing, outcome, evaluation and statistics modules 84–100 %, result export, run storage and provenance modules (`results`, `demo`, `runs`, `storage`, `lineage`, `sysinfo`) 67–91 %; per-module table and reasons for the remaining gaps in `reports/jmlr/coverage/SUMMARY.md` |
+| Python tests | **449 passed** (Windows 11, Python 3.12); fast suite 376 passed on Python 3.13 |
 | Browser end-to-end | **15 passed** (Playwright on two real backends: 10 earlier flows + 5 audit flows) |
 | Lint, format, types | ruff check and format clean; `tsc` clean; `oxlint` clean; production build OK |
 | Installation | `doctor` 10/10; source archive installed into a fresh environment, `reproduce-smoke` 14/14 and 188 release tests passed there |

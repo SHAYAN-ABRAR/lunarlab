@@ -14,8 +14,9 @@ working tree), excluding version-control files (.gitignore and the like), editor
 metadata files (``.DS_Store``, ``Thumbs.db``, ``._*``) and environment files (``.env*``) are refused.
 
 Determinism: members are sorted, owners and permissions normalised, every timestamp is the revision's commit
-time, gzip carries no name or time, and working-tree text files are normalised to LF exactly as git stores them,
-so the same revision always gives the same archive bytes. JMLR names the published archive after the paper
+time, gzip carries no name or time, revisions are exported without line-ending conversion and working-tree text
+files are normalised to LF exactly as git stores them, so the same revision always gives the same archive bytes,
+whatever the platform. JMLR names the published archive after the paper
 (for example ``jones03a-code.tar.gz``); rename the file once that identifier is assigned.
 """
 
@@ -90,7 +91,12 @@ def collect(rev: str | None) -> tuple[dict[str, bytes], dict]:
     files: dict[str, bytes] = {}
     if rev:
         commit = _git("rev-parse", rev).strip()
-        with tarfile.open(fileobj=io.BytesIO(_git("archive", "--format=tar", commit, binary=True))) as tf:
+        # git archive converts line endings as a checkout would (core.autocrlf=true on Windows gives CRLF):
+        # turn that off so a revision packs the bytes git stores, on every platform.
+        tar = _git(
+            "-c", "core.autocrlf=false", "-c", "core.eol=lf", "archive", "--format=tar", commit, binary=True
+        )
+        with tarfile.open(fileobj=io.BytesIO(tar)) as tf:
             for m in tf.getmembers():
                 if m.isfile():
                     files[m.name] = tf.extractfile(m).read()

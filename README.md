@@ -127,7 +127,7 @@ none of them affected the published results: no number above changed
 - **Engineering:** a local job supervisor (owned worker processes, cooperative stop at safe boundaries,
   resume with lineage, crash reconciliation), parallel experiment runs, weights-only model loading, loopback
   binding and strict request validation, crash-safe checkpoint bundles with full DQN continuation (replay
-  buffer included), 448 Python tests (82.9 % statement and branch coverage) and 15 browser flows, Linux and
+  buffer included), 449 Python tests (82.9 % statement and branch coverage) and 15 browser flows, Linux and
   Windows CI, and a static demo build whose snapshots record their exact provenance.
 - **Reproducibility and extension:** `reproduce-smoke` runs and verifies the whole pipeline in a temporary home;
   three published final tests ship as artifacts that `reproduce-artifact` re-evaluates episode by episode
@@ -327,7 +327,7 @@ a 64×64 MLP are about 150 KB each; a DQN replay file with the default 50k buffe
 ## Tests
 
 ```powershell
-.venv\Scripts\python.exe -m pytest                       # 448 tests: unit, integration, property-based, real PPO/DQN, end-to-end CLI
+.venv\Scripts\python.exe -m pytest                       # 449 tests: unit, integration, property-based, real PPO/DQN, end-to-end CLI
 .venv\Scripts\python.exe -m pytest -m "not slow"         # skips the tests marked slow (real PPO/DQN updates, video encoding)
 .venv\Scripts\python.exe -m pytest --cov                 # with statement + branch coverage, worker subprocesses included
 .venv\Scripts\python.exe -m lunarlab reproduce-smoke     # the whole pipeline in a temporary home, 14 checks

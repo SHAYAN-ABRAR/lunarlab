@@ -4,7 +4,7 @@ Measured with coverage.py (statement and branch coverage, worker subprocesses in
 
 | | Statements | Missed | Branches | Partial | Coverage (statements + branches) |
 |---|---:|---:|---:|---:|---:|
-| **Now** | 8,908 | 1,272 | 2,206 | 338 | **82.9 %** |
+| **Now** | 8,908 | 1,269 | 2,206 | 339 | **82.9 %** |
 | Before this work (`baseline/`) | 8,060 | 1,750 | 2,062 | 304 | 75.2 % |
 
 ## Scientific core
@@ -30,7 +30,7 @@ Measured with coverage.py (statement and branch coverage, worker subprocesses in
 | `lunarlab/results.py` | 88.0 % | 64.4 % |
 | `lunarlab/reproduce.py` | 97.7 % | new |
 | `lunarlab/runs.py` | 80.1 % | 80.1 % |
-| `lunarlab/storage.py` | 89.3 % | 90.7 % |
+| `lunarlab/storage.py` | 90.7 % | 90.7 % |
 | `lunarlab/lineage.py` | 73.3 % | 73.3 % |
 | `lunarlab/demo.py` | 86.3 % | 86.3 % |
 | `lunarlab/sysinfo.py` | 66.7 % | 63.4 % |

@@ -29,7 +29,7 @@ matrix and the evidence, is in [docs/jmlr/](docs/jmlr/READINESS_REPORT.md).
 - **Reproducibility:** `reproduce-smoke`, `export-artifact`, `reproduce-artifact`; three published final tests
   supplied in `examples/artifacts/` and re-evaluated bit-identically (300/300 episodes) on this machine; training
   bit-identical across processes on this machine.
-- **Quality:** coverage measured (82.9 %, from 75.2 %), 448 tests (from 270): property-based tests of the
+- **Quality:** coverage measured (82.9 %, from 75.2 %), 449 tests (from 270): property-based tests of the
   shaping and statistics invariants, continuation-loader refusals, the tutorial executed command by command,
   documentation commands parsed, release metadata checked.
 - **Benchmark:** `overhead-benchmark`; reward accounting costs about 4 % of PPO training-loop time against plain
@@ -43,8 +43,8 @@ matrix and the evidence, is in [docs/jmlr/](docs/jmlr/READINESS_REPORT.md).
 
 | Check (2026-10-18, branch `research/jmlr-mloss-readiness`) | Result |
 |---|---|
-| `python -m pytest --cov` (Windows 11, Python 3.12) | **448 passed**, 82.9 % statement + branch coverage |
-| Fast suite on Python 3.13 (Windows 11) | 375 passed; `reproduce-smoke` 14/14 |
+| `python -m pytest --cov` (Windows 11, Python 3.12) | **449 passed**, 82.9 % statement + branch coverage |
+| Fast suite on Python 3.13 (Windows 11) | 376 passed; `reproduce-smoke` 14/14 |
 | `ruff check` / `ruff format --check` (lunarlab, tests, tools, examples, paper) | clean |
 | `npm run typecheck` / `oxlint` / `npm run build` | clean / clean / OK |
 | `npx playwright test` | **15 passed** (10 earlier flows + 5 audit flows on a pre-built fixture home) |
