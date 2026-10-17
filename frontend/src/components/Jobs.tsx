@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2026 Shayan Abrar
+// SPDX-License-Identifier: MIT
 import { Square, Zap } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router'

@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2026 Shayan Abrar
+// SPDX-License-Identifier: MIT
 import { type ReactNode, useId } from 'react'
 import {
   Bar,

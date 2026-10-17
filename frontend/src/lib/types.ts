@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2026 Shayan Abrar
+// SPDX-License-Identifier: MIT
 // Shapes returned by the LunarLab API (lunarlab/server/api.py). Kept deliberately loose
 // where the backend passes through stored JSON.
 

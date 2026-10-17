@@ -144,8 +144,8 @@ are equally good. For the per-policy numbers, with intervals over
 episodes, see [results/tables.md](results/tables.md).
 
 A single EXTENDED baseline run (3M transitions, training seed 99, not part of the study) scored 272.4
-[263.9, 279.6] with 94% pad landing at its validation-selected checkpoint (1.9M transitions): no better than
-the 1M runs beyond noise.
+[263.9, 279.6] with 94% pad landing at its validation-selected checkpoint (1.9M transitions), within the spread
+of the five 1M runs. One run cannot show whether the longer budget helps.
 
 ## Side-by-side flights
 

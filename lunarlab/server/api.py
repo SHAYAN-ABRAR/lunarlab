@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Shayan Abrar
+# SPDX-License-Identifier: MIT
 """HTTP API (``/api``). Every handler is short: long work is submitted as a job."""
 
 from __future__ import annotations

@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Shayan Abrar
+# SPDX-License-Identifier: MIT
 """Robust aggregate statistics for comparing RL results across training seeds.
 
 Follows the recommendations of Agarwal et al., "Deep Reinforcement Learning at the
@@ -36,6 +38,9 @@ def iqm(values) -> float | None:
 
 
 def bootstrap_ci(values, stat=iqm, *, reps: int = BOOTSTRAP_REPS, level: float = 0.95, seed: int = 0):
+    """Percentile bootstrap interval of ``stat`` (the IQM by default) over training runs, resampling runs with
+    replacement; None for fewer than two runs.
+    """
     a = np.asarray(values, dtype=float)
     if a.size < 2:
         return None
@@ -75,6 +80,11 @@ def probability_of_improvement(x, y) -> float | None:
 
 
 def probability_of_improvement_ci(x, y, *, reps: int = BOOTSTRAP_REPS, level: float = 0.95, seed: int = 0):
+    """Bootstrap interval of P(X > Y), resampling each group's runs separately.
+
+    When every run of one group beats every run of the other, the interval collapses (for example [0, 0]): complete
+    separation in the observed runs, not a zero probability for future runs.
+    """
     x = np.asarray(x, dtype=float)
     y = np.asarray(y, dtype=float)
     if x.size < 2 or y.size < 2:

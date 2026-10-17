@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2026 Shayan Abrar
+// SPDX-License-Identifier: MIT
 /**
  * 3-D flight view, reconstructed from recorded telemetry.
  *

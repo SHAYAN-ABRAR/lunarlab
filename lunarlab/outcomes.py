@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Shayan Abrar
+# SPDX-License-Identifier: MIT
 """Episode outcome classification.
 
 Definitions (documented in docs/EVALUATION.md):
@@ -89,6 +91,10 @@ LANDING_CATEGORIES: tuple[str, ...] = (
 
 
 class PadLandingCriteria(BaseModel):
+    """What a strict pad landing requires beyond coming to rest without body contact: leg contact seen,
+    both leg bodies between the flags, and a final tilt of at most ``max_final_abs_angle_rad``.
+    """
+
     model_config = ConfigDict(extra="forbid")
 
     require_leg_contact_seen: bool = True
@@ -119,6 +125,7 @@ class OutcomeRecord:
     outcome_classifier_version: int = field(default=OUTCOME_CLASSIFIER_VERSION)
 
     def to_dict(self) -> dict:
+        """JSON-ready dict (non-finite coordinates become None)."""
         d = asdict(self)
         d["strict_failures"] = list(self.strict_failures)
         for k in ("leg_x_world", "helipad_x_world"):  # JSON has no NaN/inf: unknown stays None
@@ -155,6 +162,9 @@ def _category(env_outcome: str, body_contact: bool, pad: bool, geography: str) -
 
 
 def classify_env_outcome(terminated: bool, truncated: bool, final_obs: np.ndarray, p: LanderProbe) -> str:
+    """The environment's own ending: ``at_rest``, ``crash``, ``out_of_bounds``, ``timeout`` (time-limit
+    truncation) or ``unknown``.
+    """
     if terminated:
         if not p.awake:
             return "at_rest"
@@ -177,6 +187,11 @@ def classify_outcome(
     *,
     leg_contact_seen: bool,
 ) -> OutcomeRecord:
+    """Classify an episode's end (outcome classifier version 2).
+
+    Returns the environment outcome, whether it was a strict pad landing, the pad geography (within, straddling,
+    outside, unknown), exactly one landing category, and every strict condition that failed.
+    """
     c = criteria or PadLandingCriteria()
     env_outcome = classify_env_outcome(terminated, truncated, final_obs, p)
     both_legs = bool(final_obs[6] > 0.5 and final_obs[7] > 0.5)

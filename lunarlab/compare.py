@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Shayan Abrar
+# SPDX-License-Identifier: MIT
 """Comparison of runs and the reward-hacking diagnostic.
 
 Two different kinds of variability are kept apart:

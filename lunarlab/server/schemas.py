@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Shayan Abrar
+# SPDX-License-Identifier: MIT
 """Request bodies. Strict schemas: unknown fields are rejected, numbers are bounded."""
 
 from __future__ import annotations

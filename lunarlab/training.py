@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Shayan Abrar
+# SPDX-License-Identifier: MIT
 """PPO training: checkpoints, validation-based selection, cooperative stop, resume.
 
 Budgets are counted in **environment transitions** (``model.num_timesteps``,
@@ -160,6 +162,9 @@ def _build_training_env(
 
 
 def build_vec_env(cfg: RunConfig, kind: str | None = None):
+    """The run's vectorised training environments: ``n_envs`` copies of LunarLander (with the optional physics
+    randomiser) under ``LunarLabRewardWrapper(apply=True)`` and ``Monitor``, in a DummyVecEnv or a SubprocVecEnv.
+    """
     from stable_baselines3.common.vec_env import DummyVecEnv, SubprocVecEnv
 
     fn = functools.partial(
@@ -177,6 +182,7 @@ def build_vec_env(cfg: RunConfig, kind: str | None = None):
 
 
 def build_model(cfg: RunConfig, venv, device: str):
+    """SB3's own ``PPO`` or ``DQN`` with the run's hyperparameters, network and seed (LunarLab adds no learning code)."""
     import torch.nn as nn
     from stable_baselines3 import DQN, PPO
 
@@ -225,6 +231,7 @@ def build_model(cfg: RunConfig, venv, device: str):
 
 
 def resolve_device(requested: str) -> str:
+    """``cpu``, or ``cuda`` when requested (``cuda``/``auto``) and available; requesting ``cuda`` without it is an error."""
     if requested == "cpu":
         return "cpu"
     import torch

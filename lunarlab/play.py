@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Shayan Abrar
+# SPDX-License-Identifier: MIT
 """Fly it yourself: keyboard-controlled episodes, recorded like any policy's.
 
 The browser sends the actions held on the keyboard; the server steps the real environment

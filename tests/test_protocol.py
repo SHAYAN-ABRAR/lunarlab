@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Shayan Abrar
+# SPDX-License-Identifier: MIT
 """Evaluation-protocol validation: seed lists, declared vs executed environment, schema compatibility."""
 
 from __future__ import annotations

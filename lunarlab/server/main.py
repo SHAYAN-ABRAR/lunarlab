@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Shayan Abrar
+# SPDX-License-Identifier: MIT
 """App factory and launcher for the local web application.
 
 Safety model (a local, single-user tool without accounts):

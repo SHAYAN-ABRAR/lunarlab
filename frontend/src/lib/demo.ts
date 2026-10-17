@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2026 Shayan Abrar
+// SPDX-License-Identifier: MIT
 // Static demo mode (VITE_DEMO=1): the UI reads a snapshot of real API responses exported by
 // `python -m lunarlab export-demo` instead of talking to a backend. Nothing is computed or stored.
 // File names follow lunarlab/demo.py (demo_name / compare_key); keep the two in sync.

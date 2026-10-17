@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Shayan Abrar
+# SPDX-License-Identifier: MIT
 """Windows-relevant robustness: locked files, cross-process locks, atomic replacement, paths with spaces.
 
 Windows refuses to replace or delete a file that another process holds open without
@@ -290,6 +292,22 @@ def test_powershell_scripts_avoid_escapes_that_powershell_7_reads_differently():
         )
         assert res.returncode == 0, f"{script.name}: {res.stderr}"
         assert res.stdout.strip() == "", f"{script.name}: {res.stdout}"
+
+
+@windows_only
+def test_powershell_scripts_keep_their_comment_based_help():
+    # Help (<# .SYNOPSIS #>) is only found when no comment sits directly above it; a license header
+    # must be separated from it by a blank line. Without help, Get-Help prints the syntax line instead.
+    root = Path(__file__).resolve().parent.parent
+    for script in sorted((root / "scripts").glob("*.ps1")):
+        res = subprocess.run(
+            ["powershell", "-NoProfile", "-NonInteractive", "-Command", f"(Get-Help '{script}').Synopsis"],
+            capture_output=True,
+            text=True,
+        )
+        synopsis = res.stdout.strip()
+        assert res.returncode == 0 and synopsis, f"{script.name}: {res.stderr}"
+        assert not synopsis.startswith(script.name), f"{script.name}: comment-based help not found"
 
 
 @pytest.mark.slow

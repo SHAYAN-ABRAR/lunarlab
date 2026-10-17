@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Shayan Abrar
+# SPDX-License-Identifier: MIT
 """Per-episode accounting of original and training rewards.
 
 The accumulator is reset at every ``reset()`` so no state can leak from one
@@ -37,6 +39,7 @@ class EpisodeAccumulator:
     _discount: float = 1.0
 
     def reset(self) -> None:
+        """Start a new episode: every sum and counter back to zero."""
         self.length = 0
         self.original_return = 0.0
         self.training_return = 0.0
@@ -83,6 +86,9 @@ class EpisodeAccumulator:
         return hovering
 
     def summary(self) -> dict:
+        """Returns (original, training and per term; undiscounted and discounted), action counts, hover
+        and leg-contact statistics of the episode so far.
+        """
         n = max(self.length, 1)
         return {
             "length": self.length,

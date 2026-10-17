@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Shayan Abrar
+# SPDX-License-Identifier: MIT
 """The single reward wrapper used for training, evaluation telemetry and recording.
 
 Wrapper order used everywhere in LunarLab::
@@ -39,6 +41,15 @@ from lunarlab.rewards.terms import compute_terms, training_reward
 
 
 class LunarLabRewardWrapper(gym.Wrapper):
+    """Applies a reward configuration on top of LunarLander's original reward and records every component.
+
+    With ``apply=True`` (training) ``step`` returns ``original_weight * original + sum(terms)``; with ``apply=False``
+    (evaluation, recording) it returns the original reward and only records the terms. Observations, actions,
+    ``terminated`` and ``truncated`` are never changed. The last step of each episode carries
+    ``info["lunarlab_episode"]``: original and training returns (undiscounted, discounted and per term), the hover
+    detector's statistics and the outcome classification.
+    """
+
     def __init__(
         self,
         env: gym.Env,
@@ -78,6 +89,7 @@ class LunarLabRewardWrapper(gym.Wrapper):
 
     # ------------------------------------------------------------------ #
     def reset(self, *, seed: int | None = None, options: dict[str, Any] | None = None):
+        """Reset the environment and start a new episode accumulator (nothing carries over between episodes)."""
         obs, info = self.env.reset(seed=seed, options=options)
         self._acc.reset()
         self._prev_obs = np.array(obs, dtype=np.float32, copy=True)
@@ -87,6 +99,9 @@ class LunarLabRewardWrapper(gym.Wrapper):
         return obs, info
 
     def step(self, action):
+        """Step, compute the reward terms for (s, a, s'), record them, and return the training reward
+        (``apply=True``) or the original reward (``apply=False``).
+        """
         if self._needs_reset or self._prev_obs is None:
             raise RuntimeError(
                 "LunarLabRewardWrapper.step() called before reset() or after the episode ended"

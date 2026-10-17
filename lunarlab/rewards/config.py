@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Shayan Abrar
+# SPDX-License-Identifier: MIT
 """Reward configuration schema and the four named presets.
 
 A reward configuration is pure data validated by a fixed schema. There is no
@@ -40,11 +42,18 @@ class _Strict(BaseModel):
 
 
 class TimePenaltyConfig(_Strict):
+    """A constant cost on every transition (the time-penalty ablation)."""
+
     enabled: bool = False
     cost_per_step: float = Field(0.01, ge=0.0, le=1.0, description="Subtracted on every transition.")
 
 
 class HoverBonusConfig(_Strict):
+    """A bonus whenever the resulting state satisfies the eligibility predicate.
+
+    It does not telescope, so it changes which policy is optimal: the deliberately flawed preset.
+    """
+
     enabled: bool = False
     bonus_per_step: float = Field(
         1.0, ge=0.0, le=10.0, description="Added when the resulting state is eligible."
@@ -53,6 +62,8 @@ class HoverBonusConfig(_Strict):
 
 
 class PotentialWeights(_Strict):
+    """Weights of the bounded potential Phi(s) = -sum_i w_i * tanh|feature_i| (see ``rewards.terms.potential``)."""
+
     x: float = Field(1.0, ge=0.0, le=10.0, description="Weight on tanh(|x|).")
     y: float = Field(0.5, ge=0.0, le=10.0, description="Weight on tanh(|y|).")
     speed: float = Field(1.0, ge=0.0, le=10.0, description="Weight on tanh(hypot(vx, vy)).")
@@ -61,18 +72,30 @@ class PotentialWeights(_Strict):
 
 
 class PotentialConfig(_Strict):
+    """Potential-based shaping alpha * (gamma * Phi(s') - Phi(s)) with Phi(terminal) = 0; gamma is the run's discount."""
+
     enabled: bool = False
     alpha: float = Field(10.0, ge=0.0, le=100.0, description="Scale of the shaping term.")
     weights: PotentialWeights = Field(default_factory=PotentialWeights)
 
 
 class LearnedRewardConfig(_Strict):
+    """A reward model learned from preferences (``lunarlab.preferences``), scaled. With ``original_weight = 0``
+    the agent never sees the environment's reward.
+    """
+
     enabled: bool = False
     model_id: str | None = Field(None, max_length=96, pattern=r"^[A-Za-z0-9][A-Za-z0-9_\-]*$")
     scale: float = Field(1.0, gt=0.0, le=100.0, description="Multiplies the normalised model output.")
 
 
 class RewardConfig(_Strict):
+    """A complete reward definition: training reward = original_weight * original reward + the enabled terms.
+
+    Validated strictly (unknown keys are refused, values bounded); :meth:`content_hash` identifies it in every run
+    and evaluation.
+    """
+
     schema_version: Literal[1] = 1
     name: str = Field(..., min_length=1, max_length=64, pattern=r"^[A-Za-z0-9][A-Za-z0-9 _.\-]*$")
     preset: PresetName = "custom"
@@ -92,6 +115,7 @@ class RewardConfig(_Strict):
         return self
 
     def active_terms(self) -> list[str]:
+        """Names of the enabled additional terms."""
         out = []
         if self.time_penalty.enabled:
             out.append("time_penalty")
@@ -123,6 +147,7 @@ class RewardConfig(_Strict):
         return hashlib.sha256(canonical.encode()).hexdigest()[:16]
 
     def is_original(self) -> bool:
+        """True when the training reward equals the original reward (no additional term, weight 1)."""
         return not self.active_terms() and self.original_weight == 1.0
 
     def warnings(self) -> list[str]:
@@ -206,4 +231,5 @@ def preset(name: str) -> RewardConfig:
 
 
 def all_presets() -> list[RewardConfig]:
+    """The four named presets: baseline, time penalty, flawed hover bonus, potential-based shaping."""
     return [preset(n) for n in PRESET_NAMES]

@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Shayan Abrar
+# SPDX-License-Identifier: MIT
 """Markdown + HTML experiment report generated only from stored data.
 
 Figures (matplotlib, Agg backend):

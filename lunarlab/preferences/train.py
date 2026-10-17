@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Shayan Abrar
+# SPDX-License-Identifier: MIT
 """Train a reward model from pairwise preferences (Bradley–Terry / logistic loss).
 
 For a pair (A, B) the model predicts P(A preferred) = sigmoid(sum_t r(A_t) - sum_t r(B_t)),

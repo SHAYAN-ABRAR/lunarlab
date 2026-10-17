@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Shayan Abrar
+# SPDX-License-Identifier: MIT
 """Figures and tables for the results write-up (docs/RESULTS.md), generated only from stored data.
 
     python -m lunarlab results --experiment-ids <main>,<dqn>,<rlhf> --out docs/results

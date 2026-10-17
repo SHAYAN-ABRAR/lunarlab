@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2026 Shayan Abrar
+// SPDX-License-Identifier: MIT
 import clsx from 'clsx'
 import { ArrowLeftRight, ChevronFirst, ChevronLast, ChevronLeft, ChevronRight, Pause, Play } from 'lucide-react'
 import { Suspense, lazy, memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'

@@ -1,0 +1,32 @@
+Source-archive verification, 2026-10-18 (python tools/build_source_archive.py --working-tree --verify)
+Windows 11, Python 3.12.13. Temporary paths are shown as <TEMP>.
+
+lunarlab-0.1.0-src.tar.gz: 287 files, 7.9 MB, sha256 6b59a99c673ab8be416a17a7c3da53ac65221104330bb5325c0caf275995ec70
+source: working-tree 28dd935c9253 (uncommitted changes included)
+$ uv venv --python 3.12 venv
+   Using CPython 3.12.13
+   Creating virtual environment at: <TEMP>\lunarlab-sdist-obyotxz3\venv
+   Activate with: <TEMP>\lunarlab-sdist-obyotxz3\venv\Scripts\activate
+$ uv pip install --python python.exe -r requirements.lock
+    + typing-inspection==0.4.4
+    + tzdata==2026.5
+    + uvicorn==0.54.0
+$ uv pip install --python python.exe --no-deps lunarlab-0.1.0
+   Prepared 1 package in 429ms
+   Installed 1 package in 16ms
+    + lunarlab==0.1.0 (from <TEMP>/lunarlab-sdist-obyotxz3/lunarlab-0.1.0)
+$ python.exe -m lunarlab --version
+   lunarlab 0.1.0 (source no git revision); Python 3.12.13 on Windows-11-10.0.26300-SP0; gymnasium 1.4.0, stable-baselines3 2.9.0, torch 2.14.1
+$ python.exe -m lunarlab doctor
+   [OK  ] node / frontend  node v26.3.0 (meets Vite's ^20.19 || >=22.12); frontend not built yet (run scripts/setup.ps1)
+   
+   10 ok, 0 warning(s), 0 failure(s). Home: <TEMP>\lunarlab-sdist-obyotxz3\home
+$ python.exe -m lunarlab reproduce-smoke --transitions 2048
+     [ok] a repeated final-test evaluation matches the saved one exactly: 4/4 episodes identical
+     [ok] exported results re-read identically: sha256 482f7e45a4774d89
+   PASSED: 14/14 checks in 6.37 s
+$ python.exe -m pytest -q -p no:cacheprovider test_project_metadata.py test_docs.py test_reproduce.py test_audit_core.py test_properties.py test_rewards.py
+   ........................................................................ [ 76%]
+   ............................................                             [100%]
+   188 passed in 11.16s
+verified: the archive installs, runs and passes its release tests in a fresh environment

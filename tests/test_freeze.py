@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Shayan Abrar
+# SPDX-License-Identifier: MIT
 """Final-test freezing: an immutable tested artifact, no further training, safe concurrency and retries."""
 
 from __future__ import annotations

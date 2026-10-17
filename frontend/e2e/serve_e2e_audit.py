@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Shayan Abrar
+# SPDX-License-Identifier: MIT
 """Backend for the audit-repair browser tests (port 8767) with a disposable, pre-built home.
 
 The home lives in frontend/.e2e-audit-home (git-ignored) and is rebuilt on every run, so these tests

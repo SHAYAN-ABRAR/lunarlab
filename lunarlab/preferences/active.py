@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Shayan Abrar
+# SPDX-License-Identifier: MIT
 """Active preference learning: a reward-model ensemble chooses which pairs to label next.
 
 Strategies:

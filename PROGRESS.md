@@ -1,6 +1,6 @@
 # Progress
 
-_Last updated: 2026-10-17._
+_Last updated: 2026-10-18._
 
 ## Status
 
@@ -13,7 +13,44 @@ _Last updated: 2026-10-17._
 | Learned rewards (RLHF in miniature): 2 reward models × 3 seeds | **done** |
 | Static demo, CI workflow, results write-up | live at https://shayan-abrar.github.io/lunarlab/; CI and demo deploys pass on GitHub |
 | Six enhancements (leakage fix, varied physics, active preference learning, Optuna tuning, policy diagnostics, PPO–DQN comparisons) | **built and verified** with tests and smoke experiments; the leakage refit and the active-learning study were measured, the other full studies have not been run ([commands](docs/RESULTS.md#studies-built-but-not-yet-run)) |
-| Audit repair (DQN continuation, final-test freezing, outcome classifier v2, protocol validation, Windows CI, provenance, wording) | **implemented and verified locally** on branch `audit-fixes`, not committed ([docs/AUDIT_FIXES.md](docs/AUDIT_FIXES.md)); the new Windows CI job has not run on GitHub |
+| Audit repair (DQN continuation, final-test freezing, outcome classifier v2, protocol validation, Windows CI, provenance, wording) | **done**, committed and verified in CI on GitHub (Linux and Windows) ([docs/AUDIT_FIXES.md](docs/AUDIT_FIXES.md)) |
+| JMLR-MLOSS readiness (license, release tooling, coverage, reproducibility, benchmark, comparison, adapter layer, documentation, manuscript scaffold) | **implemented and verified locally** on branch `research/jmlr-mloss-readiness`, not committed ([docs/jmlr/READINESS_REPORT.md](docs/jmlr/READINESS_REPORT.md)); the extended CI has not run on GitHub; manuscript and community evidence need the authors |
+
+## JMLR-MLOSS readiness (2026-10-17/18)
+
+Work for a possible submission to the JMLR open-source software track; the full report, with the requirements
+matrix and the evidence, is in [docs/jmlr/](docs/jmlr/READINESS_REPORT.md).
+
+- **Licensing:** MIT `LICENSE`, SPDX notice in every source file (`tools/spdx_headers.py`), generated
+  `THIRD_PARTY_NOTICES.md`, `CITATION.cff`, consistent package metadata (the missing `optuna` dependency added;
+  `requires-python` matched to the tested 3.12–3.13).
+- **Release:** one authoritative version and `python -m lunarlab --version`; a deterministic source archive
+  (`tools/build_source_archive.py`) built twice byte-identically and test-installed into a fresh environment.
+- **Reproducibility:** `reproduce-smoke`, `export-artifact`, `reproduce-artifact`; three published final tests
+  supplied in `examples/artifacts/` and re-evaluated bit-identically (300/300 episodes) on this machine; training
+  bit-identical across processes on this machine.
+- **Quality:** coverage measured (82.9 %, from 75.2 %), 448 tests (from 270): property-based tests of the
+  shaping and statistics invariants, continuation-loader refusals, the tutorial executed command by command,
+  documentation commands parsed, release metadata checked.
+- **Benchmark:** `overhead-benchmark`; reward accounting costs about 4 % of PPO training-loop time against plain
+  Stable-Baselines3 on this laptop ([docs/jmlr/BENCHMARK_PROTOCOL.md](docs/jmlr/BENCHMARK_PROTOCOL.md)).
+- **Generality:** task-independent `lunarlab.audit` layer (LunarLander adapter identical to the pipeline; CartPole
+  example).
+- **Documentation:** tutorial, developer guide, generated API reference, contributing guide, issue forms; a
+  sourced comparison with related software; a scientific review of the published claims (one sentence reworded).
+- **Manuscript:** `paper/jmlr-mloss/` scaffold in the official style with verified references and figures from
+  stored data; the PDF has not been built (no LaTeX here) and author information is left to the authors.
+
+| Check (2026-10-18, branch `research/jmlr-mloss-readiness`) | Result |
+|---|---|
+| `python -m pytest --cov` (Windows 11, Python 3.12) | **448 passed**, 82.9 % statement + branch coverage |
+| Fast suite on Python 3.13 (Windows 11) | 375 passed; `reproduce-smoke` 14/14 |
+| `ruff check` / `ruff format --check` (lunarlab, tests, tools, examples, paper) | clean |
+| `npm run typecheck` / `oxlint` / `npm run build` | clean / clean / OK |
+| `npx playwright test` | **15 passed** (10 earlier flows + 5 audit flows on a pre-built fixture home) |
+| Source archive | byte-identical rebuilds; fresh install: `--version`, `doctor`, `reproduce-smoke` 14/14, 188 release tests passed |
+| Evidence integrity (1,667 historical files) | all byte-identical to the baseline taken before this work (combined SHA-256 `651c5e2b…6e04`); only new deliverables added under `reports/jmlr/` |
+| CI on GitHub | **not run** (nothing pushed) |
 
 ## Audit repair (2026-10-17)
 

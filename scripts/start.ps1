@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2026 Shayan Abrar
+# SPDX-License-Identifier: MIT
+
 <#
 .SYNOPSIS
     Start the LunarLab web application (backend + built UI) on http://127.0.0.1:<Port>.

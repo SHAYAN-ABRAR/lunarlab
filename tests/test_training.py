@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Shayan Abrar
+# SPDX-License-Identifier: MIT
 """Training lifecycle with real PPO updates (small budgets): checkpoints, stop, resume, reload."""
 
 from __future__ import annotations

@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Shayan Abrar
+# SPDX-License-Identifier: MIT
 """Training under varied physics: configuration, the per-episode randomizer, training and comparison."""
 
 from __future__ import annotations

@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Shayan Abrar
+# SPDX-License-Identifier: MIT
 """SQLite metadata: jobs, reward-configuration revisions, settings.
 
 Large artifacts (checkpoints, telemetry, videos, episode logs) stay in files.

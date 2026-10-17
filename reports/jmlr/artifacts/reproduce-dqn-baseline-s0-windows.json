@@ -1,0 +1,91 @@
+{
+  "kind": "lunarlab.reproduce-artifact",
+  "schema": 1,
+  "artifact": "20261015-224317-dqn-baseline-s0-custom-2fe1",
+  "reproduced_at": "2026-10-17T15:42:49+00:00",
+  "software": {
+    "lunarlab": "0.1.0",
+    "git": {
+      "available": true,
+      "revision": "28dd935c92532a046b902bfe4a5457b632a1b9f1",
+      "dirty": true
+    },
+    "python": "3.12.13",
+    "python_implementation": "CPython",
+    "platform": "Windows-11-10.0.26300-SP0",
+    "packages": {
+      "gymnasium": "1.4.0",
+      "Box2D": "2.3.10",
+      "pygame": "2.6.1",
+      "stable-baselines3": "2.9.0",
+      "torch": "2.14.1",
+      "numpy": "2.5.4",
+      "pandas": "3.0.6",
+      "matplotlib": "3.11.2",
+      "imageio": "2.38.1",
+      "imageio-ffmpeg": "0.6.0",
+      "optuna": "5.0.0",
+      "fastapi": "0.143.1",
+      "uvicorn": "0.54.0",
+      "pydantic": "2.14.1",
+      "psutil": "7.2.2",
+      "PyYAML": "6.0.3"
+    }
+  },
+  "hardware": {
+    "platform": "Windows-11-10.0.26300-SP0",
+    "machine": "AMD64",
+    "cpu": "13th Gen Intel(R) Core(TM) i7-13620H",
+    "physical_cores": 10,
+    "logical_cores": 16,
+    "ram_gb": 16.8
+  },
+  "episodes": 100,
+  "recorded_mean_original_return": 155.36443783032232,
+  "reproduced_mean_original_return": 155.36443783032232,
+  "recorded_pad_landing_rate": 0.29,
+  "reproduced_pad_landing_rate": 0.29,
+  "comparison": {
+    "compared": 100,
+    "exact": 100,
+    "within_tolerance": 100,
+    "tolerance": 0.0,
+    "max_abs_return_difference": 0.0,
+    "mismatches": [],
+    "n_mismatches": 0
+  },
+  "elapsed_s": 11.59,
+  "checks": [
+    {
+      "check": "checkpoint.zip matches its recorded SHA-256",
+      "ok": true,
+      "detail": "8f1438011d97158b"
+    },
+    {
+      "check": "config.yaml matches its recorded SHA-256",
+      "ok": true,
+      "detail": "199dcc9efbe236ae"
+    },
+    {
+      "check": "evaluation.json matches its recorded SHA-256",
+      "ok": true,
+      "detail": "008074c0512ab4a3"
+    },
+    {
+      "check": "configuration hash matches the record",
+      "ok": true,
+      "detail": "70de6039ef5e09c6"
+    },
+    {
+      "check": "the recorded evaluation used this checkpoint",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "every re-evaluated episode matches the record exactly",
+      "ok": true,
+      "detail": "100/100 episodes; largest return difference 0"
+    }
+  ],
+  "ok": true
+}

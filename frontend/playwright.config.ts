@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2026 Shayan Abrar
+// SPDX-License-Identifier: MIT
 import { defineConfig } from '@playwright/test'
 import path from 'node:path'
 

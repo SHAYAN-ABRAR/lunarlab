@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Shayan Abrar
+# SPDX-License-Identifier: MIT
 """HTTP API: safety middleware, validation, revisions, job endpoints, path safety."""
 
 from __future__ import annotations

@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Shayan Abrar
+# SPDX-License-Identifier: MIT
 """Experiments: named groups of runs meant to be compared (e.g. presets x seeds).
 
 Stored as ``data/experiments/<experiment_id>.json``. An experiment is rewards x variants x seeds.

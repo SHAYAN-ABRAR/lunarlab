@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Shayan Abrar
+# SPDX-License-Identifier: MIT
 """Find (and optionally terminate) LunarLab processes that belong to *this* project.
 
 A process qualifies only if its command line runs ``-m lunarlab serve`` or

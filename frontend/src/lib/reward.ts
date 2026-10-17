@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2026 Shayan Abrar
+// SPDX-License-Identifier: MIT
 import type { Preset, RewardConfig } from './types'
 
 // Fixed preset → colour mapping. Colour follows the entity, never its rank.

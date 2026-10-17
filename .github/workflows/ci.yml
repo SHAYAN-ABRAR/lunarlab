@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Shayan Abrar
+# SPDX-License-Identifier: MIT
 name: CI
 
 on:
@@ -32,10 +34,63 @@ jobs:
           uv venv .venv
           uv pip install --python .venv/bin/python -r requirements-ci.lock --torch-backend cpu
           uv pip install --python .venv/bin/python -e . --no-deps
-      - name: Ruff
-        run: .venv/bin/python -m ruff check lunarlab tests
-      - name: Pytest (unit, integration and slow tests with real PPO updates)
-        run: .venv/bin/python -m pytest -q
+      - name: Ruff (lint and formatting)
+        run: |
+          .venv/bin/python -m ruff check lunarlab tests tools examples paper
+          .venv/bin/python -m ruff format --check lunarlab tests tools examples paper
+      - name: Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)
+        run: .venv/bin/python -m pytest -q --cov --cov-report=term --cov-report=json:coverage.json --cov-report=html:htmlcov
+      - name: Upload the coverage report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-linux
+          path: |
+            coverage.json
+            htmlcov
+          retention-days: 30
+      - name: Generated API reference, license headers and manuscript sources are current
+        run: |
+          .venv/bin/python tools/gen_api_docs.py --check
+          .venv/bin/python tools/spdx_headers.py
+          .venv/bin/python paper/jmlr-mloss/check_manuscript.py
+      - name: Reproducibility smoke test (whole pipeline, no web UI)
+        run: .venv/bin/python -m lunarlab reproduce-smoke --training-determinism --report reproduce-smoke-linux.json
+      - name: Re-evaluate the supplied artifacts on Linux (observational; they were recorded on Windows)
+        # Cross-platform bit-identity is not claimed: the reports record how many episodes match exactly.
+        run: |
+          for a in ppo-baseline-s0 ppo-hover-bonus-s0 dqn-baseline-s0; do
+            .venv/bin/python -m lunarlab reproduce-artifact --artifact examples/artifacts/$a --report reproduce-$a-linux.json || true
+          done
+      - name: Upload the reproducibility reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: reproducibility-linux
+          path: reproduce-*.json
+          retention-days: 30
+
+  source-archive:
+    name: Source archive · deterministic build, fresh install, tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.12"
+      - name: Build twice and compare byte for byte
+        run: |
+          python3 tools/build_source_archive.py --rev HEAD --out dist-a
+          python3 tools/build_source_archive.py --rev HEAD --out dist-b
+          cmp dist-a/lunarlab-*-src.tar.gz dist-b/lunarlab-*-src.tar.gz
+      - name: Install the archive into a fresh environment and run its release tests
+        run: python3 tools/build_source_archive.py --rev HEAD --out dist --verify
+      - uses: actions/upload-artifact@v4
+        with:
+          name: source-archive
+          path: dist
+          retention-days: 30
 
   frontend:
     name: Frontend · typecheck + lint + build
@@ -60,9 +115,14 @@ jobs:
     # LunarLab's primary platform. Bounded: install, environment checks, the tests most exposed to
     # Windows behaviour (file locks, process groups, paths with spaces, video encoding), and the
     # PowerShell scripts. No training beyond tiny smoke budgets.
-    name: Windows · install, locks, scripts
+    # Python 3.13 was verified locally on Windows 11 (fast test subset and reproduce-smoke) before being added.
+    name: Windows · Python ${{ matrix.python }} · install, locks, scripts
     runs-on: windows-latest
     timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ["3.12", "3.13"]
     defaults:
       run:
         shell: pwsh
@@ -70,7 +130,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v6
         with:
-          python-version: "3.12"
+          python-version: ${{ matrix.python }}
       - name: Install (as scripts/setup.ps1 does; PyPI's Windows torch wheels are CPU builds)
         run: |
           uv venv .venv
@@ -83,7 +143,24 @@ jobs:
           .venv\Scripts\python.exe -m pytest -q --basetemp "${{ runner.temp }}\lunar lab tmp"
           tests/test_windows.py tests/test_dqn_continuation.py tests/test_freeze.py tests/test_training.py
           tests/test_jobs.py tests/test_env_integration.py tests/test_video_rescoring.py tests/test_protocol.py
-          tests/test_outcomes_v2.py tests/test_outcomes_stats_storage.py
+          tests/test_outcomes_v2.py tests/test_outcomes_stats_storage.py tests/test_reproduce.py
+          tests/test_continuation_validation.py tests/test_audit_core.py tests/test_project_metadata.py
+          tests/test_docs.py tests/test_source_archive.py
+      - name: Reproducibility smoke test and re-evaluation of the supplied artifacts (the latter observational)
+        run: |
+          .venv\Scripts\python.exe -m lunarlab reproduce-smoke --training-determinism --report reproduce-smoke-windows.json
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          foreach ($a in 'ppo-baseline-s0', 'ppo-hover-bonus-s0', 'dqn-baseline-s0') {
+            .venv\Scripts\python.exe -m lunarlab reproduce-artifact --artifact examples\artifacts\$a --report "reproduce-$a-windows.json"
+          }
+          exit 0
+      - name: Upload the reproducibility reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: reproducibility-windows-py${{ matrix.python }}
+          path: reproduce-*.json
+          retention-days: 30
       - name: PowerShell scripts parse (PowerShell 7)
         run: |
           $failed = $false

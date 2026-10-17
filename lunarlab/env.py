@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Shayan Abrar
+# SPDX-License-Identifier: MIT
 """Environment construction and a small read-only adapter for LunarLander internals.
 
 Everything in LunarLab that needs to look *inside* the Gymnasium LunarLander
@@ -171,18 +173,22 @@ class Geometry:
 
     @property
     def world_w(self) -> float:
+        """World width in Box2D units."""
         return self.viewport_w / self.scale
 
     @property
     def world_h(self) -> float:
+        """World height in Box2D units."""
         return self.viewport_h / self.scale
 
     def world_x_to_obs(self, x_world: float) -> float:
+        """Convert a world x coordinate to the normalised observation x."""
         half = self.world_w / 2
         return (x_world - half) / half
 
 
 def geometry() -> Geometry:
+    """Viewport, scale and helipad constants of the installed LunarLander (fails clearly if they changed)."""
     m = _ll_module()
     try:
         return Geometry(
@@ -211,6 +217,7 @@ class LanderProbe:
     leg_contact: tuple[bool, bool]
 
     def to_dict(self) -> dict[str, Any]:
+        """JSON-ready dict."""
         return asdict(self)
 
 

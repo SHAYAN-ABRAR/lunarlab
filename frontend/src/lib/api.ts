@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2026 Shayan Abrar
+// SPDX-License-Identifier: MIT
 // Tiny typed client. Every mutating request carries X-LunarLab: 1, which the backend requires
 // (a custom header cannot be sent cross-origin without a CORS preflight the server never approves).
 // In the static demo build (VITE_DEMO=1) requests are answered from exported snapshot files.

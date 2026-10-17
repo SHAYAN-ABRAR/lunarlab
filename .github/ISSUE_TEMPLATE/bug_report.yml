@@ -1,0 +1,39 @@
+# SPDX-FileCopyrightText: 2026 Shayan Abrar
+# SPDX-License-Identifier: MIT
+name: Bug report
+description: Something in LunarLab does not work as documented.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for reporting. Please include enough detail to reproduce the problem. Do not attach
+        private data; LunarLab never needs credentials.
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened, and what did you expect?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Exact commands (CLI) or clicks (web UI), starting from a fresh `LUNARLAB_HOME` if possible.
+      render: shell
+    validations:
+      required: true
+  - type: textarea
+    id: version
+    attributes:
+      label: Version and environment
+      description: Paste the output of `python -m lunarlab --version` and `python -m lunarlab doctor`.
+      render: text
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Error output or logs
+      description: For training jobs, `data/jobs/<job>/worker.log` and `runs/<run_id>/events.jsonl` help most.
+      render: text

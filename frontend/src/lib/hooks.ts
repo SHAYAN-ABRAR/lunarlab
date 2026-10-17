@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2026 Shayan Abrar
+// SPDX-License-Identifier: MIT
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { ApiError, api } from './api'
 import { DEMO } from './demo'

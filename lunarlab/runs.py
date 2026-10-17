@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Shayan Abrar
+# SPDX-License-Identifier: MIT
 """Run creation, metadata, checkpoint manifest and event log."""
 
 from __future__ import annotations
@@ -33,6 +35,8 @@ from lunarlab.storage import (
 
 
 class RunError(RuntimeError):
+    """A run operation that must not proceed (unknown run, frozen run, incompatible checkpoint, …)."""
+
     pass
 
 
@@ -53,6 +57,11 @@ def create_run(
     warm_start: WarmStart | None = None,
     lineage: dict | None = None,
 ) -> RunConfig:
+    """Create a run directory with its validated configuration and metadata.
+
+    Records the configuration, reward and protocol hashes, the planned budget, the environment and a system snapshot
+    (versions, hardware, source revision). An invalid evaluation protocol is refused.
+    """
     ppo = ppo or PPOConfig()
     physics = physics or PhysicsRandomization()
     protocol = protocol or EvalProtocol()
@@ -118,6 +127,7 @@ def create_run(
 
 
 def load_config(run_id: str) -> RunConfig:
+    """The run's validated configuration (``config.yaml``)."""
     paths = RunPaths(run_id)
     if not paths.config.exists():
         raise RunError(f"unknown run: {run_id}")
@@ -125,10 +135,12 @@ def load_config(run_id: str) -> RunConfig:
 
 
 def load_metadata(run_id: str) -> dict:
+    """The run's ``metadata.json``."""
     return read_json(RunPaths(run_id).metadata, default={}) or {}
 
 
 def update_metadata(run_id: str, **updates: Any) -> dict:
+    """Merge fields into ``metadata.json`` under the run's metadata lock."""
     return mutate_metadata(run_id, lambda meta: meta.update(updates))
 
 
@@ -143,6 +155,7 @@ def mutate_metadata(run_id: str, change: Callable[[dict], Any]) -> dict:
 
 
 def log_event(paths: RunPaths, level: str, message: str, **data: Any) -> None:
+    """Append one event to the run's ``events.jsonl``."""
     append_jsonl(paths.events, {"time": utc_now(), "level": level, "message": message, **data})
 
 
@@ -152,6 +165,7 @@ def log_event(paths: RunPaths, level: str, message: str, **data: Any) -> None:
 
 
 def read_manifest(paths: RunPaths) -> dict:
+    """The run's checkpoint manifest (an empty one before the first checkpoint)."""
     return read_json(paths.checkpoint_manifest, default=None) or {"checkpoints": [], "best_validation": None}
 
 
@@ -165,6 +179,9 @@ def register_checkpoint(
     segment: int,
     extra: dict | None = None,
 ) -> dict:
+    """Add a checkpoint file to the manifest with its size, SHA-256, transitions and the caller's extra fields
+    (under the metadata lock); a ``best_validation`` entry also becomes the manifest's selected checkpoint.
+    """
     entry = {
         "name": file.name,
         "kind": kind,
@@ -219,6 +236,7 @@ def is_resumable(entry: dict, algo: str) -> bool:
 
 
 def legacy_dqn_resume_message(run_id: str, name: str) -> str:
+    """Why a DQN checkpoint without a continuation bundle cannot be resumed, and what to do instead."""
     return (
         f"checkpoint {name} has no replay buffer or DQN training state (written before LunarLab stored "
         "them, or its continuation files were pruned). It still works for evaluation, recordings and replay, "

@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2026 Shayan Abrar
+// SPDX-License-Identifier: MIT
 import { Gauge, Layers } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { Link } from 'react-router'

@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2026 Shayan Abrar
+// SPDX-License-Identifier: MIT
 import clsx from 'clsx'
 import { Ban, Play, RotateCcw, Trophy, Wand2 } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'

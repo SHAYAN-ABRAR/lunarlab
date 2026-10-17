@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2026 Shayan Abrar
+// SPDX-License-Identifier: MIT
 import clsx from 'clsx'
 import { AlertTriangle, CheckCircle2, CircleSlash, FileText, HelpCircle } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'

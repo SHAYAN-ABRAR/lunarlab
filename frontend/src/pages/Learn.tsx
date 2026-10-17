@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2026 Shayan Abrar
+// SPDX-License-Identifier: MIT
 import { type ReactNode, useMemo, useState } from 'react'
 import { Link } from 'react-router'
 import { Card, Field, NumberInput, PageHeader, Segmented, Table } from '../components/ui'

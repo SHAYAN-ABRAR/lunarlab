@@ -2,8 +2,9 @@
 
 [![CI](https://github.com/SHAYAN-ABRAR/lunarlab/actions/workflows/ci.yml/badge.svg)](https://github.com/SHAYAN-ABRAR/lunarlab/actions/workflows/ci.yml)
 [![Live demo](https://img.shields.io/badge/live%20demo-GitHub%20Pages-3cc8d4)](https://shayan-abrar.github.io/lunarlab/)
-![Python 3.12](https://img.shields.io/badge/python-3.12-3776ab)
+![Python 3.12 | 3.13](https://img.shields.io/badge/python-3.12%20%7C%203.13-3776ab)
 ![Stable-Baselines3](https://img.shields.io/badge/RL-PPO%20%C2%B7%20DQN-555)
+[![License: MIT](https://img.shields.io/badge/license-MIT-3da639)](LICENSE)
 
 A local-first laboratory for **honest reward-design experiments** on Gymnasium's `LunarLander-v3`
 (discrete actions) with Stable-Baselines3, plus a mission-control web interface: train under fixed or
@@ -126,8 +127,15 @@ none of them affected the published results: no number above changed
 - **Engineering:** a local job supervisor (owned worker processes, cooperative stop at safe boundaries,
   resume with lineage, crash reconciliation), parallel experiment runs, weights-only model loading, loopback
   binding and strict request validation, crash-safe checkpoint bundles with full DQN continuation (replay
-  buffer included), 270 Python tests and 15 browser flows, Linux and Windows CI, and a static demo build
-  whose snapshots record their exact provenance.
+  buffer included), 448 Python tests (82.9 % statement and branch coverage) and 15 browser flows, Linux and
+  Windows CI, and a static demo build whose snapshots record their exact provenance.
+- **Reproducibility and extension:** `reproduce-smoke` runs and verifies the whole pipeline in a temporary home;
+  three published final tests ship as artifacts that `reproduce-artifact` re-evaluates episode by episode
+  (bit-identical on the machine that produced them); `overhead-benchmark` measures the instrumentation's cost
+  against plain Stable-Baselines3 (training loops about 4 % slower at 102,400 transitions, validation episodes
+  reported separately); a deterministic source archive that CI rebuilds byte for byte and installs fresh; and
+  a task-adapter layer (`lunarlab.audit`) that applies the same reward accounting to other Gymnasium
+  environments, with a [CartPole example](examples/cartpole_audit.py).
 
 ## Requirements
 
@@ -154,15 +162,16 @@ The app is at **http://127.0.0.1:8765** and binds to loopback only.
 ### Linux (secondary path)
 
 ```bash
-uv venv --python 3.12 .venv && uv pip install --python .venv/bin/python -r requirements.lock
+uv venv --python 3.12 .venv
+uv pip install --python .venv/bin/python -r requirements-ci.lock --torch-backend cpu   # CPU-only, exact versions
 uv pip install --python .venv/bin/python --no-deps -e .
 (cd frontend && npm ci && npm run build)
 .venv/bin/python -m lunarlab doctor
 .venv/bin/python -m lunarlab serve            # http://127.0.0.1:8765
 ```
 
-On Linux, PyPI's torch wheel includes CUDA libraries (several GB). For a CPU-only install, first run
-`uv pip install --python .venv/bin/python torch --index-url https://download.pytorch.org/whl/cpu`.
+This is the installation CI runs on Linux. `requirements.lock` works on Linux too, but there PyPI's default torch
+wheel pulls in NVIDIA's CUDA libraries (several GB, under proprietary licenses), which LunarLab does not need.
 
 ## First run (about five minutes)
 
@@ -227,6 +236,11 @@ Everything in the UI is also available from the command line (same core code):
 .venv\Scripts\python.exe -m lunarlab record-showcase --experiment-id <id> --references
 .venv\Scripts\python.exe -m lunarlab results --experiment-ids <id1>,<id2> --out docs/results
 .venv\Scripts\python.exe -m lunarlab export-demo --experiment-ids <id1>,<id2>   # release snapshot (clean tree; --draft otherwise)
+.venv\Scripts\python.exe -m lunarlab --version                                  # version, source revision, key dependencies
+.venv\Scripts\python.exe -m lunarlab reproduce-smoke --training-determinism     # whole pipeline in a temporary home, verified
+.venv\Scripts\python.exe -m lunarlab export-artifact --run-id <id> --out <dir>  # tested checkpoint + config + recorded test
+.venv\Scripts\python.exe -m lunarlab reproduce-artifact --artifact examples\artifacts\ppo-baseline-s0   # re-evaluate, compare
+.venv\Scripts\python.exe -m lunarlab overhead-benchmark --profile smoke         # instrumentation overhead vs plain SB3
 ```
 
 Profiles: `smoke` (8,192 transitions, technical test), `standard` (1,000,000 requested → 1,003,520 actual
@@ -267,6 +281,8 @@ demo/api/                   the exported snapshot behind the static demo (commit
 runs/<run_id>/checkpoints/frozen/   immutable, read-only copy of the checkpoint frozen for the final test
 runs/<run_id>/checkpoints/*.replay.npz, *.state.json   DQN continuation state (two most recent kept)
 data/test_exposure.jsonl    every completed final test (decides exploratory vs confirmatory)
+examples/artifacts/<name>/  three published final tests packaged for re-evaluation (committed)
+reports/jmlr/               coverage, overhead benchmarks, figures and reproduction reports (committed)
 ```
 
 Nothing is deleted automatically, with one exception: a DQN run keeps the replay and state files of its two most
@@ -275,6 +291,17 @@ a 64×64 MLP are about 150 KB each; a DQN replay file with the default 50k buffe
 
 ## Documentation
 
+- [docs/TUTORIAL.md](docs/TUTORIAL.md): a reward-design audit from the command line and from Python, step by
+  step (the test suite executes every command in it).
+- [docs/DEVELOPER.md](docs/DEVELOPER.md): module responsibilities, the reward-wrapper, training-job and
+  evaluation lifecycles, checkpoint formats, persistence, the HTTP API's security assumptions, tests.
+- [docs/api/](docs/api/README.md): the API reference (Python research API, every CLI command, the HTTP API with
+  its OpenAPI schema), generated from the code by `tools/gen_api_docs.py`.
+- [docs/jmlr/](docs/jmlr/READINESS_REPORT.md): the JMLR-MLOSS readiness package: requirements matrix,
+  reproducibility, benchmark protocol, comparison with related software, extending LunarLab to other
+  environments, community evidence, scientific review. The draft software paper (LaTeX, not submitted) is in
+  [paper/jmlr-mloss/](paper/jmlr-mloss/BUILD.md), with a map from each claim to its evidence
+  ([EVIDENCE.md](paper/jmlr-mloss/EVIDENCE.md)).
 - [docs/RESULTS.md](docs/RESULTS.md): the experiments, findings with intervals, figures, limitations and
   the commands that reproduce them.
 - [docs/REWARDS.md](docs/REWARDS.md): the original reward, the four presets, learned rewards, formulas, assumptions, why
@@ -295,15 +322,30 @@ a 64×64 MLP are about 150 KB each; a DQN replay file with the default 50k buffe
 - [docs/AUDIT_FIXES.md](docs/AUDIT_FIXES.md): the October 2026 audit findings, reproductions, fixes and tests;
   [docs/MIGRATION.md](docs/MIGRATION.md): what changed and the optional migration steps.
 - [PROGRESS.md](PROGRESS.md): what is done, test evidence, known issues, next steps.
+- [CONTRIBUTING.md](CONTRIBUTING.md): development setup, checks, conventions and how changes are reviewed.
 
 ## Tests
 
 ```powershell
-.venv\Scripts\python.exe -m pytest                       # 270 tests: unit, integration, real PPO/DQN, subprocesses
-.venv\Scripts\python.exe -m ruff check lunarlab tests
+.venv\Scripts\python.exe -m pytest                       # 448 tests: unit, integration, property-based, real PPO/DQN, end-to-end CLI
+.venv\Scripts\python.exe -m pytest -m "not slow"         # skips the tests marked slow (real PPO/DQN updates, video encoding)
+.venv\Scripts\python.exe -m pytest --cov                 # with statement + branch coverage, worker subprocesses included
+.venv\Scripts\python.exe -m lunarlab reproduce-smoke     # the whole pipeline in a temporary home, 14 checks
+.venv\Scripts\python.exe -m ruff check lunarlab tests tools examples paper
 cd frontend; npm run typecheck; npm run lint; npm run build
 npx playwright test                                      # 15 browser flows on real backends (uses installed Edge)
 ```
+
+Coverage is 82.9 % of statements and branches ([per-module report](reports/jmlr/coverage/SUMMARY.md)). CI runs
+the full suite on Linux, the Windows-sensitive tests and the PowerShell scripts on Windows with Python 3.12 and
+3.13, the smoke reproduction on both, and builds the source archive twice, compares the bytes and installs it
+into a fresh environment.
+
+## License and citation
+
+LunarLab is released under the [MIT License](LICENSE); every source file carries an SPDX license notice.
+Third-party components and their licenses are listed in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). To cite
+the software, use [CITATION.cff](CITATION.cff) (GitHub's "Cite this repository" reads it).
 
 
 This is a 2D/3D simulation benchmark. Nothing here is evidence of real-world rocket-control capability.

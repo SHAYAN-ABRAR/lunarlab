@@ -1,0 +1,291 @@
+{
+  "meta": {
+    "kind": "lunarlab.overhead-benchmark",
+    "schema": 1,
+    "created_at": "2026-10-17T15:47:05+00:00",
+    "profile": "standard",
+    "transitions": 102400,
+    "repeats": 3,
+    "torch_threads": 1,
+    "seed": 0,
+    "configurations": {
+      "sb3": "A \u00b7 plain SB3 (Monitor only)",
+      "accounting": "B \u00b7 + LunarLab reward accounting",
+      "lunarlab": "C \u00b7 full LunarLab pipeline"
+    },
+    "system": {
+      "software": {
+        "lunarlab": "0.1.0",
+        "git": {
+          "available": true,
+          "revision": "28dd935c92532a046b902bfe4a5457b632a1b9f1",
+          "dirty": true
+        },
+        "python": "3.12.13",
+        "python_implementation": "CPython",
+        "platform": "Windows-11-10.0.26300-SP0",
+        "packages": {
+          "gymnasium": "1.4.0",
+          "Box2D": "2.3.10",
+          "pygame": "2.6.1",
+          "stable-baselines3": "2.9.0",
+          "torch": "2.14.1",
+          "numpy": "2.5.4",
+          "pandas": "3.0.6",
+          "matplotlib": "3.11.2",
+          "imageio": "2.38.1",
+          "imageio-ffmpeg": "0.6.0",
+          "optuna": "5.0.0",
+          "fastapi": "0.143.1",
+          "uvicorn": "0.54.0",
+          "pydantic": "2.14.1",
+          "psutil": "7.2.2",
+          "PyYAML": "6.0.3"
+        }
+      },
+      "hardware": {
+        "platform": "Windows-11-10.0.26300-SP0",
+        "machine": "AMD64",
+        "cpu": "13th Gen Intel(R) Core(TM) i7-13620H",
+        "physical_cores": 10,
+        "logical_cores": 16,
+        "ram_gb": 16.8
+      }
+    },
+    "command": "python -m lunarlab overhead-benchmark --profile standard --transitions 102400 --repeats 3",
+    "equivalent_hyperparameters": true,
+    "hyperparameters": {
+      "n_envs": 4,
+      "n_steps": 1024,
+      "batch_size": 64,
+      "n_epochs": 4,
+      "gamma": 0.999,
+      "net_arch": "{'pi': [64, 64], 'vf': [64, 64]}",
+      "activation": "Tanh",
+      "parameters": 9797
+    },
+    "transitions_done": [
+      102400
+    ],
+    "figures": [
+      "overhead.png",
+      "overhead.pdf",
+      "overhead.svg"
+    ]
+  },
+  "summary": {
+    "sb3": {
+      "label": "A \u00b7 plain SB3 (Monitor only)",
+      "n": 3,
+      "wall_s": {
+        "mean": 48.831623166663725,
+        "sd": 0.17500044723914981,
+        "min": 48.67300799998338,
+        "max": 49.01935620000586
+      },
+      "loop_s": {
+        "mean": 48.831623166663725,
+        "sd": 0.17500044723914981,
+        "min": 48.67300799998338,
+        "max": 49.01935620000586
+      },
+      "loop_transitions_per_s": {
+        "mean": 2097.019705186754,
+        "sd": 7.508709047856927,
+        "min": 2088.9707237727403,
+        "max": 2103.835456399879
+      },
+      "wall_transitions_per_s": {
+        "mean": 2097.019705186754,
+        "sd": 7.508709047856927,
+        "min": 2088.9707237727403,
+        "max": 2103.835456399879
+      },
+      "validation_s": {
+        "mean": 0.0,
+        "sd": 0.0,
+        "min": 0.0,
+        "max": 0.0
+      },
+      "validation_env_steps": {
+        "mean": 0.0,
+        "sd": 0.0,
+        "min": 0.0,
+        "max": 0.0
+      },
+      "checkpoint_s": {
+        "mean": 0.0,
+        "sd": 0.0,
+        "min": 0.0,
+        "max": 0.0
+      },
+      "checkpoint_save_s": {
+        "mean": 0.0394845666596666,
+        "sd": 0.012976992971962687,
+        "min": 0.029273099993588403,
+        "max": 0.05408750000060536
+      },
+      "cpu_utilization": {
+        "mean": 0.9553824865061445,
+        "sd": 0.01586433836431744,
+        "min": 0.9393610722287392,
+        "max": 0.9710849389052786
+      },
+      "peak_memory_bytes": {
+        "mean": 310028970.6666667,
+        "sd": 68702.18410890103,
+        "min": 309985280.0,
+        "max": 310108160.0
+      },
+      "artifact_total_bytes": {
+        "mean": 149581.0,
+        "sd": 0.0,
+        "min": 149581.0,
+        "max": 149581.0
+      },
+      "loop_time_relative_to_sb3": 1.0
+    },
+    "accounting": {
+      "label": "B \u00b7 + LunarLab reward accounting",
+      "n": 3,
+      "wall_s": {
+        "mean": 50.7247550333365,
+        "sd": 0.31929131185553533,
+        "min": 50.371934700000565,
+        "max": 50.99382209999021
+      },
+      "loop_s": {
+        "mean": 50.7247550333365,
+        "sd": 0.31929131185553533,
+        "min": 50.371934700000565,
+        "max": 50.99382209999021
+      },
+      "loop_transitions_per_s": {
+        "mean": 2018.791635902018,
+        "sd": 12.736981975626842,
+        "min": 2008.0863873904375,
+        "max": 2032.8780423039589
+      },
+      "wall_transitions_per_s": {
+        "mean": 2018.791635902018,
+        "sd": 12.736981975626842,
+        "min": 2008.0863873904375,
+        "max": 2032.8780423039589
+      },
+      "validation_s": {
+        "mean": 0.0,
+        "sd": 0.0,
+        "min": 0.0,
+        "max": 0.0
+      },
+      "validation_env_steps": {
+        "mean": 0.0,
+        "sd": 0.0,
+        "min": 0.0,
+        "max": 0.0
+      },
+      "checkpoint_s": {
+        "mean": 0.0,
+        "sd": 0.0,
+        "min": 0.0,
+        "max": 0.0
+      },
+      "checkpoint_save_s": {
+        "mean": 0.06891003334506725,
+        "sd": 0.011921281150745928,
+        "min": 0.05956960000912659,
+        "max": 0.08233720000134781
+      },
+      "cpu_utilization": {
+        "mean": 0.9473154429398664,
+        "sd": 0.004180168718609791,
+        "min": 0.9431289520855357,
+        "max": 0.9514892607067974
+      },
+      "peak_memory_bytes": {
+        "mean": 311106218.6666667,
+        "sd": 465294.3022102606,
+        "min": 310747136.0,
+        "max": 311631872.0
+      },
+      "artifact_total_bytes": {
+        "mean": 149581.0,
+        "sd": 0.0,
+        "min": 149581.0,
+        "max": 149581.0
+      },
+      "loop_time_relative_to_sb3": 1.038768563154484
+    },
+    "lunarlab": {
+      "label": "C \u00b7 full LunarLab pipeline",
+      "n": 3,
+      "wall_s": {
+        "mean": 59.41103300000153,
+        "sd": 1.6671806460864593,
+        "min": 57.491246599995065,
+        "max": 60.4946454000019
+      },
+      "loop_s": {
+        "mean": 50.88429926667595,
+        "sd": 1.1950090604226953,
+        "min": 49.5304310999345,
+        "max": 51.79216060007457
+      },
+      "loop_transitions_per_s": {
+        "mean": 2013.1573064378692,
+        "sd": 47.82376805097966,
+        "min": 1977.1331957109464,
+        "max": 2067.4158840530545
+      },
+      "wall_transitions_per_s": {
+        "mean": 1724.5054550812395,
+        "sd": 49.17059238522346,
+        "min": 1692.7117982577147,
+        "max": 1781.1407136892522
+      },
+      "validation_s": {
+        "mean": 8.43838926665679,
+        "sd": 0.5962118935394027,
+        "min": 7.879485900019063,
+        "max": 9.065962899971055
+      },
+      "validation_env_steps": {
+        "mean": 18780.0,
+        "sd": 0.0,
+        "min": 18780.0,
+        "max": 18780.0
+      },
+      "checkpoint_s": {
+        "mean": 0.08834446666878648,
+        "sd": 0.008914895736102341,
+        "min": 0.08132960004149936,
+        "max": 0.09837640001205727
+      },
+      "checkpoint_save_s": {
+        "mean": 0.012620638095540926,
+        "sd": 0.0012735565337289058,
+        "min": 0.011618514291642765,
+        "max": 0.014053771430293896
+      },
+      "cpu_utilization": {
+        "mean": 0.9364801800842016,
+        "sd": 0.0136952095442822,
+        "min": 0.9225012704737162,
+        "max": 0.9498728629064844
+      },
+      "peak_memory_bytes": {
+        "mean": 323422890.6666667,
+        "sd": 155988.95988284983,
+        "min": 323284992.0,
+        "max": 323592192.0
+      },
+      "artifact_total_bytes": {
+        "mean": 1061314.6666666667,
+        "sd": 19.5021366350801,
+        "min": 1061301.0,
+        "max": 1061337.0
+      },
+      "loop_time_relative_to_sb3": 1.0420357949807728
+    }
+  }
+}

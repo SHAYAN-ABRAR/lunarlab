@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Shayan Abrar
+# SPDX-License-Identifier: MIT
 """Reward math: invariant, presets, hover predicate, potential shaping, accounting."""
 
 from __future__ import annotations

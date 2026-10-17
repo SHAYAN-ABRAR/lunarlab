@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2026 Shayan Abrar
+// SPDX-License-Identifier: MIT
 /**
  * Training-physics controls: per-episode randomization of wind, turbulence and gravity while training.
  * Mirrors lunarlab.config.PhysicsRandomization (same defaults and limits).

@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Shayan Abrar
+# SPDX-License-Identifier: MIT
 """Evaluation with the unmodified environment reward.
 
 Every policy is evaluated in a fresh ``LunarLander-v3`` with the default physics.
@@ -30,6 +32,8 @@ from lunarlab.storage import RunPaths, atomic_write_json, utc_now
 
 
 class EvaluationAborted(RuntimeError):
+    """Raised when an evaluation is stopped on request; nothing is saved."""
+
     pass
 
 
@@ -42,6 +46,9 @@ def make_eval_env(
     record_steps: bool = False,
     env_overrides: dict | None = None,
 ) -> LunarLabRewardWrapper:
+    """The evaluation environment: LunarLander wrapped with ``apply=False``, so the policy is scored on the
+    original reward while every reward term is still recorded.
+    """
     return LunarLabRewardWrapper(
         make_env(render_mode=render_mode, overrides=env_overrides),
         reward or preset("baseline"),
@@ -54,6 +61,9 @@ def make_eval_env(
 
 
 def run_episode(env: LunarLabRewardWrapper, policy: Policy, seed: int) -> dict:
+    """Fly one episode from ``seed`` and return its summary. Refuses to report if the loop received anything but
+    the original reward.
+    """
     obs, _ = env.reset(seed=int(seed))
     policy.reset(int(seed))
     original_total = 0.0
@@ -80,6 +90,12 @@ def evaluate_policy(
     should_stop: Callable[[], bool] | None = None,
     env_overrides: dict | None = None,
 ) -> dict[str, Any]:
+    """Evaluate ``policy`` for one episode per seed on the original reward.
+
+    Returns the episodes, the aggregate (rates with Wilson intervals, bootstrap interval of the mean return), the
+    elapsed time and the instantiated environment; refuses to report if that environment differs from the
+    protocol's declaration.
+    """
     env = make_eval_env(protocol, reward, gamma, env_overrides=env_overrides)
     environment = instantiated_environment(env, env_overrides)
     environment["matches_protocol"] = (
@@ -371,6 +387,7 @@ def _save_result(
 
 
 def list_evaluations(run_id: str) -> list[dict]:
+    """Summaries of a run's saved evaluations (validation, test, robustness), in file-name order."""
     from lunarlab.storage import read_json
 
     paths = RunPaths(run_id)

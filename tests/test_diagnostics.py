@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Shayan Abrar
+# SPDX-License-Identifier: MIT
 """Policy diagnostics stored with recordings (PPO probabilities/entropy/value, DQN Q-values)."""
 
 from __future__ import annotations

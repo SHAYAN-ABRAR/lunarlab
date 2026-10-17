@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Shayan Abrar
+# SPDX-License-Identifier: MIT
 """PPO-DQN comparisons: the discount-factor ablation, difference intervals and wall-clock context."""
 
 from __future__ import annotations

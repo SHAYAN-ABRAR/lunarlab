@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Shayan Abrar
+# SPDX-License-Identifier: MIT
 """Job supervisor: duplicates, recovery, ownership checks, real worker subprocesses."""
 
 from __future__ import annotations

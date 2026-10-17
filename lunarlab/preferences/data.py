@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Shayan Abrar
+# SPDX-License-Identifier: MIT
 """Trajectory segments and preference labels.
 
 Segments are short windows (default 40 steps = 0.8 s of simulated time) cut from real

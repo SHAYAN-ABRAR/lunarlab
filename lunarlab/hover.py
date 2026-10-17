@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Shayan Abrar
+# SPDX-License-Identifier: MIT
 """The hover predicate shared by the hover-bonus reward and the hover detector.
 
 There is **one** predicate implementation and **two independent parameter sets**:
@@ -21,6 +23,8 @@ from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 
 class HoverThresholds(BaseModel):
+    """A region of state space that counts as hovering: airborne within a height band, nearly still and upright."""
+
     model_config = ConfigDict(extra="forbid")
 
     min_height: float = Field(0.25, ge=-0.5, le=2.5, description="Lower bound on observation y (normalized).")

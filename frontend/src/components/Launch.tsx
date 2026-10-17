@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2026 Shayan Abrar
+// SPDX-License-Identifier: MIT
 import { Clapperboard, Play, Rocket } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router'

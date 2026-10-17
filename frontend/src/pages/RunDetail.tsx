@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2026 Shayan Abrar
+// SPDX-License-Identifier: MIT
 import { ArrowLeft, Camera, Download, FlaskConical, GitBranch, Play, ShieldCheck, Square } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { Link, useParams } from 'react-router'

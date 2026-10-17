@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Shayan Abrar
+# SPDX-License-Identifier: MIT
 """Final-test freezing: one immutable tested artifact per run, shared by every final-test consumer.
 
 Freezing happens at the first final-test evaluation, under the run's worker lock (the same lock
@@ -194,6 +196,7 @@ def resolve_final_checkpoint(run_id: str, *, require_frozen: bool = False) -> tu
 
 
 def start_attempt(run_id: str, sha256: str) -> int:
+    """Record a final-test attempt of the frozen checkpoint as started; returns its index."""
     index: list[int] = []
 
     def add(meta: dict) -> None:
@@ -213,6 +216,8 @@ def start_attempt(run_id: str, sha256: str) -> int:
 
 
 def finish_attempt(run_id: str, attempt: int, state: str, **info: Any) -> None:
+    """Mark a final-test attempt completed, interrupted or failed, and update the completed-test count."""
+
     def done(meta: dict) -> None:
         a = meta["test_attempts"][attempt]
         a.update(state=state, ended_at=utc_now(), **info)
@@ -232,6 +237,7 @@ def _legacy_completed(run_id: str, sha256: str) -> list[str]:
 
 
 def completed_test_count(meta: dict, run_id: str) -> int:
+    """Completed final tests of the frozen checkpoint, including test files written before attempts were recorded."""
     frozen = meta.get("frozen_for_test") or {}
     sha = frozen.get("checkpoint_sha256")
     if not sha:

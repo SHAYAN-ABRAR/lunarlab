@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Shayan Abrar
+# SPDX-License-Identifier: MIT
 """Local job supervisor: owned worker subprocesses, a small queue, stop and recovery.
 
 * Every job runs in its own process: ``python -m lunarlab worker --job-id <id>``,
@@ -466,7 +468,7 @@ def _fresh(ts: str | None) -> bool:
         t = dt.datetime.fromisoformat(ts)
     except ValueError:
         return False
-    return (dt.datetime.now(dt.timezone.utc) - t).total_seconds() < STALE_HEARTBEAT_S
+    return (dt.datetime.now(dt.UTC) - t).total_seconds() < STALE_HEARTBEAT_S
 
 
 # --------------------------------------------------------------------------- #

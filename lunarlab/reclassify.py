@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Shayan Abrar
+# SPDX-License-Identifier: MIT
 """Derived outcome-classifier-v2 reports for evaluations written by classifier version 1.
 
 Historical evaluation files are never modified. This module reads them, records their SHA-256,

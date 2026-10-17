@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Shayan Abrar
+# SPDX-License-Identifier: MIT
 """Recording (MP4 + fallback), telemetry indexing, and trajectory re-scoring."""
 
 from __future__ import annotations

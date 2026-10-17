@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Shayan Abrar
+# SPDX-License-Identifier: MIT
 """Provenance: release vs draft demo exports, recorded revisions, and file digests."""
 
 from __future__ import annotations

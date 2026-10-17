@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Shayan Abrar
+# SPDX-License-Identifier: MIT
 """``python -m lunarlab doctor``: verify the installation with actionable messages."""
 
 from __future__ import annotations

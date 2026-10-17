@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Shayan Abrar
+# SPDX-License-Identifier: MIT
 """Reports and the portfolio summary are built only from stored data."""
 
 from __future__ import annotations

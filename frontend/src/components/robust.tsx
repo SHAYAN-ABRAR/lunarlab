@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2026 Shayan Abrar
+// SPDX-License-Identifier: MIT
 /**
  * Aggregate statistics across training seeds (IQM, bootstrap intervals, probability of improvement,
  * performance profiles) and robustness under conditions never seen in training.

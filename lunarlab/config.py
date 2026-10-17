@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Shayan Abrar
+# SPDX-License-Identifier: MIT
 """Run configuration: PPO settings, budget profiles, evaluation protocol.
 
 Defaults for PPO follow RL Baselines3 Zoo's ``LunarLander-v3`` entry
@@ -41,6 +43,8 @@ class ProtocolError(ValueError):
 
 
 class PPOConfig(_Strict):
+    """PPO hyperparameters (LunarLab's LunarLander-v3 defaults), validated: whole minibatches, bounded network sizes."""
+
     n_envs: int = Field(4, ge=1, le=32)
     n_steps: int = Field(1024, ge=16, le=16384)
     batch_size: int = Field(64, ge=8, le=65536)
@@ -58,6 +62,7 @@ class PPOConfig(_Strict):
 
     @property
     def rollout_size(self) -> int:
+        """Transitions collected per rollout (``n_envs * n_steps``)."""
         return self.n_envs * self.n_steps
 
     @model_validator(mode="after")
@@ -104,9 +109,11 @@ class DQNConfig(_Strict):
 
     @property
     def rollout_size(self) -> int:
+        """Transitions collected between updates (``train_freq * n_envs``)."""
         return self.train_freq * self.n_envs
 
     def compatibility_key(self) -> dict:
+        """Settings that must match for a resume or a fair comparison."""
         return self.model_dump(mode="json")
 
 
@@ -114,6 +121,10 @@ ProfileName = Literal["smoke", "standard", "extended", "custom"]
 
 
 class TrainingConfig(_Strict):
+    """Budget and cadence of a training run: transitions, checkpoint and validation intervals, vector
+    environment, device and torch threads.
+    """
+
     profile: ProfileName = "smoke"
     total_transitions: int = Field(8192, ge=256, le=50_000_000)
     checkpoint_every: int = Field(4096, ge=256)
@@ -152,6 +163,7 @@ class PhysicsRandomization(_Strict):
         return self
 
     def describe(self) -> str:
+        """One-line description of the ranges."""
         if not self.enabled:
             return "fixed (default physics)"
         w, t, g = self.wind_power, self.turbulence_power, self.gravity
@@ -232,6 +244,7 @@ class EvalProtocol(_Strict):
     bootstrap_seed: int = 0
 
     def protocol_hash(self) -> str:
+        """Content hash of the whole protocol (seeds, environment, criteria, statistics settings)."""
         canonical = json.dumps(self.model_dump(mode="json"), sort_keys=True, separators=(",", ":"))
         return hashlib.sha256(canonical.encode()).hexdigest()[:16]
 
@@ -265,11 +278,13 @@ class EvalProtocol(_Strict):
         return out
 
     def require_valid(self) -> None:
+        """Raise :class:`ProtocolError` if :meth:`problems` reports anything."""
         problems = self.problems()
         if problems:
             raise ProtocolError("invalid evaluation protocol: " + "; ".join(problems))
 
     def seeds_for(self, split: str) -> list[int]:
+        """The ``validation`` or ``test`` seed list."""
         if split == "validation":
             return list(self.validation_seeds)
         if split == "test":
@@ -291,6 +306,10 @@ class WarmStart(_Strict):
 
 
 class RunConfig(_Strict):
+    """Everything that defines a training run: reward, algorithm settings, budget, seed, evaluation protocol,
+    physics and warm start. :meth:`config_hash` excludes identity and labels.
+    """
+
     schema_version: Literal[1] = CONFIG_SCHEMA_VERSION
     run_id: str
     experiment_id: str | None = None
@@ -341,31 +360,40 @@ class RunConfig(_Strict):
     # Algorithm-neutral accessors -------------------------------------------------
     @property
     def gamma(self) -> float:
+        """The algorithm's discount (potential-based shaping uses the same value)."""
         return self.dqn.gamma if self.algo == "dqn" and self.dqn else self.ppo.gamma
 
     @property
     def n_envs(self) -> int:
+        """Number of training environments of the active algorithm."""
         return self.dqn.n_envs if self.algo == "dqn" and self.dqn else self.ppo.n_envs
 
     @property
     def rollout_size(self) -> int:
+        """Transitions per rollout of the active algorithm."""
         return self.dqn.rollout_size if self.algo == "dqn" and self.dqn else self.ppo.rollout_size
 
     def algo_settings(self) -> dict:
+        """The active algorithm's settings as a dict."""
         return (
             self.dqn.compatibility_key() if self.algo == "dqn" and self.dqn else self.ppo.compatibility_key()
         )
 
     def worker_seeds(self, segment: int = 0) -> list[int]:
+        """Training-environment seeds of a segment: base + 1000 * seed + 100 * segment + rank, disjoint from
+        every evaluation seed.
+        """
         base = TRAIN_WORKER_SEED_BASE + 1000 * self.seed + 100 * segment
         return [base + i for i in range(self.n_envs)]
 
     @property
     def requested_transitions(self) -> int:
+        """The requested training budget."""
         return self.training.total_transitions
 
     @property
     def planned_transitions(self) -> int:
+        """The requested budget rounded up to whole rollouts (what training will actually run)."""
         return actual_budget(self.training.total_transitions, self.rollout_size)
 
 

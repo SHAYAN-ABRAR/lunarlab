@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Shayan Abrar
+# SPDX-License-Identifier: MIT
 """Outcome classification, statistics and storage safety (pure, fast)."""
 
 from __future__ import annotations

@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Shayan Abrar
+# SPDX-License-Identifier: MIT
 """Reward configuration, pure term functions, accounting and the reward wrapper."""
 
 from lunarlab.rewards.config import (

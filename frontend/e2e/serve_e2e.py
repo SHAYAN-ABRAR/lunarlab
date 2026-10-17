@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Shayan Abrar
+# SPDX-License-Identifier: MIT
 """Start a LunarLab backend for browser tests on port 8766 with a fresh, disposable home.
 
 The home lives in frontend/.e2e-home (git-ignored) and is wiped on every run, so browser

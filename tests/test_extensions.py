@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Shayan Abrar
+# SPDX-License-Identifier: MIT
 """Portfolio extensions: learned rewards (RLHF), DQN runs, robustness evaluation, robust statistics."""
 
 from __future__ import annotations

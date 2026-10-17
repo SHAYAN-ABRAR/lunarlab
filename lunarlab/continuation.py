@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Shayan Abrar
+# SPDX-License-Identifier: MIT
 """Resumable DQN checkpoints: replay buffer and algorithm state next to the SB3 weights.
 
 Checkpoint contract (docs/ARCHITECTURE.md):
@@ -58,11 +60,15 @@ class _Strict(BaseModel):
 
 
 class ArraySpec(_Strict):
+    """Shape and dtype of one replay-buffer array, checked before any array data is read."""
+
     shape: list[int] = Field(min_length=1, max_length=6)
     dtype: str = Field(max_length=16)
 
 
 class ReplayState(_Strict):
+    """Layout and position of the replay buffer in a DQN continuation bundle."""
+
     buffer_class: Literal["ReplayBuffer"]
     buffer_size: int = Field(ge=1, le=2_000_000)
     n_envs: int = Field(ge=1, le=64)
@@ -77,6 +83,10 @@ class ReplayState(_Strict):
 
 
 class ContinuationState(_Strict):
+    """What SB3's DQN keeps outside its zip file, validated strictly: counters, target-update phase,
+    exploration rate, schedule progress, and the replay buffer's layout and digest.
+    """
+
     format: Literal["lunarlab.dqn-continuation"]
     version: Literal[1]
     sb3_version: str = Field(max_length=32)

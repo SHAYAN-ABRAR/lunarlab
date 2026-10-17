@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Shayan Abrar
+# SPDX-License-Identifier: MIT
 """Back-of-envelope discounted-return reasoning for reward designs.
 
 These are calculators with explicit, editable assumptions. They illustrate why
@@ -85,6 +87,9 @@ def hover_incentive(
 
 
 def time_penalty_effect(*, cost: float, gamma: float, steps: int) -> dict:
+    """Undiscounted and discounted total of a per-step cost over ``steps`` steps (to compare with the -100
+    crash penalty).
+    """
     return {
         "undiscounted": -cost * steps,
         "discounted": geometric_sum(-cost, gamma, steps),

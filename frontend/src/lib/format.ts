@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2026 Shayan Abrar
+// SPDX-License-Identifier: MIT
 export const fmt = {
   num(v: number | null | undefined, digits = 1): string {
     if (v === null || v === undefined || Number.isNaN(v)) return '—'

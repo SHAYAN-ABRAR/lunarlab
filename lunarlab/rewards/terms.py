@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Shayan Abrar
+# SPDX-License-Identifier: MIT
 """Pure reward-term functions. No environment access, no state.
 
 Every function here is a deterministic function of observations, the action,

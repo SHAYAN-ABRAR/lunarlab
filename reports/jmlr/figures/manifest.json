@@ -1,0 +1,67 @@
+{
+ "generated_by": "python tools/paper_figures.py",
+ "figures": [
+  {
+   "name": "workflow",
+   "kind": "conceptual diagram (no data)",
+   "description": "LunarLab's audited research workflow.",
+   "files": [
+    "reports/jmlr/figures/workflow.pdf",
+    "reports/jmlr/figures/workflow.svg",
+    "reports/jmlr/figures/workflow.png",
+    "paper/jmlr-mloss/figures/workflow.pdf",
+    "paper/jmlr-mloss/figures/workflow.svg",
+    "paper/jmlr-mloss/figures/workflow.png"
+   ]
+  },
+  {
+   "name": "reward_accounting",
+   "kind": "measured data (training episodes of the published study)",
+   "description": "Original vs training return during PPO training, median over 5 seeds with min-max band, per reward design.",
+   "derived_data": "reports/jmlr/figures/reward_accounting.csv",
+   "derived_data_sha256": "bb87dfafc204803be90ea2a33b6c30582446b2e175fdf09cece54739477fe782",
+   "sources": "reports/jmlr/figures/reward_accounting.sources.json",
+   "source_runs": [
+    "20261015-223113-baseline-s0-standard-c5af",
+    "20261015-223115-baseline-s1-standard-3b80",
+    "20261015-223115-baseline-s2-standard-5b5d",
+    "20261015-223115-baseline-s3-standard-7b0f",
+    "20261015-223115-baseline-s4-standard-f7f6",
+    "20261015-223115-potential-s0-standard-0162",
+    "20261015-223115-potential-s1-standard-9f70",
+    "20261015-223115-potential-s2-standard-7f75",
+    "20261015-223115-potential-s3-standard-91e6",
+    "20261015-223115-potential-s4-standard-0b22",
+    "20261015-223115-hover-bonus-s0-standard-3376",
+    "20261015-223115-hover-bonus-s1-standard-9a39",
+    "20261015-223115-hover-bonus-s2-standard-d887",
+    "20261015-223115-hover-bonus-s3-standard-c5ba",
+    "20261015-223115-hover-bonus-s4-standard-cc47"
+   ],
+   "files": [
+    "reports/jmlr/figures/reward_accounting.pdf",
+    "reports/jmlr/figures/reward_accounting.svg",
+    "reports/jmlr/figures/reward_accounting.png",
+    "paper/jmlr-mloss/figures/reward_accounting.pdf",
+    "paper/jmlr-mloss/figures/reward_accounting.svg",
+    "paper/jmlr-mloss/figures/reward_accounting.png"
+   ]
+  },
+  {
+   "name": "overhead",
+   "kind": "measured data (overhead benchmark)",
+   "description": "Training-loop throughput and peak memory: plain SB3 vs LunarLab's reward accounting vs the full pipeline.",
+   "derived_data": "reports/jmlr/benchmarks/standard-2026-10-17T154705+0000/raw.jsonl",
+   "derived_data_sha256": "7ba954fc03fddb31619a111a0e0c7776340fdedd663debf14cf088def180629a",
+   "files": [
+    "reports/jmlr/figures/overhead.pdf",
+    "paper/jmlr-mloss/figures/overhead.pdf",
+    "reports/jmlr/figures/overhead.svg",
+    "paper/jmlr-mloss/figures/overhead.svg",
+    "reports/jmlr/figures/overhead.png",
+    "paper/jmlr-mloss/figures/overhead.png"
+   ]
+  }
+ ],
+ "note": "Re-derive the reward-accounting data from the local runs with --derive (reads, never writes, runs/)."
+}

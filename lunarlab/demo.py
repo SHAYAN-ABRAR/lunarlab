@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Shayan Abrar
+# SPDX-License-Identifier: MIT
 """Static, read-only snapshot of the API for the hosted demo (GitHub Pages).
 
 Every file is produced by calling the real API in-process (FastAPI's TestClient), so the

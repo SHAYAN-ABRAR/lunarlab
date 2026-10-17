@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2026 Shayan Abrar
+# SPDX-License-Identifier: MIT
+
 <#
 .SYNOPSIS
     Stop the LunarLab backend gracefully.

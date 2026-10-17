@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Shayan Abrar
+# SPDX-License-Identifier: MIT
 """LunarLab — Reward Shaping Mission Control.
 
 A local-first toolkit for running honest reward-design experiments on

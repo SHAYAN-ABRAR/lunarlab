@@ -1,0 +1,27 @@
+# SPDX-FileCopyrightText: 2026 Shayan Abrar
+# SPDX-License-Identifier: MIT
+name: Feature request
+description: Propose a reward term, diagnostic, environment adapter, analysis or other improvement.
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Research or usability problem
+      description: What do you want to measure, audit or do that LunarLab does not support yet?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed behaviour
+      description: >-
+        For a reward term: its formula, which transition data it needs, and how it should be accounted.
+        For an environment: which outcome definitions apply. See docs/jmlr/EXTENDING_LUNARLAB.md.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: How would we know it works?
+      description: A test, an invariant, or a reference result the change should reproduce.

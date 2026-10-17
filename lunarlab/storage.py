@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Shayan Abrar
+# SPDX-License-Identifier: MIT
 """Local storage: data root, run directories, atomic writes and path safety.
 
 Layout (under the LunarLab home, default = project root)::
@@ -82,7 +84,7 @@ def reports_dir() -> Path:
 
 
 def utc_now() -> str:
-    return _dt.datetime.now(_dt.timezone.utc).isoformat(timespec="seconds")
+    return _dt.datetime.now(_dt.UTC).isoformat(timespec="seconds")
 
 
 def new_id(*parts: str, prefix: str = "") -> str:

@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Shayan Abrar
+# SPDX-License-Identifier: MIT
 """Preference learning: train/validation isolation by episode, human-label handling."""
 
 from __future__ import annotations

@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Shayan Abrar
+# SPDX-License-Identifier: MIT
 """Throughput benchmark: measure before increasing worker counts.
 
 Two measurements per configuration:

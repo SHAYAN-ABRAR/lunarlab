@@ -1,0 +1,49 @@
+# SPDX-FileCopyrightText: 2026 Shayan Abrar
+# SPDX-License-Identifier: MIT
+name: Reproducibility report
+description: Report the result of reproducing a documented LunarLab command, metric or table (matching or not).
+labels: [reproducibility]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Reports that reproduce a result exactly are as useful as reports of discrepancies. The same
+        information can be sent without a GitHub account using docs/jmlr/REPRODUCTION_REPORT_TEMPLATE.md.
+  - type: input
+    id: what
+    attributes:
+      label: What did you reproduce?
+      description: e.g. "reproduce-smoke", "reproduce-artifact baseline-s0", "headline table in docs/RESULTS.md"
+    validations:
+      required: true
+  - type: dropdown
+    id: outcome
+    attributes:
+      label: Outcome
+      options:
+        - Matched exactly
+        - Matched within the documented tolerance
+        - Did not match
+        - Could not run
+    validations:
+      required: true
+  - type: textarea
+    id: report
+    attributes:
+      label: Report file
+      description: Paste the JSON written by `python -m lunarlab reproduce-smoke` or `reproduce-artifact` (`--report <file>`).
+      render: json
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Operating system, CPU, and the output of `python -m lunarlab --version`.
+      render: text
+    validations:
+      required: true
+  - type: textarea
+    id: notes
+    attributes:
+      label: Differences or comments

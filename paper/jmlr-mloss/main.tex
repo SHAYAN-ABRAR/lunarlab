@@ -1,0 +1,191 @@
+% SPDX-FileCopyrightText: 2026 Shayan Abrar
+% SPDX-License-Identifier: MIT
+%
+% JMLR-MLOSS software description: at most four pages in JMLR format, references excluded.
+% Build: see BUILD.md (fetch the official style with fetch_style.py; do not modify it).
+% Every quantitative statement is traced to its evidence in EVIDENCE.md.
+% Items marked \TODO need information only the authors can provide; nothing has been filled in for them.
+
+\documentclass[twoside,11pt]{article}
+
+\usepackage{jmlr2e}
+\usepackage{lastpage}
+\usepackage{booktabs}
+
+\newcommand{\TODO}[1]{\textbf{[TODO: #1]}}
+\newcommand{\lunarlab}{\textsc{LunarLab}}
+
+% Heading arguments {volume}{year}{pages}{date submitted}{date published}{paper id}{author names} are assigned
+% by JMLR; the values below are placeholders, as in the official sample.
+\jmlrheading{0}{0000}{1-\pageref{LastPage}}{\TODO{submission date}}{}{00-0000}{\TODO{author names}}
+
+% Running title: at most 50 characters (JMLR author information).
+\ShortHeadings{LunarLab: Auditing Reward Design in RL}{\TODO{author surnames}}
+\firstpageno{1}
+
+\begin{document}
+
+\title{LunarLab: A Reproducible Platform for Auditing Reward Shaping and Reward Exploitation in Reinforcement Learning}
+
+\author{\name \TODO{author name} \email \TODO{e-mail} \\
+       \addr \TODO{affiliation and postal address of the corresponding author}}
+
+\editor{\TODO{assigned by JMLR}}
+
+\maketitle
+
+\begin{abstract}%
+\lunarlab{} is an open-source platform for auditing reward design in reinforcement learning. Around
+Stable-Baselines3 training on Gymnasium's LunarLander-v3, it records the original reward, every added reward
+term and the resulting training reward on each transition, and it evaluates policies on the original reward
+only. Checkpoints are selected on validation episodes, frozen as immutable, digest-checked copies and tested
+once on disjoint seeds; interrupted runs resume exactly, including the DQN replay buffer; every run records
+configuration hashes, seeds, software versions and the source revision. Diagnostics that do not depend on the
+reward under study expose reward exploitation, as a deliberately flawed hover bonus demonstrates. The platform
+adds statistics across training seeds, counterfactual re-scoring of recorded trajectories, robustness and
+preference-learning studies, a command-line interface, a Python API and a local web interface, and a
+task-adapter layer that applies the same accounting to other Gymnasium environments. The code is covered by
+448 automated tests (82.9\% statement and branch coverage) that run on Linux and Windows. Published
+policies re-evaluate bit-identically on the platform that produced them, and the instrumentation adds about
+4\% to training-loop time compared with plain Stable-Baselines3. \lunarlab{} is released under the MIT License.
+\end{abstract}
+
+\begin{keywords}
+  reinforcement learning, reward shaping, reward hacking, reproducibility, open-source software
+\end{keywords}
+
+\section{Introduction}
+
+Reward design is how practitioners steer reinforcement-learning agents, and a common way such projects fail: an
+agent can drive a shaped or learned reward up while the task the reward was meant to encode stays unsolved
+\citep{amodei2016concrete,skalse2022gaming}. Potential-based shaping is the principled exception, leaving the
+optimal policies unchanged \citep{ng1999shaping}. Telling these cases apart in practice requires two kinds of
+bookkeeping: keeping the reward a policy is trained on separate from the reward it is judged by, on every
+transition, and an evaluation protocol that cannot leak information from the test episodes into model selection.
+Studies of experimental practice in deep reinforcement learning show how easily the latter goes wrong
+\citep{henderson2018matters,agarwal2021precipice}.
+
+Mature libraries provide reliable algorithms and training infrastructure
+\citep{raffin2021sb3,huang2022cleanrl,raffin2020zoo}. By default, however, they evaluate whatever reward the
+environment wrappers return, and they leave held-out testing, checkpoint freezing and reward bookkeeping to the
+user (the comparison and its sources are in the repository, \texttt{docs/jmlr/COMPARISON\_EVIDENCE.md}).
+Related tools address parts of the problem: a reward-learning library keeps the environment reward beside the
+learned one \citep{gleave2022imitation}, and safety benchmarks score agents on a hidden performance function
+instead of the reward they optimise \citep{leike2017gridworlds}. \lunarlab{} provides this bookkeeping as one
+tested workflow. It contributes no new learning algorithm; it makes
+reward-design experiments auditable and reproducible.
+
+\section{Software Design}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{figures/workflow.pdf}
+\caption{The audited workflow (conceptual diagram). Each stage records what the next stage needs to verify it.}
+\label{fig:workflow}
+\end{figure}
+
+\paragraph{Reward accounting.} A reward configuration is data with a strict schema and a content hash. A single
+Gymnasium wrapper computes, for every transition $(s,a,s')$,
+$r_{\mathrm{train}} = w\,r_{\mathrm{orig}} + \sum_k F_k(s,a,s')$, where the terms $F_k$ are pure functions shared by
+training, evaluation and trajectory re-scoring. It records the original, per-term and training rewards,
+undiscounted and discounted, and never changes observations or termination flags. Built-in terms include a time
+penalty, a deliberately flawed hover bonus, and potential-based shaping
+$F = \alpha(\gamma\Phi(s') - \Phi(s))$ with an absorbing terminal state and correct handling of time-limit
+truncation; property-based tests check that its discounted sum telescopes to the potential difference.
+
+\paragraph{Evaluation protocol.} Evaluation always uses the unmodified environment reward. Validation and test
+seeds are strict integers, distinct and disjoint, and the instantiated environment is checked against the
+protocol's declaration. The checkpoint with the best validation return is selected, copied to an immutable,
+read-only, digest-checked artifact at the first final test, and never trained again under the same run.
+Interrupted tests are retried on the same bytes, and a registry of test exposure labels later runs whose design
+followed an already-seen test result as exploratory. A diagnostic that does not depend on the reward under study
+(a hover detector) and a strict landing classifier expose reward exploitation.
+
+\paragraph{Reproducibility infrastructure.} Runs record configuration, reward and protocol hashes, training and
+evaluation seeds, budgets counted in environment transitions, software versions and the source revision of every
+training segment and evaluation. Checkpoints are written crash-safely with a SHA-256 manifest. PPO and DQN runs
+resume exactly; for DQN this includes the replay buffer and exploration state, stored as strictly validated
+numeric arrays (never unpickled).
+
+\paragraph{Interfaces and extension.} The same core code serves a command-line interface, a Python API and a
+local web interface (training console, three-dimensional flight replay with per-step reward decomposition,
+re-scoring, comparisons), with a local job supervisor; nothing requires a network service or an account. Studies
+cover statistics across training seeds \citep{agarwal2021precipice}, robustness to unseen physics, Optuna tuning on
+validation episodes only \citep{akiba2019optuna}, and rewards learned from preferences
+\citep{christiano2017preferences,bradley1952paired}. A task-adapter layer applies the accounting to any Gymnasium
+environment \citep{towers2024gymnasium}: its LunarLander adapter reproduces the main pipeline's rewards, returns
+and outcomes exactly in tests, and a CartPole adapter demonstrates the contract with its own outcome definitions.
+
+\section{Quality, Comparison and an Example Study}
+
+\paragraph{Software quality.} 448 tests (unit, integration, property-based, end-to-end command-line) give
+82.9\% combined statement and branch coverage, and 15 browser flows exercise the web interface against
+real backends; continuous integration runs the full suite on Linux and the platform-sensitive tests on
+Windows with Python 3.12 and 3.13. The tutorial is executed command by command by the test suite, the API reference is
+generated from the code, and a deterministic source archive is built and test-installed into a fresh environment.
+
+\paragraph{Reproducibility.} One command (\texttt{python -m lunarlab reproduce-smoke}) trains, checkpoints,
+reloads, validates, freezes, tests and exports a small run in a temporary directory and verifies every provenance
+link (14 checks); an optional 15th trains the same configuration again, which gave identical weights on the
+development machine. Three
+published final tests (100 episodes each) ship as artifacts and re-evaluated bit-identically, 300 of 300 episodes,
+on the platform that produced them. Bit-identical results across operating systems or library builds are not
+claimed \citep[see also][]{raffin2021sb3}.
+
+\paragraph{Runtime and memory.} Table~\ref{tab:overhead} compares plain Stable-Baselines3 PPO with the same model
+trained through \lunarlab{}'s reward accounting and through its full pipeline, on identical workloads.
+
+\begin{table}[t]
+\centering
+\small
+\begin{tabular}{lrrr}
+\toprule
+Configuration (PPO, 102{,}400 transitions, 3 repetitions) & Transitions/s & Loop time & Peak memory \\
+\midrule
+A: Stable-Baselines3 with \texttt{Monitor} & $2{,}097 \pm 8$ & $1.00$ & 310\,MB \\
+B: A + \lunarlab{} reward accounting & $2{,}019 \pm 13$ & $1.04$ & 311\,MB \\
+C: full \lunarlab{} pipeline (validation excluded) & $2{,}013 \pm 48$ & $1.04$ & 323\,MB \\
+\bottomrule
+\end{tabular}
+\caption{Instrumentation overhead on one laptop CPU (Intel i7-13620H, one torch thread). C also ran 18{,}780
+validation steps (8.4\,s), reported separately. Protocol and raw data: \texttt{docs/jmlr/BENCHMARK\_PROTOCOL.md}.}
+\label{tab:overhead}
+\end{table}
+
+\paragraph{Example: a reward exploited and exposed.} In the bundled study, PPO \citep{schulman2017ppo} was trained
+for one million transitions with five seeds under four reward designs (DQN \citep{mnih2015dqn} and learned rewards
+are also included). Figure~\ref{fig:accounting} shows what the accounting records. With the original reward the
+training and original returns coincide; with potential-based shaping they differ by the shaping term; with the
+flawed hover bonus the training return reaches 746 (median over seeds) while the original return falls to $-50$.
+In the frozen final tests those policies landed in none of 500 episodes and hit the time limit in 80\%. Neither the
+time penalty nor potential-based shaping showed clear evidence of improvement over the original reward at this
+budget: every probability-of-improvement interval contains 0.5.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{figures/reward_accounting.pdf}
+\caption{Original (solid) and training (dashed) return during PPO training, rolling mean of 100 episodes; median
+over five seeds with the min--max band. Data: \texttt{reports/jmlr/figures/reward\_accounting.csv}.}
+\label{fig:accounting}
+\end{figure}
+
+\section{Availability, Limitations and Conclusion}
+
+\lunarlab{} is available at \url{https://github.com/SHAYAN-ABRAR/lunarlab} under the MIT License, version
+\TODO{release tag}. It installs from locked dependencies on Windows and Linux with Python~3.12 (CPU only; no
+proprietary dependency) and is documented by a tutorial, a developer guide and a generated API reference.
+
+The main pipeline is specific to LunarLander-v3; the adapter layer has been demonstrated on CartPole-v1 only. The
+bundled study uses one training budget and three to five seeds per group, so its comparisons are deliberately
+cautious. Results are bit-identical on one platform; agreement across platforms is reported episode by episode
+rather than assumed. The experiments are a two-dimensional simulation benchmark and say nothing about real
+rocket control. \lunarlab{} does not prevent reward hacking; it measures and exposes it. By making the original
+reward, the training reward and the evaluation protocol explicit and verifiable on every transition, it turns
+reward-design experiments into results that others can audit and reproduce.
+
+\acks{\TODO{acknowledgements, and the declaration of funding and competing interests required by JMLR}}
+
+\vskip 0.2in
+\bibliography{references}
+
+\end{document}

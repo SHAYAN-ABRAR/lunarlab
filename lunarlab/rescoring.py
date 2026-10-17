@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Shayan Abrar
+# SPDX-License-Identifier: MIT
 """Reward Stress Test: re-score one saved trajectory under candidate reward configs.
 
 This is **re-scoring a fixed trajectory**. The flight is not re-simulated and no
@@ -44,6 +46,12 @@ def rescore(
     detector: HoverThresholds,
     max_points: int = 400,
 ) -> dict[str, Any]:
+    """Re-score a recorded trajectory under other reward configurations.
+
+    The original reward of each step comes from the recording; every term is recomputed with the same pure
+    functions used in training. Returns, per configuration, cumulative series, totals (undiscounted and discounted)
+    and per-phase sums.
+    """
     rows = telemetry["rows"]
     if len(rows) < 2:
         raise ValueError("trajectory has no transitions")

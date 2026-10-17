@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2026 Shayan Abrar
+// SPDX-License-Identifier: MIT
 // Capture the 3-D replay of recordings frame by frame, for the README showcase.
 //
 // Rendering is deterministic: the page is opened with ?capture=1, the engine's display loop is stopped,

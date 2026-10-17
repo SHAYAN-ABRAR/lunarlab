@@ -9,7 +9,10 @@ __pycache__/
 # LunarLab local state (experiment data stays on this machine)
 data/
 runs/
-reports/
+reports/*
+# ...except the JMLR-MLOSS evidence package (coverage, benchmarks, figures, artifact manifests)
+!reports/jmlr/
+reports/jmlr/coverage/html/
 
 # Frontend
 frontend/node_modules/
@@ -26,3 +29,7 @@ Thumbs.db
 .DS_Store
 .e2e-home/
 .e2e-audit-home/
+
+# Coverage data (reports are written to reports/jmlr/coverage/)
+.coverage
+.coverage.*

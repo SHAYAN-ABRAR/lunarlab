@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2026 Shayan Abrar
+# SPDX-License-Identifier: MIT
+
 <#
 .SYNOPSIS
     Set up LunarLab: Python virtual environment, locked dependencies, frontend build, self-check.

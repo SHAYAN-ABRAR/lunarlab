@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Shayan Abrar
+# SPDX-License-Identifier: MIT
 """Run lineage: warm restarts, test exposure and the evidence role of a run's final-test result.
 
 A **warm restart** is a new run whose networks (and optimizer state) start from another run's
@@ -144,6 +146,7 @@ def resolve_warm_start(cfg: RunConfig) -> Path:
 
 
 def test_seed_set_hash(protocol: EvalProtocol) -> str:
+    """Order-independent identity of a protocol's test seeds, used by the test-exposure registry."""
     canonical = json.dumps(sorted(protocol.test_seeds), separators=(",", ":"))
     return hashlib.sha256(canonical.encode()).hexdigest()[:16]
 
@@ -214,6 +217,7 @@ def evidence_role(meta: dict[str, Any]) -> str:
 
 
 def evidence_note(meta: dict[str, Any]) -> str | None:
+    """Why a run's results are exploratory (post-test lineage, or tuning on already-used test seeds), or None."""
     lineage = meta.get("lineage") or {}
     selection = meta.get("selection") or {}
     if lineage.get("post_test"):

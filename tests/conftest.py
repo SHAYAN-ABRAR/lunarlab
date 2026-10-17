@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Shayan Abrar
+# SPDX-License-Identifier: MIT
 """Shared fixtures. Every test gets an isolated LunarLab home (no real data touched)."""
 
 from __future__ import annotations

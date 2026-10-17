@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Shayan Abrar
+# SPDX-License-Identifier: MIT
 """Learned rewards from pairwise preferences: RLHF in miniature.
 
 1. ``data``   — collect short trajectory segments from many policies and label pairs

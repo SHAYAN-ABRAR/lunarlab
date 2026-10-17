@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Shayan Abrar
+# SPDX-License-Identifier: MIT
 """Policies that can fly the lander: random, heuristic, and trained PPO.
 
 Trained policies are loaded **without unpickling**. SB3 checkpoints contain a

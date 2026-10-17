@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Shayan Abrar
+# SPDX-License-Identifier: MIT
 """DQN continuation: resumable checkpoints restore the replay buffer and every counter SB3 needs.
 
 The reference point is SB3 2.9.0 (``stable_baselines3.dqn.dqn.DQN``,

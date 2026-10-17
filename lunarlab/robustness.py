@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Shayan Abrar
+# SPDX-License-Identifier: MIT
 """Robustness: how do trained policies cope with conditions they never trained on?
 
 Every run trains in calm default physics. Here its frozen, validation-selected
@@ -34,6 +36,9 @@ DEFAULT_EPISODES = 50
 
 
 def evaluate_robustness(run_id: str, condition: str, *, episodes: int = DEFAULT_EPISODES) -> dict[str, Any]:
+    """Evaluate a run's final-test checkpoint (the frozen bytes once frozen) under one robustness condition it
+    never trained on (wind, turbulence, heavier gravity), on the first ``episodes`` test seeds, and save the result.
+    """
     from lunarlab.evaluation import evaluate_policy, summarize_for_index
     from lunarlab.outcomes import OUTCOME_CLASSIFIER_VERSION
     from lunarlab.runs import load_config, load_policy, log_event

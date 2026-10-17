@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2026 Shayan Abrar
+// SPDX-License-Identifier: MIT
 import clsx from 'clsx'
 import { ArrowBigLeft, ArrowBigRight, ArrowBigUp, Ghost, Keyboard, Pause, Play, RotateCcw, Shuffle, Trophy, X } from 'lucide-react'
 import { type ReactNode, Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react'

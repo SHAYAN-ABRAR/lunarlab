@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Shayan Abrar
+# SPDX-License-Identifier: MIT
 """Real LunarLander-v3: API, adapter, built-in reward decomposition, SB3 VecEnv semantics."""
 
 from __future__ import annotations

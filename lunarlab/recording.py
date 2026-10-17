@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Shayan Abrar
+# SPDX-License-Identifier: MIT
 """Record real episodes: simulator frames + synchronized telemetry.
 
 Frame/step indexing (stored in every telemetry file):

@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Shayan Abrar
+# SPDX-License-Identifier: MIT
 """Automatic tuning with Optuna: algorithm hyperparameters and reward weights, on validation only.
 
 A *study* searches a bounded space for one algorithm and one reward preset:

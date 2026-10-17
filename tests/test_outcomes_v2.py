@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Shayan Abrar
+# SPDX-License-Identifier: MIT
 """Outcome classifier v2: where the lander came to rest is kept apart from how well it landed."""
 
 from __future__ import annotations

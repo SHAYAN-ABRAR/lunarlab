@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Shayan Abrar
+# SPDX-License-Identifier: MIT
 """Reward-model inference (NumPy) and the on-disk model registry.
 
 Weights are stored as plain arrays in ``model.npz`` and loaded with

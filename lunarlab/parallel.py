@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Shayan Abrar
+# SPDX-License-Identifier: MIT
 """Run independent training/evaluation runs in parallel, one process per run.
 
 Each run is a separate ``python -m lunarlab ...`` process with ``OMP_NUM_THREADS=1``

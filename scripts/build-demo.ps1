@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2026 Shayan Abrar
+# SPDX-License-Identifier: MIT
+
 <#
 .SYNOPSIS
   Build the static demo locally (frontend in demo mode + the snapshot in demo/api) and serve it.

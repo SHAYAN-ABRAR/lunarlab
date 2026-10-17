@@ -1,0 +1,4361 @@
+{
+ "components": {
+  "schemas": {
+   "BenchmarkRequest": {
+    "additionalProperties": false,
+    "properties": {
+     "idempotency_key": {
+      "anyOf": [
+       {
+        "maxLength": 80,
+        "pattern": "^[A-Za-z0-9_\\-]+$",
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Idempotency Key"
+     },
+     "n_envs": {
+      "items": {
+       "type": "integer"
+      },
+      "maxItems": 5,
+      "minItems": 1,
+      "title": "N Envs",
+      "type": "array"
+     },
+     "ppo": {
+      "default": true,
+      "title": "Ppo",
+      "type": "boolean"
+     }
+    },
+    "title": "BenchmarkRequest",
+    "type": "object"
+   },
+   "CompareRequest": {
+    "additionalProperties": false,
+    "properties": {
+     "run_ids": {
+      "items": {
+       "type": "string"
+      },
+      "maxItems": 40,
+      "minItems": 1,
+      "title": "Run Ids",
+      "type": "array"
+     },
+     "split": {
+      "default": "test",
+      "enum": [
+       "validation",
+       "test"
+      ],
+      "title": "Split",
+      "type": "string"
+     }
+    },
+    "required": [
+     "run_ids"
+    ],
+    "title": "CompareRequest",
+    "type": "object"
+   },
+   "DemoRequest": {
+    "additionalProperties": false,
+    "properties": {
+     "action_seed": {
+      "default": 0,
+      "maximum": 2147483647.0,
+      "minimum": 0.0,
+      "title": "Action Seed",
+      "type": "integer"
+     },
+     "episode_seed": {
+      "default": 20000,
+      "maximum": 2147483647.0,
+      "minimum": 0.0,
+      "title": "Episode Seed",
+      "type": "integer"
+     },
+     "idempotency_key": {
+      "anyOf": [
+       {
+        "maxLength": 80,
+        "pattern": "^[A-Za-z0-9_\\-]+$",
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Idempotency Key"
+     },
+     "policy": {
+      "default": "random",
+      "enum": [
+       "random",
+       "heuristic"
+      ],
+      "title": "Policy",
+      "type": "string"
+     }
+    },
+    "title": "DemoRequest",
+    "type": "object"
+   },
+   "EnsembleRequest": {
+    "additionalProperties": false,
+    "properties": {
+     "idempotency_key": {
+      "anyOf": [
+       {
+        "maxLength": 80,
+        "pattern": "^[A-Za-z0-9_\\-]+$",
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Idempotency Key"
+     },
+     "members": {
+      "default": 5,
+      "maximum": 10.0,
+      "minimum": 2.0,
+      "title": "Members",
+      "type": "integer"
+     },
+     "simulated_pairs": {
+      "default": 0,
+      "maximum": 5000.0,
+      "minimum": 0.0,
+      "title": "Simulated Pairs",
+      "type": "integer"
+     }
+    },
+    "title": "EnsembleRequest",
+    "type": "object"
+   },
+   "EvaluateRequest": {
+    "additionalProperties": false,
+    "properties": {
+     "checkpoint": {
+      "default": "best",
+      "maxLength": 80,
+      "pattern": "^[A-Za-z0-9_.\\-]+$",
+      "title": "Checkpoint",
+      "type": "string"
+     },
+     "confirm_test": {
+      "default": false,
+      "title": "Confirm Test",
+      "type": "boolean"
+     },
+     "idempotency_key": {
+      "anyOf": [
+       {
+        "maxLength": 80,
+        "pattern": "^[A-Za-z0-9_\\-]+$",
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Idempotency Key"
+     },
+     "split": {
+      "enum": [
+       "validation",
+       "test"
+      ],
+      "title": "Split",
+      "type": "string"
+     }
+    },
+    "required": [
+     "split"
+    ],
+    "title": "EvaluateRequest",
+    "type": "object"
+   },
+   "FlightStart": {
+    "additionalProperties": false,
+    "properties": {
+     "opponent": {
+      "anyOf": [
+       {
+        "maxLength": 120,
+        "pattern": "^[A-Za-z0-9_\\-]+$",
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Opponent"
+     },
+     "seed": {
+      "anyOf": [
+       {
+        "maximum": 2147483647.0,
+        "minimum": 0.0,
+        "type": "integer"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Seed"
+     }
+    },
+    "title": "FlightStart",
+    "type": "object"
+   },
+   "FlightStep": {
+    "additionalProperties": false,
+    "properties": {
+     "actions": {
+      "items": {
+       "maximum": 3.0,
+       "minimum": 0.0,
+       "type": "integer"
+      },
+      "maxItems": 50,
+      "minItems": 1,
+      "title": "Actions",
+      "type": "array"
+     }
+    },
+    "required": [
+     "actions"
+    ],
+    "title": "FlightStep",
+    "type": "object"
+   },
+   "HTTPValidationError": {
+    "properties": {
+     "detail": {
+      "items": {
+       "$ref": "#/components/schemas/ValidationError"
+      },
+      "title": "Detail",
+      "type": "array"
+     }
+    },
+    "title": "HTTPValidationError",
+    "type": "object"
+   },
+   "HoverAnalysisRequest": {
+    "additionalProperties": false,
+    "properties": {
+     "bonus": {
+      "default": 1.0,
+      "maximum": 10.0,
+      "minimum": 0.0,
+      "title": "Bonus",
+      "type": "number"
+     },
+     "gamma": {
+      "default": 0.999,
+      "exclusiveMaximum": 1.0,
+      "exclusiveMinimum": 0.0,
+      "title": "Gamma",
+      "type": "number"
+     },
+     "horizon": {
+      "default": 1000,
+      "maximum": 100000.0,
+      "minimum": 1.0,
+      "title": "Horizon",
+      "type": "integer"
+     },
+     "hover_start": {
+      "default": 100,
+      "maximum": 100000.0,
+      "minimum": 0.0,
+      "title": "Hover Start",
+      "type": "integer"
+     },
+     "landing_original_return": {
+      "default": 220.0,
+      "maximum": 1000.0,
+      "minimum": -1000.0,
+      "title": "Landing Original Return",
+      "type": "number"
+     },
+     "landing_step": {
+      "default": 300,
+      "maximum": 100000.0,
+      "minimum": 1.0,
+      "title": "Landing Step",
+      "type": "integer"
+     },
+     "main_engine_duty": {
+      "default": 0.5,
+      "maximum": 1.0,
+      "minimum": 0.0,
+      "title": "Main Engine Duty",
+      "type": "number"
+     }
+    },
+    "title": "HoverAnalysisRequest",
+    "type": "object"
+   },
+   "HoverBonusConfig": {
+    "additionalProperties": false,
+    "description": "A bonus whenever the resulting state satisfies the eligibility predicate.\n\nIt does not telescope, so it changes which policy is optimal: the deliberately flawed preset.",
+    "properties": {
+     "bonus_per_step": {
+      "default": 1.0,
+      "description": "Added when the resulting state is eligible.",
+      "maximum": 10.0,
+      "minimum": 0.0,
+      "title": "Bonus Per Step",
+      "type": "number"
+     },
+     "eligibility": {
+      "$ref": "#/components/schemas/HoverThresholds"
+     },
+     "enabled": {
+      "default": false,
+      "title": "Enabled",
+      "type": "boolean"
+     }
+    },
+    "title": "HoverBonusConfig",
+    "type": "object"
+   },
+   "HoverThresholds": {
+    "additionalProperties": false,
+    "description": "A region of state space that counts as hovering: airborne within a height band, nearly still and upright.",
+    "properties": {
+     "max_abs_angle_rad": {
+      "default": 0.2,
+      "description": "Maximum |angle| in radians.",
+      "exclusiveMinimum": 0.0,
+      "maximum": 3.141592653589793,
+      "title": "Max Abs Angle Rad",
+      "type": "number"
+     },
+     "max_abs_angular_velocity": {
+      "anyOf": [
+       {
+        "exclusiveMinimum": 0.0,
+        "maximum": 5.0,
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "default": 0.2,
+      "description": "Maximum |angular velocity| (scaled units); null disables the check.",
+      "title": "Max Abs Angular Velocity"
+     },
+     "max_abs_vx": {
+      "default": 0.1,
+      "description": "Maximum |vx| (scaled units).",
+      "exclusiveMinimum": 0.0,
+      "maximum": 5.0,
+      "title": "Max Abs Vx",
+      "type": "number"
+     },
+     "max_abs_vy": {
+      "default": 0.1,
+      "description": "Maximum |vy| (scaled units).",
+      "exclusiveMinimum": 0.0,
+      "maximum": 5.0,
+      "title": "Max Abs Vy",
+      "type": "number"
+     },
+     "max_height": {
+      "default": 1.0,
+      "description": "Upper bound on observation y (normalized).",
+      "maximum": 2.5,
+      "minimum": -0.5,
+      "title": "Max Height",
+      "type": "number"
+     },
+     "min_height": {
+      "default": 0.25,
+      "description": "Lower bound on observation y (normalized).",
+      "maximum": 2.5,
+      "minimum": -0.5,
+      "title": "Min Height",
+      "type": "number"
+     }
+    },
+    "title": "HoverThresholds",
+    "type": "object"
+   },
+   "LearnedRewardConfig": {
+    "additionalProperties": false,
+    "description": "A reward model learned from preferences (``lunarlab.preferences``), scaled. With ``original_weight = 0``\nthe agent never sees the environment's reward.",
+    "properties": {
+     "enabled": {
+      "default": false,
+      "title": "Enabled",
+      "type": "boolean"
+     },
+     "model_id": {
+      "anyOf": [
+       {
+        "maxLength": 96,
+        "pattern": "^[A-Za-z0-9][A-Za-z0-9_\\-]*$",
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Model Id"
+     },
+     "scale": {
+      "default": 1.0,
+      "description": "Multiplies the normalised model output.",
+      "exclusiveMinimum": 0.0,
+      "maximum": 100.0,
+      "title": "Scale",
+      "type": "number"
+     }
+    },
+    "title": "LearnedRewardConfig",
+    "type": "object"
+   },
+   "PhysicsRandomization": {
+    "additionalProperties": false,
+    "description": "Per-episode variation of wind, turbulence and gravity while TRAINING (off by default).\n\nBefore every training episode, the physics are drawn from these ranges by a generator seeded\nfrom that worker's episode seed, so a run is reproducible. An episode has wind with probability\n``wind_probability``; wind and turbulence strengths are then uniform in their ranges (both are 0\nwithout wind). Gravity is uniform in its range for every episode. Validation (checkpoint\nselection) and the final test always use default physics, for every run.",
+    "properties": {
+     "enabled": {
+      "default": false,
+      "title": "Enabled",
+      "type": "boolean"
+     },
+     "gravity": {
+      "default": [
+       -11.0,
+       -9.0
+      ],
+      "maxItems": 2,
+      "minItems": 2,
+      "prefixItems": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "number"
+       }
+      ],
+      "title": "Gravity",
+      "type": "array"
+     },
+     "turbulence_power": {
+      "default": [
+       0.0,
+       1.0
+      ],
+      "maxItems": 2,
+      "minItems": 2,
+      "prefixItems": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "number"
+       }
+      ],
+      "title": "Turbulence Power",
+      "type": "array"
+     },
+     "wind_power": {
+      "default": [
+       0.0,
+       10.0
+      ],
+      "maxItems": 2,
+      "minItems": 2,
+      "prefixItems": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "number"
+       }
+      ],
+      "title": "Wind Power",
+      "type": "array"
+     },
+     "wind_probability": {
+      "default": 0.8,
+      "maximum": 1.0,
+      "minimum": 0.0,
+      "title": "Wind Probability",
+      "type": "number"
+     }
+    },
+    "title": "PhysicsRandomization",
+    "type": "object"
+   },
+   "PotentialConfig": {
+    "additionalProperties": false,
+    "description": "Potential-based shaping alpha * (gamma * Phi(s') - Phi(s)) with Phi(terminal) = 0; gamma is the run's discount.",
+    "properties": {
+     "alpha": {
+      "default": 10.0,
+      "description": "Scale of the shaping term.",
+      "maximum": 100.0,
+      "minimum": 0.0,
+      "title": "Alpha",
+      "type": "number"
+     },
+     "enabled": {
+      "default": false,
+      "title": "Enabled",
+      "type": "boolean"
+     },
+     "weights": {
+      "$ref": "#/components/schemas/PotentialWeights"
+     }
+    },
+    "title": "PotentialConfig",
+    "type": "object"
+   },
+   "PotentialWeights": {
+    "additionalProperties": false,
+    "description": "Weights of the bounded potential Phi(s) = -sum_i w_i * tanh|feature_i| (see ``rewards.terms.potential``).",
+    "properties": {
+     "angle": {
+      "default": 0.5,
+      "description": "Weight on tanh(|angle|).",
+      "maximum": 10.0,
+      "minimum": 0.0,
+      "title": "Angle",
+      "type": "number"
+     },
+     "angular_velocity": {
+      "default": 0.25,
+      "description": "Weight on tanh(|angular velocity|).",
+      "maximum": 10.0,
+      "minimum": 0.0,
+      "title": "Angular Velocity",
+      "type": "number"
+     },
+     "speed": {
+      "default": 1.0,
+      "description": "Weight on tanh(hypot(vx, vy)).",
+      "maximum": 10.0,
+      "minimum": 0.0,
+      "title": "Speed",
+      "type": "number"
+     },
+     "x": {
+      "default": 1.0,
+      "description": "Weight on tanh(|x|).",
+      "maximum": 10.0,
+      "minimum": 0.0,
+      "title": "X",
+      "type": "number"
+     },
+     "y": {
+      "default": 0.5,
+      "description": "Weight on tanh(|y|).",
+      "maximum": 10.0,
+      "minimum": 0.0,
+      "title": "Y",
+      "type": "number"
+     }
+    },
+    "title": "PotentialWeights",
+    "type": "object"
+   },
+   "PreferenceLabel": {
+    "additionalProperties": false,
+    "properties": {
+     "choice": {
+      "enum": [
+       "a",
+       "b",
+       "tie"
+      ],
+      "title": "Choice",
+      "type": "string"
+     },
+     "i": {
+      "maximum": 10000000.0,
+      "minimum": 0.0,
+      "title": "I",
+      "type": "integer"
+     },
+     "j": {
+      "maximum": 10000000.0,
+      "minimum": 0.0,
+      "title": "J",
+      "type": "integer"
+     }
+    },
+    "required": [
+     "i",
+     "j",
+     "choice"
+    ],
+    "title": "PreferenceLabel",
+    "type": "object"
+   },
+   "QueueRequest": {
+    "additionalProperties": false,
+    "properties": {
+     "paused": {
+      "title": "Paused",
+      "type": "boolean"
+     }
+    },
+    "required": [
+     "paused"
+    ],
+    "title": "QueueRequest",
+    "type": "object"
+   },
+   "RecordRequest": {
+    "additionalProperties": false,
+    "properties": {
+     "checkpoint": {
+      "default": "best",
+      "maxLength": 80,
+      "pattern": "^[A-Za-z0-9_.\\-]+$",
+      "title": "Checkpoint",
+      "type": "string"
+     },
+     "episode_seed": {
+      "default": 20000,
+      "maximum": 2147483647.0,
+      "minimum": 0.0,
+      "title": "Episode Seed",
+      "type": "integer"
+     },
+     "idempotency_key": {
+      "anyOf": [
+       {
+        "maxLength": 80,
+        "pattern": "^[A-Za-z0-9_\\-]+$",
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Idempotency Key"
+     }
+    },
+    "title": "RecordRequest",
+    "type": "object"
+   },
+   "ReportRequest": {
+    "additionalProperties": false,
+    "properties": {
+     "experiment_id": {
+      "anyOf": [
+       {
+        "maxLength": 120,
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Experiment Id"
+     },
+     "idempotency_key": {
+      "anyOf": [
+       {
+        "maxLength": 80,
+        "pattern": "^[A-Za-z0-9_\\-]+$",
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Idempotency Key"
+     },
+     "run_ids": {
+      "items": {
+       "type": "string"
+      },
+      "maxItems": 40,
+      "title": "Run Ids",
+      "type": "array"
+     },
+     "split": {
+      "default": "test",
+      "enum": [
+       "validation",
+       "test"
+      ],
+      "title": "Split",
+      "type": "string"
+     },
+     "title": {
+      "default": "LunarLab experiment report",
+      "maxLength": 120,
+      "title": "Title",
+      "type": "string"
+     }
+    },
+    "title": "ReportRequest",
+    "type": "object"
+   },
+   "RescoreRequest": {
+    "additionalProperties": false,
+    "properties": {
+     "config_ids": {
+      "items": {
+       "type": "string"
+      },
+      "maxItems": 12,
+      "title": "Config Ids",
+      "type": "array"
+     },
+     "gamma": {
+      "default": 0.999,
+      "exclusiveMinimum": 0.0,
+      "maximum": 1.0,
+      "title": "Gamma",
+      "type": "number"
+     },
+     "presets": {
+      "items": {
+       "enum": [
+        "baseline",
+        "time-penalty",
+        "hover-bonus",
+        "potential"
+       ],
+       "type": "string"
+      },
+      "maxItems": 4,
+      "title": "Presets",
+      "type": "array"
+     }
+    },
+    "title": "RescoreRequest",
+    "type": "object"
+   },
+   "ResumeRequest": {
+    "additionalProperties": false,
+    "properties": {
+     "checkpoint": {
+      "default": "latest",
+      "maxLength": 80,
+      "pattern": "^[A-Za-z0-9_.\\-]+$",
+      "title": "Checkpoint",
+      "type": "string"
+     },
+     "idempotency_key": {
+      "anyOf": [
+       {
+        "maxLength": 80,
+        "pattern": "^[A-Za-z0-9_\\-]+$",
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Idempotency Key"
+     }
+    },
+    "title": "ResumeRequest",
+    "type": "object"
+   },
+   "RewardConfig": {
+    "additionalProperties": false,
+    "description": "A complete reward definition: training reward = original_weight * original reward + the enabled terms.\n\nValidated strictly (unknown keys are refused, values bounded); :meth:`content_hash` identifies it in every run\nand evaluation.",
+    "properties": {
+     "description": {
+      "default": "",
+      "maxLength": 2000,
+      "title": "Description",
+      "type": "string"
+     },
+     "hover_bonus": {
+      "$ref": "#/components/schemas/HoverBonusConfig"
+     },
+     "learned": {
+      "$ref": "#/components/schemas/LearnedRewardConfig"
+     },
+     "name": {
+      "maxLength": 64,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9 _.\\-]*$",
+      "title": "Name",
+      "type": "string"
+     },
+     "original_weight": {
+      "default": 1.0,
+      "description": "Weight of the original environment reward.",
+      "maximum": 1.0,
+      "minimum": 0.0,
+      "title": "Original Weight",
+      "type": "number"
+     },
+     "potential": {
+      "$ref": "#/components/schemas/PotentialConfig"
+     },
+     "preset": {
+      "default": "custom",
+      "enum": [
+       "baseline",
+       "time-penalty",
+       "hover-bonus",
+       "potential",
+       "custom"
+      ],
+      "title": "Preset",
+      "type": "string"
+     },
+     "schema_version": {
+      "const": 1,
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+     },
+     "time_penalty": {
+      "$ref": "#/components/schemas/TimePenaltyConfig"
+     }
+    },
+    "required": [
+     "name"
+    ],
+    "title": "RewardConfig",
+    "type": "object"
+   },
+   "RewardConfigCreate": {
+    "additionalProperties": false,
+    "properties": {
+     "config": {
+      "$ref": "#/components/schemas/RewardConfig"
+     },
+     "parent_id": {
+      "anyOf": [
+       {
+        "maxLength": 120,
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Parent Id"
+     }
+    },
+    "required": [
+     "config"
+    ],
+    "title": "RewardConfigCreate",
+    "type": "object"
+   },
+   "RewardConfigValidate": {
+    "additionalProperties": false,
+    "properties": {
+     "config": {
+      "additionalProperties": true,
+      "title": "Config",
+      "type": "object"
+     }
+    },
+    "required": [
+     "config"
+    ],
+    "title": "RewardConfigValidate",
+    "type": "object"
+   },
+   "RewardImport": {
+    "additionalProperties": false,
+    "properties": {
+     "parent_id": {
+      "anyOf": [
+       {
+        "maxLength": 120,
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Parent Id"
+     },
+     "yaml": {
+      "maxLength": 100000,
+      "title": "Yaml",
+      "type": "string"
+     }
+    },
+    "required": [
+     "yaml"
+    ],
+    "title": "RewardImport",
+    "type": "object"
+   },
+   "RunCreate": {
+    "additionalProperties": false,
+    "properties": {
+     "algo": {
+      "default": "ppo",
+      "enum": [
+       "ppo",
+       "dqn"
+      ],
+      "title": "Algo",
+      "type": "string"
+     },
+     "confirm_extended": {
+      "default": false,
+      "title": "Confirm Extended",
+      "type": "boolean"
+     },
+     "experiment_id": {
+      "anyOf": [
+       {
+        "maxLength": 120,
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Experiment Id"
+     },
+     "gamma": {
+      "anyOf": [
+       {
+        "exclusiveMaximum": 1.0,
+        "exclusiveMinimum": 0.9,
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Gamma"
+     },
+     "idempotency_key": {
+      "anyOf": [
+       {
+        "maxLength": 80,
+        "pattern": "^[A-Za-z0-9_\\-]+$",
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Idempotency Key"
+     },
+     "label": {
+      "default": "",
+      "maxLength": 120,
+      "title": "Label",
+      "type": "string"
+     },
+     "n_envs": {
+      "anyOf": [
+       {
+        "maximum": 16.0,
+        "minimum": 1.0,
+        "type": "integer"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "N Envs"
+     },
+     "physics": {
+      "anyOf": [
+       {
+        "$ref": "#/components/schemas/PhysicsRandomization"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "preset": {
+      "anyOf": [
+       {
+        "enum": [
+         "baseline",
+         "time-penalty",
+         "hover-bonus",
+         "potential"
+        ],
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Preset"
+     },
+     "profile": {
+      "default": "smoke",
+      "enum": [
+       "smoke",
+       "standard",
+       "extended"
+      ],
+      "title": "Profile",
+      "type": "string"
+     },
+     "reward_config_id": {
+      "anyOf": [
+       {
+        "maxLength": 120,
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Reward Config Id"
+     },
+     "seed": {
+      "default": 0,
+      "maximum": 999.0,
+      "minimum": 0.0,
+      "title": "Seed",
+      "type": "integer"
+     },
+     "start": {
+      "default": true,
+      "title": "Start",
+      "type": "boolean"
+     },
+     "total_transitions": {
+      "anyOf": [
+       {
+        "maximum": 20000000.0,
+        "minimum": 4096.0,
+        "type": "integer"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Total Transitions"
+     },
+     "vec_env": {
+      "anyOf": [
+       {
+        "enum": [
+         "dummy",
+         "subproc"
+        ],
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Vec Env"
+     }
+    },
+    "title": "RunCreate",
+    "type": "object"
+   },
+   "SuiteCreate": {
+    "additionalProperties": false,
+    "properties": {
+     "algos": {
+      "items": {
+       "enum": [
+        "ppo",
+        "dqn"
+       ],
+       "type": "string"
+      },
+      "maxItems": 2,
+      "minItems": 1,
+      "title": "Algos",
+      "type": "array"
+     },
+     "config_ids": {
+      "items": {
+       "type": "string"
+      },
+      "maxItems": 12,
+      "title": "Config Ids",
+      "type": "array"
+     },
+     "confirm_large": {
+      "default": false,
+      "title": "Confirm Large",
+      "type": "boolean"
+     },
+     "description": {
+      "default": "",
+      "maxLength": 1000,
+      "title": "Description",
+      "type": "string"
+     },
+     "gammas": {
+      "items": {
+       "type": "number"
+      },
+      "maxItems": 3,
+      "title": "Gammas",
+      "type": "array"
+     },
+     "idempotency_key": {
+      "anyOf": [
+       {
+        "maxLength": 80,
+        "pattern": "^[A-Za-z0-9_\\-]+$",
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Idempotency Key"
+     },
+     "name": {
+      "default": "reward-shaping-suite",
+      "maxLength": 64,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9 _.\\-]*$",
+      "title": "Name",
+      "type": "string"
+     },
+     "physics": {
+      "default": "fixed",
+      "enum": [
+       "fixed",
+       "randomized",
+       "both"
+      ],
+      "title": "Physics",
+      "type": "string"
+     },
+     "physics_config": {
+      "anyOf": [
+       {
+        "$ref": "#/components/schemas/PhysicsRandomization"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "presets": {
+      "items": {
+       "enum": [
+        "baseline",
+        "time-penalty",
+        "hover-bonus",
+        "potential"
+       ],
+       "type": "string"
+      },
+      "maxItems": 4,
+      "title": "Presets",
+      "type": "array"
+     },
+     "profile": {
+      "default": "standard",
+      "enum": [
+       "smoke",
+       "standard",
+       "extended"
+      ],
+      "title": "Profile",
+      "type": "string"
+     },
+     "seeds": {
+      "items": {
+       "type": "integer"
+      },
+      "maxItems": 10,
+      "minItems": 1,
+      "title": "Seeds",
+      "type": "array"
+     },
+     "start": {
+      "default": true,
+      "title": "Start",
+      "type": "boolean"
+     },
+     "total_transitions": {
+      "anyOf": [
+       {
+        "maximum": 20000000.0,
+        "minimum": 4096.0,
+        "type": "integer"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Total Transitions"
+     }
+    },
+    "required": [
+     "seeds"
+    ],
+    "title": "SuiteCreate",
+    "type": "object"
+   },
+   "SuitePlan": {
+    "additionalProperties": false,
+    "properties": {
+     "algos": {
+      "items": {
+       "enum": [
+        "ppo",
+        "dqn"
+       ],
+       "type": "string"
+      },
+      "maxItems": 2,
+      "minItems": 1,
+      "title": "Algos",
+      "type": "array"
+     },
+     "config_ids": {
+      "items": {
+       "type": "string"
+      },
+      "maxItems": 12,
+      "title": "Config Ids",
+      "type": "array"
+     },
+     "gammas": {
+      "items": {
+       "type": "number"
+      },
+      "maxItems": 3,
+      "title": "Gammas",
+      "type": "array"
+     },
+     "physics": {
+      "default": "fixed",
+      "enum": [
+       "fixed",
+       "randomized",
+       "both"
+      ],
+      "title": "Physics",
+      "type": "string"
+     },
+     "physics_config": {
+      "anyOf": [
+       {
+        "$ref": "#/components/schemas/PhysicsRandomization"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "presets": {
+      "items": {
+       "enum": [
+        "baseline",
+        "time-penalty",
+        "hover-bonus",
+        "potential"
+       ],
+       "type": "string"
+      },
+      "maxItems": 4,
+      "title": "Presets",
+      "type": "array"
+     },
+     "profile": {
+      "default": "standard",
+      "enum": [
+       "smoke",
+       "standard",
+       "extended"
+      ],
+      "title": "Profile",
+      "type": "string"
+     },
+     "seeds": {
+      "items": {
+       "type": "integer"
+      },
+      "maxItems": 10,
+      "minItems": 1,
+      "title": "Seeds",
+      "type": "array"
+     },
+     "total_transitions": {
+      "anyOf": [
+       {
+        "maximum": 20000000.0,
+        "minimum": 4096.0,
+        "type": "integer"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Total Transitions"
+     }
+    },
+    "required": [
+     "seeds"
+    ],
+    "title": "SuitePlan",
+    "type": "object"
+   },
+   "TimePenaltyConfig": {
+    "additionalProperties": false,
+    "description": "A constant cost on every transition (the time-penalty ablation).",
+    "properties": {
+     "cost_per_step": {
+      "default": 0.01,
+      "description": "Subtracted on every transition.",
+      "maximum": 1.0,
+      "minimum": 0.0,
+      "title": "Cost Per Step",
+      "type": "number"
+     },
+     "enabled": {
+      "default": false,
+      "title": "Enabled",
+      "type": "boolean"
+     }
+    },
+    "title": "TimePenaltyConfig",
+    "type": "object"
+   },
+   "TuningApply": {
+    "additionalProperties": false,
+    "properties": {
+     "profile": {
+      "default": "standard",
+      "enum": [
+       "smoke",
+       "standard",
+       "extended"
+      ],
+      "title": "Profile",
+      "type": "string"
+     },
+     "seeds": {
+      "items": {
+       "type": "integer"
+      },
+      "maxItems": 10,
+      "minItems": 1,
+      "title": "Seeds",
+      "type": "array"
+     },
+     "start": {
+      "default": true,
+      "title": "Start",
+      "type": "boolean"
+     }
+    },
+    "title": "TuningApply",
+    "type": "object"
+   },
+   "TuningCreate": {
+    "additionalProperties": false,
+    "properties": {
+     "algo": {
+      "default": "ppo",
+      "enum": [
+       "ppo",
+       "dqn"
+      ],
+      "title": "Algo",
+      "type": "string"
+     },
+     "idempotency_key": {
+      "anyOf": [
+       {
+        "maxLength": 80,
+        "pattern": "^[A-Za-z0-9_\\-]+$",
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Idempotency Key"
+     },
+     "n_trials": {
+      "default": 20,
+      "maximum": 200.0,
+      "minimum": 1.0,
+      "title": "N Trials",
+      "type": "integer"
+     },
+     "name": {
+      "default": "study",
+      "maxLength": 48,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9 _.\\-]*$",
+      "title": "Name",
+      "type": "string"
+     },
+     "params": {
+      "items": {
+       "type": "string"
+      },
+      "maxItems": 12,
+      "title": "Params",
+      "type": "array"
+     },
+     "preset": {
+      "default": "baseline",
+      "enum": [
+       "baseline",
+       "time-penalty",
+       "hover-bonus",
+       "potential"
+      ],
+      "title": "Preset",
+      "type": "string"
+     },
+     "seed": {
+      "default": 0,
+      "maximum": 10000.0,
+      "minimum": 0.0,
+      "title": "Seed",
+      "type": "integer"
+     },
+     "start": {
+      "default": true,
+      "title": "Start",
+      "type": "boolean"
+     },
+     "startup_trials": {
+      "default": 4,
+      "maximum": 50.0,
+      "minimum": 0.0,
+      "title": "Startup Trials",
+      "type": "integer"
+     },
+     "trial_transitions": {
+      "default": 200000,
+      "maximum": 3000000.0,
+      "minimum": 4096.0,
+      "title": "Trial Transitions",
+      "type": "integer"
+     },
+     "validation_every": {
+      "default": 25000,
+      "maximum": 1000000.0,
+      "minimum": 4096.0,
+      "title": "Validation Every",
+      "type": "integer"
+     },
+     "warmup_transitions": {
+      "anyOf": [
+       {
+        "maximum": 3000000.0,
+        "minimum": 0.0,
+        "type": "integer"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Warmup Transitions"
+     }
+    },
+    "title": "TuningCreate",
+    "type": "object"
+   },
+   "ValidationError": {
+    "properties": {
+     "ctx": {
+      "title": "Context",
+      "type": "object"
+     },
+     "input": {
+      "title": "Input"
+     },
+     "loc": {
+      "items": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "integer"
+        }
+       ]
+      },
+      "title": "Location",
+      "type": "array"
+     },
+     "msg": {
+      "title": "Message",
+      "type": "string"
+     },
+     "type": {
+      "title": "Error Type",
+      "type": "string"
+     }
+    },
+    "required": [
+     "loc",
+     "msg",
+     "type"
+    ],
+    "title": "ValidationError",
+    "type": "object"
+   },
+   "WarmRestartRequest": {
+    "additionalProperties": false,
+    "description": "A NEW run initialised from a checkpoint's weights. ``confirm`` must be true.",
+    "properties": {
+     "checkpoint": {
+      "default": "latest",
+      "maxLength": 80,
+      "pattern": "^[A-Za-z0-9_.\\-]+$",
+      "title": "Checkpoint",
+      "type": "string"
+     },
+     "confirm": {
+      "default": false,
+      "title": "Confirm",
+      "type": "boolean"
+     },
+     "idempotency_key": {
+      "anyOf": [
+       {
+        "maxLength": 80,
+        "pattern": "^[A-Za-z0-9_\\-]+$",
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Idempotency Key"
+     },
+     "label": {
+      "anyOf": [
+       {
+        "maxLength": 120,
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Label"
+     },
+     "start": {
+      "default": false,
+      "title": "Start",
+      "type": "boolean"
+     }
+    },
+    "title": "WarmRestartRequest",
+    "type": "object"
+   }
+  }
+ },
+ "info": {
+  "title": "LunarLab",
+  "version": "0.1.0"
+ },
+ "openapi": "3.1.0",
+ "paths": {
+  "/api/benchmark": {
+   "post": {
+    "operationId": "benchmark_api_benchmark_post",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/BenchmarkRequest"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "additionalProperties": true,
+         "title": "Response Benchmark Api Benchmark Post",
+         "type": "object"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Benchmark"
+   }
+  },
+  "/api/compare": {
+   "post": {
+    "operationId": "compare_api_compare_post",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/CompareRequest"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "additionalProperties": true,
+         "title": "Response Compare Api Compare Post",
+         "type": "object"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Compare"
+   }
+  },
+  "/api/demos": {
+   "post": {
+    "operationId": "demo_api_demos_post",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/DemoRequest"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "additionalProperties": true,
+         "title": "Response Demo Api Demos Post",
+         "type": "object"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Demo"
+   }
+  },
+  "/api/experiments": {
+   "get": {
+    "operationId": "experiments_api_experiments_get",
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "items": {
+          "additionalProperties": true,
+          "type": "object"
+         },
+         "title": "Response Experiments Api Experiments Get",
+         "type": "array"
+        }
+       }
+      },
+      "description": "Successful Response"
+     }
+    },
+    "summary": "Experiments"
+   },
+   "post": {
+    "operationId": "experiment_create_api_experiments_post",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/SuiteCreate"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "201": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "additionalProperties": true,
+         "title": "Response Experiment Create Api Experiments Post",
+         "type": "object"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Experiment Create"
+   }
+  },
+  "/api/experiments/plan": {
+   "post": {
+    "operationId": "experiment_plan_api_experiments_plan_post",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/SuitePlan"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "additionalProperties": true,
+         "title": "Response Experiment Plan Api Experiments Plan Post",
+         "type": "object"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Experiment Plan"
+   }
+  },
+  "/api/experiments/{experiment_id}": {
+   "get": {
+    "operationId": "experiment_api_experiments__experiment_id__get",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "experiment_id",
+      "required": true,
+      "schema": {
+       "title": "Experiment Id",
+       "type": "string"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "additionalProperties": true,
+         "title": "Response Experiment Api Experiments  Experiment Id  Get",
+         "type": "object"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Experiment"
+   }
+  },
+  "/api/flights": {
+   "post": {
+    "operationId": "flight_start_api_flights_post",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/FlightStart"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "201": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "additionalProperties": true,
+         "title": "Response Flight Start Api Flights Post",
+         "type": "object"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Flight Start"
+   }
+  },
+  "/api/flights/{session_id}": {
+   "delete": {
+    "operationId": "flight_abandon_api_flights__session_id__delete",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "session_id",
+      "required": true,
+      "schema": {
+       "title": "Session Id",
+       "type": "string"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "additionalProperties": true,
+         "title": "Response Flight Abandon Api Flights  Session Id  Delete",
+         "type": "object"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Flight Abandon"
+   }
+  },
+  "/api/flights/{session_id}/step": {
+   "post": {
+    "operationId": "flight_step_api_flights__session_id__step_post",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "session_id",
+      "required": true,
+      "schema": {
+       "title": "Session Id",
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/FlightStep"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "additionalProperties": true,
+         "title": "Response Flight Step Api Flights  Session Id  Step Post",
+         "type": "object"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Flight Step"
+   }
+  },
+  "/api/health": {
+   "get": {
+    "operationId": "health_api_health_get",
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "additionalProperties": true,
+         "title": "Response Health Api Health Get",
+         "type": "object"
+        }
+       }
+      },
+      "description": "Successful Response"
+     }
+    },
+    "summary": "Health"
+   }
+  },
+  "/api/jobs": {
+   "get": {
+    "operationId": "list_jobs_api_jobs_get",
+    "parameters": [
+     {
+      "in": "query",
+      "name": "active",
+      "required": false,
+      "schema": {
+       "default": false,
+       "title": "Active",
+       "type": "boolean"
+      }
+     },
+     {
+      "in": "query",
+      "name": "limit",
+      "required": false,
+      "schema": {
+       "default": 50,
+       "title": "Limit",
+       "type": "integer"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "items": {
+          "additionalProperties": true,
+          "type": "object"
+         },
+         "title": "Response List Jobs Api Jobs Get",
+         "type": "array"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "List Jobs"
+   }
+  },
+  "/api/jobs/{job_id}": {
+   "get": {
+    "operationId": "get_job_api_jobs__job_id__get",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "job_id",
+      "required": true,
+      "schema": {
+       "title": "Job Id",
+       "type": "string"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "additionalProperties": true,
+         "title": "Response Get Job Api Jobs  Job Id  Get",
+         "type": "object"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Get Job"
+   }
+  },
+  "/api/jobs/{job_id}/log": {
+   "get": {
+    "operationId": "job_log_api_jobs__job_id__log_get",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "job_id",
+      "required": true,
+      "schema": {
+       "title": "Job Id",
+       "type": "string"
+      }
+     },
+     {
+      "in": "query",
+      "name": "lines",
+      "required": false,
+      "schema": {
+       "default": 80,
+       "title": "Lines",
+       "type": "integer"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Job Log"
+   }
+  },
+  "/api/jobs/{job_id}/stop": {
+   "post": {
+    "operationId": "stop_job_api_jobs__job_id__stop_post",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "job_id",
+      "required": true,
+      "schema": {
+       "title": "Job Id",
+       "type": "string"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "additionalProperties": true,
+         "title": "Response Stop Job Api Jobs  Job Id  Stop Post",
+         "type": "object"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Stop Job"
+   }
+  },
+  "/api/jobs/{job_id}/terminate": {
+   "post": {
+    "operationId": "terminate_job_api_jobs__job_id__terminate_post",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "job_id",
+      "required": true,
+      "schema": {
+       "title": "Job Id",
+       "type": "string"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "additionalProperties": true,
+         "title": "Response Terminate Job Api Jobs  Job Id  Terminate Post",
+         "type": "object"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Terminate Job"
+   }
+  },
+  "/api/meta": {
+   "get": {
+    "operationId": "meta_api_meta_get",
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "additionalProperties": true,
+         "title": "Response Meta Api Meta Get",
+         "type": "object"
+        }
+       }
+      },
+      "description": "Successful Response"
+     }
+    },
+    "summary": "Meta"
+   }
+  },
+  "/api/overview": {
+   "get": {
+    "operationId": "overview_api_overview_get",
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "additionalProperties": true,
+         "title": "Response Overview Api Overview Get",
+         "type": "object"
+        }
+       }
+      },
+      "description": "Successful Response"
+     }
+    },
+    "summary": "Overview"
+   }
+  },
+  "/api/preferences": {
+   "get": {
+    "operationId": "preference_datasets_api_preferences_get",
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "items": {
+          "additionalProperties": true,
+          "type": "object"
+         },
+         "title": "Response Preference Datasets Api Preferences Get",
+         "type": "array"
+        }
+       }
+      },
+      "description": "Successful Response"
+     }
+    },
+    "summary": "Preference Datasets"
+   }
+  },
+  "/api/preferences/{dataset_id}/active-studies": {
+   "get": {
+    "operationId": "preference_active_studies_api_preferences__dataset_id__active_studies_get",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "dataset_id",
+      "required": true,
+      "schema": {
+       "title": "Dataset Id",
+       "type": "string"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "items": {
+          "additionalProperties": true,
+          "type": "object"
+         },
+         "title": "Response Preference Active Studies Api Preferences  Dataset Id  Active Studies Get",
+         "type": "array"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Preference Active Studies"
+   }
+  },
+  "/api/preferences/{dataset_id}/ensemble": {
+   "post": {
+    "description": "Fit the labelling ensemble (used by the disagreement strategy) as an analysis job.",
+    "operationId": "preference_ensemble_api_preferences__dataset_id__ensemble_post",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "dataset_id",
+      "required": true,
+      "schema": {
+       "title": "Dataset Id",
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/EnsembleRequest"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "additionalProperties": true,
+         "title": "Response Preference Ensemble Api Preferences  Dataset Id  Ensemble Post",
+         "type": "object"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Preference Ensemble"
+   }
+  },
+  "/api/preferences/{dataset_id}/labels": {
+   "post": {
+    "operationId": "preference_label_api_preferences__dataset_id__labels_post",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "dataset_id",
+      "required": true,
+      "schema": {
+       "title": "Dataset Id",
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/PreferenceLabel"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "201": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "additionalProperties": true,
+         "title": "Response Preference Label Api Preferences  Dataset Id  Labels Post",
+         "type": "object"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Preference Label"
+   }
+  },
+  "/api/preferences/{dataset_id}/pair": {
+   "get": {
+    "description": "The next pair to label: never one already labelled; ``disagreement`` picks, among random candidate\npairs from training episodes, the one the labelling ensemble disagrees about most.",
+    "operationId": "preference_pair_api_preferences__dataset_id__pair_get",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "dataset_id",
+      "required": true,
+      "schema": {
+       "title": "Dataset Id",
+       "type": "string"
+      }
+     },
+     {
+      "in": "query",
+      "name": "strategy",
+      "required": false,
+      "schema": {
+       "default": "random",
+       "title": "Strategy",
+       "type": "string"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "additionalProperties": true,
+         "title": "Response Preference Pair Api Preferences  Dataset Id  Pair Get",
+         "type": "object"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Preference Pair"
+   }
+  },
+  "/api/preferences/{dataset_id}/progress": {
+   "get": {
+    "operationId": "preference_progress_api_preferences__dataset_id__progress_get",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "dataset_id",
+      "required": true,
+      "schema": {
+       "title": "Dataset Id",
+       "type": "string"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "additionalProperties": true,
+         "title": "Response Preference Progress Api Preferences  Dataset Id  Progress Get",
+         "type": "object"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Preference Progress"
+   }
+  },
+  "/api/queue": {
+   "post": {
+    "operationId": "set_queue_api_queue_post",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/QueueRequest"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "additionalProperties": true,
+         "title": "Response Set Queue Api Queue Post",
+         "type": "object"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Set Queue"
+   }
+  },
+  "/api/recordings": {
+   "get": {
+    "operationId": "recordings_api_recordings_get",
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "items": {
+          "additionalProperties": true,
+          "type": "object"
+         },
+         "title": "Response Recordings Api Recordings Get",
+         "type": "array"
+        }
+       }
+      },
+      "description": "Successful Response"
+     }
+    },
+    "summary": "Recordings"
+   }
+  },
+  "/api/recordings/{recording_id}": {
+   "get": {
+    "operationId": "recording_api_recordings__recording_id__get",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "recording_id",
+      "required": true,
+      "schema": {
+       "title": "Recording Id",
+       "type": "string"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "additionalProperties": true,
+         "title": "Response Recording Api Recordings  Recording Id  Get",
+         "type": "object"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Recording"
+   }
+  },
+  "/api/recordings/{recording_id}/frames/{index}": {
+   "get": {
+    "operationId": "recording_frame_api_recordings__recording_id__frames__index__get",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "recording_id",
+      "required": true,
+      "schema": {
+       "title": "Recording Id",
+       "type": "string"
+      }
+     },
+     {
+      "in": "path",
+      "name": "index",
+      "required": true,
+      "schema": {
+       "title": "Index",
+       "type": "integer"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Recording Frame"
+   }
+  },
+  "/api/recordings/{recording_id}/rescore": {
+   "post": {
+    "operationId": "recording_rescore_api_recordings__recording_id__rescore_post",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "recording_id",
+      "required": true,
+      "schema": {
+       "title": "Recording Id",
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/RescoreRequest"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "additionalProperties": true,
+         "title": "Response Recording Rescore Api Recordings  Recording Id  Rescore Post",
+         "type": "object"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Recording Rescore"
+   }
+  },
+  "/api/recordings/{recording_id}/scene": {
+   "get": {
+    "description": "Terrain and lander geometry for the 3-D replay of one recording.",
+    "operationId": "recording_scene_api_recordings__recording_id__scene_get",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "recording_id",
+      "required": true,
+      "schema": {
+       "title": "Recording Id",
+       "type": "string"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "additionalProperties": true,
+         "title": "Response Recording Scene Api Recordings  Recording Id  Scene Get",
+         "type": "object"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Recording Scene"
+   }
+  },
+  "/api/recordings/{recording_id}/video": {
+   "get": {
+    "operationId": "recording_video_api_recordings__recording_id__video_get",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "recording_id",
+      "required": true,
+      "schema": {
+       "title": "Recording Id",
+       "type": "string"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Recording Video"
+   }
+  },
+  "/api/reports": {
+   "get": {
+    "operationId": "reports_api_reports_get",
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "items": {
+          "additionalProperties": true,
+          "type": "object"
+         },
+         "title": "Response Reports Api Reports Get",
+         "type": "array"
+        }
+       }
+      },
+      "description": "Successful Response"
+     }
+    },
+    "summary": "Reports"
+   },
+   "post": {
+    "operationId": "report_api_reports_post",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/ReportRequest"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "additionalProperties": true,
+         "title": "Response Report Api Reports Post",
+         "type": "object"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Report"
+   }
+  },
+  "/api/reports/{report_id}/{name}": {
+   "get": {
+    "operationId": "report_file_api_reports__report_id___name__get",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "report_id",
+      "required": true,
+      "schema": {
+       "title": "Report Id",
+       "type": "string"
+      }
+     },
+     {
+      "in": "path",
+      "name": "name",
+      "required": true,
+      "schema": {
+       "title": "Name",
+       "type": "string"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Report File"
+   }
+  },
+  "/api/reward-analysis/hover": {
+   "post": {
+    "operationId": "analysis_hover_api_reward_analysis_hover_post",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/HoverAnalysisRequest"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "additionalProperties": true,
+         "title": "Response Analysis Hover Api Reward Analysis Hover Post",
+         "type": "object"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Analysis Hover"
+   }
+  },
+  "/api/reward-analysis/time-penalty": {
+   "get": {
+    "operationId": "analysis_time_api_reward_analysis_time_penalty_get",
+    "parameters": [
+     {
+      "in": "query",
+      "name": "cost",
+      "required": false,
+      "schema": {
+       "default": 0.01,
+       "title": "Cost",
+       "type": "number"
+      }
+     },
+     {
+      "in": "query",
+      "name": "gamma",
+      "required": false,
+      "schema": {
+       "default": 0.999,
+       "title": "Gamma",
+       "type": "number"
+      }
+     },
+     {
+      "in": "query",
+      "name": "steps",
+      "required": false,
+      "schema": {
+       "default": 1000,
+       "title": "Steps",
+       "type": "integer"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "additionalProperties": true,
+         "title": "Response Analysis Time Api Reward Analysis Time Penalty Get",
+         "type": "object"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Analysis Time"
+   }
+  },
+  "/api/reward-configs": {
+   "get": {
+    "operationId": "reward_configs_api_reward_configs_get",
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "items": {
+          "additionalProperties": true,
+          "type": "object"
+         },
+         "title": "Response Reward Configs Api Reward Configs Get",
+         "type": "array"
+        }
+       }
+      },
+      "description": "Successful Response"
+     }
+    },
+    "summary": "Reward Configs"
+   },
+   "post": {
+    "operationId": "create_reward_api_reward_configs_post",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/RewardConfigCreate"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "201": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "additionalProperties": true,
+         "title": "Response Create Reward Api Reward Configs Post",
+         "type": "object"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Create Reward"
+   }
+  },
+  "/api/reward-configs/import": {
+   "post": {
+    "operationId": "import_reward_api_reward_configs_import_post",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/RewardImport"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "201": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "additionalProperties": true,
+         "title": "Response Import Reward Api Reward Configs Import Post",
+         "type": "object"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Import Reward"
+   }
+  },
+  "/api/reward-configs/validate": {
+   "post": {
+    "operationId": "validate_reward_api_reward_configs_validate_post",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/RewardConfigValidate"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "additionalProperties": true,
+         "title": "Response Validate Reward Api Reward Configs Validate Post",
+         "type": "object"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Validate Reward"
+   }
+  },
+  "/api/reward-configs/{config_id}": {
+   "get": {
+    "operationId": "reward_config_api_reward_configs__config_id__get",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "config_id",
+      "required": true,
+      "schema": {
+       "title": "Config Id",
+       "type": "string"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "additionalProperties": true,
+         "title": "Response Reward Config Api Reward Configs  Config Id  Get",
+         "type": "object"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Reward Config"
+   }
+  },
+  "/api/reward-configs/{config_id}/export": {
+   "get": {
+    "operationId": "export_reward_api_reward_configs__config_id__export_get",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "config_id",
+      "required": true,
+      "schema": {
+       "title": "Config Id",
+       "type": "string"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Export Reward"
+   }
+  },
+  "/api/reward-models": {
+   "get": {
+    "operationId": "reward_models_api_reward_models_get",
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "items": {
+          "additionalProperties": true,
+          "type": "object"
+         },
+         "title": "Response Reward Models Api Reward Models Get",
+         "type": "array"
+        }
+       }
+      },
+      "description": "Successful Response"
+     }
+    },
+    "summary": "Reward Models"
+   }
+  },
+  "/api/runs": {
+   "get": {
+    "operationId": "runs_api_runs_get",
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "items": {
+          "additionalProperties": true,
+          "type": "object"
+         },
+         "title": "Response Runs Api Runs Get",
+         "type": "array"
+        }
+       }
+      },
+      "description": "Successful Response"
+     }
+    },
+    "summary": "Runs"
+   },
+   "post": {
+    "operationId": "create_run_endpoint_api_runs_post",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/RunCreate"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "201": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "additionalProperties": true,
+         "title": "Response Create Run Endpoint Api Runs Post",
+         "type": "object"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Create Run Endpoint"
+   }
+  },
+  "/api/runs/{run_id}": {
+   "get": {
+    "operationId": "run_detail_api_runs__run_id__get",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "run_id",
+      "required": true,
+      "schema": {
+       "title": "Run Id",
+       "type": "string"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "additionalProperties": true,
+         "title": "Response Run Detail Api Runs  Run Id  Get",
+         "type": "object"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Run Detail"
+   }
+  },
+  "/api/runs/{run_id}/config.yaml": {
+   "get": {
+    "operationId": "run_config_file_api_runs__run_id__config_yaml_get",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "run_id",
+      "required": true,
+      "schema": {
+       "title": "Run Id",
+       "type": "string"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Run Config File"
+   }
+  },
+  "/api/runs/{run_id}/curve": {
+   "get": {
+    "operationId": "run_curve_api_runs__run_id__curve_get",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "run_id",
+      "required": true,
+      "schema": {
+       "title": "Run Id",
+       "type": "string"
+      }
+     },
+     {
+      "in": "query",
+      "name": "window",
+      "required": false,
+      "schema": {
+       "default": 100,
+       "title": "Window",
+       "type": "integer"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "additionalProperties": true,
+         "title": "Response Run Curve Api Runs  Run Id  Curve Get",
+         "type": "object"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Run Curve"
+   }
+  },
+  "/api/runs/{run_id}/estimate": {
+   "get": {
+    "operationId": "run_estimate_api_runs__run_id__estimate_get",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "run_id",
+      "required": true,
+      "schema": {
+       "title": "Run Id",
+       "type": "string"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "additionalProperties": true,
+         "title": "Response Run Estimate Api Runs  Run Id  Estimate Get",
+         "type": "object"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Run Estimate"
+   }
+  },
+  "/api/runs/{run_id}/evaluate": {
+   "post": {
+    "operationId": "run_evaluate_api_runs__run_id__evaluate_post",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "run_id",
+      "required": true,
+      "schema": {
+       "title": "Run Id",
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/EvaluateRequest"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "additionalProperties": true,
+         "title": "Response Run Evaluate Api Runs  Run Id  Evaluate Post",
+         "type": "object"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Run Evaluate"
+   }
+  },
+  "/api/runs/{run_id}/evaluations/{name}": {
+   "get": {
+    "operationId": "run_evaluation_api_runs__run_id__evaluations__name__get",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "run_id",
+      "required": true,
+      "schema": {
+       "title": "Run Id",
+       "type": "string"
+      }
+     },
+     {
+      "in": "path",
+      "name": "name",
+      "required": true,
+      "schema": {
+       "title": "Name",
+       "type": "string"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "additionalProperties": true,
+         "title": "Response Run Evaluation Api Runs  Run Id  Evaluations  Name  Get",
+         "type": "object"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Run Evaluation"
+   }
+  },
+  "/api/runs/{run_id}/events": {
+   "get": {
+    "operationId": "run_events_api_runs__run_id__events_get",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "run_id",
+      "required": true,
+      "schema": {
+       "title": "Run Id",
+       "type": "string"
+      }
+     },
+     {
+      "in": "query",
+      "name": "limit",
+      "required": false,
+      "schema": {
+       "default": 200,
+       "title": "Limit",
+       "type": "integer"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "items": {
+          "additionalProperties": true,
+          "type": "object"
+         },
+         "title": "Response Run Events Api Runs  Run Id  Events Get",
+         "type": "array"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Run Events"
+   }
+  },
+  "/api/runs/{run_id}/files/{kind}/{name}": {
+   "get": {
+    "operationId": "run_file_api_runs__run_id__files__kind___name__get",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "run_id",
+      "required": true,
+      "schema": {
+       "title": "Run Id",
+       "type": "string"
+      }
+     },
+     {
+      "in": "path",
+      "name": "kind",
+      "required": true,
+      "schema": {
+       "title": "Kind",
+       "type": "string"
+      }
+     },
+     {
+      "in": "path",
+      "name": "name",
+      "required": true,
+      "schema": {
+       "title": "Name",
+       "type": "string"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Run File"
+   }
+  },
+  "/api/runs/{run_id}/metrics": {
+   "get": {
+    "operationId": "run_metrics_api_runs__run_id__metrics_get",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "run_id",
+      "required": true,
+      "schema": {
+       "title": "Run Id",
+       "type": "string"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "items": {
+          "additionalProperties": true,
+          "type": "object"
+         },
+         "title": "Response Run Metrics Api Runs  Run Id  Metrics Get",
+         "type": "array"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Run Metrics"
+   }
+  },
+  "/api/runs/{run_id}/record": {
+   "post": {
+    "operationId": "run_record_api_runs__run_id__record_post",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "run_id",
+      "required": true,
+      "schema": {
+       "title": "Run Id",
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/RecordRequest"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "additionalProperties": true,
+         "title": "Response Run Record Api Runs  Run Id  Record Post",
+         "type": "object"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Run Record"
+   }
+  },
+  "/api/runs/{run_id}/resume": {
+   "post": {
+    "operationId": "run_resume_api_runs__run_id__resume_post",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "run_id",
+      "required": true,
+      "schema": {
+       "title": "Run Id",
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/ResumeRequest"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "additionalProperties": true,
+         "title": "Response Run Resume Api Runs  Run Id  Resume Post",
+         "type": "object"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Run Resume"
+   }
+  },
+  "/api/runs/{run_id}/stop": {
+   "post": {
+    "operationId": "run_stop_api_runs__run_id__stop_post",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "run_id",
+      "required": true,
+      "schema": {
+       "title": "Run Id",
+       "type": "string"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "additionalProperties": true,
+         "title": "Response Run Stop Api Runs  Run Id  Stop Post",
+         "type": "object"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Run Stop"
+   }
+  },
+  "/api/runs/{run_id}/train": {
+   "post": {
+    "operationId": "run_train_api_runs__run_id__train_post",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "run_id",
+      "required": true,
+      "schema": {
+       "title": "Run Id",
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "anyOf": [
+         {
+          "$ref": "#/components/schemas/ResumeRequest"
+         },
+         {
+          "type": "null"
+         }
+        ],
+        "title": "Body"
+       }
+      }
+     }
+    },
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "additionalProperties": true,
+         "title": "Response Run Train Api Runs  Run Id  Train Post",
+         "type": "object"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Run Train"
+   }
+  },
+  "/api/runs/{run_id}/validation": {
+   "get": {
+    "operationId": "run_validation_api_runs__run_id__validation_get",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "run_id",
+      "required": true,
+      "schema": {
+       "title": "Run Id",
+       "type": "string"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "items": {
+          "additionalProperties": true,
+          "type": "object"
+         },
+         "title": "Response Run Validation Api Runs  Run Id  Validation Get",
+         "type": "array"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Run Validation"
+   }
+  },
+  "/api/runs/{run_id}/warm-restart": {
+   "post": {
+    "description": "Create a NEW run from this run's checkpoint (requires ``confirm``); optionally start it.",
+    "operationId": "run_warm_restart_api_runs__run_id__warm_restart_post",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "run_id",
+      "required": true,
+      "schema": {
+       "title": "Run Id",
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/WarmRestartRequest"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "201": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "additionalProperties": true,
+         "title": "Response Run Warm Restart Api Runs  Run Id  Warm Restart Post",
+         "type": "object"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Run Warm Restart"
+   }
+  },
+  "/api/shutdown": {
+   "post": {
+    "operationId": "shutdown_api_shutdown_post",
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "additionalProperties": true,
+         "title": "Response Shutdown Api Shutdown Post",
+         "type": "object"
+        }
+       }
+      },
+      "description": "Successful Response"
+     }
+    },
+    "summary": "Shutdown"
+   }
+  },
+  "/api/system": {
+   "get": {
+    "operationId": "system_api_system_get",
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "additionalProperties": true,
+         "title": "Response System Api System Get",
+         "type": "object"
+        }
+       }
+      },
+      "description": "Successful Response"
+     }
+    },
+    "summary": "System"
+   }
+  },
+  "/api/tuning": {
+   "get": {
+    "operationId": "tuning_studies_api_tuning_get",
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "items": {
+          "additionalProperties": true,
+          "type": "object"
+         },
+         "title": "Response Tuning Studies Api Tuning Get",
+         "type": "array"
+        }
+       }
+      },
+      "description": "Successful Response"
+     }
+    },
+    "summary": "Tuning Studies"
+   },
+   "post": {
+    "operationId": "tuning_create_api_tuning_post",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/TuningCreate"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "201": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "additionalProperties": true,
+         "title": "Response Tuning Create Api Tuning Post",
+         "type": "object"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Tuning Create"
+   }
+  },
+  "/api/tuning/space": {
+   "get": {
+    "operationId": "tuning_space_api_tuning_space_get",
+    "parameters": [
+     {
+      "in": "query",
+      "name": "algo",
+      "required": false,
+      "schema": {
+       "default": "ppo",
+       "title": "Algo",
+       "type": "string"
+      }
+     },
+     {
+      "in": "query",
+      "name": "preset",
+      "required": false,
+      "schema": {
+       "default": "baseline",
+       "title": "Preset",
+       "type": "string"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "additionalProperties": true,
+         "title": "Response Tuning Space Api Tuning Space Get",
+         "type": "object"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Tuning Space"
+   }
+  },
+  "/api/tuning/{study_id}": {
+   "get": {
+    "operationId": "tuning_study_api_tuning__study_id__get",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "study_id",
+      "required": true,
+      "schema": {
+       "title": "Study Id",
+       "type": "string"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "additionalProperties": true,
+         "title": "Response Tuning Study Api Tuning  Study Id  Get",
+         "type": "object"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Tuning Study"
+   }
+  },
+  "/api/tuning/{study_id}/apply": {
+   "post": {
+    "description": "Normal runs (never tuning trials) with the best settings, ready to train and final-test.",
+    "operationId": "tuning_apply_api_tuning__study_id__apply_post",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "study_id",
+      "required": true,
+      "schema": {
+       "title": "Study Id",
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/TuningApply"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "201": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "additionalProperties": true,
+         "title": "Response Tuning Apply Api Tuning  Study Id  Apply Post",
+         "type": "object"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Tuning Apply"
+   }
+  },
+  "/api/tuning/{study_id}/cancel": {
+   "post": {
+    "operationId": "tuning_cancel_api_tuning__study_id__cancel_post",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "study_id",
+      "required": true,
+      "schema": {
+       "title": "Study Id",
+       "type": "string"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "additionalProperties": true,
+         "title": "Response Tuning Cancel Api Tuning  Study Id  Cancel Post",
+         "type": "object"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Tuning Cancel"
+   }
+  },
+  "/api/tuning/{study_id}/resume": {
+   "post": {
+    "operationId": "tuning_resume_api_tuning__study_id__resume_post",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "study_id",
+      "required": true,
+      "schema": {
+       "title": "Study Id",
+       "type": "string"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "additionalProperties": true,
+         "title": "Response Tuning Resume Api Tuning  Study Id  Resume Post",
+         "type": "object"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Tuning Resume"
+   }
+  }
+ }
+}

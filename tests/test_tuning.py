@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Shayan Abrar
+# SPDX-License-Identifier: MIT
 """Automatic tuning with Optuna: studies, pruning, cancel/resume, best settings, and test-set isolation."""
 
 from __future__ import annotations

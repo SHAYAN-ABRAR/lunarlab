@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Shayan Abrar
+# SPDX-License-Identifier: MIT
 """Exclusive, non-blocking, process-lifetime file locks (Windows and POSIX).
 
 The OS releases the lock automatically if the holding process dies, so a stale

@@ -1,0 +1,197 @@
+{
+  "kind": "lunarlab.reproduce-smoke",
+  "schema": 1,
+  "started_at": "2026-10-17T16:00:48+00:00",
+  "software": {
+    "lunarlab": "0.1.0",
+    "git": {
+      "available": true,
+      "revision": "28dd935c92532a046b902bfe4a5457b632a1b9f1",
+      "dirty": true
+    },
+    "python": "3.12.13",
+    "python_implementation": "CPython",
+    "platform": "Windows-11-10.0.26300-SP0",
+    "packages": {
+      "gymnasium": "1.4.0",
+      "Box2D": "2.3.10",
+      "pygame": "2.6.1",
+      "stable-baselines3": "2.9.0",
+      "torch": "2.14.1",
+      "numpy": "2.5.4",
+      "pandas": "3.0.6",
+      "matplotlib": "3.11.2",
+      "imageio": "2.38.1",
+      "imageio-ffmpeg": "0.6.0",
+      "optuna": "5.0.0",
+      "fastapi": "0.143.1",
+      "uvicorn": "0.54.0",
+      "pydantic": "2.14.1",
+      "psutil": "7.2.2",
+      "PyYAML": "6.0.3"
+    }
+  },
+  "hardware": {
+    "platform": "Windows-11-10.0.26300-SP0",
+    "machine": "AMD64",
+    "cpu": "13th Gen Intel(R) Core(TM) i7-13620H",
+    "physical_cores": 10,
+    "logical_cores": 16,
+    "ram_gb": 16.8
+  },
+  "settings": {
+    "transitions": 4096,
+    "seed": 0,
+    "preset": "potential",
+    "algo": "dqn",
+    "ppo": null,
+    "protocol": {
+      "validation_seeds": [
+        10000,
+        10001,
+        10002
+      ],
+      "test_seeds": [
+        20000,
+        20001,
+        20002,
+        20003
+      ]
+    }
+  },
+  "run_id": "20261017-220048-dqn-potential-s0-custom-52a8",
+  "config_hash": "7cc5bb32548fa83f",
+  "reward_hash": "55ba1d4da088b94a",
+  "protocol_hash": "861239632167bc15",
+  "training_seconds": 12.13,
+  "checkpoints": [
+    {
+      "name": "best_validation-0000000000.zip",
+      "kind": "best_validation",
+      "transitions": 0,
+      "sha256": "8832c9670e2f56ad24f3b395a1a6069aff8b2da3cd02f30d13ff23cb67ad24cb"
+    },
+    {
+      "name": "ckpt_0000002048.zip",
+      "kind": "periodic",
+      "transitions": 2048,
+      "sha256": "2fafb1a4b9ada7a52909049024fe5f5f4fee205286b22a6d28fd37b390ddd88e"
+    },
+    {
+      "name": "best_validation-0000002048.zip",
+      "kind": "best_validation",
+      "transitions": 2048,
+      "sha256": "09354460fcd13dcb2fff1d3dc58b31d9852c499be5747507ccc50a27eb207334"
+    },
+    {
+      "name": "final.zip",
+      "kind": "final",
+      "transitions": 4096,
+      "sha256": "8fe055f7f7757367ab2926cc3453a18710aafd83215041418471149a9a7ae677"
+    }
+  ],
+  "frozen_checkpoint_sha256": "09354460fcd13dcb2fff1d3dc58b31d9852c499be5747507ccc50a27eb207334",
+  "final_weights_sha256": "4ac3cee3c1afce308690f44162e21ea1db2679177fbf846ea5dcb118ca622510",
+  "frozen_weights_sha256": "342645e2cfaed92548c70a3234992998315b6446f766f44c468120eabf4a43c9",
+  "final_test_episodes_sha256": "8c621bceb692f64e8a8387c3bde7376fb32e6fea338b434d22a273e275df028f",
+  "repeated_evaluation": {
+    "compared": 4,
+    "exact": 4,
+    "within_tolerance": 4,
+    "tolerance": 0.0,
+    "max_abs_return_difference": 0.0,
+    "mismatches": [],
+    "n_mismatches": 0
+  },
+  "export_sha256": "b03eacf43e130223740dded816a2a4f6f2707a347873609de371a545e1282cd0",
+  "final_test": {
+    "mean_original_return": -159.51838891348592,
+    "n_episodes": 4
+  },
+  "training_determinism": {
+    "second_run_id": "20261017-220102-dqn-potential-s0-custom-e95a",
+    "same_config_hash": true,
+    "identical_final_weights": true,
+    "identical_training_episodes": true
+  },
+  "checks": [
+    {
+      "check": "configuration identity survives a reload",
+      "ok": true,
+      "detail": "7cc5bb32548fa83f"
+    },
+    {
+      "check": "reward configuration recorded",
+      "ok": true,
+      "detail": "55ba1d4da088b94a"
+    },
+    {
+      "check": "validation and final-test seeds are disjoint and valid",
+      "ok": true,
+      "detail": "3 validation, 4 test seeds"
+    },
+    {
+      "check": "training completed",
+      "ok": true,
+      "detail": "exit code 0"
+    },
+    {
+      "check": "training budget recorded in environment transitions",
+      "ok": true,
+      "detail": "4096 transitions (requested 4096, planned 4096)"
+    },
+    {
+      "check": "worker seeds and source revision recorded",
+      "ok": true,
+      "detail": "worker seeds [1000000]"
+    },
+    {
+      "check": "every checkpoint matches its recorded size, SHA-256 and configuration hash",
+      "ok": true,
+      "detail": "4 checkpoints"
+    },
+    {
+      "check": "training episodes record original and shaped returns separately (identity holds)",
+      "ok": true,
+      "detail": "9 episodes, largest identity error 1.0e-05 (CSV rounding bound 3.0e-05)"
+    },
+    {
+      "check": "validation-selected checkpoint reloads (weights only)",
+      "ok": true,
+      "detail": "best_validation-0000002048.zip"
+    },
+    {
+      "check": "validation evaluation uses the original reward and records the shaped return",
+      "ok": true,
+      "detail": "mean original return -163.40"
+    },
+    {
+      "check": "final test evaluated the frozen copy of the validation-selected checkpoint",
+      "ok": true,
+      "detail": "09354460fcd13dcb"
+    },
+    {
+      "check": "frozen checkpoint is read-only on disk",
+      "ok": true,
+      "detail": "checkpoints/frozen/09354460fcd13dcb2fff1d3dc58b31d9852c499be5747507ccc50a27eb207334.zip"
+    },
+    {
+      "check": "a repeated final-test evaluation matches the saved one exactly",
+      "ok": true,
+      "detail": "4/4 episodes identical"
+    },
+    {
+      "check": "exported results re-read identically",
+      "ok": true,
+      "detail": "sha256 b03eacf43e130223"
+    },
+    {
+      "check": "training the same configuration twice gives identical weights and episodes (this machine)",
+      "ok": true,
+      "detail": "same process, same software stack; not a cross-platform guarantee"
+    }
+  ],
+  "ok": true,
+  "elapsed_s": 24.99,
+  "workdir": null
+}

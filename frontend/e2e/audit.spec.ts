@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2026 Shayan Abrar
+// SPDX-License-Identifier: MIT
 import { type APIRequestContext, type Page, expect, test } from '@playwright/test'
 
 // Audit-repair flows against a real backend on a pre-built disposable home (e2e/serve_e2e_audit.py):

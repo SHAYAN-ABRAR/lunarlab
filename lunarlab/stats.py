@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Shayan Abrar
+# SPDX-License-Identifier: MIT
 """Small, explicit statistics helpers.
 
 * Episode-level uncertainty for a mean: percentile bootstrap over evaluation
@@ -18,6 +20,7 @@ import numpy as np
 
 
 def describe(values: list[float] | np.ndarray) -> dict:
+    """Count, mean, sample standard deviation (ddof = 1), median, minimum and maximum (None values when empty)."""
     a = np.asarray(values, dtype=float)
     n = int(a.size)
     if n == 0:
@@ -35,6 +38,7 @@ def describe(values: list[float] | np.ndarray) -> dict:
 def bootstrap_ci_mean(
     values, *, level: float = 0.95, resamples: int = 5000, seed: int = 0
 ) -> list[float] | None:
+    """Percentile bootstrap interval of the mean of ``values`` with a fixed seed; None for fewer than two values."""
     a = np.asarray(values, dtype=float)
     if a.size < 2:
         return None
@@ -46,6 +50,7 @@ def bootstrap_ci_mean(
 
 
 def wilson_interval(k: int, n: int, level: float = 0.95) -> list[float] | None:
+    """Wilson score interval for the proportion k / n (closed at 0 and 1); None when n = 0."""
     if n <= 0:
         return None
     z = NormalDist().inv_cdf(1 - (1 - level) / 2)
@@ -59,6 +64,7 @@ def wilson_interval(k: int, n: int, level: float = 0.95) -> list[float] | None:
 
 
 def rate(flags: list[bool], level: float = 0.95) -> dict:
+    """A proportion with its count and Wilson interval: ``{"k", "n", "rate", "ci"}``."""
     n = len(flags)
     k = int(sum(bool(f) for f in flags))
     return {"k": k, "n": n, "rate": (k / n) if n else None, "ci": wilson_interval(k, n, level)}

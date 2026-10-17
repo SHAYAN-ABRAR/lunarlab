@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2026 Shayan Abrar
+// SPDX-License-Identifier: MIT
 import clsx from 'clsx'
 import { CheckCircle2, Circle, CircleDot, GitCompareArrows, SlidersHorizontal, XCircle } from 'lucide-react'
 import { Link } from 'react-router'

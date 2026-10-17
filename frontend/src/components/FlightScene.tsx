@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2026 Shayan Abrar
+// SPDX-License-Identifier: MIT
 /**
  * Live 3-D view of a keyboard flight: the Scene3D engine in live mode (rows arrive from the server
  * as the real environment is stepped), with the opponent's flight on the same seed as a ghost.

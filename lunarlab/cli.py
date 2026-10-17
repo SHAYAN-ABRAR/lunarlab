@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Shayan Abrar
+# SPDX-License-Identifier: MIT
 """Command-line interface: ``python -m lunarlab <command>``.
 
 Every command calls the same core functions as the web application.
@@ -49,6 +51,27 @@ def _fmt(v, nd=1, pct=False):
     if v is None:
         return "—"
     return f"{100 * v:.0f}%" if pct else f"{v:.{nd}f}"
+
+
+class _VersionAction(argparse.Action):
+    """``--version``: computed only when asked (it reads the git revision), then exits."""
+
+    def __init__(self, option_strings, dest=argparse.SUPPRESS, default=argparse.SUPPRESS, help=None):
+        super().__init__(option_strings=option_strings, dest=dest, default=default, nargs=0, help=help)
+
+    def __call__(self, parser, namespace, values, option_string=None):
+        from lunarlab.sysinfo import version_line
+
+        print(version_line())
+        parser.exit()
+
+
+def cmd_version(args) -> int:
+    from lunarlab.sysinfo import version_info, version_line
+
+    info = version_info()
+    print(json.dumps(info, indent=2) if args.json else version_line(info))
+    return 0
 
 
 # --------------------------------------------------------------------------- #
@@ -998,6 +1021,89 @@ def cmd_showcase(args) -> int:
     return 0
 
 
+def _write_report(report: dict, path: str | None) -> None:
+    if path:
+        Path(path).write_text(json.dumps(report, indent=2), encoding="utf-8", newline="\n")
+        print(f"report written to {path}")
+
+
+def cmd_reproduce_smoke(args) -> int:
+    from lunarlab.reproduce import run_smoke
+
+    print(
+        f"Reproducibility smoke test: {args.algo.upper()}, preset {args.preset}, {args.transitions:,} transitions, "
+        f"seed {args.seed}{', training twice' if args.training_determinism else ''} (isolated temporary home)"
+    )
+    report = run_smoke(
+        Path(args.workdir) if args.workdir else None,
+        transitions=args.transitions,
+        seed=args.seed,
+        preset_name=args.preset,
+        algo=args.algo,
+        training_determinism=args.training_determinism,
+        keep=args.keep,
+    )
+    print(
+        f"{'PASSED' if report['ok'] else 'FAILED'}: {sum(c['ok'] for c in report['checks'])}/{len(report['checks'])} checks in {report['elapsed_s']} s"
+    )
+    _write_report(report, args.report)
+    return 0 if report["ok"] else 1
+
+
+def cmd_export_artifact(args) -> int:
+    from lunarlab.reproduce import export_artifact
+
+    m = export_artifact(args.run_id, Path(args.out))
+    d = m["documented_metric"]
+    print(
+        f"exported {args.run_id} to {args.out}: checkpoint {m['files']['checkpoint.zip']['sha256'][:16]}, "
+        f"final test {d['n_episodes']} episodes, mean original return {d['mean_original_return']:.2f}, "
+        f"pad landing {d['pad_landing_rate']:.0%}"
+    )
+    return 0
+
+
+def cmd_reproduce_artifact(args) -> int:
+    from lunarlab.reproduce import reproduce_artifact
+
+    report = reproduce_artifact(Path(args.artifact), episodes=args.episodes, tolerance=args.tolerance)
+    print(
+        f"{'PASSED' if report['ok'] else 'FAILED'}: {report['artifact']}, {report['episodes']} episodes; mean original "
+        f"return recorded {report['recorded_mean_original_return']:.4f}, reproduced "
+        f"{report['reproduced_mean_original_return']:.4f}; pad landing recorded "
+        f"{report['recorded_pad_landing_rate']:.0%}, reproduced {report['reproduced_pad_landing_rate']:.0%}"
+    )
+    _write_report(report, args.report)
+    return 0 if report["ok"] else 1
+
+
+def cmd_overhead_benchmark(args) -> int:
+    from lunarlab.overhead import PROFILES, run_benchmark
+
+    p = PROFILES[args.profile]
+    transitions = args.transitions or p["transitions"]
+    repeats = args.repeats or p["repeats"]
+    runs = 3 * repeats
+    if args.profile == "comprehensive" and not _confirm(
+        f"The comprehensive benchmark trains {runs} PPO runs of {transitions:,} transitions (hours of CPU time). Continue?",
+        args.yes,
+    ):
+        return 1
+    print(
+        f"Overhead benchmark ({args.profile}): {runs} runs of {transitions:,} transitions, each in a fresh process"
+    )
+    res = run_benchmark(
+        args.profile,
+        transitions=transitions,
+        repeats=repeats,
+        out=Path(args.out) if args.out else None,
+        torch_threads=args.torch_threads,
+    )
+    print((Path(res["out"]) / "table.md").read_text(encoding="utf-8"))
+    print(f"raw measurements, summary, table and figures: {res['out']}")
+    return 0
+
+
 def cmd_export_demo(args) -> int:
     from lunarlab.demo import export_demo
 
@@ -1169,9 +1275,15 @@ def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(
         prog="python -m lunarlab", description="LunarLab — Reward Shaping Mission Control"
     )
+    p.add_argument(
+        "--version", action=_VersionAction, help="print the version, source revision and key dependencies"
+    )
     sub = p.add_subparsers(dest="command", required=True)
 
     sub.add_parser("doctor", help="check the installation").set_defaults(fn=cmd_doctor)
+    v = sub.add_parser("version", help="software identity: version, source revision, Python, dependencies")
+    v.add_argument("--json", action="store_true", help="machine-readable output")
+    v.set_defaults(fn=cmd_version)
 
     d = sub.add_parser("random-demo", help="record one RANDOM-policy episode")
     d.add_argument("--episode-seed", type=int, default=20_000)
@@ -1450,6 +1562,59 @@ def build_parser() -> argparse.ArgumentParser:
         help="allow uncommitted source changes; the snapshot is labelled a draft (a release export refuses them)",
     )
     ed.set_defaults(fn=cmd_export_demo)
+
+    rs = sub.add_parser(
+        "reproduce-smoke",
+        help="bounded end-to-end reproducibility check in an isolated temporary home (no web UI needed)",
+    )
+    rs.add_argument("--transitions", type=int, default=4096)
+    rs.add_argument("--seed", type=int, default=0)
+    rs.add_argument("--preset", choices=PRESET_NAMES, default="potential")
+    rs.add_argument("--algo", choices=["ppo", "dqn"], default="ppo")
+    rs.add_argument(
+        "--training-determinism",
+        action="store_true",
+        help="train the same configuration twice and compare weights and episodes",
+    )
+    rs.add_argument("--workdir", help="use this (new) folder instead of a temporary one")
+    rs.add_argument("--keep", action="store_true", help="keep the working folder for inspection")
+    rs.add_argument("--report", help="write the JSON report to this file")
+    rs.set_defaults(fn=cmd_reproduce_smoke)
+
+    ea = sub.add_parser(
+        "export-artifact",
+        help="copy a run's tested checkpoint, config and recorded final test into a reproduction package",
+    )
+    ea.add_argument("--run-id", required=True)
+    ea.add_argument("--out", required=True, help="new folder to create")
+    ea.set_defaults(fn=cmd_export_artifact)
+
+    ra = sub.add_parser(
+        "reproduce-artifact",
+        help="verify a reproduction package and re-evaluate its checkpoint on the recorded test seeds",
+    )
+    ra.add_argument("--artifact", required=True, help="folder written by export-artifact")
+    ra.add_argument("--episodes", type=int, help="only the first N recorded seeds (default: all)")
+    ra.add_argument(
+        "--tolerance",
+        type=float,
+        default=0.0,
+        help="absolute tolerance on returns (default 0: bit-identical)",
+    )
+    ra.add_argument("--report", help="write the JSON report to this file")
+    ra.set_defaults(fn=cmd_reproduce_artifact)
+
+    ob = sub.add_parser(
+        "overhead-benchmark",
+        help="measure LunarLab's instrumentation overhead against plain SB3 (time, memory, artifacts)",
+    )
+    ob.add_argument("--profile", choices=["smoke", "standard", "comprehensive"], default="smoke")
+    ob.add_argument("--transitions", type=int, help="override the profile's transitions per run")
+    ob.add_argument("--repeats", type=int, help="override the profile's repetitions per configuration")
+    ob.add_argument("--torch-threads", type=int, default=1)
+    ob.add_argument("--out", help="new output folder (default reports/jmlr/benchmarks/<profile>-<time>)")
+    ob.add_argument("--yes", action="store_true", help="required for the comprehensive profile")
+    ob.set_defaults(fn=cmd_overhead_benchmark)
 
     rb = sub.add_parser(
         "robustness", help="evaluate frozen checkpoints under wind/gravity they never trained on"

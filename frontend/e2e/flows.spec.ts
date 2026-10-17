@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2026 Shayan Abrar
+// SPDX-License-Identifier: MIT
 import { type Page, expect, test } from '@playwright/test'
 
 // End-to-end flows against the real backend (real PPO, real Box2D, real video encoding).

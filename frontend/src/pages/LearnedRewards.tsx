@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2026 Shayan Abrar
+// SPDX-License-Identifier: MIT
 import clsx from 'clsx'
 import { Brain, Equal, Network, SkipForward } from 'lucide-react'
 import { useCallback, useEffect, useRef, useState } from 'react'

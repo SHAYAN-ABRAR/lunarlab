@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2026 Shayan Abrar
+// SPDX-License-Identifier: MIT
 import clsx from 'clsx'
 import { Calculator, Download, FileUp, Lock, Rocket, Save } from 'lucide-react'
 import { type ReactNode, useEffect, useMemo, useState } from 'react'

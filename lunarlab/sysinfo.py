@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Shayan Abrar
+# SPDX-License-Identifier: MIT
 """Versions, hardware and source-control state recorded with every run."""
 
 from __future__ import annotations
@@ -24,6 +26,7 @@ TRACKED_PACKAGES = (
     "matplotlib",
     "imageio",
     "imageio-ffmpeg",
+    "optuna",
     "fastapi",
     "uvicorn",
     "pydantic",
@@ -33,6 +36,7 @@ TRACKED_PACKAGES = (
 
 
 def package_versions() -> dict[str, str | None]:
+    """Installed versions of the packages that affect results (None when missing)."""
     out: dict[str, str | None] = {}
     for name in TRACKED_PACKAGES:
         try:
@@ -66,6 +70,7 @@ def cpu_name() -> str:
 
 
 def hardware() -> dict:
+    """Platform, CPU model, core counts and RAM."""
     vm = psutil.virtual_memory()
     return {
         "platform": platform.platform(),
@@ -78,6 +83,7 @@ def hardware() -> dict:
 
 
 def torch_info() -> dict:
+    """PyTorch version, CUDA build and availability, and thread count."""
     try:
         import torch
 
@@ -92,6 +98,7 @@ def torch_info() -> dict:
 
 
 def git_state() -> dict:
+    """Source revision and whether the working tree has uncommitted changes (or why that is unavailable)."""
     root = project_root()
     if not (root / ".git").exists():
         return {"available": False, "reason": "not a git repository"}
@@ -109,7 +116,40 @@ def git_state() -> dict:
         return {"available": False, "reason": str(exc)[:200]}
 
 
+def version_info() -> dict:
+    """The software identity: LunarLab version, source revision, Python, platform and dependency versions.
+
+    ``lunarlab.__version__`` is the single authoritative version (the package metadata reads it).
+    """
+    from lunarlab import __version__
+
+    return {
+        "lunarlab": __version__,
+        "git": git_state(),
+        "python": sys.version.split()[0],
+        "python_implementation": platform.python_implementation(),
+        "platform": platform.platform(),
+        "packages": package_versions(),
+    }
+
+
+def version_line(info: dict | None = None) -> str:
+    """One human-readable line for ``python -m lunarlab --version``."""
+    info = info or version_info()
+    g = info["git"]
+    if g.get("available"):
+        source = g["revision"][:12] + (" with uncommitted changes" if g.get("dirty") else "")
+    else:
+        source = "no git revision"
+    pk = info["packages"]
+    return (
+        f"lunarlab {info['lunarlab']} (source {source}); Python {info['python']} on {info['platform']}; "
+        f"gymnasium {pk.get('gymnasium')}, stable-baselines3 {pk.get('stable-baselines3')}, torch {pk.get('torch')}"
+    )
+
+
 def snapshot() -> dict:
+    """Python version and executable, package versions, hardware, PyTorch, source revision and process ID."""
     return {
         "python": sys.version.split()[0],
         "python_executable": sys.executable,
