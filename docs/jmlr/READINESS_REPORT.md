@@ -68,6 +68,7 @@ Companion documents: [REQUIREMENTS_MATRIX.md](REQUIREMENTS_MATRIX.md) · [REPROD
 | Source archive | development machine | working-tree archive (318 files, 8.2 MB) installed into a fresh environment: `--version`, `doctor` 10/10, `reproduce-smoke` 14/14, 199 release tests passed |
 | Reproducibility | development machine | `reproduce-smoke` 15/15; artifacts `exact` 300/300 (status report schema 2) |
 | CI at `2c41b42` (before the corrections) | GitHub, run 39069730331 | all six jobs passed: Linux 445 passed, 4 skipped (Windows-only); Windows 3.12 and 3.13: 288 targeted tests each; source archive installed fresh (189 release tests); 15 browser flows |
+| CI of the follow-up (`38c9703`) | GitHub, run [39145707181](https://github.com/SHAYAN-ABRAR/lunarlab/actions/runs/39145707181) | **all six jobs passed**: Linux 489 passed, 4 skipped (reproduction `numerical-difference`, tolerated); Windows 3.12 and 3.13 (`exact`, 300/300); source archive byte-identical to the Windows build of the same commit; frontend; 15 browser flows |
 | CI of the corrections (`4fd30db`) | GitHub, run [39144191758](https://github.com/SHAYAN-ABRAR/lunarlab/actions/runs/39144191758) | Linux: 489 passed, 4 skipped, coverage 85.7 %; Windows 3.12 and 3.13 passed (reproduction `exact`, 300/300); source archive passed, byte-identical to the Windows build; Linux reproduction `numerical-difference` (tolerated, summary ok). The browser job failed once: a refresh race in the run page (a job that finishes between two status polls left the event log stale for up to 20 s), fixed in the next commit |
 
 ## D. Cross-platform reproducibility
@@ -91,9 +92,9 @@ PDF built (Tectonic 0.17.0, XeTeX): **4 description pages, 2 reference pages, 11
 undefined citations or references; abstract 191 words, running title 38 characters, five keywords, 16
 verified references. Figures redrawn at the printed size (6.0 in, all text ≥ 9 pt, checked automatically).
 Corrected claims: continuation, reproducibility, overhead, adapter scope (see [SCIENTIFIC_REVIEW.md](SCIENTIFIC_REVIEW.md)).
-Unresolved author fields (9 `\TODO` markers): author names, surnames, e-mail, affiliation and address, release tag,
-acknowledgements with the funding and competing-interests declaration, submission date; the editor and paper ID
-are JMLR's. About three lines are free on page 4 beyond the acknowledgements placeholder.
+Author: Shayan Abrar, sole author (confirmed 2026-10-18), who also approved the release candidate 0.1.0 and the
+work of this pass. Still open (5 `\TODO` markers): e-mail, affiliation and postal address, acknowledgements with
+the funding and competing-interests declaration, submission date; the editor and paper ID are JMLR's. About three lines are free on page 4 beyond the acknowledgements placeholder.
 
 ## F. Experimental integrity
 
@@ -106,7 +107,7 @@ temporary home.
 
 **MOSTLY READY — SPECIFIC TECHNICAL ISSUES REMAIN**
 
-The software, its tests and its documentation are in submission shape, and every claim in the manuscript is backed by stored evidence. Specific technical issues remain: (1) the corrected CI ran on `4fd30db` with five of six jobs passing; the browser job's failure, a refresh race in the run page, is fixed in the following commit, whose CI run is the remaining check; (2) coverage is 85.8 % (command-line orchestration 60 %), still short of the "close to 100 %" the MLOSS guidelines expect; (3) the PDF was built with XeTeX (Tectonic) and its page count is unconfirmed with pdflatex. Beyond these, submission needs what only people can provide: the authors' details, acknowledgements and declarations, an approved and tagged release, and, decisively, real evidence of an active user community, which does not exist today.
+The software, its tests and its documentation are in submission shape, and every claim in the manuscript is backed by stored evidence. Specific technical issues remain: (1) none left in CI — the full run of `38c9703` passed all six jobs; (2) coverage is 85.8 % (command-line orchestration 60 %), still short of the "close to 100 %" the MLOSS guidelines expect; (3) the PDF was built with XeTeX (Tectonic) and its page count is unconfirmed with pdflatex. Beyond these, submission needs what only people can provide: the authors' details, acknowledgements and declarations, an approved and tagged release, and, decisively, real evidence of an active user community, which does not exist today.
 
 No acceptance probability is estimated.
 

@@ -350,6 +350,12 @@ the full suite on Linux, the Windows-sensitive tests and the PowerShell scripts 
 outcome; nothing is masked), and builds the source archive twice, compares the bytes and installs it into a
 fresh environment.
 
+**CI run done:** on 2026-10-18 the full CI run of commit `38c9703` (run [39145707181](https://github.com/SHAYAN-ABRAR/lunarlab/actions/runs/39145707181)) passed all six jobs —
+Linux (489 tests passed, 4 Windows-only tests skipped; the published artifacts re-evaluated as numerical
+differences, no significant aggregate change), Windows with Python 3.12 and 3.13 (artifacts bit-identical, 300 of
+300 episodes), the source archive (built twice, byte-identical to a Windows build of the same commit, installed
+fresh with its release tests), the frontend, and the 15 browser flows.
+
 ## License and citation
 
 LunarLab is released under the [MIT License](LICENSE); every source file carries an SPDX license notice.

@@ -11,11 +11,10 @@ In submission order. ✅ done and verified · ⬜ open (with who must do it). De
   on Linux and Windows and the Linux trace comparison located the divergence in the simulator
   ([REPRODUCIBILITY.md](REPRODUCIBILITY.md)); the browser job's failure (a run-page refresh race) is fixed in the
   next commit.
-- ⬜ **Confirm that the next CI run is green**, including the browser job. *(maintainer)*
-- ⬜ **Confirm the license holder's name** in `LICENSE` and `CITATION.cff` ("Shayan Abrar", from the GitHub
-  profile), and whether MIT should also cover the experiment data, figures and documentation (a CC-BY license for
-  data and documentation is a common alternative). *(owner)*
-- ⬜ **Approve the release candidate.** Prepared: version **0.1.0**, the one every file already names
+- ✅ **CI green:** run [39145707181](https://github.com/SHAYAN-ABRAR/lunarlab/actions/runs/39145707181) on `38c9703` passed all six jobs (2026-10-18).
+- ✅ **Author and license holder:** Shayan Abrar, sole author; the MIT License as it stands was approved by the
+  author on 2026-10-18.
+- ✅ **Release candidate approved** by the author on 2026-10-18. Prepared: version **0.1.0**, the one every file already names
   (`lunarlab/__init__.py`, `CITATION.cff`, `frontend/package.json`; `tests/test_project_metadata.py` checks they
   agree). It has never been tagged or released, so no published version is reused. Provenance recorded before
   the release (`lunarlab 0.1.0 (source <commit> …)`) always names its commit. To release a different number, change
@@ -53,7 +52,9 @@ In submission order. ✅ done and verified · ⬜ open (with who must do it). De
   overfull lines or undefined references, under 5 MB; figures drawn at the 6.0 in text width with all text ≥ 9 pt
   (checked by `tools/paper_figures.py`). About five lines remain free on page 4 for the acknowledgements.
 - ⬜ Optionally confirm the page count with pdflatex (TeX Live or MiKTeX); see `BUILD.md`. *(authors)*
-- ⬜ **Author list, affiliations, corresponding author's postal and e-mail address.** *(authors)*
+- ✅ Author list: Shayan Abrar, sole author (filled in `main.tex`).
+- ⬜ **Affiliation, postal address and e-mail** of the author (kept out of the public repository until
+  submission). *(author)*
 - ⬜ **Acknowledgements and the funding and competing-interests declaration.** *(authors)*
 - ⬜ Replace the `\TODO` markers (dates, editor and paper ID are assigned by JMLR). *(authors)*
 

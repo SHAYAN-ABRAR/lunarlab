@@ -38,9 +38,9 @@ tectonic -X compile main.tex                                  # alternative: one
   and scaled down, about 5.6–7.7 pt printed; that was corrected.
 - `check_manuscript.py` passes: abstract within 200 words, running title 38 characters, five keywords, 16
   citations all present in `references.bib`, all figures present, all cross-references defined.
-- The manuscript contains `\TODO{…}` markers for information only the authors can provide (author list,
-  affiliation, e-mail, release tag, acknowledgements and the funding and competing-interests declaration);
-  nothing has been filled in on their behalf.
+- Author: Shayan Abrar, sole author; version 0.1.0 (approved 2026-10-18). `\TODO{…}` markers remain for what
+  only the author can provide (e-mail, affiliation and postal address, acknowledgements and the funding and
+  competing-interests declaration, submission date); the editor and paper ID are JMLR's.
 
 ## Figures
 
