@@ -7,8 +7,10 @@ guaranteed. Results come from three sources, each named where it is used:
   2026-10-17 and 2026-10-18;
 - **GitHub Actions run [39069730331](https://github.com/SHAYAN-ABRAR/lunarlab/actions/runs/39069730331)** on revision
   `2c41b42` (2026-10-18): `ubuntu-latest` with Python 3.12.3, and `windows-latest` with Python 3.12 and 3.13;
-- **controlled experiments** on the development machine (2026-10-18, branch `research/jmlr-mloss-corrections`),
-  stored in `reports/jmlr/reproducibility/`.
+- **GitHub Actions run [39144191758](https://github.com/SHAYAN-ABRAR/lunarlab/actions/runs/39144191758)** on revision `4fd30db` (2026-10-18), the first run of the corrected
+  reproduction report (schema 2: every episode) and of the per-step trace comparison; both runners have the same
+  CPU model (AMD EPYC 7763);
+- **controlled experiments** on the development machine (2026-10-18), stored in `reports/jmlr/reproducibility/`.
 
 ## Four separate properties
 
@@ -44,19 +46,24 @@ interval that excludes 0, so a single episode changing category was flagged
 | Published final tests (`reproduce-artifact`), artifact integrity | development machine; CI Linux, Windows 3.12, Windows 3.13 | file digests, configuration hash and "the recorded evaluation used this checkpoint" passed everywhere (CI ran report schema 1; the seed, protocol, reward and loaded-weights checks added since have run on the development machine) |
 | Same, episodes bit-identical | development machine; CI Windows 3.12 and 3.13 | **300 / 300** |
 | Same, episodes bit-identical | CI Linux | **0 / 300** (details below) |
+| Per-step traces against the development machine's | CI Windows (AMD EPYC 7763) | network outputs differ in the last bits (up to 3.1e-5) from step 0–1 but change no action; dynamics identical; every trajectory bit-identical |
+| Same | CI Linux (AMD EPYC 7763) | the same output differences, no action changed; the simulator departs under identical actions after 2–24 steps; every trajectory parts at exactly that step |
 
-## Cross-platform results (Linux, run 39069730331)
+## Cross-platform results (Linux)
 
-| Artifact | Bit-identical | Mean original return, recorded → Linux | Largest return difference | Pad landing, recorded → Linux |
-|---|---:|---:|---:|---:|
-| `ppo-baseline-s0` | 0 / 100 | 265.8558 → 265.8615 | 0.277 | 96 % → 96 % |
-| `ppo-hover-bonus-s0` | 0 / 100 | −21.2456 → −20.7658 | 126 | 0 % → 0 % |
-| `dqn-baseline-s0` | 0 / 100 | 155.3644 → 156.8764 | 192 | 29 % → 29 % |
+Run 39144191758 (report schema 2, every episode; the episodes are the same as in run 39069730331):
 
-The reports of that run (schema 1) listed only the first 20 differing episodes per artifact. In those samples
-the episode length agreed in 19/20 (PPO baseline), 20/20 (hover bonus) and 16/20 (DQN) episodes, the
-environment outcome and the pad-landing classification agreed in all 60, and every difference was in the return. Full per-episode agreement statistics and the paired conclusion tests come from the
-reproduction report of the next CI run (schema 2), which records every episode; they have not been measured yet.
+| Artifact | Status | Bit-identical | Mean original return, recorded → Linux | Original-return difference: median / largest | Outcomes agree | Lengths agree | Pad landing | Paired test of the mean (p) |
+|---|---|---:|---:|---:|---:|---:|---:|---:|
+| `ppo-baseline-s0` | `numerical-difference` | 0 / 100 | 265.8558 → 265.8615 | 0.0008 / 0.277 | 100 % | 97 % | 96 % → 96 % | 0.28 |
+| `ppo-hover-bonus-s0` | `numerical-difference` | 0 / 100 | −21.2456 → −20.7658 | 2.37 / 11.9 | 100 % | 100 % | 0 % → 0 % | 0.28 |
+| `dqn-baseline-s0` | `numerical-difference` | 0 / 100 | 155.3644 → 156.8764 | 0.0004 / 192 | 99 % | 80 % | 29 % → 29 % | 0.52 |
+
+Every outcome-rate test gave p = 1 (in all 300 episodes one DQN episode changed category), so no aggregate
+differs significantly and the CI step passed with the differences listed as tolerated. **Correction:** the
+first run's reports (schema 1) gave 126 as the hover bonus's "largest return difference"; that field took the
+maximum over the original *and the training* (shaped) return, and 126 was a training-return difference. The
+original return differs by at most 11.9.
 
 What the published results depend on is unchanged on Linux: the mean returns moved by 0.006, 0.48 and 1.51,
 inside the recorded 95 % intervals ([256.7, 273.6], [−25.1, −17.4] and [128.4, 182.2]), and the
@@ -75,13 +82,16 @@ MKL settings; reports in `reports/jmlr/reproducibility/`):
 | Run the policy network with other BLAS kernels (`MKL_ENABLE_INSTRUCTIONS=SSE4_2`, `MKL_CBWR=COMPATIBLE`) | network outputs differ from step 0–1 (up to 1.9e-6 for PPO logits, 3.1e-5 for DQN Q-values) but no greedy action changes: 300/300 episodes bit-identical | rounding differences in **policy inference** of this size do not explain the Linux results |
 | Perturb the simulator once, by one float32 unit in the last place of the lander's horizontal velocity after reset | 93–94 % of episodes change (6–7 bit-identical); median return difference 0.0015 (PPO baseline), 2.4 (hover bonus), 0.0005 (DQN); largest 0.18, 15 and 134; outcome agreement 100 %, 100 %, 99 %; no significant aggregate change (all p ≥ 0.33) | a minimal **simulator** difference is amplified by the closed loop into the pattern seen on Linux |
 
-The most plausible cause is therefore floating-point behaviour inside the simulator's compiled code (Box2D built
-by different compilers and C runtimes on Windows and Linux), amplified by the closed loop; on Linux every
-episode differs, consistent with a difference that recurs at every step rather than once. **This is not yet
-confirmed on Linux.** The direct test runs in CI from now on: `trace-artifact --compare` re-flies three traced
-episodes per artifact against Windows reference traces (`reports/jmlr/reproducibility/traces/`) and separates
-the two sources — the network evaluated on the *reference* observations (inference) and the environment stepped
-open-loop with the *reference* actions (dynamics) — and reports the first step at which each differs.
+**Confirmed on Linux (run 39144191758).** `trace-artifact --compare` re-flies three traced episodes per artifact
+against the Windows reference traces (`reports/jmlr/reproducibility/traces/`) and separates the two sources: the
+network evaluated on the *reference* observations (inference) and the environment stepped open-loop with the
+*reference* actions (dynamics). On both CI machines — the same CPU model, AMD EPYC 7763 — the network's outputs
+differ from the development machine's in the last bits (4.8e-7 to 3.1e-5) from the first steps, and no action
+changes. On Windows the dynamics are identical and every trajectory is bit-identical. On Linux the simulator,
+given the identical actions, first returns a different observation after 2–24 steps, by about one float32 unit
+in the last place (1.5e-8 to 8.9e-8), and in all nine episodes the closed-loop trajectory parts at exactly that
+step. The divergence therefore starts in the simulator — Box2D and the environment code as built for Linux —
+and the closed loop amplifies it; the network's rounding differences and the CPU are not the cause.
 
 ## Continuous integration
 
@@ -193,8 +203,9 @@ their SHA-256 digests and the documented metric):
 | `dqn-baseline-s0` | `20261015-224317-dqn-baseline-s0-custom-2fe1` | DQN, original reward | `8f1438011d97…` | 155.3644, pad landing 29 % |
 
 `tests/test_reproduce.py` checks their digests, configuration hashes and documented metrics on every test run.
-Reproductions: `reports/jmlr/artifacts/reproduce-*-windows.json` (development machine) and the CI artifacts
-`reproducibility-<platform>`. Windows reference traces of seeds 20000–20002 of each artifact:
+Reproductions: `reports/jmlr/artifacts/reproduce-*-windows.json` (development machine) and unmodified copies of
+the CI reports of runs 39069730331 and 39144191758 in `reports/jmlr/reproducibility/ci/` (GitHub keeps the
+uploaded artifacts for 30 days only). Windows reference traces of seeds 20000–20002 of each artifact:
 `reports/jmlr/reproducibility/traces/`.
 
 ## Reporting a reproduction

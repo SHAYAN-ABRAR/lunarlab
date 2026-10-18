@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2026 Shayan Abrar
 // SPDX-License-Identifier: MIT
 import { ArrowLeft, Camera, Download, FlaskConical, GitBranch, Play, ShieldCheck, Square } from 'lucide-react'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Link, useParams } from 'react-router'
 import { LineChartPanel, Sparkline } from '../components/charts'
 import { ActiveJobs, useJobWatch } from '../components/Jobs'
@@ -351,6 +351,19 @@ export default function RunDetail() {
   const validation = useApi<ValidationPoint[]>(`${base}/validation`, live ? 5000 : 30000)
   const events = useApi<{ time: string; level: string; message: string }[]>(`${base}/events?limit=120`, live ? 4000 : 20000)
   const latestJob = detail.data?.jobs[0]
+  // A short job can start and finish between two status polls, so `live` never turns on: refresh the run's
+  // records whenever its state or its latest job changes, or the event log and charts lag by up to 20-30 s.
+  const changeKey = `${detail.data?.status.state ?? ''}|${latestJob?.id ?? ''}|${latestJob?.state ?? ''}`
+  const { reload: reloadEvents } = events
+  const { reload: reloadCurve } = curve
+  const { reload: reloadMetrics } = metrics
+  const { reload: reloadValidation } = validation
+  useEffect(() => {
+    reloadEvents()
+    reloadCurve()
+    reloadMetrics()
+    reloadValidation()
+  }, [changeKey, reloadEvents, reloadCurve, reloadMetrics, reloadValidation])
 
   const curvePts = useMemo(() => curve.data?.points ?? [], [curve.data])
   const valPts = useMemo(() => (validation.data ?? []).map((v) => ({ ...v })), [validation.data])

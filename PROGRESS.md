@@ -25,7 +25,8 @@ problems that are now corrected on the branch `research/jmlr-mloss-corrections` 
 - **Cross-platform reproducibility:** on Linux none of the 300 published final-test episodes was bit-identical
   (Windows: 300/300). Characterised, not hidden: integrity, within-platform, cross-platform and conclusion
   stability are reported separately; controlled experiments locate the sensitivity in the simulator's compiled
-  float code amplified by the closed loop; per-step traces (`trace-artifact`) will confirm it in CI. The means and
+  float code amplified by the closed loop, and the per-step traces compared in CI confirmed it (the Linux simulator
+  departs under identical actions after 2–24 steps). The means and
   landing rates, and so the published conclusions, are unchanged on Linux.
 - **CI** no longer discards reproduction exit codes; a summary lists every outcome and fails on integrity
   errors, same-platform differences and significant aggregate changes.
@@ -46,7 +47,7 @@ problems that are now corrected on the branch `research/jmlr-mloss-corrections` 
 | Source archive | working-tree archive (318 files, 8.2 MB) installed into a fresh environment: `--version`, `doctor` 10/10, `reproduce-smoke` 14/14, 199 release tests passed |
 | Manuscript PDF | 4 description pages + 2 reference pages, 118 KB |
 | Evidence integrity | 1,699 files byte-identical to the baseline (runs, data, published results and media, demo snapshot, supplied artifacts, earlier reports and benchmark runs); 0 removed; 21 added (the clean benchmark run and the reproducibility evidence); the coverage report and the figures regenerated |
-| CI of the corrections | **not run** (nothing pushed) |
+| CI of the corrections (`4fd30db`, run 39144191758) | Linux 489 passed / 4 skipped (85.7 %), Windows 3.12 and 3.13 passed, source archive byte-identical to the Windows build, reproduction gates passed; browser job failed on a run-page refresh race, fixed in the next commit |
 
 ## JMLR-MLOSS readiness (2026-10-17/18)
 

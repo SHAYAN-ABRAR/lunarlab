@@ -128,9 +128,9 @@ weights). Three published final tests ship as artifacts whose re-evaluation sepa
 within-platform reproduction, cross-platform numerical agreement and conclusion stability (paired tests). All
 300 episodes were bit-identical on the development machine and on Windows CI (Python 3.12, 3.13); on Linux none
 was, with return differences up to 0.28 (PPO baseline) and 192 (DQN), yet mean returns within 1.6 and unchanged
-pad-landing rates. On Windows a one-ulp simulator perturbation changes 93--94\% of the episodes without a
-significant aggregate change, whereas other numerical kernels for the network change no greedy action;
-per-step traces compared in CI locate where trajectories part.
+pad-landing rates. Per-step traces locate the cause: given identical actions, the Linux simulator departs by about
+one float32 unit after 2--24 steps and the trajectories part there, while the network's last-bit differences
+change no action; a one-ulp perturbation on Windows likewise changes 93--94\% of the episodes, aggregates intact.
 
 \paragraph{Runtime and memory.} Table~\ref{tab:overhead} compares plain Stable-Baselines3 PPO with the same model
 trained through the reward accounting and through the full pipeline: the accounting costs at most a few percent

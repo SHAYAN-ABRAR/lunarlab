@@ -7,11 +7,11 @@ In submission order. ✅ done and verified · ⬜ open (with who must do it). De
 
 ## Before anything is submitted
 
-- ⬜ **Review and commit the correction branch** (`research/jmlr-mloss-corrections`). *(maintainer)*
-- ⬜ **Push and read CI.** New on this push: per-artifact reproduction statuses and the job summary, and the
-  first Linux run of `trace-artifact --compare`, which locates where Linux trajectories part from the Windows
-  traces and whether the difference starts in the simulator or in policy inference
-  ([REPRODUCIBILITY.md](REPRODUCIBILITY.md)). Record its result there. *(maintainer)*
+- ✅ **Corrections committed and pushed** (`4fd30db`, 2026-10-18); CI run 39144191758: reproduction gates passed
+  on Linux and Windows and the Linux trace comparison located the divergence in the simulator
+  ([REPRODUCIBILITY.md](REPRODUCIBILITY.md)); the browser job's failure (a run-page refresh race) is fixed in the
+  next commit.
+- ⬜ **Confirm that the next CI run is green**, including the browser job. *(maintainer)*
 - ⬜ **Confirm the license holder's name** in `LICENSE` and `CITATION.cff` ("Shayan Abrar", from the GitHub
   profile), and whether MIT should also cover the experiment data, figures and documentation (a CC-BY license for
   data and documentation is a common alternative). *(owner)*

@@ -32,7 +32,7 @@ second (below).
 | "PPO is better than DQN" | Not claimed. Budgets differ and are stated; the matched study is listed as not run. |
 | "RLHF solved the task" | Not claimed. With 3,000 simulated labels PPO learned to land in 54 % of test episodes; with 300 labels two of three runs exploited the learned reward. The original reward still enters through the simulated labeller and checkpoint selection, and this is stated. |
 | "The method generalizes" | Not claimed for the results. The software's adapter layer is demonstrated on CartPole only, as an example. |
-| "The platform guarantees reproducibility" | Not claimed. Bit-identity holds within a platform (development machine and CI Windows machines, Python 3.12 and 3.13: 300/300 episodes); on Linux 0/300 episodes were bit-identical while mean returns moved by at most 1.51 and pad-landing rates were identical. Integrity, within-platform, cross-platform and conclusion stability are reported separately (`REPRODUCIBILITY.md`). |
+| "The platform guarantees reproducibility" | Not claimed. Bit-identity holds within a platform (development machine and CI Windows machines, Python 3.12 and 3.13: 300/300 episodes); on Linux 0/300 episodes were bit-identical while mean returns moved by at most 1.51, pad-landing rates were identical and no aggregate differed significantly; the divergence starts in the Linux build of the simulator (trace comparison, run 39144191758). Integrity, within-platform, cross-platform and conclusion stability are reported separately (`REPRODUCIBILITY.md`). |
 | "Interrupted runs resume exactly" | **Was claimed** in the manuscript and in `RELATED_SOFTWARE.md`, `COMPARISON_EVIDENCE.md`, `REQUIREMENTS_MATRIX.md` and the README ("full training state"). **Corrected:** continuation restores the algorithm state (networks, optimizer, counters; for DQN the replay buffer, target-network phase and exploration) at a safe boundary; environments restart and random-number streams are not restored, so it is not bit-identical to uninterrupted training — as the code's own contract (`training.py`) already stated. |
 | "The instrumentation adds about 4 % to training time" | **Was stated without its scope.** Corrected: about 0–4 % of the *training loop* (two runs, one on a clean checkout); a complete run takes 1.22–1.23 times as long as plain SB3 because of the validation episodes the protocol requires, reported separately (`BENCHMARK_PROTOCOL.md`). |
 | "The adapter layer applies the accounting to any Gymnasium environment" | **Was too broad** (manuscript). Corrected: it applies to other Gymnasium environments through a small adapter, demonstrated on CartPole-v1 only; training, the evaluation protocol and checkpointing remain LunarLander-specific. |
@@ -50,12 +50,9 @@ No verifiable error in the published results was found, so no corrected analysis
 All commands exist and were smoke-tested; none of these was run here (compute rules), and none of their results
 exists. Times are for the development laptop (i7-13620H, CPU).
 
-1. **Cross-platform attribution and independent reproductions.** Linux and a second Windows machine have now
-   re-evaluated the artifacts in CI (run 39069730331). Still missing: the per-step trace comparison on Linux that
-   locates the first diverging step and separates simulator from inference differences (it runs in CI once the
-   corrections are pushed: `python -m lunarlab trace-artifact --artifact examples/artifacts/<name> --compare
-   reports/jmlr/reproducibility/traces/<name>-windows.npz`), and reproductions on machines not controlled by the
-   author.
+1. **Independent reproductions.** Linux and a second Windows machine re-evaluated the artifacts in CI, and the
+   per-step trace comparison located the cross-platform divergence in the simulator (run 39144191758). Still
+   missing: reproductions on machines not controlled by the author, and other CPU architectures.
 2. **More training seeds for the shaping comparison** (5 → 10 per group) to narrow the probability-of-improvement
    intervals: `python -m lunarlab suite --presets baseline,time-penalty,potential --seeds 5,6,7,8,9 --profile standard --parallel 5 --yes`
    — 15 runs × 1 M transitions, about 1–1.5 h with five in parallel.

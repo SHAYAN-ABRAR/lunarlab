@@ -19,7 +19,7 @@ Companion documents: [REQUIREMENTS_MATRIX.md](REQUIREMENTS_MATRIX.md) · [REPROD
 
 | Problem reported | Reproduced? | Cause | Kind | Fixed | Remaining |
 |---|---|---|---|---|---|
-| Linux CI: 0/100 episodes of each supplied artifact bit-identical | yes (CI reports of run 39069730331) | numerical divergence; experiments point to the simulator's compiled float code (Box2D builds), amplified by the closed loop: correctly rounded Python trigonometry changes nothing, other BLAS kernels change network outputs but no action, a one-ulp simulator perturbation produces the same pattern | scientific limitation | characterised; per-episode diagnostics, four separate properties, statuses and exit codes; Windows reference traces and a Linux trace comparison in CI | direct Linux confirmation of the first diverging step runs at the next CI run |
+| Linux CI: 0/100 episodes of each supplied artifact bit-identical | yes (CI reports of run 39069730331) | numerical divergence; experiments point to the simulator's compiled float code (Box2D builds), amplified by the closed loop: correctly rounded Python trigonometry changes nothing, other BLAS kernels change network outputs but no action, a one-ulp simulator perturbation produces the same pattern | scientific limitation | characterised; per-episode diagnostics, four separate properties, statuses and exit codes; Windows reference traces and a Linux trace comparison in CI | confirmed in CI run 39144191758: under identical actions the Linux simulator departs after 2–24 steps and the trajectories part there; the network's rounding differences change no action |
 | CI hid the Linux reproduction outcome (`|| true`) | yes | reporting problem | reporting | every exit code recorded; job summary; fails on integrity errors, same-platform differences, significant aggregate changes; test forbids masking | the corrected workflow has not run on GitHub |
 | "Interrupted runs resume exactly" (manuscript, JMLR docs, README "full training state") | yes | overstated wording; the code's own contract already said "not bit-identical" | reporting | wording corrected everywhere to the implemented contract (levels 1–2 yes, 3 partly, 4 no) | — |
 | Readiness documents described the pre-push state | yes | documents written before the push | reporting | matrix, checklist, reproducibility, progress and this report updated with commit IDs, run ID and dates | — |
@@ -68,20 +68,22 @@ Companion documents: [REQUIREMENTS_MATRIX.md](REQUIREMENTS_MATRIX.md) · [REPROD
 | Source archive | development machine | working-tree archive (318 files, 8.2 MB) installed into a fresh environment: `--version`, `doctor` 10/10, `reproduce-smoke` 14/14, 199 release tests passed |
 | Reproducibility | development machine | `reproduce-smoke` 15/15; artifacts `exact` 300/300 (status report schema 2) |
 | CI at `2c41b42` (before the corrections) | GitHub, run 39069730331 | all six jobs passed: Linux 445 passed, 4 skipped (Windows-only); Windows 3.12 and 3.13: 288 targeted tests each; source archive installed fresh (189 release tests); 15 browser flows |
-| CI of the corrections | — | **not run** (nothing pushed) |
+| CI of the corrections (`4fd30db`) | GitHub, run [39144191758](https://github.com/SHAYAN-ABRAR/lunarlab/actions/runs/39144191758) | Linux: 489 passed, 4 skipped, coverage 85.7 %; Windows 3.12 and 3.13 passed (reproduction `exact`, 300/300); source archive passed, byte-identical to the Windows build; Linux reproduction `numerical-difference` (tolerated, summary ok). The browser job failed once: a refresh race in the run page (a job that finishes between two status polls left the event log stale for up to 20 s), fixed in the next commit |
 
 ## D. Cross-platform reproducibility
 
 | Artifact | Bit-identical (Windows dev / CI Windows / CI Linux) | Mean return recorded → Linux | Largest / sampled typical difference (Linux) | Pad landing recorded → Linux |
 |---|---|---|---|---|
-| PPO baseline | 100 / 100 / 0 of 100 | 265.8558 → 265.8615 | 0.277 / 0.0028 (seed 20000) | 96 % → 96 % |
-| PPO hover bonus | 100 / 100 / 0 of 100 | −21.2456 → −20.7658 | 126 / 0.90 (seed 20000) | 0 % → 0 % |
-| DQN baseline | 100 / 100 / 0 of 100 | 155.3644 → 156.8764 | 192 / 0.0009 (seed 20000) | 29 % → 29 % |
+| PPO baseline | 100 / 100 / 0 of 100 | 265.8558 → 265.8615 | 0.277 / 0.0008 (median) | 96 % → 96 % |
+| PPO hover bonus | 100 / 100 / 0 of 100 | −21.2456 → −20.7658 | 11.9 / 2.37 (median) | 0 % → 0 % |
+| DQN baseline | 100 / 100 / 0 of 100 | 155.3644 → 156.8764 | 192 / 0.0004 (median) | 29 % → 29 % |
 
-Outcome agreement on Linux was measured only for the 20 episodes per artifact the old report kept: all
-environment outcomes and pad-landing classifications agreed, episode lengths in 55 of 60. The main scientific
-conclusions are stable: the reward-exploitation result (0 % pad landing for the hover bonus) and every mean
-return lie well inside the recorded intervals. Explanation and limitations: [REPRODUCIBILITY.md](REPRODUCIBILITY.md).
+On Linux (run 39144191758, every episode): outcomes agree in 100 %, 100 % and 99 % of the episodes, lengths in
+97 %, 100 % and 80 %; no aggregate differs significantly (paired tests of the means p = 0.28, 0.28, 0.52; every
+rate p = 1). The hover bonus's largest difference of the *original* return is 11.9; the 126 reported earlier was
+a training-return difference. The main scientific conclusions are stable: the reward-exploitation result (0 %
+pad landing for the hover bonus) and every mean return lie well inside the recorded intervals. The trace
+comparison locates the cause: the Linux simulator departs under identical actions after 2–24 steps. Explanation and limitations: [REPRODUCIBILITY.md](REPRODUCIBILITY.md).
 
 ## E. Manuscript status
 
@@ -104,7 +106,7 @@ temporary home.
 
 **MOSTLY READY — SPECIFIC TECHNICAL ISSUES REMAIN**
 
-The software, its tests and its documentation are in submission shape, and every claim in the manuscript is backed by stored evidence. Specific technical issues remain: (1) the corrections of this pass have run only on Windows — the corrected CI workflow, including the Linux trace comparison that should confirm where Linux trajectories part, runs only after the branch is pushed; (2) coverage is 85.8 % (command-line orchestration 60 %), still short of the "close to 100 %" the MLOSS guidelines expect; (3) the PDF was built with XeTeX (Tectonic) and its page count is unconfirmed with pdflatex. Beyond these, submission needs what only people can provide: the authors' details, acknowledgements and declarations, an approved and tagged release, and, decisively, real evidence of an active user community, which does not exist today.
+The software, its tests and its documentation are in submission shape, and every claim in the manuscript is backed by stored evidence. Specific technical issues remain: (1) the corrected CI ran on `4fd30db` with five of six jobs passing; the browser job's failure, a refresh race in the run page, is fixed in the following commit, whose CI run is the remaining check; (2) coverage is 85.8 % (command-line orchestration 60 %), still short of the "close to 100 %" the MLOSS guidelines expect; (3) the PDF was built with XeTeX (Tectonic) and its page count is unconfirmed with pdflatex. Beyond these, submission needs what only people can provide: the authors' details, acknowledgements and declarations, an approved and tagged release, and, decisively, real evidence of an active user community, which does not exist today.
 
 No acceptance probability is estimated.
 

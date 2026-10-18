@@ -135,10 +135,11 @@ none of them affected the published results: no number above changed
   reporting artifact integrity, within-platform reproduction, cross-platform agreement and the stability of the
   conclusions separately (bit-identical on Windows, including CI machines with Python 3.12 and 3.13; on Linux
   every episode differs numerically while the means and landing rates do not); `trace-artifact` locates where two
-  platforms' trajectories part; `overhead-benchmark` measures the cost against plain Stable-Baselines3 (reward
-  accounting 0–4 % of training-loop time; a complete run, validation episodes included, 1.22–1.23× as long); a
-  deterministic source archive that CI rebuilds byte for byte and installs fresh; and a task-adapter layer
-  (`lunarlab.audit`) that applies the same reward accounting to other Gymnasium environments, with a
+  platforms' trajectories part (on Linux the simulator's build departs after a few steps under identical
+  actions); `overhead-benchmark` measures the cost against plain Stable-Baselines3 (reward accounting 0–4 % of
+  training-loop time; a complete run, validation episodes included, 1.22–1.23× as long); a deterministic source
+  archive that CI rebuilds byte for byte and installs fresh; and a task-adapter layer (`lunarlab.audit`) that
+  applies the same reward accounting to other Gymnasium environments, with a
   [CartPole example](examples/cartpole_audit.py).
 
 ## Requirements
