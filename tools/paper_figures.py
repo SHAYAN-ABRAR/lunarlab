@@ -124,7 +124,45 @@ def _style():
     return plt
 
 
+TEXT_WIDTH_IN = 6.0  # \textwidth of jmlr2e.sty: figures are drawn at this width and included at natural size
+MIN_TEXT_PT = 9.0  # JMLR: "Captions, labels, and other text in illustrations: at least 9 pt"
+
+
+def check_print_size(fig) -> None:
+    """Refuse a figure wider than the text block, with text under 9 pt, or with text outside the canvas."""
+    width, _ = fig.get_size_inches()
+    if width > TEXT_WIDTH_IN + 1e-6:
+        raise ValueError(f"figure is {width:.2f} in wide; the JMLR text block is {TEXT_WIDTH_IN} in")
+    fig.canvas.draw()
+    renderer = fig.canvas.get_renderer()
+    canvas = fig.bbox
+    for t in fig.findobj(lambda a: hasattr(a, "get_fontsize") and hasattr(a, "get_text")):
+        if not t.get_visible() or not t.get_text().strip():
+            continue
+        if t.get_fontsize() < MIN_TEXT_PT:
+            raise ValueError(f"text {t.get_text()!r} is {t.get_fontsize()} pt (minimum {MIN_TEXT_PT})")
+        box = t.get_window_extent(renderer)
+        if (
+            box.x0 < canvas.x0 - 1
+            or box.x1 > canvas.x1 + 1
+            or box.y0 < canvas.y0 - 1
+            or box.y1 > canvas.y1 + 1
+        ):
+            raise ValueError(f"text {t.get_text()!r} extends beyond the figure")
+    for ax in fig.axes:
+        for patch in ax.patches:  # boxes and arrows drawn on the figure must not be clipped either
+            box = patch.get_window_extent(renderer)
+            if (
+                box.x0 < canvas.x0 - 1
+                or box.x1 > canvas.x1 + 1
+                or box.y0 < canvas.y0 - 1
+                or box.y1 > canvas.y1 + 1
+            ):
+                raise ValueError(f"{type(patch).__name__} extends beyond the figure")
+
+
 def _save(fig, name: str) -> list[str]:
+    check_print_size(fig)
     out = []
     for target in (FIG, PAPER):
         target.mkdir(parents=True, exist_ok=True)
@@ -148,7 +186,7 @@ def render_reward_accounting() -> dict:
             data.setdefault((r["preset"], r["return"]), []).append(
                 (int(r["transitions"]), float(r["median"]), float(r["min"]), float(r["max"]))
             )
-    fig, axes = plt.subplots(1, 3, figsize=(7.0, 2.4), sharey=True, constrained_layout=True)
+    fig, axes = plt.subplots(1, 3, figsize=(TEXT_WIDTH_IN, 2.0), sharey=True, layout="constrained")
     for ax, (preset, title) in zip(axes, PRESETS.items(), strict=True):
         for kind, style in (
             ("original", dict(color="#1f5f8b", ls="-")),
@@ -160,9 +198,11 @@ def render_reward_accounting() -> dict:
                     label={"original": "original return (task)", "training": "training return (optimised)"}[kind])  # fmt: skip
         ax.set_title(title, loc="left", fontsize=9)
         ax.axhline(200, color="#999", lw=0.7, ls=":")
+        ax.set_xticks([0, 0.5, 1.0])
         ax.grid(color="#eee")
     axes[0].set_ylabel("return per episode\n(rolling mean of 100)")
-    axes[0].legend(frameon=False, fontsize=7.5, loc="lower right")
+    handles, labels = axes[0].get_legend_handles_labels()
+    fig.legend(handles, labels, loc="outside upper center", ncol=2, frameon=False, fontsize=9)
     fig.supxlabel("environment transitions (millions)", fontsize=9)
     files = _save(fig, "reward_accounting")
     plt.close(fig)
@@ -182,8 +222,8 @@ def render_reward_accounting() -> dict:
 def render_overhead() -> dict:
     bench = sorted((ROOT / "reports" / "jmlr" / "benchmarks").glob("standard-*"))[-1]
     files = []
-    for ext in ("pdf", "svg", "png"):
-        for target in (FIG, PAPER):
+    for ext in ("pdf", "svg", "png"):  # the manuscript reports the benchmark as a table, not this figure
+        for target in (FIG,):
             target.mkdir(parents=True, exist_ok=True)
             shutil.copyfile(bench / f"overhead.{ext}", target / f"overhead.{ext}")
             files.append(f"{target.relative_to(ROOT).as_posix()}/overhead.{ext}")
@@ -201,39 +241,41 @@ def render_workflow() -> dict:
     plt = _style()
     from matplotlib.patches import FancyArrowPatch, FancyBboxPatch
 
-    fig, ax = plt.subplots(figsize=(7.0, 1.8))
+    fig = plt.figure(figsize=(TEXT_WIDTH_IN, 1.35))
+    ax = fig.add_axes((0, 0, 1, 1))
     ax.set_xlim(0, 100)
-    ax.set_ylim(0, 28)
+    ax.set_ylim(0, 22)
     ax.axis("off")
-    width, step = 18.2, 20.0
+    width, step = 17.4, 20.4
     boxes = [
-        "Reward design\nstrict schema\ncontent hash",
-        "Training (SB3)\nper-step accounting\ntrain = w·orig + Σ terms",
-        "Checkpoints\nSHA-256 manifest\nDQN replay state",
-        "Validation seeds\nselect checkpoint\n(original reward)",
-        "Final test\nfrozen, read-only\ndisjoint seeds",
+        "Reward design\nstrict schema,\ncontent hash",
+        "Training (SB3)\nevery reward\nterm recorded",
+        "Checkpoints\nSHA-256\nmanifest",
+        "Validation\nselects the\ncheckpoint",
+        "Final test\nfrozen copy,\nunseen seeds",
     ]
     for i, text in enumerate(boxes):
-        x = 0.9 + i * step
+        x = 0.6 + i * step
         ax.add_patch(
-            FancyBboxPatch((x, 12), width, 13, boxstyle="round,pad=0.3", fc="#eef3f7", ec="#1f5f8b", lw=0.9)
+            FancyBboxPatch(
+                (x, 8.4), width, 13.0, boxstyle="round,pad=0.25", fc="#eef3f7", ec="#1f5f8b", lw=0.9
+            )
         )
-        ax.text(x + width / 2, 18.5, text, ha="center", va="center", fontsize=6.5, linespacing=1.3)
+        ax.text(x + width / 2, 14.9, text, ha="center", va="center", fontsize=9, linespacing=1.2)
         if i:
             ax.add_patch(
                 FancyArrowPatch(
-                    (x - step + width + 0.5, 18.5),
-                    (x - 0.5, 18.5),
+                    (x - step + width + 0.4, 14.9),
+                    (x - 0.4, 14.9),
                     arrowstyle="-|>",
                     mutation_scale=8,
                     color="#1f5f8b",
                 )
             )
-    ax.text(50, 6.5, "Audit outputs: original vs training return per term · reward-exploitation diagnostics · statistics across "
-            "training seeds", ha="center", fontsize=6.5)  # fmt: skip
-    ax.text(50, 2.5, "per-step replay and re-scoring · provenance: configuration hash, seeds, versions, source revision, "
-            "checkpoint digests", ha="center", fontsize=6.5)  # fmt: skip
-    ax.text(100, 26.5, "conceptual diagram (no data)", ha="right", fontsize=5.5, color="#888")
+    ax.text(50, 4.5, "Audit record: original and training return per term, exploitation diagnostics,",
+            ha="center", va="center", fontsize=9)  # fmt: skip
+    ax.text(50, 1.4, "statistics across seeds, per-step replay, provenance (hashes, seeds, versions)",
+            ha="center", va="center", fontsize=9)  # fmt: skip
     files = _save(fig, "workflow")
     plt.close(fig)
     return {

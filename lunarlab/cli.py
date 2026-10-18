@@ -909,7 +909,9 @@ def cmd_warm_restart(args) -> int:
 
 def cmd_test_status(args) -> int:
     from lunarlab.freeze import test_status
+    from lunarlab.runs import load_config
 
+    load_config(args.run_id)  # an unknown run is an error, not "0 completed final tests"
     s = test_status(args.run_id)
     f = s["frozen_for_test"] or {}
     print(
@@ -1066,15 +1068,67 @@ def cmd_export_artifact(args) -> int:
 def cmd_reproduce_artifact(args) -> int:
     from lunarlab.reproduce import reproduce_artifact
 
+    if not _is_artifact(args.artifact):
+        return 2
     report = reproduce_artifact(Path(args.artifact), episodes=args.episodes, tolerance=args.tolerance)
     print(
-        f"{'PASSED' if report['ok'] else 'FAILED'}: {report['artifact']}, {report['episodes']} episodes; mean original "
-        f"return recorded {report['recorded_mean_original_return']:.4f}, reproduced "
-        f"{report['reproduced_mean_original_return']:.4f}; pad landing recorded "
-        f"{report['recorded_pad_landing_rate']:.0%}, reproduced {report['reproduced_pad_landing_rate']:.0%}"
+        f"{report['status'].upper()}{' (blocking)' if report['blocking'] else ''}: {report['artifact']}, "
+        f"{report['episodes']} episodes; mean original return recorded {report['recorded_mean_original_return']:.4f}, "
+        f"reproduced {report['reproduced_mean_original_return']:.4f}; pad landing recorded "
+        f"{report['recorded_pad_landing_rate']:.0%}, reproduced {report['reproduced_pad_landing_rate']:.0%}\n"
+        f"  {report['status_reason']}"
     )
     _write_report(report, args.report)
-    return 0 if report["ok"] else 1
+    return report["exit_code"]
+
+
+def _is_artifact(folder: str) -> bool:
+    if (Path(folder) / "artifact.json").is_file():
+        return True
+    print(
+        f"error: {folder} is not a reproduction package (no artifact.json); see export-artifact",
+        file=sys.stderr,
+    )
+    return False
+
+
+def cmd_trace_artifact(args) -> int:
+    from lunarlab.divergence import diagnose, record_traces
+
+    if not _is_artifact(args.artifact):
+        return 2
+    if args.compare and not (
+        Path(args.compare).is_file() and Path(args.compare).with_suffix(".json").is_file()
+    ):
+        print(f"error: no trace pair {args.compare} (+ .json); record one with --out", file=sys.stderr)
+        return 2
+    if args.compare:
+        report = diagnose(Path(args.artifact), Path(args.compare))
+        for e in report["episodes"]:
+            c = e["closed_loop"]
+            print(
+                f"  seed {e['seed']}: {e['source']}; first output difference at step "
+                f"{e['inference']['first_output_difference_step']} ({e['inference']['action_flips']} action flips), "
+                f"first open-loop observation difference at step {e['dynamics']['first_observation_difference_step']}; "
+                f"closed loop parts at step {c['first_observation_difference_step']}, return "
+                f"{c['reference_return']:.4f} -> {c['return']:.4f}"
+            )
+        verdict = "IDENTICAL" if report["identical"] else "DIFFERENT"
+        print(
+            f"{verdict}: {report['artifact']} against {report['reference']['file']}; sources: {', '.join(report['sources'])}"
+        )
+        _write_report(report, args.report)
+        if "unexplained" in report["sources"]:
+            return 1  # the closed loop differs although inference and dynamics do not: nondeterminism
+        return 0 if report["identical"] else 3
+    meta = record_traces(Path(args.artifact), [int(s) for s in args.seeds.split(",")], Path(args.out))
+    for e in meta["episodes"]:
+        print(
+            f"  seed {e['seed']}: {e['steps']} steps, return {e['original_return']:.4f}"
+            f"{'' if e['matches_recorded_return'] else ' (differs from the recorded evaluation)'}"
+        )
+    print(f"traces written to {args.out} and {Path(args.out).with_suffix('.json')}")
+    return 0 if all(e["matches_recorded_return"] for e in meta["episodes"]) else 1
 
 
 def cmd_overhead_benchmark(args) -> int:
@@ -1592,6 +1646,10 @@ def build_parser() -> argparse.ArgumentParser:
     ra = sub.add_parser(
         "reproduce-artifact",
         help="verify a reproduction package and re-evaluate its checkpoint on the recorded test seeds",
+        description="Exit status: 0 = every episode bit-identical (or within --tolerance); 3 = numerical "
+        "differences on a different platform with integrity intact and no aggregate differing significantly from "
+        "the record in paired tests (reported, not failed); 1 = integrity failure, a difference on the recording "
+        "platform, or a significant aggregate difference; 2 = invalid arguments (or no artifact.json in the folder).",
     )
     ra.add_argument("--artifact", required=True, help="folder written by export-artifact")
     ra.add_argument("--episodes", type=int, help="only the first N recorded seeds (default: all)")
@@ -1603,6 +1661,22 @@ def build_parser() -> argparse.ArgumentParser:
     )
     ra.add_argument("--report", help="write the JSON report to this file")
     ra.set_defaults(fn=cmd_reproduce_artifact)
+
+    ta = sub.add_parser(
+        "trace-artifact",
+        help="record per-step traces of an artifact's test episodes, or locate where this machine departs from them",
+        description="--out records traces (observations, network outputs, actions, rewards) on this machine. "
+        "--compare re-flies the traced episodes here and separates policy-inference from simulator-dynamics "
+        "differences. Exit status for --compare: 0 = identical, 3 = differences located (reported, not failed), "
+        "1 = the closed loop differs although neither inference nor dynamics does; 2 = invalid arguments.",
+    )
+    ta.add_argument("--artifact", required=True, help="folder written by export-artifact")
+    tmode = ta.add_mutually_exclusive_group(required=True)
+    tmode.add_argument("--out", help="record: write the traces to this .npz (metadata next to it as .json)")
+    tmode.add_argument("--compare", help="compare: a .npz written by --out")
+    ta.add_argument("--seeds", default="20000,20001,20002", help="record: comma-separated test seeds")
+    ta.add_argument("--report", help="compare: write the JSON report to this file")
+    ta.set_defaults(fn=cmd_trace_artifact)
 
     ob = sub.add_parser(
         "overhead-benchmark",
@@ -1682,6 +1756,10 @@ def build_parser() -> argparse.ArgumentParser:
     return p
 
 
+# Single-id arguments, validated before any command runs (the ids LunarLab generates always pass).
+ID_ARGUMENTS = ("run_id", "experiment_id", "recording_id", "study_id", "dataset_id")
+
+
 def main(argv: list[str] | None = None) -> int:
     # When output is piped on Windows, Python uses the ANSI code page; never crash on
     # characters such as "≥" or "—" that it cannot encode.
@@ -1691,9 +1769,29 @@ def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
     from lunarlab.config import ProtocolError
     from lunarlab.runs import RunError
+    from lunarlab.storage import validate_run_id
 
+    ids = {name: v for name in ID_ARGUMENTS if isinstance(v := getattr(args, name, None), str)}
+    for name, value in ids.items():
+        try:
+            validate_run_id(value)
+        except ValueError:
+            print(
+                f"error: --{name.replace('_', '-')} {value!r} is not a valid id "
+                "(letters, digits, '-' and '_'; at most 96 characters)",
+                file=sys.stderr,
+                flush=True,
+            )
+            return 2
     try:
         return int(args.fn(args) or 0)
     except (RunError, ProtocolError) as exc:
         print(f"error: {exc}", file=sys.stderr, flush=True)
+        return 1
+    except KeyError as exc:
+        # The stores raise KeyError(<id>) for an id that does not exist; any other KeyError is a bug.
+        name = next((n for n, v in ids.items() if exc.args and exc.args[0] == v), None)
+        if name is None:
+            raise
+        print(f"error: unknown {name.removesuffix('_id')}: {exc.args[0]}", file=sys.stderr, flush=True)
         return 1

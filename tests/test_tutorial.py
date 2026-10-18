@@ -62,11 +62,11 @@ def test_every_tutorial_command_runs_in_order(tmp_path, monkeypatch):
             code = main(shlex.split(cmd))
         except SystemExit as exc:  # argparse handles --version itself
             code = exc.code
-        # The supplied artifacts were recorded on Windows: elsewhere `reproduce-artifact` may report (exit 1)
-        # that episodes differ, which is a result, not a failure of the command. Exact cross-platform
-        # agreement is not claimed; CI records it separately.
+        # The supplied artifacts were recorded on Windows: on another platform `reproduce-artifact` reports
+        # numerical differences with exit status 3 (not a failure; bit-identity across platforms is not claimed).
+        # Exit status 1 (integrity failure, significant aggregate difference) still fails the tutorial.
         allowed = (
-            (0, None, 1)
+            (0, None, 3)
             if cmd.startswith("reproduce-artifact --artifact ") and "examples/" in cmd
             else (0, None)
         )

@@ -7,7 +7,7 @@ Details per finding: [AUDIT_FIXES.md](AUDIT_FIXES.md).
 
 | Area | Before | Now |
 |---|---|---|
-| DQN resume | weights and two counters only; empty replay buffer, greedy first steps, target updates out of phase | full continuation from checkpoints written from now on; older DQN checkpoints are refused for resume and offer a **warm restart** (a new run) |
+| DQN resume | weights and two counters only; empty replay buffer, greedy first steps, target updates out of phase | continuation with the replay buffer and algorithm state from checkpoints written from now on (not bit-identical to an uninterrupted run); older DQN checkpoints are refused for resume and offer a **warm restart** (a new run) |
 | Stopping DQN | rolled back like PPO | stops at the next rollout boundary (after the current rollout's gradient steps); discarded interactions are recorded |
 | Validation-selected checkpoint | `best_validation.zip`, rewritten at every new best | `best_validation-<transitions>.zip`, one file per selection; the manifest's best entry moves |
 | Final test | freezes a file name; the run could still train; no lock | freezes an immutable read-only copy; the run never trains again; runs under the run lock; attempts recorded; incomplete tests retried |

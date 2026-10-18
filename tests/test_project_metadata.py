@@ -130,3 +130,22 @@ def test_issue_forms_are_valid_yaml_with_a_body(name):
     form = yaml.safe_load((ROOT / ".github" / "ISSUE_TEMPLATE" / name).read_text(encoding="utf-8"))
     assert form["name"] and form["description"] and form["body"]
     assert all("type" in item for item in form["body"])
+
+
+def test_provenance_outside_a_git_checkout_says_so(tmp_path, monkeypatch):
+    """An installed source archive has no .git: provenance must say "no git revision", not fail."""
+    from lunarlab import sysinfo
+
+    monkeypatch.setattr(sysinfo, "project_root", lambda: tmp_path)
+    state = sysinfo.git_state()
+    assert state == {"available": False, "reason": "not a git repository"}
+    info = sysinfo.version_info()
+    assert info["git"] == state and "no git revision" in sysinfo.version_line(info)
+
+
+def test_a_missing_tracked_package_is_reported_as_none(monkeypatch):
+    from lunarlab import sysinfo
+
+    monkeypatch.setattr(sysinfo, "TRACKED_PACKAGES", ("numpy", "no-such-package-lunarlab"))
+    versions = sysinfo.package_versions()
+    assert versions["numpy"] == md.version("numpy") and versions["no-such-package-lunarlab"] is None

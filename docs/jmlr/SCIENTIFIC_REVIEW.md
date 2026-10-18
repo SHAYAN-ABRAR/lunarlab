@@ -1,7 +1,9 @@
 # Scientific validity review of the published results and claims
 
-Reviewed on 2026-10-17/18 against the stored records (read-only). No result was recomputed into the published
-files; one sentence was reworded (below).
+Reviewed on 2026-10-17/18 against the stored records (read-only), and again on 2026-10-18 after CI ran the
+readiness branch on Linux (correction pass). No result was recomputed into the published files; one sentence
+of `docs/RESULTS.md` was reworded in the first pass, and four claims about the software were corrected in the
+second (below).
 
 ## Checks
 
@@ -30,7 +32,10 @@ files; one sentence was reworded (below).
 | "PPO is better than DQN" | Not claimed. Budgets differ and are stated; the matched study is listed as not run. |
 | "RLHF solved the task" | Not claimed. With 3,000 simulated labels PPO learned to land in 54 % of test episodes; with 300 labels two of three runs exploited the learned reward. The original reward still enters through the simulated labeller and checkpoint selection, and this is stated. |
 | "The method generalizes" | Not claimed for the results. The software's adapter layer is demonstrated on CartPole only, as an example. |
-| "The platform guarantees reproducibility" | Not claimed. Bit-identity is reported for one platform; cross-platform agreement is reported per episode, not assumed. |
+| "The platform guarantees reproducibility" | Not claimed. Bit-identity holds within a platform (development machine and CI Windows machines, Python 3.12 and 3.13: 300/300 episodes); on Linux 0/300 episodes were bit-identical while mean returns moved by at most 1.51 and pad-landing rates were identical. Integrity, within-platform, cross-platform and conclusion stability are reported separately (`REPRODUCIBILITY.md`). |
+| "Interrupted runs resume exactly" | **Was claimed** in the manuscript and in `RELATED_SOFTWARE.md`, `COMPARISON_EVIDENCE.md`, `REQUIREMENTS_MATRIX.md` and the README ("full training state"). **Corrected:** continuation restores the algorithm state (networks, optimizer, counters; for DQN the replay buffer, target-network phase and exploration) at a safe boundary; environments restart and random-number streams are not restored, so it is not bit-identical to uninterrupted training — as the code's own contract (`training.py`) already stated. |
+| "The instrumentation adds about 4 % to training time" | **Was stated without its scope.** Corrected: about 0–4 % of the *training loop* (two runs, one on a clean checkout); a complete run takes 1.22–1.23 times as long as plain SB3 because of the validation episodes the protocol requires, reported separately (`BENCHMARK_PROTOCOL.md`). |
+| "The adapter layer applies the accounting to any Gymnasium environment" | **Was too broad** (manuscript). Corrected: it applies to other Gymnasium environments through a small adapter, demonstrated on CartPole-v1 only; training, the evaluation protocol and checkpointing remain LunarLander-specific. |
 | "The tool prevents reward hacking" | Not claimed. LunarLab measures and exposes exploitation. |
 | Real-world rocket control | Explicitly disclaimed (2-D simulation benchmark). |
 
@@ -45,9 +50,12 @@ No verifiable error in the published results was found, so no corrected analysis
 All commands exist and were smoke-tested; none of these was run here (compute rules), and none of their results
 exists. Times are for the development laptop (i7-13620H, CPU).
 
-1. **Cross-platform reproduction of the supplied artifacts** (Linux, other CPUs): the strongest missing evidence
-   for the reproducibility claims. Minutes per machine:
-   `python -m lunarlab reproduce-artifact --artifact examples/artifacts/<name> --report <file>` (three artifacts).
+1. **Cross-platform attribution and independent reproductions.** Linux and a second Windows machine have now
+   re-evaluated the artifacts in CI (run 39069730331). Still missing: the per-step trace comparison on Linux that
+   locates the first diverging step and separates simulator from inference differences (it runs in CI once the
+   corrections are pushed: `python -m lunarlab trace-artifact --artifact examples/artifacts/<name> --compare
+   reports/jmlr/reproducibility/traces/<name>-windows.npz`), and reproductions on machines not controlled by the
+   author.
 2. **More training seeds for the shaping comparison** (5 → 10 per group) to narrow the probability-of-improvement
    intervals: `python -m lunarlab suite --presets baseline,time-penalty,potential --seeds 5,6,7,8,9 --profile standard --parallel 5 --yes`
    — 15 runs × 1 M transitions, about 1–1.5 h with five in parallel.

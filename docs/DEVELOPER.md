@@ -16,10 +16,10 @@ generated API reference is in [api/](api/README.md); contribution rules are in [
 | Evaluation and freezing | `evaluation.py`, `freeze.py`, `lineage.py`, `robustness.py` | original-reward evaluation and aggregates; immutable final-test checkpoints and attempts; warm restarts and test exposure; robustness conditions |
 | Inspection | `recording.py`, `rescoring.py`, `play.py` | video + per-step telemetry; counterfactual re-scoring; human flights |
 | Studies | `experiments.py`, `compare.py`, `rl_stats.py`, `stats.py`, `results.py`, `report.py`, `tuning.py`, `preferences/` | experiment groups; comparisons and statistics across seeds; published tables and figures; Optuna tuning; learned rewards |
-| Reproducibility | `reproduce.py`, `overhead.py`, `sysinfo.py`, `demo.py` | smoke pipeline and artifact re-evaluation; overhead benchmark; versions and source revision; static demo export |
+| Reproducibility | `reproduce.py`, `divergence.py`, `overhead.py`, `sysinfo.py`, `demo.py` | smoke pipeline and artifact re-evaluation (integrity, within- and cross-platform reproduction, conclusion stability; statuses and exit codes); per-step traces locating where two platforms part; overhead benchmark; versions and source revision; static demo export |
 | Application | `cli.py`, `jobs.py`, `db.py`, `procs.py`, `parallel.py`, `server/`, `doctor.py` | command line; job supervisor and worker processes; SQLite metadata; local HTTP API; installation checks |
 | Frontend | `frontend/src/` | React/TypeScript mission-control UI (same API as the CLI) |
-| Maintainer tools | `tools/` | source archive, API reference, SPDX headers, third-party notices |
+| Maintainer tools | `tools/` | source archive, API reference, SPDX headers, third-party notices, paper figures (with a print-size check), CI reproduction summary, reproducibility experiments |
 
 ## The reward wrapper lifecycle
 
@@ -106,3 +106,20 @@ bodies are validated strictly; run and file names are validated before use as pa
 Markers: `integration` (real LunarLander, fast), `slow` (real PPO/DQN updates or video). Windows-only tests (file
 locks, PowerShell scripts) skip elsewhere. Every test runs in its own temporary `LUNARLAB_HOME`
 (`tests/conftest.py`), so no test can touch real experiment data.
+
+The browser flows (`frontend/e2e/`, `npx playwright test`) start two backends and shut them down through
+`/api/shutdown` when they finish (`e2e/teardown.ts`), so the backends exit normally. To include them in a
+coverage measurement, run the Python suite with `--cov` first (it leaves `.coverage`), then, from `frontend/`:
+
+```powershell
+$env:COVERAGE_PROCESS_START = (Resolve-Path ..\pyproject.toml); $env:COVERAGE_FILE = (Join-Path (Resolve-Path ..) '.coverage.e2e')
+npx playwright test
+cd ..; .venv\Scripts\python.exe -m coverage combine --append; .venv\Scripts\python.exe -m coverage report
+```
+
+## Releasing
+
+A release is a tag on `main` whose CI run passed, plus the source archive built from it. The exact commands
+(maintainer only; nothing is tagged or published automatically) are in
+[jmlr/SUBMISSION_CHECKLIST.md](jmlr/SUBMISSION_CHECKLIST.md). The version lives in `lunarlab/__init__.py`;
+`CITATION.cff` and `frontend/package.json` must name the same version (`tests/test_project_metadata.py`).

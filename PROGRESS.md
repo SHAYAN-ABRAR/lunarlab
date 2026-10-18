@@ -16,6 +16,38 @@ _Last updated: 2026-10-18._
 | Audit repair (DQN continuation, final-test freezing, outcome classifier v2, protocol validation, Windows CI, provenance, wording) | **done**, committed and verified in CI on GitHub (Linux and Windows) ([docs/AUDIT_FIXES.md](docs/AUDIT_FIXES.md)) |
 | JMLR-MLOSS readiness (license, release tooling, coverage, reproducibility, benchmark, comparison, adapter layer, documentation, manuscript scaffold) | **implemented and verified locally** on branch `research/jmlr-mloss-readiness`, not committed ([docs/jmlr/READINESS_REPORT.md](docs/jmlr/READINESS_REPORT.md)); the extended CI has not run on GitHub; manuscript and community evidence need the authors |
 
+## JMLR-MLOSS correction pass (2026-10-18)
+
+An independent review of the pushed readiness work (`2c41b42`, CI run 39069730331, all six jobs green) found
+problems that are now corrected on the branch `research/jmlr-mloss-corrections` (uncommitted). Full account:
+[docs/jmlr/READINESS_REPORT.md](docs/jmlr/READINESS_REPORT.md).
+
+- **Cross-platform reproducibility:** on Linux none of the 300 published final-test episodes was bit-identical
+  (Windows: 300/300). Characterised, not hidden: integrity, within-platform, cross-platform and conclusion
+  stability are reported separately; controlled experiments locate the sensitivity in the simulator's compiled
+  float code amplified by the closed loop; per-step traces (`trace-artifact`) will confirm it in CI. The means and
+  landing rates, and so the published conclusions, are unchanged on Linux.
+- **CI** no longer discards reproduction exit codes; a summary lists every outcome and fails on integrity
+  errors, same-platform differences and significant aggregate changes.
+- **Continuation** wording corrected everywhere: the algorithm state is restored, continuation is not
+  bit-identical.
+- **Benchmark** repeated on a clean checkout; training-loop overhead and full wall clock reported separately.
+- **Tests** for the parallel runner, the served backend, supervisor crash recovery, CLI and HTTP errors; two bugs
+  they found are fixed (a crashed worker left its run "running"; CLI tracebacks on invalid or unknown ids).
+- **Manuscript** compiled for the first time (isolated Tectonic): four description pages, figures redrawn at print
+  size (≥ 9 pt, checked), claims corrected.
+
+| Check (2026-10-18, branch `research/jmlr-mloss-corrections`) | Result |
+|---|---|
+| `python -m pytest --cov` (Windows 11, Python 3.12) | **493 passed**, 85.8 % statement + branch coverage |
+| Fast suite on Python 3.13 (Windows 11) | 417 passed (76 slow tests deselected); `reproduce-smoke` 15/15 |
+| `npx playwright test` | 15 passed (Microsoft Edge); both backends shut down through `/api/shutdown` |
+| Frontend typecheck / lint / build | `tsc`, `oxlint` and the production build clean |
+| Source archive | working-tree archive (318 files, 8.2 MB) installed into a fresh environment: `--version`, `doctor` 10/10, `reproduce-smoke` 14/14, 199 release tests passed |
+| Manuscript PDF | 4 description pages + 2 reference pages, 118 KB |
+| Evidence integrity | 1,699 files byte-identical to the baseline (runs, data, published results and media, demo snapshot, supplied artifacts, earlier reports and benchmark runs); 0 removed; 21 added (the clean benchmark run and the reproducibility evidence); the coverage report and the figures regenerated |
+| CI of the corrections | **not run** (nothing pushed) |
+
 ## JMLR-MLOSS readiness (2026-10-17/18)
 
 Work for a possible submission to the JMLR open-source software track; the full report, with the requirements

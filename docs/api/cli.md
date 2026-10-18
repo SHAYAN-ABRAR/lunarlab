@@ -4,7 +4,7 @@ Generated from the parser in `lunarlab/cli.py`. Run any command with `--help` fo
 
 ```text
 usage: python -m lunarlab [-h] [--version]
-                          {doctor,version,random-demo,heuristic-demo,train,resume,stop,evaluate,record,compare,report,suite,run-experiment,rlhf-dataset,reward-model,rlhf-active,rlhf-study,tune,tune-resume,tune-status,tune-cancel,tune-apply,record-showcase,results,showcase,warm-restart,test-status,freeze-migrate,reclassify-outcomes,export-demo,reproduce-smoke,export-artifact,reproduce-artifact,overhead-benchmark,robustness,robustness-run,train-run,sweep,runs,rescore,benchmark,reward,serve,processes,worker}
+                          {doctor,version,random-demo,heuristic-demo,train,resume,stop,evaluate,record,compare,report,suite,run-experiment,rlhf-dataset,reward-model,rlhf-active,rlhf-study,tune,tune-resume,tune-status,tune-cancel,tune-apply,record-showcase,results,showcase,warm-restart,test-status,freeze-migrate,reclassify-outcomes,export-demo,reproduce-smoke,export-artifact,reproduce-artifact,trace-artifact,overhead-benchmark,robustness,robustness-run,train-run,sweep,runs,rescore,benchmark,reward,serve,processes,worker}
                           ...
 ```
 
@@ -584,6 +584,23 @@ usage: python -m lunarlab test-status [-h] --run-id RUN_ID
 | Argument | Description |
 |---|---|
 | `--run-id` | required.  |
+
+## `trace-artifact`
+
+record per-step traces of an artifact's test episodes, or locate where this machine departs from them
+
+```text
+usage: python -m lunarlab trace-artifact [-h] --artifact ARTIFACT (--out OUT | --compare COMPARE)
+                                         [--seeds SEEDS] [--report REPORT]
+```
+
+| Argument | Description |
+|---|---|
+| `--artifact` | required. folder written by export-artifact |
+| `--out` | record: write the traces to this .npz (metadata next to it as .json) |
+| `--compare` | compare: a .npz written by --out |
+| `--seeds` | record: comma-separated test seeds (default: `20000,20001,20002`) |
+| `--report` | compare: write the JSON report to this file |
 
 ## `train`
 

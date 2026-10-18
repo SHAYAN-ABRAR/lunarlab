@@ -10,6 +10,7 @@ const python = `"${venvPython.split(path.sep).join('/')}"`
 
 export default defineConfig({
   testDir: './e2e',
+  globalTeardown: './e2e/teardown.ts',
   timeout: 240_000,
   expect: { timeout: 15_000 },
   fullyParallel: false,

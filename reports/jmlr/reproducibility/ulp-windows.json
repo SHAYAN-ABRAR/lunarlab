@@ -1,0 +1,247 @@
+{
+ "created_at": "2026-10-18T13:44:58+00:00",
+ "software": {
+  "lunarlab": "0.1.0",
+  "git": {
+   "available": true,
+   "revision": "2c41b422e6bab1feb702d4d1901b337f0fcd21a7",
+   "dirty": true
+  },
+  "python": "3.12.13",
+  "python_implementation": "CPython",
+  "platform": "Windows-11-10.0.26300-SP0",
+  "packages": {
+   "gymnasium": "1.4.0",
+   "Box2D": "2.3.10",
+   "pygame": "2.6.1",
+   "stable-baselines3": "2.9.0",
+   "torch": "2.14.1",
+   "numpy": "2.5.4",
+   "pandas": "3.0.6",
+   "matplotlib": "3.11.2",
+   "imageio": "2.38.1",
+   "imageio-ffmpeg": "0.6.0",
+   "optuna": "5.0.0",
+   "fastapi": "0.143.1",
+   "uvicorn": "0.54.0",
+   "pydantic": "2.14.1",
+   "psutil": "7.2.2",
+   "PyYAML": "6.0.3"
+  }
+ },
+ "hardware": {
+  "platform": "Windows-11-10.0.26300-SP0",
+  "machine": "AMD64",
+  "cpu": "13th Gen Intel(R) Core(TM) i7-13620H",
+  "physical_cores": 10,
+  "logical_cores": 16,
+  "ram_gb": 16.8
+ },
+ "experiment": "one float32 ulp added to the lander's horizontal velocity right after reset",
+ "results": {
+  "ppo-baseline-s0": {
+   "episodes": 100,
+   "bit_identical": 6,
+   "summary": {
+    "n": 100,
+    "agreement": {
+     "bit_identical": 0.06,
+     "length": 0.98,
+     "termination": 1.0,
+     "env_outcome": 1.0,
+     "pad_landing": 1.0,
+     "all_outcome_fields": 1.0
+    },
+    "return_difference": {
+     "mean_abs": 0.006489486952266077,
+     "median_abs": 0.0015384253430283934,
+     "p90_abs": 0.010866395402558739,
+     "max_abs": 0.1844219735949082,
+     "median_relative": 5.397709757755492e-06,
+     "n_relative": 100,
+     "relative_floor": 1.0,
+     "episodes_differing": 94,
+     "episodes_above_1": 0,
+     "episodes_above_10": 0
+    }
+   },
+   "aggregates": {
+    "mean_original_return": {
+     "recorded": 265.85578073699435,
+     "reproduced": 265.85760801453813,
+     "p_value": 0.5048495150484952,
+     "significant": false
+    },
+    "pad_landing_rate": {
+     "recorded": 0.96,
+     "reproduced": 0.96,
+     "p_value": 1.0,
+     "significant": false
+    },
+    "timeout_rate": {
+     "recorded": 0.0,
+     "reproduced": 0.0,
+     "p_value": 1.0,
+     "significant": false
+    },
+    "crash_rate": {
+     "recorded": 0.03,
+     "reproduced": 0.03,
+     "p_value": 1.0,
+     "significant": false
+    },
+    "out_of_bounds_rate": {
+     "recorded": 0.0,
+     "reproduced": 0.0,
+     "p_value": 1.0,
+     "significant": false
+    }
+   },
+   "paired_return_difference": {
+    "mean": 0.0018272775437654333,
+    "ci": [
+     -0.0017601722916934146,
+     0.006609215420886726
+    ],
+    "ci_contains_zero": true
+   },
+   "consistent": true
+  },
+  "ppo-hover-bonus-s0": {
+   "episodes": 100,
+   "bit_identical": 7,
+   "summary": {
+    "n": 100,
+    "agreement": {
+     "bit_identical": 0.07,
+     "length": 1.0,
+     "termination": 1.0,
+     "env_outcome": 1.0,
+     "pad_landing": 1.0,
+     "all_outcome_fields": 1.0
+    },
+    "return_difference": {
+     "mean_abs": 3.035478571307844,
+     "median_abs": 2.427399866128317,
+     "p90_abs": 6.216546737935251,
+     "max_abs": 15.436977500127831,
+     "median_relative": 0.12712100554659617,
+     "n_relative": 95,
+     "relative_floor": 1.0,
+     "episodes_differing": 93,
+     "episodes_above_1": 72,
+     "episodes_above_10": 4
+    }
+   },
+   "aggregates": {
+    "mean_original_return": {
+     "recorded": -21.245551373501357,
+     "reproduced": -21.197956333328342,
+     "p_value": 0.9108089191080891,
+     "significant": false
+    },
+    "pad_landing_rate": {
+     "recorded": 0.0,
+     "reproduced": 0.0,
+     "p_value": 1.0,
+     "significant": false
+    },
+    "timeout_rate": {
+     "recorded": 1.0,
+     "reproduced": 1.0,
+     "p_value": 1.0,
+     "significant": false
+    },
+    "crash_rate": {
+     "recorded": 0.0,
+     "reproduced": 0.0,
+     "p_value": 1.0,
+     "significant": false
+    },
+    "out_of_bounds_rate": {
+     "recorded": 0.0,
+     "reproduced": 0.0,
+     "p_value": 1.0,
+     "significant": false
+    }
+   },
+   "paired_return_difference": {
+    "mean": 0.0475950401730204,
+    "ci": [
+     -0.7672772260527224,
+     0.8768273830797533
+    ],
+    "ci_contains_zero": true
+   },
+   "consistent": true
+  },
+  "dqn-baseline-s0": {
+   "episodes": 100,
+   "bit_identical": 7,
+   "summary": {
+    "n": 100,
+    "agreement": {
+     "bit_identical": 0.07,
+     "length": 0.85,
+     "termination": 1.0,
+     "env_outcome": 0.99,
+     "pad_landing": 1.0,
+     "all_outcome_fields": 0.99
+    },
+    "return_difference": {
+     "mean_abs": 2.8886900741250576,
+     "median_abs": 0.0005495486297775187,
+     "p90_abs": 1.0101637660578189,
+     "max_abs": 133.65543352352705,
+     "median_relative": 5.820761628162566e-06,
+     "n_relative": 100,
+     "relative_floor": 1.0,
+     "episodes_differing": 93,
+     "episodes_above_1": 10,
+     "episodes_above_10": 6
+    }
+   },
+   "aggregates": {
+    "mean_original_return": {
+     "recorded": 155.36443783032232,
+     "reproduced": 153.73399906509178,
+     "p_value": 0.3360663933606639,
+     "significant": false
+    },
+    "pad_landing_rate": {
+     "recorded": 0.29,
+     "reproduced": 0.29,
+     "p_value": 1.0,
+     "significant": false
+    },
+    "timeout_rate": {
+     "recorded": 0.13,
+     "reproduced": 0.13,
+     "p_value": 1.0,
+     "significant": false
+    },
+    "crash_rate": {
+     "recorded": 0.28,
+     "reproduced": 0.29,
+     "p_value": 1.0,
+     "significant": false
+    },
+    "out_of_bounds_rate": {
+     "recorded": 0.01,
+     "reproduced": 0.0,
+     "p_value": 1.0,
+     "significant": false
+    }
+   },
+   "paired_return_difference": {
+    "mean": -1.6304387652305241,
+    "ci": [
+     -5.056676572830759,
+     0.6313134732617778
+    ],
+    "ci_contains_zero": true
+   },
+   "consistent": true
+  }
+ }
+}

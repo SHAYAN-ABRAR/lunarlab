@@ -16,7 +16,7 @@ scope (for example, an analysis library that does not train agents).
 | 4 | Disjoint validation/test seeds; selection on validation only | ● [L4] | ◐ [S3] | ◐ [S3][Z2] | ○ | — | ○ |
 | 5 | Tested checkpoint frozen as an immutable, digest-checked copy | ● [L5] | ○ [S4] | ○ | ○ | — | ○ |
 | 6 | Policy loading without unpickling (weights only) | ● [L6] | ◐ [S5] | ○ | ◐ [C2] | — | ○ |
-| 7 | Exact continuation of an interrupted run (optimizer, DQN replay buffer, counters) | ● [L7] | ◐ [S4][S5] | ○ | ◐ [C2] | — | ○ |
+| 7 | Checkpoint-based continuation of an interrupted run (optimizer, DQN replay buffer, counters; not bit-identical to an uninterrupted run) | ● [L7] | ◐ [S4][S5] | ○ | ◐ [C2] | — | ○ |
 | 8 | Configuration identity (content hash of everything that defines a run) | ● [L8] | ◐ [S6] | ○ | ◐ [C3] | — | ○ |
 | 9 | Per-step trajectory inspection (reward terms, policy internals) | ● [L9] | ◐ video [S7] | ◐ video [Z3] | ◐ video [C3] | — | ○ |
 | 10 | Counterfactual re-scoring of recorded trajectories under other rewards | ● [L10] | ○ | ○ | ○ | — | ○ |

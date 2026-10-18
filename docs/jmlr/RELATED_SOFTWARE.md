@@ -21,7 +21,7 @@ LunarLab add?* This page answers it with evidence. The capability matrix, with a
 
 | Tool | What it is for | Relation to LunarLab |
 |---|---|---|
-| Stable-Baselines3 | reliable implementations of RL algorithms, with callbacks (`EvalCallback`, `CheckpointCallback`), `Monitor`, `evaluate_policy`, save/load | LunarLab's dependency. SB3 evaluates whatever reward the wrapper stack returns unless `Monitor` sits below reward wrappers [S2]; keeping the original and shaped rewards apart, freezing the tested checkpoint and exact DQN continuation are left to the user [S3–S5]. |
+| Stable-Baselines3 | reliable implementations of RL algorithms, with callbacks (`EvalCallback`, `CheckpointCallback`), `Monitor`, `evaluate_policy`, save/load | LunarLab's dependency. SB3 evaluates whatever reward the wrapper stack returns unless `Monitor` sits below reward wrappers [S2]; keeping the original and shaped rewards apart, freezing the tested checkpoint and DQN continuation with the replay buffer and algorithm state are left to the user [S3–S5]. |
 | RL Baselines3 Zoo | a training framework for SB3 with tuned hyperparameters, Optuna tuning, plots (partly rliable-based), videos | Overlaps on tuning and plotting. Reward shaping is possible through `env_wrapper`, with no documented original-versus-shaped logging [Z1]. |
 | CleanRL | single-file reference implementations, TensorBoard/W&B tracking, benchmark utility | A different design goal (readable implementations to copy and edit). Resuming is a recipe that saves the agent's weights only [C2]. |
 | rliable | statistically sound aggregate metrics with stratified bootstrap intervals across tasks | LunarLab reports the same family of statistics for one task across training seeds; rliable is the general library [R1]. |
@@ -44,8 +44,8 @@ contribution is the integration of the following into one tested workflow (cell 
 3. **An evaluation protocol that cannot leak**: validated, disjoint validation and test seeds; selection on
    validation only; the tested checkpoint frozen as an immutable, digest-checked copy; runs influenced by an
    already-seen test labelled exploratory (rows 4–5).
-4. **Exact continuation and provenance**: PPO and DQN runs resume with optimizer state and (for DQN) the replay
-   buffer; every run records configuration, reward and protocol hashes, seeds, versions and source revisions
+4. **Checkpoint-based continuation and provenance**: PPO and DQN runs resume from safe boundaries with optimizer
+   state and (for DQN) the replay buffer and algorithm state, though not bit-identically to an uninterrupted run; every run records configuration, reward and protocol hashes, seeds, versions and source revisions
    (rows 6–8).
 5. **Inspection and counterfactuals**: per-step telemetry with policy internals, and re-scoring of recorded
    flights under other reward designs (rows 9–10).

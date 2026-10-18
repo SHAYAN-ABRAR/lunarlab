@@ -69,9 +69,9 @@ none of them affected the published results: no number above changed
 ([findings, reproductions and tests](docs/AUDIT_FIXES.md) · [upgrade notes](docs/MIGRATION.md)).
 
 - **DQN resume** restored only the network weights: the replay buffer came back empty and target-network
-  updates fell out of phase. Resumable DQN checkpoints now carry the replay buffer and the full training state;
-  older ones are refused for resume and offer a warm restart (a new run). None of the 12 published DQN runs was
-  resumed.
+  updates fell out of phase. Resumable DQN checkpoints now carry the replay buffer and the algorithm state
+  (counters, target-network phase, exploration); older ones are refused for resume and offer a warm restart (a
+  new run). None of the 12 published DQN runs was resumed.
 - **Final-test freezing** recorded only a file name, and a frozen run could still train. The tested checkpoint
   is now an immutable, digest-checked copy, a frozen run never trains again, and an interrupted test is retried
   on the same bytes. No run trained during or after its freeze, and the checkpoints behind all 43 existing
@@ -126,16 +126,20 @@ none of them affected the published results: no number above changed
   Q-values); a **Reward Stress Test** re-scores recorded flights under other reward designs.
 - **Engineering:** a local job supervisor (owned worker processes, cooperative stop at safe boundaries,
   resume with lineage, crash reconciliation), parallel experiment runs, weights-only model loading, loopback
-  binding and strict request validation, crash-safe checkpoint bundles with full DQN continuation (replay
-  buffer included), 449 Python tests (82.9 % statement and branch coverage) and 15 browser flows, Linux and
-  Windows CI, and a static demo build whose snapshots record their exact provenance.
+  binding and strict request validation, crash-safe checkpoint bundles, resumable DQN checkpoints that restore
+  the replay buffer and algorithm state (a resumed run is not bit-identical to an uninterrupted one), 493
+  Python tests (85.8 % statement and branch coverage) and 15 browser flows, Linux and Windows CI, and a static
+  demo build whose snapshots record their exact provenance.
 - **Reproducibility and extension:** `reproduce-smoke` runs and verifies the whole pipeline in a temporary home;
-  three published final tests ship as artifacts that `reproduce-artifact` re-evaluates episode by episode
-  (bit-identical on the machine that produced them); `overhead-benchmark` measures the instrumentation's cost
-  against plain Stable-Baselines3 (training loops about 4 % slower at 102,400 transitions, validation episodes
-  reported separately); a deterministic source archive that CI rebuilds byte for byte and installs fresh; and
-  a task-adapter layer (`lunarlab.audit`) that applies the same reward accounting to other Gymnasium
-  environments, with a [CartPole example](examples/cartpole_audit.py).
+  three published final tests ship as artifacts that `reproduce-artifact` re-evaluates episode by episode,
+  reporting artifact integrity, within-platform reproduction, cross-platform agreement and the stability of the
+  conclusions separately (bit-identical on Windows, including CI machines with Python 3.12 and 3.13; on Linux
+  every episode differs numerically while the means and landing rates do not); `trace-artifact` locates where two
+  platforms' trajectories part; `overhead-benchmark` measures the cost against plain Stable-Baselines3 (reward
+  accounting 0–4 % of training-loop time; a complete run, validation episodes included, 1.22–1.23× as long); a
+  deterministic source archive that CI rebuilds byte for byte and installs fresh; and a task-adapter layer
+  (`lunarlab.audit`) that applies the same reward accounting to other Gymnasium environments, with a
+  [CartPole example](examples/cartpole_audit.py).
 
 ## Requirements
 
@@ -240,6 +244,7 @@ Everything in the UI is also available from the command line (same core code):
 .venv\Scripts\python.exe -m lunarlab reproduce-smoke --training-determinism     # whole pipeline in a temporary home, verified
 .venv\Scripts\python.exe -m lunarlab export-artifact --run-id <id> --out <dir>  # tested checkpoint + config + recorded test
 .venv\Scripts\python.exe -m lunarlab reproduce-artifact --artifact examples\artifacts\ppo-baseline-s0   # re-evaluate, compare
+.venv\Scripts\python.exe -m lunarlab trace-artifact --artifact examples\artifacts\ppo-baseline-s0 --compare reports\jmlr\reproducibility\traces\ppo-baseline-s0-windows.npz   # where platforms part
 .venv\Scripts\python.exe -m lunarlab overhead-benchmark --profile smoke         # instrumentation overhead vs plain SB3
 ```
 
@@ -293,6 +298,8 @@ a 64×64 MLP are about 150 KB each; a DQN replay file with the default 50k buffe
 
 - [docs/TUTORIAL.md](docs/TUTORIAL.md): a reward-design audit from the command line and from Python, step by
   step (the test suite executes every command in it).
+- [docs/REPRODUCING.md](docs/REPRODUCING.md): a 15-minute independent reproduction of the published results, how
+  to read exact versus numerical-difference outcomes, and how to send a report.
 - [docs/DEVELOPER.md](docs/DEVELOPER.md): module responsibilities, the reward-wrapper, training-job and
   evaluation lifecycles, checkpoint formats, persistence, the HTTP API's security assumptions, tests.
 - [docs/api/](docs/api/README.md): the API reference (Python research API, every CLI command, the HTTP API with
@@ -327,19 +334,20 @@ a 64×64 MLP are about 150 KB each; a DQN replay file with the default 50k buffe
 ## Tests
 
 ```powershell
-.venv\Scripts\python.exe -m pytest                       # 449 tests: unit, integration, property-based, real PPO/DQN, end-to-end CLI
+.venv\Scripts\python.exe -m pytest                       # 493 tests: unit, integration, property-based, real PPO/DQN, end-to-end CLI, served backend
 .venv\Scripts\python.exe -m pytest -m "not slow"         # skips the tests marked slow (real PPO/DQN updates, video encoding)
 .venv\Scripts\python.exe -m pytest --cov                 # with statement + branch coverage, worker subprocesses included
-.venv\Scripts\python.exe -m lunarlab reproduce-smoke     # the whole pipeline in a temporary home, 14 checks
+.venv\Scripts\python.exe -m lunarlab reproduce-smoke     # the whole pipeline in a temporary home, 14 checks (15 with --training-determinism)
 .venv\Scripts\python.exe -m ruff check lunarlab tests tools examples paper
 cd frontend; npm run typecheck; npm run lint; npm run build
 npx playwright test                                      # 15 browser flows on real backends (uses installed Edge)
 ```
 
-Coverage is 82.9 % of statements and branches ([per-module report](reports/jmlr/coverage/SUMMARY.md)). CI runs
+Coverage is 85.8 % of statements and branches ([per-module report](reports/jmlr/coverage/SUMMARY.md)). CI runs
 the full suite on Linux, the Windows-sensitive tests and the PowerShell scripts on Windows with Python 3.12 and
-3.13, the smoke reproduction on both, and builds the source archive twice, compares the bytes and installs it
-into a fresh environment.
+3.13, the smoke reproduction and the re-evaluation of the published artifacts on both (with a summary of every
+outcome; nothing is masked), and builds the source archive twice, compares the bytes and installs it into a
+fresh environment.
 
 ## License and citation
 

@@ -72,7 +72,10 @@ artifact `ppo-hover-bonus-s0` was trained with the deliberately flawed hover bon
 .venv\Scripts\python.exe -m lunarlab reproduce-artifact --artifact examples\artifacts\ppo-baseline-s0 --episodes 10
 ```
 
-Both re-run the recorded final-test episodes and compare them with the record. The recorded evaluation
+Both re-run the recorded final-test episodes and compare them with the record. The first output line names the
+result: `EXACT` (exit status 0) on Windows with the locked libraries, `NUMERICAL-DIFFERENCE` (exit status 3, not a
+failure) on other platforms, where episodes differ numerically but no aggregate differs significantly; what each
+status means is in [REPRODUCING.md](REPRODUCING.md). The recorded evaluation
 (`examples/artifacts/ppo-hover-bonus-s0/evaluation.json`) shows the exploit: all 100 test episodes end at the time
 limit (`env_outcome` = `timeout`), the lander hovers in 73 % of its steps on average (`hover_fraction`), and the
 hover-bonus reward it was trained on would have paid 678.9 per episode (`training_return`) while the task's

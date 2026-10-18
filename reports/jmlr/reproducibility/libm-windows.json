@@ -1,0 +1,152 @@
+{
+ "created_at": "2026-10-18T13:41:27+00:00",
+ "software": {
+  "lunarlab": "0.1.0",
+  "git": {
+   "available": true,
+   "revision": "2c41b422e6bab1feb702d4d1901b337f0fcd21a7",
+   "dirty": true
+  },
+  "python": "3.12.13",
+  "python_implementation": "CPython",
+  "platform": "Windows-11-10.0.26300-SP0",
+  "packages": {
+   "gymnasium": "1.4.0",
+   "Box2D": "2.3.10",
+   "pygame": "2.6.1",
+   "stable-baselines3": "2.9.0",
+   "torch": "2.14.1",
+   "numpy": "2.5.4",
+   "pandas": "3.0.6",
+   "matplotlib": "3.11.2",
+   "imageio": "2.38.1",
+   "imageio-ffmpeg": "0.6.0",
+   "optuna": "5.0.0",
+   "fastapi": "0.143.1",
+   "uvicorn": "0.54.0",
+   "pydantic": "2.14.1",
+   "psutil": "7.2.2",
+   "PyYAML": "6.0.3"
+  }
+ },
+ "hardware": {
+  "platform": "Windows-11-10.0.26300-SP0",
+  "machine": "AMD64",
+  "cpu": "13th Gen Intel(R) Core(TM) i7-13620H",
+  "physical_cores": 10,
+  "logical_cores": 16,
+  "ram_gb": 16.8
+ },
+ "experiment": "correctly rounded sin/cos inside LunarLander (all other code unchanged)",
+ "linux_reference": "GitHub Actions run 39069730331 (first 20 differing episodes per artifact)",
+ "results": {
+  "ppo-baseline-s0": {
+   "seeds": [
+    20000,
+    20001,
+    20002,
+    20003,
+    20004,
+    20005,
+    20006,
+    20007,
+    20008,
+    20009,
+    20010,
+    20011,
+    20012,
+    20013,
+    20014,
+    20015,
+    20016,
+    20017,
+    20018,
+    20019
+   ],
+   "native": {
+    "equal_to_recorded": 20,
+    "equal_to_linux": 0,
+    "trig_calls": 11216,
+    "native_trig_not_correctly_rounded": 26
+   },
+   "correctly_rounded": {
+    "equal_to_recorded": 20,
+    "equal_to_linux": 0,
+    "trig_calls": 11216,
+    "native_trig_not_correctly_rounded": 26
+   }
+  },
+  "ppo-hover-bonus-s0": {
+   "seeds": [
+    20000,
+    20001,
+    20002,
+    20003,
+    20004,
+    20005,
+    20006,
+    20007,
+    20008,
+    20009,
+    20010,
+    20011,
+    20012,
+    20013,
+    20014,
+    20015,
+    20016,
+    20017,
+    20018,
+    20019
+   ],
+   "native": {
+    "equal_to_recorded": 20,
+    "equal_to_linux": 0,
+    "trig_calls": 40040,
+    "native_trig_not_correctly_rounded": 14
+   },
+   "correctly_rounded": {
+    "equal_to_recorded": 20,
+    "equal_to_linux": 0,
+    "trig_calls": 40040,
+    "native_trig_not_correctly_rounded": 14
+   }
+  },
+  "dqn-baseline-s0": {
+   "seeds": [
+    20000,
+    20001,
+    20002,
+    20003,
+    20004,
+    20005,
+    20006,
+    20007,
+    20008,
+    20009,
+    20010,
+    20011,
+    20012,
+    20013,
+    20014,
+    20015,
+    20016,
+    20017,
+    20018,
+    20019
+   ],
+   "native": {
+    "equal_to_recorded": 20,
+    "equal_to_linux": 0,
+    "trig_calls": 13208,
+    "native_trig_not_correctly_rounded": 53
+   },
+   "correctly_rounded": {
+    "equal_to_recorded": 20,
+    "equal_to_linux": 0,
+    "trig_calls": 13208,
+    "native_trig_not_correctly_rounded": 53
+   }
+  }
+ }
+}

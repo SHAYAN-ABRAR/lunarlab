@@ -346,6 +346,15 @@ class JobManager:
             stop_req = read_json(job_stop_file(job["id"]), default={}) or {}
             if stop_req.get("reason") == "shutdown":
                 state = "interrupted"
+        if state in ("failed", "interrupted") and job["kind"] in ("train", "resume") and job["run_id"]:
+            # A worker that crashed or was killed never wrote its final state: the run would keep claiming
+            # "running" and refuse a resume until its heartbeat went stale. As after a backend restart
+            # (reconcile), the run is interrupted and resumes from its latest checkpoint.
+            paths = RunPaths(job["run_id"])
+            st = read_json(paths.status, default={}) or {}
+            if st.get("state") == "running" and st.get("job_id") == job["id"]:
+                st.update({"state": "interrupted", "phase": "ended", "updated_at": utc_now()})
+                atomic_write_json(paths.status, st)
         self.db.update_job(
             job["id"],
             state=state,

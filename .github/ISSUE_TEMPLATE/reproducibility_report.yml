@@ -21,9 +21,10 @@ body:
     attributes:
       label: Outcome
       options:
-        - Matched exactly
-        - Matched within the documented tolerance
-        - Did not match
+        - "exact: every episode bit-identical"
+        - "within-tolerance: matched within a tolerance I chose (say which)"
+        - "numerical-difference: other platform, episodes differ, no significant aggregate change"
+        - "unexpected-difference, aggregate-disagreement or integrity-failure"
         - Could not run
     validations:
       required: true

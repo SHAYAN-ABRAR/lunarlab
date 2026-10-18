@@ -36,6 +36,7 @@ CRITICAL = [
     "lunarlab/rl_stats.py",
     "lunarlab/results.py",
     "lunarlab/reproduce.py",
+    "lunarlab/divergence.py",
     "lunarlab/runs.py",
     "lunarlab/storage.py",
     "lunarlab/lineage.py",

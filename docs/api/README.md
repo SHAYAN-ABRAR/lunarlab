@@ -53,8 +53,9 @@ Modules not listed here (`cli`, `server`, `jobs`, `db`, `procs`, `parallel`, `lo
 | [`lunarlab.results`](lunarlab.results.md) — Figures and tables for the results write-up (docs/RESULTS.md), generated only from stored data. | 3 / 10 |
 | [`lunarlab.report`](lunarlab.report.md) — Markdown + HTML experiment report generated only from stored data. | 2 / 8 |
 | **Reproducibility and benchmarking** | |
-| [`lunarlab.reproduce`](lunarlab.reproduce.md) — Reproducibility checks that run without the web interface. | 9 / 9 |
+| [`lunarlab.reproduce`](lunarlab.reproduce.md) — Reproducibility checks that run without the web interface. | 18 / 18 |
+| [`lunarlab.divergence`](lunarlab.divergence.md) — Where two platforms' evaluations of the same policy part: per-step traces and their comparison. | 7 / 7 |
 | [`lunarlab.overhead`](lunarlab.overhead.md) — Overhead benchmark: what LunarLab's instrumentation costs compared with plain Stable-Baselines3. | 3 / 3 |
 | [`lunarlab.benchmark`](lunarlab.benchmark.md) — Throughput benchmark: measure before increasing worker counts. | 0 / 1 |
 
-Docstrings: 292 of 421 public classes, functions and methods in these modules.
+Docstrings: 308 of 437 public classes, functions and methods in these modules.

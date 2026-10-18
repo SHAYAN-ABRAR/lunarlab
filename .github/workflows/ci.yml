@@ -56,18 +56,39 @@ jobs:
           .venv/bin/python paper/jmlr-mloss/check_manuscript.py
       - name: Reproducibility smoke test (whole pipeline, no web UI)
         run: .venv/bin/python -m lunarlab reproduce-smoke --training-determinism --report reproduce-smoke-linux.json
-      - name: Re-evaluate the supplied artifacts on Linux (observational; they were recorded on Windows)
-        # Cross-platform bit-identity is not claimed: the reports record how many episodes match exactly.
+      - name: Re-evaluate the supplied artifacts on Linux and locate where trajectories part
+        # The artifacts were recorded on Windows. Integrity failures and significant aggregate differences fail
+        # this step. Episode-level numerical differences across platforms are reported (exit code 3) and listed
+        # in the job summary with the reason they are tolerated: bit-identical results across platforms are not
+        # a supported guarantee (docs/jmlr/REPRODUCIBILITY.md). Every exit code is recorded, none is discarded.
         run: |
-          for a in ppo-baseline-s0 ppo-hover-bonus-s0 dqn-baseline-s0; do
-            .venv/bin/python -m lunarlab reproduce-artifact --artifact examples/artifacts/$a --report reproduce-$a-linux.json || true
+          artifacts="ppo-baseline-s0 ppo-hover-bonus-s0 dqn-baseline-s0"
+          : > reproduce-exit-codes.txt
+          reports=""; divergence=""
+          for a in $artifacts; do
+            code=0
+            .venv/bin/python -m lunarlab reproduce-artifact --artifact examples/artifacts/$a --report reproduce-$a-linux.json || code=$?
+            echo "$a $code" >> reproduce-exit-codes.txt
+            reports="$reports reproduce-$a-linux.json"
+            tcode=0
+            .venv/bin/python -m lunarlab trace-artifact --artifact examples/artifacts/$a \
+              --compare reports/jmlr/reproducibility/traces/$a-windows.npz --report divergence-$a-linux.json || tcode=$?
+            if [ "$tcode" -ne 0 ] && [ "$tcode" -ne 3 ]; then echo "trace-artifact failed for $a (exit $tcode)"; exit 1; fi
+            divergence="$divergence divergence-$a-linux.json"
           done
+          .venv/bin/python tools/reproduction_summary.py --platform linux --exit-codes reproduce-exit-codes.txt \
+            --reports $reports --divergence $divergence \
+            --json reproduction-summary-linux.json --markdown "$GITHUB_STEP_SUMMARY"
       - name: Upload the reproducibility reports
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: reproducibility-linux
-          path: reproduce-*.json
+          path: |
+            reproduce-*.json
+            divergence-*.json
+            reproduction-summary-*.json
+            reproduce-exit-codes.txt
           retention-days: 30
 
   source-archive:
@@ -146,20 +167,34 @@ jobs:
           tests/test_outcomes_v2.py tests/test_outcomes_stats_storage.py tests/test_reproduce.py
           tests/test_continuation_validation.py tests/test_audit_core.py tests/test_project_metadata.py
           tests/test_docs.py tests/test_source_archive.py
-      - name: Reproducibility smoke test and re-evaluation of the supplied artifacts (the latter observational)
+      - name: Reproducibility smoke test and re-evaluation of the supplied artifacts (recording platform)
+        # Same operating system and numerical libraries as the recording: every episode must be bit-identical
+        # (a difference is status unexpected-difference and fails this step).
         run: |
           .venv\Scripts\python.exe -m lunarlab reproduce-smoke --training-determinism --report reproduce-smoke-windows.json
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          Set-Content -Path reproduce-exit-codes.txt -Value $null
+          $reports = @(); $divergence = @()
           foreach ($a in 'ppo-baseline-s0', 'ppo-hover-bonus-s0', 'dqn-baseline-s0') {
             .venv\Scripts\python.exe -m lunarlab reproduce-artifact --artifact examples\artifacts\$a --report "reproduce-$a-windows.json"
+            Add-Content -Path reproduce-exit-codes.txt -Value "$a $LASTEXITCODE"
+            $reports += "reproduce-$a-windows.json"
+            .venv\Scripts\python.exe -m lunarlab trace-artifact --artifact examples\artifacts\$a --compare "reports\jmlr\reproducibility\traces\$a-windows.npz" --report "divergence-$a-windows.json"
+            if ($LASTEXITCODE -ne 0 -and $LASTEXITCODE -ne 3) { Write-Host "trace-artifact failed for $a"; exit 1 }
+            $divergence += "divergence-$a-windows.json"
           }
-          exit 0
+          .venv\Scripts\python.exe tools\reproduction_summary.py --platform "windows-py${{ matrix.python }}" --exit-codes reproduce-exit-codes.txt --reports $reports --divergence $divergence --json reproduction-summary-windows.json --markdown $env:GITHUB_STEP_SUMMARY
+          exit $LASTEXITCODE
       - name: Upload the reproducibility reports
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: reproducibility-windows-py${{ matrix.python }}
-          path: reproduce-*.json
+          path: |
+            reproduce-*.json
+            divergence-*.json
+            reproduction-summary-*.json
+            reproduce-exit-codes.txt
           retention-days: 30
       - name: PowerShell scripts parse (PowerShell 7)
         run: |

@@ -84,7 +84,12 @@ RESEARCH_MODULES = {
         "lunarlab.results",
         "lunarlab.report",
     ],
-    "Reproducibility and benchmarking": ["lunarlab.reproduce", "lunarlab.overhead", "lunarlab.benchmark"],
+    "Reproducibility and benchmarking": [
+        "lunarlab.reproduce",
+        "lunarlab.divergence",
+        "lunarlab.overhead",
+        "lunarlab.benchmark",
+    ],
 }
 ADDRESS = re.compile(r" at 0x[0-9A-Fa-f]+")
 

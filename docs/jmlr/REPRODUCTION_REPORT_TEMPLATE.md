@@ -10,7 +10,8 @@ service is required. Reports that reproduce a result exactly are as useful as re
 - [ ] A table or figure in `docs/RESULTS.md`: ____________________
 - [ ] Something else: ____________________
 
-**Outcome:** ☐ matched exactly ☐ matched within tolerance ______ ☐ did not match ☐ could not run
+**Outcome** (the `status` in the report; see [docs/REPRODUCING.md](../REPRODUCING.md)): ☐ exact ☐ within-tolerance ______
+☐ numerical-difference ☐ unexpected-difference ☐ aggregate-disagreement ☐ integrity-failure ☐ could not run
 
 **Environment**
 

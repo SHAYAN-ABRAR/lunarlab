@@ -1,7 +1,9 @@
 # Evidence for each statement in main.tex
 
 Every factual statement in the manuscript, and where it is established. "Test" means an automated test in
-`tests/`; "measured" means a stored measurement in `reports/jmlr/`.
+`tests/`; "measured" means a stored measurement in `reports/jmlr/`; "CI" means GitHub Actions run
+[39069730331](https://github.com/SHAYAN-ABRAR/lunarlab/actions/runs/39069730331) on revision `2c41b42`
+(2026-10-18). Updated after the correction pass of 2026-10-18.
 
 | Statement (section) | Evidence |
 |---|---|
@@ -9,21 +11,25 @@ Every factual statement in the manuscript, and where it is established. "Test" m
 | Evaluates policies on the original reward only (abstract, §2) | `evaluation.make_eval_env` (`apply=False`), the cross-check in `evaluation.run_episode`; smoke check "validation evaluation uses the original reward" |
 | Potential-based shaping telescopes; absorbing terminal and truncation handled (§2) | `rewards/terms.py::potential_shaping`; `test_properties.py::test_potential_shaping_telescopes_on_lander_states` |
 | Seeds strict, distinct, disjoint; environment checked against the declaration (§2) | `config.EvalProtocol.problems`, `evaluation.evaluate_policy`; `test_protocol.py` |
-| Selected checkpoint frozen as an immutable, read-only, digest-checked artifact; never trained again; retries on the same bytes; exposure registry (§2) | `lunarlab/freeze.py`, `lunarlab/lineage.py`; `test_freeze.py`; smoke checks on the frozen copy |
+| Selected checkpoint frozen as an immutable, digest-checked artifact; never trained again; retries on the same bytes; exposure registry (§2) | `lunarlab/freeze.py`, `lunarlab/lineage.py`; `test_freeze.py`; smoke checks on the frozen copy |
 | Hover detector independent of the reward; strict landing classifier (§2) | `lunarlab/hover.py`, `lunarlab/outcomes.py`; `test_diagnostics.py`, `test_outcomes_v2.py` |
-| Hashes, seeds, budgets in transitions, versions and source revision per segment and evaluation (§2) | `runs.create_run`, `training._train_locked`, `evaluation._save_result`; smoke checks |
-| Crash-safe checkpoints with a SHA-256 manifest; exact PPO/DQN resume incl. replay buffer, never unpickled (§2) | `training.save_model_atomic`, `lunarlab/continuation.py`; `test_dqn_continuation.py`, `test_continuation_validation.py`, `test_windows.py` |
-| CLI, Python API, local web interface, no network service or account (§2) | `lunarlab/cli.py`, `docs/api/`, `frontend/`; `docs/TUTORIAL.md` |
-| Adapter layer: LunarLander adapter reproduces the pipeline exactly; CartPole demonstrates the contract (§2) | `lunarlab/audit/`; `test_audit_core.py::test_generic_accounting_reproduces_lunarlabs_wrapper_on_lunarlander`, `test_audit_policy_on_cartpole_is_deterministic_and_records_provenance`; `examples/cartpole_audit.py` |
-| N tests, B browser flows, C % coverage; CI on Linux and Windows (abstract, §3) | `reports/jmlr/coverage/SUMMARY.md` (final figures); `.github/workflows/ci.yml` |
-| Tutorial executed command by command; API reference generated; deterministic archive test-installed (§3) | `test_tutorial.py`; `tools/gen_api_docs.py --check`; `tools/build_source_archive.py --verify`, `test_source_archive.py`, `reports/jmlr/artifacts/source_archive_verification.txt` |
-| `reproduce-smoke` verifies 14 provenance checks; training twice gave identical weights (§3) | `lunarlab/reproduce.py`; measured `reports/jmlr/artifacts/reproduce-smoke-ppo-windows.json`, `…-dqn-windows.json` |
-| 300 of 300 published final-test episodes re-evaluated bit-identically (abstract, §3) | `examples/artifacts/`; measured `reports/jmlr/artifacts/reproduce-{ppo-baseline,ppo-hover-bonus,dqn-baseline}-s0-windows.json` |
-| Cross-platform bit-identity not claimed (§3, §4) | `docs/jmlr/REPRODUCIBILITY.md`; SB3's own statement cited there |
-| Table 1 values; "about 4 %" (abstract, §3) | measured `reports/jmlr/benchmarks/standard-2026-10-17T154705+0000/summary.json` and `raw.jsonl`; protocol `docs/jmlr/BENCHMARK_PROTOCOL.md` |
+| Hashes, seeds, budgets in transitions, versions and source revisions (abstract, §2) | `runs.create_run`, `training._train_locked`, `evaluation._save_result`; smoke checks |
+| Crash-safe checkpoints with a SHA-256 manifest (§2) | `training.save_model_atomic`; `test_training.py`, `test_windows.py` |
+| Continuation at a safe boundary restores networks, optimizer state and counters, for DQN the replay buffer, target-network phase and exploration schedule; never unpickled; environments restart and random-number streams are not restored, so continuation is not bit-identical (abstract, §2) | `training.py` (`PPO_CONTRACT`, `DQN_CONTRACT`, recorded with every resumable checkpoint), `lunarlab/continuation.py`; `test_dqn_continuation.py::test_resumed_target_network_optimizer_and_replay_match_the_stop_checkpoint`, `test_continuation_validation.py`; levels of continuation in `docs/jmlr/REPRODUCIBILITY.md` |
+| CLI, Python API, local web interface, job supervisor, no network service or account (§2) | `lunarlab/cli.py`, `docs/api/`, `frontend/`, `lunarlab/jobs.py`; `docs/TUTORIAL.md` |
+| Adapter layer: LunarLander adapter matches the pipeline exactly; CartPole demonstrates the contract; training, protocol and checkpointing LunarLander-specific (abstract, §2, §4) | `lunarlab/audit/`; `test_audit_core.py::test_generic_accounting_reproduces_lunarlabs_wrapper_on_lunarlander`, `test_audit_policy_on_cartpole_is_deterministic_and_records_provenance`; `examples/cartpole_audit.py`; `docs/jmlr/EXTENDING_LUNARLAB.md` |
+| N tests incl. a served backend and parallel workers; C % statement and branch coverage; 15 browser flows; CI runs the full suite on Linux and platform-sensitive tests on Windows 3.12/3.13 (abstract, §3) | `reports/jmlr/coverage/SUMMARY.md` (final figures); `tests/test_server_lifecycle.py`, `tests/test_parallel_and_supervisor.py`; `frontend/e2e/`; `.github/workflows/ci.yml`; CI |
+| Tutorial executed by the test suite; API reference generated; deterministic archive built and installed fresh (§3) | `test_tutorial.py`; `tools/gen_api_docs.py --check`; `tools/build_source_archive.py --verify`, `test_source_archive.py`; CI source-archive job |
+| `reproduce-smoke`: 14 provenance checks; a 15th trained twice and found identical weights (§3) | `lunarlab/reproduce.py`; measured `reports/jmlr/artifacts/reproduce-smoke-ppo-windows.json`, `…-dqn-windows.json`; CI (15/15 on Linux, Windows 3.12 and 3.13) |
+| Re-evaluation separates integrity, within-platform, cross-platform and conclusion stability (paired tests) (§3) | `reproduce.reproduce_artifact`, `classify_reproduction`, `compare_aggregates`; `test_reproduction_report.py` |
+| 300/300 episodes bit-identical on the development machine and on Windows CI with Python 3.12 and 3.13 (abstract, §3) | measured `reports/jmlr/artifacts/reproduce-*-windows.json`; CI artifacts `reproducibility-windows-py3.12`, `-py3.13` |
+| On Linux 0/300 bit-identical; differences up to 0.28 (PPO baseline) and 192 (DQN); mean returns within 1.6; pad-landing rates unchanged (abstract, §3) | CI artifact `reproducibility-linux` (`reproduce-*-linux.json`): max differences 0.277 and 192; means 265.8558→265.8615, −21.2456→−20.7658, 155.3644→156.8764; pad landing 96/0/29 % both ways; summarised in `docs/jmlr/REPRODUCIBILITY.md` |
+| One-ulp simulator perturbation changes 93–94 % of episodes without a significant aggregate change; other numerical kernels change no greedy action (§3) | measured `reports/jmlr/reproducibility/ulp-windows.json` (6–7/100 unchanged; all p ≥ 0.33) and `inference-kernels/` (300/300 bit-identical, outputs differ from step 0–1); `tools/reproducibility_experiments.py` |
+| Per-step traces compared in CI locate where trajectories part (§3) | `lunarlab/divergence.py`; `reports/jmlr/reproducibility/traces/`; `.github/workflows/ci.yml`; `test_reproduction_report.py::test_traces_round_trip_and_locate_the_source_of_a_difference` |
+| Table 1 values; accounting costs at most a few percent of loop time (at most 4 %); a complete run about a fifth longer, mostly validation (abstract, §3) | measured `reports/jmlr/benchmarks/standard-2026-10-18T132206+0000/` (clean checkout of `2c41b42`): loop 1.00 / 1.00 / 1.06, wall clock 1.00 / 1.00 / 1.23; first run `standard-2026-10-17T154705+0000/`: loop 1.04 / 1.04, wall clock 1.22; `docs/jmlr/BENCHMARK_PROTOCOL.md` |
 | Study design: PPO, 1 M transitions, 5 seeds, four reward designs; DQN and learned rewards included (§3) | `docs/RESULTS.md`; experiment definitions in `data/experiments/` (local) |
 | Hover bonus: training return 746 vs original −50 at the end of training (§3, Fig. 2) | measured `reports/jmlr/figures/reward_accounting.csv` (last row of each series; median over five seeds) |
-| Hover-bonus policies: 0 of 500 test landings, 80 % at the time limit (§3) | `docs/RESULTS.md`, `docs/results/results.json` |
+| Hover-bonus policies: 0 of 500 test landings (§3) | `docs/RESULTS.md`, `docs/results/results.json` |
 | Time penalty and potential shaping: every P(improvement) interval contains 0.5 (§3) | `docs/results/tables.md`: 0.32 [0.00, 0.72] and 0.36 [0.00, 0.76] |
-| MIT License; Windows and Linux; Python 3.12; CPU only, no proprietary dependency (§4) | `LICENSE`, SPDX headers (`tools/spdx_headers.py`); `requirements-ci.lock`; `THIRD_PARTY_NOTICES.md` |
-| Main pipeline specific to LunarLander-v3 (§4) | `config.EvalProtocol.problems`; `docs/jmlr/EXTENDING_LUNARLAB.md` |
+| MIT License; Windows (Python 3.12, 3.13) and Linux (3.12); no proprietary dependency (§4) | `LICENSE`, SPDX headers (`tools/spdx_headers.py`); `requirements-ci.lock`; `THIRD_PARTY_NOTICES.md`; CI |
+| Bit-identical within one platform; across operating systems measured, not assumed (§4) | `docs/jmlr/REPRODUCIBILITY.md`; SB3's own statement cited there |
