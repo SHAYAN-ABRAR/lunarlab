@@ -203,9 +203,16 @@ def _run_config(config: str, transitions: int, seed: int, threads: int) -> dict[
             **timers,
         )
         result["hyperparameters"] = _hyperparameters(built[0])
-        result["recording"] = _measure_recording(cfg.run_id)
     peak, method = _peak_memory_bytes()
-    result.update(peak_memory_bytes=peak, peak_memory_method=method)
+    # Sample before optional replay generation: process high-water marks cannot
+    # be reset, and rendering imports/allocations must not contaminate this metric.
+    result.update(
+        peak_memory_bytes=peak,
+        peak_memory_method=method,
+        peak_memory_scope="process through training and checkpointing, before optional recording",
+    )
+    if config == "lunarlab":
+        result["recording"] = _measure_recording(cfg.run_id)
     return result
 
 

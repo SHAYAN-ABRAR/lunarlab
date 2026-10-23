@@ -1,0 +1,357 @@
+{
+  "local_tests": {
+    "tests": 493,
+    "failures": 51,
+    "errors": 0,
+    "skipped": 9,
+    "passed": 433,
+    "failures_detail": [
+      {
+        "class": "tests.test_diagnostics",
+        "test": "test_ppo_recordings_store_probabilities_entropy_and_value",
+        "message": "AssertionError: assert 1 == 0\n +  where 1 = <function train at 0x7f4f4651b9c0>('20261018-191522-baseline-s0-custom-f264')\n +    where '20261018-191522-baseline-s0-custom-f264' = RunConfig(schema_version=1, run_id='20261018-191522-baseline-s0-custom-f264', experiment_id=None, label='', created_at...se, wind_probability=0.8, wind_power=(0.0, 10.0), turbulence_power=(0.0, 1.0), gravity=(-11.0, -9.0)), warm_start=None).run_id"
+      },
+      {
+        "class": "tests.test_diagnostics",
+        "test": "test_dqn_recordings_store_action_values",
+        "message": "AssertionError: assert 1 == 0\n +  where 1 = <function train at 0x7f4f4651b9c0>('20261018-191522-dqn-baseline-s0-custom-eb23')\n +    where '20261018-191522-dqn-baseline-s0-custom-eb23' = RunConfig(schema_version=1, run_id='20261018-191522-dqn-baseline-s0-custom-eb23', experiment_id=None, label='', create...se, wind_probability=0.8, wind_power=(0.0, 10.0), turbulence_power=(0.0, 1.0), gravity=(-11.0, -9.0)), warm_start=None).run_id"
+      },
+      {
+        "class": "tests.test_dqn_continuation",
+        "test": "test_dqn_stop_and_resume_continue_the_same_training_state",
+        "message": "AssertionError: assert 1 == 3\n +  where 1 = <function train at 0x7f4f4651b9c0>('20261018-191526-dqn-baseline-s0-custom-61ee', quiet=True, on_validation=<function stop_after_validation_at.<locals>.<lambda> at 0x7f4f136a2f20>)\n +    where '20261018-191526-dqn-baseline-s0-custom-61ee' = RunConfig(schema_version=1, run_id='20261018-191526-dqn-baseline-s0-custom-61ee', experiment_id=None, label='', create...se, wind_probability=0.8, wind_power=(0.0, 10.0), turbulence_power=(0.0, 1.0), gravity=(-11.0, -9.0)), warm_start=None).run_id\n +    and   <function stop_after_validation_at.<locals>.<lambda> at 0x7f4f136a2f20> = stop_after_validation_at(512)"
+      },
+      {
+        "class": "tests.test_dqn_continuation",
+        "test": "test_resumed_target_network_optimizer_and_replay_match_the_stop_checkpoint",
+        "message": "AssertionError: assert 1 == 3\n +  where 1 = <function train at 0x7f4f4651b9c0>('20261018-191526-dqn-baseline-s0-custom-910f', quiet=True, on_validation=<function stop_after_validation_at.<locals>.<lambda> at 0x7f4f136a3ba0>)\n +    where '20261018-191526-dqn-baseline-s0-custom-910f' = RunConfig(schema_version=1, run_id='20261018-191526-dqn-baseline-s0-custom-910f', experiment_id=None, label='', create...se, wind_probability=0.8, wind_power=(0.0, 10.0), turbulence_power=(0.0, 1.0), gravity=(-11.0, -9.0)), warm_start=None).run_id\n +    and   <function stop_after_validation_at.<locals>.<lambda> at 0x7f4f136a3ba0> = stop_after_validation_at(512)"
+      },
+      {
+        "class": "tests.test_dqn_continuation",
+        "test": "test_legacy_dqn_checkpoint_without_replay_state_cannot_masquerade_as_a_resume",
+        "message": "AssertionError: assert 1 == 3\n +  where 1 = <function train at 0x7f4f4651b9c0>('20261018-191526-dqn-baseline-s0-custom-fa44', quiet=True, on_validation=<function stop_after_validation_at.<locals>.<lambda> at 0x7f4f184dade0>)\n +    where '20261018-191526-dqn-baseline-s0-custom-fa44' = RunConfig(schema_version=1, run_id='20261018-191526-dqn-baseline-s0-custom-fa44', experiment_id=None, label='', create...se, wind_probability=0.8, wind_power=(0.0, 10.0), turbulence_power=(0.0, 1.0), gravity=(-11.0, -9.0)), warm_start=None).run_id\n +    and   <function stop_after_validation_at.<locals>.<lambda> at 0x7f4f184dade0> = stop_after_validation_at(512)"
+      },
+      {
+        "class": "tests.test_dqn_continuation",
+        "test": "test_corrupt_missing_or_incompatible_replay_state_fails_clearly",
+        "message": "AssertionError: assert 1 == 3\n +  where 1 = <function train at 0x7f4f4651b9c0>('20261018-191527-dqn-baseline-s0-custom-f43f', quiet=True, on_validation=<function stop_after_validation_at.<locals>.<lambda> at 0x7f4f186c0e00>)\n +    where '20261018-191527-dqn-baseline-s0-custom-f43f' = RunConfig(schema_version=1, run_id='20261018-191527-dqn-baseline-s0-custom-f43f', experiment_id=None, label='', create...se, wind_probability=0.8, wind_power=(0.0, 10.0), turbulence_power=(0.0, 1.0), gravity=(-11.0, -9.0)), warm_start=None).run_id\n +    and   <function stop_after_validation_at.<locals>.<lambda> at 0x7f4f186c0e00> = stop_after_validation_at(512)"
+      },
+      {
+        "class": "tests.test_dqn_continuation",
+        "test": "test_ppo_checkpoints_keep_their_contract_and_inference_still_works",
+        "message": "AssertionError: assert 1 == 0\n +  where 1 = <function train at 0x7f4f4651b9c0>('20261018-191527-baseline-s0-custom-4c98', quiet=True)\n +    where '20261018-191527-baseline-s0-custom-4c98' = RunConfig(schema_version=1, run_id='20261018-191527-baseline-s0-custom-4c98', experiment_id=None, label='', created_at...se, wind_probability=0.8, wind_power=(0.0, 10.0), turbulence_power=(0.0, 1.0), gravity=(-11.0, -9.0)), warm_start=None).run_id"
+      },
+      {
+        "class": "tests.test_extensions",
+        "test": "test_dqn_run_trains_checkpoints_and_reloads",
+        "message": "AssertionError: assert 1 == 0\n +  where 1 = <function train at 0x7f4f4651b9c0>('20261018-191528-dqn-baseline-s0-custom-8695')\n +    where '20261018-191528-dqn-baseline-s0-custom-8695' = RunConfig(schema_version=1, run_id='20261018-191528-dqn-baseline-s0-custom-8695', experiment_id=None, label='', create...se, wind_probability=0.8, wind_power=(0.0, 10.0), turbulence_power=(0.0, 1.0), gravity=(-11.0, -9.0)), warm_start=None).run_id"
+      },
+      {
+        "class": "tests.test_extensions",
+        "test": "test_robustness_evaluation_is_separate_from_the_final_test",
+        "message": "AssertionError: assert 1 == 0\n +  where 1 = <function train at 0x7f4f4651b9c0>('20261018-191528-baseline-s0-custom-7d22')\n +    where '20261018-191528-baseline-s0-custom-7d22' = RunConfig(schema_version=1, run_id='20261018-191528-baseline-s0-custom-7d22', experiment_id=None, label='', created_at...se, wind_probability=0.8, wind_power=(0.0, 10.0), turbulence_power=(0.0, 1.0), gravity=(-11.0, -9.0)), warm_start=None).run_id"
+      },
+      {
+        "class": "tests.test_extensions",
+        "test": "test_rlhf_study_creates_learned_reward_runs_that_train",
+        "message": "AssertionError: assert 1 == 0\n +  where 1 = <function train at 0x7f4f4651b9c0>('20261018-191529-custom-s0-custom-a58e')\n +    where '20261018-191529-custom-s0-custom-a58e' = RunConfig(schema_version=1, run_id='20261018-191529-custom-s0-custom-a58e', experiment_id=None, label='', created_at='...se, wind_probability=0.8, wind_power=(0.0, 10.0), turbulence_power=(0.0, 1.0), gravity=(-11.0, -9.0)), warm_start=None).run_id"
+      },
+      {
+        "class": "tests.test_extensions",
+        "test": "test_export_demo_writes_a_filtered_scrubbed_snapshot",
+        "message": "AssertionError: assert 1 == 0\n +  where 1 = <function train at 0x7f4f4651b9c0>('20261018-191529-baseline-s0-smoke-0196')"
+      },
+      {
+        "class": "tests.test_extensions",
+        "test": "test_results_figures_and_tables_from_final_test_data",
+        "message": "AssertionError: assert 1 == 0\n +  where 1 = <function train at 0x7f4f4651b9c0>('20261018-191530-baseline-s0-smoke-ab7f')"
+      },
+      {
+        "class": "tests.test_freeze",
+        "test": "test_a_frozen_run_refuses_more_training_in_core_cli_api_and_worker",
+        "message": "AssertionError: assert 1 == 3\n +  where 1 = <function train at 0x7f4f4651b9c0>('20261018-191531-baseline-s0-custom-c32d', quiet=True, on_validation=<function stopped_run.<locals>.<lambda> at 0x7f4f136a3ba0>)\n +    where '20261018-191531-baseline-s0-custom-c32d' = RunConfig(schema_version=1, run_id='20261018-191531-baseline-s0-custom-c32d', experiment_id=None, label='', created_at...se, wind_probability=0.8, wind_power=(0.0, 10.0), turbulence_power=(0.0, 1.0), gravity=(-11.0, -9.0)), warm_start=None).run_id"
+      },
+      {
+        "class": "tests.test_freeze",
+        "test": "test_tested_bytes_stay_available_when_an_alias_changes",
+        "message": "AssertionError: assert 1 == 0\n +  where 1 = <function train at 0x7f4f4651b9c0>('20261018-191531-baseline-s0-custom-b144', quiet=True)\n +    where '20261018-191531-baseline-s0-custom-b144' = RunConfig(schema_version=1, run_id='20261018-191531-baseline-s0-custom-b144', experiment_id=None, label='', created_at...se, wind_probability=0.8, wind_power=(0.0, 10.0), turbulence_power=(0.0, 1.0), gravity=(-11.0, -9.0)), warm_start=None).run_id"
+      },
+      {
+        "class": "tests.test_freeze",
+        "test": "test_freeze_cannot_race_with_a_training_process",
+        "message": "AssertionError: assert 1 == 0\n +  where 1 = <function train at 0x7f4f4651b9c0>('20261018-191531-baseline-s0-custom-fac3', quiet=True)\n +    where '20261018-191531-baseline-s0-custom-fac3' = RunConfig(schema_version=1, run_id='20261018-191531-baseline-s0-custom-fac3', experiment_id=None, label='', created_at...se, wind_probability=0.8, wind_power=(0.0, 10.0), turbulence_power=(0.0, 1.0), gravity=(-11.0, -9.0)), warm_start=None).run_id"
+      },
+      {
+        "class": "tests.test_freeze",
+        "test": "test_two_simultaneous_final_tests_cannot_produce_inconsistent_metadata",
+        "message": "AssertionError: assert 1 == 0\n +  where 1 = <function train at 0x7f4f4651b9c0>('20261018-191531-baseline-s0-custom-2964', quiet=True)\n +    where '20261018-191531-baseline-s0-custom-2964' = RunConfig(schema_version=1, run_id='20261018-191531-baseline-s0-custom-2964', experiment_id=None, label='', created_at...se, wind_probability=0.8, wind_power=(0.0, 10.0), turbulence_power=(0.0, 1.0), gravity=(-11.0, -9.0)), warm_start=None).run_id"
+      },
+      {
+        "class": "tests.test_freeze",
+        "test": "test_an_interrupted_final_test_is_not_counted_and_is_retried_on_the_same_checkpoint",
+        "message": "AssertionError: assert 1 == 0\n +  where 1 = <function train at 0x7f4f4651b9c0>('20261018-191531-baseline-s0-custom-c320', quiet=True)\n +    where '20261018-191531-baseline-s0-custom-c320' = RunConfig(schema_version=1, run_id='20261018-191531-baseline-s0-custom-c320', experiment_id=None, label='', created_at...se, wind_probability=0.8, wind_power=(0.0, 10.0), turbulence_power=(0.0, 1.0), gravity=(-11.0, -9.0)), warm_start=None).run_id"
+      },
+      {
+        "class": "tests.test_freeze",
+        "test": "test_missing_or_tampered_frozen_artifact_is_rejected",
+        "message": "AssertionError: assert 1 == 0\n +  where 1 = <function train at 0x7f4f4651b9c0>('20261018-191531-baseline-s0-custom-e834', quiet=True)\n +    where '20261018-191531-baseline-s0-custom-e834' = RunConfig(schema_version=1, run_id='20261018-191531-baseline-s0-custom-e834', experiment_id=None, label='', created_at...se, wind_probability=0.8, wind_power=(0.0, 10.0), turbulence_power=(0.0, 1.0), gravity=(-11.0, -9.0)), warm_start=None).run_id"
+      },
+      {
+        "class": "tests.test_freeze",
+        "test": "test_legacy_freeze_records_resolve_only_while_the_tested_bytes_are_intact",
+        "message": "AssertionError: assert 1 == 0\n +  where 1 = <function train at 0x7f4f4651b9c0>('20261018-191531-baseline-s0-custom-5e2e', quiet=True)\n +    where '20261018-191531-baseline-s0-custom-5e2e' = RunConfig(schema_version=1, run_id='20261018-191531-baseline-s0-custom-5e2e', experiment_id=None, label='', created_at...se, wind_probability=0.8, wind_power=(0.0, 10.0), turbulence_power=(0.0, 1.0), gravity=(-11.0, -9.0)), warm_start=None).run_id"
+      },
+      {
+        "class": "tests.test_freeze",
+        "test": "test_child_runs_of_a_tested_run_carry_their_test_exposure",
+        "message": "AssertionError: assert 1 == 0\n +  where 1 = <function train at 0x7f4f4651b9c0>('20261018-191531-baseline-s0-custom-2fb7', quiet=True)\n +    where '20261018-191531-baseline-s0-custom-2fb7' = RunConfig(schema_version=1, run_id='20261018-191531-baseline-s0-custom-2fb7', experiment_id=None, label='', created_at...se, wind_probability=0.8, wind_power=(0.0, 10.0), turbulence_power=(0.0, 1.0), gravity=(-11.0, -9.0)), warm_start=None).run_id"
+      },
+      {
+        "class": "tests.test_jobs",
+        "test": "test_live_worker_is_adopted_and_pid_reuse_is_never_killed",
+        "message": "psutil.NoSuchProcess: process PID not found (pid=706)"
+      },
+      {
+        "class": "tests.test_jobs",
+        "test": "test_supervised_training_graceful_stop_then_resume",
+        "message": "TimeoutError: condition not met in time"
+      },
+      {
+        "class": "tests.test_jobs",
+        "test": "test_process_discovery_requires_this_project_and_rechecks_identity",
+        "message": "subprocess.TimeoutExpired: Command '['/workspace/scratch/1c599345f09c/audit/venv/bin/python', '-c', 'import time; time.sleep(120)', '-m', 'lunarlab', 'worker', '--job-id', 'x']' timed out after 15 seconds"
+      },
+      {
+        "class": "tests.test_overhead",
+        "test": "test_benchmark_runs_every_configuration_on_an_equivalent_workload",
+        "message": "RuntimeError: benchmark worker sb3 failed:\nTraceback (most recent call last):\n  File \"<frozen runpy>\", line 198, in _run_module_as_main\n  File \"<frozen runpy>\", line 88, in _run_code\n  File \"/workspace/scratch/1c599345f09c/audit/work/lunarlab/lunarlab/overhead.py\", line 504, in <module>\n    raise SystemExit(main())\n                     ^^^^^^\n  File \"/workspace/scratch/1c599345f09c/audit/work/lunarlab/lunarlab/overhead.py\", line 498, in main\n    res = _run_config(args.worker, args.transitions, args.seed, args.threads)\n          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/scratch/1c599345f09c/audit/work/lunarlab/lunarlab/overhead.py\", line 90, in _run_config\n    proc = psutil.Process()\n           ^^^^^^^^^^^^^^^^\n  File \"/workspace/scratch/1c599345f09c/audit/venv/lib/python3.12/site-packages/psutil/__init__.py\", line 314, in __init__\n    self._init(pid)\n  File \"/workspace/scratch/1c599345f09c/audit/venv/lib/python3.12/site-packages/psutil/__init__.py\", line 360, in _init\n    raise NoSuchProcess(pid, msg=msg) from None\npsutil.NoSuchProcess: process PID not found (pid=918)"
+      },
+      {
+        "class": "tests.test_parallel_and_supervisor",
+        "test": "test_parallel_runs_respect_the_slot_limit_and_a_failure_does_not_stop_the_others",
+        "message": "AssertionError: {'20261018-191911-baseline-s0-custom-29ec': 1, '20261018-191911-baseline-s0-custom-9efa': 1, '20261018-191911-baseline-s0-custom-6c07': 1, '20261018-191911-baseline-s0-custom-c66e': 1}\nassert False\n +  where False = all(<generator object test_parallel_runs_respect_the_slot_limit_and_a_failure_does_not_stop_the_others.<locals>.<genexpr> at 0x7f4f136f8ad0>)"
+      },
+      {
+        "class": "tests.test_parallel_and_supervisor",
+        "test": "test_force_termination_crash_recovery_and_graceful_supervisor_shutdown",
+        "message": "TimeoutError: condition not met in time"
+      },
+      {
+        "class": "tests.test_physics",
+        "test": "test_randomized_training_logs_the_physics_of_every_episode",
+        "message": "AssertionError: assert 1 == 0\n +  where 1 = <function train at 0x7f4f4651b9c0>('20261018-192221-baseline-rand-s0-custom-f29e')\n +    where '20261018-192221-baseline-rand-s0-custom-f29e' = RunConfig(schema_version=1, run_id='20261018-192221-baseline-rand-s0-custom-f29e', experiment_id=None, label='', creat...ue, wind_probability=0.5, wind_power=(0.0, 10.0), turbulence_power=(0.0, 1.0), gravity=(-11.0, -9.5)), warm_start=None).run_id"
+      },
+      {
+        "class": "tests.test_physics",
+        "test": "test_compare_pairs_fixed_and_randomized_training",
+        "message": "AssertionError: assert 1 == 0\n +  where 1 = <function train at 0x7f4f4651b9c0>('20261018-192221-baseline-s0-smoke-a4fb')"
+      },
+      {
+        "class": "tests.test_provenance",
+        "test": "test_release_exports_need_a_clean_source_and_record_full_provenance",
+        "message": "AssertionError: assert 1 == 0\n +  where 1 = <function train at 0x7f4f4651b9c0>('20261018-192230-baseline-s0-smoke-e83a')"
+      },
+      {
+        "class": "tests.test_provenance",
+        "test": "test_training_and_evaluation_record_their_code_revision",
+        "message": "AssertionError: assert 1 == 0\n +  where 1 = <function train at 0x7f4f4651b9c0>('20261018-192230-baseline-s0-smoke-7473')"
+      },
+      {
+        "class": "tests.test_report",
+        "test": "test_smoke_runs_never_produce_portfolio_numbers",
+        "message": "AssertionError: assert 1 == 0\n +  where 1 = train('20261018-192232-baseline-s0-custom-39d6', quiet=True)\n +    where '20261018-192232-baseline-s0-custom-39d6' = RunConfig(schema_version=1, run_id='20261018-192232-baseline-s0-custom-39d6', experiment_id=None, label='', created_at...se, wind_probability=0.8, wind_power=(0.0, 10.0), turbulence_power=(0.0, 1.0), gravity=(-11.0, -9.0)), warm_start=None).run_id"
+      },
+      {
+        "class": "tests.test_report",
+        "test": "test_validation_split_report_does_not_fill_portfolio",
+        "message": "AssertionError: assert 1 == 0\n +  where 1 = train('20261018-192232-baseline-s0-custom-d8ad', quiet=True)\n +    where '20261018-192232-baseline-s0-custom-d8ad' = RunConfig(schema_version=1, run_id='20261018-192232-baseline-s0-custom-d8ad', experiment_id=None, label='', created_at...se, wind_probability=0.8, wind_power=(0.0, 10.0), turbulence_power=(0.0, 1.0), gravity=(-11.0, -9.0)), warm_start=None).run_id"
+      },
+      {
+        "class": "tests.test_reproduce",
+        "test": "test_smoke_pipeline_verifies_every_link_and_is_deterministic",
+        "message": "lunarlab.runs.RunError: run 20261018-192232-potential-s0-custom-46a1 has no checkpoints yet"
+      },
+      {
+        "class": "tests.test_reproduce",
+        "test": "test_smoke_pipeline_removes_its_temporary_home",
+        "message": "lunarlab.runs.RunError: run 20261018-192232-potential-s0-custom-2c8c has no checkpoints yet"
+      },
+      {
+        "class": "tests.test_reproduce",
+        "test": "test_export_then_reproduce_artifact_matches_exactly_and_detects_tampering",
+        "message": "AssertionError: assert 1 == 0\n +  where 1 = <function train at 0x7f4f4651b9c0>('20261018-192232-potential-s3-custom-f214', quiet=True)\n +    where '20261018-192232-potential-s3-custom-f214' = RunConfig(schema_version=1, run_id='20261018-192232-potential-s3-custom-f214', experiment_id=None, label='', created_a...se, wind_probability=0.8, wind_power=(0.0, 10.0), turbulence_power=(0.0, 1.0), gravity=(-11.0, -9.0)), warm_start=None).run_id"
+      },
+      {
+        "class": "tests.test_results_studies",
+        "test": "test_results_cover_algorithm_comparison_discount_ablation_and_robustness",
+        "message": "AssertionError: assert 1 == 0\n +  where 1 = <function train at 0x7f4f4651b9c0>('20261018-192235-baseline-s0-custom-cefe', quiet=True)"
+      },
+      {
+        "class": "tests.test_server_lifecycle",
+        "test": "test_backend_lifecycle_guards_single_instance_graceful_shutdown_and_recovery",
+        "message": "ImportError: Using SOCKS proxy, but the 'socksio' package is not installed. Make sure to install httpx using `pip install httpx[socks]`."
+      },
+      {
+        "class": "tests.test_training",
+        "test": "test_complete_run_records_everything",
+        "message": "AssertionError: assert 1 == 0\n +  where 1 = train('20261018-192235-potential-s0-custom-b250', quiet=True)\n +    where '20261018-192235-potential-s0-custom-b250' = RunConfig(schema_version=1, run_id='20261018-192235-potential-s0-custom-b250', experiment_id=None, label='', created_a...se, wind_probability=0.8, wind_power=(0.0, 10.0), turbulence_power=(0.0, 1.0), gravity=(-11.0, -9.0)), warm_start=None).run_id"
+      },
+      {
+        "class": "tests.test_training",
+        "test": "test_weights_only_reload_reproduces_actions",
+        "message": "AssertionError: assert 1 == 0\n +  where 1 = train('20261018-192235-potential-s0-custom-d022', quiet=True)\n +    where '20261018-192235-potential-s0-custom-d022' = RunConfig(schema_version=1, run_id='20261018-192235-potential-s0-custom-d022', experiment_id=None, label='', created_a...se, wind_probability=0.8, wind_power=(0.0, 10.0), turbulence_power=(0.0, 1.0), gravity=(-11.0, -9.0)), warm_start=None).run_id"
+      },
+      {
+        "class": "tests.test_training",
+        "test": "test_stop_at_safe_boundary_then_resume_preserves_counters",
+        "message": "assert 1 == 3"
+      },
+      {
+        "class": "tests.test_training",
+        "test": "test_incompatible_or_corrupt_resume_is_rejected",
+        "message": "AssertionError: assert 1 == 0\n +  where 1 = train('20261018-192435-potential-s0-custom-92f0', quiet=True)\n +    where '20261018-192435-potential-s0-custom-92f0' = RunConfig(schema_version=1, run_id='20261018-192435-potential-s0-custom-92f0', experiment_id=None, label='', created_a...se, wind_probability=0.8, wind_power=(0.0, 10.0), turbulence_power=(0.0, 1.0), gravity=(-11.0, -9.0)), warm_start=None).run_id"
+      },
+      {
+        "class": "tests.test_training",
+        "test": "test_stop_requested_while_job_starting_is_honoured_not_discarded",
+        "message": "AssertionError: assert 1 == 0\n +  where 1 = train('20261018-192436-potential-s0-custom-5a65', job_id='job-20260101-000000-b-0003', quiet=True)\n +    where '20261018-192436-potential-s0-custom-5a65' = RunConfig(schema_version=1, run_id='20261018-192436-potential-s0-custom-5a65', experiment_id=None, label='', created_a...se, wind_probability=0.8, wind_power=(0.0, 10.0), turbulence_power=(0.0, 1.0), gravity=(-11.0, -9.0)), warm_start=None).run_id"
+      },
+      {
+        "class": "tests.test_tuning",
+        "test": "test_a_study_trains_trials_on_validation_and_never_touches_the_test_seeds",
+        "message": "AssertionError: assert ('stopped' == 'completed'\n  \n  - completed\n  + stopped)"
+      },
+      {
+        "class": "tests.test_tuning",
+        "test": "test_pruning_stops_a_trial_early",
+        "message": "AssertionError: assert ('fail' == 'pruned'\n  \n  - pruned\n  + fail)"
+      },
+      {
+        "class": "tests.test_tuning",
+        "test": "test_cancel_then_resume_completes_the_study",
+        "message": "AssertionError: assert ('fail' == 'fail'\n  \n    fail and False)"
+      },
+      {
+        "class": "tests.test_tuning",
+        "test": "test_a_trial_left_running_by_a_crash_is_failed_on_resume",
+        "message": "AssertionError: assert ['fail', 'fail'] == ['complete', 'fail']\n  \n  At index 0 diff: 'fail' != 'complete'\n  Use -v to get more diff"
+      },
+      {
+        "class": "tests.test_tuning",
+        "test": "test_apply_best_creates_normal_testable_runs",
+        "message": "lunarlab.tuning.TuningError: no completed trial yet"
+      },
+      {
+        "class": "tests.test_tutorial",
+        "test": "test_every_tutorial_command_runs_in_order",
+        "message": "AssertionError: `python -m lunarlab reproduce-smoke` exited with 1\nassert 1 in (0, None)"
+      },
+      {
+        "class": "tests.test_windows",
+        "test": "test_the_frozen_artifact_is_read_only_and_never_overwritten",
+        "message": "AssertionError: assert 1 == 0\n +  where 1 = <function train at 0x7f4f4651b9c0>('20261018-192446-baseline-s0-custom-3159', quiet=True)\n +    where '20261018-192446-baseline-s0-custom-3159' = RunConfig(schema_version=1, run_id='20261018-192446-baseline-s0-custom-3159', experiment_id=None, label='', created_at...se, wind_probability=0.8, wind_power=(0.0, 10.0), turbulence_power=(0.0, 1.0), gravity=(-11.0, -9.0)), warm_start=None).run_id"
+      },
+      {
+        "class": "tests.test_windows",
+        "test": "test_another_process_holding_the_run_lock_blocks_training_and_final_tests",
+        "message": "AssertionError: assert 1 == 0\n +  where 1 = <function train at 0x7f4f4651b9c0>('20261018-192446-baseline-s0-custom-ad38', quiet=True)\n +    where '20261018-192446-baseline-s0-custom-ad38' = RunConfig(schema_version=1, run_id='20261018-192446-baseline-s0-custom-ad38', experiment_id=None, label='', created_at...se, wind_probability=0.8, wind_power=(0.0, 10.0), turbulence_power=(0.0, 1.0), gravity=(-11.0, -9.0)), warm_start=None).run_id"
+      },
+      {
+        "class": "tests.test_windows",
+        "test": "test_stop_resume_and_final_test_in_a_home_whose_path_has_spaces",
+        "message": "AssertionError: assert 1 == 3\n +  where 1 = <function train at 0x7f4f4651b9c0>('20261018-192446-baseline-s0-custom-4a05', quiet=True, on_validation=<function test_stop_resume_and_final_test_in_a_home_whose_path_has_spaces.<locals>.<lambda> at 0x7f4f13fcfd80>)\n +    where '20261018-192446-baseline-s0-custom-4a05' = RunConfig(schema_version=1, run_id='20261018-192446-baseline-s0-custom-4a05', experiment_id=None, label='', created_at...se, wind_probability=0.8, wind_power=(0.0, 10.0), turbulence_power=(0.0, 1.0), gravity=(-11.0, -9.0)), warm_start=None).run_id"
+      }
+    ]
+  },
+  "revised_tests": {
+    "tests": 495,
+    "failures": 7,
+    "errors": 0,
+    "skipped": 9,
+    "passed": 479,
+    "failures_detail": [
+      {
+        "class": "tests.test_jobs",
+        "test": "test_live_worker_is_adopted_and_pid_reuse_is_never_killed",
+        "message": "psutil.NoSuchProcess: process PID not found (pid=1130)"
+      },
+      {
+        "class": "tests.test_jobs",
+        "test": "test_supervised_training_graceful_stop_then_resume",
+        "message": "TimeoutError: condition not met in time"
+      },
+      {
+        "class": "tests.test_jobs",
+        "test": "test_process_discovery_requires_this_project_and_rechecks_identity",
+        "message": "subprocess.TimeoutExpired: Command '['/workspace/scratch/1c599345f09c/audit/venv/bin/python', '-c', 'import time; time.sleep(120)', '-m', 'lunarlab', 'worker', '--job-id', 'x']' timed out after 15 seconds"
+      },
+      {
+        "class": "tests.test_overhead",
+        "test": "test_benchmark_runs_every_configuration_on_an_equivalent_workload",
+        "message": "RuntimeError: benchmark worker sb3 failed:\nTraceback (most recent call last):\n  File \"<frozen runpy>\", line 198, in _run_module_as_main\n  File \"<frozen runpy>\", line 88, in _run_code\n  File \"/workspace/scratch/1c599345f09c/audit/work/lunarlab/lunarlab/overhead.py\", line 511, in <module>\n    raise SystemExit(main())\n                     ^^^^^^\n  File \"/workspace/scratch/1c599345f09c/audit/work/lunarlab/lunarlab/overhead.py\", line 505, in main\n    res = _run_config(args.worker, args.transitions, args.seed, args.threads)\n          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/scratch/1c599345f09c/audit/work/lunarlab/lunarlab/overhead.py\", line 90, in _run_config\n    proc = psutil.Process()\n           ^^^^^^^^^^^^^^^^\n  File \"/workspace/scratch/1c599345f09c/audit/venv/lib/python3.12/site-packages/psutil/__init__.py\", line 314, in __init__\n    self._init(pid)\n  File \"/workspace/scratch/1c599345f09c/audit/venv/lib/python3.12/site-packages/psutil/__init__.py\", line 360, in _init\n    raise NoSuchProcess(pid, msg=msg) from None\npsutil.NoSuchProcess: process PID not found (pid=1342)"
+      },
+      {
+        "class": "tests.test_parallel_and_supervisor",
+        "test": "test_parallel_runs_respect_the_slot_limit_and_a_failure_does_not_stop_the_others",
+        "message": "AssertionError: {'20261019-092839-baseline-s0-custom-76c6': 1, '20261019-092839-baseline-s0-custom-280a': 1, '20261019-092839-baseline-s0-custom-3c92': 1, '20261019-092839-baseline-s0-custom-013b': 1}\nassert False\n +  where False = all(<generator object test_parallel_runs_respect_the_slot_limit_and_a_failure_does_not_stop_the_others.<locals>.<genexpr> at 0x7f6b0253f510>)"
+      },
+      {
+        "class": "tests.test_parallel_and_supervisor",
+        "test": "test_force_termination_crash_recovery_and_graceful_supervisor_shutdown",
+        "message": "TimeoutError: condition not met in time"
+      },
+      {
+        "class": "tests.test_server_lifecycle",
+        "test": "test_backend_lifecycle_guards_single_instance_graceful_shutdown_and_recovery",
+        "message": "TimeoutError: condition not met in time"
+      }
+    ]
+  },
+  "focused_tests": {
+    "tests": 16,
+    "failures": 1,
+    "errors": 0,
+    "skipped": 0,
+    "passed": 15,
+    "failures_detail": [
+      {
+        "class": "tests.test_overhead",
+        "test": "test_benchmark_runs_every_configuration_on_an_equivalent_workload",
+        "message": "RuntimeError: benchmark worker sb3 failed:\nTraceback (most recent call last):\n  File \"<frozen runpy>\", line 198, in _run_module_as_main\n  File \"<frozen runpy>\", line 88, in _run_code\n  File \"/workspace/scratch/1c599345f09c/audit/work/lunarlab/lunarlab/overhead.py\", line 511, in <module>\n    raise SystemExit(main())\n                     ^^^^^^\n  File \"/workspace/scratch/1c599345f09c/audit/work/lunarlab/lunarlab/overhead.py\", line 505, in main\n    res = _run_config(args.worker, args.transitions, args.seed, args.threads)\n          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/scratch/1c599345f09c/audit/work/lunarlab/lunarlab/overhead.py\", line 90, in _run_config\n    proc = psutil.Process()\n           ^^^^^^^^^^^^^^^^\n  File \"/workspace/scratch/1c599345f09c/audit/venv/lib/python3.12/site-packages/psutil/__init__.py\", line 314, in __init__\n    self._init(pid)\n  File \"/workspace/scratch/1c599345f09c/audit/venv/lib/python3.12/site-packages/psutil/__init__.py\", line 360, in _init\n    raise NoSuchProcess(pid, msg=msg) from None\npsutil.NoSuchProcess: process PID not found (pid=23)"
+      }
+    ]
+  },
+  "reporting_regressions": {
+    "tests": 15,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "passed": 15,
+    "failures_detail": [],
+    "deselected": 1
+  },
+  "documentation_tests": {
+    "tests": 121,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "passed": 121,
+    "failures_detail": []
+  },
+  "coverage": {
+    "covered_lines": 7951,
+    "num_statements": 9216,
+    "percent_covered": 83.45511482254697,
+    "percent_covered_display": "83",
+    "missing_lines": 1265,
+    "excluded_lines": 21,
+    "percent_statements_covered": 86.27387152777777,
+    "percent_statements_covered_display": "86",
+    "num_branches": 2280,
+    "num_partial_branches": 339,
+    "covered_branches": 1643,
+    "missing_branches": 637,
+    "percent_branches_covered": 72.06140350877193,
+    "percent_branches_covered_display": "72"
+  }
+}

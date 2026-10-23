@@ -12,20 +12,20 @@
 * :func:`reproduce_artifact` re-evaluates such a package on the recorded seeds and compares every episode
   with the record.
 
-Exactness. For a fixed checkpoint, seed list, environment version and software stack the evaluation is
-deterministic, so a repeat on the same operating system and numerical libraries must match bit for bit. Across
-operating systems or PyTorch/Box2D builds, floating-point differences can change a trajectory; such reproductions
-are reported episode by episode instead of being assumed exact.
+Exactness here means equality of COMPARED_FIELDS, not a bitwise comparison of entire
+trajectories. Operating-system and package-version matching is a coarse diagnostic,
+not a guarantee of identical hardware or compiled numerical behavior. Across
+platforms, floating-point differences can change trajectories; differences are reported.
 
 A reproduction is classified (:data:`STATUSES`) by four separate properties:
 
 * **artifact integrity** -- the files match their digests, and the configuration, seeds, protocol, reward and
   loaded weights are the recorded ones (always blocking when violated);
-* **within-platform reproducibility** -- on the recording platform every episode must be bit-identical;
+* **within-platform reproducibility** -- the selected episode-summary fields are expected to match;
 * **cross-platform numerical reproducibility** -- elsewhere, per-episode differences are measured and reported;
-* **conclusion stability** -- no compared aggregate (mean return; pad-landing, timeout, crash and out-of-bounds
+* **aggregate regression screening** -- no compared aggregate (mean return; pad-landing, timeout, crash and out-of-bounds
   rates) may differ significantly from the record in a paired comparison over the same seeds
-  (:func:`compare_aggregates`).
+  (:func:`compare_aggregates`). Non-rejection does not establish equivalence or preservation of all conclusions.
 """
 
 from __future__ import annotations
@@ -64,7 +64,11 @@ NUMERICAL_STACK = ("torch", "numpy", "Box2D", "gymnasium", "stable-baselines3")
 ARTIFACT_SCHEMA = 1
 REPRODUCTION_SCHEMA = 2
 STATUSES: dict[str, dict[str, Any]] = {
-    "exact": {"blocking": False, "exit_code": 0, "meaning": "every episode is bit-identical to the record"},
+    "exact": {
+        "blocking": False,
+        "exit_code": 0,
+        "meaning": "all selected episode-summary fields match exactly",
+    },
     "within-tolerance": {
         "blocking": False,
         "exit_code": 0,
@@ -75,19 +79,19 @@ STATUSES: dict[str, dict[str, Any]] = {
         "exit_code": 3,
         "meaning": "episodes differ numerically on a different platform; integrity holds and no compared aggregate "
         "differs significantly from the record. Bit-identical results across platforms are not a supported "
-        "guarantee, so this is reported, not failed",
+        "guarantee, so this is reported, not failed. Equivalence has not been assessed",
     },
     "unexpected-difference": {
         "blocking": True,
         "exit_code": 1,
         "meaning": "episodes differ on the operating system and numerical libraries that recorded them, where "
-        "evaluation is expected to be bit-identical",
+        "selected episode-summary fields are expected to match",
     },
     "aggregate-disagreement": {
         "blocking": True,
         "exit_code": 1,
         "meaning": "a reproduced aggregate differs significantly from the record in the paired comparison over the "
-        "same seeds (a systematic change, not numerical noise)",
+        "same seeds; investigate its magnitude and cause",
     },
     "integrity-failure": {
         "blocking": True,
@@ -205,7 +209,7 @@ def compare_episodes(
 ) -> dict[str, Any]:
     """Compare two evaluations seed by seed on :data:`COMPARED_FIELDS`.
 
-    Returns are compared with ``tolerance`` (absolute; 0 = bit-identical), everything else exactly. Besides the
+    Returns are compared with ``tolerance`` (absolute; 0 = numeric equality), everything else exactly. Besides the
     counts, every episode gets a row (``episodes``: returns and their difference, length, termination and
     outcome agreement, final-observation difference) and ``summary`` aggregates them.
     """
@@ -242,11 +246,24 @@ def compare_episodes(
         else:
             within += 1
     return {
+        "compared_fields": list(COMPARED_FIELDS),
+        "exactness_scope": "numeric equality of selected episode-summary fields; not full-trajectory or bitwise identity",
         "compared": len(reproduced),
         "exact": exact,
         "within_tolerance": within,
         "tolerance": tolerance,
         "max_abs_return_difference": max_diff,
+        # Retain the legacy mixed-reward maximum above for compatibility, but
+        # expose the two reward scales separately for scientific reporting.
+        "max_abs_original_return_difference": max((r["abs_return_difference"] for r in rows), default=0.0),
+        "max_abs_training_return_difference": max(
+            (
+                abs(float(ep["training_return"]) - float(by_seed[int(ep["seed"])]["training_return"]))
+                for ep in reproduced
+                if int(ep["seed"]) in by_seed
+            ),
+            default=0.0,
+        ),
         "mismatches": mismatches[:20],
         "n_mismatches": len(reproduced) - within,
         "missing_seeds": missing,
@@ -293,7 +310,7 @@ def holm(p_values: dict[str, float], alpha: float = CONSISTENCY_ALPHA) -> dict[s
 
 
 def compare_aggregates(recorded: list[dict], reproduced: list[dict], protocol) -> dict[str, Any]:
-    """Conclusion stability: does the reproduction differ *systematically* from the record?
+    """Aggregate regression screen, not an equivalence or conclusion-stability certificate.
 
     A reproduction re-flies the recorded seeds, so the comparison is paired. The mean original return is tested
     with a sign-flip permutation test on the per-seed differences; each outcome rate (pad landing, timeout, crash,
@@ -349,6 +366,8 @@ def compare_aggregates(recorded: list[dict], reproduced: list[dict], protocol) -
     for k, m in metrics.items():
         m["significant"] = rejected[k]
     return {
+        "equivalence_assessed": False,
+        "interpretation": "Non-rejection of paired difference tests does not establish equivalence. No equivalence margins were specified.",
         "criterion": "no compared aggregate differs significantly in the paired comparison over the same seeds "
         f"(permutation test for the mean return, exact McNemar tests for rates; Holm, family-wise alpha = {CONSISTENCY_ALPHA})",
         "metrics": metrics,
@@ -402,7 +421,7 @@ def classify_reproduction(
     if not integrity_ok:
         return "integrity-failure", STATUSES["integrity-failure"]["meaning"]
     if n and exact == n:
-        return "exact", f"all {n} episodes are bit-identical to the record"
+        return "exact", f"all {n} episodes match on the selected summary fields"
     if tolerance > 0 and comparison["n_mismatches"] == 0:
         return (
             "within-tolerance",
@@ -908,7 +927,9 @@ def reproduce_artifact(
     check(
         "every re-evaluated episode matches the record" + (" exactly" if exact else f" within {tolerance:g}"),
         cmp["n_mismatches"] == 0,
-        f"{cmp['within_tolerance']}/{cmp['compared']} episodes; largest return difference {cmp['max_abs_return_difference']:.3g}",
+        f"{cmp['within_tolerance']}/{cmp['compared']} episode summaries; largest original-return difference "
+        f"{cmp['max_abs_original_return_difference']:.3g}; largest training-return difference "
+        f"{cmp['max_abs_training_return_difference']:.3g}",
         kind="reproduction",
     )
     aggregates = compare_aggregates(recorded["episodes"], res["episodes"], cfg.eval_protocol)

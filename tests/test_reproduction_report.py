@@ -85,6 +85,30 @@ def test_relative_differences_skip_returns_near_zero_and_missing_seeds_are_liste
     assert cmp["missing_seeds"] == [99_999]
 
 
+def test_return_scales_and_exactness_scope_are_explicit():
+    _, rec = _recorded()
+    ep = copy.deepcopy(rec["episodes"][0])
+    rep = copy.deepcopy(ep)
+    rep["original_return"] += 0.25
+    rep["training_return"] += 125.0
+    cmp = compare_episodes([ep], [rep])
+    assert cmp["max_abs_original_return_difference"] == pytest.approx(0.25)
+    assert cmp["max_abs_training_return_difference"] == pytest.approx(125.0)
+    assert cmp["max_abs_return_difference"] == pytest.approx(125.0)  # legacy mixed scale
+    assert cmp["compared_fields"] == [
+        "length",
+        "original_return",
+        "training_return",
+        "env_outcome",
+        "pad_landing",
+    ]
+    assert "not full-trajectory" in cmp["exactness_scope"]
+    # Final observations are diagnostic, not included in the historical exact-match key.
+    rep = copy.deepcopy(ep)
+    rep["final_obs"] = [99.0] * 8
+    assert compare_episodes([ep], [rep])["exact"] == 1
+
+
 # ---------------------------------------------------------------- paired tests
 
 
@@ -104,6 +128,8 @@ def test_aggregates_flag_systematic_shifts_but_not_symmetric_noise():
     eps = rec["episodes"]
     same = compare_aggregates(eps, copy.deepcopy(eps), cfg.eval_protocol)
     assert same["consistent"] and all(m["p_value"] == 1.0 for m in same["metrics"].values())
+    assert same["equivalence_assessed"] is False
+    assert "does not establish equivalence" in same["interpretation"]
     assert same["metrics"]["mean_original_return"]["recorded"] == rec["aggregate"]["original_return"]["mean"]
     assert same["metrics"]["mean_original_return"]["recorded_ci"] == rec["aggregate"]["original_return"]["ci"]
     # one episode changes category and a few returns move both ways: noise, not a regression

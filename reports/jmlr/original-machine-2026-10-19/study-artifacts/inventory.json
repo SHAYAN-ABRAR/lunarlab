@@ -1,0 +1,3882 @@
+{
+ "kind": "lunarlab.study-artifact-inventory",
+ "source": "docs/results/results.json",
+ "source_sha256": "35dcd0f9e134dfebd00035b3f724e23f84dbeab1db357247bd2bde65b2d50d49",
+ "experiments": [
+  "exp-20261015-223113-reward-shaping-study-7f93",
+  "exp-20261015-224317-dqn-comparison-e3d2",
+  "exp-20261015-235939-rlhf-study-d449"
+ ],
+ "policies": 38,
+ "exported": 38,
+ "verified": 38,
+ "runs": [
+  {
+   "run_id": "20261015-223113-baseline-s0-standard-c5af",
+   "group": "Original baseline",
+   "algorithm": "ppo",
+   "seed": 0,
+   "folder": "original-baseline/20261015-223113-baseline-s0-standard-c5af",
+   "command": "python -m lunarlab export-artifact --run-id 20261015-223113-baseline-s0-standard-c5af --out original-baseline/20261015-223113-baseline-s0-standard-c5af",
+   "exit_code": 0,
+   "output": "exported 20261015-223113-baseline-s0-standard-c5af to D:\\LunarLab-review-return-2026-10-19\\study-artifacts\\original-baseline\\20261015-223113-baseline-s0-standard-c5af: checkpoint a3a89f43dd2d10e8, final test 100 episodes, mean original return 265.86, pad landing 96%",
+   "checks": [
+    {
+     "check": "checkpoint.zip is a byte-identical copy of runs/20261015-223113-baseline-s0-standard-c5af/checkpoints/best_validation.zip",
+     "ok": true,
+     "exported_sha256": "a3a89f43dd2d10e8874dbee708bfcebc663b4e7a906f8ca75a10c4c176150ef7",
+     "source_sha256": "a3a89f43dd2d10e8874dbee708bfcebc663b4e7a906f8ca75a10c4c176150ef7"
+    },
+    {
+     "check": "config.yaml is a byte-identical copy of runs/20261015-223113-baseline-s0-standard-c5af/config.yaml",
+     "ok": true,
+     "exported_sha256": "e40c3f7164c4cae16adbfa099b664247507ffd991df30ddb0e8fe303e8c323d4",
+     "source_sha256": "e40c3f7164c4cae16adbfa099b664247507ffd991df30ddb0e8fe303e8c323d4"
+    },
+    {
+     "check": "evaluation.json is a byte-identical copy of runs/20261015-223113-baseline-s0-standard-c5af/evaluations/test-best_validation-2026-10-15T175850Z.json",
+     "ok": true,
+     "exported_sha256": "8727d75ba2e9875abfd3c05fb7f97551718bd56b55445b32c945eacd90e06258",
+     "source_sha256": "8727d75ba2e9875abfd3c05fb7f97551718bd56b55445b32c945eacd90e06258"
+    },
+    {
+     "check": "the exported checkpoint is the one the freeze record names",
+     "ok": true,
+     "frozen_record": {
+      "checkpoint": "best_validation.zip",
+      "sha256": "a3a89f43dd2d10e8874dbee708bfcebc663b4e7a906f8ca75a10c4c176150ef7"
+     }
+    },
+    {
+     "check": "the exported evaluation is the evaluation docs/results/results.json summarises",
+     "ok": true,
+     "compared": {
+      "file": {
+       "exported": "test-best_validation-2026-10-15T175850Z.json",
+       "published": "test-best_validation-2026-10-15T175850Z.json"
+      },
+      "checkpoint": {
+       "exported": "best_validation.zip",
+       "published": "best_validation.zip"
+      },
+      "protocol_hash": {
+       "exported": "2340c66c35b045bc",
+       "published": "2340c66c35b045bc"
+      },
+      "n_episodes": {
+       "exported": 100,
+       "published": 100
+      },
+      "mean_original_return": {
+       "exported": 265.85578073699435,
+       "published": 265.85578073699435
+      },
+      "pad_landing_rate": {
+       "exported": 0.96,
+       "published": 0.96
+      },
+      "timeout_rate": {
+       "exported": 0.0,
+       "published": 0.0
+      }
+     }
+    }
+   ],
+   "provenance": [
+    {
+     "file": "metadata.json",
+     "copied": true,
+     "sha256": "8e9ab71302cd3eaa6a995a8dc8b404b8e938ddc2bd029e2bcd20252c9596e91d",
+     "identical_to_source": true
+    },
+    {
+     "file": "status.json",
+     "copied": true,
+     "sha256": "aab6b108995d09928bac9cf0907315ff2d7f15d21e4e7974d2da30d639be3780",
+     "identical_to_source": true
+    },
+    {
+     "file": "checkpoints/manifest.json",
+     "copied": true,
+     "sha256": "ec446088d6262e1d1ca98923372aad2e5addb8de38b09e4b798c9a76f44652bb",
+     "identical_to_source": true
+    },
+    {
+     "file": "events.jsonl",
+     "copied": true,
+     "sha256": "738df171a1be6d72b25516bd3ad963859f27d33766a56d15b6f6356016ebfc44",
+     "identical_to_source": true
+    },
+    {
+     "file": "episodes.csv",
+     "copied": true,
+     "sha256": "d879a86aba2c79847d214674c4e1c4d0ad979febaec836b2f6eb26a72ea178b7",
+     "identical_to_source": true,
+     "matches_figure_source_digest": true
+    }
+   ],
+   "verified": true
+  },
+  {
+   "run_id": "20261015-223115-baseline-s1-standard-3b80",
+   "group": "Original baseline",
+   "algorithm": "ppo",
+   "seed": 1,
+   "folder": "original-baseline/20261015-223115-baseline-s1-standard-3b80",
+   "command": "python -m lunarlab export-artifact --run-id 20261015-223115-baseline-s1-standard-3b80 --out original-baseline/20261015-223115-baseline-s1-standard-3b80",
+   "exit_code": 0,
+   "output": "exported 20261015-223115-baseline-s1-standard-3b80 to D:\\LunarLab-review-return-2026-10-19\\study-artifacts\\original-baseline\\20261015-223115-baseline-s1-standard-3b80: checkpoint c65bbbe4ab46f719, final test 100 episodes, mean original return 273.00, pad landing 100%",
+   "checks": [
+    {
+     "check": "checkpoint.zip is a byte-identical copy of runs/20261015-223115-baseline-s1-standard-3b80/checkpoints/best_validation.zip",
+     "ok": true,
+     "exported_sha256": "c65bbbe4ab46f7195671b90bfafa3768efc9f0d8bccefeeb17aa2d4ea3b173d0",
+     "source_sha256": "c65bbbe4ab46f7195671b90bfafa3768efc9f0d8bccefeeb17aa2d4ea3b173d0"
+    },
+    {
+     "check": "config.yaml is a byte-identical copy of runs/20261015-223115-baseline-s1-standard-3b80/config.yaml",
+     "ok": true,
+     "exported_sha256": "f3aed589bba3332b3e1c98aa4ab6694e28adb0c26021a79e4327e30fa764cbe5",
+     "source_sha256": "f3aed589bba3332b3e1c98aa4ab6694e28adb0c26021a79e4327e30fa764cbe5"
+    },
+    {
+     "check": "evaluation.json is a byte-identical copy of runs/20261015-223115-baseline-s1-standard-3b80/evaluations/test-best_validation-2026-10-15T175849Z.json",
+     "ok": true,
+     "exported_sha256": "7cadf5ed0e9835e00bd1c1b49e76c0f90196c90c3b63b54fb90a9d3551020f44",
+     "source_sha256": "7cadf5ed0e9835e00bd1c1b49e76c0f90196c90c3b63b54fb90a9d3551020f44"
+    },
+    {
+     "check": "the exported checkpoint is the one the freeze record names",
+     "ok": true,
+     "frozen_record": {
+      "checkpoint": "best_validation.zip",
+      "sha256": "c65bbbe4ab46f7195671b90bfafa3768efc9f0d8bccefeeb17aa2d4ea3b173d0"
+     }
+    },
+    {
+     "check": "the exported evaluation is the evaluation docs/results/results.json summarises",
+     "ok": true,
+     "compared": {
+      "file": {
+       "exported": "test-best_validation-2026-10-15T175849Z.json",
+       "published": "test-best_validation-2026-10-15T175849Z.json"
+      },
+      "checkpoint": {
+       "exported": "best_validation.zip",
+       "published": "best_validation.zip"
+      },
+      "protocol_hash": {
+       "exported": "2340c66c35b045bc",
+       "published": "2340c66c35b045bc"
+      },
+      "n_episodes": {
+       "exported": 100,
+       "published": 100
+      },
+      "mean_original_return": {
+       "exported": 272.9991942034805,
+       "published": 272.9991942034805
+      },
+      "pad_landing_rate": {
+       "exported": 1.0,
+       "published": 1.0
+      },
+      "timeout_rate": {
+       "exported": 0.0,
+       "published": 0.0
+      }
+     }
+    }
+   ],
+   "provenance": [
+    {
+     "file": "metadata.json",
+     "copied": true,
+     "sha256": "d35b21bdd8090075015a6b00ffe9b5903245f79e1230e40991b25178a3fa9bd0",
+     "identical_to_source": true
+    },
+    {
+     "file": "status.json",
+     "copied": true,
+     "sha256": "51b46edf361a72f935e0a9c4a209e76183d8106f641cee3f69f1a9517b171bfd",
+     "identical_to_source": true
+    },
+    {
+     "file": "checkpoints/manifest.json",
+     "copied": true,
+     "sha256": "8ab28c1fb10f983ad989ba56ad4f5d64854a6214f647100074a6774ba2ffef06",
+     "identical_to_source": true
+    },
+    {
+     "file": "events.jsonl",
+     "copied": true,
+     "sha256": "678e0b4ca9b1dd3773b03a2514502e7849beb6d911ec080443f5e7f778e5d720",
+     "identical_to_source": true
+    },
+    {
+     "file": "episodes.csv",
+     "copied": true,
+     "sha256": "4fdcbaf23f6fe630ef9422c93da0d99eaac8484c4aa33007d87295eba3c2f63e",
+     "identical_to_source": true,
+     "matches_figure_source_digest": true
+    }
+   ],
+   "verified": true
+  },
+  {
+   "run_id": "20261015-223115-baseline-s2-standard-5b5d",
+   "group": "Original baseline",
+   "algorithm": "ppo",
+   "seed": 2,
+   "folder": "original-baseline/20261015-223115-baseline-s2-standard-5b5d",
+   "command": "python -m lunarlab export-artifact --run-id 20261015-223115-baseline-s2-standard-5b5d --out original-baseline/20261015-223115-baseline-s2-standard-5b5d",
+   "exit_code": 0,
+   "output": "exported 20261015-223115-baseline-s2-standard-5b5d to D:\\LunarLab-review-return-2026-10-19\\study-artifacts\\original-baseline\\20261015-223115-baseline-s2-standard-5b5d: checkpoint cff8905fdd069223, final test 100 episodes, mean original return 250.12, pad landing 94%",
+   "checks": [
+    {
+     "check": "checkpoint.zip is a byte-identical copy of runs/20261015-223115-baseline-s2-standard-5b5d/checkpoints/best_validation.zip",
+     "ok": true,
+     "exported_sha256": "cff8905fdd06922319d83f0d82cf349389e6e60861904ea6ebe4db739ec77571",
+     "source_sha256": "cff8905fdd06922319d83f0d82cf349389e6e60861904ea6ebe4db739ec77571"
+    },
+    {
+     "check": "config.yaml is a byte-identical copy of runs/20261015-223115-baseline-s2-standard-5b5d/config.yaml",
+     "ok": true,
+     "exported_sha256": "548caec823d2d9ce49a203adcdda21de35cb079cc07c15d2d171eb350675e662",
+     "source_sha256": "548caec823d2d9ce49a203adcdda21de35cb079cc07c15d2d171eb350675e662"
+    },
+    {
+     "check": "evaluation.json is a byte-identical copy of runs/20261015-223115-baseline-s2-standard-5b5d/evaluations/test-best_validation-2026-10-15T175856Z.json",
+     "ok": true,
+     "exported_sha256": "b0dd4461da888d07e8e0ebdef87bcbf18bb57d5253ec077b86665d230be08025",
+     "source_sha256": "b0dd4461da888d07e8e0ebdef87bcbf18bb57d5253ec077b86665d230be08025"
+    },
+    {
+     "check": "the exported checkpoint is the one the freeze record names",
+     "ok": true,
+     "frozen_record": {
+      "checkpoint": "best_validation.zip",
+      "sha256": "cff8905fdd06922319d83f0d82cf349389e6e60861904ea6ebe4db739ec77571"
+     }
+    },
+    {
+     "check": "the exported evaluation is the evaluation docs/results/results.json summarises",
+     "ok": true,
+     "compared": {
+      "file": {
+       "exported": "test-best_validation-2026-10-15T175856Z.json",
+       "published": "test-best_validation-2026-10-15T175856Z.json"
+      },
+      "checkpoint": {
+       "exported": "best_validation.zip",
+       "published": "best_validation.zip"
+      },
+      "protocol_hash": {
+       "exported": "2340c66c35b045bc",
+       "published": "2340c66c35b045bc"
+      },
+      "n_episodes": {
+       "exported": 100,
+       "published": 100
+      },
+      "mean_original_return": {
+       "exported": 250.12402092644936,
+       "published": 250.12402092644936
+      },
+      "pad_landing_rate": {
+       "exported": 0.94,
+       "published": 0.94
+      },
+      "timeout_rate": {
+       "exported": 0.0,
+       "published": 0.0
+      }
+     }
+    }
+   ],
+   "provenance": [
+    {
+     "file": "metadata.json",
+     "copied": true,
+     "sha256": "d0d61880292926da0a13f2e7c08c8f95e54b0440782d74718e7d378bafb928f0",
+     "identical_to_source": true
+    },
+    {
+     "file": "status.json",
+     "copied": true,
+     "sha256": "bb6c964085a65df1147710f7b20efcc02c95a8aa42eef59ca94bd3dfd1f18396",
+     "identical_to_source": true
+    },
+    {
+     "file": "checkpoints/manifest.json",
+     "copied": true,
+     "sha256": "2a93644635e7333155aed3efe287cc074b790cccb50e454bb128798d49c407a1",
+     "identical_to_source": true
+    },
+    {
+     "file": "events.jsonl",
+     "copied": true,
+     "sha256": "690912b0f0d0368aa0da5a892e990a3fdcd76bb148720d570f7c2918210f55b0",
+     "identical_to_source": true
+    },
+    {
+     "file": "episodes.csv",
+     "copied": true,
+     "sha256": "f8bd709bcb66516c3ffd91fa5a74f2d7c6e45ac154784832367184891d6e8c3b",
+     "identical_to_source": true,
+     "matches_figure_source_digest": true
+    }
+   ],
+   "verified": true
+  },
+  {
+   "run_id": "20261015-223115-baseline-s3-standard-7b0f",
+   "group": "Original baseline",
+   "algorithm": "ppo",
+   "seed": 3,
+   "folder": "original-baseline/20261015-223115-baseline-s3-standard-7b0f",
+   "command": "python -m lunarlab export-artifact --run-id 20261015-223115-baseline-s3-standard-7b0f --out original-baseline/20261015-223115-baseline-s3-standard-7b0f",
+   "exit_code": 0,
+   "output": "exported 20261015-223115-baseline-s3-standard-7b0f to D:\\LunarLab-review-return-2026-10-19\\study-artifacts\\original-baseline\\20261015-223115-baseline-s3-standard-7b0f: checkpoint 938d967538f58895, final test 100 episodes, mean original return 268.32, pad landing 99%",
+   "checks": [
+    {
+     "check": "checkpoint.zip is a byte-identical copy of runs/20261015-223115-baseline-s3-standard-7b0f/checkpoints/best_validation.zip",
+     "ok": true,
+     "exported_sha256": "938d967538f588954d05c05d284eb574b25ecd7d152a78fcc1a3d0e584db15f7",
+     "source_sha256": "938d967538f588954d05c05d284eb574b25ecd7d152a78fcc1a3d0e584db15f7"
+    },
+    {
+     "check": "config.yaml is a byte-identical copy of runs/20261015-223115-baseline-s3-standard-7b0f/config.yaml",
+     "ok": true,
+     "exported_sha256": "12da0c94cf298dd6a3c67e070d8e78911d8967c1c6c4bc94c05b9fa19f9df9f6",
+     "source_sha256": "12da0c94cf298dd6a3c67e070d8e78911d8967c1c6c4bc94c05b9fa19f9df9f6"
+    },
+    {
+     "check": "evaluation.json is a byte-identical copy of runs/20261015-223115-baseline-s3-standard-7b0f/evaluations/test-best_validation-2026-10-15T175850Z.json",
+     "ok": true,
+     "exported_sha256": "79151b5cd1e88901d59c5ed60e24c350d03ce0d2aa68e8aeadc30b5b2114d386",
+     "source_sha256": "79151b5cd1e88901d59c5ed60e24c350d03ce0d2aa68e8aeadc30b5b2114d386"
+    },
+    {
+     "check": "the exported checkpoint is the one the freeze record names",
+     "ok": true,
+     "frozen_record": {
+      "checkpoint": "best_validation.zip",
+      "sha256": "938d967538f588954d05c05d284eb574b25ecd7d152a78fcc1a3d0e584db15f7"
+     }
+    },
+    {
+     "check": "the exported evaluation is the evaluation docs/results/results.json summarises",
+     "ok": true,
+     "compared": {
+      "file": {
+       "exported": "test-best_validation-2026-10-15T175850Z.json",
+       "published": "test-best_validation-2026-10-15T175850Z.json"
+      },
+      "checkpoint": {
+       "exported": "best_validation.zip",
+       "published": "best_validation.zip"
+      },
+      "protocol_hash": {
+       "exported": "2340c66c35b045bc",
+       "published": "2340c66c35b045bc"
+      },
+      "n_episodes": {
+       "exported": 100,
+       "published": 100
+      },
+      "mean_original_return": {
+       "exported": 268.3226064523492,
+       "published": 268.3226064523492
+      },
+      "pad_landing_rate": {
+       "exported": 0.99,
+       "published": 0.99
+      },
+      "timeout_rate": {
+       "exported": 0.0,
+       "published": 0.0
+      }
+     }
+    }
+   ],
+   "provenance": [
+    {
+     "file": "metadata.json",
+     "copied": true,
+     "sha256": "939daa7de40235ef0258081fa4eb58356bed95b09afe1948e848ad72eeb673e1",
+     "identical_to_source": true
+    },
+    {
+     "file": "status.json",
+     "copied": true,
+     "sha256": "76f05a41617556e2ec4068537a4a68d4b30648556fc6f80deccc0821015b5514",
+     "identical_to_source": true
+    },
+    {
+     "file": "checkpoints/manifest.json",
+     "copied": true,
+     "sha256": "8f942443ed3f7f7a60d3cbf6f6efb5c488d12ab34d7a78f741391cbd39b0f667",
+     "identical_to_source": true
+    },
+    {
+     "file": "events.jsonl",
+     "copied": true,
+     "sha256": "7c03c0074557c3dde67d8b787634780191ed16b262bf5d32f16282d70c4cfe01",
+     "identical_to_source": true
+    },
+    {
+     "file": "episodes.csv",
+     "copied": true,
+     "sha256": "b7e9d448c74ce8558bc91f1273415cbff72d0b79ab0b8ddc3aaa146d8e7efcd4",
+     "identical_to_source": true,
+     "matches_figure_source_digest": true
+    }
+   ],
+   "verified": true
+  },
+  {
+   "run_id": "20261015-223115-baseline-s4-standard-f7f6",
+   "group": "Original baseline",
+   "algorithm": "ppo",
+   "seed": 4,
+   "folder": "original-baseline/20261015-223115-baseline-s4-standard-f7f6",
+   "command": "python -m lunarlab export-artifact --run-id 20261015-223115-baseline-s4-standard-f7f6 --out original-baseline/20261015-223115-baseline-s4-standard-f7f6",
+   "exit_code": 0,
+   "output": "exported 20261015-223115-baseline-s4-standard-f7f6 to D:\\LunarLab-review-return-2026-10-19\\study-artifacts\\original-baseline\\20261015-223115-baseline-s4-standard-f7f6: checkpoint 5c0439e6e82207ce, final test 100 episodes, mean original return 271.50, pad landing 99%",
+   "checks": [
+    {
+     "check": "checkpoint.zip is a byte-identical copy of runs/20261015-223115-baseline-s4-standard-f7f6/checkpoints/best_validation.zip",
+     "ok": true,
+     "exported_sha256": "5c0439e6e82207cedc648954aeb2ae11f1c29299f7669ebb0da0a1a6be609b27",
+     "source_sha256": "5c0439e6e82207cedc648954aeb2ae11f1c29299f7669ebb0da0a1a6be609b27"
+    },
+    {
+     "check": "config.yaml is a byte-identical copy of runs/20261015-223115-baseline-s4-standard-f7f6/config.yaml",
+     "ok": true,
+     "exported_sha256": "33a465060fb6f7ef98c3a0d290ad33c45644e67dfbf06f44f47b3c623e7ea1cf",
+     "source_sha256": "33a465060fb6f7ef98c3a0d290ad33c45644e67dfbf06f44f47b3c623e7ea1cf"
+    },
+    {
+     "check": "evaluation.json is a byte-identical copy of runs/20261015-223115-baseline-s4-standard-f7f6/evaluations/test-best_validation-2026-10-15T175920Z.json",
+     "ok": true,
+     "exported_sha256": "2f47ac8103ea33600abc2ad92f737e5eb12ba48aded0ef2f66a552c3d5089fd6",
+     "source_sha256": "2f47ac8103ea33600abc2ad92f737e5eb12ba48aded0ef2f66a552c3d5089fd6"
+    },
+    {
+     "check": "the exported checkpoint is the one the freeze record names",
+     "ok": true,
+     "frozen_record": {
+      "checkpoint": "best_validation.zip",
+      "sha256": "5c0439e6e82207cedc648954aeb2ae11f1c29299f7669ebb0da0a1a6be609b27"
+     }
+    },
+    {
+     "check": "the exported evaluation is the evaluation docs/results/results.json summarises",
+     "ok": true,
+     "compared": {
+      "file": {
+       "exported": "test-best_validation-2026-10-15T175920Z.json",
+       "published": "test-best_validation-2026-10-15T175920Z.json"
+      },
+      "checkpoint": {
+       "exported": "best_validation.zip",
+       "published": "best_validation.zip"
+      },
+      "protocol_hash": {
+       "exported": "2340c66c35b045bc",
+       "published": "2340c66c35b045bc"
+      },
+      "n_episodes": {
+       "exported": 100,
+       "published": 100
+      },
+      "mean_original_return": {
+       "exported": 271.504394943642,
+       "published": 271.504394943642
+      },
+      "pad_landing_rate": {
+       "exported": 0.99,
+       "published": 0.99
+      },
+      "timeout_rate": {
+       "exported": 0.0,
+       "published": 0.0
+      }
+     }
+    }
+   ],
+   "provenance": [
+    {
+     "file": "metadata.json",
+     "copied": true,
+     "sha256": "d3d66817e165ee7db84169868108fa49a8a9b9f1971661e5942621b974321b89",
+     "identical_to_source": true
+    },
+    {
+     "file": "status.json",
+     "copied": true,
+     "sha256": "a59e7945b48d61a7615f8d72c9f8c1288aa3f19b6c32eec72efb81a8b9e7e8fb",
+     "identical_to_source": true
+    },
+    {
+     "file": "checkpoints/manifest.json",
+     "copied": true,
+     "sha256": "02b4eb8c9b386a2fe66da1fa238d206899b67d0af4eb18ab9ed23d7bf317f65f",
+     "identical_to_source": true
+    },
+    {
+     "file": "events.jsonl",
+     "copied": true,
+     "sha256": "92cea954bd444e79e3176f56d22c9813256260bccb727815752a1ce7378e5a0a",
+     "identical_to_source": true
+    },
+    {
+     "file": "episodes.csv",
+     "copied": true,
+     "sha256": "c0a1b0e363c4ce19cbd7d3b34d84f571ef46a5328563ca4fea447ebbff56cd92",
+     "identical_to_source": true,
+     "matches_figure_source_digest": true
+    }
+   ],
+   "verified": true
+  },
+  {
+   "run_id": "20261015-223115-time-penalty-s0-standard-2582",
+   "group": "Time-penalty ablation",
+   "algorithm": "ppo",
+   "seed": 0,
+   "folder": "time-penalty-ablation/20261015-223115-time-penalty-s0-standard-2582",
+   "command": "python -m lunarlab export-artifact --run-id 20261015-223115-time-penalty-s0-standard-2582 --out time-penalty-ablation/20261015-223115-time-penalty-s0-standard-2582",
+   "exit_code": 0,
+   "output": "exported 20261015-223115-time-penalty-s0-standard-2582 to D:\\LunarLab-review-return-2026-10-19\\study-artifacts\\time-penalty-ablation\\20261015-223115-time-penalty-s0-standard-2582: checkpoint 46f518dc8127289b, final test 100 episodes, mean original return 266.98, pad landing 100%",
+   "checks": [
+    {
+     "check": "checkpoint.zip is a byte-identical copy of runs/20261015-223115-time-penalty-s0-standard-2582/checkpoints/best_validation.zip",
+     "ok": true,
+     "exported_sha256": "46f518dc8127289bc1848cdc36e548bfacc045cd04917f8a4d81a3585bd56a43",
+     "source_sha256": "46f518dc8127289bc1848cdc36e548bfacc045cd04917f8a4d81a3585bd56a43"
+    },
+    {
+     "check": "config.yaml is a byte-identical copy of runs/20261015-223115-time-penalty-s0-standard-2582/config.yaml",
+     "ok": true,
+     "exported_sha256": "da2f95807e9a4702487b63857051d3aea910535a1f53ee38814a833170f63609",
+     "source_sha256": "da2f95807e9a4702487b63857051d3aea910535a1f53ee38814a833170f63609"
+    },
+    {
+     "check": "evaluation.json is a byte-identical copy of runs/20261015-223115-time-penalty-s0-standard-2582/evaluations/test-best_validation-2026-10-15T175928Z.json",
+     "ok": true,
+     "exported_sha256": "bb0c226df5240e0b2086d7dc9c6f7eeb9dad27fe028e7bd2fee869151ae96b39",
+     "source_sha256": "bb0c226df5240e0b2086d7dc9c6f7eeb9dad27fe028e7bd2fee869151ae96b39"
+    },
+    {
+     "check": "the exported checkpoint is the one the freeze record names",
+     "ok": true,
+     "frozen_record": {
+      "checkpoint": "best_validation.zip",
+      "sha256": "46f518dc8127289bc1848cdc36e548bfacc045cd04917f8a4d81a3585bd56a43"
+     }
+    },
+    {
+     "check": "the exported evaluation is the evaluation docs/results/results.json summarises",
+     "ok": true,
+     "compared": {
+      "file": {
+       "exported": "test-best_validation-2026-10-15T175928Z.json",
+       "published": "test-best_validation-2026-10-15T175928Z.json"
+      },
+      "checkpoint": {
+       "exported": "best_validation.zip",
+       "published": "best_validation.zip"
+      },
+      "protocol_hash": {
+       "exported": "2340c66c35b045bc",
+       "published": "2340c66c35b045bc"
+      },
+      "n_episodes": {
+       "exported": 100,
+       "published": 100
+      },
+      "mean_original_return": {
+       "exported": 266.9751593803957,
+       "published": 266.9751593803957
+      },
+      "pad_landing_rate": {
+       "exported": 1.0,
+       "published": 1.0
+      },
+      "timeout_rate": {
+       "exported": 0.0,
+       "published": 0.0
+      }
+     }
+    }
+   ],
+   "provenance": [
+    {
+     "file": "metadata.json",
+     "copied": true,
+     "sha256": "4e2928d6d5ecebcd8832978f24321ec5f8e16667dedf74f00b64f80342e0b4ed",
+     "identical_to_source": true
+    },
+    {
+     "file": "status.json",
+     "copied": true,
+     "sha256": "80a958ac35f1eb38130451908fa661fe915ac710fd0e5a3b66bf96f7a7cab483",
+     "identical_to_source": true
+    },
+    {
+     "file": "checkpoints/manifest.json",
+     "copied": true,
+     "sha256": "aa88b3584b1118ebf4d18abed9ca7d2645d1222ad15b7c094e04e2add8fbb841",
+     "identical_to_source": true
+    },
+    {
+     "file": "events.jsonl",
+     "copied": true,
+     "sha256": "36b0402ce48e2a89471cfaa61249dd1c45260a3615ea082701dfbbc3632d9307",
+     "identical_to_source": true
+    }
+   ],
+   "verified": true
+  },
+  {
+   "run_id": "20261015-223115-time-penalty-s1-standard-6fc9",
+   "group": "Time-penalty ablation",
+   "algorithm": "ppo",
+   "seed": 1,
+   "folder": "time-penalty-ablation/20261015-223115-time-penalty-s1-standard-6fc9",
+   "command": "python -m lunarlab export-artifact --run-id 20261015-223115-time-penalty-s1-standard-6fc9 --out time-penalty-ablation/20261015-223115-time-penalty-s1-standard-6fc9",
+   "exit_code": 0,
+   "output": "exported 20261015-223115-time-penalty-s1-standard-6fc9 to D:\\LunarLab-review-return-2026-10-19\\study-artifacts\\time-penalty-ablation\\20261015-223115-time-penalty-s1-standard-6fc9: checkpoint ee4c1701915191d3, final test 100 episodes, mean original return 262.48, pad landing 94%",
+   "checks": [
+    {
+     "check": "checkpoint.zip is a byte-identical copy of runs/20261015-223115-time-penalty-s1-standard-6fc9/checkpoints/best_validation.zip",
+     "ok": true,
+     "exported_sha256": "ee4c1701915191d323a481bd36eba17b7e9de05c085ff7e0a178ac785c0e7e49",
+     "source_sha256": "ee4c1701915191d323a481bd36eba17b7e9de05c085ff7e0a178ac785c0e7e49"
+    },
+    {
+     "check": "config.yaml is a byte-identical copy of runs/20261015-223115-time-penalty-s1-standard-6fc9/config.yaml",
+     "ok": true,
+     "exported_sha256": "a8649588b96a101c86b0e139e5b5c76a8b558a2a224a2a3d9ca6272bfa5c3e20",
+     "source_sha256": "a8649588b96a101c86b0e139e5b5c76a8b558a2a224a2a3d9ca6272bfa5c3e20"
+    },
+    {
+     "check": "evaluation.json is a byte-identical copy of runs/20261015-223115-time-penalty-s1-standard-6fc9/evaluations/test-best_validation-2026-10-15T175928Z.json",
+     "ok": true,
+     "exported_sha256": "5033a86f571723fa45fc80d10ddc7a6863bb65beb58166255dc3be88d4815d8d",
+     "source_sha256": "5033a86f571723fa45fc80d10ddc7a6863bb65beb58166255dc3be88d4815d8d"
+    },
+    {
+     "check": "the exported checkpoint is the one the freeze record names",
+     "ok": true,
+     "frozen_record": {
+      "checkpoint": "best_validation.zip",
+      "sha256": "ee4c1701915191d323a481bd36eba17b7e9de05c085ff7e0a178ac785c0e7e49"
+     }
+    },
+    {
+     "check": "the exported evaluation is the evaluation docs/results/results.json summarises",
+     "ok": true,
+     "compared": {
+      "file": {
+       "exported": "test-best_validation-2026-10-15T175928Z.json",
+       "published": "test-best_validation-2026-10-15T175928Z.json"
+      },
+      "checkpoint": {
+       "exported": "best_validation.zip",
+       "published": "best_validation.zip"
+      },
+      "protocol_hash": {
+       "exported": "2340c66c35b045bc",
+       "published": "2340c66c35b045bc"
+      },
+      "n_episodes": {
+       "exported": 100,
+       "published": 100
+      },
+      "mean_original_return": {
+       "exported": 262.47710412866655,
+       "published": 262.47710412866655
+      },
+      "pad_landing_rate": {
+       "exported": 0.94,
+       "published": 0.94
+      },
+      "timeout_rate": {
+       "exported": 0.01,
+       "published": 0.01
+      }
+     }
+    }
+   ],
+   "provenance": [
+    {
+     "file": "metadata.json",
+     "copied": true,
+     "sha256": "ca7c520260f957f25d361491b226172d720754daeb0134f047882600bcb68b2a",
+     "identical_to_source": true
+    },
+    {
+     "file": "status.json",
+     "copied": true,
+     "sha256": "bb3ffb52194abb328214ea94f282302131641a4004e957eae66bf47e6944e0bd",
+     "identical_to_source": true
+    },
+    {
+     "file": "checkpoints/manifest.json",
+     "copied": true,
+     "sha256": "36bfaf8a7ede82ee8435317ff96736a7ea7f0f5ec77bad9b7fc3f08c0ed8be80",
+     "identical_to_source": true
+    },
+    {
+     "file": "events.jsonl",
+     "copied": true,
+     "sha256": "a0f361db1a3ef4427f5fb02ce52a500f001b929b2f0668d20d61b072975bd835",
+     "identical_to_source": true
+    }
+   ],
+   "verified": true
+  },
+  {
+   "run_id": "20261015-223115-time-penalty-s2-standard-9f88",
+   "group": "Time-penalty ablation",
+   "algorithm": "ppo",
+   "seed": 2,
+   "folder": "time-penalty-ablation/20261015-223115-time-penalty-s2-standard-9f88",
+   "command": "python -m lunarlab export-artifact --run-id 20261015-223115-time-penalty-s2-standard-9f88 --out time-penalty-ablation/20261015-223115-time-penalty-s2-standard-9f88",
+   "exit_code": 0,
+   "output": "exported 20261015-223115-time-penalty-s2-standard-9f88 to D:\\LunarLab-review-return-2026-10-19\\study-artifacts\\time-penalty-ablation\\20261015-223115-time-penalty-s2-standard-9f88: checkpoint 9e62a6c5d51e79f1, final test 100 episodes, mean original return 269.71, pad landing 100%",
+   "checks": [
+    {
+     "check": "checkpoint.zip is a byte-identical copy of runs/20261015-223115-time-penalty-s2-standard-9f88/checkpoints/best_validation.zip",
+     "ok": true,
+     "exported_sha256": "9e62a6c5d51e79f179e5818eae1ce35ffb0705eaca67fa06592226ade22d7c7e",
+     "source_sha256": "9e62a6c5d51e79f179e5818eae1ce35ffb0705eaca67fa06592226ade22d7c7e"
+    },
+    {
+     "check": "config.yaml is a byte-identical copy of runs/20261015-223115-time-penalty-s2-standard-9f88/config.yaml",
+     "ok": true,
+     "exported_sha256": "8d979210b6243023f2aaf379279166b741cfe22eb96a0b70176f540a33f87b06",
+     "source_sha256": "8d979210b6243023f2aaf379279166b741cfe22eb96a0b70176f540a33f87b06"
+    },
+    {
+     "check": "evaluation.json is a byte-identical copy of runs/20261015-223115-time-penalty-s2-standard-9f88/evaluations/test-best_validation-2026-10-15T175930Z.json",
+     "ok": true,
+     "exported_sha256": "e110dfec2e74112c38e97d7842c41fddaf61c4daacd8f12fccf89d3c2a4eeacd",
+     "source_sha256": "e110dfec2e74112c38e97d7842c41fddaf61c4daacd8f12fccf89d3c2a4eeacd"
+    },
+    {
+     "check": "the exported checkpoint is the one the freeze record names",
+     "ok": true,
+     "frozen_record": {
+      "checkpoint": "best_validation.zip",
+      "sha256": "9e62a6c5d51e79f179e5818eae1ce35ffb0705eaca67fa06592226ade22d7c7e"
+     }
+    },
+    {
+     "check": "the exported evaluation is the evaluation docs/results/results.json summarises",
+     "ok": true,
+     "compared": {
+      "file": {
+       "exported": "test-best_validation-2026-10-15T175930Z.json",
+       "published": "test-best_validation-2026-10-15T175930Z.json"
+      },
+      "checkpoint": {
+       "exported": "best_validation.zip",
+       "published": "best_validation.zip"
+      },
+      "protocol_hash": {
+       "exported": "2340c66c35b045bc",
+       "published": "2340c66c35b045bc"
+      },
+      "n_episodes": {
+       "exported": 100,
+       "published": 100
+      },
+      "mean_original_return": {
+       "exported": 269.70623362498,
+       "published": 269.70623362498
+      },
+      "pad_landing_rate": {
+       "exported": 1.0,
+       "published": 1.0
+      },
+      "timeout_rate": {
+       "exported": 0.0,
+       "published": 0.0
+      }
+     }
+    }
+   ],
+   "provenance": [
+    {
+     "file": "metadata.json",
+     "copied": true,
+     "sha256": "1cad0722f78387cc21c25724ab4e80b37e978fab32c8b0bec5193626558e1184",
+     "identical_to_source": true
+    },
+    {
+     "file": "status.json",
+     "copied": true,
+     "sha256": "fb28d7610ed81c5e91a386e9a0652bc53a00c461b1e7e27e9b7b27707ad33140",
+     "identical_to_source": true
+    },
+    {
+     "file": "checkpoints/manifest.json",
+     "copied": true,
+     "sha256": "dee4ee25126552fbe3c8dd44294a7d32c061a25cc5c0560ab96a4464b5a04ab0",
+     "identical_to_source": true
+    },
+    {
+     "file": "events.jsonl",
+     "copied": true,
+     "sha256": "c3b18e31cf9a62eebf0359f080ce21dcd077fcd9bc1a37c7233135b6383ea32e",
+     "identical_to_source": true
+    }
+   ],
+   "verified": true
+  },
+  {
+   "run_id": "20261015-223115-time-penalty-s3-standard-f398",
+   "group": "Time-penalty ablation",
+   "algorithm": "ppo",
+   "seed": 3,
+   "folder": "time-penalty-ablation/20261015-223115-time-penalty-s3-standard-f398",
+   "command": "python -m lunarlab export-artifact --run-id 20261015-223115-time-penalty-s3-standard-f398 --out time-penalty-ablation/20261015-223115-time-penalty-s3-standard-f398",
+   "exit_code": 0,
+   "output": "exported 20261015-223115-time-penalty-s3-standard-f398 to D:\\LunarLab-review-return-2026-10-19\\study-artifacts\\time-penalty-ablation\\20261015-223115-time-penalty-s3-standard-f398: checkpoint 7855d4ba189d8f4c, final test 100 episodes, mean original return 236.54, pad landing 75%",
+   "checks": [
+    {
+     "check": "checkpoint.zip is a byte-identical copy of runs/20261015-223115-time-penalty-s3-standard-f398/checkpoints/best_validation.zip",
+     "ok": true,
+     "exported_sha256": "7855d4ba189d8f4c0dbf9441cd7a17d17a8a40dc0eeeb44d8c5c37c76bfd041c",
+     "source_sha256": "7855d4ba189d8f4c0dbf9441cd7a17d17a8a40dc0eeeb44d8c5c37c76bfd041c"
+    },
+    {
+     "check": "config.yaml is a byte-identical copy of runs/20261015-223115-time-penalty-s3-standard-f398/config.yaml",
+     "ok": true,
+     "exported_sha256": "4af7b2c4f821d3273d6784b00c62dfd1efb9875a188bdebc83aa140aadfe4f31",
+     "source_sha256": "4af7b2c4f821d3273d6784b00c62dfd1efb9875a188bdebc83aa140aadfe4f31"
+    },
+    {
+     "check": "evaluation.json is a byte-identical copy of runs/20261015-223115-time-penalty-s3-standard-f398/evaluations/test-best_validation-2026-10-15T180012Z.json",
+     "ok": true,
+     "exported_sha256": "5038ab91fbfcb636f0d71ef6334494e8f50ce97979b9b7d40b94b94a430fd15a",
+     "source_sha256": "5038ab91fbfcb636f0d71ef6334494e8f50ce97979b9b7d40b94b94a430fd15a"
+    },
+    {
+     "check": "the exported checkpoint is the one the freeze record names",
+     "ok": true,
+     "frozen_record": {
+      "checkpoint": "best_validation.zip",
+      "sha256": "7855d4ba189d8f4c0dbf9441cd7a17d17a8a40dc0eeeb44d8c5c37c76bfd041c"
+     }
+    },
+    {
+     "check": "the exported evaluation is the evaluation docs/results/results.json summarises",
+     "ok": true,
+     "compared": {
+      "file": {
+       "exported": "test-best_validation-2026-10-15T180012Z.json",
+       "published": "test-best_validation-2026-10-15T180012Z.json"
+      },
+      "checkpoint": {
+       "exported": "best_validation.zip",
+       "published": "best_validation.zip"
+      },
+      "protocol_hash": {
+       "exported": "2340c66c35b045bc",
+       "published": "2340c66c35b045bc"
+      },
+      "n_episodes": {
+       "exported": 100,
+       "published": 100
+      },
+      "mean_original_return": {
+       "exported": 236.5374213534208,
+       "published": 236.5374213534208
+      },
+      "pad_landing_rate": {
+       "exported": 0.75,
+       "published": 0.75
+      },
+      "timeout_rate": {
+       "exported": 0.01,
+       "published": 0.01
+      }
+     }
+    }
+   ],
+   "provenance": [
+    {
+     "file": "metadata.json",
+     "copied": true,
+     "sha256": "186e1a74561e2ecef4bb620d5fc85fdbfdbc4fb67494479f65217bb0feee2245",
+     "identical_to_source": true
+    },
+    {
+     "file": "status.json",
+     "copied": true,
+     "sha256": "3a51515c358effe2c8bf38ff915aa25743f2f03200fcc8c1ba6c1ce15538ddc7",
+     "identical_to_source": true
+    },
+    {
+     "file": "checkpoints/manifest.json",
+     "copied": true,
+     "sha256": "55db40d485e564cc023cbfe939a2c0beec9e7f7a50d3bed9172359f1f29761d0",
+     "identical_to_source": true
+    },
+    {
+     "file": "events.jsonl",
+     "copied": true,
+     "sha256": "fd9ed41bdec6f9ad6a8d5fb5184ba1ac69740a7b3ff89ea8fa6e365cefcb60a7",
+     "identical_to_source": true
+    }
+   ],
+   "verified": true
+  },
+  {
+   "run_id": "20261015-223115-time-penalty-s4-standard-828d",
+   "group": "Time-penalty ablation",
+   "algorithm": "ppo",
+   "seed": 4,
+   "folder": "time-penalty-ablation/20261015-223115-time-penalty-s4-standard-828d",
+   "command": "python -m lunarlab export-artifact --run-id 20261015-223115-time-penalty-s4-standard-828d --out time-penalty-ablation/20261015-223115-time-penalty-s4-standard-828d",
+   "exit_code": 0,
+   "output": "exported 20261015-223115-time-penalty-s4-standard-828d to D:\\LunarLab-review-return-2026-10-19\\study-artifacts\\time-penalty-ablation\\20261015-223115-time-penalty-s4-standard-828d: checkpoint ad6bd0a196c9d722, final test 100 episodes, mean original return 266.53, pad landing 99%",
+   "checks": [
+    {
+     "check": "checkpoint.zip is a byte-identical copy of runs/20261015-223115-time-penalty-s4-standard-828d/checkpoints/best_validation.zip",
+     "ok": true,
+     "exported_sha256": "ad6bd0a196c9d722a136d775cd3763fd0182d7a312c31dc52a674aba58d66986",
+     "source_sha256": "ad6bd0a196c9d722a136d775cd3763fd0182d7a312c31dc52a674aba58d66986"
+    },
+    {
+     "check": "config.yaml is a byte-identical copy of runs/20261015-223115-time-penalty-s4-standard-828d/config.yaml",
+     "ok": true,
+     "exported_sha256": "dc7810696352e6e79f5a1f61503674c86a1a03eccb489101f5b2aaaf9489441b",
+     "source_sha256": "dc7810696352e6e79f5a1f61503674c86a1a03eccb489101f5b2aaaf9489441b"
+    },
+    {
+     "check": "evaluation.json is a byte-identical copy of runs/20261015-223115-time-penalty-s4-standard-828d/evaluations/test-best_validation-2026-10-15T180028Z.json",
+     "ok": true,
+     "exported_sha256": "1f88fa2a05910331cf45a4b7cbbd3abc6730ab6908ac4f3158215d6db9481254",
+     "source_sha256": "1f88fa2a05910331cf45a4b7cbbd3abc6730ab6908ac4f3158215d6db9481254"
+    },
+    {
+     "check": "the exported checkpoint is the one the freeze record names",
+     "ok": true,
+     "frozen_record": {
+      "checkpoint": "best_validation.zip",
+      "sha256": "ad6bd0a196c9d722a136d775cd3763fd0182d7a312c31dc52a674aba58d66986"
+     }
+    },
+    {
+     "check": "the exported evaluation is the evaluation docs/results/results.json summarises",
+     "ok": true,
+     "compared": {
+      "file": {
+       "exported": "test-best_validation-2026-10-15T180028Z.json",
+       "published": "test-best_validation-2026-10-15T180028Z.json"
+      },
+      "checkpoint": {
+       "exported": "best_validation.zip",
+       "published": "best_validation.zip"
+      },
+      "protocol_hash": {
+       "exported": "2340c66c35b045bc",
+       "published": "2340c66c35b045bc"
+      },
+      "n_episodes": {
+       "exported": 100,
+       "published": 100
+      },
+      "mean_original_return": {
+       "exported": 266.52773043584426,
+       "published": 266.52773043584426
+      },
+      "pad_landing_rate": {
+       "exported": 0.99,
+       "published": 0.99
+      },
+      "timeout_rate": {
+       "exported": 0.0,
+       "published": 0.0
+      }
+     }
+    }
+   ],
+   "provenance": [
+    {
+     "file": "metadata.json",
+     "copied": true,
+     "sha256": "f26db82eb78988ccb47d68b1acc96cd2d20037b4c7a3d4caa2d3435ad33f1d8d",
+     "identical_to_source": true
+    },
+    {
+     "file": "status.json",
+     "copied": true,
+     "sha256": "6321aada90785a355b90bf3d66edcec1aae88b1149bbfee64a6a9f756d5b8fac",
+     "identical_to_source": true
+    },
+    {
+     "file": "checkpoints/manifest.json",
+     "copied": true,
+     "sha256": "debd9d6cbedbc175279e07a3e9a0a5edb5827236af25b72c9928782a071c672b",
+     "identical_to_source": true
+    },
+    {
+     "file": "events.jsonl",
+     "copied": true,
+     "sha256": "06f95d55c5875c4cdace2d3e239260434257904122b3e1f88406d43f4271f518",
+     "identical_to_source": true
+    }
+   ],
+   "verified": true
+  },
+  {
+   "run_id": "20261015-223115-hover-bonus-s0-standard-3376",
+   "group": "Flawed hover bonus",
+   "algorithm": "ppo",
+   "seed": 0,
+   "folder": "flawed-hover-bonus/20261015-223115-hover-bonus-s0-standard-3376",
+   "command": "python -m lunarlab export-artifact --run-id 20261015-223115-hover-bonus-s0-standard-3376 --out flawed-hover-bonus/20261015-223115-hover-bonus-s0-standard-3376",
+   "exit_code": 0,
+   "output": "exported 20261015-223115-hover-bonus-s0-standard-3376 to D:\\LunarLab-review-return-2026-10-19\\study-artifacts\\flawed-hover-bonus\\20261015-223115-hover-bonus-s0-standard-3376: checkpoint 0ee843850038ef0f, final test 100 episodes, mean original return -21.25, pad landing 0%",
+   "checks": [
+    {
+     "check": "checkpoint.zip is a byte-identical copy of runs/20261015-223115-hover-bonus-s0-standard-3376/checkpoints/best_validation.zip",
+     "ok": true,
+     "exported_sha256": "0ee843850038ef0f946c16fd0f803f2f983b726d8ad9ebf2e1589d1cedb2d032",
+     "source_sha256": "0ee843850038ef0f946c16fd0f803f2f983b726d8ad9ebf2e1589d1cedb2d032"
+    },
+    {
+     "check": "config.yaml is a byte-identical copy of runs/20261015-223115-hover-bonus-s0-standard-3376/config.yaml",
+     "ok": true,
+     "exported_sha256": "a85c668d55127c679861502cba8884cbe2ab9cce2f1d9471b25b54f6d1a035fd",
+     "source_sha256": "a85c668d55127c679861502cba8884cbe2ab9cce2f1d9471b25b54f6d1a035fd"
+    },
+    {
+     "check": "evaluation.json is a byte-identical copy of runs/20261015-223115-hover-bonus-s0-standard-3376/evaluations/test-best_validation-2026-10-15T180247Z.json",
+     "ok": true,
+     "exported_sha256": "e27c425dbe80a7e1b7d6651d736065cd72cf70f0fe573bde5801d9e151d63c45",
+     "source_sha256": "e27c425dbe80a7e1b7d6651d736065cd72cf70f0fe573bde5801d9e151d63c45"
+    },
+    {
+     "check": "the exported checkpoint is the one the freeze record names",
+     "ok": true,
+     "frozen_record": {
+      "checkpoint": "best_validation.zip",
+      "sha256": "0ee843850038ef0f946c16fd0f803f2f983b726d8ad9ebf2e1589d1cedb2d032"
+     }
+    },
+    {
+     "check": "the exported evaluation is the evaluation docs/results/results.json summarises",
+     "ok": true,
+     "compared": {
+      "file": {
+       "exported": "test-best_validation-2026-10-15T180247Z.json",
+       "published": "test-best_validation-2026-10-15T180247Z.json"
+      },
+      "checkpoint": {
+       "exported": "best_validation.zip",
+       "published": "best_validation.zip"
+      },
+      "protocol_hash": {
+       "exported": "2340c66c35b045bc",
+       "published": "2340c66c35b045bc"
+      },
+      "n_episodes": {
+       "exported": 100,
+       "published": 100
+      },
+      "mean_original_return": {
+       "exported": -21.245551373501357,
+       "published": -21.245551373501357
+      },
+      "pad_landing_rate": {
+       "exported": 0.0,
+       "published": 0.0
+      },
+      "timeout_rate": {
+       "exported": 1.0,
+       "published": 1.0
+      }
+     }
+    }
+   ],
+   "provenance": [
+    {
+     "file": "metadata.json",
+     "copied": true,
+     "sha256": "51a0a467751fb071a6a220f92b8842ac71cec50ec9396df35fd01ae15c843318",
+     "identical_to_source": true
+    },
+    {
+     "file": "status.json",
+     "copied": true,
+     "sha256": "d05e965230ec3e327f39d44ba5d753bda72476c1c1767eecb9b9af7ad215e83b",
+     "identical_to_source": true
+    },
+    {
+     "file": "checkpoints/manifest.json",
+     "copied": true,
+     "sha256": "309a339b2ab63793bf686e2dd35ee4b37f9cea2cc87d1aa01c28e845bfa32ffb",
+     "identical_to_source": true
+    },
+    {
+     "file": "events.jsonl",
+     "copied": true,
+     "sha256": "ba1c2f28816476e92c3acf635ffbb936828dfd0a1e749fe0c569b6eb8efc39d6",
+     "identical_to_source": true
+    },
+    {
+     "file": "episodes.csv",
+     "copied": true,
+     "sha256": "b96b0c0e2726c2bc34c27bba9b2f55fb47dbeb0d14c3dbc630452fac20a10b57",
+     "identical_to_source": true,
+     "matches_figure_source_digest": true
+    }
+   ],
+   "verified": true
+  },
+  {
+   "run_id": "20261015-223115-hover-bonus-s1-standard-9a39",
+   "group": "Flawed hover bonus",
+   "algorithm": "ppo",
+   "seed": 1,
+   "folder": "flawed-hover-bonus/20261015-223115-hover-bonus-s1-standard-9a39",
+   "command": "python -m lunarlab export-artifact --run-id 20261015-223115-hover-bonus-s1-standard-9a39 --out flawed-hover-bonus/20261015-223115-hover-bonus-s1-standard-9a39",
+   "exit_code": 0,
+   "output": "exported 20261015-223115-hover-bonus-s1-standard-9a39 to D:\\LunarLab-review-return-2026-10-19\\study-artifacts\\flawed-hover-bonus\\20261015-223115-hover-bonus-s1-standard-9a39: checkpoint 5fe80d82cc4e8f6b, final test 100 episodes, mean original return -30.33, pad landing 0%",
+   "checks": [
+    {
+     "check": "checkpoint.zip is a byte-identical copy of runs/20261015-223115-hover-bonus-s1-standard-9a39/checkpoints/best_validation.zip",
+     "ok": true,
+     "exported_sha256": "5fe80d82cc4e8f6b70e08b3b9bab7e540db0805a555009a11110752250d70004",
+     "source_sha256": "5fe80d82cc4e8f6b70e08b3b9bab7e540db0805a555009a11110752250d70004"
+    },
+    {
+     "check": "config.yaml is a byte-identical copy of runs/20261015-223115-hover-bonus-s1-standard-9a39/config.yaml",
+     "ok": true,
+     "exported_sha256": "6e65ccbcf4c291dca9b7da5a92976b7ed8074b963f1c7744575099e274887d0c",
+     "source_sha256": "6e65ccbcf4c291dca9b7da5a92976b7ed8074b963f1c7744575099e274887d0c"
+    },
+    {
+     "check": "evaluation.json is a byte-identical copy of runs/20261015-223115-hover-bonus-s1-standard-9a39/evaluations/test-best_validation-2026-10-15T180249Z.json",
+     "ok": true,
+     "exported_sha256": "8a6c47b0cae245befa89076e505364a5b3dfba1763718ef4d5c468faac6832ba",
+     "source_sha256": "8a6c47b0cae245befa89076e505364a5b3dfba1763718ef4d5c468faac6832ba"
+    },
+    {
+     "check": "the exported checkpoint is the one the freeze record names",
+     "ok": true,
+     "frozen_record": {
+      "checkpoint": "best_validation.zip",
+      "sha256": "5fe80d82cc4e8f6b70e08b3b9bab7e540db0805a555009a11110752250d70004"
+     }
+    },
+    {
+     "check": "the exported evaluation is the evaluation docs/results/results.json summarises",
+     "ok": true,
+     "compared": {
+      "file": {
+       "exported": "test-best_validation-2026-10-15T180249Z.json",
+       "published": "test-best_validation-2026-10-15T180249Z.json"
+      },
+      "checkpoint": {
+       "exported": "best_validation.zip",
+       "published": "best_validation.zip"
+      },
+      "protocol_hash": {
+       "exported": "2340c66c35b045bc",
+       "published": "2340c66c35b045bc"
+      },
+      "n_episodes": {
+       "exported": 100,
+       "published": 100
+      },
+      "mean_original_return": {
+       "exported": -30.334600508084417,
+       "published": -30.334600508084417
+      },
+      "pad_landing_rate": {
+       "exported": 0.0,
+       "published": 0.0
+      },
+      "timeout_rate": {
+       "exported": 0.98,
+       "published": 0.98
+      }
+     }
+    }
+   ],
+   "provenance": [
+    {
+     "file": "metadata.json",
+     "copied": true,
+     "sha256": "c7f4f93e0e1b820e83285c7ecdd059911c4be149e00fa556bb044f33f8c7f3c2",
+     "identical_to_source": true
+    },
+    {
+     "file": "status.json",
+     "copied": true,
+     "sha256": "08914584341b595c96cd53696171aa961b5013536b4153b67c339f5ebb39222f",
+     "identical_to_source": true
+    },
+    {
+     "file": "checkpoints/manifest.json",
+     "copied": true,
+     "sha256": "e60c17c4426ba9a6afed628061f5e2d3c31e04be8ac66d3c940240e69b6b16b4",
+     "identical_to_source": true
+    },
+    {
+     "file": "events.jsonl",
+     "copied": true,
+     "sha256": "51616fd1505c9d741576a29607a08ed729357ea78cbd0c99fdf0dc033a4b9186",
+     "identical_to_source": true
+    },
+    {
+     "file": "episodes.csv",
+     "copied": true,
+     "sha256": "056605bcffce1ececa05c7e33fc5fa4ad4b6f9a5b4d912dcb4bc1274305bd702",
+     "identical_to_source": true,
+     "matches_figure_source_digest": true
+    }
+   ],
+   "verified": true
+  },
+  {
+   "run_id": "20261015-223115-hover-bonus-s2-standard-d887",
+   "group": "Flawed hover bonus",
+   "algorithm": "ppo",
+   "seed": 2,
+   "folder": "flawed-hover-bonus/20261015-223115-hover-bonus-s2-standard-d887",
+   "command": "python -m lunarlab export-artifact --run-id 20261015-223115-hover-bonus-s2-standard-d887 --out flawed-hover-bonus/20261015-223115-hover-bonus-s2-standard-d887",
+   "exit_code": 0,
+   "output": "exported 20261015-223115-hover-bonus-s2-standard-d887 to D:\\LunarLab-review-return-2026-10-19\\study-artifacts\\flawed-hover-bonus\\20261015-223115-hover-bonus-s2-standard-d887: checkpoint 61c32eacc94a619e, final test 100 episodes, mean original return -47.80, pad landing 0%",
+   "checks": [
+    {
+     "check": "checkpoint.zip is a byte-identical copy of runs/20261015-223115-hover-bonus-s2-standard-d887/checkpoints/best_validation.zip",
+     "ok": true,
+     "exported_sha256": "61c32eacc94a619e7249c5a07640278c170c6c9d744bee63e0907667a7857087",
+     "source_sha256": "61c32eacc94a619e7249c5a07640278c170c6c9d744bee63e0907667a7857087"
+    },
+    {
+     "check": "config.yaml is a byte-identical copy of runs/20261015-223115-hover-bonus-s2-standard-d887/config.yaml",
+     "ok": true,
+     "exported_sha256": "1b392bf64884534ca2853f67959bebbf95fdfe0c0d46479dfce227e498bbe564",
+     "source_sha256": "1b392bf64884534ca2853f67959bebbf95fdfe0c0d46479dfce227e498bbe564"
+    },
+    {
+     "check": "evaluation.json is a byte-identical copy of runs/20261015-223115-hover-bonus-s2-standard-d887/evaluations/test-best_validation-2026-10-15T180335Z.json",
+     "ok": true,
+     "exported_sha256": "a0803f8eaa37d81720859de559d93c31d53956c3667abe822382e96e0433e9f8",
+     "source_sha256": "a0803f8eaa37d81720859de559d93c31d53956c3667abe822382e96e0433e9f8"
+    },
+    {
+     "check": "the exported checkpoint is the one the freeze record names",
+     "ok": true,
+     "frozen_record": {
+      "checkpoint": "best_validation.zip",
+      "sha256": "61c32eacc94a619e7249c5a07640278c170c6c9d744bee63e0907667a7857087"
+     }
+    },
+    {
+     "check": "the exported evaluation is the evaluation docs/results/results.json summarises",
+     "ok": true,
+     "compared": {
+      "file": {
+       "exported": "test-best_validation-2026-10-15T180335Z.json",
+       "published": "test-best_validation-2026-10-15T180335Z.json"
+      },
+      "checkpoint": {
+       "exported": "best_validation.zip",
+       "published": "best_validation.zip"
+      },
+      "protocol_hash": {
+       "exported": "2340c66c35b045bc",
+       "published": "2340c66c35b045bc"
+      },
+      "n_episodes": {
+       "exported": 100,
+       "published": 100
+      },
+      "mean_original_return": {
+       "exported": -47.8018309993503,
+       "published": -47.8018309993503
+      },
+      "pad_landing_rate": {
+       "exported": 0.0,
+       "published": 0.0
+      },
+      "timeout_rate": {
+       "exported": 0.91,
+       "published": 0.91
+      }
+     }
+    }
+   ],
+   "provenance": [
+    {
+     "file": "metadata.json",
+     "copied": true,
+     "sha256": "9a2f29f9942267b84d18bbbe2aa5eedb7429fab86fc7d2b475c5e2b85d54b7a1",
+     "identical_to_source": true
+    },
+    {
+     "file": "status.json",
+     "copied": true,
+     "sha256": "94f7b7da03b6c844f7035b27af5a076daf2d6056210b6a368188f219151ac392",
+     "identical_to_source": true
+    },
+    {
+     "file": "checkpoints/manifest.json",
+     "copied": true,
+     "sha256": "f810507f52c46a5f42602504bf417671ddfa4a828eb51cfbfba527673602a816",
+     "identical_to_source": true
+    },
+    {
+     "file": "events.jsonl",
+     "copied": true,
+     "sha256": "98927d84a5e0f814765a2ccb482be8a931e2fa975b5b17629f648d1cfaa09bb9",
+     "identical_to_source": true
+    },
+    {
+     "file": "episodes.csv",
+     "copied": true,
+     "sha256": "f170ca25f7aef3eb62e8256ccdee94666fa2fa6649001cb84d0b43c3d14cf3b3",
+     "identical_to_source": true,
+     "matches_figure_source_digest": true
+    }
+   ],
+   "verified": true
+  },
+  {
+   "run_id": "20261015-223115-hover-bonus-s3-standard-c5ba",
+   "group": "Flawed hover bonus",
+   "algorithm": "ppo",
+   "seed": 3,
+   "folder": "flawed-hover-bonus/20261015-223115-hover-bonus-s3-standard-c5ba",
+   "command": "python -m lunarlab export-artifact --run-id 20261015-223115-hover-bonus-s3-standard-c5ba --out flawed-hover-bonus/20261015-223115-hover-bonus-s3-standard-c5ba",
+   "exit_code": 0,
+   "output": "exported 20261015-223115-hover-bonus-s3-standard-c5ba to D:\\LunarLab-review-return-2026-10-19\\study-artifacts\\flawed-hover-bonus\\20261015-223115-hover-bonus-s3-standard-c5ba: checkpoint 5be48e6222fea29d, final test 100 episodes, mean original return 38.59, pad landing 0%",
+   "checks": [
+    {
+     "check": "checkpoint.zip is a byte-identical copy of runs/20261015-223115-hover-bonus-s3-standard-c5ba/checkpoints/best_validation.zip",
+     "ok": true,
+     "exported_sha256": "5be48e6222fea29d66f91e32cd37db608fe4d1fd0e465113e5c56bcd3276694c",
+     "source_sha256": "5be48e6222fea29d66f91e32cd37db608fe4d1fd0e465113e5c56bcd3276694c"
+    },
+    {
+     "check": "config.yaml is a byte-identical copy of runs/20261015-223115-hover-bonus-s3-standard-c5ba/config.yaml",
+     "ok": true,
+     "exported_sha256": "a9c3ad1206ff853cd3393447e121dccdc696d5e7dcb1de818b7fd2333a209263",
+     "source_sha256": "a9c3ad1206ff853cd3393447e121dccdc696d5e7dcb1de818b7fd2333a209263"
+    },
+    {
+     "check": "evaluation.json is a byte-identical copy of runs/20261015-223115-hover-bonus-s3-standard-c5ba/evaluations/test-best_validation-2026-10-15T180307Z.json",
+     "ok": true,
+     "exported_sha256": "d4fb6a23c6fb0af19af48c5730c19ee2b08bba618d24e302434530465a89d454",
+     "source_sha256": "d4fb6a23c6fb0af19af48c5730c19ee2b08bba618d24e302434530465a89d454"
+    },
+    {
+     "check": "the exported checkpoint is the one the freeze record names",
+     "ok": true,
+     "frozen_record": {
+      "checkpoint": "best_validation.zip",
+      "sha256": "5be48e6222fea29d66f91e32cd37db608fe4d1fd0e465113e5c56bcd3276694c"
+     }
+    },
+    {
+     "check": "the exported evaluation is the evaluation docs/results/results.json summarises",
+     "ok": true,
+     "compared": {
+      "file": {
+       "exported": "test-best_validation-2026-10-15T180307Z.json",
+       "published": "test-best_validation-2026-10-15T180307Z.json"
+      },
+      "checkpoint": {
+       "exported": "best_validation.zip",
+       "published": "best_validation.zip"
+      },
+      "protocol_hash": {
+       "exported": "2340c66c35b045bc",
+       "published": "2340c66c35b045bc"
+      },
+      "n_episodes": {
+       "exported": 100,
+       "published": 100
+      },
+      "mean_original_return": {
+       "exported": 38.58906718434083,
+       "published": 38.58906718434083
+      },
+      "pad_landing_rate": {
+       "exported": 0.0,
+       "published": 0.0
+      },
+      "timeout_rate": {
+       "exported": 0.11,
+       "published": 0.11
+      }
+     }
+    }
+   ],
+   "provenance": [
+    {
+     "file": "metadata.json",
+     "copied": true,
+     "sha256": "cdee405987fd0f8581bc7f9ada82b1e7ef3f70a8142a02eb3201612622a0c990",
+     "identical_to_source": true
+    },
+    {
+     "file": "status.json",
+     "copied": true,
+     "sha256": "1e9151f7bc926b42b9de4b8d41f3d29f60805b8c1827f463068e35f04e254d74",
+     "identical_to_source": true
+    },
+    {
+     "file": "checkpoints/manifest.json",
+     "copied": true,
+     "sha256": "9dda96e8d733e4b62fbf8a9296b75f33c48086db89c77ca7931963a70061e29d",
+     "identical_to_source": true
+    },
+    {
+     "file": "events.jsonl",
+     "copied": true,
+     "sha256": "9aec9edff5b34e84e337f438f3bfcfe01e71fbcc1b09464e03b2f5f0dac78794",
+     "identical_to_source": true
+    },
+    {
+     "file": "episodes.csv",
+     "copied": true,
+     "sha256": "f79a45fe317eb0e2ffd65d8084117b605324c7c0332bff33671e7721fd732d4e",
+     "identical_to_source": true,
+     "matches_figure_source_digest": true
+    }
+   ],
+   "verified": true
+  },
+  {
+   "run_id": "20261015-223115-hover-bonus-s4-standard-cc47",
+   "group": "Flawed hover bonus",
+   "algorithm": "ppo",
+   "seed": 4,
+   "folder": "flawed-hover-bonus/20261015-223115-hover-bonus-s4-standard-cc47",
+   "command": "python -m lunarlab export-artifact --run-id 20261015-223115-hover-bonus-s4-standard-cc47 --out flawed-hover-bonus/20261015-223115-hover-bonus-s4-standard-cc47",
+   "exit_code": 0,
+   "output": "exported 20261015-223115-hover-bonus-s4-standard-cc47 to D:\\LunarLab-review-return-2026-10-19\\study-artifacts\\flawed-hover-bonus\\20261015-223115-hover-bonus-s4-standard-cc47: checkpoint 146e57d08a79697e, final test 100 episodes, mean original return -56.96, pad landing 0%",
+   "checks": [
+    {
+     "check": "checkpoint.zip is a byte-identical copy of runs/20261015-223115-hover-bonus-s4-standard-cc47/checkpoints/best_validation.zip",
+     "ok": true,
+     "exported_sha256": "146e57d08a79697e851725ddc9007694ab09054dc658030264c2a1eab5a1587b",
+     "source_sha256": "146e57d08a79697e851725ddc9007694ab09054dc658030264c2a1eab5a1587b"
+    },
+    {
+     "check": "config.yaml is a byte-identical copy of runs/20261015-223115-hover-bonus-s4-standard-cc47/config.yaml",
+     "ok": true,
+     "exported_sha256": "8a2bfe25db69244b73e071fdc4496c215cd8476057d344120c8e8ca56f9a611a",
+     "source_sha256": "8a2bfe25db69244b73e071fdc4496c215cd8476057d344120c8e8ca56f9a611a"
+    },
+    {
+     "check": "evaluation.json is a byte-identical copy of runs/20261015-223115-hover-bonus-s4-standard-cc47/evaluations/test-best_validation-2026-10-15T180445Z.json",
+     "ok": true,
+     "exported_sha256": "3d71fd5bdf7648c5975a077cfa64e225892aaf158ff190d65252ef570f40ec52",
+     "source_sha256": "3d71fd5bdf7648c5975a077cfa64e225892aaf158ff190d65252ef570f40ec52"
+    },
+    {
+     "check": "the exported checkpoint is the one the freeze record names",
+     "ok": true,
+     "frozen_record": {
+      "checkpoint": "best_validation.zip",
+      "sha256": "146e57d08a79697e851725ddc9007694ab09054dc658030264c2a1eab5a1587b"
+     }
+    },
+    {
+     "check": "the exported evaluation is the evaluation docs/results/results.json summarises",
+     "ok": true,
+     "compared": {
+      "file": {
+       "exported": "test-best_validation-2026-10-15T180445Z.json",
+       "published": "test-best_validation-2026-10-15T180445Z.json"
+      },
+      "checkpoint": {
+       "exported": "best_validation.zip",
+       "published": "best_validation.zip"
+      },
+      "protocol_hash": {
+       "exported": "2340c66c35b045bc",
+       "published": "2340c66c35b045bc"
+      },
+      "n_episodes": {
+       "exported": 100,
+       "published": 100
+      },
+      "mean_original_return": {
+       "exported": -56.95664310633683,
+       "published": -56.95664310633683
+      },
+      "pad_landing_rate": {
+       "exported": 0.0,
+       "published": 0.0
+      },
+      "timeout_rate": {
+       "exported": 1.0,
+       "published": 1.0
+      }
+     }
+    }
+   ],
+   "provenance": [
+    {
+     "file": "metadata.json",
+     "copied": true,
+     "sha256": "4180f4ad4a9b30b68e3ebc529a9cbd7e72c43dc56ac4a52fb3001d1d88343db3",
+     "identical_to_source": true
+    },
+    {
+     "file": "status.json",
+     "copied": true,
+     "sha256": "97f04a5642d9136499376bfc3cd6f33b6a84682e10cd9ad88740b5b53d5803c5",
+     "identical_to_source": true
+    },
+    {
+     "file": "checkpoints/manifest.json",
+     "copied": true,
+     "sha256": "c14c1bcbec7f512611704984d8e9f58f0b1e1f04fdd32288a040331e77544edb",
+     "identical_to_source": true
+    },
+    {
+     "file": "events.jsonl",
+     "copied": true,
+     "sha256": "d0ec784705f2ee8b78a5e3f14031304274a0540ddd46f816ac2fe4bef9a99bf6",
+     "identical_to_source": true
+    },
+    {
+     "file": "episodes.csv",
+     "copied": true,
+     "sha256": "6ab0da44fc17d59f99f7dc9892ccbdc6bfb0d4739aafa212daee3ba9e2ec39d7",
+     "identical_to_source": true,
+     "matches_figure_source_digest": true
+    }
+   ],
+   "verified": true
+  },
+  {
+   "run_id": "20261015-223115-potential-s0-standard-0162",
+   "group": "Potential-based shaping",
+   "algorithm": "ppo",
+   "seed": 0,
+   "folder": "potential-based-shaping/20261015-223115-potential-s0-standard-0162",
+   "command": "python -m lunarlab export-artifact --run-id 20261015-223115-potential-s0-standard-0162 --out potential-based-shaping/20261015-223115-potential-s0-standard-0162",
+   "exit_code": 0,
+   "output": "exported 20261015-223115-potential-s0-standard-0162 to D:\\LunarLab-review-return-2026-10-19\\study-artifacts\\potential-based-shaping\\20261015-223115-potential-s0-standard-0162: checkpoint 54b2cf6c16af797d, final test 100 episodes, mean original return 261.69, pad landing 96%",
+   "checks": [
+    {
+     "check": "checkpoint.zip is a byte-identical copy of runs/20261015-223115-potential-s0-standard-0162/checkpoints/best_validation.zip",
+     "ok": true,
+     "exported_sha256": "54b2cf6c16af797d3c1bd55571046c3063d6659c71964cc536e6c1a36c5e7cf6",
+     "source_sha256": "54b2cf6c16af797d3c1bd55571046c3063d6659c71964cc536e6c1a36c5e7cf6"
+    },
+    {
+     "check": "config.yaml is a byte-identical copy of runs/20261015-223115-potential-s0-standard-0162/config.yaml",
+     "ok": true,
+     "exported_sha256": "8893c5765a1f9a7fd1d8d08825130d141734a36ea7394d31f1f535cbda14140e",
+     "source_sha256": "8893c5765a1f9a7fd1d8d08825130d141734a36ea7394d31f1f535cbda14140e"
+    },
+    {
+     "check": "evaluation.json is a byte-identical copy of runs/20261015-223115-potential-s0-standard-0162/evaluations/test-best_validation-2026-10-15T180356Z.json",
+     "ok": true,
+     "exported_sha256": "305acd2cac590231986ea67b8a0b5c7955b258c59736f9716ebdfbe4128c69a6",
+     "source_sha256": "305acd2cac590231986ea67b8a0b5c7955b258c59736f9716ebdfbe4128c69a6"
+    },
+    {
+     "check": "the exported checkpoint is the one the freeze record names",
+     "ok": true,
+     "frozen_record": {
+      "checkpoint": "best_validation.zip",
+      "sha256": "54b2cf6c16af797d3c1bd55571046c3063d6659c71964cc536e6c1a36c5e7cf6"
+     }
+    },
+    {
+     "check": "the exported evaluation is the evaluation docs/results/results.json summarises",
+     "ok": true,
+     "compared": {
+      "file": {
+       "exported": "test-best_validation-2026-10-15T180356Z.json",
+       "published": "test-best_validation-2026-10-15T180356Z.json"
+      },
+      "checkpoint": {
+       "exported": "best_validation.zip",
+       "published": "best_validation.zip"
+      },
+      "protocol_hash": {
+       "exported": "2340c66c35b045bc",
+       "published": "2340c66c35b045bc"
+      },
+      "n_episodes": {
+       "exported": 100,
+       "published": 100
+      },
+      "mean_original_return": {
+       "exported": 261.6883652350106,
+       "published": 261.6883652350106
+      },
+      "pad_landing_rate": {
+       "exported": 0.96,
+       "published": 0.96
+      },
+      "timeout_rate": {
+       "exported": 0.03,
+       "published": 0.03
+      }
+     }
+    }
+   ],
+   "provenance": [
+    {
+     "file": "metadata.json",
+     "copied": true,
+     "sha256": "2fd7caee81a0abda9594f33e466522a12d0c7d0227b211d3e776d76455443c67",
+     "identical_to_source": true
+    },
+    {
+     "file": "status.json",
+     "copied": true,
+     "sha256": "dc7cdc8f95064326abd475b2cd974ccd2b77516395d700a34f2123c101359b21",
+     "identical_to_source": true
+    },
+    {
+     "file": "checkpoints/manifest.json",
+     "copied": true,
+     "sha256": "43a480641cdf3e8e386a2ab78a138c7d81cf31c5642cbb7a842edcae1d7d5ab0",
+     "identical_to_source": true
+    },
+    {
+     "file": "events.jsonl",
+     "copied": true,
+     "sha256": "8b1bf685165dd1795d47e28929ac5d495719c8ae8db6934b9c880171cba55704",
+     "identical_to_source": true
+    },
+    {
+     "file": "episodes.csv",
+     "copied": true,
+     "sha256": "c5c8bb622350f68b9f71df3cea461bbcc993173d9dc76dc8c6df23c4fd595aae",
+     "identical_to_source": true,
+     "matches_figure_source_digest": true
+    }
+   ],
+   "verified": true
+  },
+  {
+   "run_id": "20261015-223115-potential-s1-standard-9f70",
+   "group": "Potential-based shaping",
+   "algorithm": "ppo",
+   "seed": 1,
+   "folder": "potential-based-shaping/20261015-223115-potential-s1-standard-9f70",
+   "command": "python -m lunarlab export-artifact --run-id 20261015-223115-potential-s1-standard-9f70 --out potential-based-shaping/20261015-223115-potential-s1-standard-9f70",
+   "exit_code": 0,
+   "output": "exported 20261015-223115-potential-s1-standard-9f70 to D:\\LunarLab-review-return-2026-10-19\\study-artifacts\\potential-based-shaping\\20261015-223115-potential-s1-standard-9f70: checkpoint d8cd64df1268c10e, final test 100 episodes, mean original return 228.93, pad landing 81%",
+   "checks": [
+    {
+     "check": "checkpoint.zip is a byte-identical copy of runs/20261015-223115-potential-s1-standard-9f70/checkpoints/best_validation.zip",
+     "ok": true,
+     "exported_sha256": "d8cd64df1268c10e8b691ab8eb01d163d70a8b6585915bb0fa51af0bfea6269c",
+     "source_sha256": "d8cd64df1268c10e8b691ab8eb01d163d70a8b6585915bb0fa51af0bfea6269c"
+    },
+    {
+     "check": "config.yaml is a byte-identical copy of runs/20261015-223115-potential-s1-standard-9f70/config.yaml",
+     "ok": true,
+     "exported_sha256": "459f67912d898bfe7cf2459c8c5d9ac424646a829093e44c3a1dababdfcb200f",
+     "source_sha256": "459f67912d898bfe7cf2459c8c5d9ac424646a829093e44c3a1dababdfcb200f"
+    },
+    {
+     "check": "evaluation.json is a byte-identical copy of runs/20261015-223115-potential-s1-standard-9f70/evaluations/test-best_validation-2026-10-15T180428Z.json",
+     "ok": true,
+     "exported_sha256": "6bb5d0945134ff98072a73bc4ef812c726580bc54279a872abbbb4d454132074",
+     "source_sha256": "6bb5d0945134ff98072a73bc4ef812c726580bc54279a872abbbb4d454132074"
+    },
+    {
+     "check": "the exported checkpoint is the one the freeze record names",
+     "ok": true,
+     "frozen_record": {
+      "checkpoint": "best_validation.zip",
+      "sha256": "d8cd64df1268c10e8b691ab8eb01d163d70a8b6585915bb0fa51af0bfea6269c"
+     }
+    },
+    {
+     "check": "the exported evaluation is the evaluation docs/results/results.json summarises",
+     "ok": true,
+     "compared": {
+      "file": {
+       "exported": "test-best_validation-2026-10-15T180428Z.json",
+       "published": "test-best_validation-2026-10-15T180428Z.json"
+      },
+      "checkpoint": {
+       "exported": "best_validation.zip",
+       "published": "best_validation.zip"
+      },
+      "protocol_hash": {
+       "exported": "2340c66c35b045bc",
+       "published": "2340c66c35b045bc"
+      },
+      "n_episodes": {
+       "exported": 100,
+       "published": 100
+      },
+      "mean_original_return": {
+       "exported": 228.92948983533256,
+       "published": 228.92948983533256
+      },
+      "pad_landing_rate": {
+       "exported": 0.81,
+       "published": 0.81
+      },
+      "timeout_rate": {
+       "exported": 0.11,
+       "published": 0.11
+      }
+     }
+    }
+   ],
+   "provenance": [
+    {
+     "file": "metadata.json",
+     "copied": true,
+     "sha256": "e5590e88bff41e135f79e38ad926ccc99a27b12c2d36c6f79c81713d70ab6479",
+     "identical_to_source": true
+    },
+    {
+     "file": "status.json",
+     "copied": true,
+     "sha256": "0db7d94427f1cd330c9cecab944a3787a7b3a777c32e7270ff8c4b0b180f65ed",
+     "identical_to_source": true
+    },
+    {
+     "file": "checkpoints/manifest.json",
+     "copied": true,
+     "sha256": "769fb0525392a10c23d0f22f885ba2dcbfa00eabbc4fe7558e6354db1e0d0136",
+     "identical_to_source": true
+    },
+    {
+     "file": "events.jsonl",
+     "copied": true,
+     "sha256": "0865b53027c244ee1576c650aaa14a7bfe1ac56abd139fc0a4b6364ed84b38a9",
+     "identical_to_source": true
+    },
+    {
+     "file": "episodes.csv",
+     "copied": true,
+     "sha256": "5051eb3ff7fc8bff2b1cdcf5c04cbd2575f126938f2d2ee6386f713550c2345f",
+     "identical_to_source": true,
+     "matches_figure_source_digest": true
+    }
+   ],
+   "verified": true
+  },
+  {
+   "run_id": "20261015-223115-potential-s2-standard-7f75",
+   "group": "Potential-based shaping",
+   "algorithm": "ppo",
+   "seed": 2,
+   "folder": "potential-based-shaping/20261015-223115-potential-s2-standard-7f75",
+   "command": "python -m lunarlab export-artifact --run-id 20261015-223115-potential-s2-standard-7f75 --out potential-based-shaping/20261015-223115-potential-s2-standard-7f75",
+   "exit_code": 0,
+   "output": "exported 20261015-223115-potential-s2-standard-7f75 to D:\\LunarLab-review-return-2026-10-19\\study-artifacts\\potential-based-shaping\\20261015-223115-potential-s2-standard-7f75: checkpoint b8c7d0c58f0dddfa, final test 100 episodes, mean original return 256.94, pad landing 94%",
+   "checks": [
+    {
+     "check": "checkpoint.zip is a byte-identical copy of runs/20261015-223115-potential-s2-standard-7f75/checkpoints/best_validation.zip",
+     "ok": true,
+     "exported_sha256": "b8c7d0c58f0dddfab6a55b059082bd82456e107dd9c107ff024c88c5f7361766",
+     "source_sha256": "b8c7d0c58f0dddfab6a55b059082bd82456e107dd9c107ff024c88c5f7361766"
+    },
+    {
+     "check": "config.yaml is a byte-identical copy of runs/20261015-223115-potential-s2-standard-7f75/config.yaml",
+     "ok": true,
+     "exported_sha256": "bef82c2613c8944989f5405cb14e7efcaeabc51fb378dcd14377ab3c5720df15",
+     "source_sha256": "bef82c2613c8944989f5405cb14e7efcaeabc51fb378dcd14377ab3c5720df15"
+    },
+    {
+     "check": "evaluation.json is a byte-identical copy of runs/20261015-223115-potential-s2-standard-7f75/evaluations/test-best_validation-2026-10-15T180431Z.json",
+     "ok": true,
+     "exported_sha256": "e1c4379420c46efcaf505da400a0682b97537aa448bd5a2eee4901442b303a9f",
+     "source_sha256": "e1c4379420c46efcaf505da400a0682b97537aa448bd5a2eee4901442b303a9f"
+    },
+    {
+     "check": "the exported checkpoint is the one the freeze record names",
+     "ok": true,
+     "frozen_record": {
+      "checkpoint": "best_validation.zip",
+      "sha256": "b8c7d0c58f0dddfab6a55b059082bd82456e107dd9c107ff024c88c5f7361766"
+     }
+    },
+    {
+     "check": "the exported evaluation is the evaluation docs/results/results.json summarises",
+     "ok": true,
+     "compared": {
+      "file": {
+       "exported": "test-best_validation-2026-10-15T180431Z.json",
+       "published": "test-best_validation-2026-10-15T180431Z.json"
+      },
+      "checkpoint": {
+       "exported": "best_validation.zip",
+       "published": "best_validation.zip"
+      },
+      "protocol_hash": {
+       "exported": "2340c66c35b045bc",
+       "published": "2340c66c35b045bc"
+      },
+      "n_episodes": {
+       "exported": 100,
+       "published": 100
+      },
+      "mean_original_return": {
+       "exported": 256.94277596102586,
+       "published": 256.94277596102586
+      },
+      "pad_landing_rate": {
+       "exported": 0.94,
+       "published": 0.94
+      },
+      "timeout_rate": {
+       "exported": 0.06,
+       "published": 0.06
+      }
+     }
+    }
+   ],
+   "provenance": [
+    {
+     "file": "metadata.json",
+     "copied": true,
+     "sha256": "824d6e5c73cfebf34dd26f296eca739995acf5cd1bb8223cab6b3fb3dc662f91",
+     "identical_to_source": true
+    },
+    {
+     "file": "status.json",
+     "copied": true,
+     "sha256": "1d9d88e67b6ae61f65225733d6410f0903a78c13e0b86899e9897f44ab04b898",
+     "identical_to_source": true
+    },
+    {
+     "file": "checkpoints/manifest.json",
+     "copied": true,
+     "sha256": "4af4856f2798be4eb6796a2ebf8b3f25a880b172e06556adef899cafb34f584f",
+     "identical_to_source": true
+    },
+    {
+     "file": "events.jsonl",
+     "copied": true,
+     "sha256": "f073b4abc537a6e0c3a4346ed62e52d1d8f6fea092fd3f9cbeab92294c5a0dc6",
+     "identical_to_source": true
+    },
+    {
+     "file": "episodes.csv",
+     "copied": true,
+     "sha256": "e7ebc135c96992cb6c0fffbbf9081ca83cfa743a68dc2ef0a80e9d9e88f0a1bd",
+     "identical_to_source": true,
+     "matches_figure_source_digest": true
+    }
+   ],
+   "verified": true
+  },
+  {
+   "run_id": "20261015-223115-potential-s3-standard-91e6",
+   "group": "Potential-based shaping",
+   "algorithm": "ppo",
+   "seed": 3,
+   "folder": "potential-based-shaping/20261015-223115-potential-s3-standard-91e6",
+   "command": "python -m lunarlab export-artifact --run-id 20261015-223115-potential-s3-standard-91e6 --out potential-based-shaping/20261015-223115-potential-s3-standard-91e6",
+   "exit_code": 0,
+   "output": "exported 20261015-223115-potential-s3-standard-91e6 to D:\\LunarLab-review-return-2026-10-19\\study-artifacts\\potential-based-shaping\\20261015-223115-potential-s3-standard-91e6: checkpoint 6b51fcca3ccf60b7, final test 100 episodes, mean original return 277.18, pad landing 100%",
+   "checks": [
+    {
+     "check": "checkpoint.zip is a byte-identical copy of runs/20261015-223115-potential-s3-standard-91e6/checkpoints/best_validation.zip",
+     "ok": true,
+     "exported_sha256": "6b51fcca3ccf60b741ca7c39e3639d7418a1293d0787531ead217f89afe45770",
+     "source_sha256": "6b51fcca3ccf60b741ca7c39e3639d7418a1293d0787531ead217f89afe45770"
+    },
+    {
+     "check": "config.yaml is a byte-identical copy of runs/20261015-223115-potential-s3-standard-91e6/config.yaml",
+     "ok": true,
+     "exported_sha256": "03bc8282c6d23e0d042afd63bf5cb34508db43efaac5c1eb2e781814e8e493e6",
+     "source_sha256": "03bc8282c6d23e0d042afd63bf5cb34508db43efaac5c1eb2e781814e8e493e6"
+    },
+    {
+     "check": "evaluation.json is a byte-identical copy of runs/20261015-223115-potential-s3-standard-91e6/evaluations/test-best_validation-2026-10-15T180431Z.json",
+     "ok": true,
+     "exported_sha256": "97a73e7141848199a8ddcb45fe1990603923ee0051c5f1eef2edd4f82a6359eb",
+     "source_sha256": "97a73e7141848199a8ddcb45fe1990603923ee0051c5f1eef2edd4f82a6359eb"
+    },
+    {
+     "check": "the exported checkpoint is the one the freeze record names",
+     "ok": true,
+     "frozen_record": {
+      "checkpoint": "best_validation.zip",
+      "sha256": "6b51fcca3ccf60b741ca7c39e3639d7418a1293d0787531ead217f89afe45770"
+     }
+    },
+    {
+     "check": "the exported evaluation is the evaluation docs/results/results.json summarises",
+     "ok": true,
+     "compared": {
+      "file": {
+       "exported": "test-best_validation-2026-10-15T180431Z.json",
+       "published": "test-best_validation-2026-10-15T180431Z.json"
+      },
+      "checkpoint": {
+       "exported": "best_validation.zip",
+       "published": "best_validation.zip"
+      },
+      "protocol_hash": {
+       "exported": "2340c66c35b045bc",
+       "published": "2340c66c35b045bc"
+      },
+      "n_episodes": {
+       "exported": 100,
+       "published": 100
+      },
+      "mean_original_return": {
+       "exported": 277.1767514894481,
+       "published": 277.1767514894481
+      },
+      "pad_landing_rate": {
+       "exported": 1.0,
+       "published": 1.0
+      },
+      "timeout_rate": {
+       "exported": 0.0,
+       "published": 0.0
+      }
+     }
+    }
+   ],
+   "provenance": [
+    {
+     "file": "metadata.json",
+     "copied": true,
+     "sha256": "4bfa63373b552ead2df985a8bf6e782ae7e88eeb0cc53443429311244bf2d4c3",
+     "identical_to_source": true
+    },
+    {
+     "file": "status.json",
+     "copied": true,
+     "sha256": "0e1a6addd06b084a1b7e2830592d5c648cc0c6e49caefdce522e18cc01877902",
+     "identical_to_source": true
+    },
+    {
+     "file": "checkpoints/manifest.json",
+     "copied": true,
+     "sha256": "fdcd9f8de0350f321bf1910e29b981ad084a0f6ccac5afd882f80603a3699e74",
+     "identical_to_source": true
+    },
+    {
+     "file": "events.jsonl",
+     "copied": true,
+     "sha256": "82d9f08b56856ea877a26a819374fb6745913d2f4d2cbf25b7b688332eb9e281",
+     "identical_to_source": true
+    },
+    {
+     "file": "episodes.csv",
+     "copied": true,
+     "sha256": "e23e2b533905751f2fbee6f4c2aec6ca0cfa08424269d2ee020bd4b60dd5eb23",
+     "identical_to_source": true,
+     "matches_figure_source_digest": true
+    }
+   ],
+   "verified": true
+  },
+  {
+   "run_id": "20261015-223115-potential-s4-standard-0b22",
+   "group": "Potential-based shaping",
+   "algorithm": "ppo",
+   "seed": 4,
+   "folder": "potential-based-shaping/20261015-223115-potential-s4-standard-0b22",
+   "command": "python -m lunarlab export-artifact --run-id 20261015-223115-potential-s4-standard-0b22 --out potential-based-shaping/20261015-223115-potential-s4-standard-0b22",
+   "exit_code": 0,
+   "output": "exported 20261015-223115-potential-s4-standard-0b22 to D:\\LunarLab-review-return-2026-10-19\\study-artifacts\\potential-based-shaping\\20261015-223115-potential-s4-standard-0b22: checkpoint cd473cc044eecfd5, final test 100 episodes, mean original return 268.17, pad landing 99%",
+   "checks": [
+    {
+     "check": "checkpoint.zip is a byte-identical copy of runs/20261015-223115-potential-s4-standard-0b22/checkpoints/best_validation.zip",
+     "ok": true,
+     "exported_sha256": "cd473cc044eecfd5d4afa7d1c607f3befdb2df9d8a54c0e1723f2b5cf2fadf8c",
+     "source_sha256": "cd473cc044eecfd5d4afa7d1c607f3befdb2df9d8a54c0e1723f2b5cf2fadf8c"
+    },
+    {
+     "check": "config.yaml is a byte-identical copy of runs/20261015-223115-potential-s4-standard-0b22/config.yaml",
+     "ok": true,
+     "exported_sha256": "8432bcbd7b727bd168d50084afe97c2742a85f6639ee5e311a0ab444bbf50e2b",
+     "source_sha256": "8432bcbd7b727bd168d50084afe97c2742a85f6639ee5e311a0ab444bbf50e2b"
+    },
+    {
+     "check": "evaluation.json is a byte-identical copy of runs/20261015-223115-potential-s4-standard-0b22/evaluations/test-best_validation-2026-10-15T180446Z.json",
+     "ok": true,
+     "exported_sha256": "ceeb6cc2ea7e4f90b7e6d251f8c9710075ad0218a182084f37ffee99ff1093be",
+     "source_sha256": "ceeb6cc2ea7e4f90b7e6d251f8c9710075ad0218a182084f37ffee99ff1093be"
+    },
+    {
+     "check": "the exported checkpoint is the one the freeze record names",
+     "ok": true,
+     "frozen_record": {
+      "checkpoint": "best_validation.zip",
+      "sha256": "cd473cc044eecfd5d4afa7d1c607f3befdb2df9d8a54c0e1723f2b5cf2fadf8c"
+     }
+    },
+    {
+     "check": "the exported evaluation is the evaluation docs/results/results.json summarises",
+     "ok": true,
+     "compared": {
+      "file": {
+       "exported": "test-best_validation-2026-10-15T180446Z.json",
+       "published": "test-best_validation-2026-10-15T180446Z.json"
+      },
+      "checkpoint": {
+       "exported": "best_validation.zip",
+       "published": "best_validation.zip"
+      },
+      "protocol_hash": {
+       "exported": "2340c66c35b045bc",
+       "published": "2340c66c35b045bc"
+      },
+      "n_episodes": {
+       "exported": 100,
+       "published": 100
+      },
+      "mean_original_return": {
+       "exported": 268.169187950752,
+       "published": 268.169187950752
+      },
+      "pad_landing_rate": {
+       "exported": 0.99,
+       "published": 0.99
+      },
+      "timeout_rate": {
+       "exported": 0.0,
+       "published": 0.0
+      }
+     }
+    }
+   ],
+   "provenance": [
+    {
+     "file": "metadata.json",
+     "copied": true,
+     "sha256": "1e99f62d55b07958c4e53c74b9cc2f534801376edaf5b7ab52614ee1ea415e1a",
+     "identical_to_source": true
+    },
+    {
+     "file": "status.json",
+     "copied": true,
+     "sha256": "a15364393920b1b57e5a8ed5c4fc6977bcb1cfa9cedd6e6d42dce9e283c89b18",
+     "identical_to_source": true
+    },
+    {
+     "file": "checkpoints/manifest.json",
+     "copied": true,
+     "sha256": "ceefabc356af9c141ebe238425886bc3f01410df5f09b22bdeab23e3203c7d46",
+     "identical_to_source": true
+    },
+    {
+     "file": "events.jsonl",
+     "copied": true,
+     "sha256": "98557f1220cc14ede2d2dd63213eadc2058444a50b224c2849a4bb34053ee597",
+     "identical_to_source": true
+    },
+    {
+     "file": "episodes.csv",
+     "copied": true,
+     "sha256": "ba2666a45a192f787a85d369c9b39fb5d8cf10229cf15b067909af926854ea39",
+     "identical_to_source": true,
+     "matches_figure_source_digest": true
+    }
+   ],
+   "verified": true
+  },
+  {
+   "run_id": "20261015-235939-custom-s0-standard-0274",
+   "group": "Learned reward 300 pairs",
+   "algorithm": "ppo",
+   "seed": 0,
+   "folder": "learned-reward-300-pairs/20261015-235939-custom-s0-standard-0274",
+   "command": "python -m lunarlab export-artifact --run-id 20261015-235939-custom-s0-standard-0274 --out learned-reward-300-pairs/20261015-235939-custom-s0-standard-0274",
+   "exit_code": 0,
+   "output": "exported 20261015-235939-custom-s0-standard-0274 to D:\\LunarLab-review-return-2026-10-19\\study-artifacts\\learned-reward-300-pairs\\20261015-235939-custom-s0-standard-0274: checkpoint 9d33d5e581eb3fcd, final test 100 episodes, mean original return 150.98, pad landing 35%",
+   "checks": [
+    {
+     "check": "checkpoint.zip is a byte-identical copy of runs/20261015-235939-custom-s0-standard-0274/checkpoints/best_validation.zip",
+     "ok": true,
+     "exported_sha256": "9d33d5e581eb3fcd988e74d5766f0a27f8584c5f6cbad808ad8166d62f8382d9",
+     "source_sha256": "9d33d5e581eb3fcd988e74d5766f0a27f8584c5f6cbad808ad8166d62f8382d9"
+    },
+    {
+     "check": "config.yaml is a byte-identical copy of runs/20261015-235939-custom-s0-standard-0274/config.yaml",
+     "ok": true,
+     "exported_sha256": "cc80706066503c5a6f195b9b95bb8c4c3f1be6dfedacca772420f4fd9056eb86",
+     "source_sha256": "cc80706066503c5a6f195b9b95bb8c4c3f1be6dfedacca772420f4fd9056eb86"
+    },
+    {
+     "check": "evaluation.json is a byte-identical copy of runs/20261015-235939-custom-s0-standard-0274/evaluations/test-best_validation-2026-10-15T181918Z.json",
+     "ok": true,
+     "exported_sha256": "ec3536edf857491f78c00d6182f3e97f6cceded090b34c144879cd7391bd88e1",
+     "source_sha256": "ec3536edf857491f78c00d6182f3e97f6cceded090b34c144879cd7391bd88e1"
+    },
+    {
+     "check": "the exported checkpoint is the one the freeze record names",
+     "ok": true,
+     "frozen_record": {
+      "checkpoint": "best_validation.zip",
+      "sha256": "9d33d5e581eb3fcd988e74d5766f0a27f8584c5f6cbad808ad8166d62f8382d9"
+     }
+    },
+    {
+     "check": "the exported evaluation is the evaluation docs/results/results.json summarises",
+     "ok": true,
+     "compared": {
+      "file": {
+       "exported": "test-best_validation-2026-10-15T181918Z.json",
+       "published": "test-best_validation-2026-10-15T181918Z.json"
+      },
+      "checkpoint": {
+       "exported": "best_validation.zip",
+       "published": "best_validation.zip"
+      },
+      "protocol_hash": {
+       "exported": "2340c66c35b045bc",
+       "published": "2340c66c35b045bc"
+      },
+      "n_episodes": {
+       "exported": 100,
+       "published": 100
+      },
+      "mean_original_return": {
+       "exported": 150.98278994441668,
+       "published": 150.98278994441668
+      },
+      "pad_landing_rate": {
+       "exported": 0.35,
+       "published": 0.35
+      },
+      "timeout_rate": {
+       "exported": 0.0,
+       "published": 0.0
+      }
+     }
+    }
+   ],
+   "provenance": [
+    {
+     "file": "metadata.json",
+     "copied": true,
+     "sha256": "3ddbe1c9dbba81dda5e1921e3db85b457432a7246b8675d379f7294316a2041c",
+     "identical_to_source": true
+    },
+    {
+     "file": "status.json",
+     "copied": true,
+     "sha256": "d9c6fffe9905aa30f41644fb54ed35ac8f53df9d6ecaa02042e1645c4bee570d",
+     "identical_to_source": true
+    },
+    {
+     "file": "checkpoints/manifest.json",
+     "copied": true,
+     "sha256": "34190f00e9e847403f874305c3e3999fceaca15935d45b2ac870ac65cb7461d1",
+     "identical_to_source": true
+    },
+    {
+     "file": "events.jsonl",
+     "copied": true,
+     "sha256": "811e18593325d6b6391165be3768a66b50714fabc4508478fa509ef9e723df3d",
+     "identical_to_source": true
+    }
+   ],
+   "verified": true
+  },
+  {
+   "run_id": "20261015-235939-custom-s1-standard-b692",
+   "group": "Learned reward 300 pairs",
+   "algorithm": "ppo",
+   "seed": 1,
+   "folder": "learned-reward-300-pairs/20261015-235939-custom-s1-standard-b692",
+   "command": "python -m lunarlab export-artifact --run-id 20261015-235939-custom-s1-standard-b692 --out learned-reward-300-pairs/20261015-235939-custom-s1-standard-b692",
+   "exit_code": 0,
+   "output": "exported 20261015-235939-custom-s1-standard-b692 to D:\\LunarLab-review-return-2026-10-19\\study-artifacts\\learned-reward-300-pairs\\20261015-235939-custom-s1-standard-b692: checkpoint 769761f9c8f06aca, final test 100 episodes, mean original return -304.54, pad landing 1%",
+   "checks": [
+    {
+     "check": "checkpoint.zip is a byte-identical copy of runs/20261015-235939-custom-s1-standard-b692/checkpoints/best_validation.zip",
+     "ok": true,
+     "exported_sha256": "769761f9c8f06acab93378ea63eaa5aef92b0e78b3f754be6356ecb9307897b4",
+     "source_sha256": "769761f9c8f06acab93378ea63eaa5aef92b0e78b3f754be6356ecb9307897b4"
+    },
+    {
+     "check": "config.yaml is a byte-identical copy of runs/20261015-235939-custom-s1-standard-b692/config.yaml",
+     "ok": true,
+     "exported_sha256": "5ba3a974cd45c07f6dc0431fb642e77f8ba9e0e5d960742e32185be579d19b84",
+     "source_sha256": "5ba3a974cd45c07f6dc0431fb642e77f8ba9e0e5d960742e32185be579d19b84"
+    },
+    {
+     "check": "evaluation.json is a byte-identical copy of runs/20261015-235939-custom-s1-standard-b692/evaluations/test-best_validation-2026-10-15T181907Z.json",
+     "ok": true,
+     "exported_sha256": "bc8b66eb41dd3f57704e42dfd5a80bb4ab9012a9e50770f628d3cb2646ef188d",
+     "source_sha256": "bc8b66eb41dd3f57704e42dfd5a80bb4ab9012a9e50770f628d3cb2646ef188d"
+    },
+    {
+     "check": "the exported checkpoint is the one the freeze record names",
+     "ok": true,
+     "frozen_record": {
+      "checkpoint": "best_validation.zip",
+      "sha256": "769761f9c8f06acab93378ea63eaa5aef92b0e78b3f754be6356ecb9307897b4"
+     }
+    },
+    {
+     "check": "the exported evaluation is the evaluation docs/results/results.json summarises",
+     "ok": true,
+     "compared": {
+      "file": {
+       "exported": "test-best_validation-2026-10-15T181907Z.json",
+       "published": "test-best_validation-2026-10-15T181907Z.json"
+      },
+      "checkpoint": {
+       "exported": "best_validation.zip",
+       "published": "best_validation.zip"
+      },
+      "protocol_hash": {
+       "exported": "2340c66c35b045bc",
+       "published": "2340c66c35b045bc"
+      },
+      "n_episodes": {
+       "exported": 100,
+       "published": 100
+      },
+      "mean_original_return": {
+       "exported": -304.53622735680005,
+       "published": -304.53622735680005
+      },
+      "pad_landing_rate": {
+       "exported": 0.01,
+       "published": 0.01
+      },
+      "timeout_rate": {
+       "exported": 0.0,
+       "published": 0.0
+      }
+     }
+    }
+   ],
+   "provenance": [
+    {
+     "file": "metadata.json",
+     "copied": true,
+     "sha256": "b47196e69657d6d18fd5735bb9956ff2c71e8fccfa49be8d3091eaabb2a01645",
+     "identical_to_source": true
+    },
+    {
+     "file": "status.json",
+     "copied": true,
+     "sha256": "b624279b18a6a9c3f146cb7c9fb04b3f8bc645e51b07414cdb88250b806865a3",
+     "identical_to_source": true
+    },
+    {
+     "file": "checkpoints/manifest.json",
+     "copied": true,
+     "sha256": "ce7185a21c56af82eb8eac3d109d3c7c3543ab86a5b7d1e5c36181d3dba445fc",
+     "identical_to_source": true
+    },
+    {
+     "file": "events.jsonl",
+     "copied": true,
+     "sha256": "7e40e97f95134852c07228f373bb968045d7aaa2f56184f4b54e8a159a0c5d8d",
+     "identical_to_source": true
+    }
+   ],
+   "verified": true
+  },
+  {
+   "run_id": "20261015-235940-custom-s2-standard-a299",
+   "group": "Learned reward 300 pairs",
+   "algorithm": "ppo",
+   "seed": 2,
+   "folder": "learned-reward-300-pairs/20261015-235940-custom-s2-standard-a299",
+   "command": "python -m lunarlab export-artifact --run-id 20261015-235940-custom-s2-standard-a299 --out learned-reward-300-pairs/20261015-235940-custom-s2-standard-a299",
+   "exit_code": 0,
+   "output": "exported 20261015-235940-custom-s2-standard-a299 to D:\\LunarLab-review-return-2026-10-19\\study-artifacts\\learned-reward-300-pairs\\20261015-235940-custom-s2-standard-a299: checkpoint 4f403ef622539cdf, final test 100 episodes, mean original return -342.19, pad landing 0%",
+   "checks": [
+    {
+     "check": "checkpoint.zip is a byte-identical copy of runs/20261015-235940-custom-s2-standard-a299/checkpoints/best_validation.zip",
+     "ok": true,
+     "exported_sha256": "4f403ef622539cdf7a957f4c18205cdd968c8dc9b97cbb512e414cd1bb42eafa",
+     "source_sha256": "4f403ef622539cdf7a957f4c18205cdd968c8dc9b97cbb512e414cd1bb42eafa"
+    },
+    {
+     "check": "config.yaml is a byte-identical copy of runs/20261015-235940-custom-s2-standard-a299/config.yaml",
+     "ok": true,
+     "exported_sha256": "ba2a3afbc07dc3ebe22c62dc12da7bbab52de56195dd802e1d75266cff21cda9",
+     "source_sha256": "ba2a3afbc07dc3ebe22c62dc12da7bbab52de56195dd802e1d75266cff21cda9"
+    },
+    {
+     "check": "evaluation.json is a byte-identical copy of runs/20261015-235940-custom-s2-standard-a299/evaluations/test-best_validation-2026-10-15T181908Z.json",
+     "ok": true,
+     "exported_sha256": "69fc07af18bcbcbb0232505e886e14897e8550092b81072ec9899cbd1d67b126",
+     "source_sha256": "69fc07af18bcbcbb0232505e886e14897e8550092b81072ec9899cbd1d67b126"
+    },
+    {
+     "check": "the exported checkpoint is the one the freeze record names",
+     "ok": true,
+     "frozen_record": {
+      "checkpoint": "best_validation.zip",
+      "sha256": "4f403ef622539cdf7a957f4c18205cdd968c8dc9b97cbb512e414cd1bb42eafa"
+     }
+    },
+    {
+     "check": "the exported evaluation is the evaluation docs/results/results.json summarises",
+     "ok": true,
+     "compared": {
+      "file": {
+       "exported": "test-best_validation-2026-10-15T181908Z.json",
+       "published": "test-best_validation-2026-10-15T181908Z.json"
+      },
+      "checkpoint": {
+       "exported": "best_validation.zip",
+       "published": "best_validation.zip"
+      },
+      "protocol_hash": {
+       "exported": "2340c66c35b045bc",
+       "published": "2340c66c35b045bc"
+      },
+      "n_episodes": {
+       "exported": 100,
+       "published": 100
+      },
+      "mean_original_return": {
+       "exported": -342.1870168670023,
+       "published": -342.1870168670023
+      },
+      "pad_landing_rate": {
+       "exported": 0.0,
+       "published": 0.0
+      },
+      "timeout_rate": {
+       "exported": 0.0,
+       "published": 0.0
+      }
+     }
+    }
+   ],
+   "provenance": [
+    {
+     "file": "metadata.json",
+     "copied": true,
+     "sha256": "b318f97351c25dc6dc063b49a4c38dcf953f8209d69a7b25ebe7907057988fbe",
+     "identical_to_source": true
+    },
+    {
+     "file": "status.json",
+     "copied": true,
+     "sha256": "347d8c2795b5402d4b2f47266a8c3ecb36c97365e8cd848d255e37c8f961a919",
+     "identical_to_source": true
+    },
+    {
+     "file": "checkpoints/manifest.json",
+     "copied": true,
+     "sha256": "6a2d9e415c9ead53319930c850500d9cb9b99d53bb998de5f0219143e4ff941e",
+     "identical_to_source": true
+    },
+    {
+     "file": "events.jsonl",
+     "copied": true,
+     "sha256": "193b1f34170fc02907117f8028c11940bad263c72ff71e9068a67a21a2a158c0",
+     "identical_to_source": true
+    }
+   ],
+   "verified": true
+  },
+  {
+   "run_id": "20261015-235940-custom-s0-standard-d28b",
+   "group": "Learned reward 3000 pairs",
+   "algorithm": "ppo",
+   "seed": 0,
+   "folder": "learned-reward-3000-pairs/20261015-235940-custom-s0-standard-d28b",
+   "command": "python -m lunarlab export-artifact --run-id 20261015-235940-custom-s0-standard-d28b --out learned-reward-3000-pairs/20261015-235940-custom-s0-standard-d28b",
+   "exit_code": 0,
+   "output": "exported 20261015-235940-custom-s0-standard-d28b to D:\\LunarLab-review-return-2026-10-19\\study-artifacts\\learned-reward-3000-pairs\\20261015-235940-custom-s0-standard-d28b: checkpoint c42fbf980493eef5, final test 100 episodes, mean original return 196.26, pad landing 66%",
+   "checks": [
+    {
+     "check": "checkpoint.zip is a byte-identical copy of runs/20261015-235940-custom-s0-standard-d28b/checkpoints/best_validation.zip",
+     "ok": true,
+     "exported_sha256": "c42fbf980493eef514b75e3564ec65d174378b1a6427a1815b591616c486ec95",
+     "source_sha256": "c42fbf980493eef514b75e3564ec65d174378b1a6427a1815b591616c486ec95"
+    },
+    {
+     "check": "config.yaml is a byte-identical copy of runs/20261015-235940-custom-s0-standard-d28b/config.yaml",
+     "ok": true,
+     "exported_sha256": "7a88468522dad28c1f0159c2049e5cc633d9dadbb6df91b89a0ffc54a8aadb1e",
+     "source_sha256": "7a88468522dad28c1f0159c2049e5cc633d9dadbb6df91b89a0ffc54a8aadb1e"
+    },
+    {
+     "check": "evaluation.json is a byte-identical copy of runs/20261015-235940-custom-s0-standard-d28b/evaluations/test-best_validation-2026-10-15T181924Z.json",
+     "ok": true,
+     "exported_sha256": "934b16a2ee0eb972c06a72d5b989c823da20c1b063459a0fb4c752046bc838ab",
+     "source_sha256": "934b16a2ee0eb972c06a72d5b989c823da20c1b063459a0fb4c752046bc838ab"
+    },
+    {
+     "check": "the exported checkpoint is the one the freeze record names",
+     "ok": true,
+     "frozen_record": {
+      "checkpoint": "best_validation.zip",
+      "sha256": "c42fbf980493eef514b75e3564ec65d174378b1a6427a1815b591616c486ec95"
+     }
+    },
+    {
+     "check": "the exported evaluation is the evaluation docs/results/results.json summarises",
+     "ok": true,
+     "compared": {
+      "file": {
+       "exported": "test-best_validation-2026-10-15T181924Z.json",
+       "published": "test-best_validation-2026-10-15T181924Z.json"
+      },
+      "checkpoint": {
+       "exported": "best_validation.zip",
+       "published": "best_validation.zip"
+      },
+      "protocol_hash": {
+       "exported": "2340c66c35b045bc",
+       "published": "2340c66c35b045bc"
+      },
+      "n_episodes": {
+       "exported": 100,
+       "published": 100
+      },
+      "mean_original_return": {
+       "exported": 196.25725267965453,
+       "published": 196.25725267965453
+      },
+      "pad_landing_rate": {
+       "exported": 0.66,
+       "published": 0.66
+      },
+      "timeout_rate": {
+       "exported": 0.01,
+       "published": 0.01
+      }
+     }
+    }
+   ],
+   "provenance": [
+    {
+     "file": "metadata.json",
+     "copied": true,
+     "sha256": "40b23d9c2e3bd6c5628a29712bb91dbee00f2c7bfa4dc02526fe7c9b57c30f38",
+     "identical_to_source": true
+    },
+    {
+     "file": "status.json",
+     "copied": true,
+     "sha256": "7963965630e93efa09858f69c64d1b5a6de619c2573b93f09565c28b44636c8d",
+     "identical_to_source": true
+    },
+    {
+     "file": "checkpoints/manifest.json",
+     "copied": true,
+     "sha256": "c28add145c4762c2a186bc3b5dd2c5b6cf61b0addfed67e5b25d4c45fa0dd93e",
+     "identical_to_source": true
+    },
+    {
+     "file": "events.jsonl",
+     "copied": true,
+     "sha256": "d32dd2190c72ebf0ef7a5640143da9d6143cadce42b0ac7d2601af7ade5f074f",
+     "identical_to_source": true
+    }
+   ],
+   "verified": true
+  },
+  {
+   "run_id": "20261015-235940-custom-s1-standard-ce26",
+   "group": "Learned reward 3000 pairs",
+   "algorithm": "ppo",
+   "seed": 1,
+   "folder": "learned-reward-3000-pairs/20261015-235940-custom-s1-standard-ce26",
+   "command": "python -m lunarlab export-artifact --run-id 20261015-235940-custom-s1-standard-ce26 --out learned-reward-3000-pairs/20261015-235940-custom-s1-standard-ce26",
+   "exit_code": 0,
+   "output": "exported 20261015-235940-custom-s1-standard-ce26 to D:\\LunarLab-review-return-2026-10-19\\study-artifacts\\learned-reward-3000-pairs\\20261015-235940-custom-s1-standard-ce26: checkpoint b17aa5f68f4275a5, final test 100 episodes, mean original return 221.58, pad landing 54%",
+   "checks": [
+    {
+     "check": "checkpoint.zip is a byte-identical copy of runs/20261015-235940-custom-s1-standard-ce26/checkpoints/best_validation.zip",
+     "ok": true,
+     "exported_sha256": "b17aa5f68f4275a5c6a0d686d52d7c11905db0dc0dc5f308bf5c75cf2435b3ae",
+     "source_sha256": "b17aa5f68f4275a5c6a0d686d52d7c11905db0dc0dc5f308bf5c75cf2435b3ae"
+    },
+    {
+     "check": "config.yaml is a byte-identical copy of runs/20261015-235940-custom-s1-standard-ce26/config.yaml",
+     "ok": true,
+     "exported_sha256": "12391630ff5d69fe83b13a36fe4bb1a039f1d445c5e9e48b5824c0644759669f",
+     "source_sha256": "12391630ff5d69fe83b13a36fe4bb1a039f1d445c5e9e48b5824c0644759669f"
+    },
+    {
+     "check": "evaluation.json is a byte-identical copy of runs/20261015-235940-custom-s1-standard-ce26/evaluations/test-best_validation-2026-10-15T181918Z.json",
+     "ok": true,
+     "exported_sha256": "bdf22ac1b79328f1bbb9b51b6dd1a5a02c3ffd5e90fe4034a4578bcbd7787c36",
+     "source_sha256": "bdf22ac1b79328f1bbb9b51b6dd1a5a02c3ffd5e90fe4034a4578bcbd7787c36"
+    },
+    {
+     "check": "the exported checkpoint is the one the freeze record names",
+     "ok": true,
+     "frozen_record": {
+      "checkpoint": "best_validation.zip",
+      "sha256": "b17aa5f68f4275a5c6a0d686d52d7c11905db0dc0dc5f308bf5c75cf2435b3ae"
+     }
+    },
+    {
+     "check": "the exported evaluation is the evaluation docs/results/results.json summarises",
+     "ok": true,
+     "compared": {
+      "file": {
+       "exported": "test-best_validation-2026-10-15T181918Z.json",
+       "published": "test-best_validation-2026-10-15T181918Z.json"
+      },
+      "checkpoint": {
+       "exported": "best_validation.zip",
+       "published": "best_validation.zip"
+      },
+      "protocol_hash": {
+       "exported": "2340c66c35b045bc",
+       "published": "2340c66c35b045bc"
+      },
+      "n_episodes": {
+       "exported": 100,
+       "published": 100
+      },
+      "mean_original_return": {
+       "exported": 221.5753306348656,
+       "published": 221.5753306348656
+      },
+      "pad_landing_rate": {
+       "exported": 0.54,
+       "published": 0.54
+      },
+      "timeout_rate": {
+       "exported": 0.02,
+       "published": 0.02
+      }
+     }
+    }
+   ],
+   "provenance": [
+    {
+     "file": "metadata.json",
+     "copied": true,
+     "sha256": "59f7abe93312642cb7b5542495f3138cb2b7106f20ae48e14dbc56ca24d02d20",
+     "identical_to_source": true
+    },
+    {
+     "file": "status.json",
+     "copied": true,
+     "sha256": "d28de141f784d0a5c4d638e4f0194fa23059904a2f1ca798fd6fa42dfaaebe0a",
+     "identical_to_source": true
+    },
+    {
+     "file": "checkpoints/manifest.json",
+     "copied": true,
+     "sha256": "72ffa1e0d0965fd5ed9b69b25543be6ee2cd8aef926e1c6c5dc056232cbc87ff",
+     "identical_to_source": true
+    },
+    {
+     "file": "events.jsonl",
+     "copied": true,
+     "sha256": "509675e426d33ee7c8f782f8c203f780dd28b56822f75aea0dcd6069272e5b3c",
+     "identical_to_source": true
+    }
+   ],
+   "verified": true
+  },
+  {
+   "run_id": "20261015-235940-custom-s2-standard-dbc1",
+   "group": "Learned reward 3000 pairs",
+   "algorithm": "ppo",
+   "seed": 2,
+   "folder": "learned-reward-3000-pairs/20261015-235940-custom-s2-standard-dbc1",
+   "command": "python -m lunarlab export-artifact --run-id 20261015-235940-custom-s2-standard-dbc1 --out learned-reward-3000-pairs/20261015-235940-custom-s2-standard-dbc1",
+   "exit_code": 0,
+   "output": "exported 20261015-235940-custom-s2-standard-dbc1 to D:\\LunarLab-review-return-2026-10-19\\study-artifacts\\learned-reward-3000-pairs\\20261015-235940-custom-s2-standard-dbc1: checkpoint 8a2ae356ee269335, final test 100 episodes, mean original return 182.75, pad landing 42%",
+   "checks": [
+    {
+     "check": "checkpoint.zip is a byte-identical copy of runs/20261015-235940-custom-s2-standard-dbc1/checkpoints/best_validation.zip",
+     "ok": true,
+     "exported_sha256": "8a2ae356ee2693356291720dd4207377a32b5050d907c937a2b144a66a8f8c67",
+     "source_sha256": "8a2ae356ee2693356291720dd4207377a32b5050d907c937a2b144a66a8f8c67"
+    },
+    {
+     "check": "config.yaml is a byte-identical copy of runs/20261015-235940-custom-s2-standard-dbc1/config.yaml",
+     "ok": true,
+     "exported_sha256": "2a188057a33007803b4e3fad80647a351d8b04442176881d650e3f0842a89073",
+     "source_sha256": "2a188057a33007803b4e3fad80647a351d8b04442176881d650e3f0842a89073"
+    },
+    {
+     "check": "evaluation.json is a byte-identical copy of runs/20261015-235940-custom-s2-standard-dbc1/evaluations/test-best_validation-2026-10-15T181918Z.json",
+     "ok": true,
+     "exported_sha256": "b91cb2842584cc52454acd820710ee3b8af7350f223c069214e98f53d0a85bdc",
+     "source_sha256": "b91cb2842584cc52454acd820710ee3b8af7350f223c069214e98f53d0a85bdc"
+    },
+    {
+     "check": "the exported checkpoint is the one the freeze record names",
+     "ok": true,
+     "frozen_record": {
+      "checkpoint": "best_validation.zip",
+      "sha256": "8a2ae356ee2693356291720dd4207377a32b5050d907c937a2b144a66a8f8c67"
+     }
+    },
+    {
+     "check": "the exported evaluation is the evaluation docs/results/results.json summarises",
+     "ok": true,
+     "compared": {
+      "file": {
+       "exported": "test-best_validation-2026-10-15T181918Z.json",
+       "published": "test-best_validation-2026-10-15T181918Z.json"
+      },
+      "checkpoint": {
+       "exported": "best_validation.zip",
+       "published": "best_validation.zip"
+      },
+      "protocol_hash": {
+       "exported": "2340c66c35b045bc",
+       "published": "2340c66c35b045bc"
+      },
+      "n_episodes": {
+       "exported": 100,
+       "published": 100
+      },
+      "mean_original_return": {
+       "exported": 182.75221437169256,
+       "published": 182.75221437169256
+      },
+      "pad_landing_rate": {
+       "exported": 0.42,
+       "published": 0.42
+      },
+      "timeout_rate": {
+       "exported": 0.01,
+       "published": 0.01
+      }
+     }
+    }
+   ],
+   "provenance": [
+    {
+     "file": "metadata.json",
+     "copied": true,
+     "sha256": "25e81a7bb8c45933f427fae987e80efdbb7620cb35a979001e16758e8b9a7544",
+     "identical_to_source": true
+    },
+    {
+     "file": "status.json",
+     "copied": true,
+     "sha256": "a18938f2955c419ba38a838aba188ad2c2a8fea1f4b010c7deec65b6e0db7810",
+     "identical_to_source": true
+    },
+    {
+     "file": "checkpoints/manifest.json",
+     "copied": true,
+     "sha256": "537514204e61d699262c445b1a57f1bf2c5fe6028c0893850c4531824157b37d",
+     "identical_to_source": true
+    },
+    {
+     "file": "events.jsonl",
+     "copied": true,
+     "sha256": "7a6d4dd1c54e56dfd1fbb28deaeeae5fea5632ab328851ebc718d420288a6396",
+     "identical_to_source": true
+    }
+   ],
+   "verified": true
+  },
+  {
+   "run_id": "20261015-224317-dqn-baseline-s0-custom-2fe1",
+   "group": "DQN \u00b7 Original baseline",
+   "algorithm": "dqn",
+   "seed": 0,
+   "folder": "dqn-original-baseline/20261015-224317-dqn-baseline-s0-custom-2fe1",
+   "command": "python -m lunarlab export-artifact --run-id 20261015-224317-dqn-baseline-s0-custom-2fe1 --out dqn-original-baseline/20261015-224317-dqn-baseline-s0-custom-2fe1",
+   "exit_code": 0,
+   "output": "exported 20261015-224317-dqn-baseline-s0-custom-2fe1 to D:\\LunarLab-review-return-2026-10-19\\study-artifacts\\dqn-original-baseline\\20261015-224317-dqn-baseline-s0-custom-2fe1: checkpoint 8f1438011d97158b, final test 100 episodes, mean original return 155.36, pad landing 29%",
+   "checks": [
+    {
+     "check": "checkpoint.zip is a byte-identical copy of runs/20261015-224317-dqn-baseline-s0-custom-2fe1/checkpoints/best_validation.zip",
+     "ok": true,
+     "exported_sha256": "8f1438011d97158b2151e427dd61cd1c631fdbb94c56d5b4564f34767bb41bbc",
+     "source_sha256": "8f1438011d97158b2151e427dd61cd1c631fdbb94c56d5b4564f34767bb41bbc"
+    },
+    {
+     "check": "config.yaml is a byte-identical copy of runs/20261015-224317-dqn-baseline-s0-custom-2fe1/config.yaml",
+     "ok": true,
+     "exported_sha256": "199dcc9efbe236ae594c3775144cf012725f8329e9360c5017f21755bd58cd68",
+     "source_sha256": "199dcc9efbe236ae594c3775144cf012725f8329e9360c5017f21755bd58cd68"
+    },
+    {
+     "check": "evaluation.json is a byte-identical copy of runs/20261015-224317-dqn-baseline-s0-custom-2fe1/evaluations/test-best_validation-2026-10-15T180532Z.json",
+     "ok": true,
+     "exported_sha256": "008074c0512ab4a352a57b29d5f6a19020118bea30fec2e6d282348716628ab8",
+     "source_sha256": "008074c0512ab4a352a57b29d5f6a19020118bea30fec2e6d282348716628ab8"
+    },
+    {
+     "check": "the exported checkpoint is the one the freeze record names",
+     "ok": true,
+     "frozen_record": {
+      "checkpoint": "best_validation.zip",
+      "sha256": "8f1438011d97158b2151e427dd61cd1c631fdbb94c56d5b4564f34767bb41bbc"
+     }
+    },
+    {
+     "check": "the exported evaluation is the evaluation docs/results/results.json summarises",
+     "ok": true,
+     "compared": {
+      "file": {
+       "exported": "test-best_validation-2026-10-15T180532Z.json",
+       "published": "test-best_validation-2026-10-15T180532Z.json"
+      },
+      "checkpoint": {
+       "exported": "best_validation.zip",
+       "published": "best_validation.zip"
+      },
+      "protocol_hash": {
+       "exported": "2340c66c35b045bc",
+       "published": "2340c66c35b045bc"
+      },
+      "n_episodes": {
+       "exported": 100,
+       "published": 100
+      },
+      "mean_original_return": {
+       "exported": 155.36443783032232,
+       "published": 155.36443783032232
+      },
+      "pad_landing_rate": {
+       "exported": 0.29,
+       "published": 0.29
+      },
+      "timeout_rate": {
+       "exported": 0.13,
+       "published": 0.13
+      }
+     }
+    }
+   ],
+   "provenance": [
+    {
+     "file": "metadata.json",
+     "copied": true,
+     "sha256": "87d72135d5db80611f39a7cbd674debcc1378666b84b1357b1555396fc8d77be",
+     "identical_to_source": true
+    },
+    {
+     "file": "status.json",
+     "copied": true,
+     "sha256": "2e12abe50499f12bdae02dd598c39a08518933540a7b588f2904112aef061a5a",
+     "identical_to_source": true
+    },
+    {
+     "file": "checkpoints/manifest.json",
+     "copied": true,
+     "sha256": "d227861655af648fd0f10725603cc80d120fca2adf2c52f310b5ae334a0331d0",
+     "identical_to_source": true
+    },
+    {
+     "file": "events.jsonl",
+     "copied": true,
+     "sha256": "55657b16ea697e9e8e8a48370e836b57f98641d3b57b2f077c53f1880c904bb0",
+     "identical_to_source": true
+    }
+   ],
+   "verified": true
+  },
+  {
+   "run_id": "20261015-224318-dqn-baseline-s1-custom-1fa1",
+   "group": "DQN \u00b7 Original baseline",
+   "algorithm": "dqn",
+   "seed": 1,
+   "folder": "dqn-original-baseline/20261015-224318-dqn-baseline-s1-custom-1fa1",
+   "command": "python -m lunarlab export-artifact --run-id 20261015-224318-dqn-baseline-s1-custom-1fa1 --out dqn-original-baseline/20261015-224318-dqn-baseline-s1-custom-1fa1",
+   "exit_code": 0,
+   "output": "exported 20261015-224318-dqn-baseline-s1-custom-1fa1 to D:\\LunarLab-review-return-2026-10-19\\study-artifacts\\dqn-original-baseline\\20261015-224318-dqn-baseline-s1-custom-1fa1: checkpoint d44ae0d8bfab837a, final test 100 episodes, mean original return 207.59, pad landing 35%",
+   "checks": [
+    {
+     "check": "checkpoint.zip is a byte-identical copy of runs/20261015-224318-dqn-baseline-s1-custom-1fa1/checkpoints/best_validation.zip",
+     "ok": true,
+     "exported_sha256": "d44ae0d8bfab837aadd7cb1aea7b0b0cdb707837fd15581dc03fe0a5edcf4102",
+     "source_sha256": "d44ae0d8bfab837aadd7cb1aea7b0b0cdb707837fd15581dc03fe0a5edcf4102"
+    },
+    {
+     "check": "config.yaml is a byte-identical copy of runs/20261015-224318-dqn-baseline-s1-custom-1fa1/config.yaml",
+     "ok": true,
+     "exported_sha256": "0c6645a6c4769a52b352155fd6fc508c125b53a277fc7dae56f08e9ad56b6708",
+     "source_sha256": "0c6645a6c4769a52b352155fd6fc508c125b53a277fc7dae56f08e9ad56b6708"
+    },
+    {
+     "check": "evaluation.json is a byte-identical copy of runs/20261015-224318-dqn-baseline-s1-custom-1fa1/evaluations/test-best_validation-2026-10-15T180553Z.json",
+     "ok": true,
+     "exported_sha256": "ba7c0b6bb3edcc22ea297b2298e465635de210cd29f39ee98d5d9900b9472344",
+     "source_sha256": "ba7c0b6bb3edcc22ea297b2298e465635de210cd29f39ee98d5d9900b9472344"
+    },
+    {
+     "check": "the exported checkpoint is the one the freeze record names",
+     "ok": true,
+     "frozen_record": {
+      "checkpoint": "best_validation.zip",
+      "sha256": "d44ae0d8bfab837aadd7cb1aea7b0b0cdb707837fd15581dc03fe0a5edcf4102"
+     }
+    },
+    {
+     "check": "the exported evaluation is the evaluation docs/results/results.json summarises",
+     "ok": true,
+     "compared": {
+      "file": {
+       "exported": "test-best_validation-2026-10-15T180553Z.json",
+       "published": "test-best_validation-2026-10-15T180553Z.json"
+      },
+      "checkpoint": {
+       "exported": "best_validation.zip",
+       "published": "best_validation.zip"
+      },
+      "protocol_hash": {
+       "exported": "2340c66c35b045bc",
+       "published": "2340c66c35b045bc"
+      },
+      "n_episodes": {
+       "exported": 100,
+       "published": 100
+      },
+      "mean_original_return": {
+       "exported": 207.5893679476933,
+       "published": 207.5893679476933
+      },
+      "pad_landing_rate": {
+       "exported": 0.35,
+       "published": 0.35
+      },
+      "timeout_rate": {
+       "exported": 0.2,
+       "published": 0.2
+      }
+     }
+    }
+   ],
+   "provenance": [
+    {
+     "file": "metadata.json",
+     "copied": true,
+     "sha256": "8212ad2516201380a704af7a5b67248a61b1803ee492e1a5b155c48889c92b82",
+     "identical_to_source": true
+    },
+    {
+     "file": "status.json",
+     "copied": true,
+     "sha256": "c1fca72c0b12d33e12fe76c963dba968d883efa82ca901c4e41c13de274f6417",
+     "identical_to_source": true
+    },
+    {
+     "file": "checkpoints/manifest.json",
+     "copied": true,
+     "sha256": "7e50b83cfa1e2a029a4ccc4afcd97eec50e6cf71abd3d4010780d38158167dc7",
+     "identical_to_source": true
+    },
+    {
+     "file": "events.jsonl",
+     "copied": true,
+     "sha256": "2f0b80021650f5012a4f0593562eb776dea5f3bcf1c3edcad1065ba0bc01dbe3",
+     "identical_to_source": true
+    }
+   ],
+   "verified": true
+  },
+  {
+   "run_id": "20261015-224318-dqn-baseline-s2-custom-f083",
+   "group": "DQN \u00b7 Original baseline",
+   "algorithm": "dqn",
+   "seed": 2,
+   "folder": "dqn-original-baseline/20261015-224318-dqn-baseline-s2-custom-f083",
+   "command": "python -m lunarlab export-artifact --run-id 20261015-224318-dqn-baseline-s2-custom-f083 --out dqn-original-baseline/20261015-224318-dqn-baseline-s2-custom-f083",
+   "exit_code": 0,
+   "output": "exported 20261015-224318-dqn-baseline-s2-custom-f083 to D:\\LunarLab-review-return-2026-10-19\\study-artifacts\\dqn-original-baseline\\20261015-224318-dqn-baseline-s2-custom-f083: checkpoint 708d547f2c5c21cb, final test 100 episodes, mean original return 270.06, pad landing 97%",
+   "checks": [
+    {
+     "check": "checkpoint.zip is a byte-identical copy of runs/20261015-224318-dqn-baseline-s2-custom-f083/checkpoints/best_validation.zip",
+     "ok": true,
+     "exported_sha256": "708d547f2c5c21cba63bcd881defe53ce57fe7d254e64ee79427fdabb21ca0bb",
+     "source_sha256": "708d547f2c5c21cba63bcd881defe53ce57fe7d254e64ee79427fdabb21ca0bb"
+    },
+    {
+     "check": "config.yaml is a byte-identical copy of runs/20261015-224318-dqn-baseline-s2-custom-f083/config.yaml",
+     "ok": true,
+     "exported_sha256": "22f7d04adb17496ab84ef75e71f384809a832feec37707f8fc831acbf8928a8a",
+     "source_sha256": "22f7d04adb17496ab84ef75e71f384809a832feec37707f8fc831acbf8928a8a"
+    },
+    {
+     "check": "evaluation.json is a byte-identical copy of runs/20261015-224318-dqn-baseline-s2-custom-f083/evaluations/test-best_validation-2026-10-15T180521Z.json",
+     "ok": true,
+     "exported_sha256": "911090d475f0980849486612506f3d2615ad56de3e495e900ab27f0909679e4b",
+     "source_sha256": "911090d475f0980849486612506f3d2615ad56de3e495e900ab27f0909679e4b"
+    },
+    {
+     "check": "the exported checkpoint is the one the freeze record names",
+     "ok": true,
+     "frozen_record": {
+      "checkpoint": "best_validation.zip",
+      "sha256": "708d547f2c5c21cba63bcd881defe53ce57fe7d254e64ee79427fdabb21ca0bb"
+     }
+    },
+    {
+     "check": "the exported evaluation is the evaluation docs/results/results.json summarises",
+     "ok": true,
+     "compared": {
+      "file": {
+       "exported": "test-best_validation-2026-10-15T180521Z.json",
+       "published": "test-best_validation-2026-10-15T180521Z.json"
+      },
+      "checkpoint": {
+       "exported": "best_validation.zip",
+       "published": "best_validation.zip"
+      },
+      "protocol_hash": {
+       "exported": "2340c66c35b045bc",
+       "published": "2340c66c35b045bc"
+      },
+      "n_episodes": {
+       "exported": 100,
+       "published": 100
+      },
+      "mean_original_return": {
+       "exported": 270.062427549699,
+       "published": 270.062427549699
+      },
+      "pad_landing_rate": {
+       "exported": 0.97,
+       "published": 0.97
+      },
+      "timeout_rate": {
+       "exported": 0.0,
+       "published": 0.0
+      }
+     }
+    }
+   ],
+   "provenance": [
+    {
+     "file": "metadata.json",
+     "copied": true,
+     "sha256": "b7216c6c036c5ff9d025fea2d5698f06785a7f68f8385027584fb3ec2e37fc62",
+     "identical_to_source": true
+    },
+    {
+     "file": "status.json",
+     "copied": true,
+     "sha256": "886e0d0624731cc85a2cda341d08e0d3bddedbdd108dd7cb9fdc707d7f68e4c9",
+     "identical_to_source": true
+    },
+    {
+     "file": "checkpoints/manifest.json",
+     "copied": true,
+     "sha256": "736305c54dbe2a66f07dac932769d90972d649028afb54d5edbd8dfdde2f9ae6",
+     "identical_to_source": true
+    },
+    {
+     "file": "events.jsonl",
+     "copied": true,
+     "sha256": "2f666a5bf535f02f423238e4b9937629d2f30f8742ddc04c2d0380d337c90b1b",
+     "identical_to_source": true
+    }
+   ],
+   "verified": true
+  },
+  {
+   "run_id": "20261015-224318-dqn-time-penalty-s0-custom-c4a9",
+   "group": "DQN \u00b7 Time-penalty ablation",
+   "algorithm": "dqn",
+   "seed": 0,
+   "folder": "dqn-time-penalty-ablation/20261015-224318-dqn-time-penalty-s0-custom-c4a9",
+   "command": "python -m lunarlab export-artifact --run-id 20261015-224318-dqn-time-penalty-s0-custom-c4a9 --out dqn-time-penalty-ablation/20261015-224318-dqn-time-penalty-s0-custom-c4a9",
+   "exit_code": 0,
+   "output": "exported 20261015-224318-dqn-time-penalty-s0-custom-c4a9 to D:\\LunarLab-review-return-2026-10-19\\study-artifacts\\dqn-time-penalty-ablation\\20261015-224318-dqn-time-penalty-s0-custom-c4a9: checkpoint ec4bd83949ac31e8, final test 100 episodes, mean original return 116.76, pad landing 3%",
+   "checks": [
+    {
+     "check": "checkpoint.zip is a byte-identical copy of runs/20261015-224318-dqn-time-penalty-s0-custom-c4a9/checkpoints/best_validation.zip",
+     "ok": true,
+     "exported_sha256": "ec4bd83949ac31e8f9a4f70990f4a1be1ad9d908cc250b738364d49352b19790",
+     "source_sha256": "ec4bd83949ac31e8f9a4f70990f4a1be1ad9d908cc250b738364d49352b19790"
+    },
+    {
+     "check": "config.yaml is a byte-identical copy of runs/20261015-224318-dqn-time-penalty-s0-custom-c4a9/config.yaml",
+     "ok": true,
+     "exported_sha256": "05725868f7143c9a4d7905de83d35fbb4725fdb89dc50b945d38c47f86ac9409",
+     "source_sha256": "05725868f7143c9a4d7905de83d35fbb4725fdb89dc50b945d38c47f86ac9409"
+    },
+    {
+     "check": "evaluation.json is a byte-identical copy of runs/20261015-224318-dqn-time-penalty-s0-custom-c4a9/evaluations/test-best_validation-2026-10-15T180619Z.json",
+     "ok": true,
+     "exported_sha256": "66277b2fd0b8a3d72f283263203880120b10151333a9f743d559764510b53f36",
+     "source_sha256": "66277b2fd0b8a3d72f283263203880120b10151333a9f743d559764510b53f36"
+    },
+    {
+     "check": "the exported checkpoint is the one the freeze record names",
+     "ok": true,
+     "frozen_record": {
+      "checkpoint": "best_validation.zip",
+      "sha256": "ec4bd83949ac31e8f9a4f70990f4a1be1ad9d908cc250b738364d49352b19790"
+     }
+    },
+    {
+     "check": "the exported evaluation is the evaluation docs/results/results.json summarises",
+     "ok": true,
+     "compared": {
+      "file": {
+       "exported": "test-best_validation-2026-10-15T180619Z.json",
+       "published": "test-best_validation-2026-10-15T180619Z.json"
+      },
+      "checkpoint": {
+       "exported": "best_validation.zip",
+       "published": "best_validation.zip"
+      },
+      "protocol_hash": {
+       "exported": "2340c66c35b045bc",
+       "published": "2340c66c35b045bc"
+      },
+      "n_episodes": {
+       "exported": 100,
+       "published": 100
+      },
+      "mean_original_return": {
+       "exported": 116.75936407572172,
+       "published": 116.75936407572172
+      },
+      "pad_landing_rate": {
+       "exported": 0.03,
+       "published": 0.03
+      },
+      "timeout_rate": {
+       "exported": 0.7,
+       "published": 0.7
+      }
+     }
+    }
+   ],
+   "provenance": [
+    {
+     "file": "metadata.json",
+     "copied": true,
+     "sha256": "e1a1d3354a39d3133f8e71af726db07b0cf587a7516db171a3e704186e169909",
+     "identical_to_source": true
+    },
+    {
+     "file": "status.json",
+     "copied": true,
+     "sha256": "0439f4c64391d92d2f582acfadeb3d7cc9045f430eec8af4d718ccb185349a0c",
+     "identical_to_source": true
+    },
+    {
+     "file": "checkpoints/manifest.json",
+     "copied": true,
+     "sha256": "766eec1dcfac3b4ec9cd5c95238174c955c18dd225f79b509cfb0c0bc7f86405",
+     "identical_to_source": true
+    },
+    {
+     "file": "events.jsonl",
+     "copied": true,
+     "sha256": "0e3952c5abdba4da85b0419440836316ab7e2264ee31503bbd8752017acfac86",
+     "identical_to_source": true
+    }
+   ],
+   "verified": true
+  },
+  {
+   "run_id": "20261015-224318-dqn-time-penalty-s1-custom-dc89",
+   "group": "DQN \u00b7 Time-penalty ablation",
+   "algorithm": "dqn",
+   "seed": 1,
+   "folder": "dqn-time-penalty-ablation/20261015-224318-dqn-time-penalty-s1-custom-dc89",
+   "command": "python -m lunarlab export-artifact --run-id 20261015-224318-dqn-time-penalty-s1-custom-dc89 --out dqn-time-penalty-ablation/20261015-224318-dqn-time-penalty-s1-custom-dc89",
+   "exit_code": 0,
+   "output": "exported 20261015-224318-dqn-time-penalty-s1-custom-dc89 to D:\\LunarLab-review-return-2026-10-19\\study-artifacts\\dqn-time-penalty-ablation\\20261015-224318-dqn-time-penalty-s1-custom-dc89: checkpoint 25e7f730b03c6132, final test 100 episodes, mean original return 207.35, pad landing 49%",
+   "checks": [
+    {
+     "check": "checkpoint.zip is a byte-identical copy of runs/20261015-224318-dqn-time-penalty-s1-custom-dc89/checkpoints/best_validation.zip",
+     "ok": true,
+     "exported_sha256": "25e7f730b03c61326321911729d9fe34e11fe0e5d97f14da54680fe10f3bce4f",
+     "source_sha256": "25e7f730b03c61326321911729d9fe34e11fe0e5d97f14da54680fe10f3bce4f"
+    },
+    {
+     "check": "config.yaml is a byte-identical copy of runs/20261015-224318-dqn-time-penalty-s1-custom-dc89/config.yaml",
+     "ok": true,
+     "exported_sha256": "1854ba4fbd7d613e900ae075eddf8761f72ef3eda2852a62142cbd76c5420fa6",
+     "source_sha256": "1854ba4fbd7d613e900ae075eddf8761f72ef3eda2852a62142cbd76c5420fa6"
+    },
+    {
+     "check": "evaluation.json is a byte-identical copy of runs/20261015-224318-dqn-time-penalty-s1-custom-dc89/evaluations/test-best_validation-2026-10-15T180554Z.json",
+     "ok": true,
+     "exported_sha256": "449c3a56b165aeb765821d795e58952b075d2a515168404729844f6190636c12",
+     "source_sha256": "449c3a56b165aeb765821d795e58952b075d2a515168404729844f6190636c12"
+    },
+    {
+     "check": "the exported checkpoint is the one the freeze record names",
+     "ok": true,
+     "frozen_record": {
+      "checkpoint": "best_validation.zip",
+      "sha256": "25e7f730b03c61326321911729d9fe34e11fe0e5d97f14da54680fe10f3bce4f"
+     }
+    },
+    {
+     "check": "the exported evaluation is the evaluation docs/results/results.json summarises",
+     "ok": true,
+     "compared": {
+      "file": {
+       "exported": "test-best_validation-2026-10-15T180554Z.json",
+       "published": "test-best_validation-2026-10-15T180554Z.json"
+      },
+      "checkpoint": {
+       "exported": "best_validation.zip",
+       "published": "best_validation.zip"
+      },
+      "protocol_hash": {
+       "exported": "2340c66c35b045bc",
+       "published": "2340c66c35b045bc"
+      },
+      "n_episodes": {
+       "exported": 100,
+       "published": 100
+      },
+      "mean_original_return": {
+       "exported": 207.34543268436803,
+       "published": 207.34543268436803
+      },
+      "pad_landing_rate": {
+       "exported": 0.49,
+       "published": 0.49
+      },
+      "timeout_rate": {
+       "exported": 0.07,
+       "published": 0.07
+      }
+     }
+    }
+   ],
+   "provenance": [
+    {
+     "file": "metadata.json",
+     "copied": true,
+     "sha256": "b2b65191663fd617e2f3b65912077089a86f0894b2b70dfc9b10ec8c8cfaf60d",
+     "identical_to_source": true
+    },
+    {
+     "file": "status.json",
+     "copied": true,
+     "sha256": "766e05925e9a0fe481d4b89702f00982024f24dd0ceb16f9df905c2e64430dc3",
+     "identical_to_source": true
+    },
+    {
+     "file": "checkpoints/manifest.json",
+     "copied": true,
+     "sha256": "91ce3dea370a1094243183af0c05386bcf2806aa211e1509e1a5f429d66b3638",
+     "identical_to_source": true
+    },
+    {
+     "file": "events.jsonl",
+     "copied": true,
+     "sha256": "4e1e4bf85d2871d248c40a57384df5b968fc588f9ff1e8b0fe8520a15d32322f",
+     "identical_to_source": true
+    }
+   ],
+   "verified": true
+  },
+  {
+   "run_id": "20261015-224318-dqn-time-penalty-s2-custom-9494",
+   "group": "DQN \u00b7 Time-penalty ablation",
+   "algorithm": "dqn",
+   "seed": 2,
+   "folder": "dqn-time-penalty-ablation/20261015-224318-dqn-time-penalty-s2-custom-9494",
+   "command": "python -m lunarlab export-artifact --run-id 20261015-224318-dqn-time-penalty-s2-custom-9494 --out dqn-time-penalty-ablation/20261015-224318-dqn-time-penalty-s2-custom-9494",
+   "exit_code": 0,
+   "output": "exported 20261015-224318-dqn-time-penalty-s2-custom-9494 to D:\\LunarLab-review-return-2026-10-19\\study-artifacts\\dqn-time-penalty-ablation\\20261015-224318-dqn-time-penalty-s2-custom-9494: checkpoint d22cbc0fd17d8284, final test 100 episodes, mean original return 207.45, pad landing 42%",
+   "checks": [
+    {
+     "check": "checkpoint.zip is a byte-identical copy of runs/20261015-224318-dqn-time-penalty-s2-custom-9494/checkpoints/best_validation.zip",
+     "ok": true,
+     "exported_sha256": "d22cbc0fd17d82849ad1a6d1592ed5e25e3ce0f0efc27ffa04a11dded626da5f",
+     "source_sha256": "d22cbc0fd17d82849ad1a6d1592ed5e25e3ce0f0efc27ffa04a11dded626da5f"
+    },
+    {
+     "check": "config.yaml is a byte-identical copy of runs/20261015-224318-dqn-time-penalty-s2-custom-9494/config.yaml",
+     "ok": true,
+     "exported_sha256": "b516a8c34448f5d7e6aff48aa58400adb14dbfe8300f14878371f69728256ebe",
+     "source_sha256": "b516a8c34448f5d7e6aff48aa58400adb14dbfe8300f14878371f69728256ebe"
+    },
+    {
+     "check": "evaluation.json is a byte-identical copy of runs/20261015-224318-dqn-time-penalty-s2-custom-9494/evaluations/test-best_validation-2026-10-15T180609Z.json",
+     "ok": true,
+     "exported_sha256": "2a89d5d140e0eff8edf8972e565c895a90ba08fe5f39400ce734d2b1353fa07d",
+     "source_sha256": "2a89d5d140e0eff8edf8972e565c895a90ba08fe5f39400ce734d2b1353fa07d"
+    },
+    {
+     "check": "the exported checkpoint is the one the freeze record names",
+     "ok": true,
+     "frozen_record": {
+      "checkpoint": "best_validation.zip",
+      "sha256": "d22cbc0fd17d82849ad1a6d1592ed5e25e3ce0f0efc27ffa04a11dded626da5f"
+     }
+    },
+    {
+     "check": "the exported evaluation is the evaluation docs/results/results.json summarises",
+     "ok": true,
+     "compared": {
+      "file": {
+       "exported": "test-best_validation-2026-10-15T180609Z.json",
+       "published": "test-best_validation-2026-10-15T180609Z.json"
+      },
+      "checkpoint": {
+       "exported": "best_validation.zip",
+       "published": "best_validation.zip"
+      },
+      "protocol_hash": {
+       "exported": "2340c66c35b045bc",
+       "published": "2340c66c35b045bc"
+      },
+      "n_episodes": {
+       "exported": 100,
+       "published": 100
+      },
+      "mean_original_return": {
+       "exported": 207.45236466022558,
+       "published": 207.45236466022558
+      },
+      "pad_landing_rate": {
+       "exported": 0.42,
+       "published": 0.42
+      },
+      "timeout_rate": {
+       "exported": 0.08,
+       "published": 0.08
+      }
+     }
+    }
+   ],
+   "provenance": [
+    {
+     "file": "metadata.json",
+     "copied": true,
+     "sha256": "a61afb9266b9e51097deec8a15fac0595c35d738aed69115afd2d57de7378d76",
+     "identical_to_source": true
+    },
+    {
+     "file": "status.json",
+     "copied": true,
+     "sha256": "7a74956b4982a24b014142fe216056c1ab02753447bccf55e3ef3670b9e38f9a",
+     "identical_to_source": true
+    },
+    {
+     "file": "checkpoints/manifest.json",
+     "copied": true,
+     "sha256": "4a63682b4fb4ee16d4d8d57f1ede642e7aad637b615d6f2eeb64ead0bc3f7722",
+     "identical_to_source": true
+    },
+    {
+     "file": "events.jsonl",
+     "copied": true,
+     "sha256": "75a45668b6c75fa70b8590fbe9b255bc7fa6c35970dd06d98c7ab1324ddc8dfc",
+     "identical_to_source": true
+    }
+   ],
+   "verified": true
+  },
+  {
+   "run_id": "20261015-224318-dqn-hover-bonus-s0-custom-aefc",
+   "group": "DQN \u00b7 Flawed hover bonus",
+   "algorithm": "dqn",
+   "seed": 0,
+   "folder": "dqn-flawed-hover-bonus/20261015-224318-dqn-hover-bonus-s0-custom-aefc",
+   "command": "python -m lunarlab export-artifact --run-id 20261015-224318-dqn-hover-bonus-s0-custom-aefc --out dqn-flawed-hover-bonus/20261015-224318-dqn-hover-bonus-s0-custom-aefc",
+   "exit_code": 0,
+   "output": "exported 20261015-224318-dqn-hover-bonus-s0-custom-aefc to D:\\LunarLab-review-return-2026-10-19\\study-artifacts\\dqn-flawed-hover-bonus\\20261015-224318-dqn-hover-bonus-s0-custom-aefc: checkpoint f7c78e316136bc66, final test 100 episodes, mean original return 224.07, pad landing 84%",
+   "checks": [
+    {
+     "check": "checkpoint.zip is a byte-identical copy of runs/20261015-224318-dqn-hover-bonus-s0-custom-aefc/checkpoints/best_validation.zip",
+     "ok": true,
+     "exported_sha256": "f7c78e316136bc66b80036e0adea8dbbea110ceae092b6fe6b6413370eb56d37",
+     "source_sha256": "f7c78e316136bc66b80036e0adea8dbbea110ceae092b6fe6b6413370eb56d37"
+    },
+    {
+     "check": "config.yaml is a byte-identical copy of runs/20261015-224318-dqn-hover-bonus-s0-custom-aefc/config.yaml",
+     "ok": true,
+     "exported_sha256": "838879ea52701cea80ee96a24f094b8b35f689a6dc04f2820e93844dd867dede",
+     "source_sha256": "838879ea52701cea80ee96a24f094b8b35f689a6dc04f2820e93844dd867dede"
+    },
+    {
+     "check": "evaluation.json is a byte-identical copy of runs/20261015-224318-dqn-hover-bonus-s0-custom-aefc/evaluations/test-best_validation-2026-10-15T180640Z.json",
+     "ok": true,
+     "exported_sha256": "8fba460b604d65bb956f02a4a969a67d5d74669c2f28bd48a9968a9461772cb0",
+     "source_sha256": "8fba460b604d65bb956f02a4a969a67d5d74669c2f28bd48a9968a9461772cb0"
+    },
+    {
+     "check": "the exported checkpoint is the one the freeze record names",
+     "ok": true,
+     "frozen_record": {
+      "checkpoint": "best_validation.zip",
+      "sha256": "f7c78e316136bc66b80036e0adea8dbbea110ceae092b6fe6b6413370eb56d37"
+     }
+    },
+    {
+     "check": "the exported evaluation is the evaluation docs/results/results.json summarises",
+     "ok": true,
+     "compared": {
+      "file": {
+       "exported": "test-best_validation-2026-10-15T180640Z.json",
+       "published": "test-best_validation-2026-10-15T180640Z.json"
+      },
+      "checkpoint": {
+       "exported": "best_validation.zip",
+       "published": "best_validation.zip"
+      },
+      "protocol_hash": {
+       "exported": "2340c66c35b045bc",
+       "published": "2340c66c35b045bc"
+      },
+      "n_episodes": {
+       "exported": 100,
+       "published": 100
+      },
+      "mean_original_return": {
+       "exported": 224.06994853107503,
+       "published": 224.06994853107503
+      },
+      "pad_landing_rate": {
+       "exported": 0.84,
+       "published": 0.84
+      },
+      "timeout_rate": {
+       "exported": 0.04,
+       "published": 0.04
+      }
+     }
+    }
+   ],
+   "provenance": [
+    {
+     "file": "metadata.json",
+     "copied": true,
+     "sha256": "0765f61f1fef38b0a1ae330de76efc8cfdcbd089de15c1957ae3cc4789fd8dbe",
+     "identical_to_source": true
+    },
+    {
+     "file": "status.json",
+     "copied": true,
+     "sha256": "f5651c66aedd1080932ebca4c84e04158633c0ea92501fba2fc41de98222c2a8",
+     "identical_to_source": true
+    },
+    {
+     "file": "checkpoints/manifest.json",
+     "copied": true,
+     "sha256": "60e05b684b349617857df6761a53df959d6c84c0a76ed9ae37153cfeb3566e1a",
+     "identical_to_source": true
+    },
+    {
+     "file": "events.jsonl",
+     "copied": true,
+     "sha256": "a1e8c7497891a4025de896ac926e4dd4d1d60f3aef6a5c2c541e39fb3ad60cc7",
+     "identical_to_source": true
+    }
+   ],
+   "verified": true
+  },
+  {
+   "run_id": "20261015-224318-dqn-hover-bonus-s1-custom-e122",
+   "group": "DQN \u00b7 Flawed hover bonus",
+   "algorithm": "dqn",
+   "seed": 1,
+   "folder": "dqn-flawed-hover-bonus/20261015-224318-dqn-hover-bonus-s1-custom-e122",
+   "command": "python -m lunarlab export-artifact --run-id 20261015-224318-dqn-hover-bonus-s1-custom-e122 --out dqn-flawed-hover-bonus/20261015-224318-dqn-hover-bonus-s1-custom-e122",
+   "exit_code": 0,
+   "output": "exported 20261015-224318-dqn-hover-bonus-s1-custom-e122 to D:\\LunarLab-review-return-2026-10-19\\study-artifacts\\dqn-flawed-hover-bonus\\20261015-224318-dqn-hover-bonus-s1-custom-e122: checkpoint 94515a11224e74b5, final test 100 episodes, mean original return 97.17, pad landing 24%",
+   "checks": [
+    {
+     "check": "checkpoint.zip is a byte-identical copy of runs/20261015-224318-dqn-hover-bonus-s1-custom-e122/checkpoints/best_validation.zip",
+     "ok": true,
+     "exported_sha256": "94515a11224e74b553ae074871968b0200b36dd1c252dc3c42c46a23d2ea4988",
+     "source_sha256": "94515a11224e74b553ae074871968b0200b36dd1c252dc3c42c46a23d2ea4988"
+    },
+    {
+     "check": "config.yaml is a byte-identical copy of runs/20261015-224318-dqn-hover-bonus-s1-custom-e122/config.yaml",
+     "ok": true,
+     "exported_sha256": "e9aca18c908f6a513db06e6f54d1c1dc9db5e8859c8aaf3a415715d290f8d972",
+     "source_sha256": "e9aca18c908f6a513db06e6f54d1c1dc9db5e8859c8aaf3a415715d290f8d972"
+    },
+    {
+     "check": "evaluation.json is a byte-identical copy of runs/20261015-224318-dqn-hover-bonus-s1-custom-e122/evaluations/test-best_validation-2026-10-15T180637Z.json",
+     "ok": true,
+     "exported_sha256": "fe9917b016a3041999494045676552e0634b235f127ce42fc0428281dcfc6071",
+     "source_sha256": "fe9917b016a3041999494045676552e0634b235f127ce42fc0428281dcfc6071"
+    },
+    {
+     "check": "the exported checkpoint is the one the freeze record names",
+     "ok": true,
+     "frozen_record": {
+      "checkpoint": "best_validation.zip",
+      "sha256": "94515a11224e74b553ae074871968b0200b36dd1c252dc3c42c46a23d2ea4988"
+     }
+    },
+    {
+     "check": "the exported evaluation is the evaluation docs/results/results.json summarises",
+     "ok": true,
+     "compared": {
+      "file": {
+       "exported": "test-best_validation-2026-10-15T180637Z.json",
+       "published": "test-best_validation-2026-10-15T180637Z.json"
+      },
+      "checkpoint": {
+       "exported": "best_validation.zip",
+       "published": "best_validation.zip"
+      },
+      "protocol_hash": {
+       "exported": "2340c66c35b045bc",
+       "published": "2340c66c35b045bc"
+      },
+      "n_episodes": {
+       "exported": 100,
+       "published": 100
+      },
+      "mean_original_return": {
+       "exported": 97.16878418429046,
+       "published": 97.16878418429046
+      },
+      "pad_landing_rate": {
+       "exported": 0.24,
+       "published": 0.24
+      },
+      "timeout_rate": {
+       "exported": 0.31,
+       "published": 0.31
+      }
+     }
+    }
+   ],
+   "provenance": [
+    {
+     "file": "metadata.json",
+     "copied": true,
+     "sha256": "6cd609fc897e784dbc7fab687d0fb8065ffde6b97c3ac85c106a0df3e2136fdb",
+     "identical_to_source": true
+    },
+    {
+     "file": "status.json",
+     "copied": true,
+     "sha256": "5e5f2023ef6c5c033df1052a3246e2c45ea229041199dfdc0f2bdc7fbd3be515",
+     "identical_to_source": true
+    },
+    {
+     "file": "checkpoints/manifest.json",
+     "copied": true,
+     "sha256": "a9f8ee9174ebdc0b6e789367feba0c5bbe7faf048a5685beeb1bbda90227e0e7",
+     "identical_to_source": true
+    },
+    {
+     "file": "events.jsonl",
+     "copied": true,
+     "sha256": "42889f6045133159ba405a4f911776931af2df9354a788e2c816261e178646ab",
+     "identical_to_source": true
+    }
+   ],
+   "verified": true
+  },
+  {
+   "run_id": "20261015-224318-dqn-hover-bonus-s2-custom-9c0f",
+   "group": "DQN \u00b7 Flawed hover bonus",
+   "algorithm": "dqn",
+   "seed": 2,
+   "folder": "dqn-flawed-hover-bonus/20261015-224318-dqn-hover-bonus-s2-custom-9c0f",
+   "command": "python -m lunarlab export-artifact --run-id 20261015-224318-dqn-hover-bonus-s2-custom-9c0f --out dqn-flawed-hover-bonus/20261015-224318-dqn-hover-bonus-s2-custom-9c0f",
+   "exit_code": 0,
+   "output": "exported 20261015-224318-dqn-hover-bonus-s2-custom-9c0f to D:\\LunarLab-review-return-2026-10-19\\study-artifacts\\dqn-flawed-hover-bonus\\20261015-224318-dqn-hover-bonus-s2-custom-9c0f: checkpoint e1522da543fc94b7, final test 100 episodes, mean original return 7.42, pad landing 14%",
+   "checks": [
+    {
+     "check": "checkpoint.zip is a byte-identical copy of runs/20261015-224318-dqn-hover-bonus-s2-custom-9c0f/checkpoints/best_validation.zip",
+     "ok": true,
+     "exported_sha256": "e1522da543fc94b79a556b51983d6fe6bd63ca63ab2a3957744bd3170e3e9434",
+     "source_sha256": "e1522da543fc94b79a556b51983d6fe6bd63ca63ab2a3957744bd3170e3e9434"
+    },
+    {
+     "check": "config.yaml is a byte-identical copy of runs/20261015-224318-dqn-hover-bonus-s2-custom-9c0f/config.yaml",
+     "ok": true,
+     "exported_sha256": "58ebc8bd16dad71c012c021f1245d5f2cc59a743fe61e589372d8ce72b31180d",
+     "source_sha256": "58ebc8bd16dad71c012c021f1245d5f2cc59a743fe61e589372d8ce72b31180d"
+    },
+    {
+     "check": "evaluation.json is a byte-identical copy of runs/20261015-224318-dqn-hover-bonus-s2-custom-9c0f/evaluations/test-best_validation-2026-10-15T180653Z.json",
+     "ok": true,
+     "exported_sha256": "f605c868594a950dfdd9eea0fea84387199663259ad3e243b327b4d572f7eef8",
+     "source_sha256": "f605c868594a950dfdd9eea0fea84387199663259ad3e243b327b4d572f7eef8"
+    },
+    {
+     "check": "the exported checkpoint is the one the freeze record names",
+     "ok": true,
+     "frozen_record": {
+      "checkpoint": "best_validation.zip",
+      "sha256": "e1522da543fc94b79a556b51983d6fe6bd63ca63ab2a3957744bd3170e3e9434"
+     }
+    },
+    {
+     "check": "the exported evaluation is the evaluation docs/results/results.json summarises",
+     "ok": true,
+     "compared": {
+      "file": {
+       "exported": "test-best_validation-2026-10-15T180653Z.json",
+       "published": "test-best_validation-2026-10-15T180653Z.json"
+      },
+      "checkpoint": {
+       "exported": "best_validation.zip",
+       "published": "best_validation.zip"
+      },
+      "protocol_hash": {
+       "exported": "2340c66c35b045bc",
+       "published": "2340c66c35b045bc"
+      },
+      "n_episodes": {
+       "exported": 100,
+       "published": 100
+      },
+      "mean_original_return": {
+       "exported": 7.417291407182484,
+       "published": 7.417291407182484
+      },
+      "pad_landing_rate": {
+       "exported": 0.14,
+       "published": 0.14
+      },
+      "timeout_rate": {
+       "exported": 0.06,
+       "published": 0.06
+      }
+     }
+    }
+   ],
+   "provenance": [
+    {
+     "file": "metadata.json",
+     "copied": true,
+     "sha256": "714e2e5e19bb1da85c0e27cacb444346331f49fc23bcec8716f28ac3f910c715",
+     "identical_to_source": true
+    },
+    {
+     "file": "status.json",
+     "copied": true,
+     "sha256": "9274dffcfd87fe70c4f8e352e321d2ff91ecdc34ccd7ab84c0819c3de5599867",
+     "identical_to_source": true
+    },
+    {
+     "file": "checkpoints/manifest.json",
+     "copied": true,
+     "sha256": "8757423b08714e427d5b73357abf5488292f0109646b650492441f61dff6ad3c",
+     "identical_to_source": true
+    },
+    {
+     "file": "events.jsonl",
+     "copied": true,
+     "sha256": "ec28ef324e9179ac5c488376b423eee7d451f3439706b7f08ab83a93517d0d4a",
+     "identical_to_source": true
+    }
+   ],
+   "verified": true
+  },
+  {
+   "run_id": "20261015-224318-dqn-potential-s0-custom-ee4b",
+   "group": "DQN \u00b7 Potential-based shaping",
+   "algorithm": "dqn",
+   "seed": 0,
+   "folder": "dqn-potential-based-shaping/20261015-224318-dqn-potential-s0-custom-ee4b",
+   "command": "python -m lunarlab export-artifact --run-id 20261015-224318-dqn-potential-s0-custom-ee4b --out dqn-potential-based-shaping/20261015-224318-dqn-potential-s0-custom-ee4b",
+   "exit_code": 0,
+   "output": "exported 20261015-224318-dqn-potential-s0-custom-ee4b to D:\\LunarLab-review-return-2026-10-19\\study-artifacts\\dqn-potential-based-shaping\\20261015-224318-dqn-potential-s0-custom-ee4b: checkpoint c7f49495c21e463b, final test 100 episodes, mean original return 227.18, pad landing 63%",
+   "checks": [
+    {
+     "check": "checkpoint.zip is a byte-identical copy of runs/20261015-224318-dqn-potential-s0-custom-ee4b/checkpoints/best_validation.zip",
+     "ok": true,
+     "exported_sha256": "c7f49495c21e463b917a075551dd42e1645efbcdd21d2fef12e39b9f523928e1",
+     "source_sha256": "c7f49495c21e463b917a075551dd42e1645efbcdd21d2fef12e39b9f523928e1"
+    },
+    {
+     "check": "config.yaml is a byte-identical copy of runs/20261015-224318-dqn-potential-s0-custom-ee4b/config.yaml",
+     "ok": true,
+     "exported_sha256": "8f21186da12d35914041295f2ef57b27a81168f4f78242e39cb36b7975e963aa",
+     "source_sha256": "8f21186da12d35914041295f2ef57b27a81168f4f78242e39cb36b7975e963aa"
+    },
+    {
+     "check": "evaluation.json is a byte-identical copy of runs/20261015-224318-dqn-potential-s0-custom-ee4b/evaluations/test-best_validation-2026-10-15T180647Z.json",
+     "ok": true,
+     "exported_sha256": "cbe8f6473b8cae25a8043e58963f19074aeaf6f9534136946d32444e3fb0833b",
+     "source_sha256": "cbe8f6473b8cae25a8043e58963f19074aeaf6f9534136946d32444e3fb0833b"
+    },
+    {
+     "check": "the exported checkpoint is the one the freeze record names",
+     "ok": true,
+     "frozen_record": {
+      "checkpoint": "best_validation.zip",
+      "sha256": "c7f49495c21e463b917a075551dd42e1645efbcdd21d2fef12e39b9f523928e1"
+     }
+    },
+    {
+     "check": "the exported evaluation is the evaluation docs/results/results.json summarises",
+     "ok": true,
+     "compared": {
+      "file": {
+       "exported": "test-best_validation-2026-10-15T180647Z.json",
+       "published": "test-best_validation-2026-10-15T180647Z.json"
+      },
+      "checkpoint": {
+       "exported": "best_validation.zip",
+       "published": "best_validation.zip"
+      },
+      "protocol_hash": {
+       "exported": "2340c66c35b045bc",
+       "published": "2340c66c35b045bc"
+      },
+      "n_episodes": {
+       "exported": 100,
+       "published": 100
+      },
+      "mean_original_return": {
+       "exported": 227.1780443926577,
+       "published": 227.1780443926577
+      },
+      "pad_landing_rate": {
+       "exported": 0.63,
+       "published": 0.63
+      },
+      "timeout_rate": {
+       "exported": 0.05,
+       "published": 0.05
+      }
+     }
+    }
+   ],
+   "provenance": [
+    {
+     "file": "metadata.json",
+     "copied": true,
+     "sha256": "8c6448a14b2b0469b0f79a0eb7b8980ffe698d2df772adb7960e5840308854ee",
+     "identical_to_source": true
+    },
+    {
+     "file": "status.json",
+     "copied": true,
+     "sha256": "4f534d173c0cd5923e75046c9cf79450d7fd62a46e4fd701e9b2a8bacec918dd",
+     "identical_to_source": true
+    },
+    {
+     "file": "checkpoints/manifest.json",
+     "copied": true,
+     "sha256": "719ab6cc348d9bb9110fe635afbb77f82ca6fa7499666f8cdd3d8bf3f223cdce",
+     "identical_to_source": true
+    },
+    {
+     "file": "events.jsonl",
+     "copied": true,
+     "sha256": "45214faabab7d015b2470fffe3c2f82e1336f15602e661a1f75c6c9756e156fd",
+     "identical_to_source": true
+    }
+   ],
+   "verified": true
+  },
+  {
+   "run_id": "20261015-224318-dqn-potential-s1-custom-5487",
+   "group": "DQN \u00b7 Potential-based shaping",
+   "algorithm": "dqn",
+   "seed": 1,
+   "folder": "dqn-potential-based-shaping/20261015-224318-dqn-potential-s1-custom-5487",
+   "command": "python -m lunarlab export-artifact --run-id 20261015-224318-dqn-potential-s1-custom-5487 --out dqn-potential-based-shaping/20261015-224318-dqn-potential-s1-custom-5487",
+   "exit_code": 0,
+   "output": "exported 20261015-224318-dqn-potential-s1-custom-5487 to D:\\LunarLab-review-return-2026-10-19\\study-artifacts\\dqn-potential-based-shaping\\20261015-224318-dqn-potential-s1-custom-5487: checkpoint cd35cdcd599c39c8, final test 100 episodes, mean original return 244.86, pad landing 90%",
+   "checks": [
+    {
+     "check": "checkpoint.zip is a byte-identical copy of runs/20261015-224318-dqn-potential-s1-custom-5487/checkpoints/best_validation.zip",
+     "ok": true,
+     "exported_sha256": "cd35cdcd599c39c8e13ad9d506064547172731504ab893ab98dfe0d7dd89351c",
+     "source_sha256": "cd35cdcd599c39c8e13ad9d506064547172731504ab893ab98dfe0d7dd89351c"
+    },
+    {
+     "check": "config.yaml is a byte-identical copy of runs/20261015-224318-dqn-potential-s1-custom-5487/config.yaml",
+     "ok": true,
+     "exported_sha256": "31e5cee17078020b1b796722cb5efb7698678cccf363fbc5a465b2e97b37c778",
+     "source_sha256": "31e5cee17078020b1b796722cb5efb7698678cccf363fbc5a465b2e97b37c778"
+    },
+    {
+     "check": "evaluation.json is a byte-identical copy of runs/20261015-224318-dqn-potential-s1-custom-5487/evaluations/test-best_validation-2026-10-15T180709Z.json",
+     "ok": true,
+     "exported_sha256": "e95484697dd3807d284dd243931562fd486d23e936d40aea4dcc393986056909",
+     "source_sha256": "e95484697dd3807d284dd243931562fd486d23e936d40aea4dcc393986056909"
+    },
+    {
+     "check": "the exported checkpoint is the one the freeze record names",
+     "ok": true,
+     "frozen_record": {
+      "checkpoint": "best_validation.zip",
+      "sha256": "cd35cdcd599c39c8e13ad9d506064547172731504ab893ab98dfe0d7dd89351c"
+     }
+    },
+    {
+     "check": "the exported evaluation is the evaluation docs/results/results.json summarises",
+     "ok": true,
+     "compared": {
+      "file": {
+       "exported": "test-best_validation-2026-10-15T180709Z.json",
+       "published": "test-best_validation-2026-10-15T180709Z.json"
+      },
+      "checkpoint": {
+       "exported": "best_validation.zip",
+       "published": "best_validation.zip"
+      },
+      "protocol_hash": {
+       "exported": "2340c66c35b045bc",
+       "published": "2340c66c35b045bc"
+      },
+      "n_episodes": {
+       "exported": 100,
+       "published": 100
+      },
+      "mean_original_return": {
+       "exported": 244.85575096613294,
+       "published": 244.85575096613294
+      },
+      "pad_landing_rate": {
+       "exported": 0.9,
+       "published": 0.9
+      },
+      "timeout_rate": {
+       "exported": 0.02,
+       "published": 0.02
+      }
+     }
+    }
+   ],
+   "provenance": [
+    {
+     "file": "metadata.json",
+     "copied": true,
+     "sha256": "3aee7094f0df573a5642cea3aebb46e7132fc4620499bc771b3843ecb9b84aef",
+     "identical_to_source": true
+    },
+    {
+     "file": "status.json",
+     "copied": true,
+     "sha256": "02a425d45a8ddea83eb8d3c57507ee75a02e4d5f94aff6de12809298c358d3d9",
+     "identical_to_source": true
+    },
+    {
+     "file": "checkpoints/manifest.json",
+     "copied": true,
+     "sha256": "5e78b099c7cfdc0eff1ea60954864a7da8bb3da90640ab1e6977ffdcbed92d7e",
+     "identical_to_source": true
+    },
+    {
+     "file": "events.jsonl",
+     "copied": true,
+     "sha256": "06040f1dd3ba040370e2fb1d5d7454a738ea3b31b752c4014dc4568157e48e81",
+     "identical_to_source": true
+    }
+   ],
+   "verified": true
+  },
+  {
+   "run_id": "20261015-224318-dqn-potential-s2-custom-5b10",
+   "group": "DQN \u00b7 Potential-based shaping",
+   "algorithm": "dqn",
+   "seed": 2,
+   "folder": "dqn-potential-based-shaping/20261015-224318-dqn-potential-s2-custom-5b10",
+   "command": "python -m lunarlab export-artifact --run-id 20261015-224318-dqn-potential-s2-custom-5b10 --out dqn-potential-based-shaping/20261015-224318-dqn-potential-s2-custom-5b10",
+   "exit_code": 0,
+   "output": "exported 20261015-224318-dqn-potential-s2-custom-5b10 to D:\\LunarLab-review-return-2026-10-19\\study-artifacts\\dqn-potential-based-shaping\\20261015-224318-dqn-potential-s2-custom-5b10: checkpoint 8fbf015e820fca60, final test 100 episodes, mean original return 149.71, pad landing 29%",
+   "checks": [
+    {
+     "check": "checkpoint.zip is a byte-identical copy of runs/20261015-224318-dqn-potential-s2-custom-5b10/checkpoints/best_validation.zip",
+     "ok": true,
+     "exported_sha256": "8fbf015e820fca60dca49cbc64950c684e6ffd60bd31b9e0f79ea258931a8362",
+     "source_sha256": "8fbf015e820fca60dca49cbc64950c684e6ffd60bd31b9e0f79ea258931a8362"
+    },
+    {
+     "check": "config.yaml is a byte-identical copy of runs/20261015-224318-dqn-potential-s2-custom-5b10/config.yaml",
+     "ok": true,
+     "exported_sha256": "e86a3e6afb73a9dae6387923614b47c2f05f898a6b4f65e21d09f5dd24499f65",
+     "source_sha256": "e86a3e6afb73a9dae6387923614b47c2f05f898a6b4f65e21d09f5dd24499f65"
+    },
+    {
+     "check": "evaluation.json is a byte-identical copy of runs/20261015-224318-dqn-potential-s2-custom-5b10/evaluations/test-best_validation-2026-10-15T180708Z.json",
+     "ok": true,
+     "exported_sha256": "9030a6eea7718db20e65199d89d46cf1c5bfc76abb608dc495549a7be8cc7c77",
+     "source_sha256": "9030a6eea7718db20e65199d89d46cf1c5bfc76abb608dc495549a7be8cc7c77"
+    },
+    {
+     "check": "the exported checkpoint is the one the freeze record names",
+     "ok": true,
+     "frozen_record": {
+      "checkpoint": "best_validation.zip",
+      "sha256": "8fbf015e820fca60dca49cbc64950c684e6ffd60bd31b9e0f79ea258931a8362"
+     }
+    },
+    {
+     "check": "the exported evaluation is the evaluation docs/results/results.json summarises",
+     "ok": true,
+     "compared": {
+      "file": {
+       "exported": "test-best_validation-2026-10-15T180708Z.json",
+       "published": "test-best_validation-2026-10-15T180708Z.json"
+      },
+      "checkpoint": {
+       "exported": "best_validation.zip",
+       "published": "best_validation.zip"
+      },
+      "protocol_hash": {
+       "exported": "2340c66c35b045bc",
+       "published": "2340c66c35b045bc"
+      },
+      "n_episodes": {
+       "exported": 100,
+       "published": 100
+      },
+      "mean_original_return": {
+       "exported": 149.7094225229819,
+       "published": 149.7094225229819
+      },
+      "pad_landing_rate": {
+       "exported": 0.29,
+       "published": 0.29
+      },
+      "timeout_rate": {
+       "exported": 0.08,
+       "published": 0.08
+      }
+     }
+    }
+   ],
+   "provenance": [
+    {
+     "file": "metadata.json",
+     "copied": true,
+     "sha256": "23be913c220b9238b8ee99c6a8ab5d0aba193096360abf178f3d50ef4a3c44f8",
+     "identical_to_source": true
+    },
+    {
+     "file": "status.json",
+     "copied": true,
+     "sha256": "9858750bfff63da578c926f05bef1faaa9e4fc7843a8ff71f59fe239d342fd8f",
+     "identical_to_source": true
+    },
+    {
+     "file": "checkpoints/manifest.json",
+     "copied": true,
+     "sha256": "69fec0f1072937d289faf02cba55b828053e6b09dd6272e848bec127ea302463",
+     "identical_to_source": true
+    },
+    {
+     "file": "events.jsonl",
+     "copied": true,
+     "sha256": "9d4e40334a02ae29ba534d1551c5b4ee03112985c33398c330fc4bb6d8cda37c",
+     "identical_to_source": true
+    }
+   ],
+   "verified": true
+  }
+ ]
+}

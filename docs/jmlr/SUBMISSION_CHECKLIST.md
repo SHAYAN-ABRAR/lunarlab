@@ -1,94 +1,40 @@
-# JMLR-MLOSS submission checklist
+# Submission decision checklist
 
-In submission order. ✅ done and verified · ⬜ open (with who must do it). Details:
-[REQUIREMENTS_MATRIX.md](REQUIREMENTS_MATRIX.md). State on 2026-10-18: the readiness work is on `main` at
-`2c41b42` (CI run 39069730331: all six jobs passed); the corrections of the second pass are on the branch
-`research/jmlr-mloss-corrections`, **uncommitted**.
+Current assessment: **hold submission**. Base source `67440c6`; revised files are local, uncommitted work. Dates: 18–19 October 2026; follow-up on the original machine 19–20 October 2026 (see `READINESS_REPORT.md`). Requirements are grounded in `REQUIREMENTS_MATRIX.md`.
 
-## Before anything is submitted
+## Required manuscript and cover-letter materials
 
-- ✅ **Corrections committed and pushed** (`4fd30db`, 2026-10-18); CI run 39144191758: reproduction gates passed
-  on Linux and Windows and the Linux trace comparison located the divergence in the simulator
-  ([REPRODUCIBILITY.md](REPRODUCIBILITY.md)); the browser job's failure (a run-page refresh race) is fixed in the
-  next commit.
-- ✅ **CI green:** run [39145707181](https://github.com/SHAYAN-ABRAR/lunarlab/actions/runs/39145707181) on `38c9703` passed all six jobs (2026-10-18).
-- ✅ **Author and license holder:** Shayan Abrar, sole author; the MIT License as it stands was approved by the
-  author on 2026-10-18.
-- ✅ **Release candidate approved** by the author on 2026-10-18. Prepared: version **0.1.0**, the one every file already names
-  (`lunarlab/__init__.py`, `CITATION.cff`, `frontend/package.json`; `tests/test_project_metadata.py` checks they
-  agree). It has never been tagged or released, so no published version is reused. Provenance recorded before
-  the release (`lunarlab 0.1.0 (source <commit> …)`) always names its commit. To release a different number, change
-  `lunarlab/__init__.py`, `CITATION.cff` and `frontend/package.json` together. *(maintainer)*
-- ⬜ **Tag and publish the release** — only after the CI run of the commit to be released has passed:
+- [x] MLOSS framing, public software URL and MIT license identified.
+- [x] Revised LaTeX and compiled PDF supplied in official JMLR style; build details in `paper/jmlr-mloss/BUILD.md`.
+- [ ] Supply author email, affiliation and full postal address.
+- [ ] Confirm author consent to this specific submission; disclose prior overlapping publications and concurrent submissions.
+- [ ] Supply funding and competing-interest declarations covering the journal's requested period; do not assume “none.”
+- [ ] Confirm conflict-free action-editor and reviewer suggestions; provisional candidates are in the cover-letter notes.
+- [ ] Supply a truthful dated community-evidence statement. Current absence of evidence remains a major substantive weakness.
+- [ ] Identify the exact source version that will be reviewed, including the applied local changes; replace draft metadata only with actual values. *The manuscript marks this with "[final source revision and public archive of the 38-policy bundle]".*
+- [ ] Rebuild and visually check after filling author details; verify four description pages, abstract ≤200 words, five keywords, short title ≤50 characters, and upload size <5 MB.
 
-  ```bash
-  git switch main && git pull --ff-only
-  python tools/build_source_archive.py --rev HEAD --out dist --verify   # deterministic archive, fresh install, release tests
-  git tag -a v0.1.0 -m "LunarLab 0.1.0"
-  git push origin v0.1.0
-  gh release create v0.1.0 dist/lunarlab-0.1.0-src.tar.gz dist/lunarlab-0.1.0-src.manifest.json dist/SHA256SUMS \
-      --title "LunarLab 0.1.0" --notes "Release accompanying the JMLR-MLOSS submission."
-  ```
+## High-priority scientific and software readiness
 
-  Then add `date-released` (and, once archived, the DOI) to `CITATION.cff`. *(maintainer)*
-- ⬜ **Archive the release with a DOI** (optional; for example Zenodo). No DOI exists today. *(maintainer)*
-- ⬜ **Enable a forum** (GitHub Discussions or a mailing list) if you want one for the openness criterion.
-  *(owner: repository setting)*
+- [x] Preserve source provenance and distinguish self-report from executed tests and published CI.
+- [x] Recompute summary-level main results and benchmark timing ratios.
+- [x] Verify three distributed artifact payloads and execute their re-evaluations locally.
+- [x] Correct exactness, trace-causality, overhead, continuation and generic-scope language.
+- [x] Patch benchmark memory sampling and reproduction reporting locally; retain historical measurements unchanged.
+- [x] Supply for review the raw final-test records, configurations, manifests and selected checkpoint bytes for the claimed study; no new training is needed. *All 38 policies exported and verified on the original machine, 19 October 2026 (`reports/jmlr/original-machine-2026-10-19/study-artifacts/`).*
+- [ ] Publish that bundle (for example a DOI archive) and replace the manuscript's marker with its location. Author decision; nothing has been uploaded.
+- [ ] Obtain independent research-use or reproduction evidence, retaining failures and maintenance responses. *A ready-to-use exercise and report form are in the review-return package; nobody has been invited.*
+- [ ] Run the revised source through supported-platform CI and fresh-source installation before assigning a release identity. *Done locally on Windows 11 (full suite, browser tests, fresh source-archive install); Linux and CI need a push and remain outstanding.*
+- [x] Rerun the modest overhead benchmark with corrected memory scope if claiming comparable training memory; otherwise retain the explicit historical caveat. *Run `standard-2026-10-19T180346+0000`; the manuscript now uses it.*
+- [x] Record actual local and CI validation results; do not equate an interrupted or restricted-runtime test with a pass. *Local results recorded in `reports/jmlr/original-machine-2026-10-19/VALIDATION.md`; CI results for the revised source do not exist yet.*
 
-## Evidence only real people can provide
+## Optional improvements, not journal mandates
 
-- ⬜ **User community**: currently none (0 stars, 0 forks, 1 contributor on 2026-10-18). Collect real evidence —
-  independent reproduction reports ([docs/REPRODUCING.md](../REPRODUCING.md)), external issues, users,
-  citations — before submitting. *(authors)* See [COMMUNITY_EVIDENCE.md](COMMUNITY_EVIDENCE.md).
-- ⬜ **Independent reproductions** on machines the authors do not control. *(any user)*
+- [ ] Archive the reviewed release with a DOI.
+- [ ] Host the existing API/tutorial documentation for convenient reading.
+- [ ] Add an environment adapter justified by a real research use case.
+- [ ] Run extra seeds or matched-budget algorithms only if making corresponding new scientific claims.
 
-## Manuscript (`paper/jmlr-mloss/`)
+## Authorization boundary
 
-- ✅ Official style (fetched pinned and verified, not modified); `check_manuscript.py`: abstract ≤ 200 words,
-  running title ≤ 50 characters, five keywords, all citations verified.
-- ✅ Every statement traced to evidence (`EVIDENCE.md`); claims corrected in the second pass (continuation,
-  reproducibility, overhead, adapter scope).
-- ✅ **PDF built** with Tectonic 0.17.0 (XeTeX engine): description on pages 1–4, references on pages 5–6, no
-  overfull lines or undefined references, under 5 MB; figures drawn at the 6.0 in text width with all text ≥ 9 pt
-  (checked by `tools/paper_figures.py`). About five lines remain free on page 4 for the acknowledgements.
-- ⬜ Optionally confirm the page count with pdflatex (TeX Live or MiKTeX); see `BUILD.md`. *(authors)*
-- ✅ Author list: Shayan Abrar, sole author (filled in `main.tex`).
-- ⬜ **Affiliation, postal address and e-mail** of the author (kept out of the public repository until
-  submission). *(author)*
-- ⬜ **Acknowledgements and the funding and competing-interests declaration.** *(authors)*
-- ⬜ Replace the `\TODO` markers (dates, editor and paper ID are assigned by JMLR). *(authors)*
-
-## Cover letter (`paper/jmlr-mloss/COVER_LETTER_TEMPLATE.md`)
-
-- ✅ MLOSS designation, license, project web address, keywords.
-- ⬜ Version to be reviewed (tag, commit, archive digest). *(maintainer)*
-- ⬜ Evidence of an active user community, with dates. *(authors)*
-- ⬜ Previous overlapping publications (or "none"), co-author consent, conflicts of interest with action editors.
-  *(authors)*
-- ⬜ 3–5 suggested action editors (from JMLR's AE list) and 3–5 reviewers, each without conflicts, with reasons.
-  *(authors)*
-
-## Software
-
-- ✅ MIT `LICENSE`, SPDX notice in every source file, generated third-party notices, `CITATION.cff`.
-- ✅ One authoritative version; `python -m lunarlab --version` reports it with the source revision.
-- ✅ Deterministic source archive without VCS or platform files; byte-identical on Windows and Linux for the same
-  commit; installed and tested in a fresh environment (CI and locally).
-- ✅ Statement and branch coverage measured and reported (`reports/jmlr/coverage/SUMMARY.md`).
-- ✅ Reproducibility: `reproduce-smoke`; three supplied artifacts bit-identical on Windows (development machine and
-  CI, Python 3.12 and 3.13); on Linux numerically different per episode, aggregates unchanged; integrity,
-  within-platform, cross-platform and conclusion stability reported separately, and never hidden in CI.
-- ✅ Overhead benchmark against plain Stable-Baselines3 on a clean checkout, loop and full wall clock reported
-  ([BENCHMARK_PROTOCOL.md](BENCHMARK_PROTOCOL.md)).
-- ✅ Sourced comparison with related software ([COMPARISON_EVIDENCE.md](COMPARISON_EVIDENCE.md)).
-- ✅ Task-adapter layer with a CartPole example ([EXTENDING_LUNARLAB.md](EXTENDING_LUNARLAB.md)).
-- ✅ Tutorial executed by the tests; developer guide; generated API reference; contributing guide; issue forms;
-  independent-reproduction guide.
-- ✅ Historical experiment evidence verified unchanged (see the readiness report).
-
-## Submit
-
-- ⬜ Upload the PDF at https://jmlr.csail.mit.edu/manudb/ (register, log in, "submit manuscript") with the cover
-  letter, stating the MLOSS section. *(corresponding author)*
-- ⬜ After acceptance: LaTeX source and the code archive renamed to JMLR's convention (`<id>-code.tar.gz`); sign
-  the release form for source code if asked. *(authors)*
+This package does not authorize a commit, push, merge, tag, release, submission, repository-setting change or outreach. Preparation commands in `RELEASE_PREPARATION.md` stop before those actions. After eventual acceptance, follow JMLR's source/archive naming and licensing paperwork using the accepted version.

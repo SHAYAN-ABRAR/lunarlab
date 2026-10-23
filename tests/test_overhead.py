@@ -86,3 +86,25 @@ def test_benchmark_runs_every_configuration_on_an_equivalent_workload(tmp_path):
         assert (tmp_path / "bench" / name).exists()
     (tmp_path / "bench" / "table.md").unlink()
     assert "overhead.png" in render(tmp_path / "bench") and (tmp_path / "bench" / "table.md").exists()
+
+
+@pytest.mark.slow
+def test_training_memory_is_sampled_before_optional_recording(monkeypatch):
+    from lunarlab import overhead
+
+    stages = []
+
+    def memory():
+        stages.append("memory")
+        return 123, "test high-water mark"
+
+    def recording(run_id):
+        stages.append("recording")
+        return {"steps": 1}
+
+    monkeypatch.setattr(overhead, "_peak_memory_bytes", memory)
+    monkeypatch.setattr(overhead, "_measure_recording", recording)
+    row = overhead._run_config("lunarlab", 1024, 0, 1)
+    assert stages == ["memory", "recording"]
+    assert row["peak_memory_bytes"] == 123
+    assert "before optional recording" in row["peak_memory_scope"]

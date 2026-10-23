@@ -14,20 +14,20 @@ Reproducibility checks that run without the web interface.
 * :func:`reproduce_artifact` re-evaluates such a package on the recorded seeds and compares every episode
   with the record.
 
-Exactness. For a fixed checkpoint, seed list, environment version and software stack the evaluation is
-deterministic, so a repeat on the same operating system and numerical libraries must match bit for bit. Across
-operating systems or PyTorch/Box2D builds, floating-point differences can change a trajectory; such reproductions
-are reported episode by episode instead of being assumed exact.
+Exactness here means equality of COMPARED_FIELDS, not a bitwise comparison of entire
+trajectories. Operating-system and package-version matching is a coarse diagnostic,
+not a guarantee of identical hardware or compiled numerical behavior. Across
+platforms, floating-point differences can change trajectories; differences are reported.
 
 A reproduction is classified (:data:`STATUSES`) by four separate properties:
 
 * **artifact integrity** -- the files match their digests, and the configuration, seeds, protocol, reward and
   loaded weights are the recorded ones (always blocking when violated);
-* **within-platform reproducibility** -- on the recording platform every episode must be bit-identical;
+* **within-platform reproducibility** -- the selected episode-summary fields are expected to match;
 * **cross-platform numerical reproducibility** -- elsewhere, per-episode differences are measured and reported;
-* **conclusion stability** -- no compared aggregate (mean return; pad-landing, timeout, crash and out-of-bounds
+* **aggregate regression screening** -- no compared aggregate (mean return; pad-landing, timeout, crash and out-of-bounds
   rates) may differ significantly from the record in a paired comparison over the same seeds
-  (:func:`compare_aggregates`).
+  (:func:`compare_aggregates`). Non-rejection does not establish equivalence or preservation of all conclusions.
 
 ### `classify_reproduction(*, integrity_ok: 'bool', comparison: 'dict', aggregates: 'dict', platform: 'dict', tolerance: 'float' = 0.0) -> 'tuple[str, str]'`
 
@@ -35,7 +35,7 @@ The reproduction status (a key of :data:`STATUSES`) and the reason for it.
 
 ### `compare_aggregates(recorded: 'list[dict]', reproduced: 'list[dict]', protocol) -> 'dict[str, Any]'`
 
-Conclusion stability: does the reproduction differ *systematically* from the record?
+Aggregate regression screen, not an equivalence or conclusion-stability certificate.
 
 A reproduction re-flies the recorded seeds, so the comparison is paired. The mean original return is tested
 with a sign-flip permutation test on the per-seed differences; each outcome rate (pad landing, timeout, crash,
@@ -49,7 +49,7 @@ over the same seeds, with the recorded interval for reference.
 
 Compare two evaluations seed by seed on :data:`COMPARED_FIELDS`.
 
-Returns are compared with ``tolerance`` (absolute; 0 = bit-identical), everything else exactly. Besides the
+Returns are compared with ``tolerance`` (absolute; 0 = numeric equality), everything else exactly. Besides the
 counts, every episode gets a row (``episodes``: returns and their difference, length, termination and
 outcome agreement, final-observation difference) and ``summary`` aggregates them.
 
@@ -138,4 +138,4 @@ compared across processes and days.
 - `REPRODUCTION_SCHEMA` = `2`
 - `SMOKE_PPO` = `{'n_envs': 2, 'n_steps': 256, 'batch_size': 64}`
 - `SMOKE_PROTOCOL` = `{'validation_seeds': [10000, 10001, 10002], 'test_seeds': [20000, 20001, 20002, 20003]}`
-- `STATUSES` = `{'exact': {'blocking': False, 'exit_code': 0, 'meaning': 'every episode is bit-identical to the record'}, 'within-tolera…`
+- `STATUSES` = `{'exact': {'blocking': False, 'exit_code': 0, 'meaning': 'all selected episode-summary fields match exactly'}, 'within-t…`

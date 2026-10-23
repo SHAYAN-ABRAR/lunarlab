@@ -1,0 +1,440 @@
+........................................................................ [ 14%]
+........................................................................ [ 29%]
+........................................................................ [ 43%]
+...................................................F.FF................. [ 58%]
+...............................F..FF.................................... [ 72%]
+........................................................................ [ 87%]
+.....................Fsssss............................s...sss.          [100%]
+=================================== FAILURES ===================================
+__________ test_live_worker_is_adopted_and_pid_reuse_is_never_killed ___________
+
+    def test_live_worker_is_adopted_and_pid_reuse_is_never_killed():
+        db = Database()
+        job_id = "job-20260101-000000-live-0003"
+        proc = subprocess.Popen(
+            [sys.executable, "-c", "import time; time.sleep(120)", "worker", "--job-id", job_id]
+        )
+        try:
+>           created = psutil.Process(proc.pid).create_time()
+                      ^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_jobs.py:128: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../venv/lib/python3.12/site-packages/psutil/__init__.py:314: in __init__
+    self._init(pid)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = psutil.Process(pid=1130, status='terminated'), pid = 1130
+_ignore_nsp = False
+
+    def _init(self, pid, _ignore_nsp=False):
+        if pid is None:
+            pid = os.getpid()
+        else:
+            if pid < 0:
+                msg = f"pid must be a positive integer (got {pid})"
+                raise ValueError(msg)
+            try:
+                _psplatform.cext.check_pid_range(pid)
+            except OverflowError as err:
+                msg = "process PID out of range"
+                raise NoSuchProcess(pid, msg=msg) from err
+    
+        self._pid = pid
+        self._name = None
+        self._exe = None
+        self._create_time = None
+        self._gone = False
+        self._pid_reused = False
+        self._hash = None
+        self._lock = threading.RLock()
+        # used for caching on Windows only (on POSIX ppid may change)
+        self._ppid = None
+        # platform-specific modules define an _psplatform.Process
+        # implementation class
+        self._proc = _psplatform.Process(pid)
+        self._last_sys_cpu_times = None
+        self._last_proc_cpu_times = None
+        self._exitcode = _SENTINEL
+        self._ident = (self.pid, None)
+        try:
+            self._ident = self._get_ident()
+        except AccessDenied:
+            # This should happen on Windows only, since we use the fast
+            # create time method. AFAIK, on all other platforms we are
+            # able to get create time for all PIDs.
+            pass
+        except ZombieProcess:
+            # Zombies can still be queried by this class (although
+            # not always) and pids() return them so just go on.
+            pass
+        except NoSuchProcess:
+            if not _ignore_nsp:
+                msg = "process PID not found"
+>               raise NoSuchProcess(pid, msg=msg) from None
+E               psutil.NoSuchProcess: process PID not found (pid=1130)
+
+../../venv/lib/python3.12/site-packages/psutil/__init__.py:360: NoSuchProcess
+______________ test_supervised_training_graceful_stop_then_resume ______________
+
+    @pytest.mark.slow
+    def test_supervised_training_graceful_stop_then_resume():
+        db = Database()
+        jm = JobManager(db, poll_interval=0.2)
+        cfg = small_run(total=50_000)
+        paths = RunPaths(cfg.run_id)
+        job = jm.submit("train", run_id=cfg.run_id)
+    
+        def running_with_progress():
+            jm.tick()
+            st = read_json(paths.status, default={}) or {}
+            return st.get("state") == "running" and st.get("transitions", 0) >= 600
+    
+>       wait_for(running_with_progress, timeout=180)
+
+tests/test_jobs.py:168: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+fn = <function test_supervised_training_graceful_stop_then_resume.<locals>.running_with_progress at 0x7f6b02510900>
+timeout = 180, interval = 0.25
+
+    def wait_for(fn, timeout=180.0, interval=0.25):
+        deadline = time.monotonic() + timeout
+        while time.monotonic() < deadline:
+            v = fn()
+            if v:
+                return v
+            time.sleep(interval)
+>       raise TimeoutError("condition not met in time")
+E       TimeoutError: condition not met in time
+
+tests/test_jobs.py:42: TimeoutError
+______ test_process_discovery_requires_this_project_and_rechecks_identity ______
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-0/test_process_discovery_require0')
+
+    def test_process_discovery_requires_this_project_and_rechecks_identity(tmp_path):
+        """Only processes whose working directory is this project qualify; PID reuse is detected.
+    
+        On Windows the venv's python.exe can be a launcher whose child is the real interpreter, so the
+        test compares whole process trees rather than the launcher PID alone.
+        """
+        from lunarlab.procs import find_lunarlab_processes, terminate
+        from lunarlab.storage import project_root
+    
+        args = [sys.executable, "-c", "import time; time.sleep(120)", "-m", "lunarlab", "worker", "--job-id", "x"]
+        ours = subprocess.Popen(args, cwd=str(project_root()))
+        foreign = subprocess.Popen(args, cwd=str(tmp_path))  # same command line, different project
+    
+        def tree(proc):
+            try:
+                root = psutil.Process(proc.pid)
+                return {proc.pid} | {c.pid for c in root.children(recursive=True)}
+            except psutil.NoSuchProcess:
+                return {proc.pid}
+    
+        try:
+>           found = wait_for(lambda: [p for p in find_lunarlab_processes() if p["pid"] in tree(ours)], timeout=20)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_jobs.py:213: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+fn = <function test_process_discovery_requires_this_project_and_rechecks_identity.<locals>.<lambda> at 0x7f6b02687ec0>
+timeout = 20, interval = 0.25
+
+    def wait_for(fn, timeout=180.0, interval=0.25):
+        deadline = time.monotonic() + timeout
+        while time.monotonic() < deadline:
+            v = fn()
+            if v:
+                return v
+            time.sleep(interval)
+>       raise TimeoutError("condition not met in time")
+E       TimeoutError: condition not met in time
+
+tests/test_jobs.py:42: TimeoutError
+
+During handling of the above exception, another exception occurred:
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-0/test_process_discovery_require0')
+
+    def test_process_discovery_requires_this_project_and_rechecks_identity(tmp_path):
+        """Only processes whose working directory is this project qualify; PID reuse is detected.
+    
+        On Windows the venv's python.exe can be a launcher whose child is the real interpreter, so the
+        test compares whole process trees rather than the launcher PID alone.
+        """
+        from lunarlab.procs import find_lunarlab_processes, terminate
+        from lunarlab.storage import project_root
+    
+        args = [sys.executable, "-c", "import time; time.sleep(120)", "-m", "lunarlab", "worker", "--job-id", "x"]
+        ours = subprocess.Popen(args, cwd=str(project_root()))
+        foreign = subprocess.Popen(args, cwd=str(tmp_path))  # same command line, different project
+    
+        def tree(proc):
+            try:
+                root = psutil.Process(proc.pid)
+                return {proc.pid} | {c.pid for c in root.children(recursive=True)}
+            except psutil.NoSuchProcess:
+                return {proc.pid}
+    
+        try:
+            found = wait_for(lambda: [p for p in find_lunarlab_processes() if p["pid"] in tree(ours)], timeout=20)
+            assert not [p for p in find_lunarlab_processes() if p["pid"] in tree(foreign)]
+            stale = [dict(found[0], create_time=found[0]["create_time"] - 1000)]
+            assert terminate(stale)[0][1].startswith("skipped")  # PID reuse protection
+            assert ours.poll() is None
+            assert all(outcome == "terminated" for _, outcome in terminate(found))
+            ours.wait(timeout=15)
+            assert foreign.poll() is None  # the other project's process was never touched
+        finally:
+            for p in (ours, foreign):
+                for pid in tree(p):
+                    with contextlib.suppress(psutil.Error):
+                        psutil.Process(pid).kill()
+>               p.wait(timeout=15)
+
+tests/test_jobs.py:226: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/subprocess.py:1264: in wait
+    return self._wait(timeout=timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <Popen: returncode: None args: ['/workspace/scratch/1c599345f09c/audit/venv/...>
+timeout = 15
+
+    def _wait(self, timeout):
+        """Internal implementation of wait() on POSIX."""
+        if self.returncode is not None:
+            return self.returncode
+    
+        if timeout is not None:
+            endtime = _time() + timeout
+            # Enter a busy loop if we have a timeout.  This busy loop was
+            # cribbed from Lib/threading.py in Thread.wait() at r71065.
+            delay = 0.0005 # 500 us -> initial delay of 1 ms
+            while True:
+                if self._waitpid_lock.acquire(False):
+                    try:
+                        if self.returncode is not None:
+                            break  # Another thread waited.
+                        (pid, sts) = self._try_wait(os.WNOHANG)
+                        assert pid == self.pid or pid == 0
+                        if pid == self.pid:
+                            self._handle_exitstatus(sts)
+                            break
+                    finally:
+                        self._waitpid_lock.release()
+                remaining = self._remaining_time(endtime)
+                if remaining <= 0:
+>                   raise TimeoutExpired(self.args, timeout)
+E                   subprocess.TimeoutExpired: Command '['/workspace/scratch/1c599345f09c/audit/venv/bin/python', '-c', 'import time; time.sleep(120)', '-m', 'lunarlab', 'worker', '--job-id', 'x']' timed out after 15 seconds
+
+/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/subprocess.py:2045: TimeoutExpired
+______ test_benchmark_runs_every_configuration_on_an_equivalent_workload _______
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-0/test_benchmark_runs_every_conf0')
+
+    @pytest.mark.slow
+    def test_benchmark_runs_every_configuration_on_an_equivalent_workload(tmp_path):
+>       res = run_benchmark("smoke", transitions=1024, repeats=1, out=tmp_path / "bench", echo=lambda _m: None)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_overhead.py:74: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+profile = 'smoke', transitions = 1024, repeats = 1
+out = PosixPath('/tmp/pytest-of-root/pytest-0/test_benchmark_runs_every_conf0/bench')
+torch_threads = 1, seed = 0
+echo = <function test_benchmark_runs_every_configuration_on_an_equivalent_workload.<locals>.<lambda> at 0x7f6b02609080>
+
+    def run_benchmark(
+        profile: str = "smoke",
+        *,
+        transitions: int | None = None,
+        repeats: int | None = None,
+        out: Path | None = None,
+        torch_threads: int = 1,
+        seed: int = 0,
+        echo=print,
+    ) -> dict[str, Any]:
+        """Run every configuration ``repeats`` times in fresh processes; write raw rows, summary, table and figure."""
+        from lunarlab.storage import project_root, utc_now
+    
+        p = PROFILES[profile]
+        transitions = transitions or p["transitions"]
+        repeats = repeats or p["repeats"]
+        created = utc_now()
+        out = out or project_root() / "reports" / "jmlr" / "benchmarks" / f"{profile}-{created.replace(':', '')}"
+        out.mkdir(parents=True, exist_ok=False)
+        meta = {
+            "kind": "lunarlab.overhead-benchmark",
+            "schema": 1,
+            "created_at": created,
+            "profile": profile,
+            "transitions": transitions,
+            "repeats": repeats,
+            "torch_threads": torch_threads,
+            "seed": seed,
+            "configurations": LABELS,
+            "system": _system(),
+            "command": f"python -m lunarlab overhead-benchmark --profile {profile} --transitions {transitions} --repeats {repeats}",
+        }
+        rows: list[dict] = []
+        raw = out / "raw.jsonl"
+        for rep in range(repeats):
+            order = CONFIGS[rep % 3 :] + CONFIGS[: rep % 3]  # rotate so no configuration always runs first
+            for c in order:
+                with tempfile.TemporaryDirectory(prefix="lunarlab-overhead-") as home:
+                    env = {
+                        **os.environ,
+                        "LUNARLAB_HOME": home,
+                        "SDL_VIDEODRIVER": "dummy",
+                        "SDL_AUDIODRIVER": "dummy",
+                    }
+                    res_file = Path(home) / "result.json"
+                    cmd = [
+                        sys.executable, "-m", "lunarlab.overhead", "--worker", c,
+                        "--transitions", str(transitions), "--seed", str(seed), "--threads", str(torch_threads),
+                        "--result", str(res_file),
+                    ]  # fmt: skip
+                    t0 = time.perf_counter()
+                    proc = subprocess.run(cmd, env=env, capture_output=True, text=True)
+                    if proc.returncode != 0:
+>                       raise RuntimeError(f"benchmark worker {c} failed:\n{proc.stderr[-3000:]}")
+E                       RuntimeError: benchmark worker sb3 failed:
+E                       Traceback (most recent call last):
+E                         File "<frozen runpy>", line 198, in _run_module_as_main
+E                         File "<frozen runpy>", line 88, in _run_code
+E                         File "/workspace/scratch/1c599345f09c/audit/work/lunarlab/lunarlab/overhead.py", line 511, in <module>
+E                           raise SystemExit(main())
+E                                            ^^^^^^
+E                         File "/workspace/scratch/1c599345f09c/audit/work/lunarlab/lunarlab/overhead.py", line 505, in main
+E                           res = _run_config(args.worker, args.transitions, args.seed, args.threads)
+E                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E                         File "/workspace/scratch/1c599345f09c/audit/work/lunarlab/lunarlab/overhead.py", line 90, in _run_config
+E                           proc = psutil.Process()
+E                                  ^^^^^^^^^^^^^^^^
+E                         File "/workspace/scratch/1c599345f09c/audit/venv/lib/python3.12/site-packages/psutil/__init__.py", line 314, in __init__
+E                           self._init(pid)
+E                         File "/workspace/scratch/1c599345f09c/audit/venv/lib/python3.12/site-packages/psutil/__init__.py", line 360, in _init
+E                           raise NoSuchProcess(pid, msg=msg) from None
+E                       psutil.NoSuchProcess: process PID not found (pid=1342)
+
+lunarlab/overhead.py:437: RuntimeError
+_ test_parallel_runs_respect_the_slot_limit_and_a_failure_does_not_stop_the_others _
+
+    @pytest.mark.slow
+    def test_parallel_runs_respect_the_slot_limit_and_a_failure_does_not_stop_the_others():
+        good = [_run(512) for _ in range(3)]
+        untrained = _run(512)  # a final test of a run without checkpoints fails
+        lines: list[str] = []
+        jobs = [("train", c.run_id) for c in good] + [("test", untrained.run_id)]
+        codes = run_parallel(jobs, workers=2, echo=lines.append, poll_s=0.2)
+>       assert all(codes[c.run_id] == 0 for c in good), codes
+E       AssertionError: {'20261019-092839-baseline-s0-custom-76c6': 1, '20261019-092839-baseline-s0-custom-280a': 1, '20261019-092839-baseline-s0-custom-3c92': 1, '20261019-092839-baseline-s0-custom-013b': 1}
+E       assert False
+E        +  where False = all(<generator object test_parallel_runs_respect_the_slot_limit_and_a_failure_does_not_stop_the_others.<locals>.<genexpr> at 0x7f6b0253f510>)
+
+tests/test_parallel_and_supervisor.py:79: AssertionError
+____ test_force_termination_crash_recovery_and_graceful_supervisor_shutdown ____
+
+    @pytest.mark.slow
+    def test_force_termination_crash_recovery_and_graceful_supervisor_shutdown():
+        db = Database()
+        jm = JobManager(db, poll_interval=0.2)
+    
+        # forced termination: no stop checkpoint, the run is left interrupted and resumable from its last checkpoint
+        a = _run(200_000)
+        job = jm.submit("train", run_id=a.run_id)
+>       _running(jm, a.run_id)
+
+tests/test_parallel_and_supervisor.py:98: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_parallel_and_supervisor.py:51: in _running
+    return _wait(check)
+           ^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+fn = <function _running.<locals>.check at 0x7f6b0260a980>, timeout = 180.0
+interval = 0.25
+
+    def _wait(fn, timeout: float = 180.0, interval: float = 0.25):
+        deadline = time.monotonic() + timeout
+        while time.monotonic() < deadline:
+            v = fn()
+            if v:
+                return v
+            time.sleep(interval)
+>       raise TimeoutError("condition not met in time")
+E       TimeoutError: condition not met in time
+
+tests/test_parallel_and_supervisor.py:42: TimeoutError
+_ test_backend_lifecycle_guards_single_instance_graceful_shutdown_and_recovery _
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-0/test_backend_lifecycle_guards_0')
+
+    @pytest.mark.slow
+    def test_backend_lifecycle_guards_single_instance_graceful_shutdown_and_recovery(tmp_path):
+        port, log = _free_port(), tmp_path / "server.log"
+        base = f"http://127.0.0.1:{port}"
+        cfg = create_run(
+            reward=preset("baseline"),
+            seed=0,
+            ppo=PPOConfig(n_envs=2, n_steps=64, batch_size=32),
+            protocol=EvalProtocol(validation_seeds=[10_000]),
+            training=TrainingConfig(
+                profile="custom", total_transitions=200_000, checkpoint_every=512, validation_every=100_000
+            ),
+        )
+        paths = RunPaths(cfg.run_id)
+        proc = _start(port, log)
+        try:
+            with httpx.Client(base_url=base, timeout=10) as c:
+>               health = _wait(lambda: c.get("/api/health").json())
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_server_lifecycle.py:78: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+fn = <function test_backend_lifecycle_guards_single_instance_graceful_shutdown_and_recovery.<locals>.<lambda> at 0x7f6b19ff8d60>
+timeout = 120.0, interval = 0.25
+
+    def _wait(fn, timeout: float = 120.0, interval: float = 0.25):
+        deadline = time.monotonic() + timeout
+        while time.monotonic() < deadline:
+            try:
+                v = fn()
+            except httpx.HTTPError:
+                v = None
+            if v:
+                return v
+            time.sleep(interval)
+>       raise TimeoutError("condition not met in time")
+E       TimeoutError: condition not met in time
+
+tests/test_server_lifecycle.py:58: TimeoutError
+================================ tests coverage ================================
+_______________ coverage: platform linux, python 3.12.14-final-0 _______________
+
+Coverage JSON written to file /workspace/scratch/1c599345f09c/audit/revised_coverage.json
+=========================== short test summary info ============================
+SKIPPED [1] tests/test_source_archive.py:28: needs a git checkout
+SKIPPED [1] tests/test_source_archive.py:63: needs a git checkout
+SKIPPED [1] tests/test_source_archive.py:70: needs a git checkout
+SKIPPED [1] tests/test_source_archive.py:81: needs a git checkout
+SKIPPED [1] tests/test_source_archive.py:90: needs a git checkout
+SKIPPED [1] tests/test_windows.py:154: Windows file-sharing semantics
+SKIPPED [1] tests/test_windows.py:261: Windows file-sharing semantics
+SKIPPED [1] tests/test_windows.py:278: Windows file-sharing semantics
+SKIPPED [1] tests/test_windows.py:297: Windows file-sharing semantics
+FAILED tests/test_jobs.py::test_live_worker_is_adopted_and_pid_reuse_is_never_killed
+FAILED tests/test_jobs.py::test_supervised_training_graceful_stop_then_resume
+FAILED tests/test_jobs.py::test_process_discovery_requires_this_project_and_rechecks_identity
+FAILED tests/test_overhead.py::test_benchmark_runs_every_configuration_on_an_equivalent_workload
+FAILED tests/test_parallel_and_supervisor.py::test_parallel_runs_respect_the_slot_limit_and_a_failure_does_not_stop_the_others
+FAILED tests/test_parallel_and_supervisor.py::test_force_termination_crash_recovery_and_graceful_supervisor_shutdown
+FAILED tests/test_server_lifecycle.py::test_backend_lifecycle_guards_single_instance_graceful_shutdown_and_recovery
+7 failed, 479 passed, 9 skipped in 1009.75s (0:16:49)

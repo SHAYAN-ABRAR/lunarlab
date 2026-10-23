@@ -1,190 +1,167 @@
 % SPDX-FileCopyrightText: 2026 Shayan Abrar
 % SPDX-License-Identifier: MIT
-%
-% JMLR-MLOSS software description: at most four pages in JMLR format, references excluded.
-% Build: see BUILD.md (fetch the official style with fetch_style.py; do not modify it).
-% Every quantitative statement is traced to its evidence in EVIDENCE.md.
-% Sole author: Shayan Abrar (confirmed 2026-10-18). Items marked \TODO need information only the author can provide.
-
+% Independent revision, 2026-10-19. Source reviewed: 67440c664f658ccd589f7198ee2182d5820ca7c1.
+% Follow-up on the original machine, 2026-10-19/20: test counts, benchmark table and study-artifact export
+% updated from reports/jmlr/original-machine-2026-10-19/ and benchmarks/standard-2026-10-19T180346+0000/.
+% Author details and disclosures remain to be supplied. See EVIDENCE.md and BUILD.md.
 \documentclass[twoside,11pt]{article}
-
 \usepackage{jmlr2e}
 \usepackage{lastpage}
 \usepackage{booktabs}
-
-\newcommand{\TODO}[1]{\textbf{[TODO: #1]}}
+\newcommand{\TODO}[1]{\textbf{[#1]}}
 \newcommand{\lunarlab}{\textsc{LunarLab}}
-
-% Heading arguments {volume}{year}{pages}{date submitted}{date published}{paper id}{author names} are assigned
-% by JMLR; the values below are placeholders, as in the official sample.
-\jmlrheading{0}{0000}{1-\pageref{LastPage}}{\TODO{submission date}}{}{00-0000}{Shayan Abrar}
-
-% Running title: at most 50 characters (JMLR author information).
-\ShortHeadings{LunarLab: Auditing Reward Design in RL}{Abrar}
+\jmlrheading{0}{2026}{1-\pageref{LastPage}}{pending}{}{00-0000}{Shayan Abrar}
+\ShortHeadings{LunarLab: Auditable Reward-Design Experiments}{Abrar}
 \firstpageno{1}
-
 \begin{document}
-
-\title{LunarLab: A Reproducible Platform for Auditing Reward Shaping and Reward Exploitation in Reinforcement Learning}
-
-\author{\name Shayan Abrar \email \TODO{e-mail} \\
-       \addr \TODO{affiliation and postal address of the corresponding author}}
-
-\editor{\TODO{assigned by JMLR}}
-
+\title{LunarLab: Auditable Reward-Design Experiments in Reinforcement Learning}
+\author{\name Shayan Abrar \email \TODO{author email required} \\
+\addr \TODO{affiliation and complete postal address required}}
+\editor{Not assigned}
 \maketitle
 
-\begin{abstract}%
-\lunarlab{} is an open-source platform for auditing reward design in reinforcement learning. Around
-Stable-Baselines3 training on Gymnasium's LunarLander-v3, it records the original reward, every added reward
-term and the resulting training reward on each transition, and evaluates policies on the original reward
-only. Checkpoints are selected on validation episodes, frozen as immutable, digest-checked copies and tested
-once on disjoint seeds; interrupted runs continue from checkpoints that restore the algorithm state, including
-the DQN replay buffer; runs record configuration hashes, seeds, software versions and source revisions.
-Diagnostics independent of the reward under study expose reward exploitation, as a deliberately flawed hover
-bonus demonstrates. The platform adds statistics across training seeds, counterfactual re-scoring, robustness and
-preference-learning studies, a command-line interface, a Python API and a local web interface; an adapter layer
-applies the same accounting to other Gymnasium environments.
-493 automated tests (85.8\% statement and branch coverage) run on Linux and Windows. Published final tests
-re-evaluate bit-identically on Windows; on Linux single episodes differ numerically while mean returns stay
-within 1.6 and landing rates are unchanged. Reward accounting adds at most 4\% to training-loop time over plain
-Stable-Baselines3. \lunarlab{} is released under the MIT License.
+\begin{abstract}
+Reward-design experiments need evidence that optimized reward reflects task performance. \lunarlab{} is an
+MIT-licensed toolkit integrating reward accounting, policy evaluation and provenance. Built on Stable-Baselines3
+and Gymnasium's LunarLander-v3, it decomposes rewards at each transition, stores episode totals, selects
+checkpoints on validation seeds, and tests protected, digest-checked copies on separate seeds. Configuration
+hashes and software records connect results to their artifacts. A CLI, Python API and local web application
+expose the workflow; optional traces support inspection and re-scoring. Five PPO training seeds per design
+illustrate its use: a flawed hover bonus yields high shaped returns but no strict landings in 500 test episodes.
+Three distributed policies also expose a portability limit: Windows evaluations match selected summary fields,
+whereas Linux trajectories diverge despite similar aggregates. The main workflow is LunarLander-specific;
+a separate audit API is demonstrated on CartPole. The contribution is an inspectable experimental process,
+not a new learning algorithm. Code: \url{https://github.com/SHAYAN-ABRAR/lunarlab}.
 \end{abstract}
-
 \begin{keywords}
-  reinforcement learning, reward shaping, reward hacking, reproducibility, open-source software
+reinforcement learning, reward shaping, reward hacking, reproducibility, open-source software
 \end{keywords}
 
 \section{Introduction}
+A policy can improve its training reward while failing the intended task. Reward gaming concerns this
+relationship between objectives \citep{skalse2022gaming}. Auditing reward design requires separate accounts of
+original reward, modified reward, and behavioral outcomes, together with evidence identifying the selected
+checkpoint and the observations used for selection. These requirements complement established concerns about
+RL evaluation and reproducibility \citep{henderson2018matters,agarwal2021precipice}.
 
-Reward design is how practitioners steer reinforcement-learning agents, and a common way such projects fail: an
-agent can drive a shaped or learned reward up while the intended task stays unsolved
-\citep{amodei2016concrete,skalse2022gaming}. Potential-based shaping is the principled exception, leaving the
-optimal policies unchanged \citep{ng1999shaping}. Telling these cases apart requires keeping the reward a policy
-is trained on separate from the reward it is judged by, on every transition, and an evaluation protocol that
-cannot leak test information into model selection; studies of experimental practice show how easily the latter
-goes wrong \citep{henderson2018matters,agarwal2021precipice}.
+\lunarlab{} integrates reward accounting, validation-based selection, protected final-test artifacts, and
+diagnostic replay. Researchers can inspect whether a reward modification improves task outcomes, which reward
+components explain a trajectory, and whether re-evaluating the same policy preserves an observed failure.
+The contribution is this auditable process, rather than a new algorithm.
 
-Mature libraries provide reliable algorithms and training infrastructure
-\citep{raffin2021sb3,huang2022cleanrl,raffin2020zoo}. By default they evaluate whatever reward the environment
-wrappers return and leave held-out testing, checkpoint freezing and reward bookkeeping to the user (a sourced
-comparison is in \url{docs/jmlr/COMPARISON_EVIDENCE.md}). A reward-learning library keeps the environment reward
-beside the learned one \citep{gleave2022imitation}, and safety benchmarks score agents on a hidden performance
-function \citep{leike2017gridworlds}. \lunarlab{} provides this bookkeeping as one tested workflow; it contributes
-no new learning algorithm but makes reward-design experiments auditable and reproducible.
+\section{Workflow and Implementation}
+\paragraph{Accounting and diagnostics.} The main pipeline uses Gymnasium's LunarLander-v3
+\citep{towers2024gymnasium} and Stable-Baselines3 implementations of PPO and DQN \citep{raffin2021sb3}.
+A wrapper computes
+\[
+ r_{\mathrm{train}}(s,a,s')=w\,r_{\mathrm{orig}}(s,a,s')+\sum_k F_k(s,a,s').
+\]
+A validated configuration specifies the terms and has a content hash. Shared pure functions compute the
+terms for training, evaluation, and trajectory re-scoring. Normal training persists episode totals for
+original reward, training reward, and individual terms; per-transition traces are optional. The wrapper
+preserves observations and termination signals. Behavioral diagnostics include a hover detector independent
+of the chosen reward preset and a strict pad-landing classifier using position, attitude, contact, and
+termination information. These task-specific diagnostics are not universal definitions of reward exploitation.
 
-\section{Software Design}
+Built-in designs include a time penalty, a deliberately exploitable hover bonus, and potential-based shaping
+$F=\alpha(\gamma\Phi(s')-\Phi(s))$. The latter matches the learner's discount, uses zero terminal potential, and distinguishes time-limit
+truncation. Property tests check telescoping. The policy-invariance theorem \citep{ng1999shaping} does not
+guarantee better finite-budget learning.
 
-\begin{figure}[t]
-\centering
-\includegraphics{figures/workflow.pdf}
-\caption{The audited workflow (conceptual diagram): each stage records what the next needs to verify it.}
-\label{fig:workflow}
-\end{figure}
+\paragraph{Selection and provenance.} Validation and final-test seed lists are checked for duplicates and
+overlap. Validation original return selects the checkpoint; final evaluation reports the original return
+alongside behavioral outcomes and re-scored training return. At first final testing, the selected checkpoint
+is copied to a protected artifact and verified by SHA-256. Interrupted tests reuse that copy. A test-exposure registry marks derived experiments as exploratory but cannot prevent investigator reuse of
+test insights. Records include configuration/protocol hashes, transition budgets, software versions, and source revisions.
 
-\paragraph{Reward accounting.} A reward configuration is data with a strict schema and a content hash. One
-Gymnasium wrapper computes, for every transition $(s,a,s')$, $r_{\mathrm{train}} = w\,r_{\mathrm{orig}} + \sum_k
-F_k(s,a,s')$ with pure term functions shared by training, evaluation and re-scoring; it records the original,
-per-term and training rewards, undiscounted and discounted, and never changes observations or termination flags.
-Built-in terms include a time penalty, a deliberately flawed hover bonus and potential-based shaping
-$F = \alpha(\gamma\Phi(s') - \Phi(s))$ with an absorbing terminal state and correct time-limit truncation;
-property-based tests check that its discounted sum telescopes to the potential difference.
+Checkpoint continuation restores networks, optimizer state, and counters; DQN additionally restores replay
+contents and continuation metadata. The simulator and all random-number streams are not restored, so this is
+stateful continuation rather than bit-identical uninterrupted training. File integrity, numerical agreement,
+and preservation of scientific conclusions are separate questions.
 
-\paragraph{Evaluation protocol.} Evaluation always uses the unmodified environment reward. Validation and test
-seeds are strict, distinct and disjoint, and the instantiated environment is checked against the protocol. The
-checkpoint with the best validation return is selected, copied at the first final test to an immutable,
-digest-checked artifact and never trained again; interrupted tests are retried on the same bytes, and a registry
-of test exposure labels runs designed after an already-seen test as exploratory. A hover detector that does not
-depend on the reward under study and a strict landing classifier expose reward exploitation.
+\paragraph{Interfaces and extension.} A CLI, Python API, and React/FastAPI application share the local research core. Replay, re-scoring, robustness,
+tuning, and preference workflows require no hosted account. Three-dimensional replay visualizes two-dimensional
+simulation. A separate
+\texttt{lunarlab.audit} API accepts reward terms and task adapters, with LunarLander consistency tests and a
+CartPole example. The main training, checkpoint, and web workflows remain LunarLander-specific.
 
-\paragraph{Reproducibility infrastructure.} Each run records its configuration, reward and protocol hashes,
-seeds, budgets in environment transitions, software versions and source revisions. Checkpoints are written
-crash-safely with a SHA-256 manifest. An interrupted run continues from a checkpoint at a safe boundary that
-restores networks, optimizer state and counters, for DQN also the replay buffer, target-network phase and
-exploration schedule (validated numeric arrays, never unpickled); environments restart and random-number streams
-are not restored, so continuation is not bit-identical to uninterrupted training.
+\section{Relation to Existing Software and Engineering Evidence}
+Stable-Baselines3 supplies monitoring, checkpoint tools and separate evaluation environments.
+RL Baselines3 Zoo adds recipes, tuning and plotting \citep{raffin2020zoo}. CleanRL emphasizes inspectable
+single-file algorithm implementations \citep{huang2022cleanrl}. The \texttt{imitation} library preserves original
+rewards alongside learned rewards and implements preference learning \citep{gleave2022imitation}; rliable
+provides robust aggregate statistics \citep{agarwal2021precipice}. AI Safety Gridworlds separates reward from
+performance measures \citep{leike2017gridworlds}. These are established ideas. \lunarlab{} connects named reward terms, checkpoint identity, held-out evaluation
+and diagnostics in one task-specific workflow, with less environmental breadth than general RL libraries.
 
-\paragraph{Interfaces and extension.} The same core code serves a command-line interface, a Python API and a
-local web interface (including a three-dimensional replay with per-step reward decomposition) under a local job
-supervisor, without network services or accounts. Studies cover statistics across training seeds
-\citep{agarwal2021precipice}, robustness to unseen physics, Optuna tuning on validation episodes only
-\citep{akiba2019optuna} and rewards learned from preferences \citep{christiano2017preferences,bradley1952paired}.
-A separate adapter layer applies the accounting and outcome audits to other Gymnasium environments
-\citep{towers2024gymnasium}; its LunarLander adapter matches the main pipeline exactly in tests and a CartPole-v1
-adapter demonstrates the contract, while training, the evaluation protocol and checkpointing remain specific to
-LunarLander-v3.
+\paragraph{Testing and packaging.} On Windows~11 the revised source passes all 489 Python tests (86\%
+statement and branch coverage) and 15 browser tests; a fresh source-archive installation passes its 189 release
+tests. Public CI at base revision \texttt{67440c6} also passed on Linux and Windows. Tests cover reward
+identities, seed validation, freezing, continuation and interruption. Tutorial/API and developer documentation
+and deterministic archives support use and extension; tests do not establish adoption.
 
-\section{Quality, Comparison and an Example Study}
-
-\paragraph{Software quality.} 493 tests (unit, integration, property-based and end-to-end, including a served
-backend and parallel workers) give 85.8\% statement and branch coverage, and 15 browser flows exercise the web
-interface; continuous integration runs the full suite on Linux and platform-sensitive tests on Windows (Python
-3.12, 3.13). The test suite executes the tutorial, the API reference is generated from the code, and a
-deterministic source archive is built and installed into a fresh environment.
-
-\paragraph{Reproducibility.} One command (\texttt{reproduce-smoke}) runs the whole pipeline on a small run in a
-temporary directory and verifies every provenance link (14 checks; a 15th trains twice and found identical
-weights). Three published final tests ship as artifacts whose re-evaluation separates artifact integrity,
-within-platform reproduction, cross-platform numerical agreement and conclusion stability (paired tests). All
-300 episodes were bit-identical on the development machine and on Windows CI (Python 3.12, 3.13); on Linux none
-was, with return differences up to 0.28 (PPO baseline) and 192 (DQN), yet mean returns within 1.6 and unchanged
-pad-landing rates. Per-step traces locate the cause: given identical actions, the Linux simulator departs by about
-one float32 unit after 2--24 steps and the trajectories part there, while the network's last-bit differences
-change no action; a one-ulp perturbation on Windows likewise changes 93--94\% of the episodes, aggregates intact.
-
-\paragraph{Runtime and memory.} Table~\ref{tab:overhead} compares plain Stable-Baselines3 PPO with the same model
-trained through the reward accounting and through the full pipeline: the accounting costs at most a few percent
-of training-loop time, and a complete run takes about a fifth longer, mostly for the validation episodes the
-protocol requires.
-
+\paragraph{Runtime and memory.} Table~\ref{tab:overhead} reports a benchmark of the revised source.
+Hyperparameters and transition counts match across configurations. Relative loop time was
+1.021 for accounting and 1.053 for the full training workflow; including its validation and checkpoint work
+increased elapsed time to 1.221. These are measurements from three repetitions on one machine, not upper bounds.
+The loop interval includes initialization but excludes timed validation and checkpoint operations.
 \begin{table}[t]
-\centering
-\small
+\centering\small
 \begin{tabular}{@{}lrrrr@{}}
 \toprule
-Configuration & Transitions/s & Loop time & Wall clock & Peak memory \\
+Configuration & Transitions/s & Loop ratio & Wall ratio & Peak MB \\
 \midrule
-A: Stable-Baselines3 with \texttt{Monitor} & $2{,}098 \pm 57$ & $1.00$ & $1.00$ & 311\,MB \\
-B: A + \lunarlab{} reward accounting & $2{,}101 \pm 167$ & $1.00$ & $1.00$ & 311\,MB \\
-C: full \lunarlab{} pipeline & $1{,}985 \pm 42$ & $1.06$ & $1.23$ & 323\,MB \\
+SB3 + \texttt{Monitor} & $2{,}158\pm22$ & 1.000 & 1.000 & 310 \\
++ reward accounting & $2{,}115\pm29$ & 1.021 & 1.021 & 310 \\
+Full training workflow & $2{,}051\pm55$ & 1.053 & 1.221 & 314 \\
 \bottomrule
 \end{tabular}
-\caption{Overhead (PPO, 102{,}400 transitions; mean $\pm$ SD of three runs on an Intel i7-13620H, one torch
-thread, revision 2c41b42). Times relative to A; C's wall clock includes 18{,}780 validation steps (8.3\,s).}
+\caption{PPO benchmark: 102,400 transitions per run, three repetitions, Windows 11, Intel i7-13620H, one PyTorch
+thread. Throughput is mean $\pm$ sample SD; time ratios use mean durations. The full workflow includes 18,780
+validation transitions (7.9\,s on average). Peak MB ($10^6$ bytes) is the process peak through training and
+checkpointing, sampled before optional replay generation.}
 \label{tab:overhead}
 \end{table}
 
-\paragraph{Example: a reward exploited and exposed.} In the bundled study, PPO \citep{schulman2017ppo} was trained
-for one million transitions with five seeds under four reward designs (DQN \citep{mnih2015dqn} and learned rewards
-are also included). Figure~\ref{fig:accounting} shows what the accounting records: with the original reward the
-training and original returns coincide, with potential-based shaping they differ by the shaping term, and with the
-flawed hover bonus the training return reaches 746 (median over seeds) while the original return falls to $-50$;
-in the frozen final tests those policies landed in none of 500 episodes. Time penalty and potential-based shaping
-showed no clear improvement over the original reward (every probability-of-improvement interval contains 0.5).
+\section{Example Audit and Reproducibility Limits}
+The primary demonstration trains PPO \citep{schulman2017ppo} with five seeds for each of four reward designs,
+using 1,003,520 transitions per run. Checkpoints are selected on ten validation seeds and evaluated on 100
+disjoint test seeds per policy. Figure~\ref{fig:study} uses the committed per-policy summaries. The original
+reward baseline has an interquartile-mean (IQM) original return of 268.6 and a 97.6\% strict landing rate.
+The hover-bonus group has IQM $-33.1$, no strict landings in 500 episodes, and 80\% timeouts. Its mean re-scored
+training return is 496.3 while its mean original return is $-23.5$. The discrepancy demonstrates exploitation
+of this reward design under the studied configuration; it is not a general detector-validation benchmark.
 
 \begin{figure}[t]
 \centering
-\includegraphics{figures/reward_accounting.pdf}
-\caption{Original (solid) and training (dashed) return during PPO training (rolling mean of 100 episodes; median
-and min--max over five seeds).}
-\label{fig:accounting}
+\includegraphics{figures/final_test_audit.pdf}
+\caption{Final-test audit for four PPO reward designs. Dots show five policies (100 episodes each); diamonds show return IQM and mean landing rate. Bars: 95\%
+percentile intervals from 5,000 training-run bootstrap resamples. Five seeds limit uncertainty resolution;
+zero observed landings does not imply zero population success probability.}
+\label{fig:study}
 \end{figure}
 
-\section{Availability, Limitations and Conclusion}
+Time-penalty and potential-based shaping obtain IQMs 265.3 and 262.3. Both intervals for probability of
+improvement include 0.5; improvement is not established. The bootstrap conditions on fixed evaluation seeds. The broader study has 38 policies and 3,800 final-test
+episodes. The repository includes three replayable packages; packages for all 38 were exported without
+retraining, and recomputing every summary from their episodes reproduces the published values. Unequal DQN budgets preclude algorithm-superiority claims. Simulated preferences and validation use original
+reward; no human study or reward-free learning is claimed.
 
-\lunarlab{} is available at \url{https://github.com/SHAYAN-ABRAR/lunarlab} under the MIT License (version
-0.1.0) and installs from locked dependencies on Windows (Python~3.12, 3.13) and Linux
-(Python~3.12) without proprietary dependencies; evidence for every number above is in the repository.
+\paragraph{Re-evaluation evidence.} The three packages contain a PPO baseline, PPO hover-bonus policy, and
+DQN baseline. In Windows CI and on the recording machine, all 300 episodes match the five compared summary fields exactly: length, original
+return, training return, environment outcome, and strict landing indicator. This does not establish trajectory identity. On Linux, no summaries match exactly; mean returns differ by at most
+1.52 and strict landing rates remain 96\%, 0\%, and 29\%, respectively. Individual original returns differ by
+up to 0.28, 11.9, and 192. Paired tests detect no aggregate differences after Holm correction, which does not
+establish equivalence. Nine open-loop reference traces show early simulator-state differences without greedy-action changes on
+recorded observations. This supports simulator-numerics divergence, not a specific compiler cause or portability
+of all 38 policies.
 
-The main pipeline is specific to LunarLander-v3, the adapter layer has been demonstrated on CartPole-v1 only, and
-the bundled study uses one training budget and three to five seeds per group. Bit-identical results hold within
-one platform; across operating systems agreement is measured, not assumed. The experiments are a two-dimensional
-simulation benchmark, not evidence about real rocket control. \lunarlab{} does not prevent reward hacking; it
-measures and exposes it, turning reward-design experiments into results that others can audit and reproduce.
-
-\acks{\TODO{acknowledgements, and the declaration of funding and competing interests required by JMLR}}
-
-\vskip 0.2in
+\paragraph{Availability and conclusion.}
+\lunarlab{} is MIT-licensed; the described version is 0.1.0 \TODO{final source revision and public archive of
+the 38-policy bundle}, with source-specific evidence in the repository. Its contribution links reward accounting, selection, and
+recorded results. Broader task support and independent research use remain to be demonstrated; numerical
+reproduction across platforms and prevention of reward hacking are not guaranteed.
+\acks{\TODO{Funding and competing-interest declarations required.}}
+\clearpage
 \bibliography{references}
-
 \end{document}

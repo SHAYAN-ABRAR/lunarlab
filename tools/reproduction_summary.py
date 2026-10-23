@@ -118,7 +118,7 @@ def markdown(summary: dict) -> str:
     lines = [
         f"## Artifact reproduction on {summary['platform']}",
         "",
-        "| Artifact | Status | Exit | Integrity | Bit-identical | Outcomes agree | Median / max abs return diff | "
+        "| Artifact | Status | Exit | Integrity | Exact summary fields | Outcomes agree | Median / max abs original-return diff | "
         "Mean return (recorded -> here) | Pad landing | Aggregates |",
         "|---|---|---:|---|---:|---:|---:|---:|---:|---|",
     ]
@@ -131,6 +131,11 @@ def markdown(summary: dict) -> str:
             f"{'no significant difference' if r['aggregates_consistent'] else 'SIGNIFICANT DIFFERENCE'} |"
         )
     tolerated = [r for r in summary["artifacts"] if r["tolerated_because"]]
+    lines += [
+        "",
+        "Exact matches concern five selected episode-summary fields, not complete trajectories. "
+        "Non-significant differences do not establish equivalence; no equivalence margins were specified.",
+    ]
     if tolerated:
         lines += ["", f"Tolerated (not failed): {', '.join(r['artifact'] for r in tolerated)}: {TOLERATED}."]
     if summary["divergence"]:

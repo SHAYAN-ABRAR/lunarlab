@@ -242,7 +242,7 @@ usage: python -m lunarlab reproduce-artifact [-h] --artifact ARTIFACT [--episode
 |---|---|
 | `--artifact` | required. folder written by export-artifact |
 | `--episodes` | only the first N recorded seeds (default: all) |
-| `--tolerance` | absolute tolerance on returns (default 0: bit-identical) |
+| `--tolerance` | absolute tolerance on returns (default 0: exact numeric equality of compared fields) |
 | `--report` | write the JSON report to this file |
 
 ## `reproduce-smoke`

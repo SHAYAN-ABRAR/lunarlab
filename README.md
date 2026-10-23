@@ -6,7 +6,7 @@
 ![Stable-Baselines3](https://img.shields.io/badge/RL-PPO%20%C2%B7%20DQN-555)
 [![License: MIT](https://img.shields.io/badge/license-MIT-3da639)](LICENSE)
 
-A local-first laboratory for **honest reward-design experiments** on Gymnasium's `LunarLander-v3`
+A local-first laboratory for **auditable reward-design experiments** on Gymnasium's `LunarLander-v3`
 (discrete actions) with Stable-Baselines3, plus a mission-control web interface: train under fixed or
 randomized physics, tune with Optuna, replay in 3-D with the policy's own view of every step, diagnose
 reward hacking, compare PPO and DQN fairly, learn rewards from preferences, and fly the lander yourself.
@@ -127,20 +127,21 @@ none of them affected the published results: no number above changed
 - **Engineering:** a local job supervisor (owned worker processes, cooperative stop at safe boundaries,
   resume with lineage, crash reconciliation), parallel experiment runs, weights-only model loading, loopback
   binding and strict request validation, crash-safe checkpoint bundles, resumable DQN checkpoints that restore
-  the replay buffer and algorithm state (a resumed run is not bit-identical to an uninterrupted one), 493
-  Python tests (85.8 % statement and branch coverage) and 15 browser flows, Linux and Windows CI, and a static
+  the replay buffer and algorithm state (a resumed run is not bit-identical to an uninterrupted one), extensive
+  Python tests (approximately 86% combined statement and branch coverage in the reviewed public CI) and 15 browser flows, Linux and Windows CI, and a static
   demo build whose snapshots record their exact provenance.
-- **Reproducibility and extension:** `reproduce-smoke` runs and verifies the whole pipeline in a temporary home;
-  three published final tests ship as artifacts that `reproduce-artifact` re-evaluates episode by episode,
-  reporting artifact integrity, within-platform reproduction, cross-platform agreement and the stability of the
-  conclusions separately (bit-identical on Windows, including CI machines with Python 3.12 and 3.13; on Linux
-  every episode differs numerically while the means and landing rates do not); `trace-artifact` locates where two
-  platforms' trajectories part (on Linux the simulator's build departs after a few steps under identical
-  actions); `overhead-benchmark` measures the cost against plain Stable-Baselines3 (reward accounting 0–4 % of
-  training-loop time; a complete run, validation episodes included, 1.22–1.23× as long); a deterministic source
-  archive that CI rebuilds byte for byte and installs fresh; and a task-adapter layer (`lunarlab.audit`) that
-  applies the same reward accounting to other Gymnasium environments, with a
-  [CartPole example](examples/cartpole_audit.py).
+- **Reproducibility and extension:** `reproduce-smoke` verifies a small end-to-end run. Three supplied policy
+  packages support independent re-evaluation. Reports distinguish file integrity, exact agreement of five
+  episode-summary fields, numerical differences and aggregate regression tests. The tested Windows runs match
+  those fields; Linux runs differ numerically with similar mean returns and unchanged strict-landing rates.
+  Non-significant tests do not establish equivalence. Sampled trace comparisons support simulator-numerics
+  divergence without identifying a unique compiler cause. Packages for all 38 study policies were exported from
+  the original data home and checked against the published summaries; they are supplied for review, not yet
+  publicly archived. A repeat benchmark with corrected memory sampling measured 1.021× accounting-loop time,
+  1.053× full-loop time and 1.221× training-workflow elapsed time relative to SB3, with process peaks of 310, 310
+  and 314 MB through training and checkpointing ([benchmark audit](docs/jmlr/BENCHMARK_PROTOCOL.md)). The generic
+  `lunarlab.audit` API has a [CartPole example](examples/cartpole_audit.py); the full application remains
+  LunarLander-specific. See [the independent review](docs/jmlr/READINESS_REPORT.md) for evidence and limits.
 
 ## Requirements
 
@@ -335,7 +336,7 @@ a 64×64 MLP are about 150 KB each; a DQN replay file with the default 50k buffe
 ## Tests
 
 ```powershell
-.venv\Scripts\python.exe -m pytest                       # 493 tests: unit, integration, property-based, real PPO/DQN, end-to-end CLI, served backend
+.venv\Scripts\python.exe -m pytest                       # Python suite: unit, integration, property-based, PPO/DQN and end-to-end
 .venv\Scripts\python.exe -m pytest -m "not slow"         # skips the tests marked slow (real PPO/DQN updates, video encoding)
 .venv\Scripts\python.exe -m pytest --cov                 # with statement + branch coverage, worker subprocesses included
 .venv\Scripts\python.exe -m lunarlab reproduce-smoke     # the whole pipeline in a temporary home, 14 checks (15 with --training-determinism)
@@ -350,11 +351,18 @@ the full suite on Linux, the Windows-sensitive tests and the PowerShell scripts 
 outcome; nothing is masked), and builds the source archive twice, compares the bytes and installs it into a
 fresh environment.
 
-**CI run done:** on 2026-10-18 the full CI run of commit `38c9703` (run [39145707181](https://github.com/SHAYAN-ABRAR/lunarlab/actions/runs/39145707181)) passed all six jobs —
+**CI run done:** on 2026-10-18 the full CI run of commit `67440c6` (run [39147464434](https://github.com/SHAYAN-ABRAR/lunarlab/actions/runs/39147464434)) passed all six jobs —
 Linux (489 tests passed, 4 Windows-only tests skipped; the published artifacts re-evaluated as numerical
-differences, no significant aggregate change), Windows with Python 3.12 and 3.13 (artifacts bit-identical, 300 of
+differences, no significant aggregate change), Windows with Python 3.12 and 3.13 (selected episode-summary fields match, 300 of
 300 episodes), the source archive (built twice, byte-identical to a Windows build of the same commit, installed
 fresh with its release tests), the frontend, and the 15 browser flows.
+
+**Local validation of the revised source (2026-10-19, Windows 11, Python 3.12):** after the independent review's
+corrections, 489 Python tests passed with none failed or skipped (85.8 % statement and branch coverage), the
+frontend typecheck, lint and build and all 15 browser flows passed, and the three published artifacts
+re-evaluated exactly (300 of 300 episodes, all nine reference traces identical). CI has not yet run on this
+revision; Linux results for it are pending. Record:
+[`reports/jmlr/original-machine-2026-10-19/`](reports/jmlr/original-machine-2026-10-19/).
 
 ## License and citation
 

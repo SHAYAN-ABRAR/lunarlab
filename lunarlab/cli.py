@@ -1646,7 +1646,7 @@ def build_parser() -> argparse.ArgumentParser:
     ra = sub.add_parser(
         "reproduce-artifact",
         help="verify a reproduction package and re-evaluate its checkpoint on the recorded test seeds",
-        description="Exit status: 0 = every episode bit-identical (or within --tolerance); 3 = numerical "
+        description="Exit status: 0 = selected episode-summary fields match (or returns within --tolerance); 3 = numerical "
         "differences on a different platform with integrity intact and no aggregate differing significantly from "
         "the record in paired tests (reported, not failed); 1 = integrity failure, a difference on the recording "
         "platform, or a significant aggregate difference; 2 = invalid arguments (or no artifact.json in the folder).",
@@ -1657,7 +1657,7 @@ def build_parser() -> argparse.ArgumentParser:
         "--tolerance",
         type=float,
         default=0.0,
-        help="absolute tolerance on returns (default 0: bit-identical)",
+        help="absolute tolerance on returns (default 0: exact numeric equality of compared fields)",
     )
     ra.add_argument("--report", help="write the JSON report to this file")
     ra.set_defaults(fn=cmd_reproduce_artifact)

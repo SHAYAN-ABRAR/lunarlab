@@ -1,0 +1,269 @@
+{
+  "branches": [
+    {
+      "name": "main",
+      "commit": {
+        "sha": "67440c664f658ccd589f7198ee2182d5820ca7c1",
+        "url": "https://api.github.com/repos/SHAYAN-ABRAR/lunarlab/commits/67440c664f658ccd589f7198ee2182d5820ca7c1"
+      },
+      "protected": false
+    }
+  ],
+  "commits": [
+    {
+      "sha": "67440c664f658ccd589f7198ee2182d5820ca7c1",
+      "commit": {
+        "author": {
+          "name": "Shayan",
+          "email": "143760331+SHAYAN-ABRAR@users.noreply.github.com",
+          "date": "2026-10-18T16:58:55Z"
+        },
+        "committer": {
+          "name": "Shayan",
+          "email": "143760331+SHAYAN-ABRAR@users.noreply.github.com",
+          "date": "2026-10-18T16:58:55Z"
+        },
+        "message": "Record the green CI run and the author's approval\n\nREADME: the full CI run of 38c9703 (run 39145707181) passed all six jobs; what each job covered is stated.\n\nShayan Abrar is the sole author and approved the release candidate 0.1.0, the licensing as it stands and this\nwork (2026-10-18). The manuscript and the cover-letter template name the author and the version; the e-mail,\naffiliation and postal address, the acknowledgements with the funding declaration and the submission date remain\nfor the author to add. The cover-letter template's summary now states continuation and overhead with their\nscope, as everywhere else. The readiness documents record the green run and the approvals.",
+        "tree": {
+          "sha": "7fe01eac3f38f232157914b8050712e8181d9ef7",
+          "url": "https://api.github.com/repos/SHAYAN-ABRAR/lunarlab/git/trees/7fe01eac3f38f232157914b8050712e8181d9ef7"
+        },
+        "url": "https://api.github.com/repos/SHAYAN-ABRAR/lunarlab/git/commits/67440c664f658ccd589f7198ee2182d5820ca7c1",
+        "comment_count": 0,
+        "verification": {
+          "verified": false,
+          "reason": "unsigned",
+          "signature": null,
+          "payload": null,
+          "verified_at": null
+        }
+      },
+      "parents": [
+        {
+          "sha": "38c970384056b4a8e8e89b1e6c61e9c1b89bcfbf",
+          "url": "https://api.github.com/repos/SHAYAN-ABRAR/lunarlab/commits/38c970384056b4a8e8e89b1e6c61e9c1b89bcfbf",
+          "html_url": "https://github.com/SHAYAN-ABRAR/lunarlab/commit/38c970384056b4a8e8e89b1e6c61e9c1b89bcfbf"
+        }
+      ]
+    },
+    {
+      "sha": "38c970384056b4a8e8e89b1e6c61e9c1b89bcfbf",
+      "commit": {
+        "author": {
+          "name": "Shayan",
+          "email": "143760331+SHAYAN-ABRAR@users.noreply.github.com",
+          "date": "2026-10-18T16:35:33Z"
+        },
+        "committer": {
+          "name": "Shayan",
+          "email": "143760331+SHAYAN-ABRAR@users.noreply.github.com",
+          "date": "2026-10-18T16:35:33Z"
+        },
+        "message": "Fix a stale event log after short jobs; record the Linux trace results\n\nThe run page refreshed its event log every 20 s unless the run was running, so a job that started and finished\nbetween two status polls left the log stale for up to 20 s; the DQN-resume browser flow failed on it in CI run\n39144191758. The page now refreshes its records whenever the run's state or its latest job changes.\n\nThe same run located the Windows/Linux divergence: given identical actions, the Linux simulator departs after\n2-24 steps by about one float32 unit, and every traced trajectory parts at exactly that step. The network's\nlast-bit output differences, identical on the Windows and Linux CI machines (both AMD EPYC 7763), change no\naction, and the Windows CI machine reproduces all 300 episodes exactly. Full Linux statistics are recorded:\noutcomes agree in 100/100/99 % of episodes, paired tests of the mean returns p = 0.28/0.28/0.52.\n\nCorrection: the 126 reported as the hover bonus's largest return difference in the first run's reports was a\ntraining-return difference; the original return differs by at most 11.9.\n\nThe CI reproduction reports of both runs are stored unmodified in reports/jmlr/reproducibility/ci/ (GitHub keeps\nthe uploaded artifacts for 30 days).",
+        "tree": {
+          "sha": "b740b0716bf91236665a0304c7ab178e0852c7af",
+          "url": "https://api.github.com/repos/SHAYAN-ABRAR/lunarlab/git/trees/b740b0716bf91236665a0304c7ab178e0852c7af"
+        },
+        "url": "https://api.github.com/repos/SHAYAN-ABRAR/lunarlab/git/commits/38c970384056b4a8e8e89b1e6c61e9c1b89bcfbf",
+        "comment_count": 0,
+        "verification": {
+          "verified": false,
+          "reason": "unsigned",
+          "signature": null,
+          "payload": null,
+          "verified_at": null
+        }
+      },
+      "parents": [
+        {
+          "sha": "4fd30dbd8535b712d304fb4e9392037893223bb2",
+          "url": "https://api.github.com/repos/SHAYAN-ABRAR/lunarlab/commits/4fd30dbd8535b712d304fb4e9392037893223bb2",
+          "html_url": "https://github.com/SHAYAN-ABRAR/lunarlab/commit/4fd30dbd8535b712d304fb4e9392037893223bb2"
+        }
+      ]
+    },
+    {
+      "sha": "4fd30dbd8535b712d304fb4e9392037893223bb2",
+      "commit": {
+        "author": {
+          "name": "Shayan",
+          "email": "143760331+SHAYAN-ABRAR@users.noreply.github.com",
+          "date": "2026-10-18T16:15:35Z"
+        },
+        "committer": {
+          "name": "Shayan",
+          "email": "143760331+SHAYAN-ABRAR@users.noreply.github.com",
+          "date": "2026-10-18T16:15:35Z"
+        },
+        "message": "Correct the JMLR readiness work: reproducibility, claims, tests, manuscript\n\nCross-platform reproducibility: on Linux none of the 300 published final-test episodes was bit-identical\n(CI run 39069730331), and the CI step hid that with `|| true`. reproduce-artifact now reports artifact\nintegrity (new checks: test seeds, protocol and reward, recorded episodes, loaded weights), within-platform\nreproduction, cross-platform numerical agreement (every episode and a summary) and conclusion stability\n(paired permutation and McNemar tests, Holm-corrected) separately, with statuses and exit codes: 0 exact,\n3 numerical difference on another platform, 1 blocking. trace-artifact records per-step traces and separates\nsimulator from policy-inference differences; Windows reference traces are stored. CI records every exit code,\nwrites a summary and fails only on blocking statuses. Controlled experiments (correctly rounded trigonometry,\nother BLAS kernels, a one-ulp simulator perturbation) point to the simulator's compiled float code; the Linux\ntrace comparison in CI will confirm or refute it. The published conclusions hold on Linux.\n\nClaims: continuation is described as what the code restores (algorithm state, not bit-identical); overhead\nas 0-4 % of the training loop and 1.22-1.23x for a complete run including validation, from a benchmark rerun\non a clean checkout of 2c41b42; the adapter layer's scope stated.\n\nTests: 493 passed, coverage 85.8 % (from 82.9 %): the parallel runner, the served backend's lifecycle,\nsupervisor termination, crash recovery and shutdown, CLI and HTTP errors. Two bugs they found are fixed: a\ncrashed worker left its run marked running and blocked a resume for up to a minute; the CLI printed tracebacks\nfor invalid or unknown ids. Browser-test backends now shut down through /api/shutdown.\n\nManuscript compiled for the first time (Tectonic): four description pages, figures redrawn at print size with\nan automatic 9 pt check, evidence map and build notes updated. Readiness documents now describe the pushed\nrevision and its CI run; an independent-reproduction guide was added.\n\nThe published evidence is unchanged: 1,699 files byte-identical before and after this work.",
+        "tree": {
+          "sha": "8874b9603196e1ce971569365fbfe6c540907acc",
+          "url": "https://api.github.com/repos/SHAYAN-ABRAR/lunarlab/git/trees/8874b9603196e1ce971569365fbfe6c540907acc"
+        },
+        "url": "https://api.github.com/repos/SHAYAN-ABRAR/lunarlab/git/commits/4fd30dbd8535b712d304fb4e9392037893223bb2",
+        "comment_count": 0,
+        "verification": {
+          "verified": false,
+          "reason": "unsigned",
+          "signature": null,
+          "payload": null,
+          "verified_at": null
+        }
+      },
+      "parents": [
+        {
+          "sha": "2c41b422e6bab1feb702d4d1901b337f0fcd21a7",
+          "url": "https://api.github.com/repos/SHAYAN-ABRAR/lunarlab/commits/2c41b422e6bab1feb702d4d1901b337f0fcd21a7",
+          "html_url": "https://github.com/SHAYAN-ABRAR/lunarlab/commit/2c41b422e6bab1feb702d4d1901b337f0fcd21a7"
+        }
+      ]
+    },
+    {
+      "sha": "2c41b422e6bab1feb702d4d1901b337f0fcd21a7",
+      "commit": {
+        "author": {
+          "name": "Shayan",
+          "email": "143760331+SHAYAN-ABRAR@users.noreply.github.com",
+          "date": "2026-10-17T21:06:35Z"
+        },
+        "committer": {
+          "name": "Shayan",
+          "email": "143760331+SHAYAN-ABRAR@users.noreply.github.com",
+          "date": "2026-10-17T21:06:35Z"
+        },
+        "message": "Pack revision source archives identically on every platform\n\ngit archive converts line endings like a checkout, so with core.autocrlf=true (the Windows default) a\nrevision archive built on Windows held CRLF text and differed from one built on Linux. The builder now\nexports revisions without line-ending conversion, and a test checks that a revision packs the bytes git\nstores; it runs in the Windows CI job, where autocrlf is on.\n\nCounts updated after a full run: 449 tests passed with 82.9 % statement and branch coverage; the fast\nsuite passed on Python 3.13 (376 tests).",
+        "tree": {
+          "sha": "76b0cb6efda8f7e365b3d3994e3b0612d298ebec",
+          "url": "https://api.github.com/repos/SHAYAN-ABRAR/lunarlab/git/trees/76b0cb6efda8f7e365b3d3994e3b0612d298ebec"
+        },
+        "url": "https://api.github.com/repos/SHAYAN-ABRAR/lunarlab/git/commits/2c41b422e6bab1feb702d4d1901b337f0fcd21a7",
+        "comment_count": 0,
+        "verification": {
+          "verified": false,
+          "reason": "unsigned",
+          "signature": null,
+          "payload": null,
+          "verified_at": null
+        }
+      },
+      "parents": [
+        {
+          "sha": "be75c0bb25c0ab9cd030c4ac41556c1b2248c0bc",
+          "url": "https://api.github.com/repos/SHAYAN-ABRAR/lunarlab/commits/be75c0bb25c0ab9cd030c4ac41556c1b2248c0bc",
+          "html_url": "https://github.com/SHAYAN-ABRAR/lunarlab/commit/be75c0bb25c0ab9cd030c4ac41556c1b2248c0bc"
+        }
+      ]
+    },
+    {
+      "sha": "be75c0bb25c0ab9cd030c4ac41556c1b2248c0bc",
+      "commit": {
+        "author": {
+          "name": "Shayan",
+          "email": "143760331+SHAYAN-ABRAR@users.noreply.github.com",
+          "date": "2026-10-17T20:57:20Z"
+        },
+        "committer": {
+          "name": "Shayan",
+          "email": "143760331+SHAYAN-ABRAR@users.noreply.github.com",
+          "date": "2026-10-17T20:57:20Z"
+        },
+        "message": "Prepare LunarLab for a JMLR-MLOSS submission\n\nLicensing and release metadata: an MIT LICENSE, SPDX notices in every source file, THIRD_PARTY_NOTICES.md,\nCITATION.cff, PEP 639 license metadata, and one authoritative version reported by `--version` and\n`version --json` (source revision and key dependencies included).\n\nReproducibility: `reproduce-smoke` runs the whole pipeline in a temporary home and verifies 14 provenance\nchecks (optionally that training twice gives identical weights). `export-artifact` packages a tested\ncheckpoint with its configuration and recorded test, and `reproduce-artifact` re-evaluates it episode by\nepisode; three published final tests ship in examples/artifacts and re-evaluate bit-identically (300 of 300\nepisodes) on the machine that produced them. tools/build_source_archive.py builds a deterministic source\narchive, which CI builds twice, compares byte for byte and installs into a fresh environment.\n\nMeasurement: `overhead-benchmark` compares plain Stable-Baselines3, the reward accounting and the full\npipeline on identical workloads in fresh processes (training loops about 4 % slower at 102,400 transitions);\nthe recorded runs are in reports/jmlr/benchmarks.\n\nExtension: lunarlab.audit, a task-adapter layer that applies the same reward accounting, potential-based\nshaping and audits to other Gymnasium environments, with LunarLander and CartPole adapters and\nexamples/cartpole_audit.py.\n\nTesting: 448 tests (from 270), statement and branch coverage measured with worker subprocesses included\n(82.9 %, from 75.2 %), property-based tests of the reward and statistics code, an executable tutorial,\nevery documented command parsed by the real CLI parser, and a CI that now measures coverage, runs the smoke\nreproduction on Linux and on Windows with Python 3.12 and 3.13, and verifies the source archive.\n\nDocumentation: a tutorial, a developer guide, a generated API reference (Python, CLI, HTTP with its OpenAPI\nschema), a contributing guide with issue and pull-request templates, the docs/jmlr readiness package, and\nthe draft manuscript in paper/jmlr-mloss (not submitted). .gitattributes keeps files whose digests are\nrecorded byte-exact on every platform.\n\nThe published evidence (runs/, data/, reports/, docs/results, docs/media, demo/api) is unchanged: 1,667\nfiles compared by SHA-256 before and after this work, none added, removed or changed.",
+        "tree": {
+          "sha": "6ef804e46d312b161c5efbdf4114f83325e5ca83",
+          "url": "https://api.github.com/repos/SHAYAN-ABRAR/lunarlab/git/trees/6ef804e46d312b161c5efbdf4114f83325e5ca83"
+        },
+        "url": "https://api.github.com/repos/SHAYAN-ABRAR/lunarlab/git/commits/be75c0bb25c0ab9cd030c4ac41556c1b2248c0bc",
+        "comment_count": 0,
+        "verification": {
+          "verified": false,
+          "reason": "unsigned",
+          "signature": null,
+          "payload": null,
+          "verified_at": null
+        }
+      },
+      "parents": [
+        {
+          "sha": "28dd935c92532a046b902bfe4a5457b632a1b9f1",
+          "url": "https://api.github.com/repos/SHAYAN-ABRAR/lunarlab/commits/28dd935c92532a046b902bfe4a5457b632a1b9f1",
+          "html_url": "https://github.com/SHAYAN-ABRAR/lunarlab/commit/28dd935c92532a046b902bfe4a5457b632a1b9f1"
+        }
+      ]
+    }
+  ],
+  "runs": [
+    {
+      "id": 39147464434,
+      "name": "CI",
+      "head_sha": "67440c664f658ccd589f7198ee2182d5820ca7c1",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/SHAYAN-ABRAR/lunarlab/actions/runs/39147464434",
+      "updated_at": "2026-10-18T17:06:41Z"
+    },
+    {
+      "id": 39147464344,
+      "name": "Demo site",
+      "head_sha": "67440c664f658ccd589f7198ee2182d5820ca7c1",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/SHAYAN-ABRAR/lunarlab/actions/runs/39147464344",
+      "updated_at": "2026-10-18T16:59:39Z"
+    },
+    {
+      "id": 39145707181,
+      "name": "CI",
+      "head_sha": "38c970384056b4a8e8e89b1e6c61e9c1b89bcfbf",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/SHAYAN-ABRAR/lunarlab/actions/runs/39145707181",
+      "updated_at": "2026-10-18T16:46:10Z"
+    },
+    {
+      "id": 39145707046,
+      "name": "Demo site",
+      "head_sha": "38c970384056b4a8e8e89b1e6c61e9c1b89bcfbf",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/SHAYAN-ABRAR/lunarlab/actions/runs/39145707046",
+      "updated_at": "2026-10-18T16:36:13Z"
+    },
+    {
+      "id": 39144191758,
+      "name": "CI",
+      "head_sha": "4fd30dbd8535b712d304fb4e9392037893223bb2",
+      "status": "completed",
+      "conclusion": "failure",
+      "html_url": "https://github.com/SHAYAN-ABRAR/lunarlab/actions/runs/39144191758",
+      "updated_at": "2026-10-18T16:27:19Z"
+    },
+    {
+      "id": 39144191747,
+      "name": "Demo site",
+      "head_sha": "4fd30dbd8535b712d304fb4e9392037893223bb2",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/SHAYAN-ABRAR/lunarlab/actions/runs/39144191747",
+      "updated_at": "2026-10-18T16:16:27Z"
+    },
+    {
+      "id": 39069730339,
+      "name": "Demo site",
+      "head_sha": "2c41b422e6bab1feb702d4d1901b337f0fcd21a7",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/SHAYAN-ABRAR/lunarlab/actions/runs/39069730339",
+      "updated_at": "2026-10-17T21:09:57Z"
+    },
+    {
+      "id": 39069730331,
+      "name": "CI",
+      "head_sha": "2c41b422e6bab1feb702d4d1901b337f0fcd21a7",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/SHAYAN-ABRAR/lunarlab/actions/runs/39069730331",
+      "updated_at": "2026-10-17T21:20:30Z"
+    }
+  ],
+  "releases": []
+}

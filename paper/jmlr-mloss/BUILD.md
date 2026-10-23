@@ -1,82 +1,71 @@
-# Building the JMLR-MLOSS manuscript
+# Building the revised JMLR-MLOSS manuscript
 
-## Requirements
+## Requirements and commands
 
-Either a LaTeX distribution with `pdflatex` and `bibtex` (TeX Live or MiKTeX), or the single-binary
-[Tectonic](https://tectonic-typesetting.github.io/) engine (XeTeX; downloads the packages it needs on first use,
-no installation). Packages: the official JMLR style `jmlr2e.sty` (which loads `natbib`, `graphicx`, `amssymb`,
-`epsfig` and `hyperref`), `lastpage` and `booktabs`.
+Use a LaTeX distribution with pdflatex, BibTeX and latexmk, plus Python with NumPy and Matplotlib to regenerate the figure. The reviewed build used these tools and the unmodified official `jmlr2e.sty`, `lastpage` and `booktabs`. Tectonic was used for an earlier draft; the revised manuscript has not been tested with that engine.
 
-The style file is **not** stored here: its repository (<https://github.com/JmlrOrg/jmlr-style-file>) declares no
-license. Fetch the exact revision this manuscript was prepared with; the script refuses a file whose SHA-256
-differs, and the style must not be modified (JMLR: "Papers not in the JMLR style file will be rejected without
-review").
+The JMLR style is fetched separately because its upstream repository does not declare a license. `fetch_style.py` pins revision `f413f638b407af76074813f8f88a82a7a5a81e9d` and verifies SHA-256 `a430a875d561235951800e4e21d2631e18ddf0b369646ec276f43ea5080f27c3`. Do not modify the style to make the paper fit.
 
-```powershell
-.venv\Scripts\python.exe paper\jmlr-mloss\fetch_style.py      # jmlr2e.sty @ f413f638…, SHA-256 a430a875…
-.venv\Scripts\python.exe tools\paper_figures.py                # figures from the stored data (checks print size)
-.venv\Scripts\python.exe paper\jmlr-mloss\check_manuscript.py # title-page limits, citations, figures, TODOs
-cd paper\jmlr-mloss
-pdflatex main ; bibtex main ; pdflatex main ; pdflatex main  # or: latexmk -pdf main
-tectonic -X compile main.tex                                  # alternative: one command, same style file
+From the repository root:
+
+```bash
+python paper/jmlr-mloss/fetch_style.py
+python paper/jmlr-mloss/build_audit_figure.py
+python paper/jmlr-mloss/check_manuscript.py
+cd paper/jmlr-mloss
+latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
 ```
 
-## Status (2026-10-18)
+The delivered source contains the generated figure, so the second command is only needed to regenerate it. For a standalone manuscript directory, run `python fetch_style.py`, `python check_manuscript.py`, then the latexmk command from that directory. Figure regeneration requires the unchanged repository input `docs/results/results.json`.
 
-- **Built** with Tectonic 0.17.0 (official Windows release, SHA-256 verified, run from a temporary folder with its
-  package cache there; nothing installed system-wide). XeTeX uses Latin Modern, whose metrics equal pdflatex's
-  Computer Modern, so the line and page breaks should match a pdflatex build; that has not been checked with
-  pdflatex itself.
-- **Pages:** the description (abstract to acknowledgements) fills pages 1–4; the references are on pages 5–6. A
-  test with filler text showed room for about **three lines** beyond the current two-line acknowledgements
-  placeholder; longer acknowledgements need cuts elsewhere.
-- **Build log:** no overfull or underfull lines in the text (the only remaining warnings are vertical-spacing
-  notes on float and reference pages), no undefined citations or references; PDF about 120 KB.
-- **Figures:** drawn at the 6.0 in text width and included at natural size, so the printed text is the drawn
-  text: at least 9 pt everywhere (`tools/paper_figures.py` refuses a figure wider than the text block, with text
-  under 9 pt, or with text or boxes outside the canvas). Earlier versions were drawn 7 in wide with 6.5–9 pt text
-  and scaled down, about 5.6–7.7 pt printed; that was corrected.
-- `check_manuscript.py` passes: abstract within 200 words, running title 38 characters, five keywords, 16
-  citations all present in `references.bib`, all figures present, all cross-references defined.
-- Author: Shayan Abrar, sole author; version 0.1.0 (approved 2026-10-18). `\TODO{…}` markers remain for what
-  only the author can provide (e-mail, affiliation and postal address, acknowledgements and the funding and
-  competing-interests declaration, submission date); the editor and paper ID are JMLR's.
+## Verified build, 19 October 2026
 
-## Figures
+This is an uncommitted manuscript revision based on public source `67440c664f658ccd589f7198ee2182d5820ca7c1`. It is a reviewed draft, not a submitted or accepted paper.
 
-`figures/` holds PDF (vector), SVG and PNG versions made by `python tools/paper_figures.py` from committed data:
-
-| Figure | Kind | Source |
-|---|---|---|
-| `workflow` | conceptual diagram (no data) | drawn by the script |
-| `reward_accounting` | measured: training episodes of the published study (15 PPO runs) | `reports/jmlr/figures/reward_accounting.csv` (derived with `--derive` from the runs' `episodes.csv`, whose SHA-256 digests are in `reward_accounting.sources.json`) |
-
-`reports/jmlr/figures/manifest.json` records how each figure was made. Fonts are embedded as Type 42 (PDF) and
-text stays text (SVG); figure text is at least 9 pt at the printed size (checked when the figures are made). The
-manuscript reports the overhead benchmark as a table; its figure stays with the benchmark data.
-
-## Bibliography verification
-
-Each entry of `references.bib` was checked on 2026-10-17 against:
-
-| Key | Verified against |
+| Check | Observed result |
 |---|---|
-| `raffin2021sb3` | citation metadata of https://jmlr.org/papers/v22/20-1364.html |
-| `huang2022cleanrl` | citation metadata of https://jmlr.org/papers/v23/21-1342.html |
-| `raffin2020zoo` | the citation requested in the RL Baselines3 Zoo README (github.com/DLR-RM/rl-baselines3-zoo) |
-| `towers2024gymnasium`, `schulman2017ppo`, `amodei2016concrete`, `leike2017gridworlds`, `gleave2022imitation` | arXiv API (export.arxiv.org) records 2407.17032, 1707.06347, 1606.06565, 1711.09883, 2211.11972 |
-| `mnih2015dqn`, `akiba2019optuna`, `henderson2018matters`, `bradley1952paired` | Crossref records of their DOIs (10.1038/nature14236, 10.1145/3292500.3330701, 10.1609/aaai.v32i1.11694, 10.2307/2334029) |
-| `agarwal2021precipice`, `christiano2017preferences`, `skalse2022gaming` | citation metadata of their NeurIPS proceedings pages (proceedings.neurips.cc) |
-| `ng1999shaping` | the ML Anthology record (mlanthology.org/icml/1999/ng1999icml-policy) |
+| Description length | Four pages, including acknowledgements |
+| References | One additional page; five pages total |
+| Abstract | 149 words under the source checker |
+| Running title | 45 characters |
+| Keywords | Five |
+| Cited references | 11; all resolve |
+| Build log | No overfull boxes or unresolved citations/references |
+| Figure text | At least 9 pt, included at its natural 6-inch width |
+| PDF size | 213,642 bytes |
+| Delivered manuscript PDF SHA-256 | `b7198ca9b3065cb27b8a67fe17b3483a7d4fb1a2c71bebe34e90f84b4d2291fe` |
+| Visual inspection | All five pages rendered and inspected; changed pages re-rendered after the last layout correction |
 
-Two deliberate details: Skalse et al. appear under their proceedings title ("Reward *Gaming*"; the preprint says
-"Hacking"), and fields missing from the authoritative record (AAAI page numbers, Biometrika's last page) are
-omitted rather than filled in from memory.
+PDF creation metadata may change its byte hash on a fresh build. The recorded hash identifies the delivered PDF; it is not a promise of byte-identical output across TeX installations.
 
-## What is submitted, and when
+Three explicit author-input markers remain: email, affiliation/full postal address, and funding/competing-interest declarations. Submission dates and editorial metadata are provisional. Complete these truthfully, rebuild, and check the four-page description again. Adding disclosures can change pagination.
 
-- **Submission:** the PDF (at most 5 MB) through https://jmlr.csail.mit.edu/manudb/, with the cover letter
-  ([COVER_LETTER_TEMPLATE.md](COVER_LETTER_TEMPLATE.md)) and the link to the public repository.
-- **After acceptance:** the LaTeX source and one archive of the source code, named by JMLR's convention (for
-  example `jones03a-code.tar.gz`): build it from the release tag with
-  `python tools/build_source_archive.py --rev <tag> --verify` and rename it.
+## Follow-up build, 20 October 2026
+
+After the follow-up on the original machine, the test-count paragraph, Table 1 (the new benchmark run), the study-artifact sentence, the recording-machine re-evaluation and the availability sentence were updated from `reports/jmlr/original-machine-2026-10-19/` (claims mapped in `EVIDENCE.md`). A fourth author-input marker, "[final source revision and public archive of the 38-policy bundle]", replaces the base-revision statement because neither exists yet.
+
+The panel (b) title of `figures/final_test_audit.pdf` ran 0.06 inch past the figure's right edge and was visibly cut off ("…rate and mean" printed as "…rate and mear"), also in the delivered review PDF. `build_audit_figure.py` now uses "(b) Per-policy rate, mean"; data, geometry and fonts are unchanged and the output is deterministic.
+
+No pdflatex installation was available, so this build used Tectonic 0.17.0 (XeTeX engine, Latin Modern fonts) with the unmodified pinned `jmlr2e.sty` (SHA-256 verified). To check that engine first, the unchanged reviewed source was built with it and compared with the delivered pdflatex PDF. Both have five pages with the same page breaks. The text differs only in ligature and accent encoding and one intra-paragraph line break. Page 4's text ends 13 pt lower under Tectonic, so Tectonic is the stricter test of the length limit. The revised source fills page 4 exactly as far as the unchanged source does under Tectonic, so the edits are length-neutral.
+
+| Check | Observed result |
+|---|---|
+| Description length | Four pages, including acknowledgements; references on page five |
+| Build log | No overfull boxes; no undefined citations or references. Bold small caps for the title fall back to bold, as under pdflatex with Computer Modern |
+| Source checker | Abstract 149 words, running title 45 characters, five keywords, 11 citations resolve, four author-input markers |
+| Visual inspection | All five pages rendered at 110 dpi and inspected; page 4 re-inspected after the figure correction, and all five pages again after the final counts were filled in |
+| Follow-up PDF (Tectonic) | 91,373 bytes, SHA-256 `25668e183c368cece377589e604e1e80ef36e89f169c2ee37e3539c1eb289eab`; supplied in the review-return package. Creation metadata makes the hash build-specific |
+
+Before submission, rebuild with latexmk/pdflatex as above, after filling in the author fields, and check the four-page limit again.
+
+## Figure and bibliography provenance
+
+`figures/final_test_audit.pdf` and `.png` are generated by `build_audit_figure.py` directly from the 20 primary PPO per-policy summaries in `docs/results/results.json`. The adjacent `.source.json` records input identity and calculation details. The plot shows five training runs per reward design, with 100 final-test episodes per run, and training-run bootstrap intervals. It does not reconstruct absent episode-level records or rerun training.
+
+The legacy `workflow` and `reward_accounting` figures remain in the repository, unused by this revised manuscript. Their historical inputs and figures were not changed. The current figure avoids depending on unavailable original learning-curve CSVs.
+
+The 11 cited entries were checked against primary sources: JMLR records for Stable-Baselines3 and CleanRL; the RL Baselines3 Zoo repository's requested citation; the Gymnasium, PPO, imitation and AI Safety Gridworlds arXiv records; NeurIPS proceedings for statistical evaluation and reward gaming; the original potential-based shaping paper; and the AAAI record for reproducibility. `EVIDENCE.md` and `docs/jmlr/RELATED_SOFTWARE.md` identify sources and comparison scope. Unused historical bibliography entries are retained and do not print.
+
+## Submission preparation
+
+The official description limit is four pages excluding references. The current PDF is below the author-guidance file-size limit. Follow `COVER_LETTER_TEMPLATE.md` and `docs/jmlr/SUBMISSION_CHECKLIST.md`; author declarations, source identity and community evidence still require attention. Build any final source archive from the actual reviewed revision using the existing archive builder. No submission, release, tag, commit or push is authorized by these instructions.

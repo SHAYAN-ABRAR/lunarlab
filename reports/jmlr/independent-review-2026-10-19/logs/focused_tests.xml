@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="16" time="9.002" timestamp="2026-10-19T09:35:19.288154+04:00" hostname="db48199b8cdc"><testcase classname="tests.test_reproduction_report" name="test_episode_rows_and_summary_describe_every_difference" time="0.018" /><testcase classname="tests.test_reproduction_report" name="test_relative_differences_skip_returns_near_zero_and_missing_seeds_are_listed" time="0.009" /><testcase classname="tests.test_reproduction_report" name="test_return_scales_and_exactness_scope_are_explicit" time="0.007" /><testcase classname="tests.test_reproduction_report" name="test_paired_test_building_blocks" time="0.033" /><testcase classname="tests.test_reproduction_report" name="test_aggregates_flag_systematic_shifts_but_not_symmetric_noise" time="0.088" /><testcase classname="tests.test_reproduction_report" name="test_platform_identity_is_the_operating_system_and_numerical_libraries" time="0.001" /><testcase classname="tests.test_reproduction_report" name="test_status_rules_and_exit_codes" time="0.001" /><testcase classname="tests.test_reproduction_report" name="test_ci_summary_tolerates_only_cross_platform_differences_and_catches_hidden_failures" time="0.002" /><testcase classname="tests.test_reproduction_report" name="test_ci_never_discards_a_reproduction_exit_code" time="0.001" /><testcase classname="tests.test_reproduction_report" name="test_reproduce_artifact_report_separates_integrity_reproduction_and_conclusions" time="2.943" /><testcase classname="tests.test_reproduction_report" name="test_wrong_seeds_or_weights_are_integrity_failures" time="0.406" /><testcase classname="tests.test_reproduction_report" name="test_traces_round_trip_and_locate_the_source_of_a_difference" time="1.412" /><testcase classname="tests.test_reproduction_report" name="test_first_difference_handles_equal_different_and_shorter_arrays" time="0.001" /><testcase classname="tests.test_overhead" name="test_summary_excludes_validation_and_checkpoints_from_the_training_loop" time="0.002" /><testcase classname="tests.test_overhead" name="test_benchmark_runs_every_configuration_on_an_equivalent_workload" time="1.685"><failure message="RuntimeError: benchmark worker sb3 failed:&#10;Traceback (most recent call last):&#10;  File &quot;&lt;frozen runpy&gt;&quot;, line 198, in _run_module_as_main&#10;  File &quot;&lt;frozen runpy&gt;&quot;, line 88, in _run_code&#10;  File &quot;/workspace/scratch/1c599345f09c/audit/work/lunarlab/lunarlab/overhead.py&quot;, line 511, in &lt;module&gt;&#10;    raise SystemExit(main())&#10;                     ^^^^^^&#10;  File &quot;/workspace/scratch/1c599345f09c/audit/work/lunarlab/lunarlab/overhead.py&quot;, line 505, in main&#10;    res = _run_config(args.worker, args.transitions, args.seed, args.threads)&#10;          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^&#10;  File &quot;/workspace/scratch/1c599345f09c/audit/work/lunarlab/lunarlab/overhead.py&quot;, line 90, in _run_config&#10;    proc = psutil.Process()&#10;           ^^^^^^^^^^^^^^^^&#10;  File &quot;/workspace/scratch/1c599345f09c/audit/venv/lib/python3.12/site-packages/psutil/__init__.py&quot;, line 314, in __init__&#10;    self._init(pid)&#10;  File &quot;/workspace/scratch/1c599345f09c/audit/venv/lib/python3.12/site-packages/psutil/__init__.py&quot;, line 360, in _init&#10;    raise NoSuchProcess(pid, msg=msg) from None&#10;psutil.NoSuchProcess: process PID not found (pid=23)">tmp_path = PosixPath('/tmp/pytest-of-root/pytest-1/test_benchmark_runs_every_conf0')
+
+    @pytest.mark.slow
+    def test_benchmark_runs_every_configuration_on_an_equivalent_workload(tmp_path):
+&gt;       res = run_benchmark("smoke", transitions=1024, repeats=1, out=tmp_path / "bench", echo=lambda _m: None)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_overhead.py:74: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+profile = 'smoke', transitions = 1024, repeats = 1
+out = PosixPath('/tmp/pytest-of-root/pytest-1/test_benchmark_runs_every_conf0/bench')
+torch_threads = 1, seed = 0
+echo = &lt;function test_benchmark_runs_every_configuration_on_an_equivalent_workload.&lt;locals&gt;.&lt;lambda&gt; at 0x7fe4f0693e20&gt;
+
+    def run_benchmark(
+        profile: str = "smoke",
+        *,
+        transitions: int | None = None,
+        repeats: int | None = None,
+        out: Path | None = None,
+        torch_threads: int = 1,
+        seed: int = 0,
+        echo=print,
+    ) -&gt; dict[str, Any]:
+        """Run every configuration ``repeats`` times in fresh processes; write raw rows, summary, table and figure."""
+        from lunarlab.storage import project_root, utc_now
+    
+        p = PROFILES[profile]
+        transitions = transitions or p["transitions"]
+        repeats = repeats or p["repeats"]
+        created = utc_now()
+        out = out or project_root() / "reports" / "jmlr" / "benchmarks" / f"{profile}-{created.replace(':', '')}"
+        out.mkdir(parents=True, exist_ok=False)
+        meta = {
+            "kind": "lunarlab.overhead-benchmark",
+            "schema": 1,
+            "created_at": created,
+            "profile": profile,
+            "transitions": transitions,
+            "repeats": repeats,
+            "torch_threads": torch_threads,
+            "seed": seed,
+            "configurations": LABELS,
+            "system": _system(),
+            "command": f"python -m lunarlab overhead-benchmark --profile {profile} --transitions {transitions} --repeats {repeats}",
+        }
+        rows: list[dict] = []
+        raw = out / "raw.jsonl"
+        for rep in range(repeats):
+            order = CONFIGS[rep % 3 :] + CONFIGS[: rep % 3]  # rotate so no configuration always runs first
+            for c in order:
+                with tempfile.TemporaryDirectory(prefix="lunarlab-overhead-") as home:
+                    env = {
+                        **os.environ,
+                        "LUNARLAB_HOME": home,
+                        "SDL_VIDEODRIVER": "dummy",
+                        "SDL_AUDIODRIVER": "dummy",
+                    }
+                    res_file = Path(home) / "result.json"
+                    cmd = [
+                        sys.executable, "-m", "lunarlab.overhead", "--worker", c,
+                        "--transitions", str(transitions), "--seed", str(seed), "--threads", str(torch_threads),
+                        "--result", str(res_file),
+                    ]  # fmt: skip
+                    t0 = time.perf_counter()
+                    proc = subprocess.run(cmd, env=env, capture_output=True, text=True)
+                    if proc.returncode != 0:
+&gt;                       raise RuntimeError(f"benchmark worker {c} failed:\n{proc.stderr[-3000:]}")
+E                       RuntimeError: benchmark worker sb3 failed:
+E                       Traceback (most recent call last):
+E                         File "&lt;frozen runpy&gt;", line 198, in _run_module_as_main
+E                         File "&lt;frozen runpy&gt;", line 88, in _run_code
+E                         File "/workspace/scratch/1c599345f09c/audit/work/lunarlab/lunarlab/overhead.py", line 511, in &lt;module&gt;
+E                           raise SystemExit(main())
+E                                            ^^^^^^
+E                         File "/workspace/scratch/1c599345f09c/audit/work/lunarlab/lunarlab/overhead.py", line 505, in main
+E                           res = _run_config(args.worker, args.transitions, args.seed, args.threads)
+E                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E                         File "/workspace/scratch/1c599345f09c/audit/work/lunarlab/lunarlab/overhead.py", line 90, in _run_config
+E                           proc = psutil.Process()
+E                                  ^^^^^^^^^^^^^^^^
+E                         File "/workspace/scratch/1c599345f09c/audit/venv/lib/python3.12/site-packages/psutil/__init__.py", line 314, in __init__
+E                           self._init(pid)
+E                         File "/workspace/scratch/1c599345f09c/audit/venv/lib/python3.12/site-packages/psutil/__init__.py", line 360, in _init
+E                           raise NoSuchProcess(pid, msg=msg) from None
+E                       psutil.NoSuchProcess: process PID not found (pid=23)
+
+lunarlab/overhead.py:437: RuntimeError</failure></testcase><testcase classname="tests.test_overhead" name="test_training_memory_is_sampled_before_optional_recording" time="2.212" /></testsuite></testsuites>

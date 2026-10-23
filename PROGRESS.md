@@ -46,7 +46,7 @@ problems that are now corrected on the branch `research/jmlr-mloss-corrections` 
 | Frontend typecheck / lint / build | `tsc`, `oxlint` and the production build clean |
 | Source archive | working-tree archive (318 files, 8.2 MB) installed into a fresh environment: `--version`, `doctor` 10/10, `reproduce-smoke` 14/14, 199 release tests passed |
 | Manuscript PDF | 4 description pages + 2 reference pages, 118 KB |
-| Evidence integrity | 1,699 files byte-identical to the baseline (runs, data, published results and media, demo snapshot, supplied artifacts, earlier reports and benchmark runs); 0 removed; 21 added (the clean benchmark run and the reproducibility evidence); the coverage report and the figures regenerated |
+| Evidence integrity | 1,708 files byte-identical to the baseline of 1,782 (runs, data, published results and media, demo snapshot, supplied artifacts, earlier reports and benchmark runs); 0 removed; 21 added (the clean benchmark run and the reproducibility evidence); 74 regenerated (64 coverage-report files, 10 figure files). *Correction, 2026-10-20: this row first said 1,699, a miscount; the scan records give 1,708, and all 1,708 were still byte-identical on 2026-10-19 (`reports/jmlr/original-machine-2026-10-19/integrity_claims_check.json`).* |
 | CI of the follow-up (`38c9703`, run 39145707181) | **all six jobs passed** |
 | CI of the corrections (`4fd30db`, run 39144191758) | Linux 489 passed / 4 skipped (85.7 %), Windows 3.12 and 3.13 passed, source archive byte-identical to the Windows build, reproduction gates passed; browser job failed on a run-page refresh race, fixed in the next commit |
 

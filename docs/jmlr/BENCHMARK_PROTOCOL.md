@@ -1,101 +1,52 @@
-# Benchmark protocol: LunarLab's instrumentation overhead
+# Benchmark audit and repeat protocol
 
-**Question.** How much time and memory does LunarLab's research instrumentation cost compared with training the
-same model with plain Stable-Baselines3? (MLOSS reviewers weigh "comparison to previous … related
-implementations, w.r.t. run-time, memory requirements, features".)
+The manuscript now uses **only** `reports/jmlr/benchmarks/standard-2026-10-19T180346+0000/`, the repeat with corrected memory sampling described at the end of this document. The earlier `standard-2026-10-18T132206+0000/` run (clean revision `2c41b422e6bab1feb702d4d1901b337f0fcd21a7`), audited below, and the October 17 benchmark are separate measurements and remain unchanged.
 
-**Command.** `python -m lunarlab overhead-benchmark --profile smoke|standard|comprehensive` (implementation:
-`lunarlab/overhead.py`; tests: `tests/test_overhead.py`). The comprehensive profile asks for confirmation and is
-never started automatically. `python -m lunarlab.overhead --render <folder>` re-creates a folder's table and
-figures from its saved raw measurements.
+## Recomputed historical measurements
 
-## Configurations
+Windows 11; Intel i7-13620H; one PyTorch thread; PPO; 102,400 transitions/run; three repetitions/configuration. Shared settings include four environments, 1,024 steps, batch size 64, four epochs, discount 0.999 and 64×64 actor/critic networks. Raw JSONL and metadata identify the actual dependencies.
 
-| | Environment stack | Training call |
-|---|---|---|
-| **A · plain SB3** | `DummyVecEnv([Monitor(gym.make("LunarLander-v3", continuous=False))] × 4)` | `PPO(...).learn(N)` |
-| **B · + reward accounting** | `DummyVecEnv([Monitor(LunarLabRewardWrapper(gym.make(...)))] × 4)` (baseline preset: training reward = original reward; per-transition accounting, episode accumulator, outcome classification) | `PPO(...).learn(N)` |
-| **C · full LunarLab pipeline** | as B | `lunarlab.training.train(run_id)`: run directory, configuration and metadata records, episode CSV, metrics, status file, stop polling, periodic checkpoints and validation episodes |
+| Configuration | Transitions/s, mean ± sample SD | Mean loop ratio | Mean wall ratio | Recorded mean process peak |
+|---|---:|---:|---:|---:|
+| SB3 + Monitor | 2097.75 ± 57.17 | 1.00000 | 1.00000 | 310.52 MB |
+| Reward accounting | 2100.76 ± 166.53 | 1.00209 | 1.00209 | 311.45 MB |
+| Full LunarLab training workflow | 1985.49 ± 42.34 | 1.05633 | 1.22821 | 323.38 MB |
 
-**Held equal across A, B and C:** algorithm and hyperparameters (LunarLab's PPO defaults: 4 environments × 1,024
-steps per rollout, minibatch 64, 4 epochs, γ = 0.999, GAE λ = 0.98, 64×64 tanh actor and critic, 9,797
-parameters) — all three construct SB3's own `PPO` through the same call, and the harness records each run's
-hyperparameters and refuses to report if they differ; environment and physics; transition budget (PPO completes
-whole rollouts, so budgets are multiples of 4,096 and every run trains exactly the same number of transitions);
-`DummyVecEnv`; CPU; one torch thread; seed 0 and the same worker seeds; no rendering.
+Ratios compare means of durations, not inverses of mean throughput. The loop interval includes model/environment setup and subtracts timed validation/checkpoint operations for the full workflow. It is not a pure optimizer-only interval. The complete training workflow adds about 22.8% elapsed time in this measurement, including a mean 18,780 validation transitions and 8.29 seconds of evaluation. The approximate 5.6% loop increase and 22.8% workflow increase are different quantities. Three repetitions do not establish a universal upper bound or that accounting is faster than SB3.
 
-**What differs, and how it is handled.** C also evaluates the policy on 10 validation episodes at the start,
-every N/4 transitions and at the end, and writes a checkpoint every N/4 transitions and at the end (the same
-cadence as a real run, scaled to the budget). Validation episodes are *additional environment steps*, not
-instrumentation overhead, so their wall time and environment steps are measured separately (by timing
-`evaluate_policy` and `save_model_atomic` inside the benchmark process) and excluded from C's training-loop time.
-They are reported in their own columns.
+## Memory defect and local fix
 
-**Measurement.** Each repetition runs in a fresh Python process (peak memory is per process and configuration);
-the order of A, B and C rotates between repetitions; every repetition is kept. Training-loop time is measured
-from environment construction to the end of `learn()`/`train()` (minus C's validation and checkpoint time). CPU
-utilisation is process CPU time divided by wall time. Peak memory is the peak working set (Windows) or
-`ru_maxrss` (Linux). Artifact size: A and B save one SB3 model file; C's whole run directory. The cost of
-recording one episode (video and per-step telemetry) is measured separately after C's training.
+At the historical revision, configuration C calls `_measure_recording` before reading the process peak. A/B do not generate that replay. Thus the listed memory values cover different process workloads, even though the wall-time interval excludes recording. The manuscript explicitly discloses this; it makes no training-only memory-overhead claim from them.
 
-## Results (measured)
+The local patch samples peak memory before optional recording, and labels its scope in output. The regression test verifies ordering. The process peak still includes imports, setup, training and checkpointing; it is not allocator-specific model memory. Existing values were not rewritten or estimated. Repeat the benchmark on the eventual reviewed source to produce a comparable new measurement.
 
-Machine: Intel Core i7-13620H (10 cores, 16 logical), Windows 11, 16 GB RAM, Python 3.12.13, torch 2.14.1
-(CPU), stable-baselines3 2.9.0, gymnasium 1.4.0, Box2D 2.3.10. Two runs of the standard profile (102,400
-transitions per run, 3 repetitions per configuration, mean ± SD):
+## Repetition plan
 
-1. **2026-10-18, revision `2c41b42`, clean checkout** (`git status` empty; the benchmark records
-   `"dirty": false`): `reports/jmlr/benchmarks/standard-2026-10-18T132206+0000/`. This is the run the manuscript
-   reports.
-2. **2026-10-17, revision `28dd935` with the then-uncommitted changes of the readiness branch** (recorded as
-   `"dirty": true`): `reports/jmlr/benchmarks/standard-2026-10-17T154705+0000/`. Kept unchanged as the first
-   measurement.
+1. Use the intended source revision in an isolated environment with recorded locked dependencies and idle hardware. Record OS/build, CPU, thread count, source cleanliness and actual transition count.
+2. Run the existing standard benchmark; keep all nine raw rows, metadata and command output. This is a modest engineering benchmark, not a new scientific comparison between PPO and DQN.
+3. Verify identical hyperparameters/budgets; inspect errors and recording scope. Report both means and variability. Do not select only favorable repetitions.
+4. Generate the table from the new raw output, preserving the old measurement in its original path. Update manuscript/evidence links to the actual new directory and revision.
 
-| Configuration | Run | Training-loop time (s) | Throughput (transitions/s) | Loop time vs A | Wall clock (s) incl. validation and checkpoints | Wall clock vs A | Peak memory (MB) | Artifacts (MB) |
-|---|---|---:|---:|---:|---:|---:|---:|---:|
-| A · plain SB3 | clean | 48.8 ± 1.3 | 2,098 ± 57 | 1.00 | 48.8 ± 1.3 | 1.00 | 310 | 0.15 |
-| B · + reward accounting | clean | 48.9 ± 3.7 | 2,101 ± 167 | 1.00 | 48.9 ± 3.7 | 1.00 | 311 | 0.15 |
-| C · full pipeline | clean | 51.6 ± 1.1 | 1,985 ± 42 | 1.06 | 60.0 ± 1.1 | 1.23 | 323 | 1.06 |
-| A · plain SB3 | first | 48.8 ± 0.2 | 2,097 ± 8 | 1.00 | 48.8 ± 0.2 | 1.00 | 310 | 0.15 |
-| B · + reward accounting | first | 50.7 ± 0.3 | 2,019 ± 13 | 1.04 | 50.7 ± 0.3 | 1.04 | 311 | 0.15 |
-| C · full pipeline | first | 50.9 ± 1.2 | 2,013 ± 48 | 1.04 | 59.4 ± 1.7 | 1.22 | 323 | 1.06 |
-
-C's wall clock includes its validation episodes (8.3 s and 8.4 s; 18,780 extra environment steps) and its 7
-checkpoint writes (0.10 s and 0.09 s in total). Whole-process time, including interpreter start-up and imports,
-was 51.9 / 50.8 / 67.4 s (clean run) and 50.7 / 52.6 / 66.5 s (first run) for A / B / C. Recording one
-1,000-step episode with video took 5.05–5.26 s (first run, 3 measurements).
-
-**Variability.** In the clean run one repetition of B (44.7 s) was faster than every repetition of A, so B's
-spread (± 3.7 s) is machine noise, not a property of the accounting. Paired by repetition, B/A was 1.02, 1.04 and
-0.94 (clean run), and C/A was 1.04, 1.06 and 1.06.
-
-**Smoke profile: 8,192 transitions, 2 repetitions (first run):** relative loop time B 1.10, C 1.22 (A 2,410 ± 11
-transitions/s). At this size the fixed per-run cost (run directory, records, status writes) is a larger share.
-
-![Overhead benchmark](../../reports/jmlr/benchmarks/standard-2026-10-18T132206+0000/overhead.png)
-
-**Interpretation.** On this machine, LunarLab's per-transition reward accounting costs between nothing and about
-4 % of PPO's training-loop time, within the run-to-run noise of a few percent, and about 1 MB of peak memory. The
-full pipeline's run management adds a further 0–4 % to the loop (C/A 1.04 and 1.06) and about 12 MB. A complete
-run as LunarLab performs it takes **1.22–1.23 times** as long as plain SB3 training, almost all of it for the
-validation episodes the protocol requires; that is a cost of the evaluation protocol (and of its cadence, which
-is configurable), not of instrumentation, so it is reported separately rather than called overhead. This is one
-machine, one algorithm and three repetitions per run; other hardware, `SubprocVecEnv`, more torch threads or DQN
-were not measured, and the comprehensive profile (million-transition runs) was not run.
-
-## Not compared
-
-LunarLab was not timed against RL Baselines3 Zoo, CleanRL or imitation: they run different training code
-(CleanRL's own PPO, for instance), so a timing difference would not isolate LunarLab's instrumentation. The
-feature comparison is in [COMPARISON_EVIDENCE.md](COMPARISON_EVIDENCE.md).
-
-## Reproducing
-
-```powershell
-.venv\Scripts\python.exe -m lunarlab overhead-benchmark --profile smoke                     # ~1 minute
-.venv\Scripts\python.exe -m lunarlab overhead-benchmark --profile standard                  # ~10 minutes
-.venv\Scripts\python.exe -m lunarlab overhead-benchmark --profile comprehensive --yes       # 15 runs of 1,003,520 transitions: hours
+```bash
+python -m lunarlab overhead-benchmark --profile standard --transitions 102400 --repeats 3 --out review/benchmark
 ```
 
-On Linux use `.venv/bin/python`. Results go to `reports/jmlr/benchmarks/<profile>-<time>/`: `raw.jsonl` (one row
-per run, with system information and hyperparameters), `summary.json`, `table.md`, `overhead.png|pdf|svg`.
+Check `--help` on the selected version before running; output locations must be new. No such standard rerun was claimed during this audit. The small benchmark regression workload in tests is not a replacement publication measurement.
+
+## Repeat with corrected memory sampling, 19 October 2026
+
+Run `reports/jmlr/benchmarks/standard-2026-10-19T180346+0000/`, started 18:03:46 UTC on the original machine (Windows 11 build 26300, Intel i7-13620H, 16 logical cores, 16.8 GB, Python 3.12.13 in the `requirements.lock` environment, one PyTorch thread), with the standard profile: `python -m lunarlab overhead-benchmark --profile standard` (102,400 transitions, three repetitions, rotated configuration order, each run in a fresh process). No other workload was started during the run; an editor and idle background applications stayed open. All nine rows completed; hyperparameters and transition counts are identical across configurations.
+
+**Source state.** Base `67440c6` plus the uncommitted review changes; `summary.json` records only `dirty: true`, so the run folder also holds `source_state.json`: the tracked diff (24 files, SHA-256 `919ec79c…`) and a digest of every untracked file, recorded 14 s before the run and re-checked afterwards (unchanged; the only additions were the run's own outputs). Between `2c41b42` (the earlier run) and this source, the training path is unchanged: the package differs in `cli.py`, `divergence.py`, `jobs.py` (job supervisor only) and `reproduce.py`, plus the benchmark's own memory-sampling order in `overhead.py`. If the submitted revision changes training code, run the benchmark again.
+
+| Configuration | Transitions/s, mean ± sample SD | Mean loop ratio | Mean wall ratio | Mean process peak |
+|---|---:|---:|---:|---:|
+| SB3 + Monitor | 2157.91 ± 22.25 | 1.00000 | 1.00000 | 309.73 MB |
+| Reward accounting | 2114.65 ± 29.46 | 1.02052 | 1.02052 | 310.49 MB |
+| Full LunarLab training workflow | 2050.53 ± 55.44 | 1.05281 | 1.22103 | 313.92 MB |
+
+The full workflow adds 18,780 validation transitions (mean 7.90 s) and checkpoint writes (mean 0.08 s). Ratios compare means of durations, as above; `benchmark_recomputation.json` in `reports/jmlr/original-machine-2026-10-19/` recomputes every value from `raw.jsonl` for both this run and the 18 October run.
+
+**Memory scope.** Every row records `peak_memory_scope = "process through training and checkpointing, before optional recording"` (Windows peak working set via psutil). All three configurations are therefore measured over the same phases: the full workflow's peak is 4.2 MB (1.4%) above plain SB3, and the 18 October value of 323.38 MB included optional replay generation. Each figure is a whole-process peak including Python, PyTorch and Gymnasium imports, not allocator-level model memory.
+
+**Interpretation.** The timing pattern repeats the 18 October run: about 5% longer training loops for the full workflow (1.053 here, 1.056 then) and about 22% more elapsed time once its validation and checkpointing are included (1.221 here, 1.228 then). Reward accounting alone measured 1.021 here and 1.002 then. With three repetitions per configuration and sample SDs of 1–3% of mean throughput here (up to 8% in the earlier run), the accounting-only overhead is not resolved, and none of these numbers is an upper bound. The run measures one machine and does not replace platform-specific measurement.

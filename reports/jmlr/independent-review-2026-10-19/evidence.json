@@ -1,0 +1,340 @@
+{
+  "schema": 1,
+  "source_revision": "67440c664f658ccd589f7198ee2182d5820ca7c1",
+  "scope": "Summary recomputation and available-file integrity; not independent recovery of all raw episodes",
+  "groups": [
+    {
+      "name": "Original baseline",
+      "algorithm": "ppo",
+      "policies": 5,
+      "episodes": 500,
+      "iqm": 268.56092737766187,
+      "recorded_iqm_ci": [
+        255.3679408632977,
+        272.0026613635882
+      ],
+      "mean_original_return": 265.76119945258307,
+      "strict_landings": 488,
+      "timeouts": 0,
+      "training_budgets": [
+        1003520
+      ],
+      "run_ids": [
+        "20261015-223113-baseline-s0-standard-c5af",
+        "20261015-223115-baseline-s1-standard-3b80",
+        "20261015-223115-baseline-s2-standard-5b5d",
+        "20261015-223115-baseline-s3-standard-7b0f",
+        "20261015-223115-baseline-s4-standard-f7f6"
+      ]
+    },
+    {
+      "name": "Time-penalty ablation",
+      "algorithm": "ppo",
+      "policies": 5,
+      "episodes": 500,
+      "iqm": 265.3266646483022,
+      "recorded_iqm_ci": [
+        246.53419104756196,
+        268.79587554345187
+      ],
+      "mean_original_return": 260.4447297846615,
+      "strict_landings": 468,
+      "timeouts": 2,
+      "training_budgets": [
+        1003520
+      ],
+      "run_ids": [
+        "20261015-223115-time-penalty-s0-standard-2582",
+        "20261015-223115-time-penalty-s1-standard-6fc9",
+        "20261015-223115-time-penalty-s2-standard-9f88",
+        "20261015-223115-time-penalty-s3-standard-f398",
+        "20261015-223115-time-penalty-s4-standard-828d"
+      ]
+    },
+    {
+      "name": "Flawed hover bonus",
+      "algorithm": "ppo",
+      "policies": 5,
+      "episodes": 500,
+      "iqm": -33.12732762697869,
+      "recorded_iqm_ci": [
+        -53.905039070674654,
+        15.614511286865744
+      ],
+      "mean_original_return": -23.549911760586415,
+      "strict_landings": 0,
+      "timeouts": 400,
+      "training_budgets": [
+        1003520
+      ],
+      "run_ids": [
+        "20261015-223115-hover-bonus-s0-standard-3376",
+        "20261015-223115-hover-bonus-s1-standard-9a39",
+        "20261015-223115-hover-bonus-s2-standard-d887",
+        "20261015-223115-hover-bonus-s3-standard-c5ba",
+        "20261015-223115-hover-bonus-s4-standard-cc47"
+      ]
+    },
+    {
+      "name": "Potential-based shaping",
+      "algorithm": "ppo",
+      "policies": 5,
+      "episodes": 500,
+      "iqm": 262.26677638226283,
+      "recorded_iqm_ci": [
+        238.26725187723034,
+        274.1742303098827
+      ],
+      "mean_original_return": 258.5813140943138,
+      "strict_landings": 470,
+      "timeouts": 20,
+      "training_budgets": [
+        1003520
+      ],
+      "run_ids": [
+        "20261015-223115-potential-s0-standard-0162",
+        "20261015-223115-potential-s1-standard-9f70",
+        "20261015-223115-potential-s2-standard-7f75",
+        "20261015-223115-potential-s3-standard-91e6",
+        "20261015-223115-potential-s4-standard-0b22"
+      ]
+    },
+    {
+      "name": "Learned reward 300 pairs",
+      "algorithm": "ppo",
+      "policies": 3,
+      "episodes": 300,
+      "iqm": -165.24681809312855,
+      "recorded_iqm_ci": [
+        -342.1870168670023,
+        150.98278994441668
+      ],
+      "mean_original_return": -165.24681809312855,
+      "strict_landings": 36,
+      "timeouts": 0,
+      "training_budgets": [
+        1003520
+      ],
+      "run_ids": [
+        "20261015-235939-custom-s0-standard-0274",
+        "20261015-235939-custom-s1-standard-b692",
+        "20261015-235940-custom-s2-standard-a299"
+      ]
+    },
+    {
+      "name": "Learned reward 3000 pairs",
+      "algorithm": "ppo",
+      "policies": 3,
+      "episodes": 300,
+      "iqm": 200.1949325620709,
+      "recorded_iqm_ci": [
+        182.75221437169253,
+        221.5753306348656
+      ],
+      "mean_original_return": 200.1949325620709,
+      "strict_landings": 162,
+      "timeouts": 4,
+      "training_budgets": [
+        1003520
+      ],
+      "run_ids": [
+        "20261015-235940-custom-s0-standard-d28b",
+        "20261015-235940-custom-s1-standard-ce26",
+        "20261015-235940-custom-s2-standard-dbc1"
+      ]
+    },
+    {
+      "name": "DQN \u00b7 Original baseline",
+      "algorithm": "dqn",
+      "policies": 3,
+      "episodes": 300,
+      "iqm": 211.0054111092382,
+      "recorded_iqm_ci": [
+        155.36443783032232,
+        270.062427549699
+      ],
+      "mean_original_return": 211.0054111092382,
+      "strict_landings": 161,
+      "timeouts": 33,
+      "training_budgets": [
+        100000
+      ],
+      "run_ids": [
+        "20261015-224317-dqn-baseline-s0-custom-2fe1",
+        "20261015-224318-dqn-baseline-s1-custom-1fa1",
+        "20261015-224318-dqn-baseline-s2-custom-f083"
+      ]
+    },
+    {
+      "name": "DQN \u00b7 Time-penalty ablation",
+      "algorithm": "dqn",
+      "policies": 3,
+      "episodes": 300,
+      "iqm": 177.18572047343844,
+      "recorded_iqm_ci": [
+        116.75936407572173,
+        207.45236466022558
+      ],
+      "mean_original_return": 177.18572047343844,
+      "strict_landings": 94,
+      "timeouts": 85,
+      "training_budgets": [
+        100000
+      ],
+      "run_ids": [
+        "20261015-224318-dqn-time-penalty-s0-custom-c4a9",
+        "20261015-224318-dqn-time-penalty-s1-custom-dc89",
+        "20261015-224318-dqn-time-penalty-s2-custom-9494"
+      ]
+    },
+    {
+      "name": "DQN \u00b7 Flawed hover bonus",
+      "algorithm": "dqn",
+      "policies": 3,
+      "episodes": 300,
+      "iqm": 109.55200804084933,
+      "recorded_iqm_ci": [
+        7.417291407182485,
+        224.06994853107503
+      ],
+      "mean_original_return": 109.55200804084933,
+      "strict_landings": 122,
+      "timeouts": 41,
+      "training_budgets": [
+        100000
+      ],
+      "run_ids": [
+        "20261015-224318-dqn-hover-bonus-s0-custom-aefc",
+        "20261015-224318-dqn-hover-bonus-s1-custom-e122",
+        "20261015-224318-dqn-hover-bonus-s2-custom-9c0f"
+      ]
+    },
+    {
+      "name": "DQN \u00b7 Potential-based shaping",
+      "algorithm": "dqn",
+      "policies": 3,
+      "episodes": 300,
+      "iqm": 207.24773929392418,
+      "recorded_iqm_ci": [
+        149.7094225229819,
+        244.85575096613294
+      ],
+      "mean_original_return": 207.24773929392418,
+      "strict_landings": 182,
+      "timeouts": 15,
+      "training_budgets": [
+        100000
+      ],
+      "run_ids": [
+        "20261015-224318-dqn-potential-s0-custom-ee4b",
+        "20261015-224318-dqn-potential-s1-custom-5487",
+        "20261015-224318-dqn-potential-s2-custom-5b10"
+      ]
+    }
+  ],
+  "policies": 38,
+  "episodes": 3800,
+  "artifacts": [
+    {
+      "name": "dqn-baseline-s0",
+      "files": [
+        {
+          "file": "checkpoint.zip",
+          "match": true,
+          "sha256": "8f1438011d97158b2151e427dd61cd1c631fdbb94c56d5b4564f34767bb41bbc"
+        },
+        {
+          "file": "config.yaml",
+          "match": true,
+          "sha256": "199dcc9efbe236ae594c3775144cf012725f8329e9360c5017f21755bd58cd68"
+        },
+        {
+          "file": "evaluation.json",
+          "match": true,
+          "sha256": "008074c0512ab4a352a57b29d5f6a19020118bea30fec2e6d282348716628ab8"
+        }
+      ]
+    },
+    {
+      "name": "ppo-baseline-s0",
+      "files": [
+        {
+          "file": "checkpoint.zip",
+          "match": true,
+          "sha256": "a3a89f43dd2d10e8874dbee708bfcebc663b4e7a906f8ca75a10c4c176150ef7"
+        },
+        {
+          "file": "config.yaml",
+          "match": true,
+          "sha256": "e40c3f7164c4cae16adbfa099b664247507ffd991df30ddb0e8fe303e8c323d4"
+        },
+        {
+          "file": "evaluation.json",
+          "match": true,
+          "sha256": "8727d75ba2e9875abfd3c05fb7f97551718bd56b55445b32c945eacd90e06258"
+        }
+      ]
+    },
+    {
+      "name": "ppo-hover-bonus-s0",
+      "files": [
+        {
+          "file": "checkpoint.zip",
+          "match": true,
+          "sha256": "0ee843850038ef0f946c16fd0f803f2f983b726d8ad9ebf2e1589d1cedb2d032"
+        },
+        {
+          "file": "config.yaml",
+          "match": true,
+          "sha256": "a85c668d55127c679861502cba8884cbe2ab9cce2f1d9471b25b54f6d1a035fd"
+        },
+        {
+          "file": "evaluation.json",
+          "match": true,
+          "sha256": "e27c425dbe80a7e1b7d6651d736065cd72cf70f0fe573bde5801d9e151d63c45"
+        }
+      ]
+    }
+  ],
+  "historical_integrity": {
+    "manifest_entries": 1667,
+    "present_matching": 391,
+    "absent": 1274,
+    "line_ending_only": [
+      "docs/results/outcome_reclassification_v2.json",
+      "docs/results/outcome_reclassification_v2.md"
+    ],
+    "different": []
+  },
+  "benchmark": {
+    "sb3": {
+      "n": 3,
+      "transitions_per_s_mean": 2097.746691101175,
+      "transitions_per_s_sd": 57.16621798809366,
+      "loop_time_ratio": 1.0,
+      "wall_time_ratio": 1.0,
+      "process_peak_bytes_mean": 310515029.3333333
+    },
+    "accounting": {
+      "n": 3,
+      "transitions_per_s_mean": 2100.7604897272627,
+      "transitions_per_s_sd": 166.52715950964205,
+      "loop_time_ratio": 1.0020901653529377,
+      "wall_time_ratio": 1.0020901653529377,
+      "process_peak_bytes_mean": 311453013.3333333
+    },
+    "lunarlab": {
+      "n": 3,
+      "transitions_per_s_mean": 1985.491478320387,
+      "transitions_per_s_sd": 42.3401185140545,
+      "loop_time_ratio": 1.0563344351110941,
+      "wall_time_ratio": 1.2282119795517747,
+      "process_peak_bytes_mean": 323377834.6666667
+    }
+  },
+  "benchmark_caveat": "Historical C memory sampled after optional recording; not a training-only comparison",
+  "input_sha256": {
+    "docs/results/results.json": "35dcd0f9e134dfebd00035b3f724e23f84dbeab1db357247bd2bde65b2d50d49",
+    "reports/jmlr/benchmarks/standard-2026-10-18T132206+0000/raw.jsonl": "c6c7e6d5044f3df5b38dc9d73ab12168b194f04561f23fa82904bf6204b95c85"
+  }
+}

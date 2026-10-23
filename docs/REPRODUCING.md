@@ -50,7 +50,7 @@ The first line of the output and the report's `status` say what kind of agreemen
 
 | Status | Exit | Meaning |
 |---|---:|---|
-| `exact` | 0 | every episode bit-identical to the record (expected on Windows with the locked libraries) |
+| `exact` | 0 | all five compared episode-summary fields match exactly (not full-trajectory identity) |
 | `numerical-difference` | 3 | another platform: episodes differ numerically, no aggregate differs significantly from the record (expected on Linux; not a failure) |
 | `unexpected-difference` | 1 | episodes differ on the recording platform and libraries — please report |
 | `aggregate-disagreement` | 1 | a mean return or outcome rate differs significantly from the record — please report |

@@ -1,67 +1,38 @@
-# Community evidence
+# Community evidence and independent-use plan
 
-JMLR-MLOSS asks that "evidence of an active user community should be demonstrated in the cover letter by, for
-example, number of active developers, number of stars on github or similar metrics", and reviewers consider "the
-openness of the project, such as a public source code repository, bug tracker, mailing list/forum". Evidence of
-this kind cannot be produced by changing code. This page separates what has been **observed** from what **people
-still have to do**. Nothing here is estimated or invented.
+## Verified status
 
-## Observed (GitHub API)
+Inspected 18–19 October 2026: public repository, zero stars, zero forks, no open issues; documentation reports one contributor. No independent research users, reproductions or citations were established by this audit. CI and this assistant's technical review are not independent community adoption. A star is a weak attention metric; it is not proof of use.
 
-| Metric | 2026-10-18, first pass | 2026-10-18, correction pass |
+MLOSS requests active-community evidence, without prescribing a minimum number of users. The objective is actual research utility, not increasing counters.
+
+## A concrete independent-user exercise
+
+Prepare a pinned source archive with the three existing artifact packages and give an independent researcher the existing installation/tutorial instructions. Ask them to complete these tasks without live author intervention; record any help subsequently required.
+
+| Task | Evidence to retain | Success means |
 |---|---|---|
-| Repository created | 2026-10-14 (public) | — |
-| Stars / forks / watchers | 0 / 0 / 0 | 0 / 0 / 0 |
-| Open issues / pull requests from others | 0 / 0 | 0 / 0 |
-| Contributors | 1 (the author, 12 commits) | 1 (the author, 14 commits) |
-| Issues enabled / Discussions enabled | yes / no | yes / no |
-| Views, last 14 days (GitHub traffic) | 2 views, 2 unique visitors | 2 views, 2 unique visitors |
-| Clones, last 14 days (GitHub traffic) | 88 clones, 25 unique | 152 clones, 53 unique — **not evidence of users**: every CI and Pages run checks the repository out and is counted (the increase coincides with the CI and Pages runs of 2026-10-18) |
-| Citations of LunarLab, independent reproductions, external users | none known | none known |
+| Install into a fresh supported environment | OS, Python, package versions, commit, command log | Documented installation succeeds or produces an actionable report |
+| Evaluate a supplied policy | Artifact digest and JSON reproduction report | Integrity and numerical outcomes are correctly distinguished; exit 3 is understood |
+| Inspect a baseline and hover failure | Outcome/reward table and short explanation | User identifies reward/task mismatch without relying on animation |
+| Change one reward coefficient | Exported config, hash and small smoke run | User can identify original and shaped return separately |
+| Add a custom reward term | Minimal code diff and accounting test | Tutorial explains registration/adapter contract adequately |
+| Use the generic API on CartPole | Script and result provenance | Core API works without assuming the full UI is generic |
+| Report a failure | Reproducible issue with minimal environment details | Maintainer can reproduce or explain it and document the resolution |
 
-**Conclusion: there is currently no evidence of an active user community.** On this criterion the submission is
-not ready, and only real use can change that.
+A small initial cohort spanning more than one machine/platform is practical, but is an author planning choice, not a journal threshold. Do not pay for favorable testimonials or require stars. Ask permission before naming participants or quoting feedback. Preserve negative reports, fixes and follow-up verification. Report author assistance, prior relationships and whether the activity was an installation exercise or genuine research use.
 
-## Infrastructure in place for outside users (added or verified in this work)
+## Evidence record template
 
-- Public repository, MIT License, issue tracker with forms for bug reports, feature requests and **reproducibility
-  reports** (`.github/ISSUE_TEMPLATE/`), and a pull-request checklist.
-- `CONTRIBUTING.md` (setup, checks, conventions, review expectations), `docs/DEVELOPER.md`, a generated API
-  reference, and a tutorial whose commands are executed by the test suite.
-- A reproduction package that does not need the authors' data: `python -m lunarlab reproduce-smoke` and three
-  supplied published artifacts re-evaluated with `python -m lunarlab reproduce-artifact`.
-- A report form that needs no GitHub account (`docs/jmlr/REPRODUCTION_REPORT_TEMPLATE.md`), which asks whether
-  the report may be cited; its outcome choices are the statuses `reproduce-artifact` reports.
-- A 15-minute independent-reproduction guide, [docs/REPRODUCING.md](../REPRODUCING.md): install from a release
-  archive, check the installation, re-evaluate a published policy, read exact versus numerical-difference
-  results, send the report.
-- A read-only live demo of the published results (https://shayan-abrar.github.io/lunarlab/).
+- Date; participant identifier with consent; institution only if supplied.
+- Relationship to author and reason for using LunarLab.
+- Exact software revision and platform.
+- Task attempted and commands/run IDs/artifact hashes.
+- Outcome, failures and author help needed.
+- Independent issue/report URL or archived report approved for sharing.
+- What the user learned or used in a research question.
+- Follow-up fix and independent verification.
 
-## What real people still need to do (suggestions, not done)
+## Practical priorities
 
-1. **Ask colleagues or students to follow the tutorial** and send a reproduction report (template above); record
-   each report, its outcome and platform. Independent reproductions on Linux and on other CPUs are also the
-   missing cross-platform evidence.
-2. **Enable GitHub Discussions** (a repository setting, not changed here) or name another public forum, so users
-   have a place to ask questions (MLOSS mentions "mailing list/forum").
-3. **Publish a tagged release** and archive it with a DOI (for example Zenodo), so it can be cited; then update
-   `CITATION.cff`.
-4. **Present the tool where reward-design researchers are** (a workshop, a course, a talk) and point to the
-   reproduction package. This must be done by the authors; no message was sent and no account was created here.
-5. **Report real numbers in the cover letter** at submission time (stars, forks, contributors, external issues,
-   reproduction reports, citations, downloads), with their date — including small ones.
-
-## Evidence the maintainer should collect (and how to record it)
-
-Record each item with its date, source and a link, so the cover letter can cite it verbatim. JMLR names no
-minimum, and none is assumed here.
-
-| Evidence | Counts | Does not count |
-|---|---|---|
-| Reproduction reports | reports from people other than the authors, with the attached `--report` JSON and platform | runs by the authors on their own machines; CI runs |
-| Research users | people or groups using LunarLab in their own work (a thesis, a course, an experiment), confirmed by them | downloads, clones, page views |
-| External contributions | issues, pull requests, reviews or discussions by others | the authors' own accounts |
-| Citations | papers, theses or preprints citing LunarLab or its archived release | self-citations, listed separately if mentioned |
-| Public engagement | talks, courses or workshops where the tool was used, with a link or programme | announcements alone |
-
-No outreach was made, no account was created and no metric was changed in this work.
+First supply missing primary-study artifacts and ensure the tutorial explains numerical-difference exit codes. Next invite actual colleagues or researchers to try a relevant task, only after the author authorizes outreach. Turn observed friction into documentation/API fixes, then ask the same people to rerun the failing steps. Update the cover letter only with completed, dated evidence. No one was contacted and no promotional material was published during this work.
