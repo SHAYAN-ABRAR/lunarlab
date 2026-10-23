@@ -308,9 +308,9 @@ a 64×64 MLP are about 150 KB each; a DQN replay file with the default 50k buffe
   its OpenAPI schema), generated from the code by `tools/gen_api_docs.py`.
 - [docs/jmlr/](docs/jmlr/READINESS_REPORT.md): the JMLR-MLOSS readiness package: requirements matrix,
   reproducibility, benchmark protocol, comparison with related software, extending LunarLab to other
-  environments, community evidence, scientific review. The draft software paper (LaTeX, not submitted) is in
-  [paper/jmlr-mloss/](paper/jmlr-mloss/BUILD.md), with a map from each claim to its evidence
-  ([EVIDENCE.md](paper/jmlr-mloss/EVIDENCE.md)).
+  environments, community evidence, scientific review. The draft software paper (LaTeX, preprint format, not
+  submitted) is in [paper/jmlr-mloss/](paper/jmlr-mloss/BUILD.md); its Figure 1 is drawn from the stored results
+  by `build_audit_figure.py`, and [EVIDENCE.md](paper/jmlr-mloss/EVIDENCE.md) maps each claim to its evidence.
 - [docs/RESULTS.md](docs/RESULTS.md): the experiments, findings with intervals, figures, limitations and
   the commands that reproduce them.
 - [docs/REWARDS.md](docs/REWARDS.md): the original reward, the four presets, learned rewards, formulas, assumptions, why

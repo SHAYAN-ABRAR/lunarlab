@@ -6,15 +6,15 @@ Dear JMLR Editors,
 
 Please consider “LunarLab: Auditable Reward-Design Experiments in Reinforcement Learning” for the **Machine Learning Open Source Software (MLOSS)** section of the Journal of Machine Learning Research.
 
-LunarLab integrates reward accounting, validation-based checkpoint selection, protected final-test artifacts and trajectory diagnostics into a local research workflow. It builds on Stable-Baselines3 and Gymnasium rather than introducing a new learning algorithm. The manuscript uses a deliberately flawed hover reward to demonstrate the discrepancy between training reward and task outcomes, and reports the limits of cross-platform numerical reproduction.
+LunarLab integrates reward accounting, validation-based checkpoint selection, protected final-test artifacts and trajectory diagnostics into a local research workflow. It builds on Stable-Baselines3 and Gymnasium to connect reward specifications with selected policies and recorded outcomes. The manuscript uses a deliberately flawed hover reward to demonstrate the discrepancy between training reward and task outcomes, and reports the limits of cross-platform numerical reproduction.
 
-The software is released under the **MIT License** and is available at https://github.com/SHAYAN-ABRAR/lunarlab . The version proposed for review is **0.1.0 at [FULL FINAL REVIEW REVISION]**, with source archive **[FILENAME AND SHA-256]**. The independently inspected base was `67440c664f658ccd589f7198ee2182d5820ca7c1`; replace this draft version information with the actual integrated revision and archive. The public interface demonstration is at https://shayan-abrar.github.io/lunarlab/ . Packages for all 38 policies of the reported study (selected checkpoints, configurations, recorded final-test evaluations and manifests) are available at **[PUBLIC ARCHIVE LOCATION OR DOI OF THE STUDY BUNDLE]**; they were exported without retraining and their episodes reproduce every published summary.
+The software is released under the **MIT License** and is available at https://github.com/SHAYAN-ABRAR/lunarlab . The version proposed for review is **0.1.0 at [FULL FINAL REVIEW REVISION]**, with source archive **[FILENAME AND SHA-256]**. The independently inspected base was `67440c664f658ccd589f7198ee2182d5820ca7c1`; replace this draft version information with the actual integrated revision and archive. The public interface demonstration is at https://shayan-abrar.github.io/lunarlab/ . Recorded final-test episodes, selected checkpoints, configurations and manifests for all 38 policies have been supplied for review. Independent recomputation matches the stated per-policy means/rates and all ten group IQMs. **[After restoring and verifying missing dependencies, give the actual public study-archive location and verified replay scope.]** Six learned-reward exports currently require two original reward models; do not describe them as self-contained.
 
 Community evidence: **[Insert completed, dated independent-use reports and links, accurately describing assistance and relationships.]** As of the 18–19 October 2026 review, the repository had zero stars and forks and no verified independent research-use evidence. Automated CI is not offered as evidence of adoption. If this remains the state at submission, disclose it directly rather than replacing this paragraph with a favorable unsupported statement.
 
 [Confirm that Shayan Abrar is the sole author of this submission and consents to its review. Disclose any overlapping prior publication and provide the required comparison document where applicable. Confirm that no prohibited simultaneous submission is under review.]
 
-[Declare relevant funding and competing interests, and any conflicts with action editors or reviewers. Do not state “none” until personally confirmed.]
+The author acknowledges American International University-Bangladesh (AIUB) for institutional support. All funding for this work was managed by AIUB. [Declare any competing interests and conflicts with action editors or reviewers; identify any underlying funder/grant if applicable. Do not state “none” until personally confirmed.]
 
 Suggested action editors: **[3–5 conflict-screened names and brief reasons, selected from JMLR's Action Editors list.]** Suggested reviewers: **[3–5 conflict-screened names and brief reasons.]** No listed person has been contacted on behalf of this submission.
 
@@ -23,9 +23,9 @@ Keywords: reinforcement learning; reward shaping; reward hacking; reproducibilit
 Sincerely,
 
 Shayan Abrar  
-[Affiliation]  
-[Complete postal address]  
-[Email]
+American International University-Bangladesh (AIUB)  
+408/1 (Old KA 66/1), Kuratoli, Khilkhet, Dhaka 1229, Bangladesh  
+shayanabrar7@gmail.com
 
 ---
 

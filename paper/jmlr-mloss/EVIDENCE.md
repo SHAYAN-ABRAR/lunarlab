@@ -34,11 +34,30 @@ Independent revision: 19 October 2026. Inspected public base: `67440c664f658ccd5
 
 ## Figure and numerical derivation
 
-`build_audit_figure.py` reads only `docs/results/results.json` and writes `figures/final_test_audit.pdf`, PNG and a SHA-256 source manifest. Points represent five policies, each evaluated on the same fixed 100 test seeds. The left diamond is IQM with the recorded 5,000-resample, 95% run-bootstrap interval; right diamond is mean landing rate. Dots are jittered vertically only for visibility. Zero observed landings is not zero population probability.
+`build_audit_figure.py` reads only `docs/results/results.json` and writes `figures/final_test_audit.pdf`, SVG, PNG and a SHA-256 source manifest. Points represent five policies, each evaluated on the same fixed 100 test seeds. The diamond in (a) is the IQM with the recorded 5,000-resample, 95% run-bootstrap interval; the diamond in (b) is the mean landing rate. Zero observed landings is not zero population probability.
 
 The new figure replaces the learning-curve figure whose 15 raw training CSVs are not included in this source snapshot. The old figure and derived historical data are preserved. No trajectory, checkpoint or training result was changed.
 
 On 20 October 2026 panel (b)'s title was shortened from "Per-policy rate and mean" to "Per-policy rate, mean": the longer title ran 0.06 inch past the figure's right edge and was visibly cut off in the compiled PDF. Data, geometry and fonts are unchanged; the regenerated figure is deterministic (PDF SHA-256 `8acde7dcedd717b00b02a6667d48837690bfbd72e1b6971bde90fdd2ca922756` on two consecutive builds) and the source manifest is identical.
+
+### Stacked redesign, 22–24 October 2026
+
+Figure 1 now has two stacked, full-width panels (see `BUILD.md`). Circles are offset vertically only where they would touch, so they are no longer jittered. Every plotted quantity is a stored value from `docs/results/results.json`:
+
+| Element | Source in `results.json` | Verification |
+|---|---|---|
+| Circles in (a) | `groups[*].per_seed[*].evaluation.mean_original_return` (identical to `robust_stats.groups[*].run_scores`) | Plotted x equals the stored value exactly |
+| Circles in (b) | `groups[*].per_seed[*].evaluation.pad_landing_rate` (stored 0–1 scale; ticks show percent) | Exact |
+| Diamond and bar in (a) | `robust_stats.groups[*].iqm`, `iqm_ci` | Exact; bar endpoints are drawn from the stored values |
+| Diamond in (b) | `robust_stats.groups[*].pad_rate_mean` | Exact |
+
+The figure manifest records each plotted value with its seed and run ID, plus the lanes and axes geometry. An independent read-back of all 56 marker and interval positions from the rendered SVG agrees with the stored values within 5.4e-7 return units and 1.3e-9 rate units. The input's SHA-256 (`35dcd0f9…`) equals the committed blob at HEAD and the digests recorded by the two previous figure versions. No raw episode was reconstructed, nothing was smoothed, and no new data were created.
+
+## Author revision of 21 October 2026 and length edits
+
+The author revision supplies the affiliation, postal address (AIUB's official contact page) and email, the institutional-support and funding-management acknowledgment, the `preprint` option and the positive contribution wording; see `reports/jmlr/author-revision-2026-10-21/AUTHOR_REVISION.md` in the 21 October package. Its sentence "six learned-reward exports still need two original reward models before replay" comes from that package's independent follow-up (`REQUIRED_REWARD_MODELS.json`); it was not re-verified in this figure task, and the follow-up's dependency patch is not applied here.
+
+To keep four description pages with the taller figure, the reward identity is set inline (same formula), and sentences were merged or reworded in the introduction, the workflow paragraphs, the related-software, testing and runtime paragraphs, the Table 1 caption, Section 4 and the re-evaluation paragraph. Every number, citation and limitation is unchanged: the policy-invariance caveat; the test-exposure limit; non-bit-identical continuation; LunarLander scope; benchmark measurements, not bounds, with the memory scope; exploitation shown only under the studied configuration; improvement not established; the learned-reward, DQN-budget and simulated-label limits; no equivalence from paired tests; no unique compiler cause. The Figure 1 caption was rewritten for the new layout and keeps the five-seed and zero-landing qualifications.
 
 ## Bibliography checks
 
@@ -46,4 +65,4 @@ The 11 citations used by this manuscript were checked against primary JMLR paper
 
 ## Evidence not claimed
 
-No independent community adoption, public availability or re-evaluation of all 38 models (they are exported and checked, not published or replayed), Linux or CI results for the revised source, new matched-budget algorithm results, universal platform identity, confirmed compiler cause, or guaranteed acceptance was established. Author identity details, the final source revision and the bundle's public location remain placeholders until supplied.
+No independent community adoption, public availability or re-evaluation of all 38 models (they are exported and checked, not published or replayed), Linux or CI results for the revised source, new matched-budget algorithm results, universal platform identity, confirmed compiler cause, or guaranteed acceptance was established. The competing-interest declaration, the final source revision and the public study archive remain placeholders until supplied; the author identity, affiliation and acknowledgment are author-supplied (21 October 2026).
