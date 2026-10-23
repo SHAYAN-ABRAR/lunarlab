@@ -1071,6 +1071,10 @@ def cmd_reproduce_artifact(args) -> int:
     if not _is_artifact(args.artifact):
         return 2
     report = reproduce_artifact(Path(args.artifact), episodes=args.episodes, tolerance=args.tolerance)
+    if report.get("evaluation_skipped"):
+        print(f"INTEGRITY-FAILURE (blocking): {report['artifact']}; {report['status_reason']}")
+        _write_report(report, args.report)
+        return report["exit_code"]
     print(
         f"{report['status'].upper()}{' (blocking)' if report['blocking'] else ''}: {report['artifact']}, "
         f"{report['episodes']} episodes; mean original return recorded {report['recorded_mean_original_return']:.4f}, "

@@ -795,6 +795,20 @@ def export_artifact(run_id: str, out: Path) -> dict[str, Any]:
     sha = sha256_file(ckpt_path)
     eval_path = _final_test_evaluation(run_id, sha)
     recorded = json.loads(eval_path.read_text(encoding="utf-8"))
+    # Learned rewards are needed for re-scoring even in original-reward evaluation.
+    # Validate before creating an export; never substitute or retrain an old model.
+    reward_files: dict[str, Path] = {}
+    if cfg.reward.learned.enabled:
+        from lunarlab.preferences.model import load_model_file, model_path
+
+        model_dir = model_path(str(cfg.reward.learned.model_id))
+        reward_files = {f"reward_model/{name}": model_dir / name for name in ("model.npz", "meta.json")}
+        if not all(path.is_file() for path in reward_files.values()):
+            raise FileNotFoundError(f"export requires the original reward model and metadata in {model_dir}")
+        model_meta = json.loads((model_dir / "meta.json").read_text(encoding="utf-8"))
+        if model_meta.get("sha256") != sha256_file(model_dir / "model.npz"):
+            raise ValueError("the reward model does not match its metadata SHA-256; refusing to export")
+        load_model_file(model_dir / "model.npz", str(cfg.reward.learned.model_id))
     out.mkdir(parents=True, exist_ok=False)
     shutil.copyfile(ckpt_path, out / "checkpoint.zip")
     shutil.copyfile(RunPaths(run_id).config, out / "config.yaml")
@@ -839,8 +853,75 @@ def export_artifact(run_id: str, out: Path) -> dict[str, Any]:
     }
     if manifest["files"]["checkpoint.zip"]["sha256"] != recorded["checkpoint"]["sha256"]:
         raise RuntimeError("the copied checkpoint is not the one the recorded final test evaluated")
+    if reward_files:
+        model_id = str(cfg.reward.learned.model_id)
+        manifest["reward_model"] = {"id": model_id}
+        for name, source in reward_files.items():
+            target = out / name
+            target.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(source, target)
+            manifest["files"][name] = {
+                "sha256": sha256_file(target),
+                "source": f"data/reward_models/{model_id}/{source.name}",
+            }
     atomic_write_json(out / "artifact.json", manifest)
     return manifest
+
+
+def _reward_dependency_ok(artifact_dir: Path, cfg: Any, manifest: dict, check: _Checks) -> bool:
+    """Require bundled, digest-checked learned rewards; never use the caller's registry."""
+    if not cfg.reward.learned.enabled:
+        return True
+    from lunarlab.preferences.model import MODEL_ID_RE, load_model_file
+
+    model_id = str(cfg.reward.learned.model_id)
+    names = ("reward_model/model.npz", "reward_model/meta.json")
+    ok = bool(MODEL_ID_RE.fullmatch(model_id)) and (manifest.get("reward_model") or {}).get("id") == model_id
+    ok = ok and all(
+        name in manifest["files"]
+        and (artifact_dir / name).is_file()
+        and sha256_file(artifact_dir / name) == manifest["files"][name]["sha256"]
+        for name in names
+    )
+    try:
+        if ok:
+            meta = json.loads((artifact_dir / names[1]).read_text(encoding="utf-8"))
+            ok = meta.get("sha256") == sha256_file(artifact_dir / names[0])
+            if ok:
+                load_model_file(artifact_dir / names[0], model_id)
+    except (OSError, ValueError, KeyError, TypeError):
+        ok = False
+    check(
+        "the learned reward model is bundled and matches its identity and digests",
+        ok,
+        model_id if ok else f"re-export with the original model.npz and meta.json for {model_id}",
+        kind="integrity",
+    )
+    return ok
+
+
+@contextlib.contextmanager
+def _artifact_reward_home(artifact_dir: Path, cfg: Any) -> Iterator[None]:
+    """Evaluate learned rewards from the package in a disposable registry (CLI use)."""
+    if not cfg.reward.learned.enabled:
+        yield
+        return
+    from lunarlab.preferences.model import load_reward_model
+
+    with tempfile.TemporaryDirectory(prefix="lunarlab-artifact-") as temporary:
+        home = Path(temporary)
+        target = home / "data" / "reward_models" / str(cfg.reward.learned.model_id)
+        target.mkdir(parents=True)
+        for name in ("model.npz", "meta.json"):
+            shutil.copyfile(artifact_dir / "reward_model" / name, target / name)
+        # Registry cache keys omit the home; clear both boundaries to avoid a
+        # cached local model masking a missing or incorrect artifact dependency.
+        load_reward_model.cache_clear()
+        try:
+            with isolated_home(home):
+                yield
+        finally:
+            load_reward_model.cache_clear()
 
 
 def reproduce_artifact(
@@ -866,9 +947,37 @@ def reproduce_artifact(
     manifest = json.loads((artifact_dir / "artifact.json").read_text(encoding="utf-8"))
     check = _Checks(echo)
     for name, info in manifest["files"].items():
-        actual = sha256_file(artifact_dir / name)
+        path = artifact_dir / name
+        actual = sha256_file(path) if path.is_file() else "missing"
         check(f"{name} matches its recorded SHA-256", actual == info["sha256"], actual[:16], kind="integrity")
     cfg = RunConfig.model_validate(read_yaml(artifact_dir / "config.yaml"))
+    if not _reward_dependency_ok(artifact_dir, cfg, manifest, check):
+        software = version_info()
+        reason = (
+            "required learned-reward dependency is absent, inconsistent or corrupt; evaluation was not run"
+        )
+        echo(f"  status: integrity-failure (blocking): {reason}")
+        return {
+            "kind": "lunarlab.reproduce-artifact",
+            "schema": REPRODUCTION_SCHEMA,
+            "artifact": manifest["source_run_id"],
+            "reproduced_at": utc_now(),
+            "status": "integrity-failure",
+            "status_reason": reason,
+            "status_meaning": STATUSES["integrity-failure"]["meaning"],
+            "blocking": True,
+            "exit_code": 1,
+            "integrity_ok": False,
+            "ok": False,
+            "evaluation_skipped": True,
+            "episodes": 0,
+            "comparison": None,
+            "aggregates": None,
+            "software": software,
+            "hardware": hardware(),
+            "platform": compare_platforms(manifest.get("exported_with"), software),
+            "checks": check.items,
+        }
     check(
         "configuration hash matches the record",
         cfg.config_hash() == manifest["config_hash"],
@@ -918,7 +1027,8 @@ def reproduce_artifact(
     )
     policy = SB3Policy(net, deterministic=bool(recorded.get("deterministic", True)), kind=cfg.algo)
     t0 = time.perf_counter()
-    res = evaluate_policy(policy, seeds, protocol=cfg.eval_protocol, reward=cfg.reward, gamma=cfg.gamma)
+    with _artifact_reward_home(artifact_dir, cfg):
+        res = evaluate_policy(policy, seeds, protocol=cfg.eval_protocol, reward=cfg.reward, gamma=cfg.gamma)
     cmp = compare_episodes(recorded["episodes"], res["episodes"], tolerance=tolerance)
     rec_eps = [e for e in recorded["episodes"] if int(e["seed"]) in set(seeds)]
     recorded_mean = sum(e["original_return"] for e in rec_eps) / len(rec_eps)

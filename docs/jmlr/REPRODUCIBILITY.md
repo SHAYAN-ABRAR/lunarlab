@@ -45,6 +45,26 @@ On 19 October 2026 the revised source (base `67440c6` plus the local review chan
 
 All 38 policies of the published study were exported on the same machine with `export-artifact`, without retraining (`tools/export_study_artifacts.py`). Every exported checkpoint, configuration and recorded evaluation is a byte-identical copy of the run's file, every checkpoint is the one its freeze record names, and recomputing each policy summary and group IQM from the 3,800 recorded episodes reproduces `docs/results/results.json` (`tools/compare_study_summaries.py`; inventory and digests in `reports/jmlr/original-machine-2026-10-19/study-artifacts/`). The 38 packages have not been re-evaluated: the export shows the recorded evidence is complete and self-consistent, not that it reproduces elsewhere. The bundle (28 MB) is supplied for review; it is not yet publicly archived.
 
+## Current status, 24 October 2026: learned-reward dependencies
+
+**Defect.** The independent follow-up of 21 October found that the six learned-reward exports omitted the two reward models that re-score their training return. Those packages passed their own integrity checks but could not be replayed in a fresh data home (`reports/jmlr/independent-followup-2026-10-21/`).
+
+**Original dependencies.** The two model directories, `data/reward_models/rm-20261015-235825-rm-300-4877/` and `rm-20261015-235939-rm-3000-cfd0/`, are present in the original data home. Each `meta.json` and `model.npz` is byte-identical to the committed historical manifest: four files, 58,250 bytes, sizes and SHA-256 recorded in `reports/jmlr/learned-reward-repair-2026-10-24/reward_models_verification.json`. They were copied unchanged; nothing was retrained, refitted or regenerated.
+
+**Fix.** The reviewer's dependency patch was ported unchanged for runtime, CLI, export, reporting and regression tests:
+- `export-artifact` bundles `reward_model/model.npz` and `meta.json` with digests, and refuses a missing or inconsistent model.
+- `reproduce-artifact` checks the bundled model's identity, digests and metadata digest before evaluating. Any failure is a blocking `integrity-failure` (exit 1) without evaluation.
+- Evaluation uses a temporary registry built from the package, with the model cache cleared, never the local registry.
+- The study exporter checks every payload the manifest lists.
+
+The findings below are three separate properties:
+
+- **Artifact integrity.** All 38 policies were re-exported. Checkpoint, configuration and recorded-evaluation bytes are unchanged against both `runs/` and the 19 October export. The six learned-reward packages add only the two model files, identical to the originals; the other 32 are unchanged. A legacy package without the model, a missing `model.npz` and a corrupted `meta.json` each produce `integrity-failure`, exit 1, with no episode evaluated (`.../replay/negative-*.json`).
+- **Exact summary matching, recording platform.** Replayed from an otherwise empty data home on the Windows 11 recording machine, the six learned-reward policies are `exact`: 600 of 600 episodes match on the five compared fields, including the training return computed by the bundled model. Recorded mean original returns are reproduced (150.9828, −304.5362, −342.1870, 196.2573, 221.5753, 182.7522). With the modified code the three example packages also remain `exact`, with all nine reference traces identical (`.../examples-reevaluation/`).
+- **Cross-platform numerical agreement.** Not assessed for the learned-reward packages, which were replayed on Windows only. For the three example packages, CI run 40015498622 at `4116599` reports `numerical-difference` (exit 3) on Linux and `exact` on Windows with Python 3.12 and 3.13 (`reports/jmlr/reproducibility/ci/run-40015498622-4116599/`).
+
+The repaired bundle is supplied for review and is not yet publicly archived.
+
 ## Statistical gate and trace interpretation
 
 The current gate applies paired sign-flip tests to mean return and exact McNemar tests to selected outcome rates, with Holm correction within an artifact. Non-rejection is a regression screen, not an equivalence test. The tests can miss meaningful changes. No practical equivalence margins were prespecified. Do not choose margins after seeing these differences and portray them as prospective. Future equivalence analysis should state tolerable changes in return and landing probability before evaluation, explain their research meaning, and include enough independent evidence to resolve them.

@@ -1,0 +1,43 @@
+{
+  "source": "Return source, reconstructed from base 67440c6 and original followup.patch; before additional dependency correction",
+  "passed": 473,
+  "failed": 7,
+  "skipped": 9,
+  "failures": [
+    "tests.test_jobs::test_live_worker_is_adopted_and_pid_reuse_is_never_killed",
+    "tests.test_jobs::test_supervised_training_graceful_stop_then_resume",
+    "tests.test_jobs::test_process_discovery_requires_this_project_and_rechecks_identity",
+    "tests.test_overhead::test_benchmark_runs_every_configuration_on_an_equivalent_workload",
+    "tests.test_parallel_and_supervisor::test_parallel_runs_respect_the_slot_limit_and_a_failure_does_not_stop_the_others",
+    "tests.test_parallel_and_supervisor::test_force_termination_crash_recovery_and_graceful_supervisor_shutdown",
+    "tests.test_server_lifecycle::test_backend_lifecycle_guards_single_instance_graceful_shutdown_and_recovery"
+  ],
+  "skips": [
+    "tests.test_source_archive::test_archive_is_deterministic_and_contains_exactly_the_reviewable_sources",
+    "tests.test_source_archive::test_refused_files_stop_the_build",
+    "tests.test_source_archive::test_byte_exact_evidence_is_never_converted",
+    "tests.test_source_archive::test_a_revision_packs_the_bytes_git_stores_on_every_platform",
+    "tests.test_source_archive::test_working_tree_text_is_normalised_like_git",
+    "tests.test_windows::test_real_process_holding_a_destination_file",
+    "tests.test_windows::test_powershell_scripts_parse",
+    "tests.test_windows::test_powershell_scripts_avoid_escapes_that_powershell_7_reads_differently",
+    "tests.test_windows::test_powershell_scripts_keep_their_comment_based_help"
+  ],
+  "coverage": {
+    "covered_lines": 7882,
+    "num_statements": 9216,
+    "percent_covered": 82.70702853166318,
+    "percent_covered_display": "83",
+    "missing_lines": 1334,
+    "excluded_lines": 21,
+    "percent_statements_covered": 85.52517361111111,
+    "percent_statements_covered_display": "86",
+    "num_branches": 2280,
+    "num_partial_branches": 344,
+    "covered_branches": 1626,
+    "missing_branches": 654,
+    "percent_branches_covered": 71.3157894736842,
+    "percent_branches_covered_display": "71"
+  },
+  "limitations": "Reused audit runtime dependencies; not final normal Linux CI or a lock-file fresh installation."
+}

@@ -34,6 +34,8 @@ After an actual final revision exists, use its full SHA with the archive builder
 
 *Status, 19 October 2026: done for all 38 policies with `tools/export_study_artifacts.py`, which calls `export-artifact` for each run and verifies the copies; see `reports/jmlr/original-machine-2026-10-19/study-artifacts/`. The bundle has not been uploaded anywhere.*
 
+*Status, 24 October 2026: re-exported all 38 with the dependency fix. The six learned-reward packages now carry their original reward models (`reward_model/`, digest-checked) and replay exactly from an empty data home; checkpoint, configuration and evaluation bytes are unchanged. See `reports/jmlr/learned-reward-repair-2026-10-24/`. Still not uploaded anywhere.*
+
 The public ZIP does not contain most `runs/` data. It is unnecessary to resend another source ZIP. The minimum useful next input is a **study-artifact bundle from the original LunarLab data home**, not fresh training runs.
 
 For each run listed in `docs/results/results.json`, export its frozen selected checkpoint, original recorded final evaluation, configuration and manifest into a new folder using the existing command:

@@ -1,0 +1,36 @@
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/workspace/scratch/1c599345f09c/followup/work/lunarlab/lunarlab/__main__.py", line 10, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/workspace/scratch/1c599345f09c/followup/work/lunarlab/lunarlab/cli.py", line 1787, in main
+    return int(args.fn(args) or 0)
+               ^^^^^^^^^^^^^
+  File "/workspace/scratch/1c599345f09c/followup/work/lunarlab/lunarlab/cli.py", line 1073, in cmd_reproduce_artifact
+    report = reproduce_artifact(Path(args.artifact), episodes=args.episodes, tolerance=args.tolerance)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/1c599345f09c/followup/work/lunarlab/lunarlab/reproduce.py", line 921, in reproduce_artifact
+    res = evaluate_policy(policy, seeds, protocol=cfg.eval_protocol, reward=cfg.reward, gamma=cfg.gamma)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/1c599345f09c/followup/work/lunarlab/lunarlab/evaluation.py", line 99, in evaluate_policy
+    env = make_eval_env(protocol, reward, gamma, env_overrides=env_overrides)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/1c599345f09c/followup/work/lunarlab/lunarlab/evaluation.py", line 52, in make_eval_env
+    return LunarLabRewardWrapper(
+           ^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/1c599345f09c/followup/work/lunarlab/lunarlab/rewards/wrapper.py", line 88, in __init__
+    self._learned = load_reward_model(str(config.learned.model_id))
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/1c599345f09c/followup/work/lunarlab/lunarlab/preferences/model.py", line 174, in load_reward_model
+    raise FileNotFoundError(f"reward model {model_id!r} not found in {models_dir()}")
+FileNotFoundError: reward model 'rm-20261015-235939-rm-3000-cfd0' not found in /workspace/scratch/1c599345f09c/followup/verification/empty-home/data/reward_models
+  [ok] checkpoint.zip matches its recorded SHA-256: c42fbf980493eef5
+  [ok] config.yaml matches its recorded SHA-256: 7a88468522dad28c
+  [ok] evaluation.json matches its recorded SHA-256: 934b16a2ee0eb972
+  [ok] configuration hash matches the record: 02732dacc6e2e7ff
+  [ok] the recorded evaluation used this checkpoint
+  [ok] the recorded evaluation is the final test on the configuration's test seeds: 100 seeds
+  [ok] the recorded evaluation used the configuration's protocol and reward
+  [ok] the recorded episodes are exactly the recorded seeds
+  [ok] the evaluated network holds exactly the checkpoint's weights

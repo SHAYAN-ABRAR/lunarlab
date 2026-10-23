@@ -39,6 +39,19 @@ The review's `lunarlab-review.patch` was applied unchanged with `git apply` to `
 
 Still open: no CI or Linux run of the revised source, which needs a push (an author decision). The 38-policy bundle is not yet publicly archived. There is no independent-user evidence. Author declarations and the final source identity are missing. A pdflatex rebuild was not run; Tectonic reproduced the reviewer's pdflatex pagination on the unchanged source.
 
+## Current status, 24 October 2026
+
+The independent follow-up of 21 October rated readiness 7/10 and advised holding submission (`reports/jmlr/independent-followup-2026-10-21/`); that judgment is the reviewer's and is not re-rated here. Since then:
+
+| Item | Status |
+|---|---|
+| Pushed source | `109cd88` (review integration and original-machine follow-up) and `41165997f9cda78bf30b26cf676b9db894c5d9e3` (the author's manuscript revision and the stacked Figure 1) |
+| CI of `4116599` | Run 40015498622: all six jobs passed. Linux 485 tests passed and 4 Windows-only skipped, 85.68% combined coverage. Windows Python 3.12 and 3.13: 288 targeted tests each. 189 release tests from the source archive. 15 browser flows. Reproduction: Linux `numerical-difference`, Windows `exact`. Logs, coverage and reports retained in `reports/jmlr/reproducibility/ci/run-40015498622-4116599/` |
+| Learned-reward dependencies (working tree after `4116599`) | The two original reward models (four files) match the historical manifest. The reviewer's dependency fix is ported for runtime, CLI, export, reporting and tests. All 38 policies were re-exported with unchanged payloads, and the six learned-reward policies replay exactly from an empty data home. Incomplete or corrupt packages block before evaluation. See `REPRODUCIBILITY.md` and `reports/jmlr/learned-reward-repair-2026-10-24/` |
+| Local validation of that working tree | Windows 11: 498 Python tests passed, none failed or skipped (85.90% combined coverage; includes the nine new dependency tests). Ruff, generated API reference, SPDX headers and manuscript checks pass. Frontend typecheck, lint and build pass, and all 15 browser flows pass. The example packages remain `exact`. CI on this change runs after it is pushed |
+
+Still open: the competing-interest declaration (author); a public archive, DOI or final release identity for the study bundle (author decision; none invented); independent-user evidence; and CI on the commit that contains the dependency fix. Also open is the manuscript rebuild. Two sentences in it, on the learned-reward exports and the CI revision, are now out of date, and the corrected text is ready. Windows Application Control now blocks the unsigned Tectonic binary, no other TeX engine is installed, and the four-page limit must be confirmed by a build, so the committed LaTeX still matches its 22 October PDF (`paper/jmlr-mloss/BUILD.md`).
+
 ## The decisive remaining risks
 
 1. **No demonstrated independent research community.** The inspected repository has zero stars and forks, one reported contributor, and no documented independent use or citations. MLOSS explicitly asks for community evidence in the cover letter. There is no invented minimum user count, but this is a serious review weakness.

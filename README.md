@@ -136,8 +136,9 @@ none of them affected the published results: no number above changed
   those fields; Linux runs differ numerically with similar mean returns and unchanged strict-landing rates.
   Non-significant tests do not establish equivalence. Sampled trace comparisons support simulator-numerics
   divergence without identifying a unique compiler cause. Packages for all 38 study policies were exported from
-  the original data home and checked against the published summaries; they are supplied for review, not yet
-  publicly archived. A repeat benchmark with corrected memory sampling measured 1.021× accounting-loop time,
+  the original data home and checked against the published summaries; the six learned-reward packages bundle
+  their original reward models and replay exactly from an empty data home. The packages are supplied for review,
+  not yet publicly archived. A repeat benchmark with corrected memory sampling measured 1.021× accounting-loop time,
   1.053× full-loop time and 1.221× training-workflow elapsed time relative to SB3, with process peaks of 310, 310
   and 314 MB through training and checkpointing ([benchmark audit](docs/jmlr/BENCHMARK_PROTOCOL.md)). The generic
   `lunarlab.audit` API has a [CartPole example](examples/cartpole_audit.py); the full application remains
@@ -244,7 +245,7 @@ Everything in the UI is also available from the command line (same core code):
 .venv\Scripts\python.exe -m lunarlab export-demo --experiment-ids <id1>,<id2>   # release snapshot (clean tree; --draft otherwise)
 .venv\Scripts\python.exe -m lunarlab --version                                  # version, source revision, key dependencies
 .venv\Scripts\python.exe -m lunarlab reproduce-smoke --training-determinism     # whole pipeline in a temporary home, verified
-.venv\Scripts\python.exe -m lunarlab export-artifact --run-id <id> --out <dir>  # tested checkpoint + config + recorded test
+.venv\Scripts\python.exe -m lunarlab export-artifact --run-id <id> --out <dir>  # tested checkpoint + config + recorded test (+ learned reward model)
 .venv\Scripts\python.exe -m lunarlab reproduce-artifact --artifact examples\artifacts\ppo-baseline-s0   # re-evaluate, compare
 .venv\Scripts\python.exe -m lunarlab trace-artifact --artifact examples\artifacts\ppo-baseline-s0 --compare reports\jmlr\reproducibility\traces\ppo-baseline-s0-windows.npz   # where platforms part
 .venv\Scripts\python.exe -m lunarlab overhead-benchmark --profile smoke         # instrumentation overhead vs plain SB3
@@ -360,9 +361,21 @@ fresh with its release tests), the frontend, and the 15 browser flows.
 **Local validation of the revised source (2026-10-19, Windows 11, Python 3.12):** after the independent review's
 corrections, 489 Python tests passed with none failed or skipped (85.8 % statement and branch coverage), the
 frontend typecheck, lint and build and all 15 browser flows passed, and the three published artifacts
-re-evaluated exactly (300 of 300 episodes, all nine reference traces identical). CI has not yet run on this
-revision; Linux results for it are pending. Record:
-[`reports/jmlr/original-machine-2026-10-19/`](reports/jmlr/original-machine-2026-10-19/).
+re-evaluated exactly (300 of 300 episodes, all nine reference traces identical). Record:
+[`reports/jmlr/original-machine-2026-10-19/`](reports/jmlr/original-machine-2026-10-19/). CI then passed all six
+jobs on the pushed commit `4116599` (run
+[40015498622](https://github.com/SHAYAN-ABRAR/lunarlab/actions/runs/40015498622): Linux 485 tests passed and 4
+Windows-only skipped, 288 targeted tests on each of Windows Python 3.12 and 3.13, 189 release tests from the
+source archive, 15 browser flows; reports in
+[`reports/jmlr/reproducibility/ci/`](reports/jmlr/reproducibility/ci/README.md)).
+
+**Learned-reward packages (2026-10-24, Windows 11):** `export-artifact` now bundles a learned-reward policy's
+original reward model and metadata with digests, and `reproduce-artifact` replays it from a temporary registry,
+refusing a package with a missing, corrupt or mismatched model before any evaluation (exit 1). The two original
+models (four files) match the historical integrity manifest. All 38 policies were re-exported with unchanged
+checkpoint, configuration and evaluation bytes, and the six learned-reward policies replay exactly (600 of 600
+episodes) from an empty data home. Local validation of this change: 498 Python tests passed with none failed or skipped (85.9 % statement and branch coverage), the example artifacts still reproduce exactly, and the frontend checks and 15 browser flows pass; CI runs after the push. Record:
+[`reports/jmlr/learned-reward-repair-2026-10-24/`](reports/jmlr/learned-reward-repair-2026-10-24/).
 
 ## License and citation
 

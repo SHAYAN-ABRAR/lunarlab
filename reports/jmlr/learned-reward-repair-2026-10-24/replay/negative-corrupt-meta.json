@@ -1,0 +1,117 @@
+{
+  "kind": "lunarlab.reproduce-artifact",
+  "schema": 2,
+  "artifact": "20261015-235939-custom-s0-standard-0274",
+  "reproduced_at": "2026-10-23T20:20:56+00:00",
+  "status": "integrity-failure",
+  "status_reason": "required learned-reward dependency is absent, inconsistent or corrupt; evaluation was not run",
+  "status_meaning": "the artifact's files, configuration, seeds, protocol, reward or loaded weights do not match its record",
+  "blocking": true,
+  "exit_code": 1,
+  "integrity_ok": false,
+  "ok": false,
+  "evaluation_skipped": true,
+  "episodes": 0,
+  "comparison": null,
+  "aggregates": null,
+  "software": {
+    "lunarlab": "0.1.0",
+    "git": {
+      "available": true,
+      "revision": "41165997f9cda78bf30b26cf676b9db894c5d9e3",
+      "dirty": true
+    },
+    "python": "3.12.13",
+    "python_implementation": "CPython",
+    "platform": "Windows-11-10.0.26300-SP0",
+    "packages": {
+      "gymnasium": "1.4.0",
+      "Box2D": "2.3.10",
+      "pygame": "2.6.1",
+      "stable-baselines3": "2.9.0",
+      "torch": "2.14.1",
+      "numpy": "2.5.4",
+      "pandas": "3.0.6",
+      "matplotlib": "3.11.2",
+      "imageio": "2.38.1",
+      "imageio-ffmpeg": "0.6.0",
+      "optuna": "5.0.0",
+      "fastapi": "0.143.1",
+      "uvicorn": "0.54.0",
+      "pydantic": "2.14.1",
+      "psutil": "7.2.2",
+      "PyYAML": "6.0.3"
+    }
+  },
+  "hardware": {
+    "platform": "Windows-11-10.0.26300-SP0",
+    "machine": "AMD64",
+    "cpu": "13th Gen Intel(R) Core(TM) i7-13620H",
+    "physical_cores": 10,
+    "logical_cores": 16,
+    "ram_gb": 16.8
+  },
+  "platform": {
+    "basis": "operating system and numerical libraries (torch, numpy, Box2D, gymnasium, stable-baselines3) of artifact.json 'exported_with' versus this machine",
+    "recorded": {
+      "platform": "Windows-11-10.0.26300-SP0",
+      "python": "3.12.13",
+      "os": "Windows",
+      "torch": "2.14.1",
+      "numpy": "2.5.4",
+      "Box2D": "2.3.10",
+      "gymnasium": "1.4.0",
+      "stable-baselines3": "2.9.0"
+    },
+    "reproduced": {
+      "platform": "Windows-11-10.0.26300-SP0",
+      "python": "3.12.13",
+      "os": "Windows",
+      "torch": "2.14.1",
+      "numpy": "2.5.4",
+      "Box2D": "2.3.10",
+      "gymnasium": "1.4.0",
+      "stable-baselines3": "2.9.0"
+    },
+    "differences": {},
+    "same_platform": true
+  },
+  "checks": [
+    {
+      "check": "checkpoint.zip matches its recorded SHA-256",
+      "ok": true,
+      "detail": "9d33d5e581eb3fcd",
+      "kind": "integrity"
+    },
+    {
+      "check": "config.yaml matches its recorded SHA-256",
+      "ok": true,
+      "detail": "cc80706066503c5a",
+      "kind": "integrity"
+    },
+    {
+      "check": "evaluation.json matches its recorded SHA-256",
+      "ok": true,
+      "detail": "ec3536edf857491f",
+      "kind": "integrity"
+    },
+    {
+      "check": "reward_model/model.npz matches its recorded SHA-256",
+      "ok": true,
+      "detail": "ed282e43800420d9",
+      "kind": "integrity"
+    },
+    {
+      "check": "reward_model/meta.json matches its recorded SHA-256",
+      "ok": false,
+      "detail": "98568ec99f2c3011",
+      "kind": "integrity"
+    },
+    {
+      "check": "the learned reward model is bundled and matches its identity and digests",
+      "ok": false,
+      "detail": "re-export with the original model.npz and meta.json for rm-20261015-235825-rm-300-4877",
+      "kind": "integrity"
+    }
+  ]
+}

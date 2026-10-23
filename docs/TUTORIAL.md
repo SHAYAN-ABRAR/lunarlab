@@ -118,7 +118,9 @@ the baseline, outcome rates and the hover detector; `report` writes Markdown and
 
 `results` regenerates tables, figures and a JSON summary from the stored evaluations; `export-artifact` copies a
 tested checkpoint with its configuration and recorded final test (and their digests) so someone else can re-run
-it with `reproduce-artifact`.
+it with `reproduce-artifact`. A policy trained with a learned reward also carries its reward model and metadata
+(`reward_model/`), which `reproduce-artifact` checks and uses in a temporary registry. A learned-reward package
+without them is refused before any evaluation (exit 1); the local model registry is never used instead.
 
 ## 9. The same from Python
 

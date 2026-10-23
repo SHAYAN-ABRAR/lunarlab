@@ -59,6 +59,20 @@ The author revision supplies the affiliation, postal address (AIUB's official co
 
 To keep four description pages with the taller figure, the reward identity is set inline (same formula), and sentences were merged or reworded in the introduction, the workflow paragraphs, the related-software, testing and runtime paragraphs, the Table 1 caption, Section 4 and the re-evaluation paragraph. Every number, citation and limitation is unchanged: the policy-invariance caveat; the test-exposure limit; non-bit-identical continuation; LunarLander scope; benchmark measurements, not bounds, with the memory scope; exploitation shown only under the studied configuration; improvement not established; the learned-reward, DQN-budget and simulated-label limits; no equivalence from paired tests; no unique compiler cause. The Figure 1 caption was rewritten for the new layout and keeps the five-seed and zero-landing qualifications.
 
+## Learned-reward repair, 24 October 2026
+
+The 22–24 October note above, that the 21 October dependency patch was not applied, is superseded: its
+runtime, CLI, export, reporting and test changes are now integrated, without its manuscript or figure hunks.
+
+| Statement | Evidence | Status in `main.tex` |
+|---|---|---|
+| The two original reward models exist and are unchanged | `reports/jmlr/learned-reward-repair-2026-10-24/reward_models_verification.json`: four files, sizes and SHA-256 equal to the historical manifest | Not stated |
+| The six learned-reward exports bundle their models and replay exactly from an empty data home | `.../bundle_repair_comparison.json` (payload bytes unchanged for all 38) and `.../replay/` (600/600 episodes `exact`; three negative cases blocked with exit 1) | **Outdated:** the PDF still says the exports "still need two original reward models"; the correction waits for a rebuild (`BUILD.md`) |
+| CI passed at `4116599` | `reports/jmlr/reproducibility/ci/run-40015498622-4116599/` | **Not yet cited:** the PDF cites CI at `67440c6`; same pending correction |
+
+Exact replays on the recording machine show selected-field agreement on one platform. They do not show
+cross-platform numerical agreement for the learned-reward packages, which has not been tested.
+
 ## Bibliography checks
 
 The 11 citations used by this manuscript were checked against primary JMLR paper records (SB3, CleanRL), NeurIPS records (Agarwal, Skalse), AAAI (Henderson), original shaping paper, project documentation (Zoo), and arXiv records (Gymnasium, PPO, imitation, AI Safety Gridworlds). The published Skalse title is “Reward Gaming,” not the preprint's “Reward Hacking.” ArXiv entries now carry explicit printable venue identifiers/URLs; the previous BibTeX-only `eprint` field was not sufficient under the JMLR style. Gymnasium is cited by its 2024 arXiv record; its current record notes later NeurIPS 2025 acceptance. Legacy uncited entries remain but are not printed.

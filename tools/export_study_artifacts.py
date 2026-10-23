@@ -51,11 +51,7 @@ def _checks(rid: str, out: Path, summary: dict) -> list[dict]:
     meta = json.loads((run / "metadata.json").read_text(encoding="utf-8"))
     frozen = meta["frozen_for_test"]
     evaluation = json.loads((out / "evaluation.json").read_text(encoding="utf-8"))
-    sources = {
-        "checkpoint.zip": ROOT / manifest["files"]["checkpoint.zip"]["source"],
-        "config.yaml": ROOT / manifest["files"]["config.yaml"]["source"],
-        "evaluation.json": ROOT / manifest["files"]["evaluation.json"]["source"],
-    }
+    sources = {name: ROOT / info["source"] for name, info in manifest["files"].items()}
     checks = []
     for name, src in sources.items():
         exported, original = sha256(out / name), sha256(src)

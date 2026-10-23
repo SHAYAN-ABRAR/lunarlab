@@ -51,6 +51,9 @@ def summarize(reports: list[Path], divergence: list[Path], exit_codes: dict[str,
         expected = STATUSES[status]["exit_code"]
         if code is not None and code != expected:
             problems.append(f"{name}: exit code {code} does not match status {status} (expected {expected})")
+        if r.get("evaluation_skipped"):
+            problems.append(f"{name}: {status}: {r['status_reason']}")
+            continue
         s = r["comparison"]["summary"]
         rows.append(
             {
