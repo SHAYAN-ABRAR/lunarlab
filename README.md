@@ -312,6 +312,11 @@ a 64×64 MLP are about 150 KB each; a DQN replay file with the default 50k buffe
   environments, community evidence, scientific review. The draft software paper (LaTeX, preprint format, not
   submitted) is in [paper/jmlr-mloss/](paper/jmlr-mloss/BUILD.md); its Figure 1 is drawn from the stored results
   by `build_audit_figure.py`, and [EVIDENCE.md](paper/jmlr-mloss/EVIDENCE.md) maps each claim to its evidence.
+- [docs/neurocomputing/](docs/neurocomputing/README.md): Neurocomputing's submission rules as captured from the
+  official guide on 26 October 2026. It covers the software article type, which items are required and which
+  only encouraged, the fees, and what is still unresolved, including whether a software paper can be published
+  without a fee. [AI_TOOL_VERSIONS.md](docs/neurocomputing/AI_TOOL_VERSIONS.md) lists the AI tools and model
+  versions recorded during development.
 - [docs/RESULTS.md](docs/RESULTS.md): the experiments, findings with intervals, figures, limitations and
   the commands that reproduce them.
 - [docs/REWARDS.md](docs/REWARDS.md): the original reward, the four presets, learned rewards, formulas, assumptions, why
