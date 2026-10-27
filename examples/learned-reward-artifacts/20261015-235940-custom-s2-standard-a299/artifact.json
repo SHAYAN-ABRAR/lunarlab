@@ -1,0 +1,80 @@
+{
+  "schema": 1,
+  "kind": "lunarlab.artifact",
+  "source_run_id": "20261015-235940-custom-s2-standard-a299",
+  "experiment_id": "exp-20261015-235939-rlhf-study-d449",
+  "algo": "ppo",
+  "reward": {
+    "preset": "custom",
+    "name": "Learned reward 300 pairs",
+    "hash": "9e2181850d6b34a9"
+  },
+  "config_hash": "5fa60eb8983ab847",
+  "protocol_hash": "2340c66c35b045bc",
+  "files": {
+    "checkpoint.zip": {
+      "sha256": "4f403ef622539cdf7a957f4c18205cdd968c8dc9b97cbb512e414cd1bb42eafa",
+      "source": "runs/20261015-235940-custom-s2-standard-a299/checkpoints/best_validation.zip",
+      "checkpoint_name": "best_validation.zip",
+      "transitions": 151552
+    },
+    "config.yaml": {
+      "sha256": "ba2a3afbc07dc3ebe22c62dc12da7bbab52de56195dd802e1d75266cff21cda9",
+      "source": "runs/20261015-235940-custom-s2-standard-a299/config.yaml"
+    },
+    "evaluation.json": {
+      "sha256": "69fc07af18bcbcbb0232505e886e14897e8550092b81072ec9899cbd1d67b126",
+      "source": "runs/20261015-235940-custom-s2-standard-a299/evaluations/test-best_validation-2026-10-15T181908Z.json"
+    },
+    "reward_model/model.npz": {
+      "sha256": "ed282e43800420d918aad7ce575e586b94acf944df55fd780c17dbb05a0922a3",
+      "source": "data/reward_models/rm-20261015-235825-rm-300-4877/model.npz"
+    },
+    "reward_model/meta.json": {
+      "sha256": "96841ecd5e3fd909ab37891548f40dd7d7d2ffc68abc762eb676288f924cabf5",
+      "source": "data/reward_models/rm-20261015-235825-rm-300-4877/meta.json"
+    }
+  },
+  "documented_metric": {
+    "split": "test",
+    "n_episodes": 100,
+    "mean_original_return": -342.1870168670023,
+    "pad_landing_rate": 0.0,
+    "timeout_rate": 0.0,
+    "evaluated_at": "2026-10-15T18:19:08+00:00",
+    "outcome_classifier_version": 1
+  },
+  "exported_at": "2026-10-23T20:18:22+00:00",
+  "exported_with": {
+    "lunarlab": "0.1.0",
+    "git": {
+      "available": true,
+      "revision": "41165997f9cda78bf30b26cf676b9db894c5d9e3",
+      "dirty": true
+    },
+    "python": "3.12.13",
+    "python_implementation": "CPython",
+    "platform": "Windows-11-10.0.26300-SP0",
+    "packages": {
+      "gymnasium": "1.4.0",
+      "Box2D": "2.3.10",
+      "pygame": "2.6.1",
+      "stable-baselines3": "2.9.0",
+      "torch": "2.14.1",
+      "numpy": "2.5.4",
+      "pandas": "3.0.6",
+      "matplotlib": "3.11.2",
+      "imageio": "2.38.1",
+      "imageio-ffmpeg": "0.6.0",
+      "optuna": "5.0.0",
+      "fastapi": "0.143.1",
+      "uvicorn": "0.54.0",
+      "pydantic": "2.14.1",
+      "psutil": "7.2.2",
+      "PyYAML": "6.0.3"
+    }
+  },
+  "reward_model": {
+    "id": "rm-20261015-235825-rm-300-4877"
+  }
+}

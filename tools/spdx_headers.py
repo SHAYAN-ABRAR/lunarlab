@@ -61,7 +61,7 @@ SKIP_DIRS = {
 
 
 # Data, not source: byte-identical copies whose SHA-256 digests are recorded (a header would change them).
-DATA_PREFIXES = ("examples/artifacts/", "demo/", "reports/")
+DATA_PREFIXES = ("examples/artifacts/", "examples/learned-reward-artifacts/", "demo/", "reports/")
 
 
 def source_files(root: Path = ROOT) -> list[Path]:

@@ -65,3 +65,9 @@ Times are UTC. Machine: the author's Windows 11 laptop (the original data home).
 - 16:43-16:50 Cost: 5 randomized blocks on C0. Medians are 20.9, 21.0 and 21.7 s, but wall time was bimodal
   over time (some runs 10.8-14.4 s), so no precise difference is supported. Peak self working sets are 288,
   289 and 293 MB. Counted custom lines: W1 65, W2 277, W3 152.
+- 17:00 Linux replay prepared. WSL is not installed and no Linux machine is available, so the check runs as
+  a bounded CI job (`.github/workflows/learned-reward-linux.yml`), whose pass and fail criteria are written in
+  its header before any result. The six learned-reward packages (2.3 MB, 60 files, identical to the repaired
+  bundle's SHA256SUMS) are copied to `examples/learned-reward-artifacts/` for it. One package replays `exact` on
+  this machine from the new location (23 s). `ci.yml` now also runs on `research/**` pushes; the demo-site
+  workflow still deploys only from `main`.

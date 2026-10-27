@@ -1,0 +1,102 @@
+# SPDX-FileCopyrightText: 2026 Shayan Abrar
+# SPDX-License-Identifier: MIT
+name: Learned-reward replay (Linux)
+
+# Replays the study's six learned-reward policies on Linux from an empty data home, with their original
+# bundled reward models. These policies were recorded on Windows. Criteria, fixed before any result:
+#   * pass: every package's bytes match SHA256SUMS; every reproduction reports integrity intact and status
+#     `exact` (exit 0) or `numerical-difference` (exit 3); the data home stays empty; a missing or corrupt
+#     reward model is refused before any episode runs (exit 1, evaluation skipped).
+#   * fail: a checksum mismatch, an integrity failure, `aggregate-disagreement` or `unexpected-difference`
+#     (exit 1), a crash or missing report, a non-empty data home, or a negative case that is not refused.
+# Per-episode numerical differences are reported, not tolerated silently: every report keeps all 100
+# episode rows. This is a platform check, not new training (the generic example below trains 256 transitions).
+
+on:
+  push:
+    branches: ["research/**"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: learned-reward-linux-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  replay:
+    name: Six learned-reward policies · Linux · empty data home
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    env:
+      OMP_NUM_THREADS: "1"
+      MKL_NUM_THREADS: "1"
+      SDL_VIDEODRIVER: dummy
+      SDL_AUDIODRIVER: dummy
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.12"
+      - name: Install (CPU-only PyTorch, exact versions)
+        run: |
+          uv venv .venv
+          uv pip install --python .venv/bin/python -r requirements-ci.lock --torch-backend cpu
+          uv pip install --python .venv/bin/python -e . --no-deps
+      - name: Record the platform, dependency versions and numerical settings
+        run: |
+          mkdir -p out
+          {
+            echo "commit $GITHUB_SHA"; uname -a; lscpu
+            .venv/bin/python -c "import platform, torch, numpy; print(platform.platform()); print('torch', torch.__version__, 'threads', torch.get_num_threads(), 'default dtype', torch.get_default_dtype(), 'deterministic algorithms', torch.are_deterministic_algorithms_enabled()); print('numpy', numpy.__version__)"
+            echo "OMP_NUM_THREADS=$OMP_NUM_THREADS MKL_NUM_THREADS=$MKL_NUM_THREADS"
+            uv pip freeze --python .venv/bin/python
+          } > out/platform.txt
+          .venv/bin/python -m lunarlab version > out/lunarlab-version.txt
+      - name: Verify the packages' bytes before anything runs
+        working-directory: examples/learned-reward-artifacts
+        run: sha256sum -c SHA256SUMS | tee ../../out/sha256-check.txt
+      - name: Replay the six policies from an empty data home
+        run: |
+          home="$RUNNER_TEMP/empty-home"; mkdir -p "$home"
+          : > out/exit-codes.txt; reports=""
+          for d in examples/learned-reward-artifacts/*/; do
+            rid=$(basename "$d"); code=0
+            LUNARLAB_HOME="$home" .venv/bin/python -m lunarlab reproduce-artifact --artifact "$d" \
+              --report "out/reproduce-$rid-linux.json" || code=$?
+            echo "$rid $code" >> out/exit-codes.txt
+            reports="$reports out/reproduce-$rid-linux.json"
+          done
+          cat out/exit-codes.txt
+          if [ -n "$(ls -A "$home")" ]; then echo "the data home is not empty:"; ls -laR "$home"; exit 1; fi
+          echo "the empty data home stayed empty" | tee out/home-check.txt
+          .venv/bin/python tools/reproduction_summary.py --platform linux --exit-codes out/exit-codes.txt \
+            --reports $reports --json out/replay-summary-linux.json --markdown "$GITHUB_STEP_SUMMARY"
+      - name: A missing or corrupt reward model is refused before any episode
+        run: |
+          src=examples/learned-reward-artifacts/20261015-235939-custom-s0-standard-0274
+          for case in missing-model corrupt-meta; do
+            work="$RUNNER_TEMP/$case"; cp -r "$src" "$work"; chmod -R u+w "$work"
+            if [ "$case" = missing-model ]; then rm "$work/reward_model/model.npz"; else printf 'x' >> "$work/reward_model/meta.json"; fi
+            code=0
+            LUNARLAB_HOME="$RUNNER_TEMP/home-$case" .venv/bin/python -m lunarlab reproduce-artifact --artifact "$work" \
+              --report "out/negative-$case-linux.json" || code=$?
+            echo "$case $code" >> out/negative-exit-codes.txt
+            .venv/bin/python -c "import json,sys; r=json.load(open(sys.argv[1])); assert r['status']=='integrity-failure' and r.get('evaluation_skipped') is True, r['status']; print(sys.argv[2], 'refused before evaluation')" "out/negative-$case-linux.json" "$case"
+            test "$code" -eq 1
+          done
+      - name: The generic audit example on Linux (smoke protocol, 256 training transitions)
+        run: |
+          LUNARLAB_HOME="$RUNNER_TEMP/home-generic" .venv/bin/python examples/cartpole_study.py \
+            --protocol examples/protocols/cartpole-smoke.json --out "$RUNNER_TEMP/generic" --workers 2 | tee out/generic-example.log
+          for a in "$RUNNER_TEMP"/generic/artifacts/*/; do
+            .venv/bin/python -m lunarlab audit-artifact reproduce --artifact "$a" --report "out/generic-$(basename "$a")-linux.json"
+          done
+      - name: Upload the evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: learned-reward-linux
+          path: out
+          retention-days: 30

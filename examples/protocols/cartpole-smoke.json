@@ -1,0 +1,81 @@
+{
+ "schema": "lunarlab.audit-study/1",
+ "study_id": "cartpole-smoke",
+ "adapter": {
+  "name": "cartpole",
+  "version": "1"
+ },
+ "env_kwargs": {},
+ "gamma": 0.98,
+ "algorithm": {
+  "name": "ppo",
+  "policy": "MlpPolicy",
+  "n_envs": 2,
+  "kwargs": {
+   "n_steps": 32,
+   "batch_size": 64,
+   "n_epochs": 2,
+   "gae_lambda": 0.8,
+   "ent_coef": 0.0,
+   "learning_rate": {
+    "linear": 0.001
+   },
+   "clip_range": {
+    "linear": 0.2
+   }
+  },
+  "note": "smoke-test settings: 2 environments x 32 steps, 128 transitions per run; not the study's learner"
+ },
+ "budget_transitions": 128,
+ "eval_every_rollouts": 1,
+ "designs": [
+  {
+   "name": "original",
+   "original_weight": 1.0,
+   "terms": []
+  },
+  {
+   "name": "upright-potential",
+   "original_weight": 1.0,
+   "terms": [
+    {
+     "term": "upright_potential",
+     "params": {
+      "alpha": 1.0
+     }
+    }
+   ]
+  },
+  {
+   "name": "failure-bonus",
+   "original_weight": 1.0,
+   "terms": [
+    {
+     "term": "failure_bonus",
+     "params": {
+      "bonus": 1000.0
+     }
+    }
+   ]
+  }
+ ],
+ "training_seeds": [
+  7
+ ],
+ "train_env_seed_root": 1000000,
+ "validation_seeds": [
+  110000,
+  110001
+ ],
+ "test_seeds": [
+  210000,
+  210001,
+  210002
+ ],
+ "selection": {
+  "rule": "max-mean-original-validation-return"
+ },
+ "success_outcome": "balanced_to_time_limit",
+ "secondary_analyses": [],
+ "torch_threads": 1
+}
