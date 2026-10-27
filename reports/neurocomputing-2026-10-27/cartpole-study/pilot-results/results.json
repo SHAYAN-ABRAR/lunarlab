@@ -1,0 +1,614 @@
+{
+ "protocol_study_id": "cartpole-reward-design-2026-10-27-pilot",
+ "success_outcome": "balanced_to_time_limit",
+ "inputs_sha256": {
+  "runs/failure-bonus-s90/run.json": "8147a88df1459ff8cbe90309efeafd022fe56e613cac36fa180811d26ebc82c4",
+  "runs/failure-bonus-s90/test-selected.json": "f68b7fc7417828df894da5d691d59be579f31ac9583896e39a0bb5b3a063d227",
+  "runs/failure-bonus-s90/test-final.json": "f5e8dbbce1f7eb0979e9aa7348c0d2d84f24da17678def9028df45d7436848a2",
+  "runs/original-s90/run.json": "76879c699c53cfa8756087aa2b682fc4f4ed1bc1b9281009fa514b383b0c52c7",
+  "runs/original-s90/test-selected.json": "7a9d4b193099e6fb23f168f1be82f054851f031d1ff71c30893a7dd7312e4725",
+  "runs/original-s90/test-final.json": "08bd33edca1a3687be8835ed03e16d53007135cf5ca73662f5d7046dafe3efc6",
+  "runs/upright-potential-s90/run.json": "6357cc11c9fc5748dd28d6ccba8cc84f5cbcd5f9346b365d6661488b30c349e9",
+  "runs/upright-potential-s90/test-selected.json": "27e50a392639b08593826a1316b331570de822dffd205d2e828f128cb01e6951",
+  "runs/upright-potential-s90/test-final.json": "8f61871f26091b97433909ea0668ef5e8cb1eee22aa554eb4080f03ff591a14c"
+ },
+ "selection": [
+  {
+   "run": "failure-bonus-s90",
+   "selected_step": 10240,
+   "validation_by_step": {
+    "10240": 9.25,
+    "20480": 9.25
+   },
+   "transitions": 20480,
+   "effective_first_reset_seeds": [
+    1090000,
+    1090001,
+    1090002,
+    1090003,
+    1090004,
+    1090005,
+    1090006,
+    1090007
+   ]
+  },
+  {
+   "run": "original-s90",
+   "selected_step": 10240,
+   "validation_by_step": {
+    "10240": 500.0,
+    "20480": 500.0
+   },
+   "transitions": 20480,
+   "effective_first_reset_seeds": [
+    1090000,
+    1090001,
+    1090002,
+    1090003,
+    1090004,
+    1090005,
+    1090006,
+    1090007
+   ]
+  },
+  {
+   "run": "upright-potential-s90",
+   "selected_step": 10240,
+   "validation_by_step": {
+    "10240": 500.0,
+    "20480": 500.0
+   },
+   "transitions": 20480,
+   "effective_first_reset_seeds": [
+    1090000,
+    1090001,
+    1090002,
+    1090003,
+    1090004,
+    1090005,
+    1090006,
+    1090007
+   ]
+  }
+ ],
+ "selected": {
+  "policies": {
+   "failure-bonus": [
+    {
+     "run": "failure-bonus-s90",
+     "design": "failure-bonus",
+     "training_seed": 90,
+     "checkpoint_step": 10240,
+     "checkpoint_sha256": "fea26eabce0d0841d1a8a4d50d21ad91a23e77f464420dd837213cb14f52009b",
+     "episodes": 20,
+     "mean_original_return": 9.3,
+     "horizon_completion_rate": 0.0,
+     "outcomes": {
+      "pole_fell": 20
+     },
+     "mean_training_return_own_design": 1009.3,
+     "mean_term_returns": {
+      "failure_bonus": 1000.0
+     },
+     "mean_length": 9.3,
+     "terminated": 20,
+     "truncated": 0
+    }
+   ],
+   "original": [
+    {
+     "run": "original-s90",
+     "design": "original",
+     "training_seed": 90,
+     "checkpoint_step": 10240,
+     "checkpoint_sha256": "d9ff61b8ca8479aeacc13acc371d6b5793e852e64a36ec1b3509d72518e4c69d",
+     "episodes": 20,
+     "mean_original_return": 500.0,
+     "horizon_completion_rate": 1.0,
+     "outcomes": {
+      "balanced_to_time_limit": 20
+     },
+     "mean_training_return_own_design": 500.0,
+     "mean_term_returns": {},
+     "mean_length": 500.0,
+     "terminated": 0,
+     "truncated": 20
+    }
+   ],
+   "upright-potential": [
+    {
+     "run": "upright-potential-s90",
+     "design": "upright-potential",
+     "training_seed": 90,
+     "checkpoint_step": 10240,
+     "checkpoint_sha256": "b14f34580315f061d38593210ba2f046358edef57c7199fb27e2c8d6756fd4ed",
+     "episodes": 20,
+     "mean_original_return": 500.0,
+     "horizon_completion_rate": 1.0,
+     "outcomes": {
+      "balanced_to_time_limit": 20
+     },
+     "mean_training_return_own_design": 500.31678203437394,
+     "mean_term_returns": {
+      "upright_potential": 0.31678203437403696
+     },
+     "mean_length": 500.0,
+     "terminated": 0,
+     "truncated": 20
+    }
+   ]
+  },
+  "by_design": {
+   "failure-bonus": {
+    "mean_original_return": {
+     "values_by_seed": {
+      "90": 9.3
+     },
+     "mean": 9.3,
+     "mean_ci95": [
+      9.3,
+      9.3
+     ],
+     "integer_trimmed_mean_25": 9.3,
+     "min": 9.3,
+     "max": 9.3
+    },
+    "horizon_completion_rate": {
+     "values_by_seed": {
+      "90": 0.0
+     },
+     "mean": 0.0,
+     "mean_ci95": [
+      0.0,
+      0.0
+     ],
+     "integer_trimmed_mean_25": 0.0,
+     "min": 0.0,
+     "max": 0.0
+    },
+    "mean_training_return_own_design": {
+     "values_by_seed": {
+      "90": 1009.3
+     },
+     "mean": 1009.3,
+     "mean_ci95": [
+      1009.3,
+      1009.3
+     ],
+     "integer_trimmed_mean_25": 1009.3,
+     "min": 1009.3,
+     "max": 1009.3
+    }
+   },
+   "original": {
+    "mean_original_return": {
+     "values_by_seed": {
+      "90": 500.0
+     },
+     "mean": 500.0,
+     "mean_ci95": [
+      500.0,
+      500.0
+     ],
+     "integer_trimmed_mean_25": 500.0,
+     "min": 500.0,
+     "max": 500.0
+    },
+    "horizon_completion_rate": {
+     "values_by_seed": {
+      "90": 1.0
+     },
+     "mean": 1.0,
+     "mean_ci95": [
+      1.0,
+      1.0
+     ],
+     "integer_trimmed_mean_25": 1.0,
+     "min": 1.0,
+     "max": 1.0
+    },
+    "mean_training_return_own_design": {
+     "values_by_seed": {
+      "90": 500.0
+     },
+     "mean": 500.0,
+     "mean_ci95": [
+      500.0,
+      500.0
+     ],
+     "integer_trimmed_mean_25": 500.0,
+     "min": 500.0,
+     "max": 500.0
+    }
+   },
+   "upright-potential": {
+    "mean_original_return": {
+     "values_by_seed": {
+      "90": 500.0
+     },
+     "mean": 500.0,
+     "mean_ci95": [
+      500.0,
+      500.0
+     ],
+     "integer_trimmed_mean_25": 500.0,
+     "min": 500.0,
+     "max": 500.0
+    },
+    "horizon_completion_rate": {
+     "values_by_seed": {
+      "90": 1.0
+     },
+     "mean": 1.0,
+     "mean_ci95": [
+      1.0,
+      1.0
+     ],
+     "integer_trimmed_mean_25": 1.0,
+     "min": 1.0,
+     "max": 1.0
+    },
+    "mean_training_return_own_design": {
+     "values_by_seed": {
+      "90": 500.31678203437394
+     },
+     "mean": 500.31678203437394,
+     "mean_ci95": [
+      500.31678203437394,
+      500.31678203437394
+     ],
+     "integer_trimmed_mean_25": 500.31678203437394,
+     "min": 500.31678203437394,
+     "max": 500.31678203437394
+    }
+   }
+  },
+  "effects_vs_original": {
+   "mean_original_return": {
+    "failure-bonus - original": {
+     "paired_by_seed": {
+      "differences_by_seed": {
+       "90": -490.7
+      },
+      "mean": -490.7,
+      "ci95": [
+       -490.7,
+       -490.7
+      ]
+     },
+     "difference_of_means": -490.7,
+     "unpaired_ci95": [
+      -490.7,
+      -490.7
+     ]
+    },
+    "upright-potential - original": {
+     "paired_by_seed": {
+      "differences_by_seed": {
+       "90": 0.0
+      },
+      "mean": 0.0,
+      "ci95": [
+       0.0,
+       0.0
+      ]
+     },
+     "difference_of_means": 0.0,
+     "unpaired_ci95": [
+      0.0,
+      0.0
+     ]
+    }
+   },
+   "horizon_completion_rate": {
+    "failure-bonus - original": {
+     "paired_by_seed": {
+      "differences_by_seed": {
+       "90": -1.0
+      },
+      "mean": -1.0,
+      "ci95": [
+       -1.0,
+       -1.0
+      ]
+     },
+     "difference_of_means": -1.0,
+     "unpaired_ci95": [
+      -1.0,
+      -1.0
+     ]
+    },
+    "upright-potential - original": {
+     "paired_by_seed": {
+      "differences_by_seed": {
+       "90": 0.0
+      },
+      "mean": 0.0,
+      "ci95": [
+       0.0,
+       0.0
+      ]
+     },
+     "difference_of_means": 0.0,
+     "unpaired_ci95": [
+      0.0,
+      0.0
+     ]
+    }
+   }
+  }
+ },
+ "final": {
+  "policies": {
+   "failure-bonus": [
+    {
+     "run": "failure-bonus-s90",
+     "design": "failure-bonus",
+     "training_seed": 90,
+     "checkpoint_step": 20480,
+     "checkpoint_sha256": "e4f5d80253f6b054dbd53024e63cbf2d8c697154b4b540b94d183fffde228847",
+     "episodes": 20,
+     "mean_original_return": 9.35,
+     "horizon_completion_rate": 0.0,
+     "outcomes": {
+      "pole_fell": 20
+     },
+     "mean_training_return_own_design": 1009.35,
+     "mean_term_returns": {
+      "failure_bonus": 1000.0
+     },
+     "mean_length": 9.35,
+     "terminated": 20,
+     "truncated": 0
+    }
+   ],
+   "original": [
+    {
+     "run": "original-s90",
+     "design": "original",
+     "training_seed": 90,
+     "checkpoint_step": 20480,
+     "checkpoint_sha256": "d3b8ce7b9f965ec63beb52874159fb1efd2e81084be59c3c7619f3f8f2540775",
+     "episodes": 20,
+     "mean_original_return": 500.0,
+     "horizon_completion_rate": 1.0,
+     "outcomes": {
+      "balanced_to_time_limit": 20
+     },
+     "mean_training_return_own_design": 500.0,
+     "mean_term_returns": {},
+     "mean_length": 500.0,
+     "terminated": 0,
+     "truncated": 20
+    }
+   ],
+   "upright-potential": [
+    {
+     "run": "upright-potential-s90",
+     "design": "upright-potential",
+     "training_seed": 90,
+     "checkpoint_step": 20480,
+     "checkpoint_sha256": "ad51607e038205ad1ebf97ca06fa542d841ec7918fdbdf66435587cd6f3ee6ce",
+     "episodes": 20,
+     "mean_original_return": 500.0,
+     "horizon_completion_rate": 1.0,
+     "outcomes": {
+      "balanced_to_time_limit": 20
+     },
+     "mean_training_return_own_design": 500.26903579840894,
+     "mean_term_returns": {
+      "upright_potential": 0.26903579840884373
+     },
+     "mean_length": 500.0,
+     "terminated": 0,
+     "truncated": 20
+    }
+   ]
+  },
+  "by_design": {
+   "failure-bonus": {
+    "mean_original_return": {
+     "values_by_seed": {
+      "90": 9.35
+     },
+     "mean": 9.35,
+     "mean_ci95": [
+      9.35,
+      9.35
+     ],
+     "integer_trimmed_mean_25": 9.35,
+     "min": 9.35,
+     "max": 9.35
+    },
+    "horizon_completion_rate": {
+     "values_by_seed": {
+      "90": 0.0
+     },
+     "mean": 0.0,
+     "mean_ci95": [
+      0.0,
+      0.0
+     ],
+     "integer_trimmed_mean_25": 0.0,
+     "min": 0.0,
+     "max": 0.0
+    },
+    "mean_training_return_own_design": {
+     "values_by_seed": {
+      "90": 1009.35
+     },
+     "mean": 1009.35,
+     "mean_ci95": [
+      1009.35,
+      1009.35
+     ],
+     "integer_trimmed_mean_25": 1009.35,
+     "min": 1009.35,
+     "max": 1009.35
+    }
+   },
+   "original": {
+    "mean_original_return": {
+     "values_by_seed": {
+      "90": 500.0
+     },
+     "mean": 500.0,
+     "mean_ci95": [
+      500.0,
+      500.0
+     ],
+     "integer_trimmed_mean_25": 500.0,
+     "min": 500.0,
+     "max": 500.0
+    },
+    "horizon_completion_rate": {
+     "values_by_seed": {
+      "90": 1.0
+     },
+     "mean": 1.0,
+     "mean_ci95": [
+      1.0,
+      1.0
+     ],
+     "integer_trimmed_mean_25": 1.0,
+     "min": 1.0,
+     "max": 1.0
+    },
+    "mean_training_return_own_design": {
+     "values_by_seed": {
+      "90": 500.0
+     },
+     "mean": 500.0,
+     "mean_ci95": [
+      500.0,
+      500.0
+     ],
+     "integer_trimmed_mean_25": 500.0,
+     "min": 500.0,
+     "max": 500.0
+    }
+   },
+   "upright-potential": {
+    "mean_original_return": {
+     "values_by_seed": {
+      "90": 500.0
+     },
+     "mean": 500.0,
+     "mean_ci95": [
+      500.0,
+      500.0
+     ],
+     "integer_trimmed_mean_25": 500.0,
+     "min": 500.0,
+     "max": 500.0
+    },
+    "horizon_completion_rate": {
+     "values_by_seed": {
+      "90": 1.0
+     },
+     "mean": 1.0,
+     "mean_ci95": [
+      1.0,
+      1.0
+     ],
+     "integer_trimmed_mean_25": 1.0,
+     "min": 1.0,
+     "max": 1.0
+    },
+    "mean_training_return_own_design": {
+     "values_by_seed": {
+      "90": 500.26903579840894
+     },
+     "mean": 500.26903579840894,
+     "mean_ci95": [
+      500.26903579840894,
+      500.26903579840894
+     ],
+     "integer_trimmed_mean_25": 500.26903579840894,
+     "min": 500.26903579840894,
+     "max": 500.26903579840894
+    }
+   }
+  },
+  "effects_vs_original": {
+   "mean_original_return": {
+    "failure-bonus - original": {
+     "paired_by_seed": {
+      "differences_by_seed": {
+       "90": -490.65
+      },
+      "mean": -490.65,
+      "ci95": [
+       -490.65,
+       -490.65
+      ]
+     },
+     "difference_of_means": -490.65,
+     "unpaired_ci95": [
+      -490.65,
+      -490.65
+     ]
+    },
+    "upright-potential - original": {
+     "paired_by_seed": {
+      "differences_by_seed": {
+       "90": 0.0
+      },
+      "mean": 0.0,
+      "ci95": [
+       0.0,
+       0.0
+      ]
+     },
+     "difference_of_means": 0.0,
+     "unpaired_ci95": [
+      0.0,
+      0.0
+     ]
+    }
+   },
+   "horizon_completion_rate": {
+    "failure-bonus - original": {
+     "paired_by_seed": {
+      "differences_by_seed": {
+       "90": -1.0
+      },
+      "mean": -1.0,
+      "ci95": [
+       -1.0,
+       -1.0
+      ]
+     },
+     "difference_of_means": -1.0,
+     "unpaired_ci95": [
+      -1.0,
+      -1.0
+     ]
+    },
+    "upright-potential - original": {
+     "paired_by_seed": {
+      "differences_by_seed": {
+       "90": 0.0
+      },
+      "mean": 0.0,
+      "ci95": [
+       0.0,
+       0.0
+      ]
+     },
+     "difference_of_means": 0.0,
+     "unpaired_ci95": [
+      0.0,
+      0.0
+     ]
+    }
+   }
+  }
+ },
+ "conventions": {
+  "unit": "trained policy (five per design); 100 test episodes per policy; statistics condition on the fixed test seeds",
+  "intervals": "95% percentile bootstrap, 10000 resamples, seed 0; policies resampled (paired: per-seed differences resampled)",
+  "trimmed_mean": "integer-boundary 25% trimmed mean: drop int(0.25 n) from each end (middle three of five); not a fractional-weight IQM",
+  "training_return": "each design's own training reward on the same test episodes; a different scale from original return, never compared with it"
+ }
+}

@@ -1,0 +1,243 @@
+{
+ "study_id": "cartpole-reward-design-2026-10-27-pilot",
+ "protocol_sha256": "06776b677e201da5c4c168dd49a42203974ce552286b0ccd212d3cf327e97f28",
+ "runs": [
+  {
+   "run": "original-s90",
+   "design": "original",
+   "training_seed": 90,
+   "transitions": {
+    "configured": 20480,
+    "actual": 20480,
+    "rollout_size": 256,
+    "rollouts": 80
+   },
+   "selected": {
+    "rule": "max-mean-original-validation-return",
+    "meaning": "the evaluated checkpoint with the highest mean ORIGINAL return on the validation seeds; ties go to the earliest checkpoint. Candidates are every scheduled checkpoint after training starts and the final one",
+    "step": 10240,
+    "sha256": "d9ff61b8ca8479aeacc13acc371d6b5793e852e64a36ec1b3509d72518e4c69d"
+   },
+   "frozen": {
+    "selected": {
+     "step": 10240,
+     "sha256": "d9ff61b8ca8479aeacc13acc371d6b5793e852e64a36ec1b3509d72518e4c69d",
+     "file": "frozen/d9ff61b8ca8479aeacc13acc371d6b5793e852e64a36ec1b3509d72518e4c69d.zip"
+    },
+    "final": {
+     "step": 20480,
+     "sha256": "d3b8ce7b9f965ec63beb52874159fb1efd2e81084be59c3c7619f3f8f2540775",
+     "file": "frozen/d3b8ce7b9f965ec63beb52874159fb1efd2e81084be59c3c7619f3f8f2540775.zip"
+    }
+   },
+   "files": {
+    "protocol.json": "6551e2b1cdef3d7ef51080bc23f56bd87bff404eb4180ee65cb5303e4f652a39",
+    "run.json": "76879c699c53cfa8756087aa2b682fc4f4ed1bc1b9281009fa514b383b0c52c7",
+    "test-final.json": "08bd33edca1a3687be8835ed03e16d53007135cf5ca73662f5d7046dafe3efc6",
+    "test-selected.json": "7a9d4b193099e6fb23f168f1be82f054851f031d1ff71c30893a7dd7312e4725"
+   }
+  },
+  {
+   "run": "upright-potential-s90",
+   "design": "upright-potential",
+   "training_seed": 90,
+   "transitions": {
+    "configured": 20480,
+    "actual": 20480,
+    "rollout_size": 256,
+    "rollouts": 80
+   },
+   "selected": {
+    "rule": "max-mean-original-validation-return",
+    "meaning": "the evaluated checkpoint with the highest mean ORIGINAL return on the validation seeds; ties go to the earliest checkpoint. Candidates are every scheduled checkpoint after training starts and the final one",
+    "step": 10240,
+    "sha256": "b14f34580315f061d38593210ba2f046358edef57c7199fb27e2c8d6756fd4ed"
+   },
+   "frozen": {
+    "selected": {
+     "step": 10240,
+     "sha256": "b14f34580315f061d38593210ba2f046358edef57c7199fb27e2c8d6756fd4ed",
+     "file": "frozen/b14f34580315f061d38593210ba2f046358edef57c7199fb27e2c8d6756fd4ed.zip"
+    },
+    "final": {
+     "step": 20480,
+     "sha256": "ad51607e038205ad1ebf97ca06fa542d841ec7918fdbdf66435587cd6f3ee6ce",
+     "file": "frozen/ad51607e038205ad1ebf97ca06fa542d841ec7918fdbdf66435587cd6f3ee6ce.zip"
+    }
+   },
+   "files": {
+    "protocol.json": "6551e2b1cdef3d7ef51080bc23f56bd87bff404eb4180ee65cb5303e4f652a39",
+    "run.json": "6357cc11c9fc5748dd28d6ccba8cc84f5cbcd5f9346b365d6661488b30c349e9",
+    "test-final.json": "8f61871f26091b97433909ea0668ef5e8cb1eee22aa554eb4080f03ff591a14c",
+    "test-selected.json": "27e50a392639b08593826a1316b331570de822dffd205d2e828f128cb01e6951"
+   }
+  },
+  {
+   "run": "failure-bonus-s90",
+   "design": "failure-bonus",
+   "training_seed": 90,
+   "transitions": {
+    "configured": 20480,
+    "actual": 20480,
+    "rollout_size": 256,
+    "rollouts": 80
+   },
+   "selected": {
+    "rule": "max-mean-original-validation-return",
+    "meaning": "the evaluated checkpoint with the highest mean ORIGINAL return on the validation seeds; ties go to the earliest checkpoint. Candidates are every scheduled checkpoint after training starts and the final one",
+    "step": 10240,
+    "sha256": "fea26eabce0d0841d1a8a4d50d21ad91a23e77f464420dd837213cb14f52009b"
+   },
+   "frozen": {
+    "selected": {
+     "step": 10240,
+     "sha256": "fea26eabce0d0841d1a8a4d50d21ad91a23e77f464420dd837213cb14f52009b",
+     "file": "frozen/fea26eabce0d0841d1a8a4d50d21ad91a23e77f464420dd837213cb14f52009b.zip"
+    },
+    "final": {
+     "step": 20480,
+     "sha256": "e4f5d80253f6b054dbd53024e63cbf2d8c697154b4b540b94d183fffde228847",
+     "file": "frozen/e4f5d80253f6b054dbd53024e63cbf2d8c697154b4b540b94d183fffde228847.zip"
+    }
+   },
+   "files": {
+    "protocol.json": "6551e2b1cdef3d7ef51080bc23f56bd87bff404eb4180ee65cb5303e4f652a39",
+    "run.json": "8147a88df1459ff8cbe90309efeafd022fe56e613cac36fa180811d26ebc82c4",
+    "test-final.json": "f5e8dbbce1f7eb0979e9aa7348c0d2d84f24da17678def9028df45d7436848a2",
+    "test-selected.json": "f68b7fc7417828df894da5d691d59be579f31ac9583896e39a0bb5b3a063d227"
+   }
+  }
+ ],
+ "training_transitions": 61440,
+ "compute_ledger": [
+  {
+   "phase": "train",
+   "event": "start",
+   "time": 1793117544.8036962,
+   "runs": [
+    "original-s90",
+    "upright-potential-s90",
+    "failure-bonus-s90"
+   ]
+  },
+  {
+   "phase": "train",
+   "run": "original-s90",
+   "transitions": 20480,
+   "training_seconds": 18.128627099795267,
+   "wall_seconds": 19.59643030166626,
+   "selected_step": 10240
+  },
+  {
+   "phase": "train",
+   "run": "upright-potential-s90",
+   "transitions": 20480,
+   "training_seconds": 18.37258980004117,
+   "wall_seconds": 19.85347890853882,
+   "selected_step": 10240
+  },
+  {
+   "phase": "train",
+   "run": "failure-bonus-s90",
+   "transitions": 20480,
+   "training_seconds": 10.538171299966052,
+   "wall_seconds": 12.051698207855225,
+   "selected_step": 10240
+  },
+  {
+   "phase": "train",
+   "event": "end",
+   "time": 1793117565.5074708,
+   "elapsed": 20.70377469062805
+  },
+  {
+   "phase": "test",
+   "event": "start",
+   "time": 1793117565.5299513
+  },
+  {
+   "phase": "test",
+   "run": "original-s90",
+   "which": "selected",
+   "mean_original_return": 500.0,
+   "test_seconds": 2.734441600041464
+  },
+  {
+   "phase": "test",
+   "run": "upright-potential-s90",
+   "which": "selected",
+   "mean_original_return": 500.0,
+   "test_seconds": 2.8583996000234038
+  },
+  {
+   "phase": "test",
+   "run": "failure-bonus-s90",
+   "which": "selected",
+   "mean_original_return": 9.3,
+   "test_seconds": 0.12020369991660118
+  },
+  {
+   "phase": "test",
+   "run": "original-s90",
+   "which": "final",
+   "mean_original_return": 500.0,
+   "test_seconds": 2.618658799910918
+  },
+  {
+   "phase": "test",
+   "run": "upright-potential-s90",
+   "which": "final",
+   "mean_original_return": 500.0,
+   "test_seconds": 2.792438499862328
+  },
+  {
+   "phase": "test",
+   "run": "failure-bonus-s90",
+   "which": "final",
+   "mean_original_return": 9.35,
+   "test_seconds": 0.11549600004218519
+  },
+  {
+   "phase": "test",
+   "event": "end",
+   "time": 1793117577.0494323,
+   "elapsed": 11.51948094367981
+  }
+ ],
+ "software": {
+  "lunarlab": "0.1.0",
+  "git": {
+   "available": true,
+   "revision": "e7c3fabcc986ee66f56de6403f8772968559824d",
+   "dirty": false
+  },
+  "python": "3.12.13",
+  "python_implementation": "CPython",
+  "platform": "Windows-11-10.0.26300-SP0",
+  "packages": {
+   "gymnasium": "1.4.0",
+   "Box2D": "2.3.10",
+   "pygame": "2.6.1",
+   "stable-baselines3": "2.9.0",
+   "torch": "2.14.1",
+   "numpy": "2.5.4",
+   "pandas": "3.0.6",
+   "matplotlib": "3.11.2",
+   "imageio": "2.38.1",
+   "imageio-ffmpeg": "0.6.0",
+   "optuna": "5.0.0",
+   "fastapi": "0.143.1",
+   "uvicorn": "0.54.0",
+   "pydantic": "2.14.1",
+   "psutil": "7.2.2",
+   "PyYAML": "6.0.3"
+  }
+ },
+ "environment": {
+  "torch_threads": 10,
+  "torch_deterministic_algorithms": false,
+  "omp_num_threads": null,
+  "mkl_num_threads": null,
+  "float_dtype": "float32 policy network (SB3 default); float64 reward accounting"
+ }
+}
