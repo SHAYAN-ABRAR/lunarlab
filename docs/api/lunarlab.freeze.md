@@ -45,6 +45,15 @@ Freeze ``checkpoint`` for the final test. The caller must hold the run's worker 
 
 The run's frozen artifact if it holds exactly these bytes (used by warm restarts).
 
+### `immutable_copy(src: 'Path', dst: 'Path', sha: 'str') -> 'Path'`
+
+Copy ``src`` (whose SHA-256 must be ``sha``) to ``dst``, verify the copy and make it read-only.
+
+An existing ``dst`` is kept only if it already holds those bytes; otherwise nothing is overwritten. The
+copy is written to a temporary name and renamed after its digest is checked, so a partly written file
+never appears under ``dst``. Used for the main pipeline's frozen final-test checkpoints and for the
+generic audit study (:mod:`lunarlab.audit.study`).
+
 ### `migrate_legacy_freeze(run_id: 'str') -> 'dict'`
 
 Create the immutable copy for a schema-1 freeze record, only if the tested bytes are intact.

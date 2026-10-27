@@ -126,12 +126,14 @@ def remove_tree(path: Path) -> None:
     shutil.rmtree(path, onexc=_writable_retry)
 
 
-def episode_key(ep: dict) -> tuple:
-    """The compared fields of one episode (``COMPARED_FIELDS``), as a tuple."""
-    return tuple(ep.get(f) for f in COMPARED_FIELDS)
+def episode_key(ep: dict, fields: tuple[str, ...] = COMPARED_FIELDS) -> tuple:
+    """The compared fields of one episode (``COMPARED_FIELDS`` unless given), as a tuple."""
+    return tuple(ep.get(f) for f in fields)
 
 
-def _episode_row(rec: dict, ep: dict, exact: bool) -> dict[str, Any]:
+def _episode_row(
+    rec: dict, ep: dict, exact: bool, outcome_fields: tuple[str, ...] = OUTCOME_FIELDS
+) -> dict[str, Any]:
     r0, r1 = float(rec["original_return"]), float(ep["original_return"])
     row: dict[str, Any] = {
         "seed": int(ep["seed"]),
@@ -144,7 +146,7 @@ def _episode_row(rec: dict, ep: dict, exact: bool) -> dict[str, Any]:
         "reproduced_length": ep.get("length"),
         "length_agrees": rec.get("length") == ep.get("length"),
     }
-    present = [f for f in OUTCOME_FIELDS if f in rec and f in ep]
+    present = [f for f in outcome_fields if f in rec and f in ep]
     for f in present:
         row[f] = [rec[f], ep[f]]
     row["outcome_agrees"] = all(rec[f] == ep[f] for f in present)
@@ -205,13 +207,19 @@ def summarize_episode_rows(rows: list[dict]) -> dict[str, Any]:
 
 
 def compare_episodes(
-    recorded: list[dict], reproduced: list[dict], *, tolerance: float = 0.0
+    recorded: list[dict],
+    reproduced: list[dict],
+    *,
+    tolerance: float = 0.0,
+    fields: tuple[str, ...] = COMPARED_FIELDS,
+    outcome_fields: tuple[str, ...] = OUTCOME_FIELDS,
 ) -> dict[str, Any]:
-    """Compare two evaluations seed by seed on :data:`COMPARED_FIELDS`.
+    """Compare two evaluations seed by seed on ``fields`` (:data:`COMPARED_FIELDS` unless given).
 
     Returns are compared with ``tolerance`` (absolute; 0 = numeric equality), everything else exactly. Besides the
     counts, every episode gets a row (``episodes``: returns and their difference, length, termination and
-    outcome agreement, final-observation difference) and ``summary`` aggregates them.
+    outcome agreement over ``outcome_fields``, final-observation difference) and ``summary`` aggregates them.
+    The generic audit study passes its own task-independent fields.
     """
     by_seed = {int(e["seed"]): e for e in recorded}
     exact = within = 0
@@ -225,14 +233,14 @@ def compare_episodes(
             mismatches.append({"seed": ep["seed"], "reason": "seed not in the recorded evaluation"})
             missing.append(int(ep["seed"]))
             continue
-        is_exact = episode_key(rec) == episode_key(ep)
-        rows.append(_episode_row(rec, ep, is_exact))
+        is_exact = episode_key(rec, fields) == episode_key(ep, fields)
+        rows.append(_episode_row(rec, ep, is_exact, outcome_fields))
         if is_exact:
             exact += 1
             within += 1
             continue
         diffs = {}
-        for f in COMPARED_FIELDS:
+        for f in fields:
             a, b = rec.get(f), ep.get(f)
             if isinstance(a, float) and isinstance(b, float):
                 d = abs(a - b)
@@ -246,7 +254,7 @@ def compare_episodes(
         else:
             within += 1
     return {
-        "compared_fields": list(COMPARED_FIELDS),
+        "compared_fields": list(fields),
         "exactness_scope": "numeric equality of selected episode-summary fields; not full-trajectory or bitwise identity",
         "compared": len(reproduced),
         "exact": exact,

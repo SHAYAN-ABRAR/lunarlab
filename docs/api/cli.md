@@ -4,9 +4,24 @@ Generated from the parser in `lunarlab/cli.py`. Run any command with `--help` fo
 
 ```text
 usage: python -m lunarlab [-h] [--version]
-                          {doctor,version,random-demo,heuristic-demo,train,resume,stop,evaluate,record,compare,report,suite,run-experiment,rlhf-dataset,reward-model,rlhf-active,rlhf-study,tune,tune-resume,tune-status,tune-cancel,tune-apply,record-showcase,results,showcase,warm-restart,test-status,freeze-migrate,reclassify-outcomes,export-demo,reproduce-smoke,export-artifact,reproduce-artifact,trace-artifact,overhead-benchmark,robustness,robustness-run,train-run,sweep,runs,rescore,benchmark,reward,serve,processes,worker}
+                          {doctor,version,random-demo,heuristic-demo,train,resume,stop,evaluate,record,compare,report,suite,run-experiment,rlhf-dataset,reward-model,rlhf-active,rlhf-study,tune,tune-resume,tune-status,tune-cancel,tune-apply,record-showcase,results,showcase,warm-restart,test-status,freeze-migrate,reclassify-outcomes,export-demo,reproduce-smoke,export-artifact,reproduce-artifact,audit-artifact,trace-artifact,overhead-benchmark,robustness,robustness-run,train-run,sweep,runs,rescore,benchmark,reward,serve,processes,worker}
                           ...
 ```
+
+## `audit-artifact`
+
+verify or reproduce an artifact of the task-independent audit study (lunarlab.audit.study)
+
+```text
+usage: python -m lunarlab audit-artifact [-h] --artifact ARTIFACT [--report REPORT]
+                                         {verify,reproduce}
+```
+
+| Argument | Description |
+|---|---|
+| `action` | required.  Choices: verify, reproduce. |
+| `--artifact` | required. folder written by lunarlab.audit.study.export_artifact |
+| `--report` | write the JSON report to this file |
 
 ## `benchmark`
 

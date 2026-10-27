@@ -24,7 +24,7 @@ from typing import Any
 import gymnasium as gym
 import numpy as np
 
-from lunarlab.audit.core import RewardTerm, per_step, potential_shaping, state_bonus
+from lunarlab.audit.core import RewardTerm, per_step, potential_shaping, state_bonus, termination_bonus
 
 
 @dataclass(frozen=True)
@@ -209,6 +209,9 @@ def cartpole_adapter() -> TaskAdapter:
                 potential_id="-|pole_angle| / 12 degrees",
             ),
             "step_penalty": lambda cost=0.01: per_step("step_penalty", -float(cost)),
+            # Deliberately flawed: CartPole-v1 terminates only when the pole falls past 12 degrees or the cart
+            # leaves the track, so a termination bonus pays for failing (a time-limit truncation earns nothing).
+            "failure_bonus": lambda bonus=1000.0: termination_bonus("failure_bonus", float(bonus)),
         },
         metrics={"time_limit_rate": rate("balanced_to_time_limit"), "pole_fell_rate": rate("pole_fell")},
     )

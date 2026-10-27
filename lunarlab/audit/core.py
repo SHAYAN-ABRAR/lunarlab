@@ -94,6 +94,23 @@ def state_bonus(
     )
 
 
+def termination_bonus(name: str, bonus: float) -> RewardTerm:
+    """``bonus`` on the transition that ends an episode by a true termination (``terminated``).
+
+    It is also paid when that step reports ``truncated`` as well, and never for a time-limit truncation
+    alone. Where termination means failure (CartPole-v1) this pays for failing: a deliberately flawed
+    design for audit studies.
+    """
+    require_finite(bonus, f"termination_bonus term {name!r} bonus")
+    return RewardTerm(
+        name,
+        lambda t: bonus if t.terminated else 0.0,
+        {"type": "termination_bonus", "bonus": bonus},
+        term_id="lunarlab.audit.termination_bonus",
+        version="1",
+    )
+
+
 def potential_shaping(
     name: str, potential: Callable[[np.ndarray], float], *, alpha: float, gamma: float, potential_id: str
 ) -> RewardTerm:

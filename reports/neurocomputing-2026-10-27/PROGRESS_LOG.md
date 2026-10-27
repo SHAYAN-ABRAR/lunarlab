@@ -35,3 +35,15 @@ Times are UTC. Machine: the author's Windows 11 laptop (the original data home).
   hand-calculated sums. It covers potential shaping at termination, at truncation and with both flags, including
   a `TimeLimit` coincidence. The old-API probe (`contracts/old_api_probe_test.py`) failed 16 of 17 checks on
   `932cf1c`; the remaining one is a valid-input control. It passed 17 of 17 on the fixed tree.
+- 16:05 Generic study workflow `lunarlab/audit/study.py`. It covers protocol validation, PPO training with
+  scheduled original-reward validation, the prespecified selection rule, and freezing through the main
+  pipeline's `freeze.immutable_copy`, now public. It adds digest-checked final tests and artifacts that verify
+  integrity before execution. Reproduction reuses `reproduce.compare_episodes` (now with task-independent
+  fields) and `classify_reproduction`. CLI: `lunarlab audit-artifact verify|reproduce`. The CartPole adapter
+  gains the deliberately flawed `failure_bonus` (generic `termination_bonus`). `tests/test_audit_study.py`
+  runs the whole workflow at 128 transitions and checks 11 tampering cases, each refused before any episode.
+- 16:08 CartPole protocol fixed before any training (`cartpole-study/protocol/PROTOCOL.sha256`). Main study:
+  3 designs x seeds 50-54, 100,096 transitions per run. Pilot: seed 90, 20,480 transitions per run, its own
+  validation and test seeds.
+- 16:15 Smoke run of `examples/cartpole_study.py` on the tiny test protocol: every phase works, both artifacts
+  verify, and the data home stays empty.

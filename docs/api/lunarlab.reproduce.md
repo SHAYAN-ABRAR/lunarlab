@@ -45,13 +45,14 @@ centred on zero) is not flagged; a shift such as a broken policy or environment 
 regressions, not a proof of equivalence. Both sides are also aggregated by :func:`lunarlab.evaluation.aggregate`
 over the same seeds, with the recorded interval for reference.
 
-### `compare_episodes(recorded: 'list[dict]', reproduced: 'list[dict]', *, tolerance: 'float' = 0.0) -> 'dict[str, Any]'`
+### `compare_episodes(recorded: 'list[dict]', reproduced: 'list[dict]', *, tolerance: 'float' = 0.0, fields: 'tuple[str, ...]' = ('length', 'original_return', 'training_return', 'env_outcome', 'pad_landing'), outcome_fields: 'tuple[str, ...]' = ('terminated', 'truncated', 'env_outcome', 'pad_landing')) -> 'dict[str, Any]'`
 
-Compare two evaluations seed by seed on :data:`COMPARED_FIELDS`.
+Compare two evaluations seed by seed on ``fields`` (:data:`COMPARED_FIELDS` unless given).
 
 Returns are compared with ``tolerance`` (absolute; 0 = numeric equality), everything else exactly. Besides the
 counts, every episode gets a row (``episodes``: returns and their difference, length, termination and
-outcome agreement, final-observation difference) and ``summary`` aggregates them.
+outcome agreement over ``outcome_fields``, final-observation difference) and ``summary`` aggregates them.
+The generic audit study passes its own task-independent fields.
 
 ### `compare_platforms(recorded: 'dict | None', current: 'dict') -> 'dict[str, Any]'`
 
@@ -60,9 +61,9 @@ Whether this machine has the recording platform's operating system and numerical
 The recorded side is the artifact's ``exported_with`` (for the supplied artifacts, the machine that trained,
 tested and exported them). An unknown recorded platform counts as different.
 
-### `episode_key(ep: 'dict') -> 'tuple'`
+### `episode_key(ep: 'dict', fields: 'tuple[str, ...]' = ('length', 'original_return', 'training_return', 'env_outcome', 'pad_landing')) -> 'tuple'`
 
-The compared fields of one episode (``COMPARED_FIELDS``), as a tuple.
+The compared fields of one episode (``COMPARED_FIELDS`` unless given), as a tuple.
 
 ### `episodes_digest(episodes: 'list[dict]') -> 'str'`
 

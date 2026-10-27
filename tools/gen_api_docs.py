@@ -48,6 +48,7 @@ RESEARCH_MODULES = {
         "lunarlab.audit.provenance",
         "lunarlab.audit.adapters",
         "lunarlab.audit.evaluate",
+        "lunarlab.audit.study",
     ],
     "Environment, outcomes and diagnostics": [
         "lunarlab.env",

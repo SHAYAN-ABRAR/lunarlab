@@ -91,6 +91,14 @@ under that definition would produce.
 ``bonus`` when the *resulting* state satisfies ``predicate``. A bonus that does not telescope can be
 exploited: LunarLab's flawed hover bonus is this shape.
 
+### `termination_bonus(name: 'str', bonus: 'float') -> 'RewardTerm'`
+
+``bonus`` on the transition that ends an episode by a true termination (``terminated``).
+
+It is also paid when that step reports ``truncated`` as well, and never for a time-limit truncation
+alone. Where termination means failure (CartPole-v1) this pays for failing: a deliberately flawed
+design for audit studies.
+
 ### `terms_hash(terms: 'Mapping[str, RewardTerm]', original_weight: 'float') -> 'str'`
 
 Schema-0 hash of a declared reward definition: the first 16 hex characters of SHA-256.
