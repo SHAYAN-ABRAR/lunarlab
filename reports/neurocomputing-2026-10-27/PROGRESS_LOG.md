@@ -58,3 +58,10 @@ Times are UTC. Machine: the author's Windows 11 laptop (the original data home).
   rescue them, because failing fast was learned before the first checkpoint at 10,240 transitions.
 - Compute so far: 1,562,880 new training transitions (main plus pilot) of 2,000,000; about 8 minutes of
   study wall time, plus test-suite runs.
+- 16:35-16:42 Comparison run on the main fixtures (`5c7a62a`). W2 and W3 accepted both controls, the clean
+  case exact and the numerical-difference case as such. Both rejected all 12 faults through the targeted check
+  before any episode ran, and their full status vectors are identical on all 14 cases. W1 attempted none of the
+  specification's checks: it evaluated 100 episodes in every case without a warning, with no false alarms.
+- 16:43-16:50 Cost: 5 randomized blocks on C0. Medians are 20.9, 21.0 and 21.7 s, but wall time was bimodal
+  over time (some runs 10.8-14.4 s), so no precise difference is supported. Peak self working sets are 288,
+  289 and 293 MB. Counted custom lines: W1 65, W2 277, W3 152.
