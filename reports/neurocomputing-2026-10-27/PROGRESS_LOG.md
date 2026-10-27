@@ -87,3 +87,14 @@ Times are UTC. Machine: the author's Windows 11 laptop (the original data home).
     formatted after `check_file_digests` was added, so the tests never ran there. The same interrupted command
     had also skipped regenerating `docs/api`. The other jobs passed, except the browser job, which was skipped
     because it depends on the Linux job.
+- 17:25 CI run 40546091715 on `11145b3`: all six jobs passed. Linux: 567 passed, 4 Windows-only skipped, 85.91%
+  combined statement and branch coverage (8,865/10,018 statements, 1,913/2,528 branches). Windows Python 3.12 and
+  3.13: 288 each. Source archive: 189. Browser: 15 flows. Logs and artifacts are under `ci/run-40546091715-11145b3/`.
+- 17:30-18:05 Figures. Figure 1 (architecture) is drawn from a node list whose every named function is
+  checked to exist. Figure 2 is the historical LunarLander figure, copied byte for byte with all 20 plotted values
+  re-derived from `docs/results/results.json`. Figure 3 is the comparison matrix, Figure 4 the CartPole study, and
+  the appendix figure the Linux replay. Every figure was inspected at reading scale; clipped labels, overlapping
+  headers and markers, and text below 9 pt were fixed.
+- 18:05 Manuscript imported into `paper/neurocomputing/` from the package (hashes in
+  `IMPORTED_FROM_PACKAGE.sha256`), with the new evidence integrated (`manuscript/main.tex.diff`). The local build
+  is still blocked by Smart App Control (not bypassed); `.github/workflows/paper.yml` builds it with TeX Live in CI.

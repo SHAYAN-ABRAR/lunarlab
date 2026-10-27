@@ -1,0 +1,3466 @@
+{
+  "kind": "lunarlab.reproduce-artifact",
+  "schema": 2,
+  "artifact": "20261015-235940-custom-s2-standard-a299",
+  "reproduced_at": "2026-10-27T16:53:29+00:00",
+  "status": "numerical-difference",
+  "status_reason": "100 of 100 episodes differ; median |return difference| 0.000243, largest 0.0134; outcomes agree in 100%, on a different platform (os, torch differ); no compared aggregate differs significantly from the record",
+  "status_meaning": "episodes differ numerically on a different platform; integrity holds and no compared aggregate differs significantly from the record. Bit-identical results across platforms are not a supported guarantee, so this is reported, not failed. Equivalence has not been assessed",
+  "blocking": false,
+  "exit_code": 3,
+  "integrity_ok": true,
+  "software": {
+    "lunarlab": "0.1.0",
+    "git": {
+      "available": true,
+      "revision": "dea292cf24230bf59be8b3bfe7dba1b63614cf81",
+      "dirty": true
+    },
+    "python": "3.12.3",
+    "python_implementation": "CPython",
+    "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+    "packages": {
+      "gymnasium": "1.4.0",
+      "Box2D": "2.3.10",
+      "pygame": "2.6.1",
+      "stable-baselines3": "2.9.0",
+      "torch": "2.14.1+cpu",
+      "numpy": "2.5.4",
+      "pandas": "3.0.6",
+      "matplotlib": "3.11.2",
+      "imageio": "2.38.1",
+      "imageio-ffmpeg": "0.6.0",
+      "optuna": "5.0.0",
+      "fastapi": "0.143.2",
+      "uvicorn": "0.54.0",
+      "pydantic": "2.14.1",
+      "psutil": "7.2.2",
+      "PyYAML": "6.0.3"
+    }
+  },
+  "hardware": {
+    "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+    "machine": "x86_64",
+    "cpu": "AMD EPYC 9V45 96-Core Processor",
+    "physical_cores": 2,
+    "logical_cores": 4,
+    "ram_gb": 16.8
+  },
+  "platform": {
+    "basis": "operating system and numerical libraries (torch, numpy, Box2D, gymnasium, stable-baselines3) of artifact.json 'exported_with' versus this machine",
+    "recorded": {
+      "platform": "Windows-11-10.0.26300-SP0",
+      "python": "3.12.13",
+      "os": "Windows",
+      "torch": "2.14.1",
+      "numpy": "2.5.4",
+      "Box2D": "2.3.10",
+      "gymnasium": "1.4.0",
+      "stable-baselines3": "2.9.0"
+    },
+    "reproduced": {
+      "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+      "python": "3.12.3",
+      "os": "Linux",
+      "torch": "2.14.1+cpu",
+      "numpy": "2.5.4",
+      "Box2D": "2.3.10",
+      "gymnasium": "1.4.0",
+      "stable-baselines3": "2.9.0"
+    },
+    "differences": {
+      "os": [
+        "Windows",
+        "Linux"
+      ],
+      "torch": [
+        "2.14.1",
+        "2.14.1+cpu"
+      ]
+    },
+    "same_platform": false
+  },
+  "episodes": 100,
+  "recorded_mean_original_return": -342.1870168670024,
+  "reproduced_mean_original_return": -342.18678065374746,
+  "recorded_pad_landing_rate": 0.0,
+  "reproduced_pad_landing_rate": 0.0,
+  "comparison": {
+    "compared_fields": [
+      "length",
+      "original_return",
+      "training_return",
+      "env_outcome",
+      "pad_landing"
+    ],
+    "exactness_scope": "numeric equality of selected episode-summary fields; not full-trajectory or bitwise identity",
+    "compared": 100,
+    "exact": 0,
+    "within_tolerance": 0,
+    "tolerance": 0.0,
+    "max_abs_return_difference": 0.013365894689059132,
+    "max_abs_original_return_difference": 0.013365894689059132,
+    "max_abs_training_return_difference": 0.00461491709575057,
+    "mismatches": [
+      {
+        "seed": 20000,
+        "fields": {
+          "original_return": [
+            -157.81804145773071,
+            -157.8178876490607
+          ],
+          "training_return": [
+            -33.548937616171315,
+            -33.548896675230935
+          ]
+        }
+      },
+      {
+        "seed": 20001,
+        "fields": {
+          "original_return": [
+            -539.7817451185037,
+            -539.7811464978424
+          ],
+          "training_return": [
+            24.038885346613824,
+            24.038790005259216
+          ]
+        }
+      },
+      {
+        "seed": 20002,
+        "fields": {
+          "original_return": [
+            -527.5669645495,
+            -527.5673415951169
+          ],
+          "training_return": [
+            -18.963721598673146,
+            -18.963726688642055
+          ]
+        }
+      },
+      {
+        "seed": 20003,
+        "fields": {
+          "original_return": [
+            -135.62872034139815,
+            -135.62880108711317
+          ],
+          "training_return": [
+            -22.309335368685424,
+            -22.30948866531253
+          ]
+        }
+      },
+      {
+        "seed": 20004,
+        "fields": {
+          "original_return": [
+            -421.8506615462581,
+            -421.8508030962227
+          ],
+          "training_return": [
+            5.890276654623449,
+            5.890313073061407
+          ]
+        }
+      },
+      {
+        "seed": 20005,
+        "fields": {
+          "original_return": [
+            -17.590881186732943,
+            -17.590288193012583
+          ],
+          "training_return": [
+            59.08642108924687,
+            59.08625968173146
+          ]
+        }
+      },
+      {
+        "seed": 20006,
+        "fields": {
+          "original_return": [
+            -604.2422594539885,
+            -604.2423124321401
+          ],
+          "training_return": [
+            18.420167034259066,
+            18.420234305318445
+          ]
+        }
+      },
+      {
+        "seed": 20007,
+        "fields": {
+          "original_return": [
+            -493.6021926437304,
+            -493.60211586664366
+          ],
+          "training_return": [
+            -6.74371492175851,
+            -6.743740529404022
+          ]
+        }
+      },
+      {
+        "seed": 20008,
+        "fields": {
+          "original_return": [
+            -132.24858959277196,
+            -132.2497989492013
+          ],
+          "training_return": [
+            -18.126522731035948,
+            -18.12689639441669
+          ]
+        }
+      },
+      {
+        "seed": 20009,
+        "fields": {
+          "original_return": [
+            -102.16041691108776,
+            -102.1603906644564
+          ],
+          "training_return": [
+            -10.830649489536881,
+            -10.830639252439141
+          ]
+        }
+      },
+      {
+        "seed": 20010,
+        "fields": {
+          "original_return": [
+            -78.27086928907457,
+            -78.27108152642478
+          ],
+          "training_return": [
+            12.059339251369238,
+            12.05936473235488
+          ]
+        }
+      },
+      {
+        "seed": 20011,
+        "fields": {
+          "original_return": [
+            -125.67502205843407,
+            -125.67474321137156
+          ],
+          "training_return": [
+            1.7412563772522844,
+            1.7417648482951336
+          ]
+        }
+      },
+      {
+        "seed": 20012,
+        "fields": {
+          "original_return": [
+            -75.47537668010656,
+            -75.47525652703152
+          ],
+          "training_return": [
+            51.83144538290799,
+            51.831545032560825
+          ]
+        }
+      },
+      {
+        "seed": 20013,
+        "fields": {
+          "original_return": [
+            -123.61737448245901,
+            -123.61734583143931
+          ],
+          "training_return": [
+            -12.604014941956848,
+            -12.60408582771197
+          ]
+        }
+      },
+      {
+        "seed": 20014,
+        "fields": {
+          "original_return": [
+            -715.7485357159436,
+            -715.744195588468
+          ],
+          "training_return": [
+            38.21547421021387,
+            38.213293514214456
+          ]
+        }
+      },
+      {
+        "seed": 20015,
+        "fields": {
+          "original_return": [
+            -107.81263257338865,
+            -107.81263541888084
+          ],
+          "training_return": [
+            -19.778174305334687,
+            -19.778174992650747
+          ]
+        }
+      },
+      {
+        "seed": 20016,
+        "fields": {
+          "original_return": [
+            -481.68852965389476,
+            -481.68887384504876
+          ],
+          "training_return": [
+            16.058535448275506,
+            16.058558113873005
+          ]
+        }
+      },
+      {
+        "seed": 20017,
+        "fields": {
+          "original_return": [
+            -407.34265547315766,
+            -407.3441890890536
+          ],
+          "training_return": [
+            7.284919137950055,
+            7.2851163590094075
+          ]
+        }
+      },
+      {
+        "seed": 20018,
+        "fields": {
+          "original_return": [
+            -157.8227837471004,
+            -157.82275856337094
+          ],
+          "training_return": [
+            -32.20742455869913,
+            -32.207427725195885
+          ]
+        }
+      },
+      {
+        "seed": 20019,
+        "fields": {
+          "original_return": [
+            -74.33787718893197,
+            -74.33678452035994
+          ],
+          "training_return": [
+            52.160860892385244,
+            52.16150818951428
+          ]
+        }
+      }
+    ],
+    "n_mismatches": 100,
+    "missing_seeds": [],
+    "summary": {
+      "n": 100,
+      "agreement": {
+        "bit_identical": 0.0,
+        "length": 1.0,
+        "termination": 1.0,
+        "env_outcome": 1.0,
+        "pad_landing": 1.0,
+        "all_outcome_fields": 1.0
+      },
+      "return_difference": {
+        "mean_abs": 0.0008103349709891461,
+        "median_abs": 0.0002426479702535289,
+        "p90_abs": 0.0018080391045714364,
+        "max_abs": 0.013365894689059132,
+        "median_relative": 9.94997223746606e-07,
+        "n_relative": 100,
+        "relative_floor": 1.0,
+        "episodes_differing": 99,
+        "episodes_above_1": 0,
+        "episodes_above_10": 0
+      }
+    },
+    "episodes": [
+      {
+        "seed": 20000,
+        "exact": false,
+        "recorded_return": -157.81804145773071,
+        "reproduced_return": -157.8178876490607,
+        "abs_return_difference": 0.00015380867000658327,
+        "relative_return_difference": 9.745949739705691e-07,
+        "recorded_length": 72,
+        "reproduced_length": 72,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "crash",
+          "crash"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 6.288290023803711e-06
+      },
+      {
+        "seed": 20001,
+        "exact": false,
+        "recorded_return": -539.7817451185037,
+        "reproduced_return": -539.7811464978424,
+        "abs_return_difference": 0.0005986206613215472,
+        "relative_return_difference": 1.109005013109745e-06,
+        "recorded_length": 71,
+        "reproduced_length": 71,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "out_of_bounds",
+          "out_of_bounds"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 3.814697265625e-06
+      },
+      {
+        "seed": 20002,
+        "exact": false,
+        "recorded_return": -527.5669645495,
+        "reproduced_return": -527.5673415951169,
+        "abs_return_difference": 0.00037704561691498384,
+        "relative_return_difference": 7.146876932238369e-07,
+        "recorded_length": 103,
+        "reproduced_length": 103,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "out_of_bounds",
+          "out_of_bounds"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 1.8477439880371094e-06
+      },
+      {
+        "seed": 20003,
+        "exact": false,
+        "recorded_return": -135.62872034139815,
+        "reproduced_return": -135.62880108711317,
+        "abs_return_difference": 8.074571502447725e-05,
+        "relative_return_difference": 5.953437798515535e-07,
+        "recorded_length": 64,
+        "reproduced_length": 64,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "crash",
+          "crash"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 4.982948303222656e-05
+      },
+      {
+        "seed": 20004,
+        "exact": false,
+        "recorded_return": -421.8506615462581,
+        "reproduced_return": -421.8508030962227,
+        "abs_return_difference": 0.00014154996461002156,
+        "relative_return_difference": 3.3554520002690543e-07,
+        "recorded_length": 77,
+        "reproduced_length": 77,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "out_of_bounds",
+          "out_of_bounds"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 1.430511474609375e-06
+      },
+      {
+        "seed": 20005,
+        "exact": false,
+        "recorded_return": -17.590881186732943,
+        "reproduced_return": -17.590288193012583,
+        "abs_return_difference": 0.0005929937203603686,
+        "relative_return_difference": 3.371029080723966e-05,
+        "recorded_length": 136,
+        "reproduced_length": 136,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "crash",
+          "crash"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 1.5422701835632324e-05
+      },
+      {
+        "seed": 20006,
+        "exact": false,
+        "recorded_return": -604.2422594539885,
+        "reproduced_return": -604.2423124321401,
+        "abs_return_difference": 5.297815164340136e-05,
+        "relative_return_difference": 8.76770050662693e-08,
+        "recorded_length": 102,
+        "reproduced_length": 102,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "out_of_bounds",
+          "out_of_bounds"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 9.5367431640625e-07
+      },
+      {
+        "seed": 20007,
+        "exact": false,
+        "recorded_return": -493.6021926437304,
+        "reproduced_return": -493.60211586664366,
+        "abs_return_difference": 7.67770867469153e-05,
+        "relative_return_difference": 1.5554446048081286e-07,
+        "recorded_length": 88,
+        "reproduced_length": 88,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "out_of_bounds",
+          "out_of_bounds"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 4.76837158203125e-07
+      },
+      {
+        "seed": 20008,
+        "exact": false,
+        "recorded_return": -132.24858959277196,
+        "reproduced_return": -132.2497989492013,
+        "abs_return_difference": 0.0012093564293422787,
+        "relative_return_difference": 9.144569579654526e-06,
+        "recorded_length": 76,
+        "reproduced_length": 76,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "crash",
+          "crash"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 1.33514404296875e-05
+      },
+      {
+        "seed": 20009,
+        "exact": false,
+        "recorded_return": -102.16041691108776,
+        "reproduced_return": -102.1603906644564,
+        "abs_return_difference": 2.624663136430172e-05,
+        "relative_return_difference": 2.5691585995723454e-07,
+        "recorded_length": 58,
+        "reproduced_length": 58,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "crash",
+          "crash"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 1.0251998901367188e-05
+      },
+      {
+        "seed": 20010,
+        "exact": false,
+        "recorded_return": -78.27086928907457,
+        "reproduced_return": -78.27108152642478,
+        "abs_return_difference": 0.000212237350211808,
+        "relative_return_difference": 2.7115752276617826e-06,
+        "recorded_length": 84,
+        "reproduced_length": 84,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "crash",
+          "crash"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 8.58306884765625e-06
+      },
+      {
+        "seed": 20011,
+        "exact": false,
+        "recorded_return": -125.67502205843407,
+        "reproduced_return": -125.67474321137156,
+        "abs_return_difference": 0.00027884706250347335,
+        "relative_return_difference": 2.2187946175479495e-06,
+        "recorded_length": 162,
+        "reproduced_length": 162,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "out_of_bounds",
+          "out_of_bounds"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 5.3299590945243835e-06
+      },
+      {
+        "seed": 20012,
+        "exact": false,
+        "recorded_return": -75.47537668010656,
+        "reproduced_return": -75.47525652703152,
+        "abs_return_difference": 0.00012015307504498196,
+        "relative_return_difference": 1.5919506510611602e-06,
+        "recorded_length": 146,
+        "reproduced_length": 146,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "crash",
+          "crash"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 4.51505184173584e-06
+      },
+      {
+        "seed": 20013,
+        "exact": false,
+        "recorded_return": -123.61737448245901,
+        "reproduced_return": -123.61734583143931,
+        "abs_return_difference": 2.865101970428441e-05,
+        "relative_return_difference": 2.317717863223985e-07,
+        "recorded_length": 167,
+        "reproduced_length": 167,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "out_of_bounds",
+          "out_of_bounds"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 1.475214958190918e-06
+      },
+      {
+        "seed": 20014,
+        "exact": false,
+        "recorded_return": -715.7485357159436,
+        "reproduced_return": -715.744195588468,
+        "abs_return_difference": 0.004340127475643385,
+        "relative_return_difference": 6.063760188209222e-06,
+        "recorded_length": 141,
+        "reproduced_length": 141,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "out_of_bounds",
+          "out_of_bounds"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 4.3392181396484375e-05
+      },
+      {
+        "seed": 20015,
+        "exact": false,
+        "recorded_return": -107.81263257338865,
+        "reproduced_return": -107.81263541888084,
+        "abs_return_difference": 2.8454921903176e-06,
+        "relative_return_difference": 2.6392938586122156e-08,
+        "recorded_length": 56,
+        "reproduced_length": 56,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "crash",
+          "crash"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 3.3974647521972656e-06
+      },
+      {
+        "seed": 20016,
+        "exact": false,
+        "recorded_return": -481.68852965389476,
+        "reproduced_return": -481.68887384504876,
+        "abs_return_difference": 0.000344191153999418,
+        "relative_return_difference": 7.145512770393929e-07,
+        "recorded_length": 75,
+        "reproduced_length": 75,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "out_of_bounds",
+          "out_of_bounds"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 1.6689300537109375e-06
+      },
+      {
+        "seed": 20017,
+        "exact": false,
+        "recorded_return": -407.34265547315766,
+        "reproduced_return": -407.3441890890536,
+        "abs_return_difference": 0.001533615895937146,
+        "relative_return_difference": 3.7649283111677596e-06,
+        "recorded_length": 74,
+        "reproduced_length": 74,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "out_of_bounds",
+          "out_of_bounds"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 9.238719940185547e-06
+      },
+      {
+        "seed": 20018,
+        "exact": false,
+        "recorded_return": -157.8227837471004,
+        "reproduced_return": -157.82275856337094,
+        "abs_return_difference": 2.5183729462696647e-05,
+        "relative_return_difference": 1.5956966963053795e-07,
+        "recorded_length": 70,
+        "reproduced_length": 70,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "crash",
+          "crash"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 8.642673492431641e-07
+      },
+      {
+        "seed": 20019,
+        "exact": false,
+        "recorded_return": -74.33787718893197,
+        "reproduced_return": -74.33678452035994,
+        "abs_return_difference": 0.0010926685720278329,
+        "relative_return_difference": 1.4698678699834037e-05,
+        "recorded_length": 118,
+        "reproduced_length": 118,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "crash",
+          "crash"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 5.841255187988281e-06
+      },
+      {
+        "seed": 20020,
+        "exact": false,
+        "recorded_return": -40.90526467500615,
+        "reproduced_return": -40.90517812503231,
+        "abs_return_difference": 8.654997384383023e-05,
+        "relative_return_difference": 2.1158639243988025e-06,
+        "recorded_length": 135,
+        "reproduced_length": 135,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "crash",
+          "crash"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 5.960464477539062e-07
+      },
+      {
+        "seed": 20021,
+        "exact": false,
+        "recorded_return": -441.3605843409011,
+        "reproduced_return": -441.3620094370211,
+        "abs_return_difference": 0.0014250961199877565,
+        "relative_return_difference": 3.2288703852336555e-06,
+        "recorded_length": 97,
+        "reproduced_length": 97,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "out_of_bounds",
+          "out_of_bounds"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 1.2278556823730469e-05
+      },
+      {
+        "seed": 20022,
+        "exact": false,
+        "recorded_return": -352.84788990177685,
+        "reproduced_return": -352.84671604081166,
+        "abs_return_difference": 0.0011738609651956722,
+        "relative_return_difference": 3.326818719313988e-06,
+        "recorded_length": 119,
+        "reproduced_length": 119,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "out_of_bounds",
+          "out_of_bounds"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 7.197260856628418e-06
+      },
+      {
+        "seed": 20023,
+        "exact": false,
+        "recorded_return": -538.2313555091123,
+        "reproduced_return": -538.2319833770266,
+        "abs_return_difference": 0.0006278679143179033,
+        "relative_return_difference": 1.1665390874970559e-06,
+        "recorded_length": 79,
+        "reproduced_length": 79,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "out_of_bounds",
+          "out_of_bounds"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 5.7220458984375e-06
+      },
+      {
+        "seed": 20024,
+        "exact": false,
+        "recorded_return": -490.07077928145856,
+        "reproduced_return": -490.07083137327965,
+        "abs_return_difference": 5.209182108956156e-05,
+        "relative_return_difference": 1.062944849842681e-07,
+        "recorded_length": 147,
+        "reproduced_length": 147,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "out_of_bounds",
+          "out_of_bounds"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 1.6391277313232422e-06
+      },
+      {
+        "seed": 20025,
+        "exact": false,
+        "recorded_return": -641.2229263794204,
+        "reproduced_return": -641.224112935779,
+        "abs_return_difference": 0.0011865563585615746,
+        "relative_return_difference": 1.850458412741582e-06,
+        "recorded_length": 150,
+        "reproduced_length": 150,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "out_of_bounds",
+          "out_of_bounds"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 1.5735626220703125e-05
+      },
+      {
+        "seed": 20026,
+        "exact": false,
+        "recorded_return": -352.79045861292013,
+        "reproduced_return": -352.7901003896742,
+        "abs_return_difference": 0.0003582232459393708,
+        "relative_return_difference": 1.0153994735226428e-06,
+        "recorded_length": 106,
+        "reproduced_length": 106,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "out_of_bounds",
+          "out_of_bounds"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 6.705522537231445e-06
+      },
+      {
+        "seed": 20027,
+        "exact": false,
+        "recorded_return": -548.4938274134836,
+        "reproduced_return": -548.4937718474894,
+        "abs_return_difference": 5.5565994216522085e-05,
+        "relative_return_difference": 1.0130650782079542e-07,
+        "recorded_length": 78,
+        "reproduced_length": 78,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "out_of_bounds",
+          "out_of_bounds"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 2.980232238769531e-07
+      },
+      {
+        "seed": 20028,
+        "exact": false,
+        "recorded_return": -281.36089383155985,
+        "reproduced_return": -281.3594870679084,
+        "abs_return_difference": 0.0014067636514596416,
+        "relative_return_difference": 4.999854927607025e-06,
+        "recorded_length": 112,
+        "reproduced_length": 112,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "out_of_bounds",
+          "out_of_bounds"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 7.3909759521484375e-06
+      },
+      {
+        "seed": 20029,
+        "exact": false,
+        "recorded_return": -603.2674208090324,
+        "reproduced_return": -603.2672347554275,
+        "abs_return_difference": 0.00018605360492074396,
+        "relative_return_difference": 3.0840983368740585e-07,
+        "recorded_length": 146,
+        "reproduced_length": 146,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "out_of_bounds",
+          "out_of_bounds"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 4.132743924856186e-06
+      },
+      {
+        "seed": 20030,
+        "exact": false,
+        "recorded_return": -811.3846630125051,
+        "reproduced_return": -811.3739752590959,
+        "abs_return_difference": 0.010687753409229117,
+        "relative_return_difference": 1.3172239871465744e-05,
+        "recorded_length": 264,
+        "reproduced_length": 264,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "out_of_bounds",
+          "out_of_bounds"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.00012969970703125
+      },
+      {
+        "seed": 20031,
+        "exact": false,
+        "recorded_return": -468.56970451601086,
+        "reproduced_return": -468.56964645457634,
+        "abs_return_difference": 5.806143451536627e-05,
+        "relative_return_difference": 1.2391205397143282e-07,
+        "recorded_length": 122,
+        "reproduced_length": 122,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "out_of_bounds",
+          "out_of_bounds"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 3.5762786865234375e-07
+      },
+      {
+        "seed": 20032,
+        "exact": false,
+        "recorded_return": -80.40270385036929,
+        "reproduced_return": -80.4028759869038,
+        "abs_return_difference": 0.00017213653450198763,
+        "relative_return_difference": 2.140929673488798e-06,
+        "recorded_length": 89,
+        "reproduced_length": 89,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "crash",
+          "crash"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 3.0994415283203125e-06
+      },
+      {
+        "seed": 20033,
+        "exact": false,
+        "recorded_return": -191.11130559441335,
+        "reproduced_return": -191.11309882856358,
+        "abs_return_difference": 0.001793234150227363,
+        "relative_return_difference": 9.383192400103533e-06,
+        "recorded_length": 329,
+        "reproduced_length": 329,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "out_of_bounds",
+          "out_of_bounds"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 1.0192394256591797e-05
+      },
+      {
+        "seed": 20034,
+        "exact": false,
+        "recorded_return": -446.27079239153187,
+        "reproduced_return": -446.2706590610456,
+        "abs_return_difference": 0.00013333048627828248,
+        "relative_return_difference": 2.98765880607544e-07,
+        "recorded_length": 81,
+        "reproduced_length": 81,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "out_of_bounds",
+          "out_of_bounds"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 3.427267074584961e-06
+      },
+      {
+        "seed": 20035,
+        "exact": false,
+        "recorded_return": -467.42874647773476,
+        "reproduced_return": -467.4287673495506,
+        "abs_return_difference": 2.087181582055564e-05,
+        "relative_return_difference": 4.4652400986959485e-08,
+        "recorded_length": 148,
+        "reproduced_length": 148,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "out_of_bounds",
+          "out_of_bounds"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 5.960464477539062e-07
+      },
+      {
+        "seed": 20036,
+        "exact": false,
+        "recorded_return": -592.3948947460735,
+        "reproduced_return": -592.392710279845,
+        "abs_return_difference": 0.0021844662285275263,
+        "relative_return_difference": 3.6875169720425837e-06,
+        "recorded_length": 80,
+        "reproduced_length": 80,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "out_of_bounds",
+          "out_of_bounds"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 1.3470649719238281e-05
+      },
+      {
+        "seed": 20037,
+        "exact": false,
+        "recorded_return": -58.240553077105304,
+        "reproduced_return": -58.2411476814557,
+        "abs_return_difference": 0.0005946043503968212,
+        "relative_return_difference": 1.020945576546325e-05,
+        "recorded_length": 117,
+        "reproduced_length": 117,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "crash",
+          "crash"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 1.5497207641601562e-05
+      },
+      {
+        "seed": 20038,
+        "exact": false,
+        "recorded_return": -131.70715500716062,
+        "reproduced_return": -131.7072145871856,
+        "abs_return_difference": 5.958002498118731e-05,
+        "relative_return_difference": 4.523674129772834e-07,
+        "recorded_length": 78,
+        "reproduced_length": 78,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "crash",
+          "crash"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 4.3137697502970695e-07
+      },
+      {
+        "seed": 20039,
+        "exact": false,
+        "recorded_return": -94.56294517208937,
+        "reproduced_return": -94.56347553009454,
+        "abs_return_difference": 0.000530358005164544,
+        "relative_return_difference": 5.608518264732318e-06,
+        "recorded_length": 109,
+        "reproduced_length": 109,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "crash",
+          "crash"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 2.3245811462402344e-06
+      },
+      {
+        "seed": 20040,
+        "exact": false,
+        "recorded_return": -567.5097055296255,
+        "reproduced_return": -567.5097055296255,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 75,
+        "reproduced_length": 75,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "out_of_bounds",
+          "out_of_bounds"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20041,
+        "exact": false,
+        "recorded_return": -78.83812775114876,
+        "reproduced_return": -78.83829393190621,
+        "abs_return_difference": 0.00016618075744645466,
+        "relative_return_difference": 2.107872956737398e-06,
+        "recorded_length": 139,
+        "reproduced_length": 139,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "crash",
+          "crash"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 2.682209014892578e-06
+      },
+      {
+        "seed": 20042,
+        "exact": false,
+        "recorded_return": 7.55476034316797,
+        "reproduced_return": 7.55229583150529,
+        "abs_return_difference": 0.0024645116626800245,
+        "relative_return_difference": 0.0003262197013183571,
+        "recorded_length": 111,
+        "reproduced_length": 111,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "crash",
+          "crash"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 2.9802322387695312e-05
+      },
+      {
+        "seed": 20043,
+        "exact": false,
+        "recorded_return": -558.6429228968537,
+        "reproduced_return": -558.6430654428127,
+        "abs_return_difference": 0.00014254595896545652,
+        "relative_return_difference": 2.551647091961385e-07,
+        "recorded_length": 75,
+        "reproduced_length": 75,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "out_of_bounds",
+          "out_of_bounds"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 8.940696716308594e-07
+      },
+      {
+        "seed": 20044,
+        "exact": false,
+        "recorded_return": -474.3126546495429,
+        "reproduced_return": -474.3123993965561,
+        "abs_return_difference": 0.00025525298678985564,
+        "relative_return_difference": 5.38153440115266e-07,
+        "recorded_length": 78,
+        "reproduced_length": 78,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "out_of_bounds",
+          "out_of_bounds"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 1.6689300537109375e-06
+      },
+      {
+        "seed": 20045,
+        "exact": false,
+        "recorded_return": -542.025339985365,
+        "reproduced_return": -542.02492313719,
+        "abs_return_difference": 0.000416848175063933,
+        "relative_return_difference": 7.690566184141652e-07,
+        "recorded_length": 220,
+        "reproduced_length": 220,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "out_of_bounds",
+          "out_of_bounds"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 2.6226043701171875e-06
+      },
+      {
+        "seed": 20046,
+        "exact": false,
+        "recorded_return": -109.10825981205632,
+        "reproduced_return": -109.10827698469534,
+        "abs_return_difference": 1.7172639019236158e-05,
+        "relative_return_difference": 1.5739082493678086e-07,
+        "recorded_length": 80,
+        "reproduced_length": 80,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "crash",
+          "crash"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 4.76837158203125e-07
+      },
+      {
+        "seed": 20047,
+        "exact": false,
+        "recorded_return": -24.371413250545842,
+        "reproduced_return": -24.37135042054463,
+        "abs_return_difference": 6.283000121243276e-05,
+        "relative_return_difference": 2.5780204277249113e-06,
+        "recorded_length": 84,
+        "reproduced_length": 84,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "crash",
+          "crash"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 1.2814998626708984e-06
+      },
+      {
+        "seed": 20048,
+        "exact": false,
+        "recorded_return": -677.7292300336617,
+        "reproduced_return": -677.7297017698364,
+        "abs_return_difference": 0.0004717361747452742,
+        "relative_return_difference": 6.960540490806983e-07,
+        "recorded_length": 205,
+        "reproduced_length": 205,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "out_of_bounds",
+          "out_of_bounds"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 9.5367431640625e-06
+      },
+      {
+        "seed": 20049,
+        "exact": false,
+        "recorded_return": -106.4164700033623,
+        "reproduced_return": -106.41568935184601,
+        "abs_return_difference": 0.0007806515162940286,
+        "relative_return_difference": 7.3358148063862985e-06,
+        "recorded_length": 107,
+        "reproduced_length": 107,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "crash",
+          "crash"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 2.5987625122070312e-05
+      },
+      {
+        "seed": 20050,
+        "exact": false,
+        "recorded_return": -428.4407283051572,
+        "reproduced_return": -428.4412819374649,
+        "abs_return_difference": 0.0005536323076853478,
+        "relative_return_difference": 1.292202797515139e-06,
+        "recorded_length": 121,
+        "reproduced_length": 121,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "out_of_bounds",
+          "out_of_bounds"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 3.159046173095703e-06
+      },
+      {
+        "seed": 20051,
+        "exact": false,
+        "recorded_return": -624.7001358964046,
+        "reproduced_return": -624.7012182824781,
+        "abs_return_difference": 0.0010823860734490154,
+        "relative_return_difference": 1.732649012307098e-06,
+        "recorded_length": 117,
+        "reproduced_length": 117,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "out_of_bounds",
+          "out_of_bounds"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 9.059906005859375e-06
+      },
+      {
+        "seed": 20052,
+        "exact": false,
+        "recorded_return": -522.8117296740571,
+        "reproduced_return": -522.8105155659046,
+        "abs_return_difference": 0.0012141081525669506,
+        "relative_return_difference": 2.322266475015541e-06,
+        "recorded_length": 77,
+        "reproduced_length": 77,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "out_of_bounds",
+          "out_of_bounds"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 7.718801498413086e-06
+      },
+      {
+        "seed": 20053,
+        "exact": false,
+        "recorded_return": -516.5500210808834,
+        "reproduced_return": -516.5491117900078,
+        "abs_return_difference": 0.0009092908755974349,
+        "relative_return_difference": 1.760315242451717e-06,
+        "recorded_length": 78,
+        "reproduced_length": 78,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "out_of_bounds",
+          "out_of_bounds"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 6.9141387939453125e-06
+      },
+      {
+        "seed": 20054,
+        "exact": false,
+        "recorded_return": -113.38231926078984,
+        "reproduced_return": -113.38229021921691,
+        "abs_return_difference": 2.904157292960008e-05,
+        "relative_return_difference": 2.5613846249521294e-07,
+        "recorded_length": 196,
+        "reproduced_length": 196,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "crash",
+          "crash"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 5.7220458984375e-06
+      },
+      {
+        "seed": 20055,
+        "exact": false,
+        "recorded_return": -499.86877221141964,
+        "reproduced_return": -499.8685533721428,
+        "abs_return_difference": 0.00021883927684029914,
+        "relative_return_difference": 4.377934550145113e-07,
+        "recorded_length": 73,
+        "reproduced_length": 73,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "out_of_bounds",
+          "out_of_bounds"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 2.384185791015625e-06
+      },
+      {
+        "seed": 20056,
+        "exact": false,
+        "recorded_return": -30.978568638881953,
+        "reproduced_return": -30.978567058054125,
+        "abs_return_difference": 1.5808278277518184e-06,
+        "relative_return_difference": 5.102972465188992e-08,
+        "recorded_length": 184,
+        "reproduced_length": 184,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "crash",
+          "crash"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 6.109476089477539e-07
+      },
+      {
+        "seed": 20057,
+        "exact": false,
+        "recorded_return": -571.9054194713707,
+        "reproduced_return": -571.9057221724232,
+        "abs_return_difference": 0.0003027010525329388,
+        "relative_return_difference": 5.292851618939622e-07,
+        "recorded_length": 101,
+        "reproduced_length": 101,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "out_of_bounds",
+          "out_of_bounds"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 1.430511474609375e-06
+      },
+      {
+        "seed": 20058,
+        "exact": false,
+        "recorded_return": -662.2730100370076,
+        "reproduced_return": -662.2730112264543,
+        "abs_return_difference": 1.1894467206730042e-06,
+        "relative_return_difference": 1.796006635702304e-09,
+        "recorded_length": 88,
+        "reproduced_length": 88,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "out_of_bounds",
+          "out_of_bounds"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 8.344650268554688e-07
+      },
+      {
+        "seed": 20059,
+        "exact": false,
+        "recorded_return": -572.8458612024071,
+        "reproduced_return": -572.84589669699,
+        "abs_return_difference": 3.549458290308394e-05,
+        "relative_return_difference": 6.196183878954905e-08,
+        "recorded_length": 75,
+        "reproduced_length": 75,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "out_of_bounds",
+          "out_of_bounds"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 2.8014183044433594e-06
+      },
+      {
+        "seed": 20060,
+        "exact": false,
+        "recorded_return": -718.2656715800861,
+        "reproduced_return": -718.2655049128037,
+        "abs_return_difference": 0.0001666672823148474,
+        "relative_return_difference": 2.3204127512902323e-07,
+        "recorded_length": 184,
+        "reproduced_length": 184,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "out_of_bounds",
+          "out_of_bounds"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 4.291534423828125e-06
+      },
+      {
+        "seed": 20061,
+        "exact": false,
+        "recorded_return": -108.32526893195133,
+        "reproduced_return": -108.3251062551599,
+        "abs_return_difference": 0.00016267679143311398,
+        "relative_return_difference": 1.5017437116662562e-06,
+        "recorded_length": 153,
+        "reproduced_length": 153,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "crash",
+          "crash"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 2.473592758178711e-06
+      },
+      {
+        "seed": 20062,
+        "exact": false,
+        "recorded_return": -61.78764271712104,
+        "reproduced_return": -61.78762132197186,
+        "abs_return_difference": 2.1395149175873485e-05,
+        "relative_return_difference": 3.462690634408197e-07,
+        "recorded_length": 143,
+        "reproduced_length": 143,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "crash",
+          "crash"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 1.1682510375976562e-05
+      },
+      {
+        "seed": 20063,
+        "exact": false,
+        "recorded_return": -43.06959631476437,
+        "reproduced_return": -43.0692653610715,
+        "abs_return_difference": 0.0003309536928668422,
+        "relative_return_difference": 7.684160549082983e-06,
+        "recorded_length": 162,
+        "reproduced_length": 162,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "crash",
+          "crash"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 6.9588422775268555e-06
+      },
+      {
+        "seed": 20064,
+        "exact": false,
+        "recorded_return": -107.35396215350877,
+        "reproduced_return": -107.35267553372162,
+        "abs_return_difference": 0.0012866197871517215,
+        "relative_return_difference": 1.1984837460511646e-05,
+        "recorded_length": 83,
+        "reproduced_length": 83,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "crash",
+          "crash"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 2.8371810913085938e-05
+      },
+      {
+        "seed": 20065,
+        "exact": false,
+        "recorded_return": -96.9638386937713,
+        "reproduced_return": -96.96387886732086,
+        "abs_return_difference": 4.017354956431518e-05,
+        "relative_return_difference": 4.1431476007452896e-07,
+        "recorded_length": 77,
+        "reproduced_length": 77,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "crash",
+          "crash"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 4.76837158203125e-07
+      },
+      {
+        "seed": 20066,
+        "exact": false,
+        "recorded_return": -607.0351750978214,
+        "reproduced_return": -607.0354163821235,
+        "abs_return_difference": 0.00024128430209202634,
+        "relative_return_difference": 3.974799352494595e-07,
+        "recorded_length": 73,
+        "reproduced_length": 73,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "out_of_bounds",
+          "out_of_bounds"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 5.304813385009766e-06
+      },
+      {
+        "seed": 20067,
+        "exact": false,
+        "recorded_return": -523.4956980741943,
+        "reproduced_return": -523.4956851498998,
+        "abs_return_difference": 1.292429442401044e-05,
+        "relative_return_difference": 2.4688444377968318e-08,
+        "recorded_length": 83,
+        "reproduced_length": 83,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "out_of_bounds",
+          "out_of_bounds"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 2.980232238769531e-07
+      },
+      {
+        "seed": 20068,
+        "exact": false,
+        "recorded_return": -1034.0245408574337,
+        "reproduced_return": -1034.02259957374,
+        "abs_return_difference": 0.0019412836936680833,
+        "relative_return_difference": 1.8774058225526563e-06,
+        "recorded_length": 251,
+        "reproduced_length": 251,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "out_of_bounds",
+          "out_of_bounds"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 2.9325485229492188e-05
+      },
+      {
+        "seed": 20069,
+        "exact": false,
+        "recorded_return": -600.9169328292573,
+        "reproduced_return": -600.9171768408958,
+        "abs_return_difference": 0.00024401163841503148,
+        "relative_return_difference": 4.060655060361965e-07,
+        "recorded_length": 126,
+        "reproduced_length": 126,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "out_of_bounds",
+          "out_of_bounds"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 2.6226043701171875e-06
+      },
+      {
+        "seed": 20070,
+        "exact": false,
+        "recorded_return": -112.26604250017205,
+        "reproduced_return": -112.26538093970642,
+        "abs_return_difference": 0.0006615604656303731,
+        "relative_return_difference": 5.892792253983294e-06,
+        "recorded_length": 61,
+        "reproduced_length": 61,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "crash",
+          "crash"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 4.5418739318847656e-05
+      },
+      {
+        "seed": 20071,
+        "exact": false,
+        "recorded_return": -139.9768644302045,
+        "reproduced_return": -139.97690655262534,
+        "abs_return_difference": 4.212242083667661e-05,
+        "relative_return_difference": 3.0092416349045853e-07,
+        "recorded_length": 83,
+        "reproduced_length": 83,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "crash",
+          "crash"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 1.430511474609375e-06
+      },
+      {
+        "seed": 20072,
+        "exact": false,
+        "recorded_return": -339.006481271299,
+        "reproduced_return": -339.0096150121966,
+        "abs_return_difference": 0.003133740897624193,
+        "relative_return_difference": 9.243896712158531e-06,
+        "recorded_length": 163,
+        "reproduced_length": 163,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "out_of_bounds",
+          "out_of_bounds"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 1.7642974853515625e-05
+      },
+      {
+        "seed": 20073,
+        "exact": false,
+        "recorded_return": -139.47271139739405,
+        "reproduced_return": -139.47253781520686,
+        "abs_return_difference": 0.0001735821871875487,
+        "relative_return_difference": 1.2445602114450035e-06,
+        "recorded_length": 72,
+        "reproduced_length": 72,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "crash",
+          "crash"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 3.814697265625e-06
+      },
+      {
+        "seed": 20074,
+        "exact": false,
+        "recorded_return": -131.3002808373219,
+        "reproduced_return": -131.30044318719996,
+        "abs_return_difference": 0.0001623498780531918,
+        "relative_return_difference": 1.2364777669770533e-06,
+        "recorded_length": 70,
+        "reproduced_length": 70,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "crash",
+          "crash"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 1.5497207641601562e-06
+      },
+      {
+        "seed": 20075,
+        "exact": false,
+        "recorded_return": -131.58414123386592,
+        "reproduced_return": -131.58415200913524,
+        "abs_return_difference": 1.07752693168095e-05,
+        "relative_return_difference": 8.18888143796789e-08,
+        "recorded_length": 77,
+        "reproduced_length": 77,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "crash",
+          "crash"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 2.86102294921875e-06
+      },
+      {
+        "seed": 20076,
+        "exact": false,
+        "recorded_return": -747.7887955014307,
+        "reproduced_return": -747.7885648985892,
+        "abs_return_difference": 0.00023060284149778454,
+        "relative_return_difference": 3.0837964260102815e-07,
+        "recorded_length": 105,
+        "reproduced_length": 105,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "out_of_bounds",
+          "out_of_bounds"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 1.430511474609375e-06
+      },
+      {
+        "seed": 20077,
+        "exact": false,
+        "recorded_return": -83.9156369796428,
+        "reproduced_return": -83.91586870166664,
+        "abs_return_difference": 0.00023172202384103002,
+        "relative_return_difference": 2.7613688244688386e-06,
+        "recorded_length": 74,
+        "reproduced_length": 74,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "crash",
+          "crash"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 2.1457672119140625e-06
+      },
+      {
+        "seed": 20078,
+        "exact": false,
+        "recorded_return": -43.322889177370314,
+        "reproduced_return": -43.3252490063642,
+        "abs_return_difference": 0.0023598289938888684,
+        "relative_return_difference": 5.447072064440069e-05,
+        "recorded_length": 83,
+        "reproduced_length": 83,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "crash",
+          "crash"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 2.136826515197754e-05
+      },
+      {
+        "seed": 20079,
+        "exact": false,
+        "recorded_return": -55.49402497107374,
+        "reproduced_return": -55.4931592588496,
+        "abs_return_difference": 0.0008657122241402249,
+        "relative_return_difference": 1.560009793111019e-05,
+        "recorded_length": 137,
+        "reproduced_length": 137,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "crash",
+          "crash"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 2.3603439331054688e-05
+      },
+      {
+        "seed": 20080,
+        "exact": false,
+        "recorded_return": -505.78630952476374,
+        "reproduced_return": -505.7864014328436,
+        "abs_return_difference": 9.190807986669824e-05,
+        "relative_return_difference": 1.8171326138316195e-07,
+        "recorded_length": 76,
+        "reproduced_length": 76,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "out_of_bounds",
+          "out_of_bounds"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 1.1920928955078125e-06
+      },
+      {
+        "seed": 20081,
+        "exact": false,
+        "recorded_return": -7.047269096332116,
+        "reproduced_return": -7.044339746465738,
+        "abs_return_difference": 0.0029293498663776063,
+        "relative_return_difference": 0.0004156716348325966,
+        "recorded_length": 70,
+        "reproduced_length": 70,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "crash",
+          "crash"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0002906322479248047
+      },
+      {
+        "seed": 20082,
+        "exact": false,
+        "recorded_return": -97.74314841623145,
+        "reproduced_return": -97.74309354181325,
+        "abs_return_difference": 5.4874418196959596e-05,
+        "relative_return_difference": 5.614144734041227e-07,
+        "recorded_length": 112,
+        "reproduced_length": 112,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "crash",
+          "crash"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 3.248453140258789e-05
+      },
+      {
+        "seed": 20083,
+        "exact": false,
+        "recorded_return": -422.12253930638394,
+        "reproduced_return": -422.12263912673814,
+        "abs_return_difference": 9.982035419398017e-05,
+        "relative_return_difference": 2.3647245740064308e-07,
+        "recorded_length": 75,
+        "reproduced_length": 75,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "out_of_bounds",
+          "out_of_bounds"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 3.2335519790649414e-06
+      },
+      {
+        "seed": 20084,
+        "exact": false,
+        "recorded_return": -250.4373488515016,
+        "reproduced_return": -250.43936853530295,
+        "abs_return_difference": 0.002019683801336214,
+        "relative_return_difference": 8.064626983947981e-06,
+        "recorded_length": 226,
+        "reproduced_length": 226,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "out_of_bounds",
+          "out_of_bounds"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 1.2993812561035156e-05
+      },
+      {
+        "seed": 20085,
+        "exact": false,
+        "recorded_return": -410.9042621764379,
+        "reproduced_return": -410.90450235048314,
+        "abs_return_difference": 0.00024017404524556696,
+        "relative_return_difference": 5.845012265714557e-07,
+        "recorded_length": 86,
+        "reproduced_length": 86,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "out_of_bounds",
+          "out_of_bounds"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 1.9073486328125e-06
+      },
+      {
+        "seed": 20086,
+        "exact": false,
+        "recorded_return": -570.5724137129324,
+        "reproduced_return": -570.5707745808561,
+        "abs_return_difference": 0.001639132076320493,
+        "relative_return_difference": 2.8727853589240938e-06,
+        "recorded_length": 97,
+        "reproduced_length": 97,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "out_of_bounds",
+          "out_of_bounds"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 1.093745231628418e-05
+      },
+      {
+        "seed": 20087,
+        "exact": false,
+        "recorded_return": -275.60483983912127,
+        "reproduced_return": -275.60600793734784,
+        "abs_return_difference": 0.0011680982265716011,
+        "relative_return_difference": 4.238308105378174e-06,
+        "recorded_length": 155,
+        "reproduced_length": 155,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "out_of_bounds",
+          "out_of_bounds"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 8.285045623779297e-06
+      },
+      {
+        "seed": 20088,
+        "exact": false,
+        "recorded_return": -159.7243839852983,
+        "reproduced_return": -159.72483201554536,
+        "abs_return_difference": 0.00044803024707107397,
+        "relative_return_difference": 2.8050209735810443e-06,
+        "recorded_length": 71,
+        "reproduced_length": 71,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "crash",
+          "crash"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 6.961822509765625e-05
+      },
+      {
+        "seed": 20089,
+        "exact": false,
+        "recorded_return": -579.3835196065224,
+        "reproduced_return": -579.3846588658048,
+        "abs_return_difference": 0.0011392592823540326,
+        "relative_return_difference": 1.9663301488584613e-06,
+        "recorded_length": 159,
+        "reproduced_length": 159,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "out_of_bounds",
+          "out_of_bounds"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 8.58306884765625e-06
+      },
+      {
+        "seed": 20090,
+        "exact": false,
+        "recorded_return": -98.62814729438853,
+        "reproduced_return": -98.62758955403831,
+        "abs_return_difference": 0.0005577403502172729,
+        "relative_return_difference": 5.654981519144947e-06,
+        "recorded_length": 103,
+        "reproduced_length": 103,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "crash",
+          "crash"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 4.857778549194336e-06
+      },
+      {
+        "seed": 20091,
+        "exact": false,
+        "recorded_return": -778.1561645920638,
+        "reproduced_return": -778.1427986973747,
+        "abs_return_difference": 0.013365894689059132,
+        "relative_return_difference": 1.7176365487081883e-05,
+        "recorded_length": 210,
+        "reproduced_length": 210,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "out_of_bounds",
+          "out_of_bounds"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.00022786855697631836
+      },
+      {
+        "seed": 20092,
+        "exact": false,
+        "recorded_return": -390.3278753242864,
+        "reproduced_return": -390.32778655080415,
+        "abs_return_difference": 8.877348227542825e-05,
+        "relative_return_difference": 2.2743310915643618e-07,
+        "recorded_length": 88,
+        "reproduced_length": 88,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "out_of_bounds",
+          "out_of_bounds"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 1.430511474609375e-06
+      },
+      {
+        "seed": 20093,
+        "exact": false,
+        "recorded_return": -593.4638761873591,
+        "reproduced_return": -593.4641280066294,
+        "abs_return_difference": 0.00025181927026096673,
+        "relative_return_difference": 4.2432114297967194e-07,
+        "recorded_length": 250,
+        "reproduced_length": 250,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "out_of_bounds",
+          "out_of_bounds"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 1.6689300537109375e-06
+      },
+      {
+        "seed": 20094,
+        "exact": false,
+        "recorded_return": -109.73724436075345,
+        "reproduced_return": -109.7372892808964,
+        "abs_return_difference": 4.4920142954651965e-05,
+        "relative_return_difference": 4.093427278616562e-07,
+        "recorded_length": 107,
+        "reproduced_length": 107,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "crash",
+          "crash"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 1.9073486328125e-06
+      },
+      {
+        "seed": 20095,
+        "exact": false,
+        "recorded_return": -113.99101191046226,
+        "reproduced_return": -113.9910018547334,
+        "abs_return_difference": 1.0055728864699631e-05,
+        "relative_return_difference": 8.821510306968949e-08,
+        "recorded_length": 81,
+        "reproduced_length": 81,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "crash",
+          "crash"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 9.059906005859375e-06
+      },
+      {
+        "seed": 20096,
+        "exact": false,
+        "recorded_return": -432.87923064505725,
+        "reproduced_return": -432.8798279469667,
+        "abs_return_difference": 0.0005973019094653864,
+        "relative_return_difference": 1.379834991333065e-06,
+        "recorded_length": 90,
+        "reproduced_length": 90,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "out_of_bounds",
+          "out_of_bounds"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 4.32133674621582e-06
+      },
+      {
+        "seed": 20097,
+        "exact": false,
+        "recorded_return": -629.3819487198128,
+        "reproduced_return": -629.3819661826996,
+        "abs_return_difference": 1.746288671711227e-05,
+        "relative_return_difference": 2.7746087654138244e-08,
+        "recorded_length": 125,
+        "reproduced_length": 125,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "out_of_bounds",
+          "out_of_bounds"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 8.828938007354736e-06
+      },
+      {
+        "seed": 20098,
+        "exact": false,
+        "recorded_return": -519.5476343031642,
+        "reproduced_return": -519.5473598409751,
+        "abs_return_difference": 0.0002744621890542476,
+        "relative_return_difference": 5.282714633517022e-07,
+        "recorded_length": 80,
+        "reproduced_length": 80,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "out_of_bounds",
+          "out_of_bounds"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 4.0531158447265625e-06
+      },
+      {
+        "seed": 20099,
+        "exact": false,
+        "recorded_return": -659.8333996864467,
+        "reproduced_return": -659.8338667715116,
+        "abs_return_difference": 0.0004670850648835767,
+        "relative_return_difference": 7.078833310128525e-07,
+        "recorded_length": 83,
+        "reproduced_length": 83,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "out_of_bounds",
+          "out_of_bounds"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 4.172325134277344e-06
+      }
+    ]
+  },
+  "aggregates": {
+    "equivalence_assessed": false,
+    "interpretation": "Non-rejection of paired difference tests does not establish equivalence. No equivalence margins were specified.",
+    "criterion": "no compared aggregate differs significantly in the paired comparison over the same seeds (permutation test for the mean return, exact McNemar tests for rates; Holm, family-wise alpha = 0.05)",
+    "metrics": {
+      "mean_original_return": {
+        "recorded": -342.1870168670023,
+        "reproduced": -342.18678065374746,
+        "recorded_ci": [
+          -390.0935600269671,
+          -296.1815450884988
+        ],
+        "paired_mean_difference": 0.00023621325487667379,
+        "paired_difference_ci": [
+          -9.550843936994363e-05,
+          0.0006506807610772434
+        ],
+        "test": "sign-flip permutation test of the paired differences",
+        "p_value": 0.27107289271072893,
+        "significant": false
+      },
+      "pad_landing_rate": {
+        "recorded": 0.0,
+        "reproduced": 0.0,
+        "recorded_ci": [
+          0.0,
+          0.03699349820698566
+        ],
+        "episodes_gained": 0,
+        "episodes_lost": 0,
+        "test": "exact McNemar test",
+        "p_value": 1.0,
+        "significant": false
+      },
+      "timeout_rate": {
+        "recorded": 0.0,
+        "reproduced": 0.0,
+        "recorded_ci": [
+          0.0,
+          0.03699349820698566
+        ],
+        "episodes_gained": 0,
+        "episodes_lost": 0,
+        "test": "exact McNemar test",
+        "p_value": 1.0,
+        "significant": false
+      },
+      "crash_rate": {
+        "recorded": 0.41,
+        "reproduced": 0.41,
+        "recorded_ci": [
+          0.3186731302113651,
+          0.5079856994658921
+        ],
+        "episodes_gained": 0,
+        "episodes_lost": 0,
+        "test": "exact McNemar test",
+        "p_value": 1.0,
+        "significant": false
+      },
+      "out_of_bounds_rate": {
+        "recorded": 0.59,
+        "reproduced": 0.59,
+        "recorded_ci": [
+          0.4920143005341078,
+          0.6813268697886348
+        ],
+        "episodes_gained": 0,
+        "episodes_lost": 0,
+        "test": "exact McNemar test",
+        "p_value": 1.0,
+        "significant": false
+      }
+    },
+    "paired_return_difference": {
+      "mean": 0.00023621325487667379,
+      "ci": [
+        -9.550843936994363e-05,
+        0.0006506807610772434
+      ],
+      "ci_contains_zero": true
+    },
+    "consistent": true
+  },
+  "elapsed_s": 1.58,
+  "checks": [
+    {
+      "check": "checkpoint.zip matches its recorded SHA-256",
+      "ok": true,
+      "detail": "4f403ef622539cdf",
+      "kind": "integrity"
+    },
+    {
+      "check": "config.yaml matches its recorded SHA-256",
+      "ok": true,
+      "detail": "ba2a3afbc07dc3eb",
+      "kind": "integrity"
+    },
+    {
+      "check": "evaluation.json matches its recorded SHA-256",
+      "ok": true,
+      "detail": "69fc07af18bcbcbb",
+      "kind": "integrity"
+    },
+    {
+      "check": "reward_model/model.npz matches its recorded SHA-256",
+      "ok": true,
+      "detail": "ed282e43800420d9",
+      "kind": "integrity"
+    },
+    {
+      "check": "reward_model/meta.json matches its recorded SHA-256",
+      "ok": true,
+      "detail": "96841ecd5e3fd909",
+      "kind": "integrity"
+    },
+    {
+      "check": "the learned reward model is bundled and matches its identity and digests",
+      "ok": true,
+      "detail": "rm-20261015-235825-rm-300-4877",
+      "kind": "integrity"
+    },
+    {
+      "check": "configuration hash matches the record",
+      "ok": true,
+      "detail": "5fa60eb8983ab847",
+      "kind": "integrity"
+    },
+    {
+      "check": "the recorded evaluation used this checkpoint",
+      "ok": true,
+      "detail": "",
+      "kind": "integrity"
+    },
+    {
+      "check": "the recorded evaluation is the final test on the configuration's test seeds",
+      "ok": true,
+      "detail": "100 seeds",
+      "kind": "integrity"
+    },
+    {
+      "check": "the recorded evaluation used the configuration's protocol and reward",
+      "ok": true,
+      "detail": "",
+      "kind": "integrity"
+    },
+    {
+      "check": "the recorded episodes are exactly the recorded seeds",
+      "ok": true,
+      "detail": "",
+      "kind": "integrity"
+    },
+    {
+      "check": "the evaluated network holds exactly the checkpoint's weights",
+      "ok": true,
+      "detail": "",
+      "kind": "integrity"
+    },
+    {
+      "check": "every re-evaluated episode matches the record exactly",
+      "ok": false,
+      "detail": "0/100 episode summaries; largest original-return difference 0.0134; largest training-return difference 0.00461",
+      "kind": "reproduction"
+    },
+    {
+      "check": "no aggregate differs significantly from the record (paired tests, Holm-corrected)",
+      "ok": true,
+      "detail": "mean_original_return -342.2 -> -342.2 (p 0.27), pad_landing_rate 0 -> 0 (p 1), timeout_rate 0 -> 0 (p 1), crash_rate 0.41 -> 0.41 (p 1), out_of_bounds_rate 0.59 -> 0.59 (p 1)",
+      "kind": "conclusion"
+    }
+  ],
+  "ok": false
+}

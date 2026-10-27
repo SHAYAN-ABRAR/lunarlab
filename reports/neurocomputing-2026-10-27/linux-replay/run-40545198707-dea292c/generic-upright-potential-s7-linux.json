@@ -1,0 +1,361 @@
+{
+  "status": "exact",
+  "exit_code": 0,
+  "reason": "all 3 episodes match on the selected summary fields",
+  "evaluation_skipped": false,
+  "checks": [
+    {
+      "check": "manifest.json is present and readable",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "artifact schema is supported",
+      "ok": true,
+      "detail": "lunarlab.audit-artifact/1"
+    },
+    {
+      "check": "policy.zip has its recorded SHA-256",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "protocol.json has its recorded SHA-256",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "run.json has its recorded SHA-256",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "evaluation.json has its recorded SHA-256",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "reward.json has its recorded SHA-256",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "protocol digest matches the manifest, the training record and the test record",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "protocol is valid (seed contract, disjoint splits, known adapter and terms)",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "outcome schema matches the registered adapter (name, version, categories)",
+      "ok": true,
+      "detail": "artifact {'name': 'cartpole', 'version': '1', 'outcome_categories': ['balanced_to_time_limit', 'pole_fell', 'cart_left_track', 'unknown']}, registered cartpole v1 ['balanced_to_time_limit', 'pole_fell', 'cart_left_track', 'unknown']"
+    },
+    {
+      "check": "reward definition rebuilt from the protocol has the recorded digest",
+      "ok": true,
+      "detail": "rebuilt 48f30a8eaf3222f4..., recorded 48f30a8eaf3222f4..."
+    },
+    {
+      "check": "policy is the checkpoint the run froze and the test evaluated",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "test seeds equal the protocol's",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "recorded episodes are the protocol's test seeds, once each and in order",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "every episode records the original and training reward channels",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "every recorded reward value is a finite number",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "every episode records exactly the design's terms",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "training return = weight x original return + term returns, in every episode",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "every outcome is one of the adapter's categories",
+      "ok": true,
+      "detail": ""
+    }
+  ],
+  "comparison": {
+    "compared_fields": [
+      "length",
+      "original_return",
+      "training_return",
+      "outcome",
+      "terminated",
+      "truncated"
+    ],
+    "exactness_scope": "numeric equality of selected episode-summary fields; not full-trajectory or bitwise identity",
+    "compared": 3,
+    "exact": 3,
+    "within_tolerance": 3,
+    "tolerance": 0.0,
+    "max_abs_return_difference": 0.0,
+    "max_abs_original_return_difference": 0.0,
+    "max_abs_training_return_difference": 0.0,
+    "mismatches": [],
+    "n_mismatches": 0,
+    "missing_seeds": [],
+    "summary": {
+      "n": 3,
+      "agreement": {
+        "bit_identical": 1.0,
+        "length": 1.0,
+        "termination": 1.0,
+        "env_outcome": null,
+        "pad_landing": null,
+        "all_outcome_fields": 1.0
+      },
+      "return_difference": {
+        "mean_abs": 0.0,
+        "median_abs": 0.0,
+        "p90_abs": 0.0,
+        "max_abs": 0.0,
+        "median_relative": 0.0,
+        "n_relative": 3,
+        "relative_floor": 1.0,
+        "episodes_differing": 0,
+        "episodes_above_1": 0,
+        "episodes_above_10": 0
+      }
+    },
+    "episodes": [
+      {
+        "seed": 210000,
+        "exact": true,
+        "recorded_return": 10.0,
+        "reproduced_return": 10.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 10,
+        "reproduced_length": 10,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "outcome": [
+          "pole_fell",
+          "pole_fell"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210001,
+        "exact": true,
+        "recorded_return": 9.0,
+        "reproduced_return": 9.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 9,
+        "reproduced_length": 9,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "outcome": [
+          "pole_fell",
+          "pole_fell"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210002,
+        "exact": true,
+        "recorded_return": 8.0,
+        "reproduced_return": 8.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 8,
+        "reproduced_length": 8,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "outcome": [
+          "pole_fell",
+          "pole_fell"
+        ],
+        "outcome_agrees": true
+      }
+    ]
+  },
+  "aggregates": {
+    "equivalence_assessed": false,
+    "interpretation": "Non-rejection of paired difference tests does not establish equivalence.",
+    "criterion": "Holm-corrected family-wise alpha = 0.05",
+    "metrics": {
+      "mean_original_return": {
+        "paired_mean_difference": 0.0,
+        "test": "sign-flip permutation test of the paired differences",
+        "p_value": 1.0,
+        "significant": false
+      },
+      "success_rate": {
+        "episodes_gained": 0,
+        "episodes_lost": 0,
+        "test": "exact McNemar test",
+        "p_value": 1.0,
+        "significant": false
+      }
+    },
+    "consistent": true
+  },
+  "platform": {
+    "basis": "operating system and numerical libraries (torch, numpy, Box2D, gymnasium, stable-baselines3) of artifact.json 'exported_with' versus this machine",
+    "recorded": {
+      "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+      "python": "3.12.3",
+      "os": "Linux",
+      "torch": "2.14.1+cpu",
+      "numpy": "2.5.4",
+      "Box2D": "2.3.10",
+      "gymnasium": "1.4.0",
+      "stable-baselines3": "2.9.0"
+    },
+    "reproduced": {
+      "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+      "python": "3.12.3",
+      "os": "Linux",
+      "torch": "2.14.1+cpu",
+      "numpy": "2.5.4",
+      "Box2D": "2.3.10",
+      "gymnasium": "1.4.0",
+      "stable-baselines3": "2.9.0"
+    },
+    "differences": {},
+    "same_platform": true
+  },
+  "reproduced_with": {
+    "lunarlab": "0.1.0",
+    "git": {
+      "available": true,
+      "revision": "dea292cf24230bf59be8b3bfe7dba1b63614cf81",
+      "dirty": true
+    },
+    "python": "3.12.3",
+    "python_implementation": "CPython",
+    "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+    "packages": {
+      "gymnasium": "1.4.0",
+      "Box2D": "2.3.10",
+      "pygame": "2.6.1",
+      "stable-baselines3": "2.9.0",
+      "torch": "2.14.1+cpu",
+      "numpy": "2.5.4",
+      "pandas": "3.0.6",
+      "matplotlib": "3.11.2",
+      "imageio": "2.38.1",
+      "imageio-ffmpeg": "0.6.0",
+      "optuna": "5.0.0",
+      "fastapi": "0.143.2",
+      "uvicorn": "0.54.0",
+      "pydantic": "2.14.1",
+      "psutil": "7.2.2",
+      "PyYAML": "6.0.3"
+    }
+  },
+  "reproduced_episodes": [
+    {
+      "length": 10,
+      "original_return": 10.0,
+      "training_return": 10.216615939828024,
+      "discounted_original_return": 9.146359655622655,
+      "discounted_training_return": 9.308426170805305,
+      "term_returns": {
+        "upright_potential": 0.21661593982802396
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.16206651518265092
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.23733335733413696,
+      "final_cart_position": -0.13567902147769928,
+      "seed": 210000
+    },
+    {
+      "length": 9,
+      "original_return": 9.0,
+      "training_return": 9.213642127912673,
+      "discounted_original_return": 8.312611893492505,
+      "discounted_training_return": 8.454938192584992,
+      "term_returns": {
+        "upright_potential": 0.21364212791267223
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.14232629909248673
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.25072675943374634,
+      "final_cart_position": -0.11292415112257004,
+      "seed": 210001
+    },
+    {
+      "length": 8,
+      "original_return": 8.0,
+      "training_return": 8.223349349819872,
+      "discounted_original_return": 7.461848870910719,
+      "discounted_training_return": 7.6277423019540365,
+      "term_returns": {
+        "upright_potential": 0.2233493498198712
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.165893431043317
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.21200253069400787,
+      "final_cart_position": -0.09863293170928955,
+      "seed": 210002
+    }
+  ]
+}

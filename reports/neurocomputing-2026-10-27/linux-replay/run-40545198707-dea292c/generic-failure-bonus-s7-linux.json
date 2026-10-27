@@ -1,0 +1,361 @@
+{
+  "status": "exact",
+  "exit_code": 0,
+  "reason": "all 3 episodes match on the selected summary fields",
+  "evaluation_skipped": false,
+  "checks": [
+    {
+      "check": "manifest.json is present and readable",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "artifact schema is supported",
+      "ok": true,
+      "detail": "lunarlab.audit-artifact/1"
+    },
+    {
+      "check": "policy.zip has its recorded SHA-256",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "protocol.json has its recorded SHA-256",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "run.json has its recorded SHA-256",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "evaluation.json has its recorded SHA-256",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "reward.json has its recorded SHA-256",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "protocol digest matches the manifest, the training record and the test record",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "protocol is valid (seed contract, disjoint splits, known adapter and terms)",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "outcome schema matches the registered adapter (name, version, categories)",
+      "ok": true,
+      "detail": "artifact {'name': 'cartpole', 'version': '1', 'outcome_categories': ['balanced_to_time_limit', 'pole_fell', 'cart_left_track', 'unknown']}, registered cartpole v1 ['balanced_to_time_limit', 'pole_fell', 'cart_left_track', 'unknown']"
+    },
+    {
+      "check": "reward definition rebuilt from the protocol has the recorded digest",
+      "ok": true,
+      "detail": "rebuilt b5bd5758ae151d20..., recorded b5bd5758ae151d20..."
+    },
+    {
+      "check": "policy is the checkpoint the run froze and the test evaluated",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "test seeds equal the protocol's",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "recorded episodes are the protocol's test seeds, once each and in order",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "every episode records the original and training reward channels",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "every recorded reward value is a finite number",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "every episode records exactly the design's terms",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "training return = weight x original return + term returns, in every episode",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "every outcome is one of the adapter's categories",
+      "ok": true,
+      "detail": ""
+    }
+  ],
+  "comparison": {
+    "compared_fields": [
+      "length",
+      "original_return",
+      "training_return",
+      "outcome",
+      "terminated",
+      "truncated"
+    ],
+    "exactness_scope": "numeric equality of selected episode-summary fields; not full-trajectory or bitwise identity",
+    "compared": 3,
+    "exact": 3,
+    "within_tolerance": 3,
+    "tolerance": 0.0,
+    "max_abs_return_difference": 0.0,
+    "max_abs_original_return_difference": 0.0,
+    "max_abs_training_return_difference": 0.0,
+    "mismatches": [],
+    "n_mismatches": 0,
+    "missing_seeds": [],
+    "summary": {
+      "n": 3,
+      "agreement": {
+        "bit_identical": 1.0,
+        "length": 1.0,
+        "termination": 1.0,
+        "env_outcome": null,
+        "pad_landing": null,
+        "all_outcome_fields": 1.0
+      },
+      "return_difference": {
+        "mean_abs": 0.0,
+        "median_abs": 0.0,
+        "p90_abs": 0.0,
+        "max_abs": 0.0,
+        "median_relative": 0.0,
+        "n_relative": 3,
+        "relative_floor": 1.0,
+        "episodes_differing": 0,
+        "episodes_above_1": 0,
+        "episodes_above_10": 0
+      }
+    },
+    "episodes": [
+      {
+        "seed": 210000,
+        "exact": true,
+        "recorded_return": 31.0,
+        "reproduced_return": 31.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 31,
+        "reproduced_length": 31,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "outcome": [
+          "pole_fell",
+          "pole_fell"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210001,
+        "exact": true,
+        "recorded_return": 60.0,
+        "reproduced_return": 60.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 60,
+        "reproduced_length": 60,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "outcome": [
+          "pole_fell",
+          "pole_fell"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210002,
+        "exact": true,
+        "recorded_return": 71.0,
+        "reproduced_return": 71.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 71,
+        "reproduced_length": 71,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "outcome": [
+          "pole_fell",
+          "pole_fell"
+        ],
+        "outcome_agrees": true
+      }
+    ]
+  },
+  "aggregates": {
+    "equivalence_assessed": false,
+    "interpretation": "Non-rejection of paired difference tests does not establish equivalence.",
+    "criterion": "Holm-corrected family-wise alpha = 0.05",
+    "metrics": {
+      "mean_original_return": {
+        "paired_mean_difference": 0.0,
+        "test": "sign-flip permutation test of the paired differences",
+        "p_value": 1.0,
+        "significant": false
+      },
+      "success_rate": {
+        "episodes_gained": 0,
+        "episodes_lost": 0,
+        "test": "exact McNemar test",
+        "p_value": 1.0,
+        "significant": false
+      }
+    },
+    "consistent": true
+  },
+  "platform": {
+    "basis": "operating system and numerical libraries (torch, numpy, Box2D, gymnasium, stable-baselines3) of artifact.json 'exported_with' versus this machine",
+    "recorded": {
+      "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+      "python": "3.12.3",
+      "os": "Linux",
+      "torch": "2.14.1+cpu",
+      "numpy": "2.5.4",
+      "Box2D": "2.3.10",
+      "gymnasium": "1.4.0",
+      "stable-baselines3": "2.9.0"
+    },
+    "reproduced": {
+      "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+      "python": "3.12.3",
+      "os": "Linux",
+      "torch": "2.14.1+cpu",
+      "numpy": "2.5.4",
+      "Box2D": "2.3.10",
+      "gymnasium": "1.4.0",
+      "stable-baselines3": "2.9.0"
+    },
+    "differences": {},
+    "same_platform": true
+  },
+  "reproduced_with": {
+    "lunarlab": "0.1.0",
+    "git": {
+      "available": true,
+      "revision": "dea292cf24230bf59be8b3bfe7dba1b63614cf81",
+      "dirty": true
+    },
+    "python": "3.12.3",
+    "python_implementation": "CPython",
+    "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+    "packages": {
+      "gymnasium": "1.4.0",
+      "Box2D": "2.3.10",
+      "pygame": "2.6.1",
+      "stable-baselines3": "2.9.0",
+      "torch": "2.14.1+cpu",
+      "numpy": "2.5.4",
+      "pandas": "3.0.6",
+      "matplotlib": "3.11.2",
+      "imageio": "2.38.1",
+      "imageio-ffmpeg": "0.6.0",
+      "optuna": "5.0.0",
+      "fastapi": "0.143.2",
+      "uvicorn": "0.54.0",
+      "pydantic": "2.14.1",
+      "psutil": "7.2.2",
+      "PyYAML": "6.0.3"
+    }
+  },
+  "reproduced_episodes": [
+    {
+      "length": 31,
+      "original_return": 31.0,
+      "training_return": 1031.0,
+      "discounted_original_return": 23.27126835026057,
+      "discounted_training_return": 568.7555877326974,
+      "term_returns": {
+        "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+        "failure_bonus": 545.4843193824369
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": -0.21363522112369537,
+      "final_cart_position": 0.03338856250047684,
+      "seed": 210000
+    },
+    {
+      "length": 60,
+      "original_return": 60.0,
+      "training_return": 1060.0,
+      "discounted_original_return": 35.12234286539395,
+      "discounted_training_return": 338.7479986736801,
+      "term_returns": {
+        "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+        "failure_bonus": 303.6256558082862
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": -0.22059693932533264,
+      "final_cart_position": 0.062301527708768845,
+      "seed": 210001
+    },
+    {
+      "length": 71,
+      "original_return": 71.0,
+      "training_return": 1071.0,
+      "discounted_original_return": 38.08699350661454,
+      "discounted_training_return": 281.20957500427613,
+      "term_returns": {
+        "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+        "failure_bonus": 243.12258149766154
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.21688011288642883,
+      "final_cart_position": 0.2936878800392151,
+      "seed": 210002
+    }
+  ]
+}
