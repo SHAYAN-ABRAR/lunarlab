@@ -47,3 +47,14 @@ Times are UTC. Machine: the author's Windows 11 laptop (the original data home).
   validation and test seeds.
 - 16:15 Smoke run of `examples/cartpole_study.py` on the tiny test protocol: every phase works, both artifacts
   verify, and the data home stays empty.
+- 16:12 Pilot (seed 90, 3 x 20,480 transitions, 35 s). The failure-bonus payments match the hand calculation
+  on all 20 recorded test episodes: training return T + 1000, and discounted return G(T) to 1e-13. The protocol
+  was not changed.
+- 16:13-16:20 Main study, 15 runs x 100,096 transitions, from committed source `e7c3fab` (clean tree); the
+  data home stayed empty. Original and upright-potential designs: all 10 selected policies balance to the
+  500-step limit on all 100 test seeds, a ceiling at which the two designs cannot be distinguished.
+  Failure-bonus design: all 5 selected policies fail after about 9 steps (mean original return 9.22-9.44,
+  0 completions in 500 test episodes), while their own training return is about 1009. Selection could not
+  rescue them, because failing fast was learned before the first checkpoint at 10,240 transitions.
+- Compute so far: 1,562,880 new training transitions (main plus pilot) of 2,000,000; about 8 minutes of
+  study wall time, plus test-suite runs.
