@@ -640,7 +640,9 @@ def check_file_digests(root: str | Path, expected: Mapping[str, str]) -> list[tu
             out.append((f"{name} is present", False, "missing"))
             continue
         actual = _sha256_file(p)
-        out.append((f"{name} has its recorded SHA-256", actual == sha, "" if actual == sha else f"{actual} != {sha}"))
+        out.append(
+            (f"{name} has its recorded SHA-256", actual == sha, "" if actual == sha else f"{actual} != {sha}")
+        )
     return out
 
 

@@ -40,6 +40,10 @@ The configured budget rounded up to whole rollouts, as PPO collects it.
 
 The design's reward terms, built by the adapter's factories. Potential terms use the learner's gamma.
 
+### `check_file_digests(root: 'str | Path', expected: 'Mapping[str, str]') -> 'list[tuple[str, bool, str]]'`
+
+Each file under ``root`` named in ``expected`` exists and has the recorded SHA-256: (name, passed, detail).
+
 ### `check_recorded_episodes(episodes: 'list[dict[str, Any]]', *, expected_seeds: 'list[int]', term_names: 'list[str]', original_weight: 'float', categories: 'tuple[str, ...] | list[str]') -> 'list[tuple[str, bool, str]]'`
 
 Checks of a recorded evaluation that need no policy execution: (name, passed, detail) for each.

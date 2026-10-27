@@ -22,7 +22,7 @@ Modules not listed here (`cli`, `server`, `jobs`, `db`, `procs`, `parallel`, `lo
 | [`lunarlab.audit.provenance`](lunarlab.audit.provenance.md) — Versioned provenance records for reward definitions. | 4 / 4 |
 | [`lunarlab.audit.adapters`](lunarlab.audit.adapters.md) — Task adapters: what the task-independent audit layer needs to know about one environment. | 10 / 10 |
 | [`lunarlab.audit.evaluate`](lunarlab.audit.evaluate.md) — Audit a policy on any registered task: original-reward evaluation with full reward accounting. | 2 / 2 |
-| [`lunarlab.audit.study`](lunarlab.audit.study.md) — A small, prespecified reward-design study on any registered task, through the task-independent layer. | 22 / 22 |
+| [`lunarlab.audit.study`](lunarlab.audit.study.md) — A small, prespecified reward-design study on any registered task, through the task-independent layer. | 23 / 23 |
 | **Environment, outcomes and diagnostics** | |
 | [`lunarlab.env`](lunarlab.env.md) — Environment construction and a small read-only adapter for LunarLander internals. | 19 / 19 |
 | [`lunarlab.outcomes`](lunarlab.outcomes.md) — Episode outcome classification. | 8 / 8 |
@@ -61,4 +61,4 @@ Modules not listed here (`cli`, `server`, `jobs`, `db`, `procs`, `parallel`, `lo
 | [`lunarlab.overhead`](lunarlab.overhead.md) — Overhead benchmark: what LunarLab's instrumentation costs compared with plain Stable-Baselines3. | 3 / 3 |
 | [`lunarlab.benchmark`](lunarlab.benchmark.md) — Throughput benchmark: measure before increasing worker counts. | 0 / 1 |
 
-Docstrings: 345 of 474 public classes, functions and methods in these modules.
+Docstrings: 346 of 475 public classes, functions and methods in these modules.

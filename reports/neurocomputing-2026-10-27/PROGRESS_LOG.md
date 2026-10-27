@@ -71,3 +71,19 @@ Times are UTC. Machine: the author's Windows 11 laptop (the original data home).
   bundle's SHA256SUMS) are copied to `examples/learned-reward-artifacts/` for it. One package replays `exact` on
   this machine from the new location (23 s). `ci.yml` now also runs on `research/**` pushes; the demo-site
   workflow still deploys only from `main`.
+- 16:20-16:35 (entry appended at 17:20; an interrupted command had skipped it) Audit-workflow comparison
+  designed in `workflow-comparison/protocol/`. Workflows were developed on fixtures from the pilot policy only.
+  The development run showed the expected pattern; one W3 change followed it: S6/S7 use the declared term names,
+  so they run even when the reward definition cannot be built. Main fixtures from `upright-potential-s50` were
+  then built, and the protocol, fixtures and scripts hashed (`protocol/HASHES.sha256`, 16:35:26 UTC) before any
+  workflow ran on them.
+- 17:15 First push of `research/neurocomputing-audit-evidence` (`dea292c`).
+  - Learned-reward replay (Linux), run 40545198707, passed its prespecified criteria. All six policies
+    replay with integrity intact as `numerical-difference`, with no significant aggregate shift; median
+    per-episode |return difference| ranges 0.0002-0.012, the largest 0.007-18.3. The empty data home stays
+    empty. A missing model and a corrupt `meta.json` are refused before any episode. The generic example
+    reproduces exactly on Linux.
+  - CI run 40545198467 failed at the formatting gate of the Linux job: `lunarlab/audit/study.py` was not
+    formatted after `check_file_digests` was added, so the tests never ran there. The same interrupted command
+    had also skipped regenerating `docs/api`. The other jobs passed, except the browser job, which was skipped
+    because it depends on the Linux job.
