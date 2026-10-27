@@ -1,0 +1,130 @@
+{
+ "format": "fault-inventory/1",
+ "cases": [
+  {
+   "id": "C0-clean",
+   "kind": "control",
+   "injection": "none",
+   "targets": [],
+   "expected_verdict": "accepted"
+  },
+  {
+   "id": "C1-numerical-difference",
+   "kind": "control",
+   "injection": "the evaluation is recorded as made on Linux; 2 of its 100 episodes differ from this machine's replay (one ends by the pole falling at 497 steps, one at 499); all records internally consistent and all digests updated",
+   "targets": [
+    "S10"
+   ],
+   "expected_verdict": "accepted-numerical-difference",
+   "must_not": "integrity failure or any rejection"
+  },
+  {
+   "id": "F01-checkpoint-swapped",
+   "kind": "fault",
+   "injection": "policy.zip replaced by the same run's final checkpoint, a different valid policy; the selection digest is unchanged",
+   "targets": [
+    "S1"
+   ],
+   "expected_verdict": "rejected-before-execution"
+  },
+  {
+   "id": "F02-recorded-digest-corrupted",
+   "kind": "fault",
+   "injection": "the policy SHA-256 recorded in case.json is altered; policy.zip is unchanged",
+   "targets": [
+    "S1"
+   ],
+   "expected_verdict": "rejected-before-execution"
+  },
+  {
+   "id": "F03-protocol-mismatch",
+   "kind": "fault",
+   "injection": "case.json test seeds become 210100-210199; the recorded evaluation (210000-210099) is unchanged",
+   "targets": [
+    "S3"
+   ],
+   "expected_verdict": "rejected-before-execution"
+  },
+  {
+   "id": "F04-dependency-missing",
+   "kind": "fault",
+   "injection": "reward_parameters.json is deleted",
+   "targets": [
+    "S2"
+   ],
+   "expected_verdict": "rejected-before-execution"
+  },
+  {
+   "id": "F05-dependency-changed",
+   "kind": "fault",
+   "injection": "reward_parameters.json alpha 1.0 -> 2.0; its recorded digest is unchanged",
+   "targets": [
+    "S2"
+   ],
+   "expected_verdict": "rejected-before-execution"
+  },
+  {
+   "id": "F06-coercible-seed",
+   "kind": "fault",
+   "injection": "test seed 210005 is written as the float 210005.0 in case.json (equal to the recorded integer under ==)",
+   "targets": [
+    "S4"
+   ],
+   "expected_verdict": "rejected-before-execution"
+  },
+  {
+   "id": "F07-overlapping-seeds",
+   "kind": "fault",
+   "injection": "the validation seeds include test seed 210000",
+   "targets": [
+    "S4"
+   ],
+   "expected_verdict": "rejected-before-execution"
+  },
+  {
+   "id": "F08-nonfinite-parameter",
+   "kind": "fault",
+   "injection": "reward_parameters.json alpha = NaN; its recorded digest updated",
+   "targets": [
+    "S5"
+   ],
+   "expected_verdict": "rejected-before-execution"
+  },
+  {
+   "id": "F09-original-channel-absent",
+   "kind": "fault",
+   "injection": "original_return removed from every recorded episode; digest updated",
+   "targets": [
+    "S6"
+   ],
+   "expected_verdict": "rejected-before-execution"
+  },
+  {
+   "id": "F10-inconsistent-totals",
+   "kind": "fault",
+   "injection": "training_return of recorded episodes 3 and 57 increased by 0.5; digest updated",
+   "targets": [
+    "S7"
+   ],
+   "expected_verdict": "rejected-before-execution"
+  },
+  {
+   "id": "F11-potential-at-truncation",
+   "kind": "fault",
+   "injection": "the trajectory's last shaping value is computed with Phi(s') = 0 although the episode was truncated at the time limit; digest updated",
+   "targets": [
+    "S8"
+   ],
+   "expected_verdict": "rejected-before-execution"
+  },
+  {
+   "id": "F12-outcome-schema-mismatch",
+   "kind": "fault",
+   "injection": "recorded outcomes relabelled with another schema ('success' for balanced_to_time_limit); digest updated",
+   "targets": [
+    "S9"
+   ],
+   "expected_verdict": "rejected-before-execution"
+  }
+ ]
+}

@@ -631,6 +631,19 @@ def export_artifact(run_dir: str | Path, out_dir: str | Path, *, which: str = "s
     return manifest
 
 
+def check_file_digests(root: str | Path, expected: Mapping[str, str]) -> list[tuple[str, bool, str]]:
+    """Each file under ``root`` named in ``expected`` exists and has the recorded SHA-256: (name, passed, detail)."""
+    out = []
+    for name, sha in expected.items():
+        p = Path(root) / name
+        if not p.is_file():
+            out.append((f"{name} is present", False, "missing"))
+            continue
+        actual = _sha256_file(p)
+        out.append((f"{name} has its recorded SHA-256", actual == sha, "" if actual == sha else f"{actual} != {sha}"))
+    return out
+
+
 def check_recorded_episodes(
     episodes: list[dict[str, Any]],
     *,
