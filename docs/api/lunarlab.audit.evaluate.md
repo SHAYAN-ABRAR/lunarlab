@@ -12,9 +12,19 @@ The environment is wrapped with ``apply=False``: the policy is scored on the ori
 training return each reward definition *would* have given is recorded beside it. Each episode's
 original return is cross-checked against the rewards the loop received.
 
+Error boundary: the seeds (seed contract), the discount, the original-reward weight and every term
+description are validated before the environment is created. During the episodes, a non-finite
+reward, an outcome outside the adapter's categories or a modified reward raises at once. The function
+either returns a report covering every requested seed or raises; it never returns a partial report.
+
 ### `seed_split_problems(validation: 'Sequence[int]', test: 'Sequence[int]') -> 'list[str]'`
 
 Problems that make a validation/test seed split unusable (empty list: valid).
 
-Seeds must be plain integers, each list free of duplicates, and the two lists disjoint, so the
+Each list must satisfy the seed contract (:data:`~lunarlab.audit.contracts.SEED_CONTRACT`: non-empty,
+nonnegative integers, no duplicates, nothing coerced), and the two lists must be disjoint, so the
 checkpoint selected on validation episodes is never selected on the episodes that test it.
+
+## Constants
+
+- `SEED_CONTRACT` = `'an evaluation seed is a nonnegative integer (a Python int or NumPy integer scalar, not a bool, float or string), seed l…`

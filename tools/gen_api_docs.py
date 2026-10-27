@@ -44,6 +44,8 @@ RESEARCH_MODULES = {
     ],
     "Task-independent auditing": [
         "lunarlab.audit.core",
+        "lunarlab.audit.contracts",
+        "lunarlab.audit.provenance",
         "lunarlab.audit.adapters",
         "lunarlab.audit.evaluate",
     ],

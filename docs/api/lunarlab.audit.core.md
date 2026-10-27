@@ -33,6 +33,11 @@ original reward unchanged and only records what the terms would have added. Obse
 ``terminated`` and ``truncated`` are never changed. On the last step of an episode,
 ``info["audit_episode"]`` holds the episode summary, including the adapter's outcome classification.
 
+The original reward, every term output and the training reward must be finite. A NaN or infinite value
+raises :class:`~lunarlab.audit.contracts.NonFiniteValueError` naming its source and ends the episode:
+the wrapper refuses further steps until the next reset, so a partly accounted episode is never
+completed or summarised.
+
 `RewardAccountingWrapper(env: 'gym.Env', terms: 'Mapping[str, RewardTerm] | None' = None, *, gamma: 'float', original_weight: 'float' = 1.0, apply: 'bool' = True, adapter: 'TaskAdapter | None' = None) -> 'None'`
 
 - method `reset(self, *, seed: 'int | None' = None, options: 'dict[str, Any] | None' = None)`: Reset and start a new episode audit.
@@ -42,7 +47,13 @@ original reward unchanged and only records what the terms would have added. Obse
 
 A named, pure reward term. ``describe`` (JSON-serialisable) identifies it in provenance records.
 
-`RewardTerm(name: 'str', fn: 'Callable[[Transition], float]', describe: 'Mapping[str, Any]') -> None`
+``term_id`` and ``version`` name the term's implementation for provenance records, and ``components``
+lists any further callables its result depends on (a predicate or a potential), so their source files
+can be recorded too (:func:`lunarlab.audit.provenance.reward_provenance`). None of the three enters
+:func:`terms_hash`. Every output must be a finite real number: NaN or infinity raises
+:class:`~lunarlab.audit.contracts.NonFiniteValueError` naming the term.
+
+`RewardTerm(name: 'str', fn: 'Callable[[Transition], float]', describe: 'Mapping[str, Any]', term_id: 'str | None' = None, version: 'str | None' = None, components: 'tuple[Callable, ...]' = ()) -> None`
 
 
 ### class `Transition`
@@ -60,10 +71,20 @@ A constant added on every transition (e.g. a time penalty with ``value < 0``).
 
 F(s, s') = alpha * (gamma * Phi(s') - Phi(s)) (Ng, Harada and Russell, 1999).
 
-A true termination makes s' absorbing, so Phi(s') = 0. A time-limit truncation is not a terminal
-state: the real next observation is used, as in LunarLab's own implementation. With these
-conventions the discounted sum of F over an episode telescopes to alpha * (gamma^T * Phi(s_T) - Phi(s_0)),
-with Phi(s_T) = 0 when the episode terminated.
+A true termination makes s' absorbing, so Phi(s') = 0; this includes a step on which the environment
+reports both ``terminated`` and ``truncated``. A time-limit truncation alone is not a terminal state: the
+real next observation is used, as in LunarLab's own implementation. With these conventions the
+discounted sum of F over an episode of T transitions telescopes to
+alpha * (gamma^T * Phi(s_T) - Phi(s_0)), with Phi(s_T) = 0 when the episode terminated. The identity
+concerns that sum; it does not imply that a policy learned with a finite budget is unchanged.
+
+### `rescore_transitions(transitions: 'list[Transition]', terms: 'Mapping[str, RewardTerm]', *, gamma: 'float', original_weight: 'float' = 1.0) -> 'dict[str, Any]'`
+
+Apply a reward definition to a fixed sequence of transitions (a recorded trajectory).
+
+Returns every step's original reward, term values and training reward, and the episode sums. This
+answers what the definition pays for those transitions; it says nothing about the policy that training
+under that definition would produce.
 
 ### `state_bonus(name: 'str', predicate: 'Callable[[np.ndarray], bool]', bonus: 'float', *, predicate_id: 'str') -> 'RewardTerm'`
 
@@ -72,7 +93,13 @@ exploited: LunarLab's flawed hover bonus is this shape.
 
 ### `terms_hash(terms: 'Mapping[str, RewardTerm]', original_weight: 'float') -> 'str'`
 
-Content hash of a reward definition (term descriptions and the original reward's weight).
+Schema-0 hash of a declared reward definition: the first 16 hex characters of SHA-256.
+
+It covers the term descriptions and the original reward's weight, not the code of the term callables:
+two terms with equal descriptions and different functions have equal hashes. Its value for a valid
+definition is unchanged from earlier records. Descriptions containing NaN, infinity or values that are
+not JSON are refused, naming the term. New records also carry the full-digest, versioned record of
+:func:`lunarlab.audit.provenance.reward_provenance`.
 
 ## Constants
 

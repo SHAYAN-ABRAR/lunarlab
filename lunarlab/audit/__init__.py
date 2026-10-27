@@ -24,6 +24,14 @@ from lunarlab.audit.adapters import (
     lunar_lander_adapter,
     register_adapter,
 )
+from lunarlab.audit.contracts import (
+    SEED_CONTRACT,
+    AuditInputError,
+    NonFiniteValueError,
+    canonical_json,
+    normalize_seeds,
+    seed_problems,
+)
 from lunarlab.audit.core import (
     EpisodeAudit,
     RewardAccountingWrapper,
@@ -31,26 +39,38 @@ from lunarlab.audit.core import (
     Transition,
     per_step,
     potential_shaping,
+    rescore_transitions,
     state_bonus,
     terms_hash,
 )
 from lunarlab.audit.evaluate import audit_policy, seed_split_problems
+from lunarlab.audit.provenance import PROVENANCE_SCHEMA, definition_sha256, reward_provenance
 
 __all__ = [
+    "PROVENANCE_SCHEMA",
+    "SEED_CONTRACT",
+    "AuditInputError",
     "EpisodeAudit",
     "EpisodeEnd",
+    "NonFiniteValueError",
     "RewardAccountingWrapper",
     "RewardTerm",
     "TaskAdapter",
     "Transition",
     "adapter_names",
     "audit_policy",
+    "canonical_json",
     "cartpole_adapter",
+    "definition_sha256",
     "get_adapter",
     "lunar_lander_adapter",
+    "normalize_seeds",
     "per_step",
     "potential_shaping",
     "register_adapter",
+    "rescore_transitions",
+    "reward_provenance",
+    "seed_problems",
     "seed_split_problems",
     "state_bonus",
     "terms_hash",
