@@ -44,6 +44,7 @@ import hashlib
 import json
 import os
 import shutil
+import stat
 import subprocess
 import sys
 import tempfile
@@ -54,6 +55,16 @@ REPORTS = "reports/neurocomputing-2026-10-27"
 STUDY = f"{REPORTS}/cartpole-study"
 COMPARISON = f"{REPORTS}/workflow-comparison"
 VERIFY_STUDY = "reports/neurocomputing-review-repairs-2026-10-28/recovery/verify_cartpole_study.py"
+
+
+def remove_tree(path: Path) -> None:
+    """``shutil.rmtree`` that also removes read-only files (frozen checkpoints are read-only on purpose)."""
+
+    def writable_then_retry(func, p, _exc):
+        os.chmod(p, stat.S_IWRITE)
+        func(p)
+
+    shutil.rmtree(path, onexc=writable_then_retry)
 
 
 def sha256(path: Path) -> str:
@@ -321,7 +332,7 @@ def main() -> int:
     )
     work = out / "work"
     if work.exists():
-        shutil.rmtree(work)
+        remove_tree(work)
     shutil.copytree(package / "source", work)
     overlay = package / "outside-git"
     for path in sorted(overlay.rglob("*")) if overlay.is_dir() else ():

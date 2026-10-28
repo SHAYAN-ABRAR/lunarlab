@@ -24,7 +24,9 @@ from __future__ import annotations
 import argparse
 import hashlib
 import io
+import os
 import shutil
+import stat
 import subprocess
 import tarfile
 from pathlib import Path
@@ -32,6 +34,16 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[3]
 E = ROOT / "reports/neurocomputing-2026-10-27"
 R = ROOT / "reports/neurocomputing-review-repairs-2026-10-28"
+
+
+def remove_tree(path: Path) -> None:
+    """``shutil.rmtree`` that also removes read-only files (frozen checkpoints are read-only on purpose)."""
+
+    def writable_then_retry(func, p, _exc):
+        os.chmod(p, stat.S_IWRITE)
+        func(p)
+
+    shutil.rmtree(path, onexc=writable_then_retry)
 
 
 def sha256(p: Path) -> str:
@@ -61,7 +73,7 @@ def main() -> int:
     a = ap.parse_args()
     out = a.out
     if out.exists():
-        shutil.rmtree(out)
+        remove_tree(out)
     out.mkdir(parents=True)
     problems: list[str] = []
 
