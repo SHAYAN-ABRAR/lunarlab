@@ -43,3 +43,22 @@ defects found by an independent review of the Neurocomputing revision. It trains
     visible. The root data home, the browser-test homes, the fixture models and `__pycache__` stay ignored.
   - The 72 records were staged by explicit path, without force-adding. The staged bytes equal the recorded
     digests, and the files carry `-text`, so no line endings change.
+- 15:05-15:15 Verification from the recovered records
+  (`recovery/verify_cartpole_study.py TREE OUT --checkpoints DIR`). `TREE` was a fresh `git archive HEAD`
+  extraction, so only committed files were used. The checkpoint files came from the study runner's output.
+  - **Analysis:** the prespecified analysis, rerun into a fresh directory, reproduces the committed results
+    for both the main study and the pilot: `results.json` equal, `RESULTS.md` byte-identical.
+  - **Per run:** all 18 runs pass every check. Actual transitions are rollouts × 8 × 32 (100,096 main, 20,480
+    pilot; 1,501,440 and 61,440 in total). The effective first-reset seeds equal `1,000,000 + 1000 × seed + i`,
+    and no later reset was seeded. Checkpoints fall every 10,240 transitions plus the final step. Every
+    validation mean equals the mean of its 20 episodes.
+  - **Selection:** rerunning the rule gives the recorded step in every run, often among ties (up to 10
+    checkpoints tied at the maximum). The earliest tied checkpoint is chosen, as the protocol states.
+  - **Frozen digests and tests:** the frozen selected and final digests equal the chosen and last checkpoints.
+    Both tests name those digests, ran after training finished, and use the protocol's test seeds (100 main,
+    20 pilot), disjoint from the validation seeds. Their aggregates equal the mean of their episodes.
+  - **Checkpoint files:** all 192 match their recorded digests.
+  - **Source:** every run records source `e7c3fab` with a clean tree.
+  - **Validation readings:** the flawed-bonus validation means lie between 9.05 and 9.55 at every evaluated
+    checkpoint, from the first, at 10,240 transitions. That is the observation; the records say nothing about
+    what happened before the first checkpoint.
