@@ -52,3 +52,9 @@ to the text width, so its smallest text prints at 9.03 pt.
 - The study archive has no DOI yet. Replace the availability statement with the real record once it is
   deposited.
 - The OSP-specific fee and format conditions remain unresolved (`docs/neurocomputing/README.md`).
+- **CRediT statement:** the guide requires one ("Corresponding authors are required to acknowledge co-author
+  contributions using CRediT roles"). The manuscript has none yet, and the roles are the author's to state.
+- **Highlights:** encouraged but optional. Give 3 to 5 bullets of at most 85 characters each, in a separate
+  file.
+- **Software revision:** the availability statement cites the review branch. After a merge and a release,
+  cite the released revision instead.

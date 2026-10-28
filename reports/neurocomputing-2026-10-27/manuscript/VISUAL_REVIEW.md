@@ -40,3 +40,42 @@ Fixes:
 - **Figure numbering:** the counter is reset after `\appendix`.
 - **Availability statement:** it now names the review branch and says that it is neither merged nor released.
 - **Figure 1 caption:** it says "Diamonds mark checks" and names no colour.
+
+## Build 2: commit b92879e, workflow run 40691885367
+
+- **Logs:** `build-run-40691885367-b92879e/`. The PDF's SHA-256 is
+  `24e714ba54b197d7ee893bf94ed1af74bef9053da5aae9b805d0f28b2ddeacbe`.
+- **Pages and paper:** 19 US-letter pages.
+- **Fonts:** all 34 embedded.
+- **References:** no undefined references or citations.
+- **Layout warnings:** no overfull boxes. The same underfull bibliography line as in build 1.
+
+All 19 pages were read. Each figure now follows its first mention:
+
+| Figure | First mention | Placed |
+|---|---|---|
+| 1 | page 2 | page 4, a float page |
+| 2 | page 7 | top of page 8 |
+| 3 | page 9 | page 10, a float page |
+| 4 | page 11 | page 12, a float page |
+| A.1 | page 14 | page 17, in the appendix, before the references |
+
+At print size, the figure text is legible and nothing is clipped or overlapping. The end matter reads as
+fixed:
+
+- the author block, with the address in lower case;
+- self-funded, with the exact competing-interest sentence;
+- the AIUB acknowledgement.
+
+One fault remained. Figure 4's caption said that intervals "collapse where all five policies coincide". That
+is true of most of them, but the flawed design's interval over policies (9.22 to 9.40) is merely narrower than
+its marker. Every interval in the figure is at most 0.172 units wide, so no bar is visible. The caption now
+says so.
+
+**Links.** The PDF's 11 link targets were extracted. The checks:
+
+- **DOIs:** all three resolve through the doi.org handle API (response code 1).
+- **Other links:** the arXiv identifiers, the JMLR pages and the two GitHub repositories are the cited works'
+  official addresses.
+- **Fault:** the support address in Table 1 was set with `\url`, which made the bare address a link target with
+  no `mailto:` scheme. It is now a `mailto:` link.

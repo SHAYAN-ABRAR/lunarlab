@@ -14,8 +14,8 @@
 \usepackage{placeins}
 \newcommand{\lunarlab}{LunarLab}
 % Software identity of this revision (the last commit that changed code) and its CI run; see BUILD.md.
-\newcommand{\swrev}{11145b3}
-\newcommand{\cirun}{40546091715}
+\newcommand{\swrev}{30bd3f6}
+\newcommand{\cirun}{40694880778}
 \newcolumntype{Y}{>{\raggedright\arraybackslash}X}
 % The figures are tall: let them share a page with text, or fill a float page, near their first mention.
 \renewcommand{\topfraction}{0.9}
@@ -78,7 +78,7 @@ Main dependencies & Gymnasium, Stable-Baselines3, PyTorch, NumPy, FastAPI \\
 Supported systems & Windows and Linux; continuous integration includes Python 3.12 and 3.13 \\
 Interfaces & Command line, Python API and local web application \\
 Documentation & Repository \texttt{README.md}, \texttt{docs/} and executable examples \\
-Support & Repository issue tracker; \url{shayanabrar7@gmail.com} \\
+Support & Repository issue tracker; \href{mailto:shayanabrar7@gmail.com}{\texttt{shayanabrar7@gmail.com}} \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -89,7 +89,7 @@ For a transition from $s_t$ to $s_{t+1}$ under action $a_t$, the training reward
  r_t^{\mathrm{train}}=w\,r_t^{\mathrm{orig}}+\sum_{k=1}^{K}F_k(s_t,a_t,s_{t+1}).
  \label{eq:accounting}
 \end{equation}
-A configuration specifies the original-reward weight $w$ and named additional terms $F_k$. Shared pure functions implement each term for training, evaluation and trajectory re-scoring, avoiding separate definitions of the same reward. The wrapper preserves observations and episode-ending signals, and it refuses a non-finite original reward, term output or weight, naming its source, so that a partly accounted episode cannot be reported as complete. Episode records store original return, training return and component totals; transition traces are optional. A versioned provenance record identifies the reward definition by a full SHA-256 digest of its declared description and, separately, by digests and repository status of the source files that implement each term. A description digest cannot identify what code computes, and code typed into an interactive session is reported as incompletely identified. Original return remains an environment-defined reference, and behavioral criteria provide a separate account of task completion.
+A configuration specifies the original-reward weight $w$ and named additional terms $F_k$. Shared pure functions implement each term for training, evaluation and trajectory re-scoring, avoiding separate definitions of the same reward. The wrapper preserves observations and episode-ending signals, and it refuses a non-finite original reward, term output or weight, naming its source, so that a partly accounted episode cannot be reported as complete. Episode records store original return, training return and component totals; transition traces are optional. A versioned provenance record identifies the reward definition by a full SHA-256 digest of its declared description and, separately, by the digest and repository status of each implementing source file, a digest of each implementing function's own source and the values it captures. A description digest cannot identify what code computes; code typed into an interactive session, or a captured value without a JSON form, is reported as incompletely identified. Original return remains an environment-defined reference, and behavioral criteria provide a separate account of task completion.
 
 LunarLander can terminate with an at-rest outcome away from the intended pad. LunarLab therefore distinguishes that outcome from a strict pad landing. The latter requires an at-rest termination, no body contact during the episode, recorded leg contact, both leg bodies horizontally between the pad flags, and a final absolute angle at most 0.35 radians. The classifier records which conditions fail and versions its category definitions. It uses leg contact observed during the episode because final-frame contact flags can be cleared when contacts move between terrain fixtures. This explicit operational definition makes a landing claim inspectable beyond the environment's terminal reward.
 
@@ -153,13 +153,13 @@ The original and potential designs reached the 500-step limit in every test epis
 \begin{figure}[!tbp]
 \centering
 \includegraphics[width=\linewidth]{figures/cartpole_study.pdf}
-\caption{CartPole audit, validation-selected policies. Circles are the five trained policies per design (the sampling unit), each the mean over the same 100 held-out test seeds, offset vertically in seed order; diamonds and bars are the mean and 95\% percentile bootstrap interval over policies (10,000 resamples), conditional on those seeds. Intervals collapse where all five policies coincide. Panel (c) uses each design's own training reward and is not comparable with (a).}
+\caption{CartPole audit, validation-selected policies. Circles are the five trained policies per design (the sampling unit), each the mean over the same 100 held-out test seeds, offset vertically in seed order; diamonds and bars are the mean and 95\% percentile bootstrap interval over policies (10,000 resamples), conditional on those seeds. The widest interval spans 0.17 return units, narrower than a marker, so no bar is visible. Panel (c) uses each design's own training reward and is not comparable with (a).}
 \label{fig:cartpole}
 \end{figure}
 
 \section{Engineering evaluation and reproducibility}
 \subsection{Tests, packaging and execution cost}
-At revision \texttt{\swrev}, public continuous integration (run \cirun) records 567 passed Python tests on Linux, four Windows-only skips and 85.91\% combined statement/branch coverage. Targeted Windows jobs pass 288 tests on each of Python 3.12 and 3.13. Browser testing covers 15 flows, and a fresh source-archive installation passes 189 release tests. Tests exercise accounting identities against hand-calculated sums, the seed and finite-value contracts, protocol validation, checkpoint freezing, continuation, interruption, artifact dependencies and the refusal of eleven kinds of tampered artifacts before execution. Runtime reproductions of the seed, finite-value and seeding behavior of the task-independent layer at the preceding revision found contract gaps that these tests now cover. A deterministic archive builder records the source revision and verifies archive contents. These checks document specific tested behaviors and supported configurations.
+At revision \texttt{\swrev}, public continuous integration (run \cirun) records 572 passed Python tests on Linux, four Windows-only skips and 85.95\% combined statement/branch coverage. Targeted Windows jobs pass 291 tests on each of Python 3.12 and 3.13. Browser testing covers 15 flows, and a fresh source-archive installation passes 192 release tests. Tests exercise accounting identities against hand-calculated sums, the seed and finite-value contracts, protocol validation, checkpoint freezing, continuation, interruption, artifact dependencies and the refusal of eleven kinds of tampered artifacts before execution. Runtime reproductions of the seed, finite-value, seeding and reward-identity behavior of the task-independent layer at the preceding revisions found contract gaps that these tests now cover. A deterministic archive builder records the source revision and verifies archive contents; the archive of this revision built on Linux CI and on the recording machine is byte-identical. These checks document specific tested behaviors and supported configurations.
 
 Table~\ref{tab:cost} compares SB3 with a monitoring wrapper, SB3 with LunarLab accounting, and the full LunarLab training workflow. Hyperparameters, training transitions and thread count are matched. The full workflow's loop time is 5.3\% higher, while its additional validation and checkpointing raise elapsed time by 22.1\%. The loop interval includes initialization and excludes separately timed validation and checkpoint operations. Memory is the mean of per-run process peaks measured through training and checkpointing, before optional replay generation. The benchmark records an uncommitted source state based on \texttt{67440c6}; its source manifest is preserved separately from later revisions. The measurements apply to the recorded machine, source state and workload.
 
