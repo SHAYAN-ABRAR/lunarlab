@@ -125,3 +125,17 @@ defects found by an independent review of the Neurocomputing revision. It trains
 - 16:05 `tools/validate_review_package.py`: a package validator that checks scientific dependencies as well as
   checksums. It recomputes, rebuilds and (with `--commands`) runs the documented commands in a fresh
   environment. Its tests show the dependency check names a missing or altered run record.
+- 17:05-17:30 Pushed `8f1258d`.
+  - CI run 40734273117: all six jobs passed. Linux: 596 passed and 4 skipped, which includes the two
+    validator tests. Windows: 293 each. Source archive: 194. Browser: 15.
+  - Manuscript build 40734273141: 19 pages, all fonts embedded, no undefined references. Every page was read,
+    and the reading found four problems:
+    - the branch name and the repairs path in the availability statement ran up to 111 pt into the margin
+      (`\texttt` cannot break), as did one line in Section 4.1 (4.4 pt);
+    - the Section 4.1 title still said "independent";
+    - the longer abstract pushed the title block's closing rule onto page 2.
+  - Fixes: `\path` for branch names and paths, which breaks at `/` and `-`; the 4.1 sentence and title
+    rephrased; the abstract shortened to 180 words without dropping content.
+- 17:18 Integrity (`integrity/`). The 2,359 protected historical files are unchanged; the combined digest
+  equals the one before any change. Since `d5881cb`, the 27 October evidence folder has 72 added run records
+  and 5 documentation edits, and no change to protocols, raw outputs, results or figure inputs.
