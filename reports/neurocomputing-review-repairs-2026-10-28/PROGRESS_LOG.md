@@ -98,3 +98,30 @@ defects found by an independent review of the Neurocomputing revision. It trains
 - 15:52 Regression check (`regression/rerun_w3.py`). The comparison's W3 program was rerun with the repaired
   code on all 14 fixtures (evaluation only). Its status vectors, verdicts, exit statuses and episode counts are
   identical to the recorded results of 27 October in 14 of 14 cases.
+- 15:20 CI run 40712412847 on `c9b9384` (pushed 15:05): all six jobs passed.
+  - Linux: 594 passed and 4 Windows-only tests skipped; 86.04% combined coverage (8,995 of 10,155 statements,
+    1,976 of 2,596 branches).
+  - Windows Python 3.12 and 3.13: 293 each. Source archive: 194. Browser: 15 flows.
+  - Learned-reward replay 40712412965: passed.
+- 15:35 The source archive of `c9b9384` built locally is byte-identical to CI's (`3427d9a9…`, 1,112 files) and
+  passes 194 release tests after a fresh install (`validation/`).
+- 15:25-16:00 Manuscript corrections, following the brief's items A to G:
+  - **Scope (A):** the layer is described as adapter-based, with adapters for LunarLander and CartPole, the two
+    tasks it has been used on. Figure 1's header now reads "Reusable core via task adapters (LunarLander,
+    CartPole)"; a longer first version was clipped and shortened.
+  - **Agreement (B):** "a separately implemented reference", wherever the text said "independent".
+  - **Checks (C):** which command runs which checks. `audit-artifact verify` runs the equivalents of S1-S7 and
+    S9, `reproduce` adds S10, and S8 is a library function, because exported artifacts carry no trajectory.
+  - **Contract (D):** the finite-value contract as implemented.
+  - **Validation readings (E):** stated as an observation; no learning chronology is asserted.
+  - **Identity (F):** the merged `30bd3f6`, the repair revision `c9b9384`, the experiments' own source states,
+    and the absence of any release.
+  - **Provenance (G):** its limits.
+  - **Section 5.1:** CI numbers of `c9b9384`. "Independent review" became "subsequent review", because the
+    review was AI-assisted, as the paper discloses.
+- 16:00 Wording aligned in the README, `docs/DEVELOPER.md`, the comparison README and FINDINGS. The comparison's
+  hash-listed `PROTOCOL.md` is unchanged. The 27 October readiness report and log carry dated correction notes,
+  and their earlier text is kept. `paper/neurocomputing/EVIDENCE.md` was rewritten for the corrected claims.
+- 16:05 `tools/validate_review_package.py`: a package validator that checks scientific dependencies as well as
+  checksums. It recomputes, rebuilds and (with `--commands`) runs the documented commands in a fresh
+  environment. Its tests show the dependency check names a missing or altered run record.

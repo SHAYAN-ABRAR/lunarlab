@@ -142,15 +142,18 @@ none of them affected the published results: no number above changed
   1.053× full-loop time and 1.221× training-workflow elapsed time relative to SB3, with process peaks of 310, 310
   and 314 MB through training and checkpointing ([benchmark audit](docs/jmlr/BENCHMARK_PROTOCOL.md)). See
   [the independent review](docs/jmlr/READINESS_REPORT.md) for evidence and limits.
-- **Task-independent audit layer:** `lunarlab.audit` brings the reward accounting to any Gymnasium task through
-  an adapter. It adds a seed contract that refuses booleans, floats, duplicates and overlapping splits, and it
-  refuses non-finite rewards and parameters. Reward definitions carry a versioned provenance record. A
+- **Adapter-based audit layer:** `lunarlab.audit` brings the reward accounting to other Gymnasium tasks
+  through task adapters. Adapters exist for LunarLander and CartPole, the two tasks it has been used on. It
+  adds a seed contract that refuses booleans, floats, duplicates and overlapping splits, and it
+  refuses non-finite rewards and parameters and episode totals that overflow. Reward definitions carry a versioned provenance record. A
   prespecified PPO study workflow covers validation selection, freezing and a digest-checked final test, and
   `lunarlab audit-artifact` checks an exported artifact before any episode runs. Examples: a
   [CartPole audit](examples/cartpole_audit.py) and a [study runner](examples/cartpole_study.py). The full
-  application remains LunarLander-specific. The October 2026 evidence (a fault-injection comparison with two SB3
-  workflows, a CartPole study, and Linux replays of the learned-reward packages) is in
-  [`reports/neurocomputing-2026-10-27/`](reports/neurocomputing-2026-10-27/README.md).
+  application remains LunarLander-specific. The October 2026 evidence (a fault-injection comparison with a conventional
+  SB3 evaluation and a separately implemented SB3 reference, a CartPole study, and Linux replays of the
+  learned-reward packages) is in [`reports/neurocomputing-2026-10-27/`](reports/neurocomputing-2026-10-27/README.md),
+  and the repairs that followed a review of it are in
+  [`reports/neurocomputing-review-repairs-2026-10-28/`](reports/neurocomputing-review-repairs-2026-10-28/README.md).
 
 ## Requirements
 
@@ -304,6 +307,7 @@ examples/artifacts/<name>/  three published final tests packaged for re-evaluati
 examples/learned-reward-artifacts/   the six learned-reward policies with their reward models (committed)
 reports/jmlr/               coverage, overhead benchmarks, figures and reproduction reports (committed)
 reports/neurocomputing-2026-10-27/   protocols, records and reports of the October 2026 evidence (committed)
+reports/neurocomputing-review-repairs-2026-10-28/   record recovery, defect reproductions, validation (committed)
 ```
 
 Nothing is deleted automatically, with one exception: a DQN run keeps the replay and state files of its two most
@@ -367,7 +371,7 @@ cd frontend; npm run typecheck; npm run lint; npm run build
 npx playwright test                                      # 15 browser flows on real backends (uses installed Edge)
 ```
 
-Coverage is 85.95 % of statements and branches in CI at `30bd3f6` (85.8 % in the
+Coverage is 86.04 % of statements and branches in CI at `c9b9384` (85.8 % in the
 [per-module report](reports/jmlr/coverage/SUMMARY.md) of the JMLR revision). CI runs
 the full suite on Linux, the Windows-sensitive tests and the PowerShell scripts on Windows with Python 3.12 and
 3.13, the smoke reproduction and the re-evaluation of the published artifacts on both (with a summary of every
@@ -403,7 +407,7 @@ episodes) from an empty data home. Local validation of this change: 498 Python t
 **Research-strengthening revision (27 and 28 October 2026, review branch
 `research/neurocomputing-audit-evidence`, not merged):**
 
-- **Contract defects:** seed, finite-value and seeding defects of the task-independent layer were reproduced
+- **Contract defects:** seed, finite-value and seeding defects of the adapter-based layer were reproduced
   and fixed. Sixteen reproductions fail on the previous code and pass now; a valid-input control passes on both.
 - **Reward identity:** two terms with the same description that pay 1 and 1,000 could not be told apart by
   their record. Provenance schema 2 records each term function's own source digest and captured values, and
@@ -424,6 +428,32 @@ episodes) from an empty data home. Local validation of this change: 498 Python t
   only numerically.
 
 Records: [`reports/neurocomputing-2026-10-27/`](reports/neurocomputing-2026-10-27/README.md).
+
+**Review repairs (28 October 2026, branch `research/neurocomputing-review-repairs`, not merged):**
+
+- **Missing records:** an unanchored `runs/` ignore rule had kept the CartPole study's 72 run records out
+  of Git, so every distribution built from Git omitted the inputs of its analysis. They are now committed
+  byte for byte; each matches every digest recorded for it. From a fresh extraction, the analysis
+  reproduces the committed results exactly, and checks of all 18 runs pass (budgets, seeds, selection
+  with ties, frozen digests, tests, 192 checkpoint files).
+- **Two validation defects fixed:**
+  - finite rewards whose episode totals overflow are refused, naming the quantity, and no summary is
+    emitted;
+  - malformed recorded episodes (null, boolean, text or missing values) are reported field by field
+    instead of raising.
+
+  The comparison's W3 program, rerun on all 14 fixtures, reaches the same verdicts.
+- **CI:** on commit `c9b9384` (run
+  [40712412847](https://github.com/SHAYAN-ABRAR/lunarlab/actions/runs/40712412847)) all six jobs passed:
+  - Linux: 594 tests passed and 4 Windows-only tests skipped, with 86.04 % statement and branch coverage;
+  - Windows Python 3.12 and 3.13: 293 targeted tests passed on each;
+  - source archive: 194 release tests passed (the Windows build is byte-identical);
+  - browser: 15 flows passed.
+- **Package validation:** `tools/validate_review_package.py` checks every file a scientific record names,
+  not only the checksums of the files present. It then recomputes the results and runs the documented
+  commands from a fresh extraction.
+
+Records: [`reports/neurocomputing-review-repairs-2026-10-28/`](reports/neurocomputing-review-repairs-2026-10-28/README.md).
 
 ## License and citation
 

@@ -203,3 +203,15 @@ Times are UTC. Machine: the author's Windows 11 laptop (the original data home).
   the index, readiness and archive documents. Manuscript build 40697723844: 19 pages, no overfull boxes, all
   fonts embedded. Every page was read and no new fault was found (`manuscript/VISUAL_REVIEW.md`, build 3). The
   CI run on `5e3f485` was superseded by the next push, which cancels a run in progress for the same branch.
+
+## 2026-10-28, corrections added after the independent review
+
+- Two statements above are wrong or too strong:
+  - The 13:02-13:16 entry says the CartPole analysis reproduces byte for byte from the committed records.
+    The run records had never been committed: an unanchored `runs/` ignore rule excluded them, and the check
+    had read the working tree.
+  - The 16:13-16:20 entry of 27 October says failing fast "was learned before the first checkpoint". The
+    records show only that every flawed-bonus validation mean was 9.05-9.55 at every evaluated checkpoint,
+    from the first, at 10,240 transitions; nothing was recorded earlier.
+- The records were recovered and committed byte for byte, and the analysis reproduces from them; see
+  `../neurocomputing-review-repairs-2026-10-28/`. The entries above are left as written.

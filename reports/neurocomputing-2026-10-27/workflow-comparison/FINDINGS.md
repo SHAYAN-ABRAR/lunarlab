@@ -16,7 +16,7 @@ stayed empty.
 | False alarms on controls | 0 | 0 | 0 |
 
 W2 and W3 report identical status vectors (S1–S10) on all 14 cases. Because W2 shares no code with LunarLab
-and was written from the specification, the agreement cross-checks W3's checks against an independent
+and was written from the specification, the agreement cross-checks W3's checks against a separately written
 implementation of the same specification. Both were written by the same developer with AI assistance, so
 this is not evidence from an independent team.
 

@@ -1,8 +1,13 @@
 # Evidence for the Neurocomputing revision, 27 and 28 October 2026
 
+> Corrections and repairs made after a review of this evidence (28 October 2026) are in
+> [`../neurocomputing-review-repairs-2026-10-28/`](../neurocomputing-review-repairs-2026-10-28/README.md). The
+> CartPole run records under `cartpole-study/records/*/runs/` were committed only then.
+
 This folder holds the new evidence behind `paper/neurocomputing/main.tex`.
 
-- **Branch:** the review branch `research/neurocomputing-audit-evidence`. It has not been merged or released.
+- **Branch:** the review branch `research/neurocomputing-audit-evidence`, merged into `main` by PR #1
+  (`d5881cb`) on 28 October 2026. It has not been released.
 - **Software evaluated:** revision `30bd3f6`, the last commit on the branch that changed library code.
 - **What was added:** protocols were fixed before the runs they govern, with raw records, analyses, CI logs and
   the manuscript's build logs.
