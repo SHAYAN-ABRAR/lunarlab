@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: MIT
 """Independent checks of the CartPole study from its recovered run records.
 
-    python verify_cartpole_study.py TREE OUT [--checkpoints DIR]
+    python verify_cartpole_study.py TREE OUT [--checkpoints DIR [--frozen-only]]
 
 ``TREE`` is a source tree holding ``reports/neurocomputing-2026-10-27`` (for example a fresh ``git archive``
 extraction). ``--checkpoints`` points at the study runner's output, whose ``<part>/runs/<run>/`` folders hold
@@ -51,7 +51,9 @@ def close(a: float, b: float) -> bool:
     return abs(a - b) <= 1e-9 * max(1.0, abs(a), abs(b))
 
 
-def check_run(part: str, run_dir: Path, protocol: dict, ckpt_dir: Path | None) -> tuple[dict, list[str]]:
+def check_run(
+    part: str, run_dir: Path, protocol: dict, ckpt_dir: Path | None, frozen_only: bool = False
+) -> tuple[dict, list[str]]:
     problems: list[str] = []
     name = run_dir.name
 
@@ -157,7 +159,7 @@ def check_run(part: str, run_dir: Path, protocol: dict, ckpt_dir: Path | None) -
     files_checked = 0
     if ckpt_dir is not None:
         rd = ckpt_dir / part / "runs" / name
-        for c in ckpts:
+        for c in [] if frozen_only else ckpts:
             p = rd / c["file"]
             need(
                 p.is_file() and sha256(p) == c["sha256"], f"checkpoint file {c['file']} missing or different"
@@ -190,6 +192,7 @@ def main() -> int:
     ap.add_argument("tree", type=Path)
     ap.add_argument("out", type=Path)
     ap.add_argument("--checkpoints", type=Path)
+    ap.add_argument("--frozen-only", action="store_true", help="check only the frozen checkpoint files")
     a = ap.parse_args()
     study = a.tree / "reports/neurocomputing-2026-10-27/cartpole-study"
     a.out.mkdir(parents=True, exist_ok=True)
@@ -231,7 +234,7 @@ def main() -> int:
             run_dir = study / "records" / part / "runs" / entry["run"]
             if load(run_dir / "protocol.json") != protocol:
                 report["problems"].append(f"{part}/{entry['run']}: protocol differs from the other runs'")
-            summary, problems = check_run(part, run_dir, protocol, a.checkpoints)
+            summary, problems = check_run(part, run_dir, protocol, a.checkpoints, a.frozen_only)
             rows.append(summary)
             report["problems"] += problems
         report["runs"][part] = rows
