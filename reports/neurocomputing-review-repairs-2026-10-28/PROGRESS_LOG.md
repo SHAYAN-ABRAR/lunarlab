@@ -152,3 +152,20 @@ defects found by an independent review of the Neurocomputing revision. It trains
     (`git -c core.autocrlf=false archive`). The package builder is committed as `package/build_review_package.py`,
     with machine paths as arguments.
 - Visual review of manuscript builds 4 and 5 recorded in `manuscript/VISUAL_REVIEW.md`, with their text logs.
+- 17:37-17:49 Fresh-extraction validation of the package from `500e360`. Its commands ran with a new virtual
+  environment, installed from the package's lock file.
+  - **Passed:**
+    - checksums: 1,438 of 1,438 files;
+    - CartPole records: both analyses reproduce, and 18 of 18 runs pass;
+    - figures: plotted values identical in 4 of 4 value files, and 20 of 20 output files byte-identical;
+    - replays: the published hover-bonus artifact and a learned-reward package replay `exact` from empty data
+      homes;
+    - CartPole artifacts: all 18 verify and replay `exact`;
+    - comparison: rerun from its fixtures, it reproduces all 42 workflow-case pairs (verdict, outcome, exit
+      status, episodes, S1-S10 statuses).
+  - **Reported as failed:** the dependency step named two "missing" files. Both were false positives: the
+    hash lists' header line ("fixed at … before …") does not start with `#`, and the parser read it as an
+    entry. The summary line also printed the command results as `null`.
+  - **Fixed in the validator:** only `<64 hex digits> <name>` lines are entries, and the command results carry
+    an overall `ok`. A test covers the header line. The package is rebuilt and validated again from the
+    resulting commit.

@@ -43,6 +43,7 @@ import argparse
 import hashlib
 import json
 import os
+import re
 import shutil
 import stat
 import subprocess
@@ -79,13 +80,20 @@ def load(path: Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+DIGEST_LINE = re.compile(r"^([0-9a-f]{64}) [ *](.+)$")
+
+
 def hash_list(path: Path) -> list[tuple[str, str]]:
-    """``(digest, name)`` rows of a ``sha256sum``-style list; comment lines are skipped."""
+    """``(digest, name)`` rows of a ``sha256sum``-style list.
+
+    Only ``<64 hex digits> <space or *><name>`` lines are entries. Other lines are skipped, such as the
+    prespecified lists' header "fixed at <time>, before ...".
+    """
     rows = []
     for line in path.read_text(encoding="utf-8").splitlines():
-        if line.strip() and not line.lstrip().startswith("#"):
-            digest, name = line.split(None, 1)
-            rows.append((digest, name.strip().lstrip("*")))
+        m = DIGEST_LINE.match(line.strip())
+        if m:
+            rows.append((m.group(1), m.group(2).strip()))
     return rows
 
 
@@ -383,14 +391,16 @@ def main() -> int:
         "ok": figures_code == 0 and check_code == 0 and not figures["values_differ"],
     }
     if a.commands:
-        report["commands"] = commands(python, work, out, env, study_output)
+        results = commands(python, work, out, env, study_output)
+        report["commands"] = {"ok": all(r.get("ok", False) for r in results.values()), "results": results}
     steps = [
         report["checksums"].get("ok") is not False,
         report["dependencies"]["ok"],
         report["cartpole_records"]["ok"],
         report["figures"]["ok"],
     ]
-    steps += [v.get("ok", False) for v in report.get("commands", {}).values()]
+    if "commands" in report:
+        steps.append(report["commands"]["ok"])
     report["ok"] = all(steps)
     report["finished_utc"] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
     (out / "validation.json").write_text(json.dumps(report, indent=1) + "\n", encoding="utf-8", newline="\n")
