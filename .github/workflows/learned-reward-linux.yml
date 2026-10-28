@@ -10,7 +10,7 @@ name: Learned-reward replay (Linux)
 #   * fail: a checksum mismatch, an integrity failure, `aggregate-disagreement` or `unexpected-difference`
 #     (exit 1), a crash or missing report, a non-empty data home, or a negative case that is not refused.
 # Per-episode numerical differences are reported, not tolerated silently: every report keeps all 100
-# episode rows. This is a platform check, not new training (the generic example below trains 256 transitions).
+# episode rows. This is a platform check, not new training (the generic example below trains 3 x 128 = 384 transitions).
 
 on:
   push:
@@ -86,7 +86,7 @@ jobs:
             .venv/bin/python -c "import json,sys; r=json.load(open(sys.argv[1])); assert r['status']=='integrity-failure' and r.get('evaluation_skipped') is True, r['status']; print(sys.argv[2], 'refused before evaluation')" "out/negative-$case-linux.json" "$case"
             test "$code" -eq 1
           done
-      - name: The generic audit example on Linux (smoke protocol, 256 training transitions)
+      - name: The generic audit example on Linux (smoke protocol, 384 training transitions)
         run: |
           LUNARLAB_HOME="$RUNNER_TEMP/home-generic" .venv/bin/python examples/cartpole_study.py \
             --protocol examples/protocols/cartpole-smoke.json --out "$RUNNER_TEMP/generic" --workers 2 | tee out/generic-example.log
