@@ -12,7 +12,10 @@ the offending input. Nothing is coerced: a value either satisfies its contract a
   ``"7"`` and negative values are refused. A seed list is non-empty, ordered (a list, tuple, range or
   one-dimensional integer array, not a set or a string) and free of duplicates.
 * **Finite values.** Original rewards, reward-term outputs, the original-reward weight and the discount
-  must be finite real numbers; NaN and infinity are refused with the term or field named.
+  must be finite real numbers; NaN and infinity are refused with the term or field named. So must every
+  accumulated episode total: finite transition values whose sum leaves the floating-point range are refused
+  too. A *recorded* reward value (read back from JSON) must be an ``int`` or ``float``: null, booleans and
+  text are refused rather than converted.
 * **Canonical JSON.** Reward descriptions and provenance records are serialised with sorted keys, compact
   separators and no NaN or infinity, so a digest of them is well defined.
 
@@ -34,9 +37,23 @@ A reward, reward-term output, weight or discount is NaN or infinite.
 
 Sorted keys, compact separators, ASCII, and no NaN or infinity (refused, not written).
 
+### `finite_mean(values: 'Sequence[float]', what: 'str') -> 'float'`
+
+The mean of finite ``values``, named ``what`` if it cannot be represented.
+
+Ordinary values give exactly ``statistics.fmean``. When the plain sum overflows although the mean itself
+is representable (finite totals near the largest double), the mean is taken as the sum of ``value / n``.
+
 ### `normalize_seeds(seeds: 'Any', label: 'str' = 'seeds') -> 'list[int]'`
 
 The seeds as a list of Python ints, or :class:`AuditInputError` naming every contract violation.
+
+### `number_problem(value: 'Any') -> 'str | None'`
+
+Why ``value`` is not a finite real number, or ``None`` if it is one.
+
+A finite real number here is a Python or NumPy ``int`` or ``float``. ``None`` (JSON null), booleans,
+strings and other types are refused rather than converted, and so are NaN and infinity.
 
 ### `require_finite(value: 'Any', what: 'str') -> 'float'`
 

@@ -19,6 +19,10 @@ Task knowledge (what an episode outcome means) comes from a :class:`~lunarlab.au
 
 Per-episode sums. ``G = sum_t gamma^t r_t`` with t = 0 for the first transition after reset.
 
+Every total stays finite: ``add`` refuses a transition whose values are not finite, or whose values are
+finite but would carry a total outside the floating-point range. A refused transition leaves the audit
+unchanged.
+
 `EpisodeAudit(gamma: 'float', length: 'int' = 0, original_return: 'float' = 0.0, training_return: 'float' = 0.0, discounted_original_return: 'float' = 0.0, discounted_training_return: 'float' = 0.0, term_returns: 'dict[str, float]' = <factory>, term_discounted_returns: 'dict[str, float]' = <factory>, _discount: 'float' = 1.0) -> None`
 
 - method `add(self, original: 'float', terms: 'Mapping[str, float]', training: 'float') -> 'None'`: Add one transition's original reward, term values and training reward.
@@ -33,10 +37,17 @@ original reward unchanged and only records what the terms would have added. Obse
 ``terminated`` and ``truncated`` are never changed. On the last step of an episode,
 ``info["audit_episode"]`` holds the episode summary, including the adapter's outcome classification.
 
-The original reward, every term output and the training reward must be finite. A NaN or infinite value
-raises :class:`~lunarlab.audit.contracts.NonFiniteValueError` naming its source and ends the episode:
-the wrapper refuses further steps until the next reset, so a partly accounted episode is never
-completed or summarised.
+The original reward, every term output and the training reward must be finite, and so must every
+episode total. A NaN or infinite value, or finite values whose total overflows, raise
+:class:`~lunarlab.audit.contracts.NonFiniteValueError` naming the source. The episode then ends for
+accounting:
+
+- no ``audit_episode`` is emitted for it;
+- ``last_episode`` is cleared to ``None``;
+- further steps are refused until the next reset, which starts a new audit.
+
+Only these checked values are guaranteed; an episode summary is emitted only after every transition has
+passed them.
 
 `RewardAccountingWrapper(env: 'gym.Env', terms: 'Mapping[str, RewardTerm] | None' = None, *, gamma: 'float', original_weight: 'float' = 1.0, apply: 'bool' = True, adapter: 'TaskAdapter | None' = None) -> 'None'`
 
@@ -108,6 +119,14 @@ two terms with equal descriptions and different functions have equal hashes. Its
 definition is unchanged from earlier records. Descriptions containing NaN, infinity or values that are
 not JSON are refused, naming the term. New records also carry the full-digest, versioned record of
 :func:`lunarlab.audit.provenance.reward_provenance`.
+
+### `training_reward(weight: 'float', original: 'float', terms: 'Mapping[str, float]', where: 'str') -> 'float'`
+
+``weight * original + sum(terms)``, which must be finite; otherwise ``NonFiniteValueError`` names
+``where`` (for example ``"at step 3"``).
+
+Finite term values can still sum beyond the floating-point range; that is refused too, not left to
+raise a bare ``OverflowError``.
 
 ## Constants
 

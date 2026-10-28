@@ -62,3 +62,39 @@ defects found by an independent review of the Neurocomputing revision. It trains
   - **Validation readings:** the flawed-bonus validation means lie between 9.05 and 9.55 at every evaluated
     checkpoint, from the first, at 10,240 transitions. That is the observation; the records say nothing about
     what happened before the first checkpoint.
+- 15:20-15:50 The two validation defects (`defects/`).
+  - **Reproduced on the unfixed code** with `defects/reproduce_defects.py` (output `before-fix-d1f69c6.json`):
+    - Two steps of reward 1e308 through `RewardAccountingWrapper` (gamma 0.99) emitted a completed
+      `audit_episode`, and set `last_episode`, with infinite original, training and discounted totals.
+    - Two finite terms of 1e308 raised a bare `OverflowError`.
+    - `rescore_transitions` returned infinite totals.
+    - The audit aggregate crashed with `OverflowError` on two finite episode totals of 1.5e308.
+    - `check_recorded_episodes` raised `TypeError` on null returns. Booleans and text were caught but reported
+      only as "episodes [0]", and a null optional value passed silently.
+  - **Fixed:**
+    - `EpisodeAudit.add` validates every input and every new total before changing anything. If a total
+      overflows, `NonFiniteValueError` names each affected quantity and the audit is unchanged.
+    - The wrapper does its accounting, outcome classification and summary under one guard. On failure it emits
+      no summary, clears `last_episode` and refuses steps until reset.
+    - `training_reward()` turns an `fsum` overflow into the audit error; `rescore_transitions` reuses it.
+    - Audit means use `finite_mean`. It equals `statistics.fmean` for ordinary values, and is exact when only
+      the plain sum would overflow.
+    - `check_recorded_episodes` now has explicit required fields (`original_return`, `training_return`,
+      `term_returns`) and optional ones (the discounted returns, `term_discounted_returns`). Every present value
+      must be a finite `int` or `float`. Each problem is reported with its episode, field and type, and nothing
+      raises.
+    - Artifact checks carry a kind, `integrity` or `record`. `audit-artifact` prints
+      `MALFORMED-RECORD (blocking)` when only record checks fail. The status stays `integrity-failure`, exit 1,
+      with no episode run, distinct from numerical differences (exit 3).
+  - **After the fix:** `after-fix-working-tree.json` shows every case handled.
+  - **Tests:** six overflow tests use independent oracles (1e308 + 1e308 exceeds the largest double, and
+    powers of two near the limit are exact). Eleven record tests cover direct calls, the tampered-artifact
+    path and the CLI, plus the two new tampering cases. 109 audit tests pass, 316 with the documentation,
+    CLI and reproduction suites.
+  - **Main LunarLander pipeline:** not changed. Its inputs are bounded by the configuration schema (every term
+    parameter bounded, `tanh`-bounded potential features, original-reward weight at most 1, learned-reward
+    scale at most 100), and its episodes end within 1,000 steps, so its totals cannot approach the
+    floating-point range.
+- 15:52 Regression check (`regression/rerun_w3.py`). The comparison's W3 program was rerun with the repaired
+  code on all 14 fixtures (evaluation only). Its status vectors, verdicts, exit statuses and episode counts are
+  identical to the recorded results of 27 October in 14 of 14 cases.
