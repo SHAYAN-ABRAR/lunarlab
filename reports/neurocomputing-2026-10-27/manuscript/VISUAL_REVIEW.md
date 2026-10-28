@@ -79,3 +79,24 @@ says so.
   official addresses.
 - **Fault:** the support address in Table 1 was set with `\url`, which made the bare address a link target with
   no `mailto:` scheme. It is now a `mailto:` link.
+
+## Build 3: commit 5e3f485, workflow run 40697723844
+
+- **Logs:** `build-run-40697723844-5e3f485/`. The PDF's SHA-256 is
+  `42db45de7c412ed4a6480cd644847bee2adf56d02152a44ca86b9be7b01cc039`.
+- **Pages and paper:** 19 US-letter pages.
+- **Fonts:** all 34 embedded.
+- **References:** no undefined references or citations.
+- **Layout warnings:** no overfull boxes, and the same single underfull bibliography line.
+
+All 19 pages were read again. The figure placement is unchanged from build 2. Each change of this build reads
+correctly:
+
+- Table 1 names revision `30bd3f6`;
+- Section 2.2 describes provenance schema 2;
+- Section 5.1 gives the counts of CI run 40694880778 (572, 85.95%, 291, 192, 15) and the byte-identical source
+  archive;
+- Figure 4's caption explains why no interval bar is visible;
+- the availability statement names `30bd3f6`.
+
+The PDF's 11 link targets include `mailto:shayanabrar7@gmail.com`. No new fault was found.

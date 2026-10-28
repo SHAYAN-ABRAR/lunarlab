@@ -199,3 +199,7 @@ Times are UTC. Machine: the author's Windows 11 laptop (the original data home).
   describes schema 2.
 - The compute tally is unchanged in substance. The targeted tests and the archive's release tests trained
   under 10,000 transitions, so the local total including test fixtures is still about 1.89 million.
+- 13:36 Fifth push (`66b7950`, `3fbcee8`, `5e3f485`): the manuscript on `30bd3f6`, CI and integrity records, and
+  the index, readiness and archive documents. Manuscript build 40697723844: 19 pages, no overfull boxes, all
+  fonts embedded. Every page was read and no new fault was found (`manuscript/VISUAL_REVIEW.md`, build 3). The
+  CI run on `5e3f485` was superseded by the next push, which cancels a run in progress for the same branch.
