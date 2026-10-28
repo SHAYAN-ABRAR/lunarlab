@@ -1,0 +1,2349 @@
+{
+ "schema": "lunarlab.audit-test/1",
+ "which": "final",
+ "design": "upright-potential",
+ "training_seed": 50,
+ "checkpoint_step": 100096,
+ "checkpoint_sha256": "f6ba5af4d87c1147d7c34e196618cbc80bdac55a0976078394ab567b4a126f73",
+ "protocol_sha256": "4811d318e3797dbae804fac0783d051c4bc5a3fcbbbe63ca9a9f681c37ce0430",
+ "tested_at": "2026-10-27T16:20:31+00:00",
+ "test_seconds": 27.920682199997827,
+ "torch_threads": 1,
+ "tested_with": {
+  "lunarlab": "0.1.0",
+  "git": {
+   "available": true,
+   "revision": "e7c3fabcc986ee66f56de6403f8772968559824d",
+   "dirty": false
+  },
+  "python": "3.12.13",
+  "python_implementation": "CPython",
+  "platform": "Windows-11-10.0.26300-SP0",
+  "packages": {
+   "gymnasium": "1.4.0",
+   "Box2D": "2.3.10",
+   "pygame": "2.6.1",
+   "stable-baselines3": "2.9.0",
+   "torch": "2.14.1",
+   "numpy": "2.5.4",
+   "pandas": "3.0.6",
+   "matplotlib": "3.11.2",
+   "imageio": "2.38.1",
+   "imageio-ffmpeg": "0.6.0",
+   "optuna": "5.0.0",
+   "fastapi": "0.143.1",
+   "uvicorn": "0.54.0",
+   "pydantic": "2.14.1",
+   "psutil": "7.2.2",
+   "PyYAML": "6.0.3"
+  }
+ },
+ "report": {
+  "adapter": {
+   "name": "cartpole",
+   "version": "1"
+  },
+  "environment": {
+   "env_id": "CartPole-v1",
+   "env_kwargs": {},
+   "gymnasium": "1.4.0"
+  },
+  "reward": {
+   "original_weight": 1.0,
+   "terms": {
+    "upright_potential": {
+     "type": "potential_shaping",
+     "alpha": 1.0,
+     "gamma": 0.98,
+     "potential": "-|pole_angle| / 12 degrees"
+    }
+   },
+   "hash": "d954e803310888f5",
+   "definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+   "provenance": {
+    "schema": "lunarlab.reward-provenance/1",
+    "definition": {
+     "original_weight": 1.0,
+     "terms": {
+      "upright_potential": {
+       "type": "potential_shaping",
+       "alpha": 1.0,
+       "gamma": 0.98,
+       "potential": "-|pole_angle| / 12 degrees"
+      }
+     }
+    },
+    "definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "legacy_terms_hash": "d954e803310888f5",
+    "adapter": {
+     "name": "cartpole",
+     "version": "1"
+    },
+    "terms": {
+     "upright_potential": {
+      "term_id": "lunarlab.audit.potential_shaping",
+      "term_version": "1",
+      "implementation": [
+       {
+        "module": "lunarlab.audit.core",
+        "qualname": "potential_shaping.<locals>.fn",
+        "source_file_sha256": "5c175a5d85f242661d5282801c040e7b5578630f0568f8ec78bd98a58efe673f",
+        "source_file": "lunarlab/audit/core.py",
+        "git": {
+         "tracked": true,
+         "modified": false
+        },
+        "status": "tracked-unmodified"
+       },
+       {
+        "module": "lunarlab.audit.adapters",
+        "qualname": "cartpole_adapter.<locals>.upright_potential",
+        "source_file_sha256": "c998357b2d19c4264c634fdc29cf0aa843bd2dc6df68d3477383cdec5d656e2b",
+        "source_file": "lunarlab/audit/adapters.py",
+        "git": {
+         "tracked": true,
+         "modified": false
+        },
+        "status": "tracked-unmodified"
+       }
+      ]
+     }
+    },
+    "source": {
+     "available": true,
+     "revision": "e7c3fabcc986ee66f56de6403f8772968559824d",
+     "dirty": false
+    },
+    "implementation_identity": "recorded",
+    "incomplete_reasons": [],
+    "scopes": {
+     "definition_sha256": "SHA-256 of the canonical JSON of the declared term descriptions and the original-reward weight. It identifies what was declared, not what the term callables compute.",
+     "source_file_sha256": "SHA-256 of the bytes of the file defining a callable, read at record time. It does not cover modules that file imports, data it reads, or interpreter and library versions.",
+     "source.revision": "git revision of the checkout; it pins a callable's code only when that callable's file is tracked and unmodified.",
+     "legacy_terms_hash": "schema-0 reward hash: the first 16 hex characters of SHA-256 over the same declared definition, kept so new records can be matched with older ones."
+    }
+   }
+  },
+  "gamma": 0.98,
+  "seeds": [
+   210000,
+   210001,
+   210002,
+   210003,
+   210004,
+   210005,
+   210006,
+   210007,
+   210008,
+   210009,
+   210010,
+   210011,
+   210012,
+   210013,
+   210014,
+   210015,
+   210016,
+   210017,
+   210018,
+   210019,
+   210020,
+   210021,
+   210022,
+   210023,
+   210024,
+   210025,
+   210026,
+   210027,
+   210028,
+   210029,
+   210030,
+   210031,
+   210032,
+   210033,
+   210034,
+   210035,
+   210036,
+   210037,
+   210038,
+   210039,
+   210040,
+   210041,
+   210042,
+   210043,
+   210044,
+   210045,
+   210046,
+   210047,
+   210048,
+   210049,
+   210050,
+   210051,
+   210052,
+   210053,
+   210054,
+   210055,
+   210056,
+   210057,
+   210058,
+   210059,
+   210060,
+   210061,
+   210062,
+   210063,
+   210064,
+   210065,
+   210066,
+   210067,
+   210068,
+   210069,
+   210070,
+   210071,
+   210072,
+   210073,
+   210074,
+   210075,
+   210076,
+   210077,
+   210078,
+   210079,
+   210080,
+   210081,
+   210082,
+   210083,
+   210084,
+   210085,
+   210086,
+   210087,
+   210088,
+   210089,
+   210090,
+   210091,
+   210092,
+   210093,
+   210094,
+   210095,
+   210096,
+   210097,
+   210098,
+   210099
+  ],
+  "seed_contract": "an evaluation seed is a nonnegative integer (a Python int or NumPy integer scalar, not a bool, float or string), seed lists are non-empty ordered sequences without duplicates, and nothing is converted",
+  "episodes": [
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.2934166501376,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.160014647518466,
+    "term_returns": {
+     "upright_potential": 0.29341665013744284
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.1620658467757399
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": 0.003412413876503706,
+    "final_cart_position": -0.5765170454978943,
+    "seed": 210000
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.2835141957876,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.1402748643818,
+    "term_returns": {
+     "upright_potential": 0.28351419578700804
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.14232606363913172
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": 0.0012020586291328073,
+    "final_cart_position": 0.015676740556955338,
+    "seed": 210001
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.30122160017885,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.163841606285274,
+    "term_returns": {
+     "upright_potential": 0.30122160017886557
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.1658928055425458
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": -0.0031933654099702835,
+    "final_cart_position": 0.5337091684341431,
+    "seed": 210002
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.2045162768319,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.074984706939524,
+    "term_returns": {
+     "upright_potential": 0.20451627683202725
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.07703590619682796
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": 0.0030470057390630245,
+    "final_cart_position": -0.5538297891616821,
+    "seed": 210003
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.16680103870306,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.0368844333042,
+    "term_returns": {
+     "upright_potential": 0.1668010387031473
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.038935632561428665
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": -0.002649236237630248,
+    "final_cart_position": -0.052770182490348816,
+    "seed": 210004
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.2314668631455,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.10726309096112,
+    "term_returns": {
+     "upright_potential": 0.23146686314554799
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.10931429021845535
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": -0.004661623854190111,
+    "final_cart_position": 0.5026851892471313,
+    "seed": 210005
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.16555258542286,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.032619872671084,
+    "term_returns": {
+     "upright_potential": 0.16555258542261722
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.03467107192836141
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": 0.0022471912670880556,
+    "final_cart_position": 0.520132839679718,
+    "seed": 210006
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.2307354098004,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.10402000067685,
+    "term_returns": {
+     "upright_potential": 0.23073540980036664
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.10607119993415473
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": -0.0037760548293590546,
+    "final_cart_position": -0.06282726675271988,
+    "seed": 210007
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.2392631790305,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.11197431230998,
+    "term_returns": {
+     "upright_potential": 0.23926317903025132
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.11402551156730374
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": 0.004023210611194372,
+    "final_cart_position": -0.21370825171470642,
+    "seed": 210008
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.24118558439704,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.09680136819459,
+    "term_returns": {
+     "upright_potential": 0.24118558439608626
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.0988525674518502
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": -6.817509711254388e-05,
+    "final_cart_position": -0.0937812328338623,
+    "seed": 210009
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.2304931036356,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.1057060529653,
+    "term_returns": {
+     "upright_potential": 0.23049310363553133
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.10775725222260826
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": 0.004545233212411404,
+    "final_cart_position": 0.8613454103469849,
+    "seed": 210010
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.22444705187024,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.08890224334864,
+    "term_returns": {
+     "upright_potential": 0.22444705187070302
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.0909534426059009
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": -0.0021224624942988157,
+    "final_cart_position": 0.5391396284103394,
+    "seed": 210011
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.37789028789865,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.22288926518497,
+    "term_returns": {
+     "upright_potential": 0.37789028789907697
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.22494046444232577
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": -0.00011805255053332075,
+    "final_cart_position": 0.3557518422603607,
+    "seed": 210012
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.2945545602881,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.14986897421554,
+    "term_returns": {
+     "upright_potential": 0.29455456028842036
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.1519201734728403
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": -0.0009426032775081694,
+    "final_cart_position": 0.24843834340572357,
+    "seed": 210013
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.3228205830438,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.179326605215856,
+    "term_returns": {
+     "upright_potential": 0.32282058304360384
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.18137780447318227
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": -0.0013793222606182098,
+    "final_cart_position": -0.31644999980926514,
+    "seed": 210014
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.19962710219426,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.07065085070898,
+    "term_returns": {
+     "upright_potential": 0.19962710219396623
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.0727020499662528
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": -0.003177740378305316,
+    "final_cart_position": 0.20354224741458893,
+    "seed": 210015
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.2412670215682,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.10888305068209,
+    "term_returns": {
+     "upright_potential": 0.24126702156794114
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.1109342499394376
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": 0.002642064355313778,
+    "final_cart_position": -0.43708011507987976,
+    "seed": 210016
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.1677246394485,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.05035490959652,
+    "term_returns": {
+     "upright_potential": 0.16772463944852045
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.052406108853797616
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": -0.0056895846500992775,
+    "final_cart_position": 0.6806806921958923,
+    "seed": 210017
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.1504175784367,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.017121041327115,
+    "term_returns": {
+     "upright_potential": 0.15041757843658785
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.019172240584368474
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": 0.0016250457847490907,
+    "final_cart_position": 0.2828710973262787,
+    "seed": 210018
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.2673101044996,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.12537027676678,
+    "term_returns": {
+     "upright_potential": 0.2673101044994602
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.12742147602407303
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": -0.0009911807719618082,
+    "final_cart_position": -0.1659930944442749,
+    "seed": 210019
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.34592852614617,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.20999022282494,
+    "term_returns": {
+     "upright_potential": 0.3459285261462134
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.21204142208220256
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": -0.0038354580756276846,
+    "final_cart_position": 0.9836227297782898,
+    "seed": 210020
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.18840770016766,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.050100502460324,
+    "term_returns": {
+     "upright_potential": 0.18840770016749228
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.05215170171759706
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": 0.0013100396608933806,
+    "final_cart_position": -0.912696361541748,
+    "seed": 210021
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.368026543665,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.2310192114941,
+    "term_returns": {
+     "upright_potential": 0.3680265436649682
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.23307041075140947
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": 0.0032387757673859596,
+    "final_cart_position": -0.5701965689659119,
+    "seed": 210022
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.3015169688453,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.174616295116,
+    "term_returns": {
+     "upright_potential": 0.3015169688455889
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.176667494373305
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": -0.005402015522122383,
+    "final_cart_position": 0.0627034455537796,
+    "seed": 210023
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.33603034889455,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.21250373560524,
+    "term_returns": {
+     "upright_potential": 0.3360303488947963
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.21455493486260582
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": 0.005726255476474762,
+    "final_cart_position": 1.1668428182601929,
+    "seed": 210024
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.1751349336327,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.05098274311414,
+    "term_returns": {
+     "upright_potential": 0.17513493363246696
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.053033942371427216
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": -0.004016709513962269,
+    "final_cart_position": 0.6005153059959412,
+    "seed": 210025
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.1440699803484,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.00719400238567,
+    "term_returns": {
+     "upright_potential": 0.14406998034854154
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.009245201642979971
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": 0.0010284512536600232,
+    "final_cart_position": -0.29505541920661926,
+    "seed": 210026
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.2014582294594,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.06890080330871,
+    "term_returns": {
+     "upright_potential": 0.20145822945958103
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.07095200256602714
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": -0.002396626863628626,
+    "final_cart_position": -0.02632823772728443,
+    "seed": 210027
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.17178460478993,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.03720027860817,
+    "term_returns": {
+     "upright_potential": 0.17178460479043484
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.03925147786551098
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": -0.0016153170727193356,
+    "final_cart_position": -0.1739725023508072,
+    "seed": 210028
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.29667078866254,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.14916417543907,
+    "term_returns": {
+     "upright_potential": 0.2966707886625088
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.1512153746963843
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": -0.0006234390311874449,
+    "final_cart_position": 0.661773681640625,
+    "seed": 210029
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.355347619185,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.21201745010605,
+    "term_returns": {
+     "upright_potential": 0.3553476191848599
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.21406864936338313
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": -0.0020442246459424496,
+    "final_cart_position": -0.2551156282424927,
+    "seed": 210030
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.1723459175865,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.03446019469475,
+    "term_returns": {
+     "upright_potential": 0.17234591758663384
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.03651139395196744
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": 0.0011141948634758592,
+    "final_cart_position": -0.650393009185791,
+    "seed": 210031
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.2074371271142,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.0766337836777,
+    "term_returns": {
+     "upright_potential": 0.20743712711433052
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.0786849829350376
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": 0.0034349788911640644,
+    "final_cart_position": 0.8470503687858582,
+    "seed": 210032
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.20504083208635,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.07194732524821,
+    "term_returns": {
+     "upright_potential": 0.20504083208687332
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.07399852450553746
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": -0.0021940511651337147,
+    "final_cart_position": 0.3499389588832855,
+    "seed": 210033
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.23222478219236,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.10442985299638,
+    "term_returns": {
+     "upright_potential": 0.23222478219219864
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.10648105225375759
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": -0.003566893981769681,
+    "final_cart_position": -0.14512339234352112,
+    "seed": 210034
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.1283896761791,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.005458870214895,
+    "term_returns": {
+     "upright_potential": 0.128389676179034
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.007510069472160233
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": -0.003943301271647215,
+    "final_cart_position": 0.23631127178668976,
+    "seed": 210035
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.1821727224221,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.049049300697554,
+    "term_returns": {
+     "upright_potential": 0.18217272242234178
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.05110049995490759
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": -0.0020459669176489115,
+    "final_cart_position": 0.5418511629104614,
+    "seed": 210036
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.1507359089084,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.03637701201639,
+    "term_returns": {
+     "upright_potential": 0.1507359089084094
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.03842821127374798
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": -0.0060297641903162,
+    "final_cart_position": 0.9198747873306274,
+    "seed": 210037
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.31517008815985,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.18672294738856,
+    "term_returns": {
+     "upright_potential": 0.31517008815960157
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.1887741466459288
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": -0.004858838394284248,
+    "final_cart_position": 1.2615259885787964,
+    "seed": 210038
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.13775847498295,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.018235455603,
+    "term_returns": {
+     "upright_potential": 0.13775847498289978
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.020286654860318373
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": 0.004669430200010538,
+    "final_cart_position": 0.008976503275334835,
+    "seed": 210039
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.1684675798472,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.03779253851279,
+    "term_returns": {
+     "upright_potential": 0.16846757984723093
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.03984373777009339
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": 0.0023019651416689157,
+    "final_cart_position": 0.3179537057876587,
+    "seed": 210040
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.21032734127135,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.072115962644546,
+    "term_returns": {
+     "upright_potential": 0.21032734127145272
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.07416716190176449
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": -0.0014483898412436247,
+    "final_cart_position": 0.8068526387214661,
+    "seed": 210041
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.21740526976174,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.0772717381128,
+    "term_returns": {
+     "upright_potential": 0.2174052697615087
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.07932293737011006
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": -0.0008987046894617379,
+    "final_cart_position": -0.7062855362892151,
+    "seed": 210042
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.2185139864492,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.10061235817942,
+    "term_returns": {
+     "upright_potential": 0.2185139864497605
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.10266355743675169
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": 0.005777114536613226,
+    "final_cart_position": 0.21588891744613647,
+    "seed": 210043
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.1776810948518,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.05924849653896,
+    "term_returns": {
+     "upright_potential": 0.1776810948518379
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.061299695796249457
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": 0.005143247079104185,
+    "final_cart_position": -0.06715928763151169,
+    "seed": 210044
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.1733510534146,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.03331218351946,
+    "term_returns": {
+     "upright_potential": 0.1733510534145702
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.03536338277684088
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": 0.0004626771551556885,
+    "final_cart_position": 0.044042423367500305,
+    "seed": 210045
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.29708878798147,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.16021118502487,
+    "term_returns": {
+     "upright_potential": 0.2970887879813747
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.16226238428223114
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": 0.0034547962713986635,
+    "final_cart_position": 0.7131831049919128,
+    "seed": 210046
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.24534721164946,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.1086971004868,
+    "term_returns": {
+     "upright_potential": 0.2453472116496728
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.11074829974407188
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": 0.0017162039875984192,
+    "final_cart_position": -0.6865189671516418,
+    "seed": 210047
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.2077846858337,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.07396119457385,
+    "term_returns": {
+     "upright_potential": 0.20778468583332307
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.0760123938311335
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": -0.002264146227389574,
+    "final_cart_position": -0.4427454471588135,
+    "seed": 210048
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.31719284792945,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.18049009914444,
+    "term_returns": {
+     "upright_potential": 0.3171928479290163
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.18254129840167738
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": 0.003306166734546423,
+    "final_cart_position": 0.4125061631202698,
+    "seed": 210049
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.3439909697754,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.20172587631338,
+    "term_returns": {
+     "upright_potential": 0.34399096977533994
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.20377707557071906
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": 0.002177871996536851,
+    "final_cart_position": -0.26575398445129395,
+    "seed": 210050
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.28520704135747,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.15558887563032,
+    "term_returns": {
+     "upright_potential": 0.28520704135732006
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.1576400748875993
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": -0.004709055181592703,
+    "final_cart_position": -0.7774162888526917,
+    "seed": 210051
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.3485082534277,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.20073266475755,
+    "term_returns": {
+     "upright_potential": 0.3485082534276665
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.20278386401487988
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": 0.00021074122923891991,
+    "final_cart_position": 0.21327602863311768,
+    "seed": 210052
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.2049912005392,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.067407406952405,
+    "term_returns": {
+     "upright_potential": 0.20499120053985465
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.06945860620965794
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": 0.001349820988252759,
+    "final_cart_position": -0.284935861825943,
+    "seed": 210053
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.1398939256647,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.01312868348637,
+    "term_returns": {
+     "upright_potential": 0.13989392566463818
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.01517988274358253
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": -0.003543309634551406,
+    "final_cart_position": 0.834445595741272,
+    "seed": 210054
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.1954430949872,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.060909057429384,
+    "term_returns": {
+     "upright_potential": 0.19544309498656412
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.06296025668666312
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": -0.002089574234560132,
+    "final_cart_position": 0.49177777767181396,
+    "seed": 210055
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.25382962586883,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.10866640346644,
+    "term_returns": {
+     "upright_potential": 0.2538296258684402
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.11071760272371896
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": -0.00020125032460782677,
+    "final_cart_position": 0.49355971813201904,
+    "seed": 210056
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.19154680436753,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.062112670603035,
+    "term_returns": {
+     "upright_potential": 0.19154680436752505
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.06416386986039015
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": 0.003081672126427293,
+    "final_cart_position": 0.374663382768631,
+    "seed": 210057
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.33217859194133,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.18324365105941,
+    "term_returns": {
+     "upright_potential": 0.3321785919412972
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.18529485031671925
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": 0.0009982113260775805,
+    "final_cart_position": 0.5923571586608887,
+    "seed": 210058
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.3396946856946,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.189224955430745,
+    "term_returns": {
+     "upright_potential": 0.3396946856943064
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.19127615468808884
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": 0.0006480703596025705,
+    "final_cart_position": 0.4664084017276764,
+    "seed": 210059
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.2637047862348,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.133852166640345,
+    "term_returns": {
+     "upright_potential": 0.2637047862348453
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.13590336589776295
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": 0.004555428400635719,
+    "final_cart_position": 1.1491879224777222,
+    "seed": 210060
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.1827606348129,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.055559257388545,
+    "term_returns": {
+     "upright_potential": 0.18276063481278232
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.057610456645840295
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": -0.00329794455319643,
+    "final_cart_position": -0.3109845817089081,
+    "seed": 210061
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.16640754841757,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.039808371272684,
+    "term_returns": {
+     "upright_potential": 0.16640754841756755
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.04185957053004022
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": 0.003608294762670994,
+    "final_cart_position": -0.6813194155693054,
+    "seed": 210062
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.1274712218449,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.00015903698558,
+    "term_returns": {
+     "upright_potential": 0.12747122184459436
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.0022102362428706953
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": 0.003066285280510783,
+    "final_cart_position": -0.08661868423223495,
+    "seed": 210063
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.2173856640158,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.09623147942325,
+    "term_returns": {
+     "upright_potential": 0.21738566401553605
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.09828267868058574
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": -0.005354191642254591,
+    "final_cart_position": 0.7104405760765076,
+    "seed": 210064
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.3075909431354,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.16060416649188,
+    "term_returns": {
+     "upright_potential": 0.3075909431354632
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.16265536574909395
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": -0.0007480673375539482,
+    "final_cart_position": 0.6282452940940857,
+    "seed": 210065
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.2024392247455,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.08224626554764,
+    "term_returns": {
+     "upright_potential": 0.20243922474545634
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.08429746480495814
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": -0.0053156474605202675,
+    "final_cart_position": 0.18064682185649872,
+    "seed": 210066
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.23380791632866,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.09950973729526,
+    "term_returns": {
+     "upright_potential": 0.23380791632894538
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.1015609365524776
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": 0.0031834845431149006,
+    "final_cart_position": 1.0769100189208984,
+    "seed": 210067
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.3292746330945,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.20282527083286,
+    "term_returns": {
+     "upright_potential": 0.3292746330938905
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.20487647009019944
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": 0.0057149408385157585,
+    "final_cart_position": 0.5495706796646118,
+    "seed": 210068
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.1766675368837,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.044963642624744,
+    "term_returns": {
+     "upright_potential": 0.17666753688349163
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.04701484188199499
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": 0.0025675150100141764,
+    "final_cart_position": 0.3130217492580414,
+    "seed": 210069
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.2238484850923,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.083969945497515,
+    "term_returns": {
+     "upright_potential": 0.2238484850922602
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.086021144754862
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": 0.001411466859281063,
+    "final_cart_position": -0.7944982647895813,
+    "seed": 210070
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.2783742568572,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.154134233994036,
+    "term_returns": {
+     "upright_potential": 0.27837425685746625
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.15618543325133624
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": -0.005017212592065334,
+    "final_cart_position": 0.4478115141391754,
+    "seed": 210071
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.12847289264135,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.00097350639257,
+    "term_returns": {
+     "upright_potential": 0.12847289264094533
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.0030247056499052376
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": 0.0030099397990852594,
+    "final_cart_position": -0.28104469180107117,
+    "seed": 210072
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.3248657488142,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.187232608519956,
+    "term_returns": {
+     "upright_potential": 0.32486574881449204
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.18928380777719267
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": 0.0034373735543340445,
+    "final_cart_position": 0.4010774493217468,
+    "seed": 210073
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.3585379669655,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.22478609238915,
+    "term_returns": {
+     "upright_potential": 0.3585379669658332
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.22683729164641417
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": 0.0040678116492927074,
+    "final_cart_position": -0.40925586223602295,
+    "seed": 210074
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.18486438745066,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.05522729748967,
+    "term_returns": {
+     "upright_potential": 0.18486438745067443
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.05727849674690815
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": 0.002922391751781106,
+    "final_cart_position": 0.3533659279346466,
+    "seed": 210075
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.32173002429414,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.18781765737746,
+    "term_returns": {
+     "upright_potential": 0.3217300242947135
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.18986885663479675
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": -0.004070645198225975,
+    "final_cart_position": -0.38105812668800354,
+    "seed": 210076
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.1792549621433,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.05544898988491,
+    "term_returns": {
+     "upright_potential": 0.17925496214267636
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.057500189142276587
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": -0.0040787323378026485,
+    "final_cart_position": 0.021946987137198448,
+    "seed": 210077
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.18249073041795,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.04062786625797,
+    "term_returns": {
+     "upright_potential": 0.18249073041774125
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.04267906551534015
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": -0.0002193789987359196,
+    "final_cart_position": 0.26440778374671936,
+    "seed": 210078
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.32232264684245,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.17131411771355,
+    "term_returns": {
+     "upright_potential": 0.3223226468423843
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.17336531697084925
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": 1.568547304486856e-05,
+    "final_cart_position": 0.6312741637229919,
+    "seed": 210079
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.285003365004,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.14839691234524,
+    "term_returns": {
+     "upright_potential": 0.28500336500418766
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.1504481116026559
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": 0.002375213662162423,
+    "final_cart_position": 0.1350058615207672,
+    "seed": 210080
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.325331009758,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.175716851386674,
+    "term_returns": {
+     "upright_potential": 0.32533100975782103
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.1777680506439425
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": -0.000737812602892518,
+    "final_cart_position": -0.0792708545923233,
+    "seed": 210081
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.25200732045937,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.10757819540998,
+    "term_returns": {
+     "upright_potential": 0.2520073204593401
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.10962939466731254
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": 0.00012267731653992087,
+    "final_cart_position": -0.47848284244537354,
+    "seed": 210082
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.30635267720635,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.18280988949096,
+    "term_returns": {
+     "upright_potential": 0.30635267720651116
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.18486108874820129
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": -0.006310910452157259,
+    "final_cart_position": 0.6233586668968201,
+    "seed": 210083
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.1657076013524,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.0315517699308,
+    "term_returns": {
+     "upright_potential": 0.1657076013527616
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.03360296918810947
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": 0.0016495812451466918,
+    "final_cart_position": -0.27685171365737915,
+    "seed": 210084
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.25630032367246,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.12745264749568,
+    "term_returns": {
+     "upright_potential": 0.25630032367269584
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.12950384675299464
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": 0.004038245417177677,
+    "final_cart_position": -0.15865036845207214,
+    "seed": 210085
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.1760214062838,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.05667508386231,
+    "term_returns": {
+     "upright_potential": 0.17602140628388196
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.05872628311963912
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": -0.004967032931745052,
+    "final_cart_position": -0.33606135845184326,
+    "seed": 210086
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.3648610503875,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.22828915529248,
+    "term_returns": {
+     "upright_potential": 0.3648610503873463
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.23034035454972532
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": -0.004188950639218092,
+    "final_cart_position": -0.8384909629821777,
+    "seed": 210087
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.28157492711324,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.14962211491197,
+    "term_returns": {
+     "upright_potential": 0.28157492711336124
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.15167331416933472
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": 0.003455662401393056,
+    "final_cart_position": 0.029779646545648575,
+    "seed": 210088
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.31137514109304,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.17363781222734,
+    "term_returns": {
+     "upright_potential": 0.3113751410929303
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.17568901148462968
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": -0.0034294130746275187,
+    "final_cart_position": 0.44642162322998047,
+    "seed": 210089
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.34288364857133,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.20895994597368,
+    "term_returns": {
+     "upright_potential": 0.34288364857098824
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.21101114523104067
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": 0.003852257039397955,
+    "final_cart_position": -1.0351250171661377,
+    "seed": 210090
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.23737432804575,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.11466184986731,
+    "term_returns": {
+     "upright_potential": 0.23737432804555825
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.11671304912460197
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": 0.005110785830765963,
+    "final_cart_position": 0.2047853022813797,
+    "seed": 210091
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.2421722359242,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.10634173790789,
+    "term_returns": {
+     "upright_potential": 0.24217223592434767
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.10839293716520332
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": 0.0021990297827869654,
+    "final_cart_position": 0.279936283826828,
+    "seed": 210092
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.2367582777349,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.10543189079576,
+    "term_returns": {
+     "upright_potential": 0.23675827773465513
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.10748309005299968
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": -0.0033800548408180475,
+    "final_cart_position": -0.7063196301460266,
+    "seed": 210093
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.14974515701175,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.016099863081344,
+    "term_returns": {
+     "upright_potential": 0.14974515701150307
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.01815106233861966
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": 0.0017807706026360393,
+    "final_cart_position": 0.13534331321716309,
+    "seed": 210094
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.15305140572684,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.0224944639272,
+    "term_returns": {
+     "upright_potential": 0.15305140572686132
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.02454566318460278
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": 0.00264521362259984,
+    "final_cart_position": 0.7531784176826477,
+    "seed": 210095
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.12775818362564,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.01181244055112,
+    "term_returns": {
+     "upright_potential": 0.12775818362534072
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.013863639808433985
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": 0.005352103617042303,
+    "final_cart_position": -0.5688831806182861,
+    "seed": 210096
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.36609970990247,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.2311890385725,
+    "term_returns": {
+     "upright_potential": 0.3660997099020882
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.2332402378298631
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": -0.004160786047577858,
+    "final_cart_position": 0.7201569080352783,
+    "seed": 210097
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.37729128092093,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.22224649053359,
+    "term_returns": {
+     "upright_potential": 0.3772912809209555
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.22429768979090967
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": -0.00015687548147980124,
+    "final_cart_position": 0.9346624612808228,
+    "seed": 210098
+   },
+   {
+    "length": 500,
+    "original_return": 500.0,
+    "training_return": 500.3171082644081,
+    "discounted_original_return": 49.997948800742655,
+    "discounted_training_return": 50.19483686145465,
+    "term_returns": {
+     "upright_potential": 0.31710826440804185
+    },
+    "term_discounted_returns": {
+     "upright_potential": 0.19688806071197398
+    },
+    "terminated": false,
+    "truncated": true,
+    "reward_hash": "d954e803310888f5",
+    "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+    "outcome": "balanced_to_time_limit",
+    "final_pole_angle_rad": 0.00619506323710084,
+    "final_cart_position": -1.0961225032806396,
+    "seed": 210099
+   }
+  ],
+  "aggregate": {
+   "n_episodes": 100,
+   "mean_original_return": 500.0,
+   "mean_training_return": 500.2430537076759,
+   "outcomes": {
+    "balanced_to_time_limit": 100,
+    "pole_fell": 0,
+    "cart_left_track": 0,
+    "unknown": 0
+   },
+   "metrics": {
+    "time_limit_rate": 1.0,
+    "pole_fell_rate": 0.0
+   }
+  }
+ }
+}

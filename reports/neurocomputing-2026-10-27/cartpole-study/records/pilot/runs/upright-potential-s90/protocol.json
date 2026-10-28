@@ -1,0 +1,118 @@
+{
+ "schema": "lunarlab.audit-study/1",
+ "study_id": "cartpole-reward-design-2026-10-27-pilot",
+ "adapter": {
+  "name": "cartpole",
+  "version": "1"
+ },
+ "env_kwargs": {},
+ "gamma": 0.98,
+ "algorithm": {
+  "name": "ppo",
+  "policy": "MlpPolicy",
+  "n_envs": 8,
+  "kwargs": {
+   "n_steps": 32,
+   "batch_size": 256,
+   "n_epochs": 20,
+   "gae_lambda": 0.8,
+   "ent_coef": 0.0,
+   "learning_rate": {
+    "linear": 0.001
+   },
+   "clip_range": {
+    "linear": 0.2
+   }
+  },
+  "source": "RL Baselines3 Zoo hyperparams/ppo.yml, CartPole-v1 entry, commit eec15dc22e1ec7167064aae0c1218eefccaf0ff4 (gamma 0.98 is the top-level gamma)"
+ },
+ "budget_transitions": 20480,
+ "eval_every_rollouts": 40,
+ "designs": [
+  {
+   "name": "original",
+   "original_weight": 1.0,
+   "terms": []
+  },
+  {
+   "name": "upright-potential",
+   "original_weight": 1.0,
+   "terms": [
+    {
+     "term": "upright_potential",
+     "params": {
+      "alpha": 1.0
+     }
+    }
+   ]
+  },
+  {
+   "name": "failure-bonus",
+   "original_weight": 1.0,
+   "terms": [
+    {
+     "term": "failure_bonus",
+     "params": {
+      "bonus": 1000.0
+     }
+    }
+   ]
+  }
+ ],
+ "training_seeds": [
+  90
+ ],
+ "train_env_seed_root": 1000000,
+ "validation_seeds": [
+  310000,
+  310001,
+  310002,
+  310003,
+  310004,
+  310005,
+  310006,
+  310007,
+  310008,
+  310009,
+  310010,
+  310011,
+  310012,
+  310013,
+  310014,
+  310015,
+  310016,
+  310017,
+  310018,
+  310019
+ ],
+ "test_seeds": [
+  410000,
+  410001,
+  410002,
+  410003,
+  410004,
+  410005,
+  410006,
+  410007,
+  410008,
+  410009,
+  410010,
+  410011,
+  410012,
+  410013,
+  410014,
+  410015,
+  410016,
+  410017,
+  410018,
+  410019
+ ],
+ "selection": {
+  "rule": "max-mean-original-validation-return"
+ },
+ "success_outcome": "balanced_to_time_limit",
+ "secondary_analyses": [
+  "final checkpoint of every run evaluated on the same test seeds, reported separately and never used for selection"
+ ],
+ "torch_threads": 1
+}
