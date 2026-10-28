@@ -10,7 +10,7 @@ Status on 28 October 2026: a complete deposit candidate exists on the author's m
 | | |
 |---|---|
 | Location | `D:\LunarLab-deposit-candidate-2026-10-28\` (on the author's machine) |
-| Built by | `deposit/build_deposit_candidate.py 83176fb …`, the evidence taken by `git archive` from commit `83176fb` |
+| Built by | `deposit/build_deposit_candidate.py 83176fb …`, the evidence taken by `git archive` from commit `83176fb`. Both evidence folders are byte-exact (`-text`), so the archive's line-ending issue found later did not affect them. Later commits add only process records: validation logs, this file, the readiness report and the progress log. Rebuild from the final commit before any real deposit |
 | Files | 961 (960 listed in its `SHA256SUMS`, all verified after building), 95.4 MB |
 | Digest of its `SHA256SUMS` | `3d17fa3304a261e3a5dcf655a8a44c8752beaf73447d3bb6597c283f61676020` |
 | Its README | `deposit/DEPOSIT_README.md` (copied to the candidate as `README.md`) |

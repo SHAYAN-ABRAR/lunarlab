@@ -1,0 +1,20 @@
+$ <validation-run>\venv\Scripts\python.exe -m lunarlab reproduce-artifact --artifact examples/learned-reward-artifacts/20261015-235939-custom-s0-standard-0274 --report <validation-run>\reports\replay-learned-reward-0274.json
+(exit 0, 18.8 s)
+  [ok] checkpoint.zip matches its recorded SHA-256: 9d33d5e581eb3fcd
+  [ok] config.yaml matches its recorded SHA-256: cc80706066503c5a
+  [ok] evaluation.json matches its recorded SHA-256: ec3536edf857491f
+  [ok] reward_model/model.npz matches its recorded SHA-256: ed282e43800420d9
+  [ok] reward_model/meta.json matches its recorded SHA-256: 96841ecd5e3fd909
+  [ok] the learned reward model is bundled and matches its identity and digests: rm-20261015-235825-rm-300-4877
+  [ok] configuration hash matches the record: 7df5439aab6d7370
+  [ok] the recorded evaluation used this checkpoint
+  [ok] the recorded evaluation is the final test on the configuration's test seeds: 100 seeds
+  [ok] the recorded evaluation used the configuration's protocol and reward
+  [ok] the recorded episodes are exactly the recorded seeds
+  [ok] the evaluated network holds exactly the checkpoint's weights
+  [ok] every re-evaluated episode matches the record exactly: 100/100 episode summaries; largest original-return difference 0; largest training-return difference 0
+  [ok] no aggregate differs significantly from the record (paired tests, Holm-corrected): mean_original_return 151 -> 151 (p 1), pad_landing_rate 0.35 -> 0.35 (p 1), timeout_rate 0 -> 0 (p 1), crash_rate 0.28 -> 0.28 (p 1), out_of_bounds_rate 0.04 -> 0.04 (p 1)
+  status: exact (not blocking): all 100 episodes match on the selected summary fields
+EXACT: 20261015-235939-custom-s0-standard-0274, 100 episodes; mean original return recorded 150.9828, reproduced 150.9828; pad landing recorded 35%, reproduced 35%
+  all 100 episodes match on the selected summary fields
+report written to <validation-run>\reports\replay-learned-reward-0274.json

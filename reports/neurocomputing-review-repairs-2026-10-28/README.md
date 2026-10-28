@@ -17,7 +17,9 @@ This folder holds the reproduction of each finding, the repair and its verificat
 | [defects/](defects/) | `reproduce_defects.py` and its output before (`before-fix-d1f69c6.json`) and after (`after-fix-working-tree.json`) the two validation fixes |
 | [regression/](regression/) | The comparison's W3 program rerun on the 14 fixtures with the repaired code: verdicts unchanged |
 | [ci/](ci/) | CI of the repaired code revision `c9b9384` (run 40712412847): log, coverage, reproducibility reports, source-archive digest |
-| [validation/](validation/) | The repaired revision's source archive built on Windows (byte-identical to CI's), and the fresh-extraction validation of the review package |
+| [validation/](validation/README.md) | The repaired revision's source archive built on Windows (byte-identical to CI's), and the fresh-extraction validation of the review package (every step passed) |
+| [package/](package/) | `build_review_package.py` and `seal_package.py`: how the review package is assembled and sealed |
+| [manuscript/](manuscript/VISUAL_REVIEW.md) | Manuscript builds 4 and 5 after the review: logs and the page-by-page review |
 | [integrity/](integrity/) | The comparison of the 2,359 protected historical files with the inventory taken before any change on 27 October |
 | [READINESS.md](READINESS.md) | What was repaired and verified, what remains unverified, and what blocks submission |
 | [DEPOSIT.md](DEPOSIT.md) | The local deposit candidate: contents, digests, licences and citation fields. Nothing is published |

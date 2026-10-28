@@ -169,3 +169,25 @@ defects found by an independent review of the Neurocomputing revision. It trains
   - **Fixed in the validator:** only `<64 hex digits> <name>` lines are entries, and the command results carry
     an overall `ok`. A test covers the header line. The package is rebuilt and validated again from the
     resulting commit.
+- 17:51-18:04 Fresh-extraction validation of the package rebuilt from `82518c6`
+  (`validation/package-validation-82518c6/`). The commands ran with a new virtual environment. Every step
+  passed:
+  - checksums: 1,439 of 1,439;
+  - dependencies: 423 checks, 0 problems;
+  - CartPole records: both analyses reproduce, and 18 of 18 runs pass;
+  - figures: values identical in 4 of 4 value files, and 20 of 20 output files byte-identical;
+  - published replays: `exact` (hover bonus, learned reward), with data homes left empty;
+  - CartPole artifacts: 18 of 18 verify and replay `exact`;
+  - comparison: 42 of 42 pairs reproduced.
+- 18:05 CI run 40739578908 on `82518c6` passed all six jobs: Linux 597 passed and 4 skipped; Windows 293 each;
+  source archive 194; browser 15.
+- Deposit candidate. It was built from `83176fb` (961 files, 95.4 MB, `SHA256SUMS` digest `3d17fa33…`); see
+  `DEPOSIT.md`. Its evidence folders are byte-exact, and later commits add only process records. Nothing was
+  published.
+- Compute: nothing was trained. Evaluation-only reruns:
+  - the W3 regression on the 14 fixtures;
+  - the package validations, each with two published replays, 18 CartPole artifact replays and the full
+    comparison (W1 evaluates 100 episodes per case).
+
+  The local tests run were targeted subsets (at most a few thousand fixture transitions); CI runs the full
+  suite.
