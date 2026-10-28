@@ -32,3 +32,20 @@ that runs the documentation tests. One new command was split over two lines with
 the documentation test cannot parse (`tests/test_docs.py::test_documented_command_parses[docs/REPRODUCING.md:73]`).
 
 **Fix:** the command is now on one line, and the documentation and metadata tests pass locally (126 passed).
+
+## Source archive of `30bd3f6` on Windows, 28 October 2026
+
+```bash
+python tools/build_source_archive.py --rev 30bd3f6 --out OUT --verify
+```
+
+The archive was built on the author's laptop: 918 files, 11.2 MB. Its SHA-256,
+`88bea61451fbaecee0559d43817ce003d8017ec36a0950a8484d220116b9e116`, equals that of the archive built by
+CI run 40694880778 on Linux (`../ci/run-40694880778-30bd3f6/source-archive/SHA256SUMS`).
+
+Installed into a fresh environment, it passed:
+
+- the smoke reproduction, 14 of 14 checks;
+- 192 release tests.
+
+The run took 64 s. The log is `source-archive-30bd3f6-windows.log`, with temporary paths shown as `<temp>`.

@@ -1,0 +1,33 @@
+lunarlab-0.1.0-src.tar.gz: 918 files, 11.2 MB, sha256 88bea61451fbaecee0559d43817ce003d8017ec36a0950a8484d220116b9e116
+source: revision 30bd3f64b392
+$ uv venv --python 3.12 venv
+   Using CPython 3.12.13
+   Creating virtual environment at: <temp>\lunarlab-sdist-du7_35gu\venv
+   Activate with: <temp>\lunarlab-sdist-du7_35gu\venv\Scripts\activate
+$ uv pip install --python python.exe -r requirements.lock
+    + typing-inspection==0.4.4
+    + tzdata==2026.5
+    + uvicorn==0.54.0
+$ uv pip install --python python.exe --no-deps lunarlab-0.1.0
+   Prepared 1 package in 466ms
+   Installed 1 package in 19ms
+    + lunarlab==0.1.0 (from file:///<temp>/lunarlab-sdist-du7_35gu/lunarlab-0.1.0)
+$ python.exe -m lunarlab --version
+   lunarlab 0.1.0 (source no git revision); Python 3.12.13 on Windows-11-10.0.26300-SP0; gymnasium 1.4.0, stable-baselines3 2.9.0, torch 2.14.1
+$ python.exe -m lunarlab doctor
+   [OK  ] node / frontend  node v26.3.0 (meets Vite's ^20.19 || >=22.12); frontend not built yet (run scripts/setup.ps1)
+   
+   10 ok, 0 warning(s), 0 failure(s). Home: <temp>\lunarlab-sdist-du7_35gu\home
+$ python.exe -m lunarlab reproduce-smoke --transitions 2048
+     [ok] a repeated final-test evaluation matches the saved one exactly: 4/4 episodes identical
+     [ok] exported results re-read identically: sha256 f6cc41484a2feaa0
+   PASSED: 14/14 checks in 8.84 s
+$ python.exe -m pytest -q -p no:cacheprovider test_project_metadata.py test_docs.py test_reproduce.py test_audit_core.py test_properties.py test_rewards.py
+   ........................................................................ [ 75%]
+   ................................................                         [100%]
+   192 passed in 18.08s
+verified: the archive installs, runs and passes its release tests in a fresh environment
+
+real	1m4.272s
+user	0m0.000s
+sys	0m0.000s
