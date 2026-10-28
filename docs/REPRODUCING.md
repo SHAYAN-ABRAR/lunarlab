@@ -126,7 +126,8 @@ print(report["aggregate"]["mean_training_return"], report["reward"]["provenance"
 
 - **Rules for a term:** its output must be finite.
 - **Provenance:** the report records the term's description digest and, separately, the digest and git status
-  of the file defining `centred`. A function typed into an interactive session is reported as `incomplete`.
+  of the file defining `centred`, a digest of `centred`'s own source and any values it captures. A function
+  typed into an interactive session is reported as `incomplete`.
 - **Using it in a study:** register a term factory on a task adapter (`lunarlab/audit/adapters.py`). Training on
   LunarLander with the full application is described in [TUTORIAL.md](TUTORIAL.md).
 

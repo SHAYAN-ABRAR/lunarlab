@@ -447,9 +447,61 @@ def test_built_in_terms_name_their_implementation_and_components():
     assert entry["term_id"] == "lunarlab.audit.potential_shaping" and entry["term_version"] == "1"
     files = [r["source_file"] for r in entry["implementation"]]
     assert files[0].endswith("lunarlab/audit/core.py") and files[1].endswith("tests/test_audit_contracts.py")
-    assert record["schema"] == "lunarlab.reward-provenance/1" and record["legacy_terms_hash"] == terms_hash(
+    assert record["schema"] == "lunarlab.reward-provenance/2" and record["legacy_terms_hash"] == terms_hash(
         {"f": f}, 1.0
     )
+    fn_record = entry["implementation"][0]
+    assert fn_record["captured"]["alpha"] == 1.0 and fn_record["captured"]["gamma"] == 0.9
+    assert fn_record["captured"]["potential"]["callable"]["qualname"] == "phi"
+    assert fn_record["captured_complete"] and record["implementation_identity"] != "incomplete"
+
+
+class SameDescription:
+    """The reproduced defect: two terms that declare the same description and pay 1 and 1,000."""
+
+    a = RewardTerm("bonus", lambda t: 1.0, {"type": "custom", "id": "bonus"})
+    b = RewardTerm("bonus", lambda t: 1000.0, {"type": "custom", "id": "bonus"})
+
+
+def _paying(value: float):
+    return lambda t: value
+
+
+def _implementation(term: RewardTerm) -> dict:
+    return reward_provenance({"bonus": term}, 1.0)["terms"]["bonus"]["implementation"][0]
+
+
+def test_terms_with_equal_descriptions_are_told_apart_by_their_code_or_captured_values():
+    # Two lambdas in one file: same description digest, same file digest, different source text and line.
+    one, thousand = _implementation(SameDescription.a), _implementation(SameDescription.b)
+    assert definition_sha256({"bonus": SameDescription.a}, 1.0) == definition_sha256(
+        {"bonus": SameDescription.b}, 1.0
+    )
+    assert one["source_file_sha256"] == thousand["source_file_sha256"]
+    assert one["function_source_sha256"] != thousand["function_source_sha256"]
+    assert one["first_line"] + 1 == thousand["first_line"]
+    # Two closures of one factory: same source, different captured value.
+    desc = {"type": "custom", "id": "bonus"}
+    c1, c1000 = (_implementation(RewardTerm("bonus", _paying(v), desc)) for v in (1.0, 1000.0))
+    assert c1["function_source_sha256"] == c1000["function_source_sha256"]
+    assert c1["captured"] == {"value": 1.0} and c1000["captured"] == {"value": 1000.0}
+    # Arrays are recorded by digest.
+    weights = np.array([0.5, -1.0])
+    rec = _implementation(RewardTerm("bonus", lambda t: float(weights @ t.next_obs[:2]), desc))
+    assert rec["captured"]["weights"]["array"]["shape"] == [2]
+
+
+def test_a_captured_value_without_a_json_form_makes_the_identity_incomplete():
+    class Opaque:
+        pass
+
+    thing = Opaque()
+    term = RewardTerm("bonus", lambda t: 1.0 if thing else 0.0, {"type": "custom", "id": "bonus"})
+    record = reward_provenance({"bonus": term}, 1.0)
+    impl = record["terms"]["bonus"]["implementation"][0]
+    assert impl["captured_complete"] is False and "Opaque" in impl["captured_reason"]
+    assert record["implementation_identity"] == "incomplete"
+    assert any("Opaque" in r for r in record["incomplete_reasons"])
 
 
 def test_audit_reports_carry_the_versioned_provenance_record():
