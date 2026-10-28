@@ -238,7 +238,7 @@ def figure_architecture(manifest: dict) -> None:
     ax.text(
         0.14,
         top + 0.12,
-        "Reusable research core: any Gymnasium task, via an adapter",
+        "Reusable core via task adapters (LunarLander, CartPole)",
         ha="left",
         va="bottom",
         fontsize=FONT,
