@@ -70,8 +70,7 @@ The study's six learned-reward policies are in `examples/learned-reward-artifact
 reward model it was trained with:
 
 ```bash
-LUNARLAB_HOME="$(mktemp -d)" .venv/bin/python -m lunarlab reproduce-artifact \
-  --artifact examples/learned-reward-artifacts/20261015-235939-custom-s0-standard-0274 --report lr.json
+LUNARLAB_HOME="$(mktemp -d)" .venv/bin/python -m lunarlab reproduce-artifact --artifact examples/learned-reward-artifacts/20261015-235939-custom-s0-standard-0274 --report lr.json
 ```
 
 - **Expected result:** `exact` on Windows with the locked libraries (about 25 seconds on a laptop CPU), and

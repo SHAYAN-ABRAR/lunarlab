@@ -22,3 +22,13 @@ H=$(mktemp -d); LUNARLAB_HOME="$H" .venv/Scripts/python.exe -m pytest -q -p no:c
 
 Public CI on Linux reports 567 passed and four skips for the same tests. The four are Windows-only tests, which
 run here. The manuscript cites the public CI run, not this one.
+
+**What this run did not cover:** the suite collects the commands documented in Markdown files when it starts,
+at about 17:13:00 UTC. The new sections 5 to 9 of `docs/REPRODUCING.md` were written at 17:13:44, so this run
+did not test them.
+
+**First CI test of those sections:** CI run 40691885283 on `b92879e` tested them first and failed in every job
+that runs the documentation tests. One new command was split over two lines with a trailing backslash, which
+the documentation test cannot parse (`tests/test_docs.py::test_documented_command_parses[docs/REPRODUCING.md:73]`).
+
+**Fix:** the command is now on one line, and the documentation and metadata tests pass locally (126 passed).
