@@ -1,0 +1,114 @@
+{
+ "stages": [
+  {
+   "title": "Reward specification",
+   "detail": "named terms, original-reward weight and a versioned provenance record",
+   "code": [
+    "lunarlab.audit.core:RewardTerm",
+    "lunarlab.audit.provenance:reward_provenance",
+    "lunarlab.rewards.config:RewardConfig"
+   ]
+  },
+  {
+   "title": "Training with reward accounting",
+   "detail": "SB3 learns the training reward; the original reward and every term are recorded with it",
+   "code": [
+    "lunarlab.audit.core:RewardAccountingWrapper",
+    "lunarlab.rewards.wrapper:LunarLabRewardWrapper",
+    "lunarlab.audit.study:train_run"
+   ]
+  },
+  {
+   "title": "Checkpoint selection",
+   "detail": "checkpoints scored with the original reward on validation seeds; prespecified rule",
+   "code": [
+    "lunarlab.audit.evaluate:audit_policy",
+    "lunarlab.audit.study:select_checkpoint",
+    "lunarlab.evaluation:evaluate_policy"
+   ]
+  },
+  {
+   "title": "Frozen policy",
+   "detail": "content-addressed, read-only copy of the selected checkpoint",
+   "code": [
+    "lunarlab.freeze:immutable_copy",
+    "lunarlab.freeze:freeze_for_test"
+   ]
+  },
+  {
+   "title": "Held-out test",
+   "detail": "fixed test seeds; per episode: original, training and term returns, ending, outcome",
+   "code": [
+    "lunarlab.audit.study:final_test",
+    "lunarlab.evaluation:evaluate_run"
+   ]
+  },
+  {
+   "title": "Artifact verification and replay",
+   "detail": "integrity checked first; then exact, numerical difference or blocking difference",
+   "code": [
+    "lunarlab.reproduce:reproduce_artifact",
+    "lunarlab.audit.study:reproduce_artifact",
+    "lunarlab.reproduce:classify_reproduction"
+   ]
+  }
+ ],
+ "checks": [
+  {
+   "between_stages": 0.5,
+   "text": "seed contract, finite values, protocol validated",
+   "code": [
+    "lunarlab.audit.contracts:normalize_seeds",
+    "lunarlab.config:EvalProtocol"
+   ]
+  },
+  {
+   "between_stages": 1.5,
+   "text": "SHA-256 of every checkpoint recorded",
+   "code": [
+    "lunarlab.storage:sha256_file"
+   ]
+  },
+  {
+   "between_stages": 2.5,
+   "text": "selection sees validation seeds only",
+   "code": [
+    "lunarlab.audit.study:protocol_problems"
+   ]
+  },
+  {
+   "between_stages": 3.5,
+   "text": "frozen digest checked before the test opens",
+   "code": [
+    "lunarlab.audit.study:verify_frozen",
+    "lunarlab.freeze:resolve_frozen_checkpoint"
+   ]
+  },
+  {
+   "between_stages": 5.0,
+   "text": "files, reward model and records checked before any episode runs",
+   "code": [
+    "lunarlab.audit.study:verify_artifact"
+   ]
+  }
+ ],
+ "application": [
+  {
+   "label": "Strict pad-landing classifier",
+   "code": "lunarlab.outcomes:classify_outcome",
+   "connects_to_stage": 4
+  },
+  {
+   "label": "Hover diagnostic, replay, re-scoring",
+   "code": "lunarlab.hover:hover_state",
+   "connects_to_stage": 4
+  },
+  {
+   "label": "Web interface (FastAPI, React)",
+   "code": "lunarlab.server",
+   "connects_to_stage": 5
+  }
+ ],
+ "all_named_code_exists": true,
+ "edges": "solid: data passes from each stage to the next along the listed functions; red dashed with a diamond: a check that must pass before the next stage; grey dashed: application components that plug in (outcome definitions, diagnostics) or read recorded artifacts (interface)"
+}

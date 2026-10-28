@@ -1,0 +1,442 @@
+{
+  "software": {
+    "lunarlab": "0.1.0",
+    "git": {
+      "available": true,
+      "revision": "932cf1c7c1bb7ba1d0f5b225c48e830d6a269479",
+      "dirty": true
+    },
+    "python": "3.12.13",
+    "python_implementation": "CPython",
+    "platform": "Windows-11-10.0.26300-SP0",
+    "packages": {
+      "gymnasium": "1.4.0",
+      "Box2D": "2.3.10",
+      "pygame": "2.6.1",
+      "stable-baselines3": "2.9.0",
+      "torch": "2.14.1",
+      "numpy": "2.5.4",
+      "pandas": "3.0.6",
+      "matplotlib": "3.11.2",
+      "imageio": "2.38.1",
+      "imageio-ffmpeg": "0.6.0",
+      "optuna": "5.0.0",
+      "fastapi": "0.143.1",
+      "uvicorn": "0.54.0",
+      "pydantic": "2.14.1",
+      "psutil": "7.2.2",
+      "PyYAML": "6.0.3"
+    }
+  },
+  "seeds_audit_policy": {
+    "booleans": {
+      "raised": "AuditInputError: invalid seeds: seeds must be nonnegative integers: seeds[0] = True (bool): booleans are not seeds; seeds[1] = False (bool): booleans are not seeds. Contract: an evaluation seed is a nonnegative integer (a Python int or NumPy integer scalar, not a bool, float or string), seed lists are non-empty ordered sequences without duplicates, and nothing is converted",
+      "traceback_tail": [
+        "  File \"D:\\Rocket\\lunarlab\\audit\\contracts.py\", line 95, in normalize_seeds",
+        "    raise AuditInputError(f\"invalid {label}: \" + \"; \".join(problems) + f\". Contract: {SEED_CONTRACT}\")",
+        "lunarlab.audit.contracts.AuditInputError: invalid seeds: seeds must be nonnegative integers: seeds[0] = True (bool): booleans are not seeds; seeds[1] = False (bool): booleans are not seeds. Contract: an evaluation seed is a nonnegative integer (a Python int or NumPy integer scalar, not a bool, float or string), seed lists are non-empty ordered sequences without duplicates, and nothing is converted"
+      ],
+      "environments_created": 0,
+      "reset_seeds": [],
+      "input": [
+        "True",
+        "False"
+      ]
+    },
+    "fractional_floats": {
+      "raised": "AuditInputError: invalid seeds: seeds must be nonnegative integers: seeds[0] = 1.5 (float): not an integer; floats are not converted, even when integral; seeds[1] = 2.7 (float): not an integer; floats are not converted, even when integral. Contract: an evaluation seed is a nonnegative integer (a Python int or NumPy integer scalar, not a bool, float or string), seed lists are non-empty ordered sequences without duplicates, and nothing is converted",
+      "traceback_tail": [
+        "  File \"D:\\Rocket\\lunarlab\\audit\\contracts.py\", line 95, in normalize_seeds",
+        "    raise AuditInputError(f\"invalid {label}: \" + \"; \".join(problems) + f\". Contract: {SEED_CONTRACT}\")",
+        "lunarlab.audit.contracts.AuditInputError: invalid seeds: seeds must be nonnegative integers: seeds[0] = 1.5 (float): not an integer; floats are not converted, even when integral; seeds[1] = 2.7 (float): not an integer; floats are not converted, even when integral. Contract: an evaluation seed is a nonnegative integer (a Python int or NumPy integer scalar, not a bool, float or string), seed lists are non-empty ordered sequences without duplicates, and nothing is converted"
+      ],
+      "environments_created": 0,
+      "reset_seeds": [],
+      "input": [
+        "1.5",
+        "2.7"
+      ]
+    },
+    "integral_floats": {
+      "raised": "AuditInputError: invalid seeds: seeds must be nonnegative integers: seeds[0] = 3.0 (float): not an integer; floats are not converted, even when integral; seeds[1] = 4.0 (float): not an integer; floats are not converted, even when integral. Contract: an evaluation seed is a nonnegative integer (a Python int or NumPy integer scalar, not a bool, float or string), seed lists are non-empty ordered sequences without duplicates, and nothing is converted",
+      "traceback_tail": [
+        "  File \"D:\\Rocket\\lunarlab\\audit\\contracts.py\", line 95, in normalize_seeds",
+        "    raise AuditInputError(f\"invalid {label}: \" + \"; \".join(problems) + f\". Contract: {SEED_CONTRACT}\")",
+        "lunarlab.audit.contracts.AuditInputError: invalid seeds: seeds must be nonnegative integers: seeds[0] = 3.0 (float): not an integer; floats are not converted, even when integral; seeds[1] = 4.0 (float): not an integer; floats are not converted, even when integral. Contract: an evaluation seed is a nonnegative integer (a Python int or NumPy integer scalar, not a bool, float or string), seed lists are non-empty ordered sequences without duplicates, and nothing is converted"
+      ],
+      "environments_created": 0,
+      "reset_seeds": [],
+      "input": [
+        "3.0",
+        "4.0"
+      ]
+    },
+    "numeric_strings": {
+      "raised": "AuditInputError: invalid seeds: seeds must be nonnegative integers: seeds[0] = '7' (str): not an integer; numeric strings are not converted; seeds[1] = '8' (str): not an integer; numeric strings are not converted. Contract: an evaluation seed is a nonnegative integer (a Python int or NumPy integer scalar, not a bool, float or string), seed lists are non-empty ordered sequences without duplicates, and nothing is converted",
+      "traceback_tail": [
+        "  File \"D:\\Rocket\\lunarlab\\audit\\contracts.py\", line 95, in normalize_seeds",
+        "    raise AuditInputError(f\"invalid {label}: \" + \"; \".join(problems) + f\". Contract: {SEED_CONTRACT}\")",
+        "lunarlab.audit.contracts.AuditInputError: invalid seeds: seeds must be nonnegative integers: seeds[0] = '7' (str): not an integer; numeric strings are not converted; seeds[1] = '8' (str): not an integer; numeric strings are not converted. Contract: an evaluation seed is a nonnegative integer (a Python int or NumPy integer scalar, not a bool, float or string), seed lists are non-empty ordered sequences without duplicates, and nothing is converted"
+      ],
+      "environments_created": 0,
+      "reset_seeds": [],
+      "input": [
+        "'7'",
+        "'8'"
+      ]
+    },
+    "negative_after_valid": {
+      "raised": "AuditInputError: invalid seeds: seeds must be nonnegative integers: seeds[1] = -1 (int): negative. Contract: an evaluation seed is a nonnegative integer (a Python int or NumPy integer scalar, not a bool, float or string), seed lists are non-empty ordered sequences without duplicates, and nothing is converted",
+      "traceback_tail": [
+        "  File \"D:\\Rocket\\lunarlab\\audit\\contracts.py\", line 95, in normalize_seeds",
+        "    raise AuditInputError(f\"invalid {label}: \" + \"; \".join(problems) + f\". Contract: {SEED_CONTRACT}\")",
+        "lunarlab.audit.contracts.AuditInputError: invalid seeds: seeds must be nonnegative integers: seeds[1] = -1 (int): negative. Contract: an evaluation seed is a nonnegative integer (a Python int or NumPy integer scalar, not a bool, float or string), seed lists are non-empty ordered sequences without duplicates, and nothing is converted"
+      ],
+      "environments_created": 0,
+      "reset_seeds": [],
+      "input": [
+        "5",
+        "-1"
+      ]
+    },
+    "empty": {
+      "raised": "AuditInputError: invalid seeds: seeds must not be empty. Contract: an evaluation seed is a nonnegative integer (a Python int or NumPy integer scalar, not a bool, float or string), seed lists are non-empty ordered sequences without duplicates, and nothing is converted",
+      "traceback_tail": [
+        "  File \"D:\\Rocket\\lunarlab\\audit\\contracts.py\", line 95, in normalize_seeds",
+        "    raise AuditInputError(f\"invalid {label}: \" + \"; \".join(problems) + f\". Contract: {SEED_CONTRACT}\")",
+        "lunarlab.audit.contracts.AuditInputError: invalid seeds: seeds must not be empty. Contract: an evaluation seed is a nonnegative integer (a Python int or NumPy integer scalar, not a bool, float or string), seed lists are non-empty ordered sequences without duplicates, and nothing is converted"
+      ],
+      "environments_created": 0,
+      "reset_seeds": [],
+      "input": []
+    },
+    "numpy_int64": {
+      "raised": null,
+      "returned": {
+        "n_episodes": 2,
+        "seeds_recorded": [
+          5,
+          6
+        ],
+        "mean_original_return": 500.0,
+        "metrics": {
+          "time_limit_rate": 1.0,
+          "pole_fell_rate": 0.0
+        },
+        "reward_hash": "836a0214637dd620"
+      },
+      "environments_created": 1,
+      "reset_seeds": [
+        5,
+        6
+      ],
+      "input": [
+        "np.int64(5)",
+        "np.int64(6)"
+      ]
+    },
+    "collapse_after_coercion": {
+      "raised": "AuditInputError: invalid seeds: seeds must be nonnegative integers: seeds[1] = 1.5 (float): not an integer; floats are not converted, even when integral. Contract: an evaluation seed is a nonnegative integer (a Python int or NumPy integer scalar, not a bool, float or string), seed lists are non-empty ordered sequences without duplicates, and nothing is converted",
+      "traceback_tail": [
+        "  File \"D:\\Rocket\\lunarlab\\audit\\contracts.py\", line 95, in normalize_seeds",
+        "    raise AuditInputError(f\"invalid {label}: \" + \"; \".join(problems) + f\". Contract: {SEED_CONTRACT}\")",
+        "lunarlab.audit.contracts.AuditInputError: invalid seeds: seeds must be nonnegative integers: seeds[1] = 1.5 (float): not an integer; floats are not converted, even when integral. Contract: an evaluation seed is a nonnegative integer (a Python int or NumPy integer scalar, not a bool, float or string), seed lists are non-empty ordered sequences without duplicates, and nothing is converted"
+      ],
+      "environments_created": 0,
+      "reset_seeds": [],
+      "input": [
+        "1",
+        "1.5"
+      ]
+    },
+    "string_and_int_collapse": {
+      "raised": "AuditInputError: invalid seeds: seeds must be nonnegative integers: seeds[0] = '9' (str): not an integer; numeric strings are not converted. Contract: an evaluation seed is a nonnegative integer (a Python int or NumPy integer scalar, not a bool, float or string), seed lists are non-empty ordered sequences without duplicates, and nothing is converted",
+      "traceback_tail": [
+        "  File \"D:\\Rocket\\lunarlab\\audit\\contracts.py\", line 95, in normalize_seeds",
+        "    raise AuditInputError(f\"invalid {label}: \" + \"; \".join(problems) + f\". Contract: {SEED_CONTRACT}\")",
+        "lunarlab.audit.contracts.AuditInputError: invalid seeds: seeds must be nonnegative integers: seeds[0] = '9' (str): not an integer; numeric strings are not converted. Contract: an evaluation seed is a nonnegative integer (a Python int or NumPy integer scalar, not a bool, float or string), seed lists are non-empty ordered sequences without duplicates, and nothing is converted"
+      ],
+      "environments_created": 0,
+      "reset_seeds": [],
+      "input": [
+        "'9'",
+        "9"
+      ]
+    }
+  },
+  "seed_split_problems": {
+    "empty_lists": {
+      "raised": null,
+      "returned": [
+        "validation seeds must not be empty",
+        "test seeds must not be empty"
+      ],
+      "environments_created": 0,
+      "reset_seeds": [],
+      "input": {
+        "validation": [],
+        "test": []
+      }
+    },
+    "negative": {
+      "raised": null,
+      "returned": [
+        "validation seeds must be nonnegative integers: validation seeds[0] = -1 (int): negative"
+      ],
+      "environments_created": 0,
+      "reset_seeds": [],
+      "input": {
+        "validation": [
+          "-1",
+          "2"
+        ],
+        "test": [
+          "3"
+        ]
+      }
+    },
+    "duplicates": {
+      "raised": null,
+      "returned": [
+        "validation seeds contain duplicates: [1]"
+      ],
+      "environments_created": 0,
+      "reset_seeds": [],
+      "input": {
+        "validation": [
+          "1",
+          "1"
+        ],
+        "test": [
+          "3"
+        ]
+      }
+    },
+    "overlap": {
+      "raised": null,
+      "returned": [
+        "validation and test seeds overlap: [2]"
+      ],
+      "environments_created": 0,
+      "reset_seeds": [],
+      "input": {
+        "validation": [
+          "1",
+          "2"
+        ],
+        "test": [
+          "2",
+          "3"
+        ]
+      }
+    },
+    "numeric_strings": {
+      "raised": null,
+      "returned": [
+        "validation seeds must be nonnegative integers: validation seeds[0] = '1' (str): not an integer; numeric strings are not converted"
+      ],
+      "environments_created": 0,
+      "reset_seeds": [],
+      "input": {
+        "validation": [
+          "'1'"
+        ],
+        "test": [
+          "2"
+        ]
+      }
+    },
+    "integral_float": {
+      "raised": null,
+      "returned": [
+        "validation seeds must be nonnegative integers: validation seeds[0] = 1.0 (float): not an integer; floats are not converted, even when integral"
+      ],
+      "environments_created": 0,
+      "reset_seeds": [],
+      "input": {
+        "validation": [
+          "1.0"
+        ],
+        "test": [
+          "2"
+        ]
+      }
+    },
+    "numpy_integers": {
+      "raised": null,
+      "returned": [],
+      "environments_created": 0,
+      "reset_seeds": [],
+      "input": {
+        "validation": [
+          "np.int64(1)"
+        ],
+        "test": [
+          "np.int32(2)"
+        ]
+      }
+    },
+    "numpy_bool": {
+      "raised": null,
+      "returned": [
+        "validation seeds must be nonnegative integers: validation seeds[0] = np.True_ (bool): booleans are not seeds"
+      ],
+      "environments_created": 0,
+      "reset_seeds": [],
+      "input": {
+        "validation": [
+          "np.True_"
+        ],
+        "test": [
+          "2"
+        ]
+      }
+    },
+    "numpy_int_overlap": {
+      "raised": null,
+      "returned": [
+        "validation and test seeds overlap: [5]"
+      ],
+      "environments_created": 0,
+      "reset_seeds": [],
+      "input": {
+        "validation": [
+          "np.int64(5)"
+        ],
+        "test": [
+          "5"
+        ]
+      }
+    },
+    "unhashable_entry": {
+      "raised": null,
+      "returned": [
+        "validation seeds must be nonnegative integers: validation seeds[0] = [1] (list): not an integer"
+      ],
+      "environments_created": 0,
+      "reset_seeds": [],
+      "input": {
+        "validation": [
+          "[1]"
+        ],
+        "test": [
+          "2"
+        ]
+      }
+    }
+  },
+  "cartpole_example_seeding": {
+    "intended_initial_seed_roots": [
+      1000000,
+      1000001,
+      1000002,
+      1000003
+    ],
+    "effective_initial_reset_seeds": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "later_auto_reset_seeds_sample": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "later_auto_resets": 119,
+    "later_resets_all_unseeded": true,
+    "first_observation_shape": [
+      4,
+      4
+    ]
+  },
+  "reward_definition_identity": {
+    "terms_hash_pays_1": "7c35d7d90b6715e4",
+    "terms_hash_pays_1000": "7c35d7d90b6715e4",
+    "hashes_equal": true,
+    "hash_length_hex": 16,
+    "audits": {
+      "pays_1": {
+        "reward_hash": "7c35d7d90b6715e4",
+        "mean_training_return": 1000.0,
+        "recorded_terms": {
+          "bonus": {
+            "type": "custom",
+            "id": "bonus"
+          }
+        }
+      },
+      "pays_1000": {
+        "reward_hash": "7c35d7d90b6715e4",
+        "mean_training_return": 500500.0,
+        "recorded_terms": {
+          "bonus": {
+            "type": "custom",
+            "id": "bonus"
+          }
+        }
+      }
+    }
+  },
+  "nonfinite_values": {
+    "nan_term": {
+      "raised": "NonFiniteValueError: reward term 'nan_term' output must be finite, got nan",
+      "traceback_tail": [
+        "  File \"D:\\Rocket\\lunarlab\\audit\\contracts.py\", line 117, in require_finite",
+        "    raise NonFiniteValueError(f\"{what} must be finite, got {number!r}\")",
+        "lunarlab.audit.contracts.NonFiniteValueError: reward term 'nan_term' output must be finite, got nan"
+      ],
+      "environments_created": 0
+    },
+    "inf_term": {
+      "raised": "NonFiniteValueError: reward term 'inf_term' output must be finite, got inf",
+      "traceback_tail": [
+        "  File \"D:\\Rocket\\lunarlab\\audit\\contracts.py\", line 117, in require_finite",
+        "    raise NonFiniteValueError(f\"{what} must be finite, got {number!r}\")",
+        "lunarlab.audit.contracts.NonFiniteValueError: reward term 'inf_term' output must be finite, got inf"
+      ],
+      "environments_created": 0
+    },
+    "nan_original_weight": {
+      "raised": "NonFiniteValueError: original_weight must be finite, got nan",
+      "traceback_tail": [
+        "  File \"D:\\Rocket\\lunarlab\\audit\\contracts.py\", line 117, in require_finite",
+        "    raise NonFiniteValueError(f\"{what} must be finite, got {number!r}\")",
+        "lunarlab.audit.contracts.NonFiniteValueError: original_weight must be finite, got nan"
+      ],
+      "environments_created": 0
+    },
+    "inf_original_weight": {
+      "raised": "NonFiniteValueError: original_weight must be finite, got inf",
+      "traceback_tail": [
+        "  File \"D:\\Rocket\\lunarlab\\audit\\contracts.py\", line 117, in require_finite",
+        "    raise NonFiniteValueError(f\"{what} must be finite, got {number!r}\")",
+        "lunarlab.audit.contracts.NonFiniteValueError: original_weight must be finite, got inf"
+      ],
+      "environments_created": 0
+    },
+    "nan_in_term_description": {
+      "raised": "NonFiniteValueError: non-finite value in reward term 'bad' description.scale = nan",
+      "traceback_tail": [
+        "  File \"D:\\Rocket\\lunarlab\\audit\\contracts.py\", line 143, in require_json_finite",
+        "    raise NonFiniteValueError(\"non-finite value in \" + \"; \".join(bad[:MAX_LISTED]))",
+        "lunarlab.audit.contracts.NonFiniteValueError: non-finite value in reward term 'bad' description.scale = nan"
+      ],
+      "environments_created": 0
+    },
+    "non_json_term_description": {
+      "raised": "AuditInputError: reward term 'obj' description is not JSON-serialisable: Object of type object is not JSON serializable",
+      "traceback_tail": [
+        "  File \"D:\\Rocket\\lunarlab\\audit\\contracts.py\", line 147, in require_json_finite",
+        "    raise AuditInputError(f\"{what} is not JSON-serialisable: {exc}\") from None",
+        "lunarlab.audit.contracts.AuditInputError: reward term 'obj' description is not JSON-serialisable: Object of type object is not JSON serializable"
+      ],
+      "environments_created": 0
+    }
+  }
+}

@@ -1,0 +1,80 @@
+{
+  "schema": 1,
+  "kind": "lunarlab.artifact",
+  "source_run_id": "20261015-235940-custom-s2-standard-dbc1",
+  "experiment_id": "exp-20261015-235939-rlhf-study-d449",
+  "algo": "ppo",
+  "reward": {
+    "preset": "custom",
+    "name": "Learned reward 3000 pairs",
+    "hash": "e4a207bb84cc8d8c"
+  },
+  "config_hash": "17e0e5cbeb3a6fdf",
+  "protocol_hash": "2340c66c35b045bc",
+  "files": {
+    "checkpoint.zip": {
+      "sha256": "8a2ae356ee2693356291720dd4207377a32b5050d907c937a2b144a66a8f8c67",
+      "source": "runs/20261015-235940-custom-s2-standard-dbc1/checkpoints/best_validation.zip",
+      "checkpoint_name": "best_validation.zip",
+      "transitions": 651264
+    },
+    "config.yaml": {
+      "sha256": "2a188057a33007803b4e3fad80647a351d8b04442176881d650e3f0842a89073",
+      "source": "runs/20261015-235940-custom-s2-standard-dbc1/config.yaml"
+    },
+    "evaluation.json": {
+      "sha256": "b91cb2842584cc52454acd820710ee3b8af7350f223c069214e98f53d0a85bdc",
+      "source": "runs/20261015-235940-custom-s2-standard-dbc1/evaluations/test-best_validation-2026-10-15T181918Z.json"
+    },
+    "reward_model/model.npz": {
+      "sha256": "4426daaae4d2480409f242b77b099f1d2243fe2bcd73f5ceedba5f15c91ff7fa",
+      "source": "data/reward_models/rm-20261015-235939-rm-3000-cfd0/model.npz"
+    },
+    "reward_model/meta.json": {
+      "sha256": "b7911c64f3f388f66c36fa66f9b771626481b66be2795637adff5a617f30a3e1",
+      "source": "data/reward_models/rm-20261015-235939-rm-3000-cfd0/meta.json"
+    }
+  },
+  "documented_metric": {
+    "split": "test",
+    "n_episodes": 100,
+    "mean_original_return": 182.75221437169256,
+    "pad_landing_rate": 0.42,
+    "timeout_rate": 0.01,
+    "evaluated_at": "2026-10-15T18:19:18+00:00",
+    "outcome_classifier_version": 1
+  },
+  "exported_at": "2026-10-23T20:18:24+00:00",
+  "exported_with": {
+    "lunarlab": "0.1.0",
+    "git": {
+      "available": true,
+      "revision": "41165997f9cda78bf30b26cf676b9db894c5d9e3",
+      "dirty": true
+    },
+    "python": "3.12.13",
+    "python_implementation": "CPython",
+    "platform": "Windows-11-10.0.26300-SP0",
+    "packages": {
+      "gymnasium": "1.4.0",
+      "Box2D": "2.3.10",
+      "pygame": "2.6.1",
+      "stable-baselines3": "2.9.0",
+      "torch": "2.14.1",
+      "numpy": "2.5.4",
+      "pandas": "3.0.6",
+      "matplotlib": "3.11.2",
+      "imageio": "2.38.1",
+      "imageio-ffmpeg": "0.6.0",
+      "optuna": "5.0.0",
+      "fastapi": "0.143.1",
+      "uvicorn": "0.54.0",
+      "pydantic": "2.14.1",
+      "psutil": "7.2.2",
+      "PyYAML": "6.0.3"
+    }
+  },
+  "reward_model": {
+    "id": "rm-20261015-235939-rm-3000-cfd0"
+  }
+}

@@ -1,0 +1,19 @@
+protocol cartpole-reward-design-2026-10-27-pilot sha256 06776b677e201da5c4c168dd49a42203974ce552286b0ccd212d3cf327e97f28; 3 runs
+  failure-bonus seed 90: step 10,240 validation original return 9.2, success 0%
+  original seed 90: step 10,240 validation original return 500.0, success 100%
+  upright-potential seed 90: step 10,240 validation original return 500.0, success 100%
+  failure-bonus seed 90: step 20,480 validation original return 9.2, success 0%
+  original seed 90: step 20,480 validation original return 500.0, success 100%
+trained {'run': 'original-s90', 'transitions': 20480, 'training_seconds': 18.128627099795267, 'wall_seconds': 19.59643030166626, 'selected_step': 10240}
+  upright-potential seed 90: step 20,480 validation original return 500.0, success 100%
+trained {'run': 'upright-potential-s90', 'transitions': 20480, 'training_seconds': 18.37258980004117, 'wall_seconds': 19.85347890853882, 'selected_step': 10240}
+trained {'run': 'failure-bonus-s90', 'transitions': 20480, 'training_seconds': 10.538171299966052, 'wall_seconds': 12.051698207855225, 'selected_step': 10240}
+frozen checkpoints verified
+tested {'run': 'original-s90', 'which': 'selected', 'mean_original_return': 500.0, 'test_seconds': 2.734441600041464}
+tested {'run': 'upright-potential-s90', 'which': 'selected', 'mean_original_return': 500.0, 'test_seconds': 2.8583996000234038}
+tested {'run': 'failure-bonus-s90', 'which': 'selected', 'mean_original_return': 9.3, 'test_seconds': 0.12020369991660118}
+tested {'run': 'original-s90', 'which': 'final', 'mean_original_return': 500.0, 'test_seconds': 2.618658799910918}
+tested {'run': 'upright-potential-s90', 'which': 'final', 'mean_original_return': 500.0, 'test_seconds': 2.792438499862328}
+tested {'run': 'failure-bonus-s90', 'which': 'final', 'mean_original_return': 9.35, 'test_seconds': 0.11549600004218519}
+artifacts exported
+study.json written: 61,440 training transitions

@@ -1086,6 +1086,31 @@ def cmd_reproduce_artifact(args) -> int:
     return report["exit_code"]
 
 
+def cmd_audit_artifact(args) -> int:
+    from lunarlab.audit.study import reproduce_artifact, verify_artifact
+
+    if not (Path(args.artifact) / "manifest.json").is_file():
+        print(f"error: {args.artifact} is not an audit artifact (no manifest.json)", file=sys.stderr)
+        return 2
+    if args.action == "verify":
+        report = verify_artifact(Path(args.artifact))
+        for c in report["checks"]:
+            print(
+                f"  [{'ok' if c['ok'] else 'FAIL'}] {c['check']}"
+                + (f": {c['detail']}" if c["detail"] else "")
+            )
+        print("VERIFIED: every integrity check passes" if report["ok"] else "INTEGRITY-FAILURE (blocking)")
+        _write_report(report, args.report)
+        return 0 if report["ok"] else 1
+    report = reproduce_artifact(Path(args.artifact))
+    if report["evaluation_skipped"]:
+        print("INTEGRITY-FAILURE (blocking): evaluation skipped, no episode was run")
+    else:
+        print(f"{report['status'].upper()}: {report['reason']}")
+    _write_report(report, args.report)
+    return report["exit_code"]
+
+
 def _is_artifact(folder: str) -> bool:
     if (Path(folder) / "artifact.json").is_file():
         return True
@@ -1665,6 +1690,21 @@ def build_parser() -> argparse.ArgumentParser:
     )
     ra.add_argument("--report", help="write the JSON report to this file")
     ra.set_defaults(fn=cmd_reproduce_artifact)
+
+    aa = sub.add_parser(
+        "audit-artifact",
+        help="verify or reproduce an artifact of the task-independent audit study (lunarlab.audit.study)",
+        description="verify: integrity checks only, nothing executed (exit 0 = all pass, 1 = a check fails). "
+        "reproduce: verify, then re-evaluate the frozen policy on the recorded test seeds, with the exit statuses "
+        "of reproduce-artifact (0 exact, 3 numerical differences on a different platform, 1 integrity failure "
+        "or another blocking difference). 2 = invalid arguments (no manifest.json in the folder).",
+    )
+    aa.add_argument("action", choices=["verify", "reproduce"])
+    aa.add_argument(
+        "--artifact", required=True, help="folder written by lunarlab.audit.study.export_artifact"
+    )
+    aa.add_argument("--report", help="write the JSON report to this file")
+    aa.set_defaults(fn=cmd_audit_artifact)
 
     ta = sub.add_parser(
         "trace-artifact",

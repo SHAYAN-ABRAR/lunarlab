@@ -1,0 +1,330 @@
+FFFFFFFFFFFFFFFF.                                                        [100%]
+================================== FAILURES ===================================
+________ test_invalid_seeds_refused_before_an_environment_exists[bool] ________
+
+seeds = [True, False]
+
+    @pytest.mark.parametrize(
+        "seeds",
+        [[True, False], [1.5, 2.7], [3.0, 4.0], ["7", "8"], [5, -1], [], [1, 1.5], ["9", 9]],
+        ids=["bool", "fractional", "integral-float", "string", "negative-after-valid", "empty", "collapse", "str-int"],
+    )
+    def test_invalid_seeds_refused_before_an_environment_exists(seeds):
+        COUNT["envs"] = 0
+>       with pytest.raises(ValueError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValueError
+
+tests\old_api_probe_test.py:41: Failed
+_____ test_invalid_seeds_refused_before_an_environment_exists[fractional] _____
+
+seeds = [1.5, 2.7]
+
+    @pytest.mark.parametrize(
+        "seeds",
+        [[True, False], [1.5, 2.7], [3.0, 4.0], ["7", "8"], [5, -1], [], [1, 1.5], ["9", 9]],
+        ids=["bool", "fractional", "integral-float", "string", "negative-after-valid", "empty", "collapse", "str-int"],
+    )
+    def test_invalid_seeds_refused_before_an_environment_exists(seeds):
+        COUNT["envs"] = 0
+>       with pytest.raises(ValueError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValueError
+
+tests\old_api_probe_test.py:41: Failed
+___ test_invalid_seeds_refused_before_an_environment_exists[integral-float] ___
+
+seeds = [3.0, 4.0]
+
+    @pytest.mark.parametrize(
+        "seeds",
+        [[True, False], [1.5, 2.7], [3.0, 4.0], ["7", "8"], [5, -1], [], [1, 1.5], ["9", 9]],
+        ids=["bool", "fractional", "integral-float", "string", "negative-after-valid", "empty", "collapse", "str-int"],
+    )
+    def test_invalid_seeds_refused_before_an_environment_exists(seeds):
+        COUNT["envs"] = 0
+>       with pytest.raises(ValueError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValueError
+
+tests\old_api_probe_test.py:41: Failed
+_______ test_invalid_seeds_refused_before_an_environment_exists[string] _______
+
+seeds = ['7', '8']
+
+    @pytest.mark.parametrize(
+        "seeds",
+        [[True, False], [1.5, 2.7], [3.0, 4.0], ["7", "8"], [5, -1], [], [1, 1.5], ["9", 9]],
+        ids=["bool", "fractional", "integral-float", "string", "negative-after-valid", "empty", "collapse", "str-int"],
+    )
+    def test_invalid_seeds_refused_before_an_environment_exists(seeds):
+        COUNT["envs"] = 0
+>       with pytest.raises(ValueError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValueError
+
+tests\old_api_probe_test.py:41: Failed
+_ test_invalid_seeds_refused_before_an_environment_exists[negative-after-valid] _
+
+seeds = [5, -1]
+
+    @pytest.mark.parametrize(
+        "seeds",
+        [[True, False], [1.5, 2.7], [3.0, 4.0], ["7", "8"], [5, -1], [], [1, 1.5], ["9", 9]],
+        ids=["bool", "fractional", "integral-float", "string", "negative-after-valid", "empty", "collapse", "str-int"],
+    )
+    def test_invalid_seeds_refused_before_an_environment_exists(seeds):
+        COUNT["envs"] = 0
+        with pytest.raises(ValueError):
+>           audit_policy(counting(), lambda o: 0, seeds, gamma=0.99)
+
+tests\old_api_probe_test.py:42: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+lunarlab\audit\evaluate.py:65: in audit_policy
+    obs, _ = env.reset(seed=int(seed))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+lunarlab\audit\core.py:183: in reset
+    obs, info = self.env.reset(seed=seed, options=options)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+D:\Rocket\.venv\Lib\site-packages\gymnasium\wrappers\common.py:151: in reset
+    return super().reset(seed=seed, options=options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+D:\Rocket\.venv\Lib\site-packages\gymnasium\core.py:348: in reset
+    return self.env.reset(seed=seed, options=options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+D:\Rocket\.venv\Lib\site-packages\gymnasium\wrappers\common.py:431: in reset
+    return super().reset(seed=seed, options=options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+D:\Rocket\.venv\Lib\site-packages\gymnasium\core.py:348: in reset
+    return self.env.reset(seed=seed, options=options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+D:\Rocket\.venv\Lib\site-packages\gymnasium\wrappers\common.py:326: in reset
+    return self.env.reset(seed=seed, options=options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+D:\Rocket\.venv\Lib\site-packages\gymnasium\envs\classic_control\cartpole.py:235: in reset
+    super().reset(seed=seed)
+D:\Rocket\.venv\Lib\site-packages\gymnasium\core.py:171: in reset
+    self._np_random, self._np_random_seed = seeding.np_random(seed)
+                                            ^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+seed = -1
+
+    def np_random(seed: int | None = None) -> tuple[np.random.Generator, int]:
+        """Returns a NumPy random number generator (RNG) along with seed value from the inputted seed.
+    
+        If ``seed`` is ``None`` then a **random** seed will be generated as the RNG's initial seed.
+        This randomly selected seed is returned as the second value of the tuple.
+    
+        .. py:currentmodule:: gymnasium.Env
+    
+        This function is called in :meth:`reset` to reset an environment's initial RNG.
+    
+        Args:
+            seed: The seed used to create the generator
+    
+        Returns:
+            A NumPy-based Random Number Generator and generator seed
+    
+        Raises:
+            Error: Seed must be a non-negative integer
+        """
+        if seed is not None and not (isinstance(seed, int) and 0 <= seed):
+            if isinstance(seed, int) is False:
+                raise error.Error(
+                    f"Seed must be a python integer, actual type: {type(seed)}"
+                )
+            else:
+>               raise error.Error(
+                    f"Seed must be greater or equal to zero, actual value: {seed}"
+                )
+E               gymnasium.error.Error: Seed must be greater or equal to zero, actual value: -1
+
+D:\Rocket\.venv\Lib\site-packages\gymnasium\utils\seeding.py:35: Error
+_______ test_invalid_seeds_refused_before_an_environment_exists[empty] ________
+
+seeds = []
+
+    @pytest.mark.parametrize(
+        "seeds",
+        [[True, False], [1.5, 2.7], [3.0, 4.0], ["7", "8"], [5, -1], [], [1, 1.5], ["9", 9]],
+        ids=["bool", "fractional", "integral-float", "string", "negative-after-valid", "empty", "collapse", "str-int"],
+    )
+    def test_invalid_seeds_refused_before_an_environment_exists(seeds):
+        COUNT["envs"] = 0
+>       with pytest.raises(ValueError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValueError
+
+tests\old_api_probe_test.py:41: Failed
+______ test_invalid_seeds_refused_before_an_environment_exists[collapse] ______
+
+seeds = [1, 1.5]
+
+    @pytest.mark.parametrize(
+        "seeds",
+        [[True, False], [1.5, 2.7], [3.0, 4.0], ["7", "8"], [5, -1], [], [1, 1.5], ["9", 9]],
+        ids=["bool", "fractional", "integral-float", "string", "negative-after-valid", "empty", "collapse", "str-int"],
+    )
+    def test_invalid_seeds_refused_before_an_environment_exists(seeds):
+        COUNT["envs"] = 0
+>       with pytest.raises(ValueError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValueError
+
+tests\old_api_probe_test.py:41: Failed
+______ test_invalid_seeds_refused_before_an_environment_exists[str-int] _______
+
+seeds = ['9', 9]
+
+    @pytest.mark.parametrize(
+        "seeds",
+        [[True, False], [1.5, 2.7], [3.0, 4.0], ["7", "8"], [5, -1], [], [1, 1.5], ["9", 9]],
+        ids=["bool", "fractional", "integral-float", "string", "negative-after-valid", "empty", "collapse", "str-int"],
+    )
+    def test_invalid_seeds_refused_before_an_environment_exists(seeds):
+        COUNT["envs"] = 0
+>       with pytest.raises(ValueError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValueError
+
+tests\old_api_probe_test.py:41: Failed
+_______________ test_split_problems_reported[empty-validation] ________________
+
+validation = [], test = [3]
+
+    @pytest.mark.parametrize(
+        "validation, test",
+        [([], [3]), ([1], []), ([-1, 2], [3]), ([[1]], [2])],
+        ids=["empty-validation", "empty-test", "negative", "unhashable"],
+    )
+    def test_split_problems_reported(validation, test):
+>       assert seed_split_problems(validation, test) != []
+E       assert [] != []
+E        +  where [] = seed_split_problems([], [3])
+
+tests\old_api_probe_test.py:52: AssertionError
+__________________ test_split_problems_reported[empty-test] ___________________
+
+validation = [1], test = []
+
+    @pytest.mark.parametrize(
+        "validation, test",
+        [([], [3]), ([1], []), ([-1, 2], [3]), ([[1]], [2])],
+        ids=["empty-validation", "empty-test", "negative", "unhashable"],
+    )
+    def test_split_problems_reported(validation, test):
+>       assert seed_split_problems(validation, test) != []
+E       assert [] != []
+E        +  where [] = seed_split_problems([1], [])
+
+tests\old_api_probe_test.py:52: AssertionError
+___________________ test_split_problems_reported[negative] ____________________
+
+validation = [-1, 2], test = [3]
+
+    @pytest.mark.parametrize(
+        "validation, test",
+        [([], [3]), ([1], []), ([-1, 2], [3]), ([[1]], [2])],
+        ids=["empty-validation", "empty-test", "negative", "unhashable"],
+    )
+    def test_split_problems_reported(validation, test):
+>       assert seed_split_problems(validation, test) != []
+E       assert [] != []
+E        +  where [] = seed_split_problems([-1, 2], [3])
+
+tests\old_api_probe_test.py:52: AssertionError
+__________________ test_split_problems_reported[unhashable] ___________________
+
+validation = [[1]], test = [2]
+
+    @pytest.mark.parametrize(
+        "validation, test",
+        [([], [3]), ([1], []), ([-1, 2], [3]), ([[1]], [2])],
+        ids=["empty-validation", "empty-test", "negative", "unhashable"],
+    )
+    def test_split_problems_reported(validation, test):
+>       assert seed_split_problems(validation, test) != []
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\old_api_probe_test.py:52: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+validation = [[1]], test = [2]
+
+    def seed_split_problems(validation: Sequence[int], test: Sequence[int]) -> list[str]:
+        """Problems that make a validation/test seed split unusable (empty list: valid).
+    
+        Seeds must be plain integers, each list free of duplicates, and the two lists disjoint, so the
+        checkpoint selected on validation episodes is never selected on the episodes that test it.
+        """
+        out = []
+        for label, seeds in (("validation", validation), ("test", test)):
+            if any(isinstance(s, bool) or not isinstance(s, (int, np.integer)) for s in seeds):
+                out.append(f"{label} seeds must be integers")
+>           if len(set(seeds)) != len(seeds):
+                   ^^^^^^^^^^
+E           TypeError: unhashable type: 'list'
+
+lunarlab\audit\evaluate.py:28: TypeError
+______________________ test_non_finite_term_refused[nan] ______________________
+
+value = nan
+
+    @pytest.mark.parametrize("value", [math.nan, math.inf], ids=["nan", "inf"])
+    def test_non_finite_term_refused(value):
+        term = RewardTerm("t", lambda tr: value, {"type": "custom"})
+>       with pytest.raises(ValueError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValueError
+
+tests\old_api_probe_test.py:58: Failed
+______________________ test_non_finite_term_refused[inf] ______________________
+
+value = inf
+
+    @pytest.mark.parametrize("value", [math.nan, math.inf], ids=["nan", "inf"])
+    def test_non_finite_term_refused(value):
+        term = RewardTerm("t", lambda tr: value, {"type": "custom"})
+>       with pytest.raises(ValueError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValueError
+
+tests\old_api_probe_test.py:58: Failed
+_______________________ test_non_finite_weight_refused ________________________
+
+    def test_non_finite_weight_refused():
+>       with pytest.raises(ValueError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValueError
+
+tests\old_api_probe_test.py:63: Failed
+_____________________ test_non_finite_description_refused _____________________
+
+    def test_non_finite_description_refused():
+>       with pytest.raises(ValueError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValueError
+
+tests\old_api_probe_test.py:68: Failed
+=================================== PASSES ====================================
+=========================== short test summary info ===========================
+PASSED tests/old_api_probe_test.py::test_valid_inputs_still_work
+FAILED tests/old_api_probe_test.py::test_invalid_seeds_refused_before_an_environment_exists[bool]
+FAILED tests/old_api_probe_test.py::test_invalid_seeds_refused_before_an_environment_exists[fractional]
+FAILED tests/old_api_probe_test.py::test_invalid_seeds_refused_before_an_environment_exists[integral-float]
+FAILED tests/old_api_probe_test.py::test_invalid_seeds_refused_before_an_environment_exists[string]
+FAILED tests/old_api_probe_test.py::test_invalid_seeds_refused_before_an_environment_exists[negative-after-valid]
+FAILED tests/old_api_probe_test.py::test_invalid_seeds_refused_before_an_environment_exists[empty]
+FAILED tests/old_api_probe_test.py::test_invalid_seeds_refused_before_an_environment_exists[collapse]
+FAILED tests/old_api_probe_test.py::test_invalid_seeds_refused_before_an_environment_exists[str-int]
+FAILED tests/old_api_probe_test.py::test_split_problems_reported[empty-validation]
+FAILED tests/old_api_probe_test.py::test_split_problems_reported[empty-test]
+FAILED tests/old_api_probe_test.py::test_split_problems_reported[negative] - ...
+FAILED tests/old_api_probe_test.py::test_split_problems_reported[unhashable]
+FAILED tests/old_api_probe_test.py::test_non_finite_term_refused[nan] - Faile...
+FAILED tests/old_api_probe_test.py::test_non_finite_term_refused[inf] - Faile...
+FAILED tests/old_api_probe_test.py::test_non_finite_weight_refused - Failed: ...
+FAILED tests/old_api_probe_test.py::test_non_finite_description_refused - Fai...
+16 failed, 1 passed in 0.48s
+unmodified run imported lunarlab from <scratch>\wt-932cf1c\lunarlab

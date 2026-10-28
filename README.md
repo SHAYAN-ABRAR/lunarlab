@@ -140,9 +140,17 @@ none of them affected the published results: no number above changed
   their original reward models and replay exactly from an empty data home. The packages are supplied for review,
   not yet publicly archived. A repeat benchmark with corrected memory sampling measured 1.021× accounting-loop time,
   1.053× full-loop time and 1.221× training-workflow elapsed time relative to SB3, with process peaks of 310, 310
-  and 314 MB through training and checkpointing ([benchmark audit](docs/jmlr/BENCHMARK_PROTOCOL.md)). The generic
-  `lunarlab.audit` API has a [CartPole example](examples/cartpole_audit.py); the full application remains
-  LunarLander-specific. See [the independent review](docs/jmlr/READINESS_REPORT.md) for evidence and limits.
+  and 314 MB through training and checkpointing ([benchmark audit](docs/jmlr/BENCHMARK_PROTOCOL.md)). See
+  [the independent review](docs/jmlr/READINESS_REPORT.md) for evidence and limits.
+- **Task-independent audit layer:** `lunarlab.audit` brings the reward accounting to any Gymnasium task through
+  an adapter. It adds a seed contract that refuses booleans, floats, duplicates and overlapping splits, and it
+  refuses non-finite rewards and parameters. Reward definitions carry a versioned provenance record. A
+  prespecified PPO study workflow covers validation selection, freezing and a digest-checked final test, and
+  `lunarlab audit-artifact` checks an exported artifact before any episode runs. Examples: a
+  [CartPole audit](examples/cartpole_audit.py) and a [study runner](examples/cartpole_study.py). The full
+  application remains LunarLander-specific. The October 2026 evidence (a fault-injection comparison with two SB3
+  workflows, a CartPole study, and Linux replays of the learned-reward packages) is in
+  [`reports/neurocomputing-2026-10-27/`](reports/neurocomputing-2026-10-27/README.md).
 
 ## Requirements
 
@@ -249,6 +257,9 @@ Everything in the UI is also available from the command line (same core code):
 .venv\Scripts\python.exe -m lunarlab reproduce-artifact --artifact examples\artifacts\ppo-baseline-s0   # re-evaluate, compare
 .venv\Scripts\python.exe -m lunarlab trace-artifact --artifact examples\artifacts\ppo-baseline-s0 --compare reports\jmlr\reproducibility\traces\ppo-baseline-s0-windows.npz   # where platforms part
 .venv\Scripts\python.exe -m lunarlab overhead-benchmark --profile smoke         # instrumentation overhead vs plain SB3
+.venv\Scripts\python.exe examples\cartpole_study.py --protocol examples\protocols\cartpole-smoke.json --out smoke-study   # a prespecified study, any adapter
+.venv\Scripts\python.exe -m lunarlab audit-artifact verify --artifact smoke-study\artifacts\failure-bonus-s7      # files, protocol, reward, records
+.venv\Scripts\python.exe -m lunarlab audit-artifact reproduce --artifact smoke-study\artifacts\failure-bonus-s7   # verified first, then re-run and compared
 ```
 
 Profiles: `smoke` (8,192 transitions, technical test), `standard` (1,000,000 requested → 1,003,520 actual
@@ -290,7 +301,9 @@ runs/<run_id>/checkpoints/frozen/   immutable, read-only copy of the checkpoint 
 runs/<run_id>/checkpoints/*.replay.npz, *.state.json   DQN continuation state (two most recent kept)
 data/test_exposure.jsonl    every completed final test (decides exploratory vs confirmatory)
 examples/artifacts/<name>/  three published final tests packaged for re-evaluation (committed)
+examples/learned-reward-artifacts/   the six learned-reward policies with their reward models (committed)
 reports/jmlr/               coverage, overhead benchmarks, figures and reproduction reports (committed)
+reports/neurocomputing-2026-10-27/   protocols, records and reports of the October 2026 evidence (committed)
 ```
 
 Nothing is deleted automatically, with one exception: a DQN run keeps the replay and state files of its two most
@@ -317,6 +330,9 @@ a 64×64 MLP are about 150 KB each; a DQN replay file with the default 50k buffe
   only encouraged, the fees, and what is still unresolved, including whether a software paper can be published
   without a fee. [AI_TOOL_VERSIONS.md](docs/neurocomputing/AI_TOOL_VERSIONS.md) lists the AI tools and model
   versions recorded during development.
+- [paper/neurocomputing/](paper/neurocomputing/BUILD.md): the Neurocomputing manuscript, a working draft that has
+  not been submitted. CI builds it with pdfLaTeX and BibTeX. `figures/build_figures.py` draws its figures from
+  the recorded evidence, and [EVIDENCE.md](paper/neurocomputing/EVIDENCE.md) maps each claim to its evidence.
 - [docs/RESULTS.md](docs/RESULTS.md): the experiments, findings with intervals, figures, limitations and
   the commands that reproduce them.
 - [docs/REWARDS.md](docs/REWARDS.md): the original reward, the four presets, learned rewards, formulas, assumptions, why
@@ -351,11 +367,13 @@ cd frontend; npm run typecheck; npm run lint; npm run build
 npx playwright test                                      # 15 browser flows on real backends (uses installed Edge)
 ```
 
-Coverage is 85.8 % of statements and branches ([per-module report](reports/jmlr/coverage/SUMMARY.md)). CI runs
+Coverage is 85.95 % of statements and branches in CI at `30bd3f6` (85.8 % in the
+[per-module report](reports/jmlr/coverage/SUMMARY.md) of the JMLR revision). CI runs
 the full suite on Linux, the Windows-sensitive tests and the PowerShell scripts on Windows with Python 3.12 and
 3.13, the smoke reproduction and the re-evaluation of the published artifacts on both (with a summary of every
 outcome; nothing is masked), and builds the source archive twice, compares the bytes and installs it into a
-fresh environment.
+fresh environment. Two further workflows replay the six learned-reward packages on Linux from an empty data home
+and build the Neurocomputing manuscript.
 
 **CI run done:** on 2026-10-18 the full CI run of commit `67440c6` (run [39147464434](https://github.com/SHAYAN-ABRAR/lunarlab/actions/runs/39147464434)) passed all six jobs —
 Linux (489 tests passed, 4 Windows-only tests skipped; the published artifacts re-evaluated as numerical
@@ -381,6 +399,31 @@ models (four files) match the historical integrity manifest. All 38 policies wer
 checkpoint, configuration and evaluation bytes, and the six learned-reward policies replay exactly (600 of 600
 episodes) from an empty data home. Local validation of this change: 498 Python tests passed with none failed or skipped (85.9 % statement and branch coverage), the example artifacts still reproduce exactly, and the frontend checks and 15 browser flows pass; CI runs after the push. Record:
 [`reports/jmlr/learned-reward-repair-2026-10-24/`](reports/jmlr/learned-reward-repair-2026-10-24/).
+
+**Research-strengthening revision (27 and 28 October 2026, review branch
+`research/neurocomputing-audit-evidence`, not merged):**
+
+- **Contract defects:** seed, finite-value and seeding defects of the task-independent layer were reproduced
+  and fixed. Sixteen reproductions fail on the previous code and pass now; a valid-input control passes on both.
+- **Reward identity:** two terms with the same description that pay 1 and 1,000 could not be told apart by
+  their record. Provenance schema 2 records each term function's own source digest and captured values, and
+  tells them apart.
+- **New features:** a prespecified study workflow with `audit-artifact`.
+- **CI:** on commit `30bd3f6` (run
+  [40694880778](https://github.com/SHAYAN-ABRAR/lunarlab/actions/runs/40694880778)) all six jobs passed:
+  - Linux: 572 tests passed and 4 Windows-only tests skipped, with 85.95 % statement and branch coverage;
+  - Windows Python 3.12 and 3.13: 291 targeted tests passed on each;
+  - source archive: 192 release tests passed;
+  - browser: 15 flows passed.
+- **Source archive:** the archive of `30bd3f6` built on the author's Windows laptop is byte-identical to the
+  CI build, and installs and passes its release tests there too.
+- **Local run:** on Windows 11 with Python 3.12, the full suite at `21ceb66` passed 571 tests with none skipped
+  (86.0 %).
+- **Linux replay:** the six learned-reward packages, replayed on Linux CI from an empty data home (run
+  [40545198707](https://github.com/SHAYAN-ABRAR/lunarlab/actions/runs/40545198707)), keep integrity and differ
+  only numerically.
+
+Records: [`reports/neurocomputing-2026-10-27/`](reports/neurocomputing-2026-10-27/README.md).
 
 ## License and citation
 

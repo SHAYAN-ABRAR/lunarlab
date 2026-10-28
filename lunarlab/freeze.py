@@ -54,7 +54,18 @@ def _artifact_rel(sha: str) -> str:
 def _write_immutable_copy(src: Path, paths: RunPaths, sha: str) -> Path:
     """Copy ``src`` to the content-addressed frozen location; verify; make it read-only."""
     paths.frozen.mkdir(parents=True, exist_ok=True)
-    dst = paths.root / _artifact_rel(sha)
+    return immutable_copy(src, paths.root / _artifact_rel(sha), sha)
+
+
+def immutable_copy(src: Path, dst: Path, sha: str) -> Path:
+    """Copy ``src`` (whose SHA-256 must be ``sha``) to ``dst``, verify the copy and make it read-only.
+
+    An existing ``dst`` is kept only if it already holds those bytes; otherwise nothing is overwritten. The
+    copy is written to a temporary name and renamed after its digest is checked, so a partly written file
+    never appears under ``dst``. Used for the main pipeline's frozen final-test checkpoints and for the
+    generic audit study (:mod:`lunarlab.audit.study`).
+    """
+    dst.parent.mkdir(parents=True, exist_ok=True)
     if dst.exists():
         if sha256_file(dst) != sha:
             raise RunError(f"{dst.name} exists with different bytes; refusing to overwrite a frozen artifact")

@@ -1,0 +1,69 @@
+{
+ "format": "audit-comparison-specification/1",
+ "checks": {
+  "S1": "policy file SHA-256 equals the digest recorded at selection",
+  "S2": "every dependency and record file is present with its recorded SHA-256",
+  "S3": "the recorded evaluation was made with the case's environment, gamma and test seeds (identical lists)",
+  "S4": "seed contract: non-empty lists of nonnegative integers (no bool, float or string; nothing coerced), no duplicates, validation and test disjoint",
+  "S5": "every reward parameter and gamma is finite",
+  "S6": "every recorded episode has finite original return, training return and every declared term",
+  "S7": "training return = weight x original return + sum of term returns (1e-9 relative)",
+  "S8": "recorded per-step shaping values equal alpha*(gamma*Phi(s') - Phi(s)), Phi(s) = -|theta|/(12*2*pi/360), Phi(s') = 0 only at a true termination (1e-9)",
+  "S9": "outcome schema (name, version, categories) is the evaluator's and every recorded outcome is one of its categories",
+  "S10": "replay on the test seeds; exact comparison of length, original_return, training_return, outcome, terminated, truncated; exact / numerical-difference (other platform, Holm-corrected paired sign-flip and McNemar screen not rejecting at 0.05) / unexpected-difference (same platform) / aggregate-disagreement"
+ },
+ "integrity_checks_before_execution": [
+  "S1",
+  "S2",
+  "S3",
+  "S4",
+  "S5",
+  "S6",
+  "S7",
+  "S8",
+  "S9"
+ ],
+ "check_statuses": [
+  "pass",
+  "fail",
+  "warn",
+  "unsupported",
+  "not-run"
+ ],
+ "verdicts": {
+  "accepted": 0,
+  "accepted-numerical-difference": 3,
+  "rejected-before-execution": 1,
+  "rejected-after-execution": 1,
+  "unchecked": 4
+ },
+ "crash": "any other exit status, or no JSON object on stdout",
+ "output_fields": [
+  "workflow",
+  "case",
+  "checks",
+  "verdict",
+  "episodes_executed",
+  "execution_started_before_failure",
+  "mean_original_return",
+  "completion_rate"
+ ],
+ "environment": {
+  "id": "CartPole-v1",
+  "kwargs": {},
+  "gamma": 0.98,
+  "time_limit": 500
+ },
+ "outcome_schema": {
+  "name": "cartpole",
+  "version": "1",
+  "categories": [
+   "balanced_to_time_limit",
+   "pole_fell",
+   "cart_left_track",
+   "unknown"
+  ],
+  "success": "balanced_to_time_limit",
+  "rules": "truncated and not terminated -> balanced_to_time_limit; terminated and |theta| > 12*2*pi/360 -> pole_fell; terminated and |x| > 2.4 -> cart_left_track; otherwise unknown"
+ }
+}

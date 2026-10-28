@@ -1,0 +1,19 @@
+protocol cartpole-smoke sha256 9d5c076e62a101e42fecd2afe68be1c845cb5fc72c1fc572e4a19de9e67c4deb; 3 runs
+  original seed 7: step 64 validation original return 8.5, success 0%
+  original seed 7: step 128 validation original return 8.5, success 0%
+trained {'run': 'original-s7', 'transitions': 128, 'training_seconds': 1.2701862239999997, 'wall_seconds': 2.178194999694824, 'selected_step': 64}
+  upright-potential seed 7: step 64 validation original return 8.5, success 0%
+  upright-potential seed 7: step 128 validation original return 8.5, success 0%
+  failure-bonus seed 7: step 64 validation original return 59.0, success 0%
+trained {'run': 'upright-potential-s7', 'transitions': 128, 'training_seconds': 1.3850614059999913, 'wall_seconds': 2.21309232711792, 'selected_step': 64}
+  failure-bonus seed 7: step 128 validation original return 59.0, success 0%
+trained {'run': 'failure-bonus-s7', 'transitions': 128, 'training_seconds': 0.0760731179999965, 'wall_seconds': 0.10369634628295898, 'selected_step': 64}
+frozen checkpoints verified
+tested {'run': 'original-s7', 'which': 'selected', 'mean_original_return': 9.0, 'test_seconds': 0.013324095000001535}
+tested {'run': 'upright-potential-s7', 'which': 'selected', 'mean_original_return': 9.0, 'test_seconds': 0.01739292199999909}
+tested {'run': 'failure-bonus-s7', 'which': 'selected', 'mean_original_return': 54.0, 'test_seconds': 0.025574383000005696}
+tested {'run': 'original-s7', 'which': 'final', 'mean_original_return': 9.0, 'test_seconds': 0.013548312999986933}
+tested {'run': 'upright-potential-s7', 'which': 'final', 'mean_original_return': 9.0, 'test_seconds': 0.017338159000004794}
+tested {'run': 'failure-bonus-s7', 'which': 'final', 'mean_original_return': 54.0, 'test_seconds': 0.02584180799999558}
+artifacts exported
+study.json written: 384 training transitions

@@ -40,10 +40,14 @@ def train(adapter, terms: dict, transitions: int, seed: int) -> PPO:
         )
 
     venv = DummyVecEnv([make] * 4)
-    venv.seed(1_000_000 + 1000 * seed)  # training episodes never use validation or test seeds
+    # PPO(seed=...) seeds the learner's random generators and also calls venv.seed(seed), which replaces
+    # any environment seeds set before it. So the training environments' seed roots are set afterwards:
+    # learn() starts with venv.reset(), which uses them once (root + i for environment i). Every later
+    # episode is reset without a seed and continues that environment's own random stream.
     model = PPO(
         "MlpPolicy", venv, n_steps=256, batch_size=64, gamma=GAMMA, seed=seed, device="cpu", verbose=0
     )
+    venv.seed(1_000_000 + 1000 * seed)  # training episodes never use validation or test seeds
     model.learn(transitions)
     venv.close()
     return model

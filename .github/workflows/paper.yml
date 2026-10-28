@@ -1,0 +1,62 @@
+# SPDX-FileCopyrightText: 2026 Shayan Abrar
+# SPDX-License-Identifier: MIT
+name: Manuscript (Neurocomputing)
+
+# Builds paper/neurocomputing with pdflatex and BibTeX from Ubuntu's TeX Live packages. The author's Windows
+# machine blocks its unsigned TeX binary, so the manuscript is built here. The job fails on an undefined
+# reference or citation, a LaTeX error or a font that is not embedded. It uploads the PDF, every log, pdffonts,
+# pdfinfo and a 100-dpi PNG of every page, so each page can be inspected.
+
+on:
+  push:
+    branches: ["research/**"]
+    paths:
+      - "paper/neurocomputing/**"
+      - ".github/workflows/paper.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: pdflatex + BibTeX · fonts · page renders
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    defaults:
+      run:
+        working-directory: paper/neurocomputing
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install TeX Live and Poppler (Ubuntu packages)
+        run: |
+          sudo apt-get update -q
+          sudo apt-get install -y -q --no-install-recommends texlive-latex-base texlive-latex-recommended \
+            texlive-latex-extra texlive-fonts-recommended lmodern poppler-utils python3
+      - name: Check the source
+        run: python3 check_manuscript.py --final
+      - name: Build (pdflatex, BibTeX, pdflatex, pdflatex)
+        run: |
+          mkdir -p out
+          { pdflatex --version | head -1; bibtex --version | head -1; } > out/versions.txt
+          pdflatex -interaction=nonstopmode -halt-on-error main.tex > out/build-1.log
+          bibtex main > out/bibtex.log
+          pdflatex -interaction=nonstopmode -halt-on-error main.tex > out/build-2.log
+          pdflatex -interaction=nonstopmode -halt-on-error main.tex > out/build-3.log
+          cp main.pdf main.log main.blg main.bbl out/
+      - name: References resolved, fonts embedded, layout warnings counted
+        run: |
+          if grep -E "There were undefined references|Citation .* undefined|Reference .* undefined" main.log; then
+            echo "undefined references"; exit 1; fi
+          pdffonts main.pdf | tee out/pdffonts.txt
+          pdfinfo main.pdf | tee out/pdfinfo.txt
+          awk 'NR > 2 && $(NF-4) != "yes" { bad = 1; print "not embedded:", $0 } END { exit bad }' out/pdffonts.txt
+          { echo "overfull boxes: $(grep -c '^Overfull' main.log || true)"; echo "underfull boxes: $(grep -c '^Underfull' main.log || true)"; grep -A1 '^Overfull' main.log || true; } | tee out/layout-warnings.txt
+      - name: Render every page
+        run: pdftoppm -r 100 -png main.pdf out/page
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: manuscript
+          path: paper/neurocomputing/out
+          retention-days: 30
