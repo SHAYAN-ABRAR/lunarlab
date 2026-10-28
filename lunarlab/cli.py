@@ -1087,7 +1087,7 @@ def cmd_reproduce_artifact(args) -> int:
 
 
 def cmd_audit_artifact(args) -> int:
-    from lunarlab.audit.study import reproduce_artifact, verify_artifact
+    from lunarlab.audit.study import failure_summary, reproduce_artifact, verify_artifact
 
     if not (Path(args.artifact) / "manifest.json").is_file():
         print(f"error: {args.artifact} is not an audit artifact (no manifest.json)", file=sys.stderr)
@@ -1096,15 +1096,15 @@ def cmd_audit_artifact(args) -> int:
         report = verify_artifact(Path(args.artifact))
         for c in report["checks"]:
             print(
-                f"  [{'ok' if c['ok'] else 'FAIL'}] {c['check']}"
+                f"  [{'ok' if c['ok'] else 'FAIL (' + c['kind'] + ')'}] {c['check']}"
                 + (f": {c['detail']}" if c["detail"] else "")
             )
-        print("VERIFIED: every integrity check passes" if report["ok"] else "INTEGRITY-FAILURE (blocking)")
+        print("VERIFIED: every check passes" if report["ok"] else failure_summary(report["failed_kinds"]))
         _write_report(report, args.report)
         return 0 if report["ok"] else 1
     report = reproduce_artifact(Path(args.artifact))
     if report["evaluation_skipped"]:
-        print("INTEGRITY-FAILURE (blocking): evaluation skipped, no episode was run")
+        print(f"{failure_summary(report['failed_kinds'])}: evaluation skipped, no episode was run")
     else:
         print(f"{report['status'].upper()}: {report['reason']}")
     _write_report(report, args.report)

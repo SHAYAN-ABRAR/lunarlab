@@ -14,6 +14,7 @@ from __future__ import annotations
 import hashlib
 import json
 import math
+import statistics
 import subprocess
 import sys
 import textwrap
@@ -44,6 +45,8 @@ from lunarlab.audit import (
     terms_hash,
 )
 from lunarlab.audit import provenance as prov
+from lunarlab.audit.contracts import finite_mean
+from lunarlab.audit.core import EpisodeAudit
 
 # --------------------------------------------------------------------------- #
 # A tiny deterministic environment with hand-calculable rewards
@@ -281,6 +284,111 @@ def test_built_in_term_parameters_must_be_finite():
         per_step("p", math.nan)
     with pytest.raises(NonFiniteValueError, match="potential_shaping term 'f' alpha"):
         potential_shaping("f", phi, alpha=math.inf, gamma=0.9, potential_id="-x")
+
+
+class Scripted(gym.Env):
+    """Episode k (from 0) pays ``episodes[k]`` step by step and terminates after its last reward."""
+
+    observation_space = spaces.Box(-1.0, 1.0, (1,), np.float64)
+    action_space = spaces.Discrete(1)
+
+    def __init__(self, *episodes: tuple[float, ...]):
+        self.episodes, self.k, self.t = episodes, -1, 0
+
+    def reset(self, *, seed=None, options=None):
+        super().reset(seed=seed)
+        self.k, self.t = self.k + 1, 0
+        return np.zeros(1), {}
+
+    def step(self, action):
+        rewards = self.episodes[self.k]
+        self.t += 1
+        return np.zeros(1), rewards[self.t - 1], self.t == len(rewards), False, {}
+
+
+LARGEST_DOUBLE = sys.float_info.max  # about 1.798e308, so 1e308 + 1e308 is not representable
+
+
+def test_finite_rewards_whose_totals_overflow_end_the_episode_without_a_summary():
+    assert math.isfinite(1e308) and LARGEST_DOUBLE < 1e308 + 1e308  # the premise, checked independently
+    w = RewardAccountingWrapper(Scripted((1e308, 1e308), (1.0, 2.0)), gamma=0.99)
+    w.reset(seed=0)
+    _, reward, terminated, _, info = w.step(0)
+    assert reward == 1e308 and not terminated and "audit_episode" not in info
+    with pytest.raises(NonFiniteValueError) as err:
+        w.step(0)  # every value is finite; the four totals are not
+    message = str(err.value)
+    for total in (
+        "original_return",
+        "training_return",
+        "discounted_original_return",
+        "discounted_training_return",
+    ):
+        assert total in message
+    assert "at step 1" in message and "floating-point range" in message
+    assert w.last_episode is None  # nothing that looks like a completed audit
+    with pytest.raises(RuntimeError, match="before reset"):
+        w.step(0)  # the failed episode cannot be continued
+    w.reset(seed=0)  # a reset starts a new audit, which completes normally
+    w.step(0)
+    *_, info = w.step(0)
+    assert info["audit_episode"]["original_return"] == 3.0 and w.last_episode["original_return"] == 3.0
+
+
+def test_totals_near_the_largest_double_stay_exact_when_they_fit():
+    big = 2.0**1020  # powers of two: every expected total below is exact
+    w = RewardAccountingWrapper(Scripted((big, big)), gamma=0.5)
+    w.reset(seed=0)
+    w.step(0)
+    *_, info = w.step(0)
+    ep = info["audit_episode"]
+    assert ep["original_return"] == ep["training_return"] == 2.0**1021
+    assert (
+        ep["discounted_original_return"] == ep["discounted_training_return"] == 3 * 2.0**1019
+    )  # big + big / 2
+
+
+def test_finite_term_outputs_whose_sum_overflows_raise_the_audit_error_not_overflow_error():
+    terms = {n: RewardTerm(n, lambda t: 1e308, {"type": "custom", "id": n}) for n in ("a", "b")}
+    w = RewardAccountingWrapper(Scripted((0.0,)), terms, gamma=0.9)
+    w.reset(seed=0)
+    with pytest.raises(NonFiniteValueError, match="reward-term outputs at step 0 are each finite"):
+        w.step(0)
+    assert w.last_episode is None
+
+
+def test_a_refused_transition_leaves_the_episode_audit_unchanged():
+    audit = EpisodeAudit(0.5)
+    audit.add(1e308, {"t": 1e308}, 1e308)
+    before = audit.summary()
+    with pytest.raises(NonFiniteValueError, match=r"term_returns\['t'\]"):
+        audit.add(1e308, {"t": 1e308}, 0.0)
+    assert audit.summary() == before and audit.length == 1
+
+
+def test_rescoring_refuses_totals_that_overflow():
+    zero = np.zeros(1)
+    transitions = [Transition(zero, 0, 1e308, zero, i == 1, False) for i in range(2)]
+    with pytest.raises(NonFiniteValueError, match="episode totals overflow at step 1"):
+        rescore_transitions(transitions, {}, gamma=0.99)
+
+
+def test_the_audit_mean_is_exact_when_only_the_plain_sum_would_overflow():
+    adapter = TaskAdapter(
+        name="large",
+        version="1",
+        env_id="Large-test",
+        env_kwargs={},
+        observation_labels=("x",),
+        action_labels=("a",),
+        outcome_categories=("ended",),
+        classify=lambda end: {"outcome": "ended"},
+        factory=lambda **kw: Scripted((1.5e308,), (1.5e308,)),
+    )
+    report = audit_policy(adapter, lambda o: 0, [1, 2], gamma=0.9)
+    assert [e["original_return"] for e in report["episodes"]] == [1.5e308, 1.5e308]
+    assert report["aggregate"]["mean_original_return"] == 1.5e308  # x/2 + x/2 is exact for this x
+    assert finite_mean([0.1, 0.2, 0.7], "m") == statistics.fmean([0.1, 0.2, 0.7])  # ordinary values unchanged
 
 
 # --------------------------------------------------------------------------- #

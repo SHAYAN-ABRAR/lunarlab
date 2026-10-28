@@ -1,0 +1,202 @@
+{
+ "schema": "lunarlab.audit-study/1",
+ "study_id": "cartpole-reward-design-2026-10-27",
+ "adapter": {
+  "name": "cartpole",
+  "version": "1"
+ },
+ "env_kwargs": {},
+ "gamma": 0.98,
+ "algorithm": {
+  "name": "ppo",
+  "policy": "MlpPolicy",
+  "n_envs": 8,
+  "kwargs": {
+   "n_steps": 32,
+   "batch_size": 256,
+   "n_epochs": 20,
+   "gae_lambda": 0.8,
+   "ent_coef": 0.0,
+   "learning_rate": {
+    "linear": 0.001
+   },
+   "clip_range": {
+    "linear": 0.2
+   }
+  },
+  "source": "RL Baselines3 Zoo hyperparams/ppo.yml, CartPole-v1 entry, commit eec15dc22e1ec7167064aae0c1218eefccaf0ff4 (gamma 0.98 is the top-level gamma)"
+ },
+ "budget_transitions": 100000,
+ "eval_every_rollouts": 40,
+ "designs": [
+  {
+   "name": "original",
+   "original_weight": 1.0,
+   "terms": []
+  },
+  {
+   "name": "upright-potential",
+   "original_weight": 1.0,
+   "terms": [
+    {
+     "term": "upright_potential",
+     "params": {
+      "alpha": 1.0
+     }
+    }
+   ]
+  },
+  {
+   "name": "failure-bonus",
+   "original_weight": 1.0,
+   "terms": [
+    {
+     "term": "failure_bonus",
+     "params": {
+      "bonus": 1000.0
+     }
+    }
+   ]
+  }
+ ],
+ "training_seeds": [
+  50,
+  51,
+  52,
+  53,
+  54
+ ],
+ "train_env_seed_root": 1000000,
+ "validation_seeds": [
+  110000,
+  110001,
+  110002,
+  110003,
+  110004,
+  110005,
+  110006,
+  110007,
+  110008,
+  110009,
+  110010,
+  110011,
+  110012,
+  110013,
+  110014,
+  110015,
+  110016,
+  110017,
+  110018,
+  110019
+ ],
+ "test_seeds": [
+  210000,
+  210001,
+  210002,
+  210003,
+  210004,
+  210005,
+  210006,
+  210007,
+  210008,
+  210009,
+  210010,
+  210011,
+  210012,
+  210013,
+  210014,
+  210015,
+  210016,
+  210017,
+  210018,
+  210019,
+  210020,
+  210021,
+  210022,
+  210023,
+  210024,
+  210025,
+  210026,
+  210027,
+  210028,
+  210029,
+  210030,
+  210031,
+  210032,
+  210033,
+  210034,
+  210035,
+  210036,
+  210037,
+  210038,
+  210039,
+  210040,
+  210041,
+  210042,
+  210043,
+  210044,
+  210045,
+  210046,
+  210047,
+  210048,
+  210049,
+  210050,
+  210051,
+  210052,
+  210053,
+  210054,
+  210055,
+  210056,
+  210057,
+  210058,
+  210059,
+  210060,
+  210061,
+  210062,
+  210063,
+  210064,
+  210065,
+  210066,
+  210067,
+  210068,
+  210069,
+  210070,
+  210071,
+  210072,
+  210073,
+  210074,
+  210075,
+  210076,
+  210077,
+  210078,
+  210079,
+  210080,
+  210081,
+  210082,
+  210083,
+  210084,
+  210085,
+  210086,
+  210087,
+  210088,
+  210089,
+  210090,
+  210091,
+  210092,
+  210093,
+  210094,
+  210095,
+  210096,
+  210097,
+  210098,
+  210099
+ ],
+ "selection": {
+  "rule": "max-mean-original-validation-return"
+ },
+ "success_outcome": "balanced_to_time_limit",
+ "secondary_analyses": [
+  "final checkpoint of every run evaluated on the same test seeds, reported separately and never used for selection"
+ ],
+ "torch_threads": 1
+}

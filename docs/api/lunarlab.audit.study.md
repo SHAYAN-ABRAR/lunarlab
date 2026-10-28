@@ -48,6 +48,18 @@ Each file under ``root`` named in ``expected`` exists and has the recorded SHA-2
 
 Checks of a recorded evaluation that need no policy execution: (name, passed, detail) for each.
 
+**Required fields.** Every episode is an object holding ``REQUIRED_RETURN_FIELDS`` and ``term_returns``
+with exactly the design's terms.
+
+**Optional fields.** ``OPTIONAL_RETURN_FIELDS`` and ``term_discounted_returns`` may be absent.
+
+**Values.** Every present reward value must be a finite ``int`` or ``float``: null, booleans, text, NaN and
+infinity are refused, never converted to a number. The accounting identity is computed only from
+well-formed values.
+
+**Malformed input.** It never raises. Each problem is a failed check naming the episode, the field and what
+is wrong.
+
 ### `check_trajectory(trajectory: 'Mapping[str, Any]', terms: 'Mapping[str, RewardTerm]', *, gamma: 'float', original_weight: 'float' = 1.0) -> 'list[tuple[str, bool, str]]'`
 
 Re-score a recorded trajectory and compare every step's recorded term values with the re-scored ones.
@@ -73,6 +85,10 @@ Threads and numerical settings that affect results, for study records.
 ### `export_artifact(run_dir: 'str | Path', out_dir: 'str | Path', *, which: 'str' = 'selected') -> 'dict[str, Any]'`
 
 Package the frozen policy, protocol, training record, reward provenance and recorded test evaluation.
+
+### `failure_summary(failed_kinds: 'list[str]') -> 'str'`
+
+How a failed verification reads: an integrity failure, malformed records, or both. Each one blocks.
 
 ### `final_test(run_dir: 'str | Path', *, which: 'str' = 'selected') -> 'dict[str, Any]'`
 
@@ -133,9 +149,16 @@ directory: a run is never retrained in place.
 
 ### `verify_artifact(artifact_dir: 'str | Path') -> 'dict[str, Any]'`
 
-Every integrity check of an exported artifact. Nothing is executed: no environment, no policy.
+Every check of an exported artifact. Nothing is executed: no environment, no policy.
 
-A malformed record (a missing key, a wrong type) is reported as a failed check naming the problem.
+Each check has a ``kind``:
+
+- ``integrity``: the files and their digests, the protocol, the reward definition, the policy's identity
+  and the seeds;
+- ``record``: whether the recorded evaluation is complete, well formed and internally consistent.
+
+A malformed record (a missing key, a null, boolean or text value, a wrong type) is reported as a failed
+``record`` check naming the problem; it never raises. ``failed_kinds`` lists the kinds that failed.
 
 ### `verify_frozen(run_dir: 'str | Path', which: 'str' = 'selected') -> 'tuple[Path, dict[str, Any]]'`
 
@@ -146,7 +169,11 @@ The frozen checkpoint's path, after checking its digest against the run record.
 - `ARTIFACT_FILES` = `('policy.zip', 'protocol.json', 'run.json', 'evaluation.json', 'reward.json')`
 - `ARTIFACT_SCHEMA` = `'lunarlab.audit-artifact/1'`
 - `COMPARED_FIELDS` = `('length', 'original_return', 'training_return', 'outcome', 'terminated', 'truncated')`
+- `OPTIONAL_RETURN_FIELDS` = `('discounted_original_return', 'discounted_training_return')`
+- `OPTIONAL_TERM_FIELD` = `'term_discounted_returns'`
 - `OUTCOME_FIELDS` = `('terminated', 'truncated', 'outcome')`
+- `REQUIRED_RETURN_FIELDS` = `('original_return', 'training_return')`
+- `REQUIRED_TERM_FIELD` = `'term_returns'`
 - `RUN_SCHEMA` = `'lunarlab.audit-run/1'`
 - `SEED_STRIDE` = `1000`
 - `SELECTION_RULES` = `{'max-mean-original-validation-return': 'the evaluated checkpoint with the highest mean ORIGINAL return on the validatio…`

@@ -36,6 +36,7 @@ from __future__ import annotations
 import hashlib
 import inspect
 import json
+import math
 import os
 import shutil
 import time
@@ -50,6 +51,7 @@ from lunarlab.audit.adapters import TaskAdapter, get_adapter
 from lunarlab.audit.contracts import (
     AuditInputError,
     canonical_json,
+    number_problem,
     require_finite,
     seed_problems,
     split_problems,
@@ -72,6 +74,11 @@ SELECTION_RULES = {
 COMPARED_FIELDS = ("length", "original_return", "training_return", "outcome", "terminated", "truncated")
 OUTCOME_FIELDS = ("terminated", "truncated", "outcome")
 ARTIFACT_FILES = ("policy.zip", "protocol.json", "run.json", "evaluation.json", "reward.json")
+# Reward fields of a recorded episode: the required ones must be present; the optional ones may be absent.
+# Every present value must be a finite int or float (null, booleans and text are refused, never converted).
+REQUIRED_RETURN_FIELDS = ("original_return", "training_return")
+OPTIONAL_RETURN_FIELDS = ("discounted_original_return", "discounted_training_return")
+REQUIRED_TERM_FIELD, OPTIONAL_TERM_FIELD = "term_returns", "term_discounted_returns"
 
 
 # --------------------------------------------------------------------------- #
@@ -646,6 +653,10 @@ def check_file_digests(root: str | Path, expected: Mapping[str, str]) -> list[tu
     return out
 
 
+def _listed(items: list[str], limit: int = 5) -> str:
+    return "; ".join(items[:limit]) + (f" (and {len(items) - limit} more)" if len(items) > limit else "")
+
+
 def check_recorded_episodes(
     episodes: list[dict[str, Any]],
     *,
@@ -654,8 +665,28 @@ def check_recorded_episodes(
     original_weight: float,
     categories: tuple[str, ...] | list[str],
 ) -> list[tuple[str, bool, str]]:
-    """Checks of a recorded evaluation that need no policy execution: (name, passed, detail) for each."""
-    out = []
+    """Checks of a recorded evaluation that need no policy execution: (name, passed, detail) for each.
+
+    **Required fields.** Every episode is an object holding ``REQUIRED_RETURN_FIELDS`` and ``term_returns``
+    with exactly the design's terms.
+
+    **Optional fields.** ``OPTIONAL_RETURN_FIELDS`` and ``term_discounted_returns`` may be absent.
+
+    **Values.** Every present reward value must be a finite ``int`` or ``float``: null, booleans, text, NaN and
+    infinity are refused, never converted to a number. The accounting identity is computed only from
+    well-formed values.
+
+    **Malformed input.** It never raises. Each problem is a failed check naming the episode, the field and what
+    is wrong.
+    """
+    out: list[tuple[str, bool, str]] = []
+    if not isinstance(episodes, (list, tuple)):
+        return [("recorded episodes are a list of episode objects", False, f"got {type(episodes).__name__}")]
+    not_objects = [str(i) for i, e in enumerate(episodes) if not isinstance(e, Mapping)]
+    if not_objects:
+        return [
+            ("recorded episodes are a list of episode objects", False, f"not objects: {_listed(not_objects)}")
+        ]
     seeds = [e.get("seed") for e in episodes]
     out.append(
         (
@@ -664,63 +695,73 @@ def check_recorded_episodes(
             "",
         )
     )
-    missing = [i for i, e in enumerate(episodes) if "original_return" not in e or "training_return" not in e]
+    missing = [
+        f"episode {i}: no {k}" for i, e in enumerate(episodes) for k in REQUIRED_RETURN_FIELDS if k not in e
+    ]
     out.append(
-        (
-            "every episode records the original and training reward channels",
-            not missing,
-            f"missing in {missing[:5]}" if missing else "",
-        )
+        ("every episode records the original and training reward channels", not missing, _listed(missing))
     )
     bad = []
     for i, e in enumerate(episodes):
-        values = [
-            e.get(k)
-            for k in (
-                "original_return",
-                "training_return",
-                "discounted_original_return",
-                "discounted_training_return",
-            )
-        ]
-        values += list((e.get("term_returns") or {}).values())
-        if any(
-            not isinstance(v, (int, float)) or isinstance(v, bool) or not np.isfinite(v)
-            for v in values
-            if v is not None
+        for k in REQUIRED_RETURN_FIELDS + OPTIONAL_RETURN_FIELDS:
+            if k in e and (problem := number_problem(e[k])):
+                bad.append(f"episode {i}: {k} is {problem}")
+        for field in (REQUIRED_TERM_FIELD, OPTIONAL_TERM_FIELD):
+            if field not in e:
+                continue
+            if not isinstance(e[field], Mapping):
+                bad.append(f"episode {i}: {field} is {type(e[field]).__name__}, not an object")
+                continue
+            for k, v in e[field].items():
+                if problem := number_problem(v):
+                    bad.append(f"episode {i}: {field}[{k!r}] is {problem}")
+    out.append(("every recorded reward value is a finite number", not bad, _listed(bad)))
+    wrong_terms = []
+    for i, e in enumerate(episodes):
+        recorded = e.get(REQUIRED_TERM_FIELD)
+        if not isinstance(recorded, Mapping) or sorted(recorded) != sorted(term_names):
+            wrong_terms.append(f"episode {i}: {REQUIRED_TERM_FIELD}")
+        optional = e.get(OPTIONAL_TERM_FIELD)
+        if OPTIONAL_TERM_FIELD in e and (
+            not isinstance(optional, Mapping) or sorted(optional) != sorted(term_names)
         ):
-            bad.append(i)
-    out.append(
-        ("every recorded reward value is a finite number", not bad, f"episodes {bad[:5]}" if bad else "")
-    )
-    wrong_terms = [
-        i for i, e in enumerate(episodes) if sorted(e.get("term_returns") or {}) != sorted(term_names)
-    ]
-    out.append(
-        (
-            "every episode records exactly the design's terms",
-            not wrong_terms,
-            f"episodes {wrong_terms[:5]}" if wrong_terms else "",
-        )
-    )
+            wrong_terms.append(f"episode {i}: {OPTIONAL_TERM_FIELD}")
+    out.append(("every episode records exactly the design's terms", not wrong_terms, _listed(wrong_terms)))
     broken = []
     if not missing and not bad and not wrong_terms:
         for i, e in enumerate(episodes):
-            expected = original_weight * e["original_return"] + sum(e["term_returns"].values())
-            if abs(e["training_return"] - expected) > 1e-9 * max(1.0, abs(expected)):
-                broken.append(i)
+            try:
+                expected = math.fsum(
+                    [original_weight * e["original_return"], *e[REQUIRED_TERM_FIELD].values()]
+                )
+            except OverflowError:
+                expected = math.inf
+            if not math.isfinite(expected):
+                broken.append(f"{i} (the expected total overflows)")
+            elif abs(e["training_return"] - expected) > 1e-9 * max(1.0, abs(expected)):
+                broken.append(str(i))
     out.append(
         (
             "training return = weight x original return + term returns, in every episode",
             not (missing or bad or wrong_terms or broken),
-            f"episodes {broken[:5]}"
+            f"episodes {_listed(broken)}"
             if broken
             else ("not checked: channels incomplete" if missing or bad or wrong_terms else ""),
         )
     )
-    outside = sorted({e.get("outcome") for e in episodes} - set(categories), key=str)
+    outside = sorted(
+        {
+            repr(e.get("outcome"))
+            for e in episodes
+            if not (isinstance(e.get("outcome"), str) and e.get("outcome") in categories)
+        }
+    )
     out.append(
-        ("every outcome is one of the adapter's categories", not outside, f"{outside}" if outside else "")
+        (
+            "every outcome is one of the adapter's categories",
+            not outside,
+            ", ".join(outside) if outside else "",
+        )
     )
     return out
 
@@ -822,22 +863,41 @@ def compare_generic_aggregates(
 
 
 def verify_artifact(artifact_dir: str | Path) -> dict[str, Any]:
-    """Every integrity check of an exported artifact. Nothing is executed: no environment, no policy.
+    """Every check of an exported artifact. Nothing is executed: no environment, no policy.
 
-    A malformed record (a missing key, a wrong type) is reported as a failed check naming the problem.
+    Each check has a ``kind``:
+
+    - ``integrity``: the files and their digests, the protocol, the reward definition, the policy's identity
+      and the seeds;
+    - ``record``: whether the recorded evaluation is complete, well formed and internally consistent.
+
+    A malformed record (a missing key, a null, boolean or text value, a wrong type) is reported as a failed
+    ``record`` check naming the problem; it never raises. ``failed_kinds`` lists the kinds that failed.
     """
     root = Path(artifact_dir)
     checks: list[dict[str, Any]] = []
 
-    def check(name: str, ok: bool, detail: str = "") -> bool:
-        checks.append({"check": name, "ok": bool(ok), "detail": detail})
+    def check(name: str, ok: bool, detail: str = "", kind: str = "integrity") -> bool:
+        checks.append({"check": name, "ok": bool(ok), "detail": detail, "kind": kind})
         return bool(ok)
 
     try:
-        return _verify(root, checks, check)
+        result = _verify(root, checks, check)
     except (KeyError, TypeError, IndexError, AuditInputError) as exc:
-        check("artifact records are complete and well formed", False, f"{type(exc).__name__}: {exc}"[:300])
-        return {"ok": False, "checks": checks}
+        detail = f"{type(exc).__name__}: {exc}"[:300]
+        check("artifact records are complete and well formed", False, detail, "record")
+        result = {"ok": False, "checks": checks}
+    result["failed_kinds"] = sorted({c["kind"] for c in checks if not c["ok"]})
+    return result
+
+
+def failure_summary(failed_kinds: list[str]) -> str:
+    """How a failed verification reads: an integrity failure, malformed records, or both. Each one blocks."""
+    if failed_kinds == ["record"]:
+        return "MALFORMED-RECORD (blocking): the files match their digests, but the recorded evaluation is not well formed"
+    if "record" in failed_kinds:
+        return "INTEGRITY-FAILURE (blocking), and the recorded evaluation is not well formed"
+    return "INTEGRITY-FAILURE (blocking)"
 
 
 def _verify(root: Path, checks: list[dict[str, Any]], check: Callable[..., bool]) -> dict[str, Any]:
@@ -874,7 +934,7 @@ def _verify(root: Path, checks: list[dict[str, Any]], check: Callable[..., bool]
         test = load_json(root / "evaluation.json")
         reward = load_json(root / "reward.json")
     except ValueError as exc:
-        check("JSON files parse", False, str(exc)[:200])
+        check("JSON files parse", False, str(exc)[:200], "record")
         return {"ok": False, "checks": checks}
     digest = protocol_sha256(protocol)
     check(
@@ -933,7 +993,7 @@ def _verify(root: Path, checks: list[dict[str, Any]], check: Callable[..., bool]
         original_weight=weight,
         categories=adapter.outcome_categories,
     ):
-        check(name, ok, detail)
+        check(name, ok, detail, "record")
     return {"ok": all(c["ok"] for c in checks), "checks": checks}
 
 
@@ -955,10 +1015,17 @@ def reproduce_artifact(artifact_dir: str | Path, *, echo: Callable[[str], None] 
     current = version_info()
     if not verification["ok"]:
         status = "integrity-failure"
+        failed = [c["check"] for c in verification["checks"] if not c["ok"] and c["kind"] == "record"]
+        reason = STATUSES[status]["meaning"]
+        if verification["failed_kinds"] == ["record"]:
+            reason = "the recorded evaluation is not well formed: " + "; ".join(failed)
+        elif failed:
+            reason += "; and the recorded evaluation is not well formed: " + "; ".join(failed)
         return {
             "status": status,
             "exit_code": STATUSES[status]["exit_code"],
-            "reason": STATUSES[status]["meaning"],
+            "reason": reason,
+            "failed_kinds": verification["failed_kinds"],
             "evaluation_skipped": True,
             "checks": verification["checks"],
             "reproduced_with": current,

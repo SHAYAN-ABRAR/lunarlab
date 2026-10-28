@@ -4,7 +4,6 @@
 
 from __future__ import annotations
 
-import statistics
 from collections.abc import Callable, Mapping, Sequence
 from typing import Any
 
@@ -12,7 +11,13 @@ import gymnasium as gym
 import numpy as np
 
 from lunarlab.audit.adapters import TaskAdapter
-from lunarlab.audit.contracts import SEED_CONTRACT, normalize_seeds, require_finite, split_problems
+from lunarlab.audit.contracts import (
+    SEED_CONTRACT,
+    finite_mean,
+    normalize_seeds,
+    require_finite,
+    split_problems,
+)
 from lunarlab.audit.core import RewardAccountingWrapper, RewardTerm
 from lunarlab.audit.provenance import definition_document, reward_provenance
 
@@ -99,8 +104,8 @@ def audit_policy(
         "episodes": episodes,
         "aggregate": {
             "n_episodes": len(episodes),
-            "mean_original_return": statistics.fmean(orig),
-            "mean_training_return": statistics.fmean(train),
+            "mean_original_return": finite_mean(orig, "mean original return over the audited episodes"),
+            "mean_training_return": finite_mean(train, "mean training return over the audited episodes"),
             "outcomes": {c: sum(e["outcome"] == c for e in episodes) for c in adapter.outcome_categories},
             "metrics": {name: fn(episodes) for name, fn in adapter.metrics.items()},
         },

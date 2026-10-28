@@ -1,0 +1,213 @@
+{
+ "platform": "linux",
+ "artifacts": [
+  {
+   "artifact": "dqn-baseline-s0",
+   "status": "numerical-difference",
+   "blocking": false,
+   "exit_code": 3,
+   "integrity_ok": true,
+   "same_platform": false,
+   "platform_differences": {
+    "os": [
+     "Windows",
+     "Linux"
+    ],
+    "torch": [
+     "2.14.1",
+     "2.14.1+cpu"
+    ]
+   },
+   "episodes": 100,
+   "bit_identical": 0,
+   "outcome_agreement": 0.99,
+   "length_agreement": 0.8,
+   "median_abs_return_difference": 0.0004121211125038826,
+   "max_abs_return_difference": 191.74561927669063,
+   "mean_return": [
+    155.36443783032232,
+    156.87641692954435
+   ],
+   "pad_landing": [
+    0.29,
+    0.29
+   ],
+   "aggregates_consistent": true,
+   "reason": "100 of 100 episodes differ; median |return difference| 0.000412, largest 192; outcomes agree in 99%, on a different platform (os, torch differ); no compared aggregate differs significantly from the record",
+   "tolerated_because": "exact cross-platform identity is not a supported guarantee (docs/jmlr/REPRODUCIBILITY.md); integrity holds and no aggregate differs significantly from the record"
+  },
+  {
+   "artifact": "ppo-baseline-s0",
+   "status": "numerical-difference",
+   "blocking": false,
+   "exit_code": 3,
+   "integrity_ok": true,
+   "same_platform": false,
+   "platform_differences": {
+    "os": [
+     "Windows",
+     "Linux"
+    ],
+    "torch": [
+     "2.14.1",
+     "2.14.1+cpu"
+    ]
+   },
+   "episodes": 100,
+   "bit_identical": 0,
+   "outcome_agreement": 1.0,
+   "length_agreement": 0.97,
+   "median_abs_return_difference": 0.000842918145110616,
+   "max_abs_return_difference": 0.27668375129513834,
+   "mean_return": [
+    265.8557807369944,
+    265.86154628274727
+   ],
+   "pad_landing": [
+    0.96,
+    0.96
+   ],
+   "aggregates_consistent": true,
+   "reason": "100 of 100 episodes differ; median |return difference| 0.000843, largest 0.277; outcomes agree in 100%, on a different platform (os, torch differ); no compared aggregate differs significantly from the record",
+   "tolerated_because": "exact cross-platform identity is not a supported guarantee (docs/jmlr/REPRODUCIBILITY.md); integrity holds and no aggregate differs significantly from the record"
+  },
+  {
+   "artifact": "ppo-hover-bonus-s0",
+   "status": "numerical-difference",
+   "blocking": false,
+   "exit_code": 3,
+   "integrity_ok": true,
+   "same_platform": false,
+   "platform_differences": {
+    "os": [
+     "Windows",
+     "Linux"
+    ],
+    "torch": [
+     "2.14.1",
+     "2.14.1+cpu"
+    ]
+   },
+   "episodes": 100,
+   "bit_identical": 0,
+   "outcome_agreement": 1.0,
+   "length_agreement": 1.0,
+   "median_abs_return_difference": 2.374038695599194,
+   "max_abs_return_difference": 11.878744821987315,
+   "mean_return": [
+    -21.24555137350136,
+    -20.765847499775884
+   ],
+   "pad_landing": [
+    0.0,
+    0.0
+   ],
+   "aggregates_consistent": true,
+   "reason": "100 of 100 episodes differ; median |return difference| 2.37, largest 11.9; outcomes agree in 100%, on a different platform (os, torch differ); no compared aggregate differs significantly from the record",
+   "tolerated_because": "exact cross-platform identity is not a supported guarantee (docs/jmlr/REPRODUCIBILITY.md); integrity holds and no aggregate differs significantly from the record"
+  }
+ ],
+ "divergence": [
+  {
+   "artifact": "20261015-224317-dqn-baseline-s0-custom-2fe1",
+   "seed": 20000,
+   "source": "both",
+   "first_output_difference_step": 0,
+   "action_flips_on_reference_observations": 0,
+   "first_open_loop_observation_difference_step": 15,
+   "first_open_loop_difference_max_abs": 1.4901161193847656e-08,
+   "closed_loop_first_observation_difference_step": 15,
+   "closed_loop_abs_return_difference": 0.0008846751795204
+  },
+  {
+   "artifact": "20261015-224317-dqn-baseline-s0-custom-2fe1",
+   "seed": 20001,
+   "source": "both",
+   "first_output_difference_step": 0,
+   "action_flips_on_reference_observations": 0,
+   "first_open_loop_observation_difference_step": 2,
+   "first_open_loop_difference_max_abs": 5.21540641784668e-08,
+   "closed_loop_first_observation_difference_step": 2,
+   "closed_loop_abs_return_difference": 1.7092319694711477e-05
+  },
+  {
+   "artifact": "20261015-224317-dqn-baseline-s0-custom-2fe1",
+   "seed": 20002,
+   "source": "both",
+   "first_output_difference_step": 0,
+   "action_flips_on_reference_observations": 0,
+   "first_open_loop_observation_difference_step": 20,
+   "first_open_loop_difference_max_abs": 5.960464477539063e-08,
+   "closed_loop_first_observation_difference_step": 20,
+   "closed_loop_abs_return_difference": 0.00026462547251071555
+  },
+  {
+   "artifact": "20261015-223113-baseline-s0-standard-c5af",
+   "seed": 20000,
+   "source": "both",
+   "first_output_difference_step": 0,
+   "action_flips_on_reference_observations": 0,
+   "first_open_loop_observation_difference_step": 14,
+   "first_open_loop_difference_max_abs": 4.470348358154297e-08,
+   "closed_loop_first_observation_difference_step": 14,
+   "closed_loop_abs_return_difference": 0.002802242647589992
+  },
+  {
+   "artifact": "20261015-223113-baseline-s0-standard-c5af",
+   "seed": 20001,
+   "source": "both",
+   "first_output_difference_step": 0,
+   "action_flips_on_reference_observations": 0,
+   "first_open_loop_observation_difference_step": 2,
+   "first_open_loop_difference_max_abs": 5.21540641784668e-08,
+   "closed_loop_first_observation_difference_step": 2,
+   "closed_loop_abs_return_difference": 0.007182373539308173
+  },
+  {
+   "artifact": "20261015-223113-baseline-s0-standard-c5af",
+   "seed": 20002,
+   "source": "both",
+   "first_output_difference_step": 0,
+   "action_flips_on_reference_observations": 0,
+   "first_open_loop_observation_difference_step": 12,
+   "first_open_loop_difference_max_abs": 8.940696716308594e-08,
+   "closed_loop_first_observation_difference_step": 12,
+   "closed_loop_abs_return_difference": 4.636226373122554e-05
+  },
+  {
+   "artifact": "20261015-223115-hover-bonus-s0-standard-3376",
+   "seed": 20000,
+   "source": "both",
+   "first_output_difference_step": 0,
+   "action_flips_on_reference_observations": 0,
+   "first_open_loop_observation_difference_step": 14,
+   "first_open_loop_difference_max_abs": 5.960464477539063e-08,
+   "closed_loop_first_observation_difference_step": 14,
+   "closed_loop_abs_return_difference": 0.9005088239156627
+  },
+  {
+   "artifact": "20261015-223115-hover-bonus-s0-standard-3376",
+   "seed": 20001,
+   "source": "both",
+   "first_output_difference_step": 0,
+   "action_flips_on_reference_observations": 0,
+   "first_open_loop_observation_difference_step": 2,
+   "first_open_loop_difference_max_abs": 5.21540641784668e-08,
+   "closed_loop_first_observation_difference_step": 2,
+   "closed_loop_abs_return_difference": 2.2630171360126026
+  },
+  {
+   "artifact": "20261015-223115-hover-bonus-s0-standard-3376",
+   "seed": 20002,
+   "source": "both",
+   "first_output_difference_step": 0,
+   "action_flips_on_reference_observations": 0,
+   "first_open_loop_observation_difference_step": 24,
+   "first_open_loop_difference_max_abs": 8.940696716308594e-08,
+   "closed_loop_first_observation_difference_step": 24,
+   "closed_loop_abs_return_difference": 5.900440499368962
+  }
+ ],
+ "problems": [],
+ "ok": true
+}

@@ -1,0 +1,24 @@
+$ <validation-run>\venv\Scripts\python.exe -m lunarlab audit-artifact reproduce --artifact <validation-run>\cartpole-artifacts\main\upright-potential-s50 --report <validation-run>\reports\cartpole-main-upright-potential-s50.json
+(exit 0, 22.0 s)
+  [ok] manifest.json is present and readable
+  [ok] artifact schema is supported: lunarlab.audit-artifact/1
+  [ok] policy.zip has its recorded SHA-256
+  [ok] protocol.json has its recorded SHA-256
+  [ok] run.json has its recorded SHA-256
+  [ok] evaluation.json has its recorded SHA-256
+  [ok] reward.json has its recorded SHA-256
+  [ok] protocol digest matches the manifest, the training record and the test record
+  [ok] protocol is valid (seed contract, disjoint splits, known adapter and terms)
+  [ok] outcome schema matches the registered adapter (name, version, categories): artifact {'name': 'cartpole', 'version': '1', 'outcome_categories': ['balanced_to_time_limit', 'pole_fell', 'cart_left_track', 'unknown']}, registered cartpole v1 ['balanced_to_time_limit', 'pole_fell', 'cart_left_track', 'unknown']
+  [ok] reward definition rebuilt from the protocol has the recorded digest: rebuilt 48f30a8eaf3222f4..., recorded 48f30a8eaf3222f4...
+  [ok] policy is the checkpoint the run froze and the test evaluated
+  [ok] test seeds equal the protocol's
+  [ok] recorded episodes are the protocol's test seeds, once each and in order
+  [ok] every episode records the original and training reward channels
+  [ok] every recorded reward value is a finite number
+  [ok] every episode records exactly the design's terms
+  [ok] training return = weight x original return + term returns, in every episode
+  [ok] every outcome is one of the adapter's categories
+  status: exact: all 100 episodes match on the selected summary fields
+EXACT: all 100 episodes match on the selected summary fields
+report written to <validation-run>\reports\cartpole-main-upright-potential-s50.json

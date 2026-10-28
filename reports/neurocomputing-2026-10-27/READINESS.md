@@ -1,5 +1,17 @@
 # Readiness assessment: Neurocomputing research-strengthening revision
 
+> **Superseded on 28 October 2026** by
+> [`../neurocomputing-review-repairs-2026-10-28/READINESS.md`](../neurocomputing-review-repairs-2026-10-28/READINESS.md).
+> A review found three problems with this assessment:
+>
+> - **Records not committed:** the CartPole run records it says the analysis reproduces from had never
+>   been committed (an unanchored ignore rule); they are now.
+> - **Wording:** W2 is a *separately implemented* reference written by the same developer, not an
+>   independent implementation.
+> - **Two missed defects:** overflowing totals and malformed recorded episodes.
+>
+> The text below is kept as written.
+
 Written 28 October 2026, as evidence for the brief's reassessment. It is not a rating, and it does not
 estimate acceptance. The manuscript is **not submission-ready**; the blockers are listed below.
 

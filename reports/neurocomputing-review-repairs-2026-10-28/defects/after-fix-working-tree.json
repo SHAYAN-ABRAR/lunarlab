@@ -1,0 +1,114 @@
+{
+ "A1 two steps of 1e308, gamma 0.99": {
+  "steps": [
+   {
+    "reward": "1e+308",
+    "audit_episode": null
+   },
+   {
+    "exception": "NonFiniteValueError",
+    "message": "episode totals overflow at step 1: original_return, training_return, discounted_original_return, discounted_training_return. Every value of this transition is finite, but the accumulated total leaves the floating-point range, so the episode cannot be accounted"
+   }
+  ],
+  "step_after_end": "RuntimeError: step() called before reset() or after the episode ended",
+  "last_episode": null
+ },
+ "A2 two terms of 1e308 in one transition": {
+  "steps": [
+   {
+    "exception": "NonFiniteValueError",
+    "message": "the reward-term outputs at step 0 are each finite, but their sum overflows the floating-point range"
+   }
+  ],
+  "step_after_end": "RuntimeError: step() called before reset() or after the episode ended",
+  "last_episode": null
+ },
+ "A3 rescore_transitions of the same transitions": {
+  "exception": "NonFiniteValueError",
+  "message": "episode totals overflow at step 1: original_return, training_return, discounted_original_return, discounted_training_return. Every value of this transition is finite, but the accumulated total leaves the floating-point range, so the episode cannot be accounted"
+ },
+ "A4 audit_policy aggregate of two episodes of 1.5e308": {
+  "result": {
+   "n_episodes": 2,
+   "mean_original_return": 1.5e+308,
+   "mean_training_return": 1.5e+308,
+   "outcomes": {
+    "ended": 2
+   },
+   "metrics": {}
+  }
+ },
+ "B1 null original and training returns": {
+  "result": [
+   [
+    "every recorded reward value is a finite number",
+    false,
+    "episode 0: original_return is null; episode 0: training_return is null"
+   ],
+   [
+    "training return = weight x original return + term returns, in every episode",
+    false,
+    "not checked: channels incomplete"
+   ]
+  ]
+ },
+ "B2 boolean original return": {
+  "result": [
+   [
+    "every recorded reward value is a finite number",
+    false,
+    "episode 0: original_return is a boolean (True)"
+   ],
+   [
+    "training return = weight x original return + term returns, in every episode",
+    false,
+    "not checked: channels incomplete"
+   ]
+  ]
+ },
+ "B3 text training return": {
+  "result": [
+   [
+    "every recorded reward value is a finite number",
+    false,
+    "episode 0: training_return is a str ('3.0')"
+   ],
+   [
+    "training return = weight x original return + term returns, in every episode",
+    false,
+    "not checked: channels incomplete"
+   ]
+  ]
+ },
+ "B4 missing training return": {
+  "result": [
+   [
+    "every episode records the original and training reward channels",
+    false,
+    "episode 0: no training_return"
+   ],
+   [
+    "training return = weight x original return + term returns, in every episode",
+    false,
+    "not checked: channels incomplete"
+   ]
+  ]
+ },
+ "B5 null discounted (optional) return": {
+  "result": [
+   [
+    "every recorded reward value is a finite number",
+    false,
+    "episode 0: discounted_training_return is null"
+   ],
+   [
+    "training return = weight x original return + term returns, in every episode",
+    false,
+    "not checked: channels incomplete"
+   ]
+  ]
+ },
+ "B6 valid record": {
+  "result": []
+ }
+}

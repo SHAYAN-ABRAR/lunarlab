@@ -1,0 +1,4579 @@
+{
+ "schema": "lunarlab.audit-run/1",
+ "study_id": "cartpole-reward-design-2026-10-27",
+ "protocol_sha256": "4811d318e3797dbae804fac0783d051c4bc5a3fcbbbe63ca9a9f681c37ce0430",
+ "design": "failure-bonus",
+ "training_seed": 50,
+ "started_at": "2026-10-27T16:17:13+00:00",
+ "finished_at": "2026-10-27T16:18:21+00:00",
+ "training_seconds": 68.1755673000589,
+ "torch_threads": 1,
+ "transitions": {
+  "configured": 100000,
+  "actual": 100096,
+  "rollout_size": 256,
+  "rollouts": 391
+ },
+ "seeding": {
+  "learner_seed": 50,
+  "intended_first_reset_seeds": [
+   1050000,
+   1050001,
+   1050002,
+   1050003,
+   1050004,
+   1050005,
+   1050006,
+   1050007
+  ],
+  "effective_first_reset_seeds": [
+   1050000,
+   1050001,
+   1050002,
+   1050003,
+   1050004,
+   1050005,
+   1050006,
+   1050007
+  ],
+  "later_resets": 10123,
+  "later_resets_with_a_seed": 0,
+  "validation_seeds": [
+   110000,
+   110001,
+   110002,
+   110003,
+   110004,
+   110005,
+   110006,
+   110007,
+   110008,
+   110009,
+   110010,
+   110011,
+   110012,
+   110013,
+   110014,
+   110015,
+   110016,
+   110017,
+   110018,
+   110019
+  ],
+  "note": "later training episodes reset without a seed and continue each environment's random stream"
+ },
+ "reward": {
+  "design": {
+   "name": "failure-bonus",
+   "original_weight": 1.0,
+   "terms": [
+    {
+     "term": "failure_bonus",
+     "params": {
+      "bonus": 1000.0
+     }
+    }
+   ]
+  },
+  "definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+  "provenance": {
+   "schema": "lunarlab.reward-provenance/1",
+   "definition": {
+    "original_weight": 1.0,
+    "terms": {
+     "failure_bonus": {
+      "type": "termination_bonus",
+      "bonus": 1000.0
+     }
+    }
+   },
+   "definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+   "legacy_terms_hash": "b15b7aef7cda15f7",
+   "adapter": {
+    "name": "cartpole",
+    "version": "1"
+   },
+   "terms": {
+    "failure_bonus": {
+     "term_id": "lunarlab.audit.termination_bonus",
+     "term_version": "1",
+     "implementation": [
+      {
+       "module": "lunarlab.audit.core",
+       "qualname": "termination_bonus.<locals>.<lambda>",
+       "source_file_sha256": "5c175a5d85f242661d5282801c040e7b5578630f0568f8ec78bd98a58efe673f",
+       "source_file": "lunarlab/audit/core.py",
+       "git": {
+        "tracked": true,
+        "modified": false
+       },
+       "status": "tracked-unmodified"
+      }
+     ]
+    }
+   },
+   "source": {
+    "available": true,
+    "revision": "e7c3fabcc986ee66f56de6403f8772968559824d",
+    "dirty": false
+   },
+   "implementation_identity": "recorded",
+   "incomplete_reasons": [],
+   "scopes": {
+    "definition_sha256": "SHA-256 of the canonical JSON of the declared term descriptions and the original-reward weight. It identifies what was declared, not what the term callables compute.",
+    "source_file_sha256": "SHA-256 of the bytes of the file defining a callable, read at record time. It does not cover modules that file imports, data it reads, or interpreter and library versions.",
+    "source.revision": "git revision of the checkout; it pins a callable's code only when that callable's file is tracked and unmodified.",
+    "legacy_terms_hash": "schema-0 reward hash: the first 16 hex characters of SHA-256 over the same declared definition, kept so new records can be matched with older ones."
+   }
+  }
+ },
+ "checkpoints": [
+  {
+   "step": 10240,
+   "rollouts": 40,
+   "file": "checkpoints/step-00010240.zip",
+   "sha256": "db8edec2cef2069c6e0c940e1e8f91b36ccddb435900f7917d2db421164fda84",
+   "validation": {
+    "mean_original_return": 9.1,
+    "mean_training_return": 1009.1,
+    "success_rate": 0.0,
+    "outcomes": {
+     "balanced_to_time_limit": 0,
+     "pole_fell": 20,
+     "cart_left_track": 0,
+     "unknown": 0
+    },
+    "episodes": [
+     {
+      "length": 8,
+      "original_return": 8.0,
+      "training_return": 1008.0,
+      "discounted_original_return": 7.461848870910719,
+      "discounted_training_return": 875.5873821176305,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 868.1255332467198
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.22296014428138733,
+      "final_cart_position": -0.08303471654653549,
+      "seed": 110000
+     },
+     {
+      "length": 10,
+      "original_return": 10.0,
+      "training_return": 1010.0,
+      "discounted_original_return": 9.146359655622655,
+      "discounted_training_return": 842.8941217857723,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 833.7477621301497
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": -0.24651563167572021,
+      "final_cart_position": 0.1762159913778305,
+      "seed": 110001
+     },
+     {
+      "length": 8,
+      "original_return": 8.0,
+      "training_return": 1008.0,
+      "discounted_original_return": 7.461848870910719,
+      "discounted_training_return": 875.5873821176305,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 868.1255332467198
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": -0.21393990516662598,
+      "final_cart_position": 0.14050190150737762,
+      "seed": 110002
+     },
+     {
+      "length": 10,
+      "original_return": 10.0,
+      "training_return": 1010.0,
+      "discounted_original_return": 9.146359655622655,
+      "discounted_training_return": 842.8941217857723,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 833.7477621301497
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": -0.23101721704006195,
+      "final_cart_position": 0.16315864026546478,
+      "seed": 110003
+     },
+     {
+      "length": 10,
+      "original_return": 10.0,
+      "training_return": 1010.0,
+      "discounted_original_return": 9.146359655622655,
+      "discounted_training_return": 842.8941217857723,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 833.7477621301497
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": -0.24195431172847748,
+      "final_cart_position": 0.21149611473083496,
+      "seed": 110004
+     },
+     {
+      "length": 10,
+      "original_return": 10.0,
+      "training_return": 1010.0,
+      "discounted_original_return": 9.146359655622655,
+      "discounted_training_return": 842.8941217857723,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 833.7477621301497
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": -0.209480881690979,
+      "final_cart_position": 0.1391359120607376,
+      "seed": 110005
+     },
+     {
+      "length": 8,
+      "original_return": 8.0,
+      "training_return": 1008.0,
+      "discounted_original_return": 7.461848870910719,
+      "discounted_training_return": 875.5873821176305,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 868.1255332467198
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": -0.22442884743213654,
+      "final_cart_position": 0.06774035096168518,
+      "seed": 110006
+     },
+     {
+      "length": 10,
+      "original_return": 10.0,
+      "training_return": 1010.0,
+      "discounted_original_return": 9.146359655622655,
+      "discounted_training_return": 842.8941217857723,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 833.7477621301497
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": -0.2319781333208084,
+      "final_cart_position": 0.15340560674667358,
+      "seed": 110007
+     },
+     {
+      "length": 9,
+      "original_return": 9.0,
+      "training_return": 1009.0,
+      "discounted_original_return": 8.312611893492505,
+      "discounted_training_return": 859.0756344752779,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 850.7630225817853
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": -0.2516072690486908,
+      "final_cart_position": 0.18524077534675598,
+      "seed": 110008
+     },
+     {
+      "length": 8,
+      "original_return": 8.0,
+      "training_return": 1008.0,
+      "discounted_original_return": 7.461848870910719,
+      "discounted_training_return": 875.5873821176305,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 868.1255332467198
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": -0.21852964162826538,
+      "final_cart_position": 0.08977802097797394,
+      "seed": 110009
+     },
+     {
+      "length": 8,
+      "original_return": 8.0,
+      "training_return": 1008.0,
+      "discounted_original_return": 7.461848870910719,
+      "discounted_training_return": 875.5873821176305,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 868.1255332467198
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": -0.22621367871761322,
+      "final_cart_position": 0.13843177258968353,
+      "seed": 110010
+     },
+     {
+      "length": 8,
+      "original_return": 8.0,
+      "training_return": 1008.0,
+      "discounted_original_return": 7.461848870910719,
+      "discounted_training_return": 875.5873821176305,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 868.1255332467198
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": -0.21187831461429596,
+      "final_cart_position": 0.06275676190853119,
+      "seed": 110011
+     },
+     {
+      "length": 9,
+      "original_return": 9.0,
+      "training_return": 1009.0,
+      "discounted_original_return": 8.312611893492505,
+      "discounted_training_return": 859.0756344752779,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 850.7630225817853
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.23379479348659515,
+      "final_cart_position": -0.11751444637775421,
+      "seed": 110012
+     },
+     {
+      "length": 8,
+      "original_return": 8.0,
+      "training_return": 1008.0,
+      "discounted_original_return": 7.461848870910719,
+      "discounted_training_return": 875.5873821176305,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 868.1255332467198
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": -0.22165188193321228,
+      "final_cart_position": 0.12152344733476639,
+      "seed": 110013
+     },
+     {
+      "length": 11,
+      "original_return": 11.0,
+      "training_return": 1011.0,
+      "discounted_original_return": 9.963432462510202,
+      "discounted_training_return": 827.0362393500569,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 817.0728068875467
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": -0.25875967741012573,
+      "final_cart_position": 0.2069637030363083,
+      "seed": 110014
+     },
+     {
+      "length": 10,
+      "original_return": 10.0,
+      "training_return": 1010.0,
+      "discounted_original_return": 9.146359655622655,
+      "discounted_training_return": 842.8941217857723,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 833.7477621301497
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.22826270759105682,
+      "final_cart_position": -0.22296077013015747,
+      "seed": 110015
+     },
+     {
+      "length": 10,
+      "original_return": 10.0,
+      "training_return": 1010.0,
+      "discounted_original_return": 9.146359655622655,
+      "discounted_training_return": 842.8941217857723,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 833.7477621301497
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": -0.2292029857635498,
+      "final_cart_position": 0.15410591661930084,
+      "seed": 110016
+     },
+     {
+      "length": 9,
+      "original_return": 9.0,
+      "training_return": 1009.0,
+      "discounted_original_return": 8.312611893492505,
+      "discounted_training_return": 859.0756344752779,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 850.7630225817853
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": -0.232014462351799,
+      "final_cart_position": 0.09781013429164886,
+      "seed": 110017
+     },
+     {
+      "length": 9,
+      "original_return": 9.0,
+      "training_return": 1009.0,
+      "discounted_original_return": 8.312611893492505,
+      "discounted_training_return": 859.0756344752779,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 850.7630225817853
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": -0.23136727511882782,
+      "final_cart_position": 0.1827685534954071,
+      "seed": 110018
+     },
+     {
+      "length": 9,
+      "original_return": 9.0,
+      "training_return": 1009.0,
+      "discounted_original_return": 8.312611893492505,
+      "discounted_training_return": 859.0756344752779,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 850.7630225817853
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.2398405820131302,
+      "final_cart_position": -0.11763805150985718,
+      "seed": 110019
+     }
+    ]
+   },
+   "validation_seconds": 0.20540570002049208
+  },
+  {
+   "step": 20480,
+   "rollouts": 80,
+   "file": "checkpoints/step-00020480.zip",
+   "sha256": "264e83c9a3226896a38df0f97ad7d0c7abe1e03b74f45e42da6dd5ec385178c5",
+   "validation": {
+    "mean_original_return": 9.5,
+    "mean_training_return": 1009.5,
+    "success_rate": 0.0,
+    "outcomes": {
+     "balanced_to_time_limit": 0,
+     "pole_fell": 20,
+     "cart_left_track": 0,
+     "unknown": 0
+    },
+    "episodes": [
+     {
+      "length": 8,
+      "original_return": 8.0,
+      "training_return": 1008.0,
+      "discounted_original_return": 7.461848870910719,
+      "discounted_training_return": 875.5873821176305,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 868.1255332467198
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.22296014428138733,
+      "final_cart_position": -0.08303471654653549,
+      "seed": 110000
+     },
+     {
+      "length": 10,
+      "original_return": 10.0,
+      "training_return": 1010.0,
+      "discounted_original_return": 9.146359655622655,
+      "discounted_training_return": 842.8941217857723,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 833.7477621301497
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": -0.24651563167572021,
+      "final_cart_position": 0.1762159913778305,
+      "seed": 110001
+     },
+     {
+      "length": 10,
+      "original_return": 10.0,
+      "training_return": 1010.0,
+      "discounted_original_return": 9.146359655622655,
+      "discounted_training_return": 842.8941217857723,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 833.7477621301497
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.21958446502685547,
+      "final_cart_position": -0.14301222562789917,
+      "seed": 110002
+     },
+     {
+      "length": 9,
+      "original_return": 9.0,
+      "training_return": 1009.0,
+      "discounted_original_return": 8.312611893492505,
+      "discounted_training_return": 859.0756344752779,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 850.7630225817853
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.2529745399951935,
+      "final_cart_position": -0.15281185507774353,
+      "seed": 110003
+     },
+     {
+      "length": 9,
+      "original_return": 9.0,
+      "training_return": 1009.0,
+      "discounted_original_return": 8.312611893492505,
+      "discounted_training_return": 859.0756344752779,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 850.7630225817853
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.24270018935203552,
+      "final_cart_position": -0.10497736930847168,
+      "seed": 110004
+     },
+     {
+      "length": 8,
+      "original_return": 8.0,
+      "training_return": 1008.0,
+      "discounted_original_return": 7.461848870910719,
+      "discounted_training_return": 875.5873821176305,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 868.1255332467198
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.22139176726341248,
+      "final_cart_position": -0.14713367819786072,
+      "seed": 110005
+     },
+     {
+      "length": 11,
+      "original_return": 11.0,
+      "training_return": 1011.0,
+      "discounted_original_return": 9.963432462510202,
+      "discounted_training_return": 827.0362393500569,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 817.0728068875467
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.26541879773139954,
+      "final_cart_position": -0.25585392117500305,
+      "seed": 110006
+     },
+     {
+      "length": 9,
+      "original_return": 9.0,
+      "training_return": 1009.0,
+      "discounted_original_return": 8.312611893492505,
+      "discounted_training_return": 859.0756344752779,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 850.7630225817853
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.25253820419311523,
+      "final_cart_position": -0.16299952566623688,
+      "seed": 110007
+     },
+     {
+      "length": 9,
+      "original_return": 9.0,
+      "training_return": 1009.0,
+      "discounted_original_return": 8.312611893492505,
+      "discounted_training_return": 859.0756344752779,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 850.7630225817853
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": -0.2516072690486908,
+      "final_cart_position": 0.18524077534675598,
+      "seed": 110008
+     },
+     {
+      "length": 10,
+      "original_return": 10.0,
+      "training_return": 1010.0,
+      "discounted_original_return": 9.146359655622655,
+      "discounted_training_return": 842.8941217857723,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 833.7477621301497
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.21227648854255676,
+      "final_cart_position": -0.19582146406173706,
+      "seed": 110009
+     },
+     {
+      "length": 11,
+      "original_return": 11.0,
+      "training_return": 1011.0,
+      "discounted_original_return": 9.963432462510202,
+      "discounted_training_return": 827.0362393500569,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 817.0728068875467
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.2624654173851013,
+      "final_cart_position": -0.18745867908000946,
+      "seed": 110010
+     },
+     {
+      "length": 10,
+      "original_return": 10.0,
+      "training_return": 1010.0,
+      "discounted_original_return": 9.146359655622655,
+      "discounted_training_return": 842.8941217857723,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 833.7477621301497
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.2210138738155365,
+      "final_cart_position": -0.22335723042488098,
+      "seed": 110011
+     },
+     {
+      "length": 9,
+      "original_return": 9.0,
+      "training_return": 1009.0,
+      "discounted_original_return": 8.312611893492505,
+      "discounted_training_return": 859.0756344752779,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 850.7630225817853
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.23379479348659515,
+      "final_cart_position": -0.11751444637775421,
+      "seed": 110012
+     },
+     {
+      "length": 11,
+      "original_return": 11.0,
+      "training_return": 1011.0,
+      "discounted_original_return": 9.963432462510202,
+      "discounted_training_return": 827.0362393500569,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 817.0728068875467
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.2685757279396057,
+      "final_cart_position": -0.20211492478847504,
+      "seed": 110013
+     },
+     {
+      "length": 8,
+      "original_return": 8.0,
+      "training_return": 1008.0,
+      "discounted_original_return": 7.461848870910719,
+      "discounted_training_return": 875.5873821176305,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 868.1255332467198
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.22954054176807404,
+      "final_cart_position": -0.11991583555936813,
+      "seed": 110014
+     },
+     {
+      "length": 10,
+      "original_return": 10.0,
+      "training_return": 1010.0,
+      "discounted_original_return": 9.146359655622655,
+      "discounted_training_return": 842.8941217857723,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 833.7477621301497
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.22826270759105682,
+      "final_cart_position": -0.22296077013015747,
+      "seed": 110015
+     },
+     {
+      "length": 9,
+      "original_return": 9.0,
+      "training_return": 1009.0,
+      "discounted_original_return": 8.312611893492505,
+      "discounted_training_return": 859.0756344752779,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 850.7630225817853
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.2550412118434906,
+      "final_cart_position": -0.16210877895355225,
+      "seed": 110016
+     },
+     {
+      "length": 10,
+      "original_return": 10.0,
+      "training_return": 1010.0,
+      "discounted_original_return": 9.146359655622655,
+      "discounted_training_return": 842.8941217857723,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 833.7477621301497
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.25335240364074707,
+      "final_cart_position": -0.2180938422679901,
+      "seed": 110017
+     },
+     {
+      "length": 10,
+      "original_return": 10.0,
+      "training_return": 1010.0,
+      "discounted_original_return": 9.146359655622655,
+      "discounted_training_return": 842.8941217857723,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 833.7477621301497
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.25405070185661316,
+      "final_cart_position": -0.1336846500635147,
+      "seed": 110018
+     },
+     {
+      "length": 9,
+      "original_return": 9.0,
+      "training_return": 1009.0,
+      "discounted_original_return": 8.312611893492505,
+      "discounted_training_return": 859.0756344752779,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 850.7630225817853
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.2398405820131302,
+      "final_cart_position": -0.11763805150985718,
+      "seed": 110019
+     }
+    ]
+   },
+   "validation_seconds": 0.21859379997476935
+  },
+  {
+   "step": 30720,
+   "rollouts": 120,
+   "file": "checkpoints/step-00030720.zip",
+   "sha256": "611aceaf277c5859414933c18f379bbdbdede1b72508c748b169b3fca24bf997",
+   "validation": {
+    "mean_original_return": 9.5,
+    "mean_training_return": 1009.5,
+    "success_rate": 0.0,
+    "outcomes": {
+     "balanced_to_time_limit": 0,
+     "pole_fell": 20,
+     "cart_left_track": 0,
+     "unknown": 0
+    },
+    "episodes": [
+     {
+      "length": 8,
+      "original_return": 8.0,
+      "training_return": 1008.0,
+      "discounted_original_return": 7.461848870910719,
+      "discounted_training_return": 875.5873821176305,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 868.1255332467198
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.22296014428138733,
+      "final_cart_position": -0.08303471654653549,
+      "seed": 110000
+     },
+     {
+      "length": 10,
+      "original_return": 10.0,
+      "training_return": 1010.0,
+      "discounted_original_return": 9.146359655622655,
+      "discounted_training_return": 842.8941217857723,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 833.7477621301497
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": -0.24651563167572021,
+      "final_cart_position": 0.1762159913778305,
+      "seed": 110001
+     },
+     {
+      "length": 10,
+      "original_return": 10.0,
+      "training_return": 1010.0,
+      "discounted_original_return": 9.146359655622655,
+      "discounted_training_return": 842.8941217857723,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 833.7477621301497
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.21958446502685547,
+      "final_cart_position": -0.14301222562789917,
+      "seed": 110002
+     },
+     {
+      "length": 9,
+      "original_return": 9.0,
+      "training_return": 1009.0,
+      "discounted_original_return": 8.312611893492505,
+      "discounted_training_return": 859.0756344752779,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 850.7630225817853
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.2529745399951935,
+      "final_cart_position": -0.15281185507774353,
+      "seed": 110003
+     },
+     {
+      "length": 9,
+      "original_return": 9.0,
+      "training_return": 1009.0,
+      "discounted_original_return": 8.312611893492505,
+      "discounted_training_return": 859.0756344752779,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 850.7630225817853
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.24270018935203552,
+      "final_cart_position": -0.10497736930847168,
+      "seed": 110004
+     },
+     {
+      "length": 8,
+      "original_return": 8.0,
+      "training_return": 1008.0,
+      "discounted_original_return": 7.461848870910719,
+      "discounted_training_return": 875.5873821176305,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 868.1255332467198
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.22139176726341248,
+      "final_cart_position": -0.14713367819786072,
+      "seed": 110005
+     },
+     {
+      "length": 11,
+      "original_return": 11.0,
+      "training_return": 1011.0,
+      "discounted_original_return": 9.963432462510202,
+      "discounted_training_return": 827.0362393500569,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 817.0728068875467
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.26541879773139954,
+      "final_cart_position": -0.25585392117500305,
+      "seed": 110006
+     },
+     {
+      "length": 9,
+      "original_return": 9.0,
+      "training_return": 1009.0,
+      "discounted_original_return": 8.312611893492505,
+      "discounted_training_return": 859.0756344752779,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 850.7630225817853
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.25253820419311523,
+      "final_cart_position": -0.16299952566623688,
+      "seed": 110007
+     },
+     {
+      "length": 9,
+      "original_return": 9.0,
+      "training_return": 1009.0,
+      "discounted_original_return": 8.312611893492505,
+      "discounted_training_return": 859.0756344752779,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 850.7630225817853
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": -0.2516072690486908,
+      "final_cart_position": 0.18524077534675598,
+      "seed": 110008
+     },
+     {
+      "length": 10,
+      "original_return": 10.0,
+      "training_return": 1010.0,
+      "discounted_original_return": 9.146359655622655,
+      "discounted_training_return": 842.8941217857723,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 833.7477621301497
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.21227648854255676,
+      "final_cart_position": -0.19582146406173706,
+      "seed": 110009
+     },
+     {
+      "length": 11,
+      "original_return": 11.0,
+      "training_return": 1011.0,
+      "discounted_original_return": 9.963432462510202,
+      "discounted_training_return": 827.0362393500569,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 817.0728068875467
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.2624654173851013,
+      "final_cart_position": -0.18745867908000946,
+      "seed": 110010
+     },
+     {
+      "length": 10,
+      "original_return": 10.0,
+      "training_return": 1010.0,
+      "discounted_original_return": 9.146359655622655,
+      "discounted_training_return": 842.8941217857723,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 833.7477621301497
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.2210138738155365,
+      "final_cart_position": -0.22335723042488098,
+      "seed": 110011
+     },
+     {
+      "length": 9,
+      "original_return": 9.0,
+      "training_return": 1009.0,
+      "discounted_original_return": 8.312611893492505,
+      "discounted_training_return": 859.0756344752779,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 850.7630225817853
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.23379479348659515,
+      "final_cart_position": -0.11751444637775421,
+      "seed": 110012
+     },
+     {
+      "length": 11,
+      "original_return": 11.0,
+      "training_return": 1011.0,
+      "discounted_original_return": 9.963432462510202,
+      "discounted_training_return": 827.0362393500569,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 817.0728068875467
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.2685757279396057,
+      "final_cart_position": -0.20211492478847504,
+      "seed": 110013
+     },
+     {
+      "length": 8,
+      "original_return": 8.0,
+      "training_return": 1008.0,
+      "discounted_original_return": 7.461848870910719,
+      "discounted_training_return": 875.5873821176305,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 868.1255332467198
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.22954054176807404,
+      "final_cart_position": -0.11991583555936813,
+      "seed": 110014
+     },
+     {
+      "length": 10,
+      "original_return": 10.0,
+      "training_return": 1010.0,
+      "discounted_original_return": 9.146359655622655,
+      "discounted_training_return": 842.8941217857723,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 833.7477621301497
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.22826270759105682,
+      "final_cart_position": -0.22296077013015747,
+      "seed": 110015
+     },
+     {
+      "length": 9,
+      "original_return": 9.0,
+      "training_return": 1009.0,
+      "discounted_original_return": 8.312611893492505,
+      "discounted_training_return": 859.0756344752779,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 850.7630225817853
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.2550412118434906,
+      "final_cart_position": -0.16210877895355225,
+      "seed": 110016
+     },
+     {
+      "length": 10,
+      "original_return": 10.0,
+      "training_return": 1010.0,
+      "discounted_original_return": 9.146359655622655,
+      "discounted_training_return": 842.8941217857723,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 833.7477621301497
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.25335240364074707,
+      "final_cart_position": -0.2180938422679901,
+      "seed": 110017
+     },
+     {
+      "length": 10,
+      "original_return": 10.0,
+      "training_return": 1010.0,
+      "discounted_original_return": 9.146359655622655,
+      "discounted_training_return": 842.8941217857723,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 833.7477621301497
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.25405070185661316,
+      "final_cart_position": -0.1336846500635147,
+      "seed": 110018
+     },
+     {
+      "length": 9,
+      "original_return": 9.0,
+      "training_return": 1009.0,
+      "discounted_original_return": 8.312611893492505,
+      "discounted_training_return": 859.0756344752779,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 850.7630225817853
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.2398405820131302,
+      "final_cart_position": -0.11763805150985718,
+      "seed": 110019
+     }
+    ]
+   },
+   "validation_seconds": 0.3209188000764698
+  },
+  {
+   "step": 40960,
+   "rollouts": 160,
+   "file": "checkpoints/step-00040960.zip",
+   "sha256": "f09135bfe3d20cda1fa89f14204e8b94da029db8b4d1e0e596b5883dc767e869",
+   "validation": {
+    "mean_original_return": 9.3,
+    "mean_training_return": 1009.3,
+    "success_rate": 0.0,
+    "outcomes": {
+     "balanced_to_time_limit": 0,
+     "pole_fell": 20,
+     "cart_left_track": 0,
+     "unknown": 0
+    },
+    "episodes": [
+     {
+      "length": 8,
+      "original_return": 8.0,
+      "training_return": 1008.0,
+      "discounted_original_return": 7.461848870910719,
+      "discounted_training_return": 875.5873821176305,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 868.1255332467198
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.22296014428138733,
+      "final_cart_position": -0.08303471654653549,
+      "seed": 110000
+     },
+     {
+      "length": 10,
+      "original_return": 10.0,
+      "training_return": 1010.0,
+      "discounted_original_return": 9.146359655622655,
+      "discounted_training_return": 842.8941217857723,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 833.7477621301497
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": -0.24651563167572021,
+      "final_cart_position": 0.1762159913778305,
+      "seed": 110001
+     },
+     {
+      "length": 10,
+      "original_return": 10.0,
+      "training_return": 1010.0,
+      "discounted_original_return": 9.146359655622655,
+      "discounted_training_return": 842.8941217857723,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 833.7477621301497
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.21958446502685547,
+      "final_cart_position": -0.14301222562789917,
+      "seed": 110002
+     },
+     {
+      "length": 9,
+      "original_return": 9.0,
+      "training_return": 1009.0,
+      "discounted_original_return": 8.312611893492505,
+      "discounted_training_return": 859.0756344752779,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 850.7630225817853
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.2529745399951935,
+      "final_cart_position": -0.15281185507774353,
+      "seed": 110003
+     },
+     {
+      "length": 9,
+      "original_return": 9.0,
+      "training_return": 1009.0,
+      "discounted_original_return": 8.312611893492505,
+      "discounted_training_return": 859.0756344752779,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 850.7630225817853
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.24270018935203552,
+      "final_cart_position": -0.10497736930847168,
+      "seed": 110004
+     },
+     {
+      "length": 8,
+      "original_return": 8.0,
+      "training_return": 1008.0,
+      "discounted_original_return": 7.461848870910719,
+      "discounted_training_return": 875.5873821176305,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 868.1255332467198
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.22139176726341248,
+      "final_cart_position": -0.14713367819786072,
+      "seed": 110005
+     },
+     {
+      "length": 11,
+      "original_return": 11.0,
+      "training_return": 1011.0,
+      "discounted_original_return": 9.963432462510202,
+      "discounted_training_return": 827.0362393500569,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 817.0728068875467
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.26541879773139954,
+      "final_cart_position": -0.25585392117500305,
+      "seed": 110006
+     },
+     {
+      "length": 10,
+      "original_return": 10.0,
+      "training_return": 1010.0,
+      "discounted_original_return": 9.146359655622655,
+      "discounted_training_return": 842.8941217857723,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 833.7477621301497
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": -0.2319781333208084,
+      "final_cart_position": 0.15340560674667358,
+      "seed": 110007
+     },
+     {
+      "length": 9,
+      "original_return": 9.0,
+      "training_return": 1009.0,
+      "discounted_original_return": 8.312611893492505,
+      "discounted_training_return": 859.0756344752779,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 850.7630225817853
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": -0.2516072690486908,
+      "final_cart_position": 0.18524077534675598,
+      "seed": 110008
+     },
+     {
+      "length": 8,
+      "original_return": 8.0,
+      "training_return": 1008.0,
+      "discounted_original_return": 7.461848870910719,
+      "discounted_training_return": 875.5873821176305,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 868.1255332467198
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": -0.21852964162826538,
+      "final_cart_position": 0.08977802097797394,
+      "seed": 110009
+     },
+     {
+      "length": 11,
+      "original_return": 11.0,
+      "training_return": 1011.0,
+      "discounted_original_return": 9.963432462510202,
+      "discounted_training_return": 827.0362393500569,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 817.0728068875467
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.2624654173851013,
+      "final_cart_position": -0.18745867908000946,
+      "seed": 110010
+     },
+     {
+      "length": 10,
+      "original_return": 10.0,
+      "training_return": 1010.0,
+      "discounted_original_return": 9.146359655622655,
+      "discounted_training_return": 842.8941217857723,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 833.7477621301497
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.2210138738155365,
+      "final_cart_position": -0.22335723042488098,
+      "seed": 110011
+     },
+     {
+      "length": 9,
+      "original_return": 9.0,
+      "training_return": 1009.0,
+      "discounted_original_return": 8.312611893492505,
+      "discounted_training_return": 859.0756344752779,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 850.7630225817853
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.23379479348659515,
+      "final_cart_position": -0.11751444637775421,
+      "seed": 110012
+     },
+     {
+      "length": 8,
+      "original_return": 8.0,
+      "training_return": 1008.0,
+      "discounted_original_return": 7.461848870910719,
+      "discounted_training_return": 875.5873821176305,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 868.1255332467198
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": -0.22165188193321228,
+      "final_cart_position": 0.12152344733476639,
+      "seed": 110013
+     },
+     {
+      "length": 8,
+      "original_return": 8.0,
+      "training_return": 1008.0,
+      "discounted_original_return": 7.461848870910719,
+      "discounted_training_return": 875.5873821176305,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 868.1255332467198
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.22954054176807404,
+      "final_cart_position": -0.11991583555936813,
+      "seed": 110014
+     },
+     {
+      "length": 10,
+      "original_return": 10.0,
+      "training_return": 1010.0,
+      "discounted_original_return": 9.146359655622655,
+      "discounted_training_return": 842.8941217857723,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 833.7477621301497
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.22826270759105682,
+      "final_cart_position": -0.22296077013015747,
+      "seed": 110015
+     },
+     {
+      "length": 9,
+      "original_return": 9.0,
+      "training_return": 1009.0,
+      "discounted_original_return": 8.312611893492505,
+      "discounted_training_return": 859.0756344752779,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 850.7630225817853
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.2550412118434906,
+      "final_cart_position": -0.16210877895355225,
+      "seed": 110016
+     },
+     {
+      "length": 10,
+      "original_return": 10.0,
+      "training_return": 1010.0,
+      "discounted_original_return": 9.146359655622655,
+      "discounted_training_return": 842.8941217857723,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 833.7477621301497
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.25335240364074707,
+      "final_cart_position": -0.2180938422679901,
+      "seed": 110017
+     },
+     {
+      "length": 10,
+      "original_return": 10.0,
+      "training_return": 1010.0,
+      "discounted_original_return": 9.146359655622655,
+      "discounted_training_return": 842.8941217857723,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 833.7477621301497
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.25405070185661316,
+      "final_cart_position": -0.1336846500635147,
+      "seed": 110018
+     },
+     {
+      "length": 9,
+      "original_return": 9.0,
+      "training_return": 1009.0,
+      "discounted_original_return": 8.312611893492505,
+      "discounted_training_return": 859.0756344752779,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 850.7630225817853
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.2398405820131302,
+      "final_cart_position": -0.11763805150985718,
+      "seed": 110019
+     }
+    ]
+   },
+   "validation_seconds": 0.20700559997931123
+  },
+  {
+   "step": 51200,
+   "rollouts": 200,
+   "file": "checkpoints/step-00051200.zip",
+   "sha256": "f2a7a90e63e7505723cfbddb2bda3bdd2562623480e5d1bc05d9e548e4af1387",
+   "validation": {
+    "mean_original_return": 9.15,
+    "mean_training_return": 1009.15,
+    "success_rate": 0.0,
+    "outcomes": {
+     "balanced_to_time_limit": 0,
+     "pole_fell": 20,
+     "cart_left_track": 0,
+     "unknown": 0
+    },
+    "episodes": [
+     {
+      "length": 8,
+      "original_return": 8.0,
+      "training_return": 1008.0,
+      "discounted_original_return": 7.461848870910719,
+      "discounted_training_return": 875.5873821176305,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 868.1255332467198
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.22296014428138733,
+      "final_cart_position": -0.08303471654653549,
+      "seed": 110000
+     },
+     {
+      "length": 10,
+      "original_return": 10.0,
+      "training_return": 1010.0,
+      "discounted_original_return": 9.146359655622655,
+      "discounted_training_return": 842.8941217857723,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 833.7477621301497
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": -0.24651563167572021,
+      "final_cart_position": 0.1762159913778305,
+      "seed": 110001
+     },
+     {
+      "length": 8,
+      "original_return": 8.0,
+      "training_return": 1008.0,
+      "discounted_original_return": 7.461848870910719,
+      "discounted_training_return": 875.5873821176305,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 868.1255332467198
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": -0.21393990516662598,
+      "final_cart_position": 0.14050190150737762,
+      "seed": 110002
+     },
+     {
+      "length": 10,
+      "original_return": 10.0,
+      "training_return": 1010.0,
+      "discounted_original_return": 9.146359655622655,
+      "discounted_training_return": 842.8941217857723,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 833.7477621301497
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": -0.23101721704006195,
+      "final_cart_position": 0.16315864026546478,
+      "seed": 110003
+     },
+     {
+      "length": 10,
+      "original_return": 10.0,
+      "training_return": 1010.0,
+      "discounted_original_return": 9.146359655622655,
+      "discounted_training_return": 842.8941217857723,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 833.7477621301497
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": -0.24195431172847748,
+      "final_cart_position": 0.21149611473083496,
+      "seed": 110004
+     },
+     {
+      "length": 10,
+      "original_return": 10.0,
+      "training_return": 1010.0,
+      "discounted_original_return": 9.146359655622655,
+      "discounted_training_return": 842.8941217857723,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 833.7477621301497
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": -0.209480881690979,
+      "final_cart_position": 0.1391359120607376,
+      "seed": 110005
+     },
+     {
+      "length": 8,
+      "original_return": 8.0,
+      "training_return": 1008.0,
+      "discounted_original_return": 7.461848870910719,
+      "discounted_training_return": 875.5873821176305,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 868.1255332467198
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": -0.22442884743213654,
+      "final_cart_position": 0.06774035096168518,
+      "seed": 110006
+     },
+     {
+      "length": 10,
+      "original_return": 10.0,
+      "training_return": 1010.0,
+      "discounted_original_return": 9.146359655622655,
+      "discounted_training_return": 842.8941217857723,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 833.7477621301497
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": -0.2319781333208084,
+      "final_cart_position": 0.15340560674667358,
+      "seed": 110007
+     },
+     {
+      "length": 9,
+      "original_return": 9.0,
+      "training_return": 1009.0,
+      "discounted_original_return": 8.312611893492505,
+      "discounted_training_return": 859.0756344752779,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 850.7630225817853
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": -0.2516072690486908,
+      "final_cart_position": 0.18524077534675598,
+      "seed": 110008
+     },
+     {
+      "length": 8,
+      "original_return": 8.0,
+      "training_return": 1008.0,
+      "discounted_original_return": 7.461848870910719,
+      "discounted_training_return": 875.5873821176305,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 868.1255332467198
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": -0.21852964162826538,
+      "final_cart_position": 0.08977802097797394,
+      "seed": 110009
+     },
+     {
+      "length": 8,
+      "original_return": 8.0,
+      "training_return": 1008.0,
+      "discounted_original_return": 7.461848870910719,
+      "discounted_training_return": 875.5873821176305,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 868.1255332467198
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": -0.22621367871761322,
+      "final_cart_position": 0.13843177258968353,
+      "seed": 110010
+     },
+     {
+      "length": 8,
+      "original_return": 8.0,
+      "training_return": 1008.0,
+      "discounted_original_return": 7.461848870910719,
+      "discounted_training_return": 875.5873821176305,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 868.1255332467198
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": -0.21187831461429596,
+      "final_cart_position": 0.06275676190853119,
+      "seed": 110011
+     },
+     {
+      "length": 9,
+      "original_return": 9.0,
+      "training_return": 1009.0,
+      "discounted_original_return": 8.312611893492505,
+      "discounted_training_return": 859.0756344752779,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 850.7630225817853
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.23379479348659515,
+      "final_cart_position": -0.11751444637775421,
+      "seed": 110012
+     },
+     {
+      "length": 8,
+      "original_return": 8.0,
+      "training_return": 1008.0,
+      "discounted_original_return": 7.461848870910719,
+      "discounted_training_return": 875.5873821176305,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 868.1255332467198
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": -0.22165188193321228,
+      "final_cart_position": 0.12152344733476639,
+      "seed": 110013
+     },
+     {
+      "length": 11,
+      "original_return": 11.0,
+      "training_return": 1011.0,
+      "discounted_original_return": 9.963432462510202,
+      "discounted_training_return": 827.0362393500569,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 817.0728068875467
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": -0.25875967741012573,
+      "final_cart_position": 0.2069637030363083,
+      "seed": 110014
+     },
+     {
+      "length": 10,
+      "original_return": 10.0,
+      "training_return": 1010.0,
+      "discounted_original_return": 9.146359655622655,
+      "discounted_training_return": 842.8941217857723,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 833.7477621301497
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.22826270759105682,
+      "final_cart_position": -0.22296077013015747,
+      "seed": 110015
+     },
+     {
+      "length": 10,
+      "original_return": 10.0,
+      "training_return": 1010.0,
+      "discounted_original_return": 9.146359655622655,
+      "discounted_training_return": 842.8941217857723,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 833.7477621301497
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": -0.2292029857635498,
+      "final_cart_position": 0.15410591661930084,
+      "seed": 110016
+     },
+     {
+      "length": 9,
+      "original_return": 9.0,
+      "training_return": 1009.0,
+      "discounted_original_return": 8.312611893492505,
+      "discounted_training_return": 859.0756344752779,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 850.7630225817853
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": -0.232014462351799,
+      "final_cart_position": 0.09781013429164886,
+      "seed": 110017
+     },
+     {
+      "length": 9,
+      "original_return": 9.0,
+      "training_return": 1009.0,
+      "discounted_original_return": 8.312611893492505,
+      "discounted_training_return": 859.0756344752779,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 850.7630225817853
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": -0.23136727511882782,
+      "final_cart_position": 0.1827685534954071,
+      "seed": 110018
+     },
+     {
+      "length": 10,
+      "original_return": 10.0,
+      "training_return": 1010.0,
+      "discounted_original_return": 9.146359655622655,
+      "discounted_training_return": 842.8941217857723,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 833.7477621301497
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": -0.24420472979545593,
+      "final_cart_position": 0.19975939393043518,
+      "seed": 110019
+     }
+    ]
+   },
+   "validation_seconds": 0.25012519978918135
+  },
+  {
+   "step": 61440,
+   "rollouts": 240,
+   "file": "checkpoints/step-00061440.zip",
+   "sha256": "775153434678f6a7a114f2d500314ff585d00df53f4c9705d95003ea09afa359",
+   "validation": {
+    "mean_original_return": 9.05,
+    "mean_training_return": 1009.05,
+    "success_rate": 0.0,
+    "outcomes": {
+     "balanced_to_time_limit": 0,
+     "pole_fell": 20,
+     "cart_left_track": 0,
+     "unknown": 0
+    },
+    "episodes": [
+     {
+      "length": 8,
+      "original_return": 8.0,
+      "training_return": 1008.0,
+      "discounted_original_return": 7.461848870910719,
+      "discounted_training_return": 875.5873821176305,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 868.1255332467198
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.22296014428138733,
+      "final_cart_position": -0.08303471654653549,
+      "seed": 110000
+     },
+     {
+      "length": 10,
+      "original_return": 10.0,
+      "training_return": 1010.0,
+      "discounted_original_return": 9.146359655622655,
+      "discounted_training_return": 842.8941217857723,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 833.7477621301497
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": -0.24651563167572021,
+      "final_cart_position": 0.1762159913778305,
+      "seed": 110001
+     },
+     {
+      "length": 10,
+      "original_return": 10.0,
+      "training_return": 1010.0,
+      "discounted_original_return": 9.146359655622655,
+      "discounted_training_return": 842.8941217857723,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 833.7477621301497
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.21958446502685547,
+      "final_cart_position": -0.14301222562789917,
+      "seed": 110002
+     },
+     {
+      "length": 9,
+      "original_return": 9.0,
+      "training_return": 1009.0,
+      "discounted_original_return": 8.312611893492505,
+      "discounted_training_return": 859.0756344752779,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 850.7630225817853
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.2529745399951935,
+      "final_cart_position": -0.15281185507774353,
+      "seed": 110003
+     },
+     {
+      "length": 9,
+      "original_return": 9.0,
+      "training_return": 1009.0,
+      "discounted_original_return": 8.312611893492505,
+      "discounted_training_return": 859.0756344752779,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 850.7630225817853
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.24270018935203552,
+      "final_cart_position": -0.10497736930847168,
+      "seed": 110004
+     },
+     {
+      "length": 8,
+      "original_return": 8.0,
+      "training_return": 1008.0,
+      "discounted_original_return": 7.461848870910719,
+      "discounted_training_return": 875.5873821176305,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 868.1255332467198
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.22139176726341248,
+      "final_cart_position": -0.14713367819786072,
+      "seed": 110005
+     },
+     {
+      "length": 8,
+      "original_return": 8.0,
+      "training_return": 1008.0,
+      "discounted_original_return": 7.461848870910719,
+      "discounted_training_return": 875.5873821176305,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 868.1255332467198
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": -0.22442884743213654,
+      "final_cart_position": 0.06774035096168518,
+      "seed": 110006
+     },
+     {
+      "length": 10,
+      "original_return": 10.0,
+      "training_return": 1010.0,
+      "discounted_original_return": 9.146359655622655,
+      "discounted_training_return": 842.8941217857723,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 833.7477621301497
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": -0.2319781333208084,
+      "final_cart_position": 0.15340560674667358,
+      "seed": 110007
+     },
+     {
+      "length": 9,
+      "original_return": 9.0,
+      "training_return": 1009.0,
+      "discounted_original_return": 8.312611893492505,
+      "discounted_training_return": 859.0756344752779,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 850.7630225817853
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": -0.2516072690486908,
+      "final_cart_position": 0.18524077534675598,
+      "seed": 110008
+     },
+     {
+      "length": 8,
+      "original_return": 8.0,
+      "training_return": 1008.0,
+      "discounted_original_return": 7.461848870910719,
+      "discounted_training_return": 875.5873821176305,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 868.1255332467198
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": -0.21852964162826538,
+      "final_cart_position": 0.08977802097797394,
+      "seed": 110009
+     },
+     {
+      "length": 8,
+      "original_return": 8.0,
+      "training_return": 1008.0,
+      "discounted_original_return": 7.461848870910719,
+      "discounted_training_return": 875.5873821176305,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 868.1255332467198
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": -0.22621367871761322,
+      "final_cart_position": 0.13843177258968353,
+      "seed": 110010
+     },
+     {
+      "length": 10,
+      "original_return": 10.0,
+      "training_return": 1010.0,
+      "discounted_original_return": 9.146359655622655,
+      "discounted_training_return": 842.8941217857723,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 833.7477621301497
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.2210138738155365,
+      "final_cart_position": -0.22335723042488098,
+      "seed": 110011
+     },
+     {
+      "length": 9,
+      "original_return": 9.0,
+      "training_return": 1009.0,
+      "discounted_original_return": 8.312611893492505,
+      "discounted_training_return": 859.0756344752779,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 850.7630225817853
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.23379479348659515,
+      "final_cart_position": -0.11751444637775421,
+      "seed": 110012
+     },
+     {
+      "length": 8,
+      "original_return": 8.0,
+      "training_return": 1008.0,
+      "discounted_original_return": 7.461848870910719,
+      "discounted_training_return": 875.5873821176305,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 868.1255332467198
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": -0.22165188193321228,
+      "final_cart_position": 0.12152344733476639,
+      "seed": 110013
+     },
+     {
+      "length": 8,
+      "original_return": 8.0,
+      "training_return": 1008.0,
+      "discounted_original_return": 7.461848870910719,
+      "discounted_training_return": 875.5873821176305,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 868.1255332467198
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.22954054176807404,
+      "final_cart_position": -0.11991583555936813,
+      "seed": 110014
+     },
+     {
+      "length": 10,
+      "original_return": 10.0,
+      "training_return": 1010.0,
+      "discounted_original_return": 9.146359655622655,
+      "discounted_training_return": 842.8941217857723,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 833.7477621301497
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.22826270759105682,
+      "final_cart_position": -0.22296077013015747,
+      "seed": 110015
+     },
+     {
+      "length": 10,
+      "original_return": 10.0,
+      "training_return": 1010.0,
+      "discounted_original_return": 9.146359655622655,
+      "discounted_training_return": 842.8941217857723,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 833.7477621301497
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": -0.2292029857635498,
+      "final_cart_position": 0.15410591661930084,
+      "seed": 110016
+     },
+     {
+      "length": 10,
+      "original_return": 10.0,
+      "training_return": 1010.0,
+      "discounted_original_return": 9.146359655622655,
+      "discounted_training_return": 842.8941217857723,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 833.7477621301497
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.25335240364074707,
+      "final_cart_position": -0.2180938422679901,
+      "seed": 110017
+     },
+     {
+      "length": 10,
+      "original_return": 10.0,
+      "training_return": 1010.0,
+      "discounted_original_return": 9.146359655622655,
+      "discounted_training_return": 842.8941217857723,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 833.7477621301497
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.25405070185661316,
+      "final_cart_position": -0.1336846500635147,
+      "seed": 110018
+     },
+     {
+      "length": 9,
+      "original_return": 9.0,
+      "training_return": 1009.0,
+      "discounted_original_return": 8.312611893492505,
+      "discounted_training_return": 859.0756344752779,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 850.7630225817853
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.2398405820131302,
+      "final_cart_position": -0.11763805150985718,
+      "seed": 110019
+     }
+    ]
+   },
+   "validation_seconds": 0.2233869000338018
+  },
+  {
+   "step": 71680,
+   "rollouts": 280,
+   "file": "checkpoints/step-00071680.zip",
+   "sha256": "aa2cf9d532ad3f21d9a7deabb67d1d33cc20b77a0b0fac7e7e66670fc945c061",
+   "validation": {
+    "mean_original_return": 9.45,
+    "mean_training_return": 1009.45,
+    "success_rate": 0.0,
+    "outcomes": {
+     "balanced_to_time_limit": 0,
+     "pole_fell": 20,
+     "cart_left_track": 0,
+     "unknown": 0
+    },
+    "episodes": [
+     {
+      "length": 8,
+      "original_return": 8.0,
+      "training_return": 1008.0,
+      "discounted_original_return": 7.461848870910719,
+      "discounted_training_return": 875.5873821176305,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 868.1255332467198
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.22296014428138733,
+      "final_cart_position": -0.08303471654653549,
+      "seed": 110000
+     },
+     {
+      "length": 9,
+      "original_return": 9.0,
+      "training_return": 1009.0,
+      "discounted_original_return": 8.312611893492505,
+      "discounted_training_return": 859.0756344752779,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 850.7630225817853
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.23872429132461548,
+      "final_cart_position": -0.14120973646640778,
+      "seed": 110001
+     },
+     {
+      "length": 10,
+      "original_return": 10.0,
+      "training_return": 1010.0,
+      "discounted_original_return": 9.146359655622655,
+      "discounted_training_return": 842.8941217857723,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 833.7477621301497
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.21958446502685547,
+      "final_cart_position": -0.14301222562789917,
+      "seed": 110002
+     },
+     {
+      "length": 9,
+      "original_return": 9.0,
+      "training_return": 1009.0,
+      "discounted_original_return": 8.312611893492505,
+      "discounted_training_return": 859.0756344752779,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 850.7630225817853
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.2529745399951935,
+      "final_cart_position": -0.15281185507774353,
+      "seed": 110003
+     },
+     {
+      "length": 9,
+      "original_return": 9.0,
+      "training_return": 1009.0,
+      "discounted_original_return": 8.312611893492505,
+      "discounted_training_return": 859.0756344752779,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 850.7630225817853
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.24270018935203552,
+      "final_cart_position": -0.10497736930847168,
+      "seed": 110004
+     },
+     {
+      "length": 8,
+      "original_return": 8.0,
+      "training_return": 1008.0,
+      "discounted_original_return": 7.461848870910719,
+      "discounted_training_return": 875.5873821176305,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 868.1255332467198
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.22139176726341248,
+      "final_cart_position": -0.14713367819786072,
+      "seed": 110005
+     },
+     {
+      "length": 11,
+      "original_return": 11.0,
+      "training_return": 1011.0,
+      "discounted_original_return": 9.963432462510202,
+      "discounted_training_return": 827.0362393500569,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 817.0728068875467
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.26541879773139954,
+      "final_cart_position": -0.25585392117500305,
+      "seed": 110006
+     },
+     {
+      "length": 9,
+      "original_return": 9.0,
+      "training_return": 1009.0,
+      "discounted_original_return": 8.312611893492505,
+      "discounted_training_return": 859.0756344752779,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 850.7630225817853
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.25253820419311523,
+      "final_cart_position": -0.16299952566623688,
+      "seed": 110007
+     },
+     {
+      "length": 9,
+      "original_return": 9.0,
+      "training_return": 1009.0,
+      "discounted_original_return": 8.312611893492505,
+      "discounted_training_return": 859.0756344752779,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 850.7630225817853
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": -0.2516072690486908,
+      "final_cart_position": 0.18524077534675598,
+      "seed": 110008
+     },
+     {
+      "length": 10,
+      "original_return": 10.0,
+      "training_return": 1010.0,
+      "discounted_original_return": 9.146359655622655,
+      "discounted_training_return": 842.8941217857723,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 833.7477621301497
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.21227648854255676,
+      "final_cart_position": -0.19582146406173706,
+      "seed": 110009
+     },
+     {
+      "length": 11,
+      "original_return": 11.0,
+      "training_return": 1011.0,
+      "discounted_original_return": 9.963432462510202,
+      "discounted_training_return": 827.0362393500569,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 817.0728068875467
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.2624654173851013,
+      "final_cart_position": -0.18745867908000946,
+      "seed": 110010
+     },
+     {
+      "length": 10,
+      "original_return": 10.0,
+      "training_return": 1010.0,
+      "discounted_original_return": 9.146359655622655,
+      "discounted_training_return": 842.8941217857723,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 833.7477621301497
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.2210138738155365,
+      "final_cart_position": -0.22335723042488098,
+      "seed": 110011
+     },
+     {
+      "length": 9,
+      "original_return": 9.0,
+      "training_return": 1009.0,
+      "discounted_original_return": 8.312611893492505,
+      "discounted_training_return": 859.0756344752779,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 850.7630225817853
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.23379479348659515,
+      "final_cart_position": -0.11751444637775421,
+      "seed": 110012
+     },
+     {
+      "length": 11,
+      "original_return": 11.0,
+      "training_return": 1011.0,
+      "discounted_original_return": 9.963432462510202,
+      "discounted_training_return": 827.0362393500569,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 817.0728068875467
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.2685757279396057,
+      "final_cart_position": -0.20211492478847504,
+      "seed": 110013
+     },
+     {
+      "length": 8,
+      "original_return": 8.0,
+      "training_return": 1008.0,
+      "discounted_original_return": 7.461848870910719,
+      "discounted_training_return": 875.5873821176305,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 868.1255332467198
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.22954054176807404,
+      "final_cart_position": -0.11991583555936813,
+      "seed": 110014
+     },
+     {
+      "length": 10,
+      "original_return": 10.0,
+      "training_return": 1010.0,
+      "discounted_original_return": 9.146359655622655,
+      "discounted_training_return": 842.8941217857723,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 833.7477621301497
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.22826270759105682,
+      "final_cart_position": -0.22296077013015747,
+      "seed": 110015
+     },
+     {
+      "length": 9,
+      "original_return": 9.0,
+      "training_return": 1009.0,
+      "discounted_original_return": 8.312611893492505,
+      "discounted_training_return": 859.0756344752779,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 850.7630225817853
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.2550412118434906,
+      "final_cart_position": -0.16210877895355225,
+      "seed": 110016
+     },
+     {
+      "length": 10,
+      "original_return": 10.0,
+      "training_return": 1010.0,
+      "discounted_original_return": 9.146359655622655,
+      "discounted_training_return": 842.8941217857723,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 833.7477621301497
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.25335240364074707,
+      "final_cart_position": -0.2180938422679901,
+      "seed": 110017
+     },
+     {
+      "length": 10,
+      "original_return": 10.0,
+      "training_return": 1010.0,
+      "discounted_original_return": 9.146359655622655,
+      "discounted_training_return": 842.8941217857723,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 833.7477621301497
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.25405070185661316,
+      "final_cart_position": -0.1336846500635147,
+      "seed": 110018
+     },
+     {
+      "length": 9,
+      "original_return": 9.0,
+      "training_return": 1009.0,
+      "discounted_original_return": 8.312611893492505,
+      "discounted_training_return": 859.0756344752779,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 850.7630225817853
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.2398405820131302,
+      "final_cart_position": -0.11763805150985718,
+      "seed": 110019
+     }
+    ]
+   },
+   "validation_seconds": 0.20750360004603863
+  },
+  {
+   "step": 81920,
+   "rollouts": 320,
+   "file": "checkpoints/step-00081920.zip",
+   "sha256": "b829e6b85692e521088815be0bf54bca0cbf30e23f936d3a359db72c167ce53a",
+   "validation": {
+    "mean_original_return": 9.5,
+    "mean_training_return": 1009.5,
+    "success_rate": 0.0,
+    "outcomes": {
+     "balanced_to_time_limit": 0,
+     "pole_fell": 20,
+     "cart_left_track": 0,
+     "unknown": 0
+    },
+    "episodes": [
+     {
+      "length": 8,
+      "original_return": 8.0,
+      "training_return": 1008.0,
+      "discounted_original_return": 7.461848870910719,
+      "discounted_training_return": 875.5873821176305,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 868.1255332467198
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.22296014428138733,
+      "final_cart_position": -0.08303471654653549,
+      "seed": 110000
+     },
+     {
+      "length": 10,
+      "original_return": 10.0,
+      "training_return": 1010.0,
+      "discounted_original_return": 9.146359655622655,
+      "discounted_training_return": 842.8941217857723,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 833.7477621301497
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": -0.24651563167572021,
+      "final_cart_position": 0.1762159913778305,
+      "seed": 110001
+     },
+     {
+      "length": 10,
+      "original_return": 10.0,
+      "training_return": 1010.0,
+      "discounted_original_return": 9.146359655622655,
+      "discounted_training_return": 842.8941217857723,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 833.7477621301497
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.21958446502685547,
+      "final_cart_position": -0.14301222562789917,
+      "seed": 110002
+     },
+     {
+      "length": 9,
+      "original_return": 9.0,
+      "training_return": 1009.0,
+      "discounted_original_return": 8.312611893492505,
+      "discounted_training_return": 859.0756344752779,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 850.7630225817853
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.2529745399951935,
+      "final_cart_position": -0.15281185507774353,
+      "seed": 110003
+     },
+     {
+      "length": 9,
+      "original_return": 9.0,
+      "training_return": 1009.0,
+      "discounted_original_return": 8.312611893492505,
+      "discounted_training_return": 859.0756344752779,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 850.7630225817853
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.24270018935203552,
+      "final_cart_position": -0.10497736930847168,
+      "seed": 110004
+     },
+     {
+      "length": 8,
+      "original_return": 8.0,
+      "training_return": 1008.0,
+      "discounted_original_return": 7.461848870910719,
+      "discounted_training_return": 875.5873821176305,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 868.1255332467198
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.22139176726341248,
+      "final_cart_position": -0.14713367819786072,
+      "seed": 110005
+     },
+     {
+      "length": 11,
+      "original_return": 11.0,
+      "training_return": 1011.0,
+      "discounted_original_return": 9.963432462510202,
+      "discounted_training_return": 827.0362393500569,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 817.0728068875467
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.26541879773139954,
+      "final_cart_position": -0.25585392117500305,
+      "seed": 110006
+     },
+     {
+      "length": 9,
+      "original_return": 9.0,
+      "training_return": 1009.0,
+      "discounted_original_return": 8.312611893492505,
+      "discounted_training_return": 859.0756344752779,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 850.7630225817853
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.25253820419311523,
+      "final_cart_position": -0.16299952566623688,
+      "seed": 110007
+     },
+     {
+      "length": 9,
+      "original_return": 9.0,
+      "training_return": 1009.0,
+      "discounted_original_return": 8.312611893492505,
+      "discounted_training_return": 859.0756344752779,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 850.7630225817853
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": -0.2516072690486908,
+      "final_cart_position": 0.18524077534675598,
+      "seed": 110008
+     },
+     {
+      "length": 10,
+      "original_return": 10.0,
+      "training_return": 1010.0,
+      "discounted_original_return": 9.146359655622655,
+      "discounted_training_return": 842.8941217857723,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 833.7477621301497
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.21227648854255676,
+      "final_cart_position": -0.19582146406173706,
+      "seed": 110009
+     },
+     {
+      "length": 11,
+      "original_return": 11.0,
+      "training_return": 1011.0,
+      "discounted_original_return": 9.963432462510202,
+      "discounted_training_return": 827.0362393500569,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 817.0728068875467
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.2624654173851013,
+      "final_cart_position": -0.18745867908000946,
+      "seed": 110010
+     },
+     {
+      "length": 10,
+      "original_return": 10.0,
+      "training_return": 1010.0,
+      "discounted_original_return": 9.146359655622655,
+      "discounted_training_return": 842.8941217857723,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 833.7477621301497
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.2210138738155365,
+      "final_cart_position": -0.22335723042488098,
+      "seed": 110011
+     },
+     {
+      "length": 9,
+      "original_return": 9.0,
+      "training_return": 1009.0,
+      "discounted_original_return": 8.312611893492505,
+      "discounted_training_return": 859.0756344752779,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 850.7630225817853
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.23379479348659515,
+      "final_cart_position": -0.11751444637775421,
+      "seed": 110012
+     },
+     {
+      "length": 11,
+      "original_return": 11.0,
+      "training_return": 1011.0,
+      "discounted_original_return": 9.963432462510202,
+      "discounted_training_return": 827.0362393500569,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 817.0728068875467
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.2685757279396057,
+      "final_cart_position": -0.20211492478847504,
+      "seed": 110013
+     },
+     {
+      "length": 8,
+      "original_return": 8.0,
+      "training_return": 1008.0,
+      "discounted_original_return": 7.461848870910719,
+      "discounted_training_return": 875.5873821176305,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 868.1255332467198
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.22954054176807404,
+      "final_cart_position": -0.11991583555936813,
+      "seed": 110014
+     },
+     {
+      "length": 10,
+      "original_return": 10.0,
+      "training_return": 1010.0,
+      "discounted_original_return": 9.146359655622655,
+      "discounted_training_return": 842.8941217857723,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 833.7477621301497
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.22826270759105682,
+      "final_cart_position": -0.22296077013015747,
+      "seed": 110015
+     },
+     {
+      "length": 9,
+      "original_return": 9.0,
+      "training_return": 1009.0,
+      "discounted_original_return": 8.312611893492505,
+      "discounted_training_return": 859.0756344752779,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 850.7630225817853
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.2550412118434906,
+      "final_cart_position": -0.16210877895355225,
+      "seed": 110016
+     },
+     {
+      "length": 10,
+      "original_return": 10.0,
+      "training_return": 1010.0,
+      "discounted_original_return": 9.146359655622655,
+      "discounted_training_return": 842.8941217857723,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 833.7477621301497
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.25335240364074707,
+      "final_cart_position": -0.2180938422679901,
+      "seed": 110017
+     },
+     {
+      "length": 10,
+      "original_return": 10.0,
+      "training_return": 1010.0,
+      "discounted_original_return": 9.146359655622655,
+      "discounted_training_return": 842.8941217857723,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 833.7477621301497
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.25405070185661316,
+      "final_cart_position": -0.1336846500635147,
+      "seed": 110018
+     },
+     {
+      "length": 9,
+      "original_return": 9.0,
+      "training_return": 1009.0,
+      "discounted_original_return": 8.312611893492505,
+      "discounted_training_return": 859.0756344752779,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 850.7630225817853
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.2398405820131302,
+      "final_cart_position": -0.11763805150985718,
+      "seed": 110019
+     }
+    ]
+   },
+   "validation_seconds": 0.24013800011016428
+  },
+  {
+   "step": 92160,
+   "rollouts": 360,
+   "file": "checkpoints/step-00092160.zip",
+   "sha256": "a80a3b58a1b9e6d5a06b910e696b8fc125630645075f747138ff784176761bb9",
+   "validation": {
+    "mean_original_return": 9.5,
+    "mean_training_return": 1009.5,
+    "success_rate": 0.0,
+    "outcomes": {
+     "balanced_to_time_limit": 0,
+     "pole_fell": 20,
+     "cart_left_track": 0,
+     "unknown": 0
+    },
+    "episodes": [
+     {
+      "length": 8,
+      "original_return": 8.0,
+      "training_return": 1008.0,
+      "discounted_original_return": 7.461848870910719,
+      "discounted_training_return": 875.5873821176305,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 868.1255332467198
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.22296014428138733,
+      "final_cart_position": -0.08303471654653549,
+      "seed": 110000
+     },
+     {
+      "length": 10,
+      "original_return": 10.0,
+      "training_return": 1010.0,
+      "discounted_original_return": 9.146359655622655,
+      "discounted_training_return": 842.8941217857723,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 833.7477621301497
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": -0.24651563167572021,
+      "final_cart_position": 0.1762159913778305,
+      "seed": 110001
+     },
+     {
+      "length": 10,
+      "original_return": 10.0,
+      "training_return": 1010.0,
+      "discounted_original_return": 9.146359655622655,
+      "discounted_training_return": 842.8941217857723,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 833.7477621301497
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.21958446502685547,
+      "final_cart_position": -0.14301222562789917,
+      "seed": 110002
+     },
+     {
+      "length": 9,
+      "original_return": 9.0,
+      "training_return": 1009.0,
+      "discounted_original_return": 8.312611893492505,
+      "discounted_training_return": 859.0756344752779,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 850.7630225817853
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.2529745399951935,
+      "final_cart_position": -0.15281185507774353,
+      "seed": 110003
+     },
+     {
+      "length": 9,
+      "original_return": 9.0,
+      "training_return": 1009.0,
+      "discounted_original_return": 8.312611893492505,
+      "discounted_training_return": 859.0756344752779,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 850.7630225817853
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.24270018935203552,
+      "final_cart_position": -0.10497736930847168,
+      "seed": 110004
+     },
+     {
+      "length": 8,
+      "original_return": 8.0,
+      "training_return": 1008.0,
+      "discounted_original_return": 7.461848870910719,
+      "discounted_training_return": 875.5873821176305,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 868.1255332467198
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.22139176726341248,
+      "final_cart_position": -0.14713367819786072,
+      "seed": 110005
+     },
+     {
+      "length": 11,
+      "original_return": 11.0,
+      "training_return": 1011.0,
+      "discounted_original_return": 9.963432462510202,
+      "discounted_training_return": 827.0362393500569,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 817.0728068875467
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.26541879773139954,
+      "final_cart_position": -0.25585392117500305,
+      "seed": 110006
+     },
+     {
+      "length": 9,
+      "original_return": 9.0,
+      "training_return": 1009.0,
+      "discounted_original_return": 8.312611893492505,
+      "discounted_training_return": 859.0756344752779,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 850.7630225817853
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.25253820419311523,
+      "final_cart_position": -0.16299952566623688,
+      "seed": 110007
+     },
+     {
+      "length": 9,
+      "original_return": 9.0,
+      "training_return": 1009.0,
+      "discounted_original_return": 8.312611893492505,
+      "discounted_training_return": 859.0756344752779,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 850.7630225817853
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": -0.2516072690486908,
+      "final_cart_position": 0.18524077534675598,
+      "seed": 110008
+     },
+     {
+      "length": 10,
+      "original_return": 10.0,
+      "training_return": 1010.0,
+      "discounted_original_return": 9.146359655622655,
+      "discounted_training_return": 842.8941217857723,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 833.7477621301497
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.21227648854255676,
+      "final_cart_position": -0.19582146406173706,
+      "seed": 110009
+     },
+     {
+      "length": 11,
+      "original_return": 11.0,
+      "training_return": 1011.0,
+      "discounted_original_return": 9.963432462510202,
+      "discounted_training_return": 827.0362393500569,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 817.0728068875467
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.2624654173851013,
+      "final_cart_position": -0.18745867908000946,
+      "seed": 110010
+     },
+     {
+      "length": 10,
+      "original_return": 10.0,
+      "training_return": 1010.0,
+      "discounted_original_return": 9.146359655622655,
+      "discounted_training_return": 842.8941217857723,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 833.7477621301497
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.2210138738155365,
+      "final_cart_position": -0.22335723042488098,
+      "seed": 110011
+     },
+     {
+      "length": 9,
+      "original_return": 9.0,
+      "training_return": 1009.0,
+      "discounted_original_return": 8.312611893492505,
+      "discounted_training_return": 859.0756344752779,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 850.7630225817853
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.23379479348659515,
+      "final_cart_position": -0.11751444637775421,
+      "seed": 110012
+     },
+     {
+      "length": 11,
+      "original_return": 11.0,
+      "training_return": 1011.0,
+      "discounted_original_return": 9.963432462510202,
+      "discounted_training_return": 827.0362393500569,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 817.0728068875467
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.2685757279396057,
+      "final_cart_position": -0.20211492478847504,
+      "seed": 110013
+     },
+     {
+      "length": 8,
+      "original_return": 8.0,
+      "training_return": 1008.0,
+      "discounted_original_return": 7.461848870910719,
+      "discounted_training_return": 875.5873821176305,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 868.1255332467198
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.22954054176807404,
+      "final_cart_position": -0.11991583555936813,
+      "seed": 110014
+     },
+     {
+      "length": 10,
+      "original_return": 10.0,
+      "training_return": 1010.0,
+      "discounted_original_return": 9.146359655622655,
+      "discounted_training_return": 842.8941217857723,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 833.7477621301497
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.22826270759105682,
+      "final_cart_position": -0.22296077013015747,
+      "seed": 110015
+     },
+     {
+      "length": 9,
+      "original_return": 9.0,
+      "training_return": 1009.0,
+      "discounted_original_return": 8.312611893492505,
+      "discounted_training_return": 859.0756344752779,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 850.7630225817853
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.2550412118434906,
+      "final_cart_position": -0.16210877895355225,
+      "seed": 110016
+     },
+     {
+      "length": 10,
+      "original_return": 10.0,
+      "training_return": 1010.0,
+      "discounted_original_return": 9.146359655622655,
+      "discounted_training_return": 842.8941217857723,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 833.7477621301497
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.25335240364074707,
+      "final_cart_position": -0.2180938422679901,
+      "seed": 110017
+     },
+     {
+      "length": 10,
+      "original_return": 10.0,
+      "training_return": 1010.0,
+      "discounted_original_return": 9.146359655622655,
+      "discounted_training_return": 842.8941217857723,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 833.7477621301497
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.25405070185661316,
+      "final_cart_position": -0.1336846500635147,
+      "seed": 110018
+     },
+     {
+      "length": 9,
+      "original_return": 9.0,
+      "training_return": 1009.0,
+      "discounted_original_return": 8.312611893492505,
+      "discounted_training_return": 859.0756344752779,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 850.7630225817853
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.2398405820131302,
+      "final_cart_position": -0.11763805150985718,
+      "seed": 110019
+     }
+    ]
+   },
+   "validation_seconds": 0.2053358000703156
+  },
+  {
+   "step": 100096,
+   "rollouts": 391,
+   "file": "checkpoints/step-00100096.zip",
+   "sha256": "f7c0d8e0d0f96f00e2a96e04d05fba314a251a3a1ecd9b87fb25ce6870dd82de",
+   "validation": {
+    "mean_original_return": 9.5,
+    "mean_training_return": 1009.5,
+    "success_rate": 0.0,
+    "outcomes": {
+     "balanced_to_time_limit": 0,
+     "pole_fell": 20,
+     "cart_left_track": 0,
+     "unknown": 0
+    },
+    "episodes": [
+     {
+      "length": 8,
+      "original_return": 8.0,
+      "training_return": 1008.0,
+      "discounted_original_return": 7.461848870910719,
+      "discounted_training_return": 875.5873821176305,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 868.1255332467198
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.22296014428138733,
+      "final_cart_position": -0.08303471654653549,
+      "seed": 110000
+     },
+     {
+      "length": 10,
+      "original_return": 10.0,
+      "training_return": 1010.0,
+      "discounted_original_return": 9.146359655622655,
+      "discounted_training_return": 842.8941217857723,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 833.7477621301497
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": -0.24651563167572021,
+      "final_cart_position": 0.1762159913778305,
+      "seed": 110001
+     },
+     {
+      "length": 10,
+      "original_return": 10.0,
+      "training_return": 1010.0,
+      "discounted_original_return": 9.146359655622655,
+      "discounted_training_return": 842.8941217857723,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 833.7477621301497
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.21958446502685547,
+      "final_cart_position": -0.14301222562789917,
+      "seed": 110002
+     },
+     {
+      "length": 9,
+      "original_return": 9.0,
+      "training_return": 1009.0,
+      "discounted_original_return": 8.312611893492505,
+      "discounted_training_return": 859.0756344752779,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 850.7630225817853
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.2529745399951935,
+      "final_cart_position": -0.15281185507774353,
+      "seed": 110003
+     },
+     {
+      "length": 9,
+      "original_return": 9.0,
+      "training_return": 1009.0,
+      "discounted_original_return": 8.312611893492505,
+      "discounted_training_return": 859.0756344752779,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 850.7630225817853
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.24270018935203552,
+      "final_cart_position": -0.10497736930847168,
+      "seed": 110004
+     },
+     {
+      "length": 8,
+      "original_return": 8.0,
+      "training_return": 1008.0,
+      "discounted_original_return": 7.461848870910719,
+      "discounted_training_return": 875.5873821176305,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 868.1255332467198
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.22139176726341248,
+      "final_cart_position": -0.14713367819786072,
+      "seed": 110005
+     },
+     {
+      "length": 11,
+      "original_return": 11.0,
+      "training_return": 1011.0,
+      "discounted_original_return": 9.963432462510202,
+      "discounted_training_return": 827.0362393500569,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 817.0728068875467
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.26541879773139954,
+      "final_cart_position": -0.25585392117500305,
+      "seed": 110006
+     },
+     {
+      "length": 9,
+      "original_return": 9.0,
+      "training_return": 1009.0,
+      "discounted_original_return": 8.312611893492505,
+      "discounted_training_return": 859.0756344752779,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 850.7630225817853
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.25253820419311523,
+      "final_cart_position": -0.16299952566623688,
+      "seed": 110007
+     },
+     {
+      "length": 9,
+      "original_return": 9.0,
+      "training_return": 1009.0,
+      "discounted_original_return": 8.312611893492505,
+      "discounted_training_return": 859.0756344752779,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 850.7630225817853
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": -0.2516072690486908,
+      "final_cart_position": 0.18524077534675598,
+      "seed": 110008
+     },
+     {
+      "length": 10,
+      "original_return": 10.0,
+      "training_return": 1010.0,
+      "discounted_original_return": 9.146359655622655,
+      "discounted_training_return": 842.8941217857723,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 833.7477621301497
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.21227648854255676,
+      "final_cart_position": -0.19582146406173706,
+      "seed": 110009
+     },
+     {
+      "length": 11,
+      "original_return": 11.0,
+      "training_return": 1011.0,
+      "discounted_original_return": 9.963432462510202,
+      "discounted_training_return": 827.0362393500569,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 817.0728068875467
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.2624654173851013,
+      "final_cart_position": -0.18745867908000946,
+      "seed": 110010
+     },
+     {
+      "length": 10,
+      "original_return": 10.0,
+      "training_return": 1010.0,
+      "discounted_original_return": 9.146359655622655,
+      "discounted_training_return": 842.8941217857723,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 833.7477621301497
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.2210138738155365,
+      "final_cart_position": -0.22335723042488098,
+      "seed": 110011
+     },
+     {
+      "length": 9,
+      "original_return": 9.0,
+      "training_return": 1009.0,
+      "discounted_original_return": 8.312611893492505,
+      "discounted_training_return": 859.0756344752779,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 850.7630225817853
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.23379479348659515,
+      "final_cart_position": -0.11751444637775421,
+      "seed": 110012
+     },
+     {
+      "length": 11,
+      "original_return": 11.0,
+      "training_return": 1011.0,
+      "discounted_original_return": 9.963432462510202,
+      "discounted_training_return": 827.0362393500569,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 817.0728068875467
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.2685757279396057,
+      "final_cart_position": -0.20211492478847504,
+      "seed": 110013
+     },
+     {
+      "length": 8,
+      "original_return": 8.0,
+      "training_return": 1008.0,
+      "discounted_original_return": 7.461848870910719,
+      "discounted_training_return": 875.5873821176305,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 868.1255332467198
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.22954054176807404,
+      "final_cart_position": -0.11991583555936813,
+      "seed": 110014
+     },
+     {
+      "length": 10,
+      "original_return": 10.0,
+      "training_return": 1010.0,
+      "discounted_original_return": 9.146359655622655,
+      "discounted_training_return": 842.8941217857723,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 833.7477621301497
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.22826270759105682,
+      "final_cart_position": -0.22296077013015747,
+      "seed": 110015
+     },
+     {
+      "length": 9,
+      "original_return": 9.0,
+      "training_return": 1009.0,
+      "discounted_original_return": 8.312611893492505,
+      "discounted_training_return": 859.0756344752779,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 850.7630225817853
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.2550412118434906,
+      "final_cart_position": -0.16210877895355225,
+      "seed": 110016
+     },
+     {
+      "length": 10,
+      "original_return": 10.0,
+      "training_return": 1010.0,
+      "discounted_original_return": 9.146359655622655,
+      "discounted_training_return": 842.8941217857723,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 833.7477621301497
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.25335240364074707,
+      "final_cart_position": -0.2180938422679901,
+      "seed": 110017
+     },
+     {
+      "length": 10,
+      "original_return": 10.0,
+      "training_return": 1010.0,
+      "discounted_original_return": 9.146359655622655,
+      "discounted_training_return": 842.8941217857723,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 833.7477621301497
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.25405070185661316,
+      "final_cart_position": -0.1336846500635147,
+      "seed": 110018
+     },
+     {
+      "length": 9,
+      "original_return": 9.0,
+      "training_return": 1009.0,
+      "discounted_original_return": 8.312611893492505,
+      "discounted_training_return": 859.0756344752779,
+      "term_returns": {
+       "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+       "failure_bonus": 850.7630225817853
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.2398405820131302,
+      "final_cart_position": -0.11763805150985718,
+      "seed": 110019
+     }
+    ]
+   },
+   "validation_seconds": 0.22058379999361932
+  }
+ ],
+ "selection": {
+  "rule": "max-mean-original-validation-return",
+  "meaning": "the evaluated checkpoint with the highest mean ORIGINAL return on the validation seeds; ties go to the earliest checkpoint. Candidates are every scheduled checkpoint after training starts and the final one",
+  "step": 20480,
+  "sha256": "264e83c9a3226896a38df0f97ad7d0c7abe1e03b74f45e42da6dd5ec385178c5"
+ },
+ "frozen": {
+  "selected": {
+   "step": 20480,
+   "sha256": "264e83c9a3226896a38df0f97ad7d0c7abe1e03b74f45e42da6dd5ec385178c5",
+   "file": "frozen/264e83c9a3226896a38df0f97ad7d0c7abe1e03b74f45e42da6dd5ec385178c5.zip"
+  },
+  "final": {
+   "step": 100096,
+   "sha256": "f7c0d8e0d0f96f00e2a96e04d05fba314a251a3a1ecd9b87fb25ce6870dd82de",
+   "file": "frozen/f7c0d8e0d0f96f00e2a96e04d05fba314a251a3a1ecd9b87fb25ce6870dd82de.zip"
+  }
+ },
+ "software": {
+  "lunarlab": "0.1.0",
+  "git": {
+   "available": true,
+   "revision": "e7c3fabcc986ee66f56de6403f8772968559824d",
+   "dirty": false
+  },
+  "python": "3.12.13",
+  "python_implementation": "CPython",
+  "platform": "Windows-11-10.0.26300-SP0",
+  "packages": {
+   "gymnasium": "1.4.0",
+   "Box2D": "2.3.10",
+   "pygame": "2.6.1",
+   "stable-baselines3": "2.9.0",
+   "torch": "2.14.1",
+   "numpy": "2.5.4",
+   "pandas": "3.0.6",
+   "matplotlib": "3.11.2",
+   "imageio": "2.38.1",
+   "imageio-ffmpeg": "0.6.0",
+   "optuna": "5.0.0",
+   "fastapi": "0.143.1",
+   "uvicorn": "0.54.0",
+   "pydantic": "2.14.1",
+   "psutil": "7.2.2",
+   "PyYAML": "6.0.3"
+  }
+ }
+}

@@ -1,0 +1,1144 @@
+{
+  "status": "exact",
+  "exit_code": 0,
+  "reason": "all 20 episodes match on the selected summary fields",
+  "evaluation_skipped": false,
+  "checks": [
+    {
+      "check": "manifest.json is present and readable",
+      "ok": true,
+      "detail": "",
+      "kind": "integrity"
+    },
+    {
+      "check": "artifact schema is supported",
+      "ok": true,
+      "detail": "lunarlab.audit-artifact/1",
+      "kind": "integrity"
+    },
+    {
+      "check": "policy.zip has its recorded SHA-256",
+      "ok": true,
+      "detail": "",
+      "kind": "integrity"
+    },
+    {
+      "check": "protocol.json has its recorded SHA-256",
+      "ok": true,
+      "detail": "",
+      "kind": "integrity"
+    },
+    {
+      "check": "run.json has its recorded SHA-256",
+      "ok": true,
+      "detail": "",
+      "kind": "integrity"
+    },
+    {
+      "check": "evaluation.json has its recorded SHA-256",
+      "ok": true,
+      "detail": "",
+      "kind": "integrity"
+    },
+    {
+      "check": "reward.json has its recorded SHA-256",
+      "ok": true,
+      "detail": "",
+      "kind": "integrity"
+    },
+    {
+      "check": "protocol digest matches the manifest, the training record and the test record",
+      "ok": true,
+      "detail": "",
+      "kind": "integrity"
+    },
+    {
+      "check": "protocol is valid (seed contract, disjoint splits, known adapter and terms)",
+      "ok": true,
+      "detail": "",
+      "kind": "integrity"
+    },
+    {
+      "check": "outcome schema matches the registered adapter (name, version, categories)",
+      "ok": true,
+      "detail": "artifact {'name': 'cartpole', 'version': '1', 'outcome_categories': ['balanced_to_time_limit', 'pole_fell', 'cart_left_track', 'unknown']}, registered cartpole v1 ['balanced_to_time_limit', 'pole_fell', 'cart_left_track', 'unknown']",
+      "kind": "integrity"
+    },
+    {
+      "check": "reward definition rebuilt from the protocol has the recorded digest",
+      "ok": true,
+      "detail": "rebuilt b5bd5758ae151d20..., recorded b5bd5758ae151d20...",
+      "kind": "integrity"
+    },
+    {
+      "check": "policy is the checkpoint the run froze and the test evaluated",
+      "ok": true,
+      "detail": "",
+      "kind": "integrity"
+    },
+    {
+      "check": "test seeds equal the protocol's",
+      "ok": true,
+      "detail": "",
+      "kind": "integrity"
+    },
+    {
+      "check": "recorded episodes are the protocol's test seeds, once each and in order",
+      "ok": true,
+      "detail": "",
+      "kind": "record"
+    },
+    {
+      "check": "every episode records the original and training reward channels",
+      "ok": true,
+      "detail": "",
+      "kind": "record"
+    },
+    {
+      "check": "every recorded reward value is a finite number",
+      "ok": true,
+      "detail": "",
+      "kind": "record"
+    },
+    {
+      "check": "every episode records exactly the design's terms",
+      "ok": true,
+      "detail": "",
+      "kind": "record"
+    },
+    {
+      "check": "training return = weight x original return + term returns, in every episode",
+      "ok": true,
+      "detail": "",
+      "kind": "record"
+    },
+    {
+      "check": "every outcome is one of the adapter's categories",
+      "ok": true,
+      "detail": "",
+      "kind": "record"
+    }
+  ],
+  "comparison": {
+    "compared_fields": [
+      "length",
+      "original_return",
+      "training_return",
+      "outcome",
+      "terminated",
+      "truncated"
+    ],
+    "exactness_scope": "numeric equality of selected episode-summary fields; not full-trajectory or bitwise identity",
+    "compared": 20,
+    "exact": 20,
+    "within_tolerance": 20,
+    "tolerance": 0.0,
+    "max_abs_return_difference": 0.0,
+    "max_abs_original_return_difference": 0.0,
+    "max_abs_training_return_difference": 0.0,
+    "mismatches": [],
+    "n_mismatches": 0,
+    "missing_seeds": [],
+    "summary": {
+      "n": 20,
+      "agreement": {
+        "bit_identical": 1.0,
+        "length": 1.0,
+        "termination": 1.0,
+        "env_outcome": null,
+        "pad_landing": null,
+        "all_outcome_fields": 1.0
+      },
+      "return_difference": {
+        "mean_abs": 0.0,
+        "median_abs": 0.0,
+        "p90_abs": 0.0,
+        "max_abs": 0.0,
+        "median_relative": 0.0,
+        "n_relative": 20,
+        "relative_floor": 1.0,
+        "episodes_differing": 0,
+        "episodes_above_1": 0,
+        "episodes_above_10": 0
+      }
+    },
+    "episodes": [
+      {
+        "seed": 410000,
+        "exact": true,
+        "recorded_return": 8.0,
+        "reproduced_return": 8.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 8,
+        "reproduced_length": 8,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "outcome": [
+          "pole_fell",
+          "pole_fell"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 410001,
+        "exact": true,
+        "recorded_return": 10.0,
+        "reproduced_return": 10.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 10,
+        "reproduced_length": 10,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "outcome": [
+          "pole_fell",
+          "pole_fell"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 410002,
+        "exact": true,
+        "recorded_return": 9.0,
+        "reproduced_return": 9.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 9,
+        "reproduced_length": 9,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "outcome": [
+          "pole_fell",
+          "pole_fell"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 410003,
+        "exact": true,
+        "recorded_return": 10.0,
+        "reproduced_return": 10.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 10,
+        "reproduced_length": 10,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "outcome": [
+          "pole_fell",
+          "pole_fell"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 410004,
+        "exact": true,
+        "recorded_return": 9.0,
+        "reproduced_return": 9.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 9,
+        "reproduced_length": 9,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "outcome": [
+          "pole_fell",
+          "pole_fell"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 410005,
+        "exact": true,
+        "recorded_return": 10.0,
+        "reproduced_return": 10.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 10,
+        "reproduced_length": 10,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "outcome": [
+          "pole_fell",
+          "pole_fell"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 410006,
+        "exact": true,
+        "recorded_return": 9.0,
+        "reproduced_return": 9.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 9,
+        "reproduced_length": 9,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "outcome": [
+          "pole_fell",
+          "pole_fell"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 410007,
+        "exact": true,
+        "recorded_return": 8.0,
+        "reproduced_return": 8.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 8,
+        "reproduced_length": 8,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "outcome": [
+          "pole_fell",
+          "pole_fell"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 410008,
+        "exact": true,
+        "recorded_return": 10.0,
+        "reproduced_return": 10.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 10,
+        "reproduced_length": 10,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "outcome": [
+          "pole_fell",
+          "pole_fell"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 410009,
+        "exact": true,
+        "recorded_return": 10.0,
+        "reproduced_return": 10.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 10,
+        "reproduced_length": 10,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "outcome": [
+          "pole_fell",
+          "pole_fell"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 410010,
+        "exact": true,
+        "recorded_return": 9.0,
+        "reproduced_return": 9.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 9,
+        "reproduced_length": 9,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "outcome": [
+          "pole_fell",
+          "pole_fell"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 410011,
+        "exact": true,
+        "recorded_return": 10.0,
+        "reproduced_return": 10.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 10,
+        "reproduced_length": 10,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "outcome": [
+          "pole_fell",
+          "pole_fell"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 410012,
+        "exact": true,
+        "recorded_return": 9.0,
+        "reproduced_return": 9.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 9,
+        "reproduced_length": 9,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "outcome": [
+          "pole_fell",
+          "pole_fell"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 410013,
+        "exact": true,
+        "recorded_return": 9.0,
+        "reproduced_return": 9.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 9,
+        "reproduced_length": 9,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "outcome": [
+          "pole_fell",
+          "pole_fell"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 410014,
+        "exact": true,
+        "recorded_return": 9.0,
+        "reproduced_return": 9.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 9,
+        "reproduced_length": 9,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "outcome": [
+          "pole_fell",
+          "pole_fell"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 410015,
+        "exact": true,
+        "recorded_return": 9.0,
+        "reproduced_return": 9.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 9,
+        "reproduced_length": 9,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "outcome": [
+          "pole_fell",
+          "pole_fell"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 410016,
+        "exact": true,
+        "recorded_return": 10.0,
+        "reproduced_return": 10.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 10,
+        "reproduced_length": 10,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "outcome": [
+          "pole_fell",
+          "pole_fell"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 410017,
+        "exact": true,
+        "recorded_return": 10.0,
+        "reproduced_return": 10.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 10,
+        "reproduced_length": 10,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "outcome": [
+          "pole_fell",
+          "pole_fell"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 410018,
+        "exact": true,
+        "recorded_return": 9.0,
+        "reproduced_return": 9.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 9,
+        "reproduced_length": 9,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "outcome": [
+          "pole_fell",
+          "pole_fell"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 410019,
+        "exact": true,
+        "recorded_return": 9.0,
+        "reproduced_return": 9.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 9,
+        "reproduced_length": 9,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "outcome": [
+          "pole_fell",
+          "pole_fell"
+        ],
+        "outcome_agrees": true
+      }
+    ]
+  },
+  "aggregates": {
+    "equivalence_assessed": false,
+    "interpretation": "Non-rejection of paired difference tests does not establish equivalence.",
+    "criterion": "Holm-corrected family-wise alpha = 0.05",
+    "metrics": {
+      "mean_original_return": {
+        "paired_mean_difference": 0.0,
+        "test": "sign-flip permutation test of the paired differences",
+        "p_value": 1.0,
+        "significant": false
+      },
+      "success_rate": {
+        "episodes_gained": 0,
+        "episodes_lost": 0,
+        "test": "exact McNemar test",
+        "p_value": 1.0,
+        "significant": false
+      }
+    },
+    "consistent": true
+  },
+  "platform": {
+    "basis": "operating system and numerical libraries (torch, numpy, Box2D, gymnasium, stable-baselines3) of artifact.json 'exported_with' versus this machine",
+    "recorded": {
+      "platform": "Windows-11-10.0.26300-SP0",
+      "python": "3.12.13",
+      "os": "Windows",
+      "torch": "2.14.1",
+      "numpy": "2.5.4",
+      "Box2D": "2.3.10",
+      "gymnasium": "1.4.0",
+      "stable-baselines3": "2.9.0"
+    },
+    "reproduced": {
+      "platform": "Windows-11-10.0.26300-SP0",
+      "python": "3.12.13",
+      "os": "Windows",
+      "torch": "2.14.1",
+      "numpy": "2.5.4",
+      "Box2D": "2.3.10",
+      "gymnasium": "1.4.0",
+      "stable-baselines3": "2.9.0"
+    },
+    "differences": {},
+    "same_platform": true
+  },
+  "reproduced_with": {
+    "lunarlab": "0.1.0",
+    "git": {
+      "available": false,
+      "reason": "not a git repository"
+    },
+    "python": "3.12.13",
+    "python_implementation": "CPython",
+    "platform": "Windows-11-10.0.26300-SP0",
+    "packages": {
+      "gymnasium": "1.4.0",
+      "Box2D": "2.3.10",
+      "pygame": "2.6.1",
+      "stable-baselines3": "2.9.0",
+      "torch": "2.14.1",
+      "numpy": "2.5.4",
+      "pandas": "3.0.6",
+      "matplotlib": "3.11.2",
+      "imageio": "2.38.1",
+      "imageio-ffmpeg": "0.6.0",
+      "optuna": "5.0.0",
+      "fastapi": "0.143.1",
+      "uvicorn": "0.54.0",
+      "pydantic": "2.14.1",
+      "psutil": "7.2.2",
+      "PyYAML": "6.0.3"
+    }
+  },
+  "reproduced_episodes": [
+    {
+      "length": 8,
+      "original_return": 8.0,
+      "training_return": 1008.0,
+      "discounted_original_return": 7.461848870910719,
+      "discounted_training_return": 875.5873821176305,
+      "term_returns": {
+        "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+        "failure_bonus": 868.1255332467198
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.21967704594135284,
+      "final_cart_position": -0.09461264312267303,
+      "seed": 410000
+    },
+    {
+      "length": 10,
+      "original_return": 10.0,
+      "training_return": 1010.0,
+      "discounted_original_return": 9.146359655622655,
+      "discounted_training_return": 842.8941217857723,
+      "term_returns": {
+        "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+        "failure_bonus": 833.7477621301497
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": -0.2207970768213272,
+      "final_cart_position": 0.1615021526813507,
+      "seed": 410001
+    },
+    {
+      "length": 9,
+      "original_return": 9.0,
+      "training_return": 1009.0,
+      "discounted_original_return": 8.312611893492505,
+      "discounted_training_return": 859.0756344752779,
+      "term_returns": {
+        "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+        "failure_bonus": 850.7630225817853
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.21349969506263733,
+      "final_cart_position": -0.1945229470729828,
+      "seed": 410002
+    },
+    {
+      "length": 10,
+      "original_return": 10.0,
+      "training_return": 1010.0,
+      "discounted_original_return": 9.146359655622655,
+      "discounted_training_return": 842.8941217857723,
+      "term_returns": {
+        "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+        "failure_bonus": 833.7477621301497
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.2629638612270355,
+      "final_cart_position": -0.22755491733551025,
+      "seed": 410003
+    },
+    {
+      "length": 9,
+      "original_return": 9.0,
+      "training_return": 1009.0,
+      "discounted_original_return": 8.312611893492505,
+      "discounted_training_return": 859.0756344752779,
+      "term_returns": {
+        "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+        "failure_bonus": 850.7630225817853
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.2257305532693863,
+      "final_cart_position": -0.09397599846124649,
+      "seed": 410004
+    },
+    {
+      "length": 10,
+      "original_return": 10.0,
+      "training_return": 1010.0,
+      "discounted_original_return": 9.146359655622655,
+      "discounted_training_return": 842.8941217857723,
+      "term_returns": {
+        "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+        "failure_bonus": 833.7477621301497
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.2277357578277588,
+      "final_cart_position": -0.22132408618927002,
+      "seed": 410005
+    },
+    {
+      "length": 9,
+      "original_return": 9.0,
+      "training_return": 1009.0,
+      "discounted_original_return": 8.312611893492505,
+      "discounted_training_return": 859.0756344752779,
+      "term_returns": {
+        "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+        "failure_bonus": 850.7630225817853
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.23692795634269714,
+      "final_cart_position": -0.1654759794473648,
+      "seed": 410006
+    },
+    {
+      "length": 8,
+      "original_return": 8.0,
+      "training_return": 1008.0,
+      "discounted_original_return": 7.461848870910719,
+      "discounted_training_return": 875.5873821176305,
+      "term_returns": {
+        "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+        "failure_bonus": 868.1255332467198
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": -0.21037407219409943,
+      "final_cart_position": 0.16085517406463623,
+      "seed": 410007
+    },
+    {
+      "length": 10,
+      "original_return": 10.0,
+      "training_return": 1010.0,
+      "discounted_original_return": 9.146359655622655,
+      "discounted_training_return": 842.8941217857723,
+      "term_returns": {
+        "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+        "failure_bonus": 833.7477621301497
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.23927736282348633,
+      "final_cart_position": -0.2004675269126892,
+      "seed": 410008
+    },
+    {
+      "length": 10,
+      "original_return": 10.0,
+      "training_return": 1010.0,
+      "discounted_original_return": 9.146359655622655,
+      "discounted_training_return": 842.8941217857723,
+      "term_returns": {
+        "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+        "failure_bonus": 833.7477621301497
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": -0.24623939394950867,
+      "final_cart_position": 0.17489083111286163,
+      "seed": 410009
+    },
+    {
+      "length": 9,
+      "original_return": 9.0,
+      "training_return": 1009.0,
+      "discounted_original_return": 8.312611893492505,
+      "discounted_training_return": 859.0756344752779,
+      "term_returns": {
+        "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+        "failure_bonus": 850.7630225817853
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": -0.2454652041196823,
+      "final_cart_position": 0.10992161184549332,
+      "seed": 410010
+    },
+    {
+      "length": 10,
+      "original_return": 10.0,
+      "training_return": 1010.0,
+      "discounted_original_return": 9.146359655622655,
+      "discounted_training_return": 842.8941217857723,
+      "term_returns": {
+        "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+        "failure_bonus": 833.7477621301497
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.2588823139667511,
+      "final_cart_position": -0.14624112844467163,
+      "seed": 410011
+    },
+    {
+      "length": 9,
+      "original_return": 9.0,
+      "training_return": 1009.0,
+      "discounted_original_return": 8.312611893492505,
+      "discounted_training_return": 859.0756344752779,
+      "term_returns": {
+        "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+        "failure_bonus": 850.7630225817853
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.25257015228271484,
+      "final_cart_position": -0.15454810857772827,
+      "seed": 410012
+    },
+    {
+      "length": 9,
+      "original_return": 9.0,
+      "training_return": 1009.0,
+      "discounted_original_return": 8.312611893492505,
+      "discounted_training_return": 859.0756344752779,
+      "term_returns": {
+        "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+        "failure_bonus": 850.7630225817853
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.2498132884502411,
+      "final_cart_position": -0.10469144582748413,
+      "seed": 410013
+    },
+    {
+      "length": 9,
+      "original_return": 9.0,
+      "training_return": 1009.0,
+      "discounted_original_return": 8.312611893492505,
+      "discounted_training_return": 859.0756344752779,
+      "term_returns": {
+        "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+        "failure_bonus": 850.7630225817853
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.23341012001037598,
+      "final_cart_position": -0.1252516806125641,
+      "seed": 410014
+    },
+    {
+      "length": 9,
+      "original_return": 9.0,
+      "training_return": 1009.0,
+      "discounted_original_return": 8.312611893492505,
+      "discounted_training_return": 859.0756344752779,
+      "term_returns": {
+        "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+        "failure_bonus": 850.7630225817853
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.24816285073757172,
+      "final_cart_position": -0.1717379093170166,
+      "seed": 410015
+    },
+    {
+      "length": 10,
+      "original_return": 10.0,
+      "training_return": 1010.0,
+      "discounted_original_return": 9.146359655622655,
+      "discounted_training_return": 842.8941217857723,
+      "term_returns": {
+        "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+        "failure_bonus": 833.7477621301497
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": -0.23692063987255096,
+      "final_cart_position": 0.21298398077487946,
+      "seed": 410016
+    },
+    {
+      "length": 10,
+      "original_return": 10.0,
+      "training_return": 1010.0,
+      "discounted_original_return": 9.146359655622655,
+      "discounted_training_return": 842.8941217857723,
+      "term_returns": {
+        "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+        "failure_bonus": 833.7477621301497
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.23493996262550354,
+      "final_cart_position": -0.14644387364387512,
+      "seed": 410017
+    },
+    {
+      "length": 9,
+      "original_return": 9.0,
+      "training_return": 1009.0,
+      "discounted_original_return": 8.312611893492505,
+      "discounted_training_return": 859.0756344752779,
+      "term_returns": {
+        "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+        "failure_bonus": 850.7630225817853
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.254705011844635,
+      "final_cart_position": -0.1813095360994339,
+      "seed": 410018
+    },
+    {
+      "length": 9,
+      "original_return": 9.0,
+      "training_return": 1009.0,
+      "discounted_original_return": 8.312611893492505,
+      "discounted_training_return": 859.0756344752779,
+      "term_returns": {
+        "failure_bonus": 1000.0
+      },
+      "term_discounted_returns": {
+        "failure_bonus": 850.7630225817853
+      },
+      "terminated": true,
+      "truncated": false,
+      "reward_hash": "b15b7aef7cda15f7",
+      "reward_definition_sha256": "b5bd5758ae151d20538ef31096629918004a4d7cb55aabe649ed4750eb1c2736",
+      "outcome": "pole_fell",
+      "final_pole_angle_rad": 0.23302967846393585,
+      "final_cart_position": -0.18586887419223785,
+      "seed": 410019
+    }
+  ]
+}

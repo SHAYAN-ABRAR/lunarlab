@@ -232,6 +232,20 @@ TAMPERING = {
         ),
         "finite number",
     ),
+    "null reward values": (
+        lambda a: _rewrite(
+            a,
+            "evaluation.json",
+            lambda d: d["report"]["episodes"][0].update(original_return=None, training_return=None),
+        ),
+        "finite number",
+    ),
+    "boolean reward value": (
+        lambda a: _rewrite(
+            a, "evaluation.json", lambda d: d["report"]["episodes"][0].update(original_return=True)
+        ),
+        "finite number",
+    ),
     "outcome outside the schema": (
         lambda a: _rewrite(
             a, "evaluation.json", lambda d: d["report"]["episodes"][2].update(outcome="landed")
@@ -275,6 +289,107 @@ def test_tampering_is_caught_before_any_episode_runs(artifact, case, monkeypatch
     assert result["status"] == "integrity-failure" and result["exit_code"] == 1
     assert result["evaluation_skipped"] and not ran
     assert main(["audit-artifact", "verify", "--artifact", str(artifact)]) == 1
+
+
+@pytest.mark.slow
+def test_a_malformed_record_is_reported_as_such_and_blocks_replay(artifact, capsys, monkeypatch):
+    _rewrite(
+        artifact,
+        "evaluation.json",
+        lambda d: d["report"]["episodes"][0].update(original_return=None, training_return=None),
+    )
+    verification = st.verify_artifact(artifact)
+    assert not verification["ok"] and verification["failed_kinds"] == [
+        "record"
+    ]  # every file matches its digest
+    details = " ".join(c["detail"] for c in verification["checks"] if not c["ok"])
+    assert "episode 0: original_return is null" in details and "episode 0: training_return is null" in details
+    ran = []
+    monkeypatch.setattr(st, "audit_policy", lambda *a, **k: ran.append(1))
+    result = st.reproduce_artifact(artifact, echo=lambda _m: None)
+    assert result["status"] == "integrity-failure" and result["exit_code"] == 1  # blocking, unlike exit 3
+    assert result["evaluation_skipped"] and not ran and result["failed_kinds"] == ["record"]
+    assert result["reason"].startswith("the recorded evaluation is not well formed")
+    capsys.readouterr()
+    assert main(["audit-artifact", "verify", "--artifact", str(artifact)]) == 1
+    out = capsys.readouterr().out
+    assert "MALFORMED-RECORD (blocking)" in out and "[FAIL (record)]" in out
+
+
+@pytest.mark.slow
+def test_an_integrity_failure_is_labelled_as_one(artifact, capsys):
+    p = artifact / "policy.zip"
+    _make_writable(p)
+    p.write_bytes(b"not a model")
+    assert st.verify_artifact(artifact)["failed_kinds"] == ["integrity"]
+    capsys.readouterr()
+    assert main(["audit-artifact", "verify", "--artifact", str(artifact)]) == 1
+    out = capsys.readouterr().out
+    assert "INTEGRITY-FAILURE (blocking)" in out and "MALFORMED-RECORD" not in out
+
+
+GOOD_EPISODE = {
+    "seed": 1,
+    "original_return": 3.0,
+    "training_return": 1003.0,
+    "discounted_original_return": 2.9,
+    "discounted_training_return": 2.9,
+    "term_returns": {"bonus": 1000.0},
+    "term_discounted_returns": {"bonus": 970.0},
+    "outcome": "ended",
+}
+MALFORMED = {  # change to a valid episode -> text the failed check must contain
+    "null required returns": ({"original_return": None, "training_return": None}, "original_return is null"),
+    "boolean": ({"original_return": True}, "original_return is a boolean (True)"),
+    "text": ({"training_return": "1003.0"}, "training_return is a str"),
+    "NaN": ({"training_return": float("nan")}, "training_return is not finite (nan)"),
+    "null term value": ({"term_returns": {"bonus": None}}, "term_returns['bonus'] is null"),
+    "term values not an object": ({"term_returns": [1000.0]}, "term_returns is list, not an object"),
+    "null optional value": ({"discounted_training_return": None}, "discounted_training_return is null"),
+    "boolean optional term value": (
+        {"term_discounted_returns": {"bonus": False}},
+        "term_discounted_returns['bonus'] is a boolean",
+    ),
+}
+
+
+def _failed(episodes) -> dict[str, str]:
+    checks = st.check_recorded_episodes(
+        episodes, expected_seeds=[1], term_names=["bonus"], original_weight=1.0, categories=("ended",)
+    )
+    return {name: detail for name, ok, detail in checks if not ok}
+
+
+@pytest.mark.parametrize("case", sorted(MALFORMED))
+def test_malformed_recorded_values_are_reported_never_raised_or_converted(case):
+    change, expected = MALFORMED[case]
+    failed = _failed([{**GOOD_EPISODE, **change}])
+    assert expected in failed["every recorded reward value is a finite number"]
+    assert failed["training return = weight x original return + term returns, in every episode"] == (
+        "not checked: channels incomplete"
+    )
+
+
+def test_required_and_optional_reward_fields_are_distinguished():
+    assert _failed([GOOD_EPISODE]) == {}
+    optional_absent = {
+        k: v
+        for k, v in GOOD_EPISODE.items()
+        if k not in st.OPTIONAL_RETURN_FIELDS + (st.OPTIONAL_TERM_FIELD,)
+    }
+    assert _failed([optional_absent]) == {}  # optional fields may be omitted
+    required_absent = {k: v for k, v in GOOD_EPISODE.items() if k != "training_return"}
+    assert (
+        "episode 0: no training_return"
+        in _failed([required_absent])["every episode records the original and training reward channels"]
+    )
+    no_terms = {k: v for k, v in GOOD_EPISODE.items() if k != st.REQUIRED_TERM_FIELD}
+    assert "every episode records exactly the design's terms" in _failed([no_terms])
+
+
+def test_records_that_are_not_episode_objects_are_reported():
+    assert _failed(None) == {"recorded episodes are a list of episode objects": "got NoneType"}
+    assert "not objects: 0" in _failed([3.0])["recorded episodes are a list of episode objects"]
 
 
 def test_the_cli_refuses_a_folder_without_a_manifest(tmp_path):

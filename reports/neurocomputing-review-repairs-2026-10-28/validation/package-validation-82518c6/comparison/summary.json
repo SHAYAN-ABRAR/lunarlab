@@ -1,0 +1,2393 @@
+{
+ "inventory_cases": 14,
+ "rows": [
+  {
+   "case": "C0-clean",
+   "kind": "control",
+   "targets": [],
+   "expected_verdict": "accepted",
+   "workflow": "W1",
+   "exit_code": 4,
+   "verdict": "unchecked",
+   "episodes_executed": 100,
+   "wall_seconds": 19.42657219991088,
+   "checks": {
+    "S1": {
+     "status": "unsupported",
+     "detail": "SB3 neither records nor verifies a checkpoint digest; PPO.load only validated and loaded the archive"
+    },
+    "S2": {
+     "status": "unsupported",
+     "detail": "no dependency or record files are verified"
+    },
+    "S3": {
+     "status": "unsupported",
+     "detail": "the saved configuration is used for evaluation, not compared with a recorded evaluation"
+    },
+    "S4": {
+     "status": "unsupported",
+     "detail": "seeds are passed to reset(seed=int(seed)); int() converts floats and numeric strings without notice"
+    },
+    "S5": {
+     "status": "unsupported",
+     "detail": "reward parameters are not read: the evaluation uses the original reward only"
+    },
+    "S6": {
+     "status": "unsupported",
+     "detail": "the recorded evaluation is not read"
+    },
+    "S7": {
+     "status": "unsupported",
+     "detail": "the recorded evaluation is not read"
+    },
+    "S8": {
+     "status": "unsupported",
+     "detail": "reward terms are not re-scored"
+    },
+    "S9": {
+     "status": "unsupported",
+     "detail": "no outcome schema is compared"
+    },
+    "S10": {
+     "status": "unsupported",
+     "detail": "results are not compared with the recorded evaluation"
+    }
+   },
+   "outcome": "unsupported",
+   "note": "results produced without the specification's checks; no false alarm"
+  },
+  {
+   "case": "C0-clean",
+   "kind": "control",
+   "targets": [],
+   "expected_verdict": "accepted",
+   "workflow": "W2",
+   "exit_code": 0,
+   "verdict": "accepted",
+   "episodes_executed": 100,
+   "wall_seconds": 19.744501899927855,
+   "checks": {
+    "S1": {
+     "status": "pass",
+     "detail": "policy 7aa5207e7aeeec75..."
+    },
+    "S2": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S3": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S4": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S5": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S6": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S7": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S8": {
+     "status": "pass",
+     "detail": "largest difference 0"
+    },
+    "S9": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S10": {
+     "status": "pass",
+     "detail": "exact: 0 of 100 episodes differ"
+    }
+   },
+   "outcome": "correct",
+   "note": "accepted"
+  },
+  {
+   "case": "C0-clean",
+   "kind": "control",
+   "targets": [],
+   "expected_verdict": "accepted",
+   "workflow": "W3",
+   "exit_code": 0,
+   "verdict": "accepted",
+   "episodes_executed": 100,
+   "wall_seconds": 21.50637420010753,
+   "checks": {
+    "S1": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S2": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S3": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S4": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S5": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S6": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S7": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S8": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S9": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S10": {
+     "status": "pass",
+     "detail": "exact: all 100 episodes match on the selected summary fields"
+    }
+   },
+   "outcome": "correct",
+   "note": "accepted"
+  },
+  {
+   "case": "C1-numerical-difference",
+   "kind": "control",
+   "targets": [
+    "S10"
+   ],
+   "expected_verdict": "accepted-numerical-difference",
+   "workflow": "W1",
+   "exit_code": 4,
+   "verdict": "unchecked",
+   "episodes_executed": 100,
+   "wall_seconds": 19.35308300005272,
+   "checks": {
+    "S1": {
+     "status": "unsupported",
+     "detail": "SB3 neither records nor verifies a checkpoint digest; PPO.load only validated and loaded the archive"
+    },
+    "S2": {
+     "status": "unsupported",
+     "detail": "no dependency or record files are verified"
+    },
+    "S3": {
+     "status": "unsupported",
+     "detail": "the saved configuration is used for evaluation, not compared with a recorded evaluation"
+    },
+    "S4": {
+     "status": "unsupported",
+     "detail": "seeds are passed to reset(seed=int(seed)); int() converts floats and numeric strings without notice"
+    },
+    "S5": {
+     "status": "unsupported",
+     "detail": "reward parameters are not read: the evaluation uses the original reward only"
+    },
+    "S6": {
+     "status": "unsupported",
+     "detail": "the recorded evaluation is not read"
+    },
+    "S7": {
+     "status": "unsupported",
+     "detail": "the recorded evaluation is not read"
+    },
+    "S8": {
+     "status": "unsupported",
+     "detail": "reward terms are not re-scored"
+    },
+    "S9": {
+     "status": "unsupported",
+     "detail": "no outcome schema is compared"
+    },
+    "S10": {
+     "status": "unsupported",
+     "detail": "results are not compared with the recorded evaluation"
+    }
+   },
+   "outcome": "unsupported",
+   "note": "results produced without the specification's checks; no false alarm"
+  },
+  {
+   "case": "C1-numerical-difference",
+   "kind": "control",
+   "targets": [
+    "S10"
+   ],
+   "expected_verdict": "accepted-numerical-difference",
+   "workflow": "W2",
+   "exit_code": 3,
+   "verdict": "accepted-numerical-difference",
+   "episodes_executed": 100,
+   "wall_seconds": 19.482391000026837,
+   "checks": {
+    "S1": {
+     "status": "pass",
+     "detail": "policy 7aa5207e7aeeec75..."
+    },
+    "S2": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S3": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S4": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S5": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S6": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S7": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S8": {
+     "status": "pass",
+     "detail": "largest difference 0"
+    },
+    "S9": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S10": {
+     "status": "pass",
+     "detail": "numerical-difference: 2 of 100 episodes differ"
+    }
+   },
+   "outcome": "correct",
+   "note": "accepted-numerical-difference"
+  },
+  {
+   "case": "C1-numerical-difference",
+   "kind": "control",
+   "targets": [
+    "S10"
+   ],
+   "expected_verdict": "accepted-numerical-difference",
+   "workflow": "W3",
+   "exit_code": 3,
+   "verdict": "accepted-numerical-difference",
+   "episodes_executed": 100,
+   "wall_seconds": 20.81245830003172,
+   "checks": {
+    "S1": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S2": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S3": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S4": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S5": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S6": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S7": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S8": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S9": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S10": {
+     "status": "pass",
+     "detail": "numerical-difference: 2 of 100 episodes differ; median |return difference| 0, largest 3; outcomes agree in 98%, on a different platform (os differ); no compared aggregate differs significantly from the record"
+    }
+   },
+   "outcome": "correct",
+   "note": "accepted-numerical-difference"
+  },
+  {
+   "case": "F01-checkpoint-swapped",
+   "kind": "fault",
+   "targets": [
+    "S1"
+   ],
+   "expected_verdict": "rejected-before-execution",
+   "workflow": "W1",
+   "exit_code": 4,
+   "verdict": "unchecked",
+   "episodes_executed": 100,
+   "wall_seconds": 20.032675799913704,
+   "checks": {
+    "S1": {
+     "status": "unsupported",
+     "detail": "SB3 neither records nor verifies a checkpoint digest; PPO.load only validated and loaded the archive"
+    },
+    "S2": {
+     "status": "unsupported",
+     "detail": "no dependency or record files are verified"
+    },
+    "S3": {
+     "status": "unsupported",
+     "detail": "the saved configuration is used for evaluation, not compared with a recorded evaluation"
+    },
+    "S4": {
+     "status": "unsupported",
+     "detail": "seeds are passed to reset(seed=int(seed)); int() converts floats and numeric strings without notice"
+    },
+    "S5": {
+     "status": "unsupported",
+     "detail": "reward parameters are not read: the evaluation uses the original reward only"
+    },
+    "S6": {
+     "status": "unsupported",
+     "detail": "the recorded evaluation is not read"
+    },
+    "S7": {
+     "status": "unsupported",
+     "detail": "the recorded evaluation is not read"
+    },
+    "S8": {
+     "status": "unsupported",
+     "detail": "reward terms are not re-scored"
+    },
+    "S9": {
+     "status": "unsupported",
+     "detail": "no outcome schema is compared"
+    },
+    "S10": {
+     "status": "unsupported",
+     "detail": "results are not compared with the recorded evaluation"
+    }
+   },
+   "outcome": "unsupported",
+   "note": "unchecked; 100 episodes executed"
+  },
+  {
+   "case": "F01-checkpoint-swapped",
+   "kind": "fault",
+   "targets": [
+    "S1"
+   ],
+   "expected_verdict": "rejected-before-execution",
+   "workflow": "W2",
+   "exit_code": 1,
+   "verdict": "rejected-before-execution",
+   "episodes_executed": 0,
+   "wall_seconds": 1.670902700163424,
+   "checks": {
+    "S1": {
+     "status": "fail",
+     "detail": "policy f6ba5af4d87c1147..."
+    },
+    "S2": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S3": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S4": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S5": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S6": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S7": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S8": {
+     "status": "pass",
+     "detail": "largest difference 0"
+    },
+    "S9": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S10": {
+     "status": "not-run",
+     "detail": "an integrity check failed"
+    }
+   },
+   "outcome": "rejected",
+   "note": "rejected-before-execution; targeted {'S1': 'fail'}"
+  },
+  {
+   "case": "F01-checkpoint-swapped",
+   "kind": "fault",
+   "targets": [
+    "S1"
+   ],
+   "expected_verdict": "rejected-before-execution",
+   "workflow": "W3",
+   "exit_code": 1,
+   "verdict": "rejected-before-execution",
+   "episodes_executed": 0,
+   "wall_seconds": 1.4013441000133753,
+   "checks": {
+    "S1": {
+     "status": "fail",
+     "detail": "policy.zip has its recorded SHA-256: f6ba5af4d87c1147d7c34e196618cbc80bdac55a0976078394ab567b4a126f73 != 7aa5207e7aeeec758442253f64baabd31e2de6d1a5c69fa0211ce849e9c607d8"
+    },
+    "S2": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S3": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S4": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S5": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S6": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S7": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S8": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S9": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S10": {
+     "status": "not-run",
+     "detail": "an integrity check failed"
+    }
+   },
+   "outcome": "rejected",
+   "note": "rejected-before-execution; targeted {'S1': 'fail'}"
+  },
+  {
+   "case": "F02-recorded-digest-corrupted",
+   "kind": "fault",
+   "targets": [
+    "S1"
+   ],
+   "expected_verdict": "rejected-before-execution",
+   "workflow": "W1",
+   "exit_code": 4,
+   "verdict": "unchecked",
+   "episodes_executed": 100,
+   "wall_seconds": 19.273696300107986,
+   "checks": {
+    "S1": {
+     "status": "unsupported",
+     "detail": "SB3 neither records nor verifies a checkpoint digest; PPO.load only validated and loaded the archive"
+    },
+    "S2": {
+     "status": "unsupported",
+     "detail": "no dependency or record files are verified"
+    },
+    "S3": {
+     "status": "unsupported",
+     "detail": "the saved configuration is used for evaluation, not compared with a recorded evaluation"
+    },
+    "S4": {
+     "status": "unsupported",
+     "detail": "seeds are passed to reset(seed=int(seed)); int() converts floats and numeric strings without notice"
+    },
+    "S5": {
+     "status": "unsupported",
+     "detail": "reward parameters are not read: the evaluation uses the original reward only"
+    },
+    "S6": {
+     "status": "unsupported",
+     "detail": "the recorded evaluation is not read"
+    },
+    "S7": {
+     "status": "unsupported",
+     "detail": "the recorded evaluation is not read"
+    },
+    "S8": {
+     "status": "unsupported",
+     "detail": "reward terms are not re-scored"
+    },
+    "S9": {
+     "status": "unsupported",
+     "detail": "no outcome schema is compared"
+    },
+    "S10": {
+     "status": "unsupported",
+     "detail": "results are not compared with the recorded evaluation"
+    }
+   },
+   "outcome": "unsupported",
+   "note": "unchecked; 100 episodes executed"
+  },
+  {
+   "case": "F02-recorded-digest-corrupted",
+   "kind": "fault",
+   "targets": [
+    "S1"
+   ],
+   "expected_verdict": "rejected-before-execution",
+   "workflow": "W2",
+   "exit_code": 1,
+   "verdict": "rejected-before-execution",
+   "episodes_executed": 0,
+   "wall_seconds": 1.5646112998947501,
+   "checks": {
+    "S1": {
+     "status": "fail",
+     "detail": "policy 7aa5207e7aeeec75..."
+    },
+    "S2": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S3": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S4": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S5": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S6": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S7": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S8": {
+     "status": "pass",
+     "detail": "largest difference 0"
+    },
+    "S9": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S10": {
+     "status": "not-run",
+     "detail": "an integrity check failed"
+    }
+   },
+   "outcome": "rejected",
+   "note": "rejected-before-execution; targeted {'S1': 'fail'}"
+  },
+  {
+   "case": "F02-recorded-digest-corrupted",
+   "kind": "fault",
+   "targets": [
+    "S1"
+   ],
+   "expected_verdict": "rejected-before-execution",
+   "workflow": "W3",
+   "exit_code": 1,
+   "verdict": "rejected-before-execution",
+   "episodes_executed": 0,
+   "wall_seconds": 1.4971914999186993,
+   "checks": {
+    "S1": {
+     "status": "fail",
+     "detail": "policy.zip has its recorded SHA-256: 7aa5207e7aeeec758442253f64baabd31e2de6d1a5c69fa0211ce849e9c607d8 != 7aa5207e7aeeec758442253f64baabd31e2de6d1a5c69fa0211ce849e9c607d0"
+    },
+    "S2": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S3": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S4": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S5": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S6": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S7": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S8": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S9": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S10": {
+     "status": "not-run",
+     "detail": "an integrity check failed"
+    }
+   },
+   "outcome": "rejected",
+   "note": "rejected-before-execution; targeted {'S1': 'fail'}"
+  },
+  {
+   "case": "F03-protocol-mismatch",
+   "kind": "fault",
+   "targets": [
+    "S3"
+   ],
+   "expected_verdict": "rejected-before-execution",
+   "workflow": "W1",
+   "exit_code": 4,
+   "verdict": "unchecked",
+   "episodes_executed": 100,
+   "wall_seconds": 18.96427179989405,
+   "checks": {
+    "S1": {
+     "status": "unsupported",
+     "detail": "SB3 neither records nor verifies a checkpoint digest; PPO.load only validated and loaded the archive"
+    },
+    "S2": {
+     "status": "unsupported",
+     "detail": "no dependency or record files are verified"
+    },
+    "S3": {
+     "status": "unsupported",
+     "detail": "the saved configuration is used for evaluation, not compared with a recorded evaluation"
+    },
+    "S4": {
+     "status": "unsupported",
+     "detail": "seeds are passed to reset(seed=int(seed)); int() converts floats and numeric strings without notice"
+    },
+    "S5": {
+     "status": "unsupported",
+     "detail": "reward parameters are not read: the evaluation uses the original reward only"
+    },
+    "S6": {
+     "status": "unsupported",
+     "detail": "the recorded evaluation is not read"
+    },
+    "S7": {
+     "status": "unsupported",
+     "detail": "the recorded evaluation is not read"
+    },
+    "S8": {
+     "status": "unsupported",
+     "detail": "reward terms are not re-scored"
+    },
+    "S9": {
+     "status": "unsupported",
+     "detail": "no outcome schema is compared"
+    },
+    "S10": {
+     "status": "unsupported",
+     "detail": "results are not compared with the recorded evaluation"
+    }
+   },
+   "outcome": "unsupported",
+   "note": "unchecked; 100 episodes executed"
+  },
+  {
+   "case": "F03-protocol-mismatch",
+   "kind": "fault",
+   "targets": [
+    "S3"
+   ],
+   "expected_verdict": "rejected-before-execution",
+   "workflow": "W2",
+   "exit_code": 1,
+   "verdict": "rejected-before-execution",
+   "episodes_executed": 0,
+   "wall_seconds": 1.5558758000843227,
+   "checks": {
+    "S1": {
+     "status": "pass",
+     "detail": "policy 7aa5207e7aeeec75..."
+    },
+    "S2": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S3": {
+     "status": "fail",
+     "detail": "recorded environment, gamma or test seeds differ from the case"
+    },
+    "S4": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S5": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S6": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S7": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S8": {
+     "status": "pass",
+     "detail": "largest difference 0"
+    },
+    "S9": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S10": {
+     "status": "not-run",
+     "detail": "an integrity check failed"
+    }
+   },
+   "outcome": "rejected",
+   "note": "rejected-before-execution; targeted {'S3': 'fail'}"
+  },
+  {
+   "case": "F03-protocol-mismatch",
+   "kind": "fault",
+   "targets": [
+    "S3"
+   ],
+   "expected_verdict": "rejected-before-execution",
+   "workflow": "W3",
+   "exit_code": 1,
+   "verdict": "rejected-before-execution",
+   "episodes_executed": 0,
+   "wall_seconds": 1.6296781999990344,
+   "checks": {
+    "S1": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S2": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S3": {
+     "status": "fail",
+     "detail": "recorded seeds are the case's test seeds"
+    },
+    "S4": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S5": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S6": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S7": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S8": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S9": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S10": {
+     "status": "not-run",
+     "detail": "an integrity check failed"
+    }
+   },
+   "outcome": "rejected",
+   "note": "rejected-before-execution; targeted {'S3': 'fail'}"
+  },
+  {
+   "case": "F04-dependency-missing",
+   "kind": "fault",
+   "targets": [
+    "S2"
+   ],
+   "expected_verdict": "rejected-before-execution",
+   "workflow": "W1",
+   "exit_code": 4,
+   "verdict": "unchecked",
+   "episodes_executed": 100,
+   "wall_seconds": 17.318726500030607,
+   "checks": {
+    "S1": {
+     "status": "unsupported",
+     "detail": "SB3 neither records nor verifies a checkpoint digest; PPO.load only validated and loaded the archive"
+    },
+    "S2": {
+     "status": "unsupported",
+     "detail": "no dependency or record files are verified"
+    },
+    "S3": {
+     "status": "unsupported",
+     "detail": "the saved configuration is used for evaluation, not compared with a recorded evaluation"
+    },
+    "S4": {
+     "status": "unsupported",
+     "detail": "seeds are passed to reset(seed=int(seed)); int() converts floats and numeric strings without notice"
+    },
+    "S5": {
+     "status": "unsupported",
+     "detail": "reward parameters are not read: the evaluation uses the original reward only"
+    },
+    "S6": {
+     "status": "unsupported",
+     "detail": "the recorded evaluation is not read"
+    },
+    "S7": {
+     "status": "unsupported",
+     "detail": "the recorded evaluation is not read"
+    },
+    "S8": {
+     "status": "unsupported",
+     "detail": "reward terms are not re-scored"
+    },
+    "S9": {
+     "status": "unsupported",
+     "detail": "no outcome schema is compared"
+    },
+    "S10": {
+     "status": "unsupported",
+     "detail": "results are not compared with the recorded evaluation"
+    }
+   },
+   "outcome": "unsupported",
+   "note": "unchecked; 100 episodes executed"
+  },
+  {
+   "case": "F04-dependency-missing",
+   "kind": "fault",
+   "targets": [
+    "S2"
+   ],
+   "expected_verdict": "rejected-before-execution",
+   "workflow": "W2",
+   "exit_code": 1,
+   "verdict": "rejected-before-execution",
+   "episodes_executed": 0,
+   "wall_seconds": 1.659518500091508,
+   "checks": {
+    "S1": {
+     "status": "pass",
+     "detail": "policy 7aa5207e7aeeec75..."
+    },
+    "S2": {
+     "status": "fail",
+     "detail": "missing ['reward_parameters.json'], changed []"
+    },
+    "S3": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S4": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S5": {
+     "status": "not-run",
+     "detail": "reward parameters unavailable"
+    },
+    "S6": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S7": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S8": {
+     "status": "not-run",
+     "detail": "trajectory or finite parameters unavailable"
+    },
+    "S9": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S10": {
+     "status": "not-run",
+     "detail": "an integrity check failed"
+    }
+   },
+   "outcome": "rejected",
+   "note": "rejected-before-execution; targeted {'S2': 'fail'}"
+  },
+  {
+   "case": "F04-dependency-missing",
+   "kind": "fault",
+   "targets": [
+    "S2"
+   ],
+   "expected_verdict": "rejected-before-execution",
+   "workflow": "W3",
+   "exit_code": 1,
+   "verdict": "rejected-before-execution",
+   "episodes_executed": 0,
+   "wall_seconds": 1.3751877001486719,
+   "checks": {
+    "S1": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S2": {
+     "status": "fail",
+     "detail": "reward_parameters.json is present: missing"
+    },
+    "S3": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S4": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S5": {
+     "status": "not-run",
+     "detail": "reward parameters unavailable"
+    },
+    "S6": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S7": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S8": {
+     "status": "not-run",
+     "detail": "trajectory or reward definition unavailable"
+    },
+    "S9": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S10": {
+     "status": "not-run",
+     "detail": "an integrity check failed"
+    }
+   },
+   "outcome": "rejected",
+   "note": "rejected-before-execution; targeted {'S2': 'fail'}"
+  },
+  {
+   "case": "F05-dependency-changed",
+   "kind": "fault",
+   "targets": [
+    "S2"
+   ],
+   "expected_verdict": "rejected-before-execution",
+   "workflow": "W1",
+   "exit_code": 4,
+   "verdict": "unchecked",
+   "episodes_executed": 100,
+   "wall_seconds": 14.38097899989225,
+   "checks": {
+    "S1": {
+     "status": "unsupported",
+     "detail": "SB3 neither records nor verifies a checkpoint digest; PPO.load only validated and loaded the archive"
+    },
+    "S2": {
+     "status": "unsupported",
+     "detail": "no dependency or record files are verified"
+    },
+    "S3": {
+     "status": "unsupported",
+     "detail": "the saved configuration is used for evaluation, not compared with a recorded evaluation"
+    },
+    "S4": {
+     "status": "unsupported",
+     "detail": "seeds are passed to reset(seed=int(seed)); int() converts floats and numeric strings without notice"
+    },
+    "S5": {
+     "status": "unsupported",
+     "detail": "reward parameters are not read: the evaluation uses the original reward only"
+    },
+    "S6": {
+     "status": "unsupported",
+     "detail": "the recorded evaluation is not read"
+    },
+    "S7": {
+     "status": "unsupported",
+     "detail": "the recorded evaluation is not read"
+    },
+    "S8": {
+     "status": "unsupported",
+     "detail": "reward terms are not re-scored"
+    },
+    "S9": {
+     "status": "unsupported",
+     "detail": "no outcome schema is compared"
+    },
+    "S10": {
+     "status": "unsupported",
+     "detail": "results are not compared with the recorded evaluation"
+    }
+   },
+   "outcome": "unsupported",
+   "note": "unchecked; 100 episodes executed"
+  },
+  {
+   "case": "F05-dependency-changed",
+   "kind": "fault",
+   "targets": [
+    "S2"
+   ],
+   "expected_verdict": "rejected-before-execution",
+   "workflow": "W2",
+   "exit_code": 1,
+   "verdict": "rejected-before-execution",
+   "episodes_executed": 0,
+   "wall_seconds": 1.6298203999176621,
+   "checks": {
+    "S1": {
+     "status": "pass",
+     "detail": "policy 7aa5207e7aeeec75..."
+    },
+    "S2": {
+     "status": "fail",
+     "detail": "missing [], changed ['reward_parameters.json']"
+    },
+    "S3": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S4": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S5": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S6": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S7": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S8": {
+     "status": "fail",
+     "detail": "largest difference 0.034"
+    },
+    "S9": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S10": {
+     "status": "not-run",
+     "detail": "an integrity check failed"
+    }
+   },
+   "outcome": "rejected",
+   "note": "rejected-before-execution; targeted {'S2': 'fail'}"
+  },
+  {
+   "case": "F05-dependency-changed",
+   "kind": "fault",
+   "targets": [
+    "S2"
+   ],
+   "expected_verdict": "rejected-before-execution",
+   "workflow": "W3",
+   "exit_code": 1,
+   "verdict": "rejected-before-execution",
+   "episodes_executed": 0,
+   "wall_seconds": 1.4117630999535322,
+   "checks": {
+    "S1": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S2": {
+     "status": "fail",
+     "detail": "reward_parameters.json has its recorded SHA-256: 78597ffbc9e044c4e9bfcc33d637fb7a61123e92e51c75e751ac4ffe727f87ba != 574450648ab0619f78f3763f50bd79bfee6c814c15b231b797c20b8e1d0ee587"
+    },
+    "S3": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S4": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S5": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S6": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S7": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S8": {
+     "status": "fail",
+     "detail": "recorded per-step values of 'upright_potential' match the re-scored definition: largest difference 0.034"
+    },
+    "S9": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S10": {
+     "status": "not-run",
+     "detail": "an integrity check failed"
+    }
+   },
+   "outcome": "rejected",
+   "note": "rejected-before-execution; targeted {'S2': 'fail'}"
+  },
+  {
+   "case": "F06-coercible-seed",
+   "kind": "fault",
+   "targets": [
+    "S4"
+   ],
+   "expected_verdict": "rejected-before-execution",
+   "workflow": "W1",
+   "exit_code": 4,
+   "verdict": "unchecked",
+   "episodes_executed": 100,
+   "wall_seconds": 19.88271449995227,
+   "checks": {
+    "S1": {
+     "status": "unsupported",
+     "detail": "SB3 neither records nor verifies a checkpoint digest; PPO.load only validated and loaded the archive"
+    },
+    "S2": {
+     "status": "unsupported",
+     "detail": "no dependency or record files are verified"
+    },
+    "S3": {
+     "status": "unsupported",
+     "detail": "the saved configuration is used for evaluation, not compared with a recorded evaluation"
+    },
+    "S4": {
+     "status": "unsupported",
+     "detail": "seeds are passed to reset(seed=int(seed)); int() converts floats and numeric strings without notice"
+    },
+    "S5": {
+     "status": "unsupported",
+     "detail": "reward parameters are not read: the evaluation uses the original reward only"
+    },
+    "S6": {
+     "status": "unsupported",
+     "detail": "the recorded evaluation is not read"
+    },
+    "S7": {
+     "status": "unsupported",
+     "detail": "the recorded evaluation is not read"
+    },
+    "S8": {
+     "status": "unsupported",
+     "detail": "reward terms are not re-scored"
+    },
+    "S9": {
+     "status": "unsupported",
+     "detail": "no outcome schema is compared"
+    },
+    "S10": {
+     "status": "unsupported",
+     "detail": "results are not compared with the recorded evaluation"
+    }
+   },
+   "outcome": "unsupported",
+   "note": "unchecked; 100 episodes executed"
+  },
+  {
+   "case": "F06-coercible-seed",
+   "kind": "fault",
+   "targets": [
+    "S4"
+   ],
+   "expected_verdict": "rejected-before-execution",
+   "workflow": "W2",
+   "exit_code": 1,
+   "verdict": "rejected-before-execution",
+   "episodes_executed": 0,
+   "wall_seconds": 1.477679600007832,
+   "checks": {
+    "S1": {
+     "status": "pass",
+     "detail": "policy 7aa5207e7aeeec75..."
+    },
+    "S2": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S3": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S4": {
+     "status": "fail",
+     "detail": "test seeds entries are not nonnegative integers: ['210005.0']"
+    },
+    "S5": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S6": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S7": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S8": {
+     "status": "pass",
+     "detail": "largest difference 0"
+    },
+    "S9": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S10": {
+     "status": "not-run",
+     "detail": "an integrity check failed"
+    }
+   },
+   "outcome": "rejected",
+   "note": "rejected-before-execution; targeted {'S4': 'fail'}"
+  },
+  {
+   "case": "F06-coercible-seed",
+   "kind": "fault",
+   "targets": [
+    "S4"
+   ],
+   "expected_verdict": "rejected-before-execution",
+   "workflow": "W3",
+   "exit_code": 1,
+   "verdict": "rejected-before-execution",
+   "episodes_executed": 0,
+   "wall_seconds": 1.3136146999895573,
+   "checks": {
+    "S1": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S2": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S3": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S4": {
+     "status": "fail",
+     "detail": "test seeds must be nonnegative integers: test seeds[5] = 210005.0 (float): not an integer; floats are not converted, even when integral"
+    },
+    "S5": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S6": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S7": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S8": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S9": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S10": {
+     "status": "not-run",
+     "detail": "an integrity check failed"
+    }
+   },
+   "outcome": "rejected",
+   "note": "rejected-before-execution; targeted {'S4': 'fail'}"
+  },
+  {
+   "case": "F07-overlapping-seeds",
+   "kind": "fault",
+   "targets": [
+    "S4"
+   ],
+   "expected_verdict": "rejected-before-execution",
+   "workflow": "W1",
+   "exit_code": 4,
+   "verdict": "unchecked",
+   "episodes_executed": 100,
+   "wall_seconds": 20.512929700082168,
+   "checks": {
+    "S1": {
+     "status": "unsupported",
+     "detail": "SB3 neither records nor verifies a checkpoint digest; PPO.load only validated and loaded the archive"
+    },
+    "S2": {
+     "status": "unsupported",
+     "detail": "no dependency or record files are verified"
+    },
+    "S3": {
+     "status": "unsupported",
+     "detail": "the saved configuration is used for evaluation, not compared with a recorded evaluation"
+    },
+    "S4": {
+     "status": "unsupported",
+     "detail": "seeds are passed to reset(seed=int(seed)); int() converts floats and numeric strings without notice"
+    },
+    "S5": {
+     "status": "unsupported",
+     "detail": "reward parameters are not read: the evaluation uses the original reward only"
+    },
+    "S6": {
+     "status": "unsupported",
+     "detail": "the recorded evaluation is not read"
+    },
+    "S7": {
+     "status": "unsupported",
+     "detail": "the recorded evaluation is not read"
+    },
+    "S8": {
+     "status": "unsupported",
+     "detail": "reward terms are not re-scored"
+    },
+    "S9": {
+     "status": "unsupported",
+     "detail": "no outcome schema is compared"
+    },
+    "S10": {
+     "status": "unsupported",
+     "detail": "results are not compared with the recorded evaluation"
+    }
+   },
+   "outcome": "unsupported",
+   "note": "unchecked; 100 episodes executed"
+  },
+  {
+   "case": "F07-overlapping-seeds",
+   "kind": "fault",
+   "targets": [
+    "S4"
+   ],
+   "expected_verdict": "rejected-before-execution",
+   "workflow": "W2",
+   "exit_code": 1,
+   "verdict": "rejected-before-execution",
+   "episodes_executed": 0,
+   "wall_seconds": 1.8172102000098675,
+   "checks": {
+    "S1": {
+     "status": "pass",
+     "detail": "policy 7aa5207e7aeeec75..."
+    },
+    "S2": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S3": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S4": {
+     "status": "fail",
+     "detail": "validation and test seeds overlap: [210000]"
+    },
+    "S5": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S6": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S7": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S8": {
+     "status": "pass",
+     "detail": "largest difference 0"
+    },
+    "S9": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S10": {
+     "status": "not-run",
+     "detail": "an integrity check failed"
+    }
+   },
+   "outcome": "rejected",
+   "note": "rejected-before-execution; targeted {'S4': 'fail'}"
+  },
+  {
+   "case": "F07-overlapping-seeds",
+   "kind": "fault",
+   "targets": [
+    "S4"
+   ],
+   "expected_verdict": "rejected-before-execution",
+   "workflow": "W3",
+   "exit_code": 1,
+   "verdict": "rejected-before-execution",
+   "episodes_executed": 0,
+   "wall_seconds": 1.6758755999617279,
+   "checks": {
+    "S1": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S2": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S3": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S4": {
+     "status": "fail",
+     "detail": "validation and test seeds overlap: [210000]"
+    },
+    "S5": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S6": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S7": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S8": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S9": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S10": {
+     "status": "not-run",
+     "detail": "an integrity check failed"
+    }
+   },
+   "outcome": "rejected",
+   "note": "rejected-before-execution; targeted {'S4': 'fail'}"
+  },
+  {
+   "case": "F08-nonfinite-parameter",
+   "kind": "fault",
+   "targets": [
+    "S5"
+   ],
+   "expected_verdict": "rejected-before-execution",
+   "workflow": "W1",
+   "exit_code": 4,
+   "verdict": "unchecked",
+   "episodes_executed": 100,
+   "wall_seconds": 20.39596339990385,
+   "checks": {
+    "S1": {
+     "status": "unsupported",
+     "detail": "SB3 neither records nor verifies a checkpoint digest; PPO.load only validated and loaded the archive"
+    },
+    "S2": {
+     "status": "unsupported",
+     "detail": "no dependency or record files are verified"
+    },
+    "S3": {
+     "status": "unsupported",
+     "detail": "the saved configuration is used for evaluation, not compared with a recorded evaluation"
+    },
+    "S4": {
+     "status": "unsupported",
+     "detail": "seeds are passed to reset(seed=int(seed)); int() converts floats and numeric strings without notice"
+    },
+    "S5": {
+     "status": "unsupported",
+     "detail": "reward parameters are not read: the evaluation uses the original reward only"
+    },
+    "S6": {
+     "status": "unsupported",
+     "detail": "the recorded evaluation is not read"
+    },
+    "S7": {
+     "status": "unsupported",
+     "detail": "the recorded evaluation is not read"
+    },
+    "S8": {
+     "status": "unsupported",
+     "detail": "reward terms are not re-scored"
+    },
+    "S9": {
+     "status": "unsupported",
+     "detail": "no outcome schema is compared"
+    },
+    "S10": {
+     "status": "unsupported",
+     "detail": "results are not compared with the recorded evaluation"
+    }
+   },
+   "outcome": "unsupported",
+   "note": "unchecked; 100 episodes executed"
+  },
+  {
+   "case": "F08-nonfinite-parameter",
+   "kind": "fault",
+   "targets": [
+    "S5"
+   ],
+   "expected_verdict": "rejected-before-execution",
+   "workflow": "W2",
+   "exit_code": 1,
+   "verdict": "rejected-before-execution",
+   "episodes_executed": 0,
+   "wall_seconds": 1.7498179001268,
+   "checks": {
+    "S1": {
+     "status": "pass",
+     "detail": "policy 7aa5207e7aeeec75..."
+    },
+    "S2": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S3": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S4": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S5": {
+     "status": "fail",
+     "detail": "weight 1.0, gamma 0.98, alpha nan"
+    },
+    "S6": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S7": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S8": {
+     "status": "not-run",
+     "detail": "trajectory or finite parameters unavailable"
+    },
+    "S9": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S10": {
+     "status": "not-run",
+     "detail": "an integrity check failed"
+    }
+   },
+   "outcome": "rejected",
+   "note": "rejected-before-execution; targeted {'S5': 'fail'}"
+  },
+  {
+   "case": "F08-nonfinite-parameter",
+   "kind": "fault",
+   "targets": [
+    "S5"
+   ],
+   "expected_verdict": "rejected-before-execution",
+   "workflow": "W3",
+   "exit_code": 1,
+   "verdict": "rejected-before-execution",
+   "episodes_executed": 0,
+   "wall_seconds": 1.5170236001722515,
+   "checks": {
+    "S1": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S2": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S3": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S4": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S5": {
+     "status": "fail",
+     "detail": "reward parameters are finite: potential_shaping term 'upright_potential' alpha must be finite, got nan"
+    },
+    "S6": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S7": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S8": {
+     "status": "not-run",
+     "detail": "trajectory or reward definition unavailable"
+    },
+    "S9": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S10": {
+     "status": "not-run",
+     "detail": "an integrity check failed"
+    }
+   },
+   "outcome": "rejected",
+   "note": "rejected-before-execution; targeted {'S5': 'fail'}"
+  },
+  {
+   "case": "F09-original-channel-absent",
+   "kind": "fault",
+   "targets": [
+    "S6"
+   ],
+   "expected_verdict": "rejected-before-execution",
+   "workflow": "W1",
+   "exit_code": 4,
+   "verdict": "unchecked",
+   "episodes_executed": 100,
+   "wall_seconds": 20.827054100111127,
+   "checks": {
+    "S1": {
+     "status": "unsupported",
+     "detail": "SB3 neither records nor verifies a checkpoint digest; PPO.load only validated and loaded the archive"
+    },
+    "S2": {
+     "status": "unsupported",
+     "detail": "no dependency or record files are verified"
+    },
+    "S3": {
+     "status": "unsupported",
+     "detail": "the saved configuration is used for evaluation, not compared with a recorded evaluation"
+    },
+    "S4": {
+     "status": "unsupported",
+     "detail": "seeds are passed to reset(seed=int(seed)); int() converts floats and numeric strings without notice"
+    },
+    "S5": {
+     "status": "unsupported",
+     "detail": "reward parameters are not read: the evaluation uses the original reward only"
+    },
+    "S6": {
+     "status": "unsupported",
+     "detail": "the recorded evaluation is not read"
+    },
+    "S7": {
+     "status": "unsupported",
+     "detail": "the recorded evaluation is not read"
+    },
+    "S8": {
+     "status": "unsupported",
+     "detail": "reward terms are not re-scored"
+    },
+    "S9": {
+     "status": "unsupported",
+     "detail": "no outcome schema is compared"
+    },
+    "S10": {
+     "status": "unsupported",
+     "detail": "results are not compared with the recorded evaluation"
+    }
+   },
+   "outcome": "unsupported",
+   "note": "unchecked; 100 episodes executed"
+  },
+  {
+   "case": "F09-original-channel-absent",
+   "kind": "fault",
+   "targets": [
+    "S6"
+   ],
+   "expected_verdict": "rejected-before-execution",
+   "workflow": "W2",
+   "exit_code": 1,
+   "verdict": "rejected-before-execution",
+   "episodes_executed": 0,
+   "wall_seconds": 1.5016135000623763,
+   "checks": {
+    "S1": {
+     "status": "pass",
+     "detail": "policy 7aa5207e7aeeec75..."
+    },
+    "S2": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S3": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S4": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S5": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S6": {
+     "status": "fail",
+     "detail": "episodes [0, 1, 2, 3, 4]"
+    },
+    "S7": {
+     "status": "not-run",
+     "detail": "channels incomplete"
+    },
+    "S8": {
+     "status": "pass",
+     "detail": "largest difference 0"
+    },
+    "S9": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S10": {
+     "status": "not-run",
+     "detail": "an integrity check failed"
+    }
+   },
+   "outcome": "rejected",
+   "note": "rejected-before-execution; targeted {'S6': 'fail'}"
+  },
+  {
+   "case": "F09-original-channel-absent",
+   "kind": "fault",
+   "targets": [
+    "S6"
+   ],
+   "expected_verdict": "rejected-before-execution",
+   "workflow": "W3",
+   "exit_code": 1,
+   "verdict": "rejected-before-execution",
+   "episodes_executed": 0,
+   "wall_seconds": 1.4680741000920534,
+   "checks": {
+    "S1": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S2": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S3": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S4": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S5": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S6": {
+     "status": "fail",
+     "detail": "every episode records the original and training reward channels: episode 0: no original_return; episode 1: no original_return; episode 2: no original_return; episode 3: no original_return; episode 4: no original_return (and 95 more)"
+    },
+    "S7": {
+     "status": "not-run",
+     "detail": "not checked: the reward channels are incomplete"
+    },
+    "S8": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S9": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S10": {
+     "status": "not-run",
+     "detail": "an integrity check failed"
+    }
+   },
+   "outcome": "rejected",
+   "note": "rejected-before-execution; targeted {'S6': 'fail'}"
+  },
+  {
+   "case": "F10-inconsistent-totals",
+   "kind": "fault",
+   "targets": [
+    "S7"
+   ],
+   "expected_verdict": "rejected-before-execution",
+   "workflow": "W1",
+   "exit_code": 4,
+   "verdict": "unchecked",
+   "episodes_executed": 100,
+   "wall_seconds": 20.33745580003597,
+   "checks": {
+    "S1": {
+     "status": "unsupported",
+     "detail": "SB3 neither records nor verifies a checkpoint digest; PPO.load only validated and loaded the archive"
+    },
+    "S2": {
+     "status": "unsupported",
+     "detail": "no dependency or record files are verified"
+    },
+    "S3": {
+     "status": "unsupported",
+     "detail": "the saved configuration is used for evaluation, not compared with a recorded evaluation"
+    },
+    "S4": {
+     "status": "unsupported",
+     "detail": "seeds are passed to reset(seed=int(seed)); int() converts floats and numeric strings without notice"
+    },
+    "S5": {
+     "status": "unsupported",
+     "detail": "reward parameters are not read: the evaluation uses the original reward only"
+    },
+    "S6": {
+     "status": "unsupported",
+     "detail": "the recorded evaluation is not read"
+    },
+    "S7": {
+     "status": "unsupported",
+     "detail": "the recorded evaluation is not read"
+    },
+    "S8": {
+     "status": "unsupported",
+     "detail": "reward terms are not re-scored"
+    },
+    "S9": {
+     "status": "unsupported",
+     "detail": "no outcome schema is compared"
+    },
+    "S10": {
+     "status": "unsupported",
+     "detail": "results are not compared with the recorded evaluation"
+    }
+   },
+   "outcome": "unsupported",
+   "note": "unchecked; 100 episodes executed"
+  },
+  {
+   "case": "F10-inconsistent-totals",
+   "kind": "fault",
+   "targets": [
+    "S7"
+   ],
+   "expected_verdict": "rejected-before-execution",
+   "workflow": "W2",
+   "exit_code": 1,
+   "verdict": "rejected-before-execution",
+   "episodes_executed": 0,
+   "wall_seconds": 1.5074317001271993,
+   "checks": {
+    "S1": {
+     "status": "pass",
+     "detail": "policy 7aa5207e7aeeec75..."
+    },
+    "S2": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S3": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S4": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S5": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S6": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S7": {
+     "status": "fail",
+     "detail": "episodes [3, 57]"
+    },
+    "S8": {
+     "status": "pass",
+     "detail": "largest difference 0"
+    },
+    "S9": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S10": {
+     "status": "not-run",
+     "detail": "an integrity check failed"
+    }
+   },
+   "outcome": "rejected",
+   "note": "rejected-before-execution; targeted {'S7': 'fail'}"
+  },
+  {
+   "case": "F10-inconsistent-totals",
+   "kind": "fault",
+   "targets": [
+    "S7"
+   ],
+   "expected_verdict": "rejected-before-execution",
+   "workflow": "W3",
+   "exit_code": 1,
+   "verdict": "rejected-before-execution",
+   "episodes_executed": 0,
+   "wall_seconds": 1.7896054999437183,
+   "checks": {
+    "S1": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S2": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S3": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S4": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S5": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S6": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S7": {
+     "status": "fail",
+     "detail": "training return = weight x original return + term returns, in every episode: episodes 3; 57"
+    },
+    "S8": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S9": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S10": {
+     "status": "not-run",
+     "detail": "an integrity check failed"
+    }
+   },
+   "outcome": "rejected",
+   "note": "rejected-before-execution; targeted {'S7': 'fail'}"
+  },
+  {
+   "case": "F11-potential-at-truncation",
+   "kind": "fault",
+   "targets": [
+    "S8"
+   ],
+   "expected_verdict": "rejected-before-execution",
+   "workflow": "W1",
+   "exit_code": 4,
+   "verdict": "unchecked",
+   "episodes_executed": 100,
+   "wall_seconds": 21.3161597000435,
+   "checks": {
+    "S1": {
+     "status": "unsupported",
+     "detail": "SB3 neither records nor verifies a checkpoint digest; PPO.load only validated and loaded the archive"
+    },
+    "S2": {
+     "status": "unsupported",
+     "detail": "no dependency or record files are verified"
+    },
+    "S3": {
+     "status": "unsupported",
+     "detail": "the saved configuration is used for evaluation, not compared with a recorded evaluation"
+    },
+    "S4": {
+     "status": "unsupported",
+     "detail": "seeds are passed to reset(seed=int(seed)); int() converts floats and numeric strings without notice"
+    },
+    "S5": {
+     "status": "unsupported",
+     "detail": "reward parameters are not read: the evaluation uses the original reward only"
+    },
+    "S6": {
+     "status": "unsupported",
+     "detail": "the recorded evaluation is not read"
+    },
+    "S7": {
+     "status": "unsupported",
+     "detail": "the recorded evaluation is not read"
+    },
+    "S8": {
+     "status": "unsupported",
+     "detail": "reward terms are not re-scored"
+    },
+    "S9": {
+     "status": "unsupported",
+     "detail": "no outcome schema is compared"
+    },
+    "S10": {
+     "status": "unsupported",
+     "detail": "results are not compared with the recorded evaluation"
+    }
+   },
+   "outcome": "unsupported",
+   "note": "unchecked; 100 episodes executed"
+  },
+  {
+   "case": "F11-potential-at-truncation",
+   "kind": "fault",
+   "targets": [
+    "S8"
+   ],
+   "expected_verdict": "rejected-before-execution",
+   "workflow": "W2",
+   "exit_code": 1,
+   "verdict": "rejected-before-execution",
+   "episodes_executed": 0,
+   "wall_seconds": 1.748771300073713,
+   "checks": {
+    "S1": {
+     "status": "pass",
+     "detail": "policy 7aa5207e7aeeec75..."
+    },
+    "S2": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S3": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S4": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S5": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S6": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S7": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S8": {
+     "status": "fail",
+     "detail": "largest difference 0.0212"
+    },
+    "S9": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S10": {
+     "status": "not-run",
+     "detail": "an integrity check failed"
+    }
+   },
+   "outcome": "rejected",
+   "note": "rejected-before-execution; targeted {'S8': 'fail'}"
+  },
+  {
+   "case": "F11-potential-at-truncation",
+   "kind": "fault",
+   "targets": [
+    "S8"
+   ],
+   "expected_verdict": "rejected-before-execution",
+   "workflow": "W3",
+   "exit_code": 1,
+   "verdict": "rejected-before-execution",
+   "episodes_executed": 0,
+   "wall_seconds": 1.5208943001925945,
+   "checks": {
+    "S1": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S2": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S3": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S4": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S5": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S6": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S7": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S8": {
+     "status": "fail",
+     "detail": "recorded per-step values of 'upright_potential' match the re-scored definition: largest difference 0.0212"
+    },
+    "S9": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S10": {
+     "status": "not-run",
+     "detail": "an integrity check failed"
+    }
+   },
+   "outcome": "rejected",
+   "note": "rejected-before-execution; targeted {'S8': 'fail'}"
+  },
+  {
+   "case": "F12-outcome-schema-mismatch",
+   "kind": "fault",
+   "targets": [
+    "S9"
+   ],
+   "expected_verdict": "rejected-before-execution",
+   "workflow": "W1",
+   "exit_code": 4,
+   "verdict": "unchecked",
+   "episodes_executed": 100,
+   "wall_seconds": 20.466300200205296,
+   "checks": {
+    "S1": {
+     "status": "unsupported",
+     "detail": "SB3 neither records nor verifies a checkpoint digest; PPO.load only validated and loaded the archive"
+    },
+    "S2": {
+     "status": "unsupported",
+     "detail": "no dependency or record files are verified"
+    },
+    "S3": {
+     "status": "unsupported",
+     "detail": "the saved configuration is used for evaluation, not compared with a recorded evaluation"
+    },
+    "S4": {
+     "status": "unsupported",
+     "detail": "seeds are passed to reset(seed=int(seed)); int() converts floats and numeric strings without notice"
+    },
+    "S5": {
+     "status": "unsupported",
+     "detail": "reward parameters are not read: the evaluation uses the original reward only"
+    },
+    "S6": {
+     "status": "unsupported",
+     "detail": "the recorded evaluation is not read"
+    },
+    "S7": {
+     "status": "unsupported",
+     "detail": "the recorded evaluation is not read"
+    },
+    "S8": {
+     "status": "unsupported",
+     "detail": "reward terms are not re-scored"
+    },
+    "S9": {
+     "status": "unsupported",
+     "detail": "no outcome schema is compared"
+    },
+    "S10": {
+     "status": "unsupported",
+     "detail": "results are not compared with the recorded evaluation"
+    }
+   },
+   "outcome": "unsupported",
+   "note": "unchecked; 100 episodes executed"
+  },
+  {
+   "case": "F12-outcome-schema-mismatch",
+   "kind": "fault",
+   "targets": [
+    "S9"
+   ],
+   "expected_verdict": "rejected-before-execution",
+   "workflow": "W2",
+   "exit_code": 1,
+   "verdict": "rejected-before-execution",
+   "episodes_executed": 0,
+   "wall_seconds": 1.4903776999562979,
+   "checks": {
+    "S1": {
+     "status": "pass",
+     "detail": "policy 7aa5207e7aeeec75..."
+    },
+    "S2": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S3": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S4": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S5": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S6": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S7": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S8": {
+     "status": "pass",
+     "detail": "largest difference 0"
+    },
+    "S9": {
+     "status": "fail",
+     "detail": "outcome schema or recorded labels differ"
+    },
+    "S10": {
+     "status": "not-run",
+     "detail": "an integrity check failed"
+    }
+   },
+   "outcome": "rejected",
+   "note": "rejected-before-execution; targeted {'S9': 'fail'}"
+  },
+  {
+   "case": "F12-outcome-schema-mismatch",
+   "kind": "fault",
+   "targets": [
+    "S9"
+   ],
+   "expected_verdict": "rejected-before-execution",
+   "workflow": "W3",
+   "exit_code": 1,
+   "verdict": "rejected-before-execution",
+   "episodes_executed": 0,
+   "wall_seconds": 1.4430386000312865,
+   "checks": {
+    "S1": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S2": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S3": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S4": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S5": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S6": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S7": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S8": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S9": {
+     "status": "fail",
+     "detail": "every outcome is one of the adapter's categories: 'success'"
+    },
+    "S10": {
+     "status": "not-run",
+     "detail": "an integrity check failed"
+    }
+   },
+   "outcome": "rejected",
+   "note": "rejected-before-execution; targeted {'S9': 'fail'}"
+  }
+ ]
+}

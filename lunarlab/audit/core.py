@@ -26,7 +26,7 @@ from typing import TYPE_CHECKING, Any
 import gymnasium as gym
 import numpy as np
 
-from lunarlab.audit.contracts import AuditInputError, require_finite
+from lunarlab.audit.contracts import AuditInputError, NonFiniteValueError, require_finite
 
 if TYPE_CHECKING:
     from lunarlab.audit.adapters import TaskAdapter
@@ -177,17 +177,37 @@ def rescore_transitions(
     for i, t in enumerate(transitions):
         original = require_finite(t.original_reward, f"original reward of transition {i}")
         values = {k: term(t) for k, term in terms.items()}
-        training = require_finite(
-            weight * original + math.fsum(values.values()), f"training reward of transition {i}"
-        )
+        training = training_reward(weight, original, values, f"of transition {i}")
         audit.add(original, values, training)
         steps.append({"original": original, "terms": values, "training": training})
     return {"steps": steps, "summary": audit.summary()}
 
 
+def training_reward(weight: float, original: float, terms: Mapping[str, float], where: str) -> float:
+    """``weight * original + sum(terms)``, which must be finite; otherwise ``NonFiniteValueError`` names
+    ``where`` (for example ``"at step 3"``).
+
+    Finite term values can still sum beyond the floating-point range; that is refused too, not left to
+    raise a bare ``OverflowError``.
+    """
+    try:
+        terms_total = math.fsum(terms.values())
+    except OverflowError:
+        raise NonFiniteValueError(
+            f"the reward-term outputs {where} are each finite, but their sum overflows the floating-point "
+            "range"
+        ) from None
+    return require_finite(weight * original + terms_total, f"training reward {where}")
+
+
 @dataclass
 class EpisodeAudit:
-    """Per-episode sums. ``G = sum_t gamma^t r_t`` with t = 0 for the first transition after reset."""
+    """Per-episode sums. ``G = sum_t gamma^t r_t`` with t = 0 for the first transition after reset.
+
+    Every total stays finite: ``add`` refuses a transition whose values are not finite, or whose values are
+    finite but would carry a total outside the floating-point range. A refused transition leaves the audit
+    unchanged.
+    """
 
     gamma: float
     length: int = 0
@@ -200,16 +220,43 @@ class EpisodeAudit:
     _discount: float = 1.0
 
     def add(self, original: float, terms: Mapping[str, float], training: float) -> None:
-        """Add one transition's original reward, term values and training reward."""
-        d = self._discount
-        self.length += 1
-        self.original_return += original
-        self.training_return += training
-        self.discounted_original_return += d * original
-        self.discounted_training_return += d * training
+        """Add one transition's original reward, term values and training reward.
+
+        Raises :class:`~lunarlab.audit.contracts.NonFiniteValueError`, naming every affected quantity, if a
+        value is not finite or a total would overflow; the audit is then unchanged.
+        """
+        step = self.length
+        original = require_finite(original, f"original reward at step {step}")
+        training = require_finite(training, f"training reward at step {step}")
         for k, v in terms.items():
-            self.term_returns[k] = self.term_returns.get(k, 0.0) + v
-            self.term_discounted_returns[k] = self.term_discounted_returns.get(k, 0.0) + d * v
+            require_finite(v, f"reward term {k!r} output at step {step}")
+        d = self._discount
+        totals = {
+            "original_return": self.original_return + original,
+            "training_return": self.training_return + training,
+            "discounted_original_return": self.discounted_original_return + d * original,
+            "discounted_training_return": self.discounted_training_return + d * training,
+        }
+        term_totals = {k: self.term_returns.get(k, 0.0) + v for k, v in terms.items()}
+        term_discounted = {k: self.term_discounted_returns.get(k, 0.0) + d * v for k, v in terms.items()}
+        overflowed = [k for k, v in totals.items() if not math.isfinite(v)]
+        overflowed += [f"term_returns[{k!r}]" for k, v in term_totals.items() if not math.isfinite(v)]
+        overflowed += [
+            f"term_discounted_returns[{k!r}]" for k, v in term_discounted.items() if not math.isfinite(v)
+        ]
+        if overflowed:
+            raise NonFiniteValueError(
+                f"episode totals overflow at step {step}: {', '.join(overflowed)}. Every value of this transition "
+                "is finite, but the accumulated total leaves the floating-point range, so the episode cannot be "
+                "accounted"
+            )
+        self.length += 1
+        self.original_return = totals["original_return"]
+        self.training_return = totals["training_return"]
+        self.discounted_original_return = totals["discounted_original_return"]
+        self.discounted_training_return = totals["discounted_training_return"]
+        self.term_returns.update(term_totals)
+        self.term_discounted_returns.update(term_discounted)
         self._discount *= self.gamma
 
     def summary(self) -> dict[str, Any]:
@@ -233,10 +280,17 @@ class RewardAccountingWrapper(gym.Wrapper):
     ``terminated`` and ``truncated`` are never changed. On the last step of an episode,
     ``info["audit_episode"]`` holds the episode summary, including the adapter's outcome classification.
 
-    The original reward, every term output and the training reward must be finite. A NaN or infinite value
-    raises :class:`~lunarlab.audit.contracts.NonFiniteValueError` naming its source and ends the episode:
-    the wrapper refuses further steps until the next reset, so a partly accounted episode is never
-    completed or summarised.
+    The original reward, every term output and the training reward must be finite, and so must every
+    episode total. A NaN or infinite value, or finite values whose total overflows, raise
+    :class:`~lunarlab.audit.contracts.NonFiniteValueError` naming the source. The episode then ends for
+    accounting:
+
+    - no ``audit_episode`` is emitted for it;
+    - ``last_episode`` is cleared to ``None``;
+    - further steps are refused until the next reset, which starts a new audit.
+
+    Only these checked values are guaranteed; an episode summary is emitted only after every transition has
+    passed them.
     """
 
     def __init__(
@@ -287,52 +341,57 @@ class RewardAccountingWrapper(gym.Wrapper):
             raise RuntimeError("step() called before reset() or after the episode ended")
         obs, original, terminated, truncated, info = self.env.step(action)
         try:
-            original = require_finite(original, f"original reward at step {self._audit.length}")
+            step = self._audit.length
+            original = require_finite(original, f"original reward at step {step}")
             t = Transition(
                 self._prev, action, original, np.array(obs, copy=True), bool(terminated), bool(truncated)
             )
             values = {k: term(t) for k, term in self.terms.items()}
-            training = require_finite(
-                self.original_weight * original + math.fsum(values.values()),
-                f"training reward at step {self._audit.length}",
-            )
+            training = training_reward(self.original_weight, original, values, f"at step {step}")
+            self._audit.add(original, values, training)
+            self._observations.append(t.next_obs)
+            info = dict(info)
+            if terminated or truncated:
+                info["audit_episode"] = self._episode_summary(bool(terminated), bool(truncated), info)
         except Exception:
-            self._prev = None  # the episode cannot be completed: refuse further steps until a reset
+            # The episode cannot be completed: no summary, no stale last episode, no further steps until reset.
+            self._prev = None
+            self.last_episode = None
             raise
-        self._audit.add(original, values, training)
-        self._observations.append(t.next_obs)
-        info = dict(info)
         if terminated or truncated:
-            summary = self._audit.summary()
-            summary.update(
-                terminated=bool(terminated),
-                truncated=bool(truncated),
-                reward_hash=self.reward_hash,
-                reward_definition_sha256=self.reward_definition_sha256,
-            )
-            if self.adapter is not None:
-                from lunarlab.audit.adapters import EpisodeEnd
-
-                outcome = self.adapter.classify(
-                    EpisodeEnd(
-                        env=self.env,
-                        observations=np.asarray(self._observations),
-                        terminated=bool(terminated),
-                        truncated=bool(truncated),
-                        info=info,
-                    )
-                )
-                if outcome.get("outcome") not in self.adapter.outcome_categories:
-                    raise ValueError(
-                        f"adapter {self.adapter.name!r} returned outcome {outcome.get('outcome')!r}, "
-                        f"not one of {self.adapter.outcome_categories}"
-                    )
-                summary.update(outcome)
-                for name, diag in self.adapter.diagnostics.items():
-                    summary[name] = diag(np.asarray(self._observations))
-            info["audit_episode"] = summary
-            self.last_episode = summary
+            self.last_episode = info["audit_episode"]
             self._prev = None
         else:
             self._prev = t.next_obs
         return obs, (training if self.apply else original), terminated, truncated, info
+
+    def _episode_summary(self, terminated: bool, truncated: bool, info: dict[str, Any]) -> dict[str, Any]:
+        """The completed episode's audit: totals, ending flags, reward identity and the adapter's outcome."""
+        summary = self._audit.summary()
+        summary.update(
+            terminated=terminated,
+            truncated=truncated,
+            reward_hash=self.reward_hash,
+            reward_definition_sha256=self.reward_definition_sha256,
+        )
+        if self.adapter is not None:
+            from lunarlab.audit.adapters import EpisodeEnd
+
+            outcome = self.adapter.classify(
+                EpisodeEnd(
+                    env=self.env,
+                    observations=np.asarray(self._observations),
+                    terminated=terminated,
+                    truncated=truncated,
+                    info=info,
+                )
+            )
+            if outcome.get("outcome") not in self.adapter.outcome_categories:
+                raise ValueError(
+                    f"adapter {self.adapter.name!r} returned outcome {outcome.get('outcome')!r}, "
+                    f"not one of {self.adapter.outcome_categories}"
+                )
+            summary.update(outcome)
+            for name, diag in self.adapter.diagnostics.items():
+                summary[name] = diag(np.asarray(self._observations))
+        return summary

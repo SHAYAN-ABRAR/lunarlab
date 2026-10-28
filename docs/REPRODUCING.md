@@ -138,6 +138,8 @@ print(report["aggregate"]["mean_training_return"], report["reward"]["provenance"
 | `AuditInputError: invalid seeds: ... booleans are not seeds` | A seed list holds `True`, `3.0` or `"7"`, or is empty, negative or duplicated | Pass plain nonnegative integers; nothing is converted |
 | `NonFiniteValueError: reward term 'x' output must be finite` | A term returned NaN or infinity | Fix the term; the episode is not counted |
 | `INTEGRITY-FAILURE (blocking)`, exit 1 | A packaged file, reward model or record no longer matches its digest | Use the original package; nothing was evaluated |
+| `MALFORMED-RECORD (blocking)`, exit 1 | `audit-artifact`: every file matches its digest, but a recorded reward value is null, a boolean, text, non-finite or missing | The `[FAIL (record)]` lines name the episode and field. Use the original package; nothing was evaluated |
+| `NonFiniteValueError: episode totals overflow at step N: ...` | Each reward is finite, but an episode total leaves the floating-point range (about 1.8e308) | The reward is far outside any ordinary scale: rescale it. No episode summary was written |
 | `NUMERICAL-DIFFERENCE`, exit 3 | Another operating system or library build | Expected; read the per-episode differences in the report |
 | `error: ... no manifest.json`, exit 2 | `audit-artifact` was pointed at a folder that is not an audit artifact | Pass the folder written by the study's export phase |
 

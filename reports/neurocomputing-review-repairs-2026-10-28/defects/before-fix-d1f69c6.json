@@ -1,0 +1,117 @@
+{
+ "A1 two steps of 1e308, gamma 0.99": {
+  "steps": [
+   {
+    "reward": "1e+308",
+    "audit_episode": null
+   },
+   {
+    "reward": "1e+308",
+    "audit_episode": {
+     "length": 2,
+     "original_return": "inf",
+     "training_return": "inf",
+     "discounted_original_return": "inf",
+     "discounted_training_return": "inf",
+     "term_returns": {},
+     "term_discounted_returns": {},
+     "terminated": true,
+     "truncated": false,
+     "reward_hash": "836a0214637dd620",
+     "reward_definition_sha256": "be8fd42d8167e70c36f16f9a84ce1f7c3b450471a03655c9de39c2b8a419cca0"
+    }
+   }
+  ],
+  "step_after_end": "RuntimeError: step() called before reset() or after the episode ended",
+  "last_episode": {
+   "length": 2,
+   "original_return": "inf",
+   "training_return": "inf",
+   "discounted_original_return": "inf",
+   "discounted_training_return": "inf",
+   "term_returns": {},
+   "term_discounted_returns": {},
+   "terminated": true,
+   "truncated": false,
+   "reward_hash": "836a0214637dd620",
+   "reward_definition_sha256": "be8fd42d8167e70c36f16f9a84ce1f7c3b450471a03655c9de39c2b8a419cca0"
+  }
+ },
+ "A2 two terms of 1e308 in one transition": {
+  "steps": [
+   {
+    "exception": "OverflowError",
+    "message": "intermediate overflow in fsum"
+   }
+  ],
+  "step_after_end": "RuntimeError: step() called before reset() or after the episode ended",
+  "last_episode": null
+ },
+ "A3 rescore_transitions of the same transitions": {
+  "result": {
+   "length": 2,
+   "original_return": "inf",
+   "training_return": "inf",
+   "discounted_original_return": "inf",
+   "discounted_training_return": "inf",
+   "term_returns": {},
+   "term_discounted_returns": {}
+  }
+ },
+ "A4 audit_policy aggregate of two episodes of 1.5e308": {
+  "exception": "OverflowError",
+  "message": "intermediate overflow in fsum"
+ },
+ "B1 null original and training returns": {
+  "exception": "TypeError",
+  "message": "unsupported operand type(s) for *: 'float' and 'NoneType'"
+ },
+ "B2 boolean original return": {
+  "result": [
+   [
+    "every recorded reward value is a finite number",
+    false,
+    "episodes [0]"
+   ],
+   [
+    "training return = weight x original return + term returns, in every episode",
+    false,
+    "not checked: channels incomplete"
+   ]
+  ]
+ },
+ "B3 text training return": {
+  "result": [
+   [
+    "every recorded reward value is a finite number",
+    false,
+    "episodes [0]"
+   ],
+   [
+    "training return = weight x original return + term returns, in every episode",
+    false,
+    "not checked: channels incomplete"
+   ]
+  ]
+ },
+ "B4 missing training return": {
+  "result": [
+   [
+    "every episode records the original and training reward channels",
+    false,
+    "missing in [0]"
+   ],
+   [
+    "training return = weight x original return + term returns, in every episode",
+    false,
+    "not checked: channels incomplete"
+   ]
+  ]
+ },
+ "B5 null discounted (optional) return": {
+  "result": []
+ },
+ "B6 valid record": {
+  "result": []
+ }
+}

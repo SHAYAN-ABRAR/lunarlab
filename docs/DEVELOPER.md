@@ -9,7 +9,7 @@ generated API reference is in [api/](api/README.md); contribution rules are in [
 | Area | Modules | Responsibility |
 |---|---|---|
 | Rewards | `rewards/config.py`, `rewards/terms.py`, `rewards/accounting.py`, `rewards/wrapper.py`, `rewards/analysis.py` | strict reward schema and presets; pure term functions; per-episode sums; the single wrapper used for training, evaluation and recording |
-| Task-independent auditing | `audit/core.py`, `audit/adapters.py`, `audit/evaluate.py` | the accounting identity for any Gymnasium task; task adapters (LunarLander, CartPole); policy audits |
+| Task-independent auditing | `audit/core.py`, `audit/adapters.py`, `audit/evaluate.py` | the accounting identity (a wrapper for any Gymnasium environment); task adapters for LunarLander and CartPole, the two tasks the layer has been used on; policy audits |
 | Environment and outcomes | `env.py`, `outcomes.py`, `hover.py`, `physics.py` | environment factory and read-only internals; outcome classifier (version 2); hover detector; per-episode physics randomisation |
 | Configuration and runs | `config.py`, `runs.py`, `storage.py`, `locks.py` | run, PPO/DQN, training and protocol schemas with hashes; run creation, metadata and checkpoint manifest; paths and atomic writes; cross-process locks |
 | Training | `training.py`, `continuation.py`, `policies.py` | SB3 model and environment construction, the training callback, crash-safe checkpoints, DQN continuation bundles, weights-only policy loading |

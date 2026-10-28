@@ -1,0 +1,4744 @@
+{
+  "status": "exact",
+  "exit_code": 0,
+  "reason": "all 100 episodes match on the selected summary fields",
+  "evaluation_skipped": false,
+  "checks": [
+    {
+      "check": "manifest.json is present and readable",
+      "ok": true,
+      "detail": "",
+      "kind": "integrity"
+    },
+    {
+      "check": "artifact schema is supported",
+      "ok": true,
+      "detail": "lunarlab.audit-artifact/1",
+      "kind": "integrity"
+    },
+    {
+      "check": "policy.zip has its recorded SHA-256",
+      "ok": true,
+      "detail": "",
+      "kind": "integrity"
+    },
+    {
+      "check": "protocol.json has its recorded SHA-256",
+      "ok": true,
+      "detail": "",
+      "kind": "integrity"
+    },
+    {
+      "check": "run.json has its recorded SHA-256",
+      "ok": true,
+      "detail": "",
+      "kind": "integrity"
+    },
+    {
+      "check": "evaluation.json has its recorded SHA-256",
+      "ok": true,
+      "detail": "",
+      "kind": "integrity"
+    },
+    {
+      "check": "reward.json has its recorded SHA-256",
+      "ok": true,
+      "detail": "",
+      "kind": "integrity"
+    },
+    {
+      "check": "protocol digest matches the manifest, the training record and the test record",
+      "ok": true,
+      "detail": "",
+      "kind": "integrity"
+    },
+    {
+      "check": "protocol is valid (seed contract, disjoint splits, known adapter and terms)",
+      "ok": true,
+      "detail": "",
+      "kind": "integrity"
+    },
+    {
+      "check": "outcome schema matches the registered adapter (name, version, categories)",
+      "ok": true,
+      "detail": "artifact {'name': 'cartpole', 'version': '1', 'outcome_categories': ['balanced_to_time_limit', 'pole_fell', 'cart_left_track', 'unknown']}, registered cartpole v1 ['balanced_to_time_limit', 'pole_fell', 'cart_left_track', 'unknown']",
+      "kind": "integrity"
+    },
+    {
+      "check": "reward definition rebuilt from the protocol has the recorded digest",
+      "ok": true,
+      "detail": "rebuilt 48f30a8eaf3222f4..., recorded 48f30a8eaf3222f4...",
+      "kind": "integrity"
+    },
+    {
+      "check": "policy is the checkpoint the run froze and the test evaluated",
+      "ok": true,
+      "detail": "",
+      "kind": "integrity"
+    },
+    {
+      "check": "test seeds equal the protocol's",
+      "ok": true,
+      "detail": "",
+      "kind": "integrity"
+    },
+    {
+      "check": "recorded episodes are the protocol's test seeds, once each and in order",
+      "ok": true,
+      "detail": "",
+      "kind": "record"
+    },
+    {
+      "check": "every episode records the original and training reward channels",
+      "ok": true,
+      "detail": "",
+      "kind": "record"
+    },
+    {
+      "check": "every recorded reward value is a finite number",
+      "ok": true,
+      "detail": "",
+      "kind": "record"
+    },
+    {
+      "check": "every episode records exactly the design's terms",
+      "ok": true,
+      "detail": "",
+      "kind": "record"
+    },
+    {
+      "check": "training return = weight x original return + term returns, in every episode",
+      "ok": true,
+      "detail": "",
+      "kind": "record"
+    },
+    {
+      "check": "every outcome is one of the adapter's categories",
+      "ok": true,
+      "detail": "",
+      "kind": "record"
+    }
+  ],
+  "comparison": {
+    "compared_fields": [
+      "length",
+      "original_return",
+      "training_return",
+      "outcome",
+      "terminated",
+      "truncated"
+    ],
+    "exactness_scope": "numeric equality of selected episode-summary fields; not full-trajectory or bitwise identity",
+    "compared": 100,
+    "exact": 100,
+    "within_tolerance": 100,
+    "tolerance": 0.0,
+    "max_abs_return_difference": 0.0,
+    "max_abs_original_return_difference": 0.0,
+    "max_abs_training_return_difference": 0.0,
+    "mismatches": [],
+    "n_mismatches": 0,
+    "missing_seeds": [],
+    "summary": {
+      "n": 100,
+      "agreement": {
+        "bit_identical": 1.0,
+        "length": 1.0,
+        "termination": 1.0,
+        "env_outcome": null,
+        "pad_landing": null,
+        "all_outcome_fields": 1.0
+      },
+      "return_difference": {
+        "mean_abs": 0.0,
+        "median_abs": 0.0,
+        "p90_abs": 0.0,
+        "max_abs": 0.0,
+        "median_relative": 0.0,
+        "n_relative": 100,
+        "relative_floor": 1.0,
+        "episodes_differing": 0,
+        "episodes_above_1": 0,
+        "episodes_above_10": 0
+      }
+    },
+    "episodes": [
+      {
+        "seed": 210000,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210001,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210002,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210003,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210004,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210005,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210006,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210007,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210008,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210009,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210010,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210011,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210012,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210013,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210014,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210015,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210016,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210017,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210018,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210019,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210020,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210021,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210022,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210023,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210024,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210025,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210026,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210027,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210028,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210029,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210030,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210031,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210032,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210033,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210034,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210035,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210036,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210037,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210038,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210039,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210040,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210041,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210042,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210043,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210044,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210045,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210046,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210047,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210048,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210049,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210050,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210051,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210052,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210053,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210054,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210055,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210056,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210057,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210058,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210059,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210060,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210061,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210062,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210063,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210064,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210065,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210066,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210067,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210068,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210069,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210070,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210071,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210072,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210073,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210074,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210075,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210076,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210077,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210078,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210079,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210080,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210081,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210082,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210083,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210084,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210085,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210086,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210087,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210088,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210089,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210090,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210091,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210092,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210093,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210094,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210095,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210096,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210097,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210098,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      },
+      {
+        "seed": 210099,
+        "exact": true,
+        "recorded_return": 500.0,
+        "reproduced_return": 500.0,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 500,
+        "reproduced_length": 500,
+        "length_agrees": true,
+        "terminated": [
+          false,
+          false
+        ],
+        "truncated": [
+          true,
+          true
+        ],
+        "outcome": [
+          "balanced_to_time_limit",
+          "balanced_to_time_limit"
+        ],
+        "outcome_agrees": true
+      }
+    ]
+  },
+  "aggregates": {
+    "equivalence_assessed": false,
+    "interpretation": "Non-rejection of paired difference tests does not establish equivalence.",
+    "criterion": "Holm-corrected family-wise alpha = 0.05",
+    "metrics": {
+      "mean_original_return": {
+        "paired_mean_difference": 0.0,
+        "test": "sign-flip permutation test of the paired differences",
+        "p_value": 1.0,
+        "significant": false
+      },
+      "success_rate": {
+        "episodes_gained": 0,
+        "episodes_lost": 0,
+        "test": "exact McNemar test",
+        "p_value": 1.0,
+        "significant": false
+      }
+    },
+    "consistent": true
+  },
+  "platform": {
+    "basis": "operating system and numerical libraries (torch, numpy, Box2D, gymnasium, stable-baselines3) of artifact.json 'exported_with' versus this machine",
+    "recorded": {
+      "platform": "Windows-11-10.0.26300-SP0",
+      "python": "3.12.13",
+      "os": "Windows",
+      "torch": "2.14.1",
+      "numpy": "2.5.4",
+      "Box2D": "2.3.10",
+      "gymnasium": "1.4.0",
+      "stable-baselines3": "2.9.0"
+    },
+    "reproduced": {
+      "platform": "Windows-11-10.0.26300-SP0",
+      "python": "3.12.13",
+      "os": "Windows",
+      "torch": "2.14.1",
+      "numpy": "2.5.4",
+      "Box2D": "2.3.10",
+      "gymnasium": "1.4.0",
+      "stable-baselines3": "2.9.0"
+    },
+    "differences": {},
+    "same_platform": true
+  },
+  "reproduced_with": {
+    "lunarlab": "0.1.0",
+    "git": {
+      "available": false,
+      "reason": "not a git repository"
+    },
+    "python": "3.12.13",
+    "python_implementation": "CPython",
+    "platform": "Windows-11-10.0.26300-SP0",
+    "packages": {
+      "gymnasium": "1.4.0",
+      "Box2D": "2.3.10",
+      "pygame": "2.6.1",
+      "stable-baselines3": "2.9.0",
+      "torch": "2.14.1",
+      "numpy": "2.5.4",
+      "pandas": "3.0.6",
+      "matplotlib": "3.11.2",
+      "imageio": "2.38.1",
+      "imageio-ffmpeg": "0.6.0",
+      "optuna": "5.0.0",
+      "fastapi": "0.143.1",
+      "uvicorn": "0.54.0",
+      "pydantic": "2.14.1",
+      "psutil": "7.2.2",
+      "PyYAML": "6.0.3"
+    }
+  },
+  "reproduced_episodes": [
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.3165719292084,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.16001524442219,
+      "term_returns": {
+        "upright_potential": 0.3165719292087281
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.1620664436795659
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": -0.00036504428135231137,
+      "final_cart_position": -0.2999285161495209,
+      "seed": 210000
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.2990932822867,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.140275019149,
+      "term_returns": {
+        "upright_potential": 0.2990932822864963
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.1423262184063067
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": 0.0004119266814086586,
+      "final_cart_position": -0.10067299753427505,
+      "seed": 210001
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.31635860050886,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.163841193326995,
+      "term_returns": {
+        "upright_potential": 0.31635860050879855
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.16589239258434121
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": -0.0053016385063529015,
+      "final_cart_position": 1.435802698135376,
+      "seed": 210002
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.20994502574644,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.07498473743401,
+      "term_returns": {
+        "upright_potential": 0.2099450257466481
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.07703593669127896
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": -0.00289132259786129,
+      "final_cart_position": -0.3207867443561554,
+      "seed": 210003
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.1591167329799,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.03688378987967,
+      "term_returns": {
+        "upright_potential": 0.1591167329798286
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.038934989137014625
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": 0.00593410711735487,
+      "final_cart_position": 0.041405316442251205,
+      "seed": 210004
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.2356410725722,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.107262867743145,
+      "term_returns": {
+        "upright_potential": 0.23564107257190228
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.10931406700050114
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": 0.0058012171648442745,
+      "final_cart_position": 0.17487208545207977,
+      "seed": 210005
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.1815537389582,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.032620293192956,
+      "term_returns": {
+        "upright_potential": 0.1815537389582741
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.03467149245024166
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": -0.00010030338307842612,
+      "final_cart_position": 0.26564306020736694,
+      "seed": 210006
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.2439012186186,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.104020403115626,
+      "term_returns": {
+        "upright_potential": 0.24390121861885883
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.10607160237296565
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": -0.0017214863328263164,
+      "final_cart_position": -0.15748544037342072,
+      "seed": 210007
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.2594671507016,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.11197394276178,
+      "term_returns": {
+        "upright_potential": 0.25946715070127174
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.11402514201909124
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": 0.00590986292809248,
+      "final_cart_position": 0.04807589575648308,
+      "seed": 210008
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.23604968893767,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.096800943880886,
+      "term_returns": {
+        "upright_potential": 0.23604968893724204
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.09885214313817565
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": 0.002234421204775572,
+      "final_cart_position": -0.15935245156288147,
+      "seed": 210009
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.25868314961025,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.10570692272105,
+      "term_returns": {
+        "upright_potential": 0.258683149610309
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.10775812197839284
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": 0.00010487411782378331,
+      "final_cart_position": 0.41782113909721375,
+      "seed": 210010
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.2082832083134,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.0889013568376,
+      "term_returns": {
+        "upright_potential": 0.20828320831368125
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.09095255609494186
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": 0.006648361682891846,
+      "final_cart_position": 0.28414520621299744,
+      "seed": 210011
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.38580162771586,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.22288855656994,
+      "term_returns": {
+        "upright_potential": 0.3858016277158508
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.2249397558272101
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": 0.0037357411347329617,
+      "final_cart_position": 1.1484627723693848,
+      "seed": 210012
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.30385285894226,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.14986834092587,
+      "term_returns": {
+        "upright_potential": 0.30385285894211855
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.151919540183261
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": -0.004175732843577862,
+      "final_cart_position": 0.02308717370033264,
+      "seed": 210013
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.34456724886127,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.17932670460306,
+      "term_returns": {
+        "upright_potential": 0.3445672488612393
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.1813779038604748
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": -0.0008719208999536932,
+      "final_cart_position": -0.2437334656715393,
+      "seed": 210014
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.2194779376115,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.07065117475298,
+      "term_returns": {
+        "upright_potential": 0.21947793761130016
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.07270237401041729
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": 0.0015233996091410518,
+      "final_cart_position": 0.006926305592060089,
+      "seed": 210015
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.2402965621563,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.108882761166555,
+      "term_returns": {
+        "upright_potential": 0.2402965621563159
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.11093396042389236
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": -0.004120126366615295,
+      "final_cart_position": -0.3640326261520386,
+      "seed": 210016
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.19482202312696,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.05035596501403,
+      "term_returns": {
+        "upright_potential": 0.19482202312718516
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.05240716427138245
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": 0.000301367457723245,
+      "final_cart_position": 0.382167786359787,
+      "seed": 210017
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.1673480559914,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.01712111472404,
+      "term_returns": {
+        "upright_potential": 0.16734805599095787
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.019172313981402615
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": 0.0012503323378041387,
+      "final_cart_position": 0.013743402436375618,
+      "seed": 210018
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.2846663361065,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.12537027251774,
+      "term_returns": {
+        "upright_potential": 0.2846663361060821
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.12742147177505586
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": 0.0010128732537850738,
+      "final_cart_position": -0.09334326535463333,
+      "seed": 210019
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.3653329941815,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.209989495808244,
+      "term_returns": {
+        "upright_potential": 0.3653329941810932
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.2120406950655942
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": 0.007547091692686081,
+      "final_cart_position": 0.5175628662109375,
+      "seed": 210020
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.1767883659468,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.05009965055239,
+      "term_returns": {
+        "upright_potential": 0.17678836594700315
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.0521508498096404
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": 0.0056592803448438644,
+      "final_cart_position": -0.33095911145210266,
+      "seed": 210021
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.3893347246266,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.23101874325917,
+      "term_returns": {
+        "upright_potential": 0.3893347246263827
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.23306994251651098
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": 0.005629252642393112,
+      "final_cart_position": -1.5014010667800903,
+      "seed": 210022
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.3427254979433,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.174616515646555,
+      "term_returns": {
+        "upright_potential": 0.34272549794364526
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.17666771490380526
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": -0.004276142455637455,
+      "final_cart_position": 0.048107896000146866,
+      "seed": 210023
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.39268899595237,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.21250462277718,
+      "term_returns": {
+        "upright_potential": 0.39268899595282714
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.21455582203448317
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": 0.0011969821061939,
+      "final_cart_position": 0.41053688526153564,
+      "seed": 210024
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.1814810961972,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.05098260725782,
+      "term_returns": {
+        "upright_potential": 0.18148109619735356
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.053033806515162554
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": -0.004710295703262091,
+      "final_cart_position": 0.38232144713401794,
+      "seed": 210025
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.1490153630963,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.00719411762139,
+      "term_returns": {
+        "upright_potential": 0.14901536309626473
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.009245316878644196
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": -0.00044013929436914623,
+      "final_cart_position": -0.21497273445129395,
+      "seed": 210026
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.195159706445,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.06890032492485,
+      "term_returns": {
+        "upright_potential": 0.19515970644495584
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.07095152418212171
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": -0.004838917404413223,
+      "final_cart_position": -0.2444424331188202,
+      "seed": 210027
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.19353387853664,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.03720040492038,
+      "term_returns": {
+        "upright_potential": 0.19353387853637938
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.03925160417769448
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": 0.0009704562253318727,
+      "final_cart_position": 0.007764920126646757,
+      "seed": 210028
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.3172210523219,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.14916429325344,
+      "term_returns": {
+        "upright_potential": 0.3172210523219227
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.15121549251072444
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": -2.1962172468192875e-05,
+      "final_cart_position": 0.3562323749065399,
+      "seed": 210029
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.39012437915335,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.21201746918228,
+      "term_returns": {
+        "upright_potential": 0.3901243791526587
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.21406866843961928
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": 0.001946834847331047,
+      "final_cart_position": -0.0952591747045517,
+      "seed": 210030
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.16149956402904,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.03445967481359,
+      "term_returns": {
+        "upright_potential": 0.16149956402849808
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.036510874070887635
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": 0.0037683406844735146,
+      "final_cart_position": -0.34499770402908325,
+      "seed": 210031
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.2283208698179,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.07663431836212,
+      "term_returns": {
+        "upright_potential": 0.22832086981777253
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.0786855176193939
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": -0.0007052579894661903,
+      "final_cart_position": 0.403513640165329,
+      "seed": 210032
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.2073942570194,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.07194689242924,
+      "term_returns": {
+        "upright_potential": 0.20739425701986078
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.07399809168649521
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": -0.004403719678521156,
+      "final_cart_position": 0.12453952431678772,
+      "seed": 210033
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.24469188814925,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.104430228701844,
+      "term_returns": {
+        "upright_potential": 0.24469188814917486
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.10648142795915339
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": 0.0016488074325025082,
+      "final_cart_position": -0.08716723322868347,
+      "seed": 210034
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.14844608445213,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.005459490662545,
+      "term_returns": {
+        "upright_potential": 0.14844608445280105
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.0075106899198738855
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": 0.0007757332059554756,
+      "final_cart_position": 0.0687912106513977,
+      "seed": 210035
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.1718129855695,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.04904851741256,
+      "term_returns": {
+        "upright_potential": 0.1718129855695987
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.0510997166698636
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": 0.0060448674485087395,
+      "final_cart_position": 0.2796139419078827,
+      "seed": 210036
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.18965734434835,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.03637817119871,
+      "term_returns": {
+        "upright_potential": 0.18965734434831652
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.038429370455986905
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": 0.00011179791908944026,
+      "final_cart_position": 0.3740330636501312,
+      "seed": 210037
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.3600611703107,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.18672386676924,
+      "term_returns": {
+        "upright_potential": 0.36006117031079465
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.18877506602651678
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": 0.0001651300844969228,
+      "final_cart_position": 1.770491361618042,
+      "seed": 210038
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.1687875288594,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.01823609875408,
+      "term_returns": {
+        "upright_potential": 0.1687875288591791
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.020287298011348986
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": 0.0013859550235792994,
+      "final_cart_position": -0.01997130736708641,
+      "seed": 210039
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.1627726054926,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.03779189333571,
+      "term_returns": {
+        "upright_potential": 0.16277260549257758
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.03984309259295983
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": -0.005595784168690443,
+      "final_cart_position": 0.14373140037059784,
+      "seed": 210040
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.20091500495624,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.07211528082961,
+      "term_returns": {
+        "upright_potential": 0.20091500495584452
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.07416648008690645
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": 0.004929255228489637,
+      "final_cart_position": 0.3992094397544861,
+      "seed": 210041
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.2194844162714,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.0772716070821,
+      "term_returns": {
+        "upright_potential": 0.2194844162711955
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.07932280633942139
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": -0.001567654893733561,
+      "final_cart_position": -0.335271954536438,
+      "seed": 210042
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.25609795166537,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.10061338952706,
+      "term_returns": {
+        "upright_potential": 0.2560979516656222
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.10266458878436985
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": 0.0005117816035635769,
+      "final_cart_position": 0.237949401140213,
+      "seed": 210043
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.19432416481123,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.05924914294218,
+      "term_returns": {
+        "upright_potential": 0.19432416481135892
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.06130034219951552
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": -0.0018431682838127017,
+      "final_cart_position": -0.11048758029937744,
+      "seed": 210044
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.1654976464132,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.03331139794893,
+      "term_returns": {
+        "upright_potential": 0.1654976464131658
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.03536259720623171
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": -0.004473246168345213,
+      "final_cart_position": -0.0284755639731884,
+      "seed": 210045
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.337644100245,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.160211503444536,
+      "term_returns": {
+        "upright_potential": 0.33764410024532143
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.16226270270184154
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": 0.001829170505516231,
+      "final_cart_position": 0.2622600197792053,
+      "seed": 210046
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.26235818406224,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.1086971482104,
+      "term_returns": {
+        "upright_potential": 0.2623581840618108
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.11074834746765905
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": 0.0014725610380992293,
+      "final_cart_position": -0.30825138092041016,
+      "seed": 210047
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.2234026659197,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.07396070086149,
+      "term_returns": {
+        "upright_potential": 0.22340266592016816
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.07601190011877873
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": -0.004784693010151386,
+      "final_cart_position": -0.09347096085548401,
+      "seed": 210048
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.337130860413,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.18048953057721,
+      "term_returns": {
+        "upright_potential": 0.33713086041291207
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.18254072983454694
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": 0.0062088691629469395,
+      "final_cart_position": 1.4307605028152466,
+      "seed": 210049
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.3833832596686,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.2017260546931,
+      "term_returns": {
+        "upright_potential": 0.38338325966892167
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.20377725395046972
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": -0.0012671909062191844,
+      "final_cart_position": -1.4294687509536743,
+      "seed": 210050
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.3264461711841,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.155589661983896,
+      "term_returns": {
+        "upright_potential": 0.32644617118439545
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.1576408612412358
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": 0.0006944885826669633,
+      "final_cart_position": -0.39213135838508606,
+      "seed": 210051
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.36274174375205,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.200731676720444,
+      "term_returns": {
+        "upright_potential": 0.36274174375189955
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.20278287597780847
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": 0.005254961084574461,
+      "final_cart_position": 1.3259977102279663,
+      "seed": 210052
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.1855892774868,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.06740659236474,
+      "term_returns": {
+        "upright_potential": 0.18558927748644438
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.06945779162212068
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": -0.005508529953658581,
+      "final_cart_position": -0.19006051123142242,
+      "seed": 210053
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.1386405279412,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.01312819590331,
+      "term_returns": {
+        "upright_potential": 0.13864052794103357
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.015179395160682955
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": 0.006032563745975494,
+      "final_cart_position": 0.310270756483078,
+      "seed": 210054
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.20624726628284,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.06090940704381,
+      "term_returns": {
+        "upright_potential": 0.20624726628278475
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.06296060630117153
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": -0.00030468933982774615,
+      "final_cart_position": 0.3316650986671448,
+      "seed": 210055
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.26250464332026,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.10866577011699,
+      "term_returns": {
+        "upright_potential": 0.26250464332043405
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.11071696937436508
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": -0.0034346850588917732,
+      "final_cart_position": -0.037307437509298325,
+      "seed": 210056
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.20683946096534,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.062113057399166,
+      "term_returns": {
+        "upright_potential": 0.20683946096539357
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.06416425665641431
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": 0.0011069646570831537,
+      "final_cart_position": 0.2074468731880188,
+      "seed": 210057
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.34784545279024,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.1832431091994,
+      "term_returns": {
+        "upright_potential": 0.34784545278989865
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.18529430845671271
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": 0.003764566034078598,
+      "final_cart_position": 1.5015047788619995,
+      "seed": 210058
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.34322293341614,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.18922403456564,
+      "term_returns": {
+        "upright_potential": 0.34322293341614024
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.19127523382297507
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": -0.005349357612431049,
+      "final_cart_position": 1.2886621952056885,
+      "seed": 210059
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.29606306781693,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.133852154077,
+      "term_returns": {
+        "upright_potential": 0.2960630678169314
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.13590335333420656
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": -0.004619569052010775,
+      "final_cart_position": 0.5749450922012329,
+      "seed": 210060
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.1862292896609,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.055558833136786,
+      "term_returns": {
+        "upright_potential": 0.1862292896606602
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.05761003239419823
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": -0.005463873967528343,
+      "final_cart_position": -0.18722522258758545,
+      "seed": 210061
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.1600659652985,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.0398079441379,
+      "term_returns": {
+        "upright_potential": 0.16006596529850917
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.04185914339520414
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": -0.0057889437302947044,
+      "final_cart_position": -0.28081345558166504,
+      "seed": 210062
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.11774553580665,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.000158648784975,
+      "term_returns": {
+        "upright_potential": 0.11774553580687065
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.0022098480422356633
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": -0.005048163700848818,
+      "final_cart_position": -0.13717007637023926,
+      "seed": 210063
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.24943279891164,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.096232504795246,
+      "term_returns": {
+        "upright_potential": 0.24943279891152176
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.09828370405253277
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": 0.00011936626833630726,
+      "final_cart_position": 0.3319358825683594,
+      "seed": 210064
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.30082218184737,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.16060325428485,
+      "term_returns": {
+        "upright_potential": 0.3008221818469433
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.16265445354221575
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": 0.005405151750892401,
+      "final_cart_position": 0.3806423544883728,
+      "seed": 210065
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.22840301907377,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.08224693557879,
+      "term_returns": {
+        "upright_potential": 0.22840301907365607
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.08429813483611744
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": -0.001894941320642829,
+      "final_cart_position": -0.11774888634681702,
+      "seed": 210066
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.253000697117,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.09950930623958,
+      "term_returns": {
+        "upright_potential": 0.2530006971168039
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.10156050549691747
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": -0.005384149961173534,
+      "final_cart_position": 0.46626853942871094,
+      "seed": 210067
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.3738378003926,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.20282544034832,
+      "term_returns": {
+        "upright_potential": 0.373837800392103
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.20487663960558716
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": 0.004849514923989773,
+      "final_cart_position": -0.8906794786453247,
+      "seed": 210068
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.19341874512,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.04496392047189,
+      "term_returns": {
+        "upright_potential": 0.1934187451202414
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.047015119729155716
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": 0.0011490235337987542,
+      "final_cart_position": -0.057896990329027176,
+      "seed": 210069
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.212256185191,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.083969240058416,
+      "term_returns": {
+        "upright_potential": 0.21225618519050998
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.08602043931573623
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": -0.00501294108107686,
+      "final_cart_position": -0.29228800535202026,
+      "seed": 210070
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.3144982091964,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.15413499111516,
+      "term_returns": {
+        "upright_potential": 0.31449820919632476
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.1561861903724439
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": 0.0011518866522237659,
+      "final_cart_position": 0.2438563108444214,
+      "seed": 210071
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.117236509744,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.00097303374495,
+      "term_returns": {
+        "upright_potential": 0.11723650974418165
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.003024233002333561
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": -0.0054229446686804295,
+      "final_cart_position": -0.17154957354068756,
+      "seed": 210072
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.37693344004686,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.1872329536789,
+      "term_returns": {
+        "upright_potential": 0.37693344004670737
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.1892841529362155
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": 0.0016752352239564061,
+      "final_cart_position": 0.27022653818130493,
+      "seed": 210073
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.41157133924287,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.22478684740595,
+      "term_returns": {
+        "upright_potential": 0.4115713392429551
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.2268380466632335
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": 0.00021322871907614172,
+      "final_cart_position": -0.2417786717414856,
+      "seed": 210074
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.18105550704604,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.055226851710756,
+      "term_returns": {
+        "upright_potential": 0.181055507046183
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.057278050968041
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": -0.005198223982006311,
+      "final_cart_position": 0.23734723031520844,
+      "seed": 210075
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.34364611513104,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.187817850315525,
+      "term_returns": {
+        "upright_potential": 0.34364611513035603
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.18986904957291992
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": -0.003085639327764511,
+      "final_cart_position": -0.1846955269575119,
+      "seed": 210076
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.17241972208467,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.05544855554526,
+      "term_returns": {
+        "upright_potential": 0.17241972208423684
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.05749975480255673
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": 0.006296164356172085,
+      "final_cart_position": 0.028751011937856674,
+      "seed": 210077
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.18919320798216,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.04062788797781,
+      "term_returns": {
+        "upright_potential": 0.18919320798190067
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.04267908723511259
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": 0.00010849317186512053,
+      "final_cart_position": 0.24257060885429382,
+      "seed": 210078
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.3411188272533,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.17131396947642,
+      "term_returns": {
+        "upright_potential": 0.34111882725261006
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.17336516873376326
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": 0.0007724793977104127,
+      "final_cart_position": 1.344109058380127,
+      "seed": 210079
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.3142447686508,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.1483972187068,
+      "term_returns": {
+        "upright_potential": 0.3142447686504208
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.15044841796413524
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": 0.000811148202046752,
+      "final_cart_position": -0.0685989037156105,
+      "seed": 210080
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.3315287603805,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.175715953019086,
+      "term_returns": {
+        "upright_potential": 0.3315287603801039
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.17776715227640666
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": -0.005324243102222681,
+      "final_cart_position": -1.2356575727462769,
+      "seed": 210081
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.2445173654677,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.10757773556028,
+      "term_returns": {
+        "upright_potential": 0.2445173654675803
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.10962893481753129
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": 0.002470345702022314,
+      "final_cart_position": -0.2385404109954834,
+      "seed": 210082
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.34730510227485,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.18281035713288,
+      "term_returns": {
+        "upright_potential": 0.3473051022751225
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.18486155639013452
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": -0.003923460841178894,
+      "final_cart_position": 1.525249719619751,
+      "seed": 210083
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.16518429829466,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.031551677488956,
+      "term_returns": {
+        "upright_potential": 0.1651842982945952
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.03360287674628378
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": 0.002121523953974247,
+      "final_cart_position": -0.16776043176651,
+      "seed": 210084
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.30393337336045,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.12745335923579,
+      "term_returns": {
+        "upright_potential": 0.3039333733604732
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.12950455849307563
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": -0.0004046029644086957,
+      "final_cart_position": 0.023404505103826523,
+      "seed": 210085
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.19685454145167,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.05667577554292,
+      "term_returns": {
+        "upright_potential": 0.19685454145180725
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.05872697480024697
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": 0.001435799989849329,
+      "final_cart_position": -0.13994866609573364,
+      "seed": 210086
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.38494378263755,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.228289629310865,
+      "term_returns": {
+        "upright_potential": 0.3849437826375649
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.23034082856820517
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": -0.0017689468804746866,
+      "final_cart_position": -1.4423575401306152,
+      "seed": 210087
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.3061193411857,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.149622501246476,
+      "term_returns": {
+        "upright_potential": 0.3061193411857769
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.15167370050376097
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": 0.0014833115274086595,
+      "final_cart_position": -0.12288736552000046,
+      "seed": 210088
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.3579304825229,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.173638245886835,
+      "term_returns": {
+        "upright_potential": 0.35793048252281645
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.1756894451441626
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": 0.001215453608892858,
+      "final_cart_position": 0.22071532905101776,
+      "seed": 210089
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.3589225446357,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.208959902102755,
+      "term_returns": {
+        "upright_potential": 0.35892254463601664
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.21101110136006548
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": -0.004076231271028519,
+      "final_cart_position": -1.5948774814605713,
+      "seed": 210090
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.25779950908134,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.1146617945751,
+      "term_returns": {
+        "upright_potential": 0.2577995090816014
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.11671299383240248
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": 0.0053930687718093395,
+      "final_cart_position": 0.24841678142547607,
+      "seed": 210091
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.27312161189246,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.106342121998495,
+      "term_returns": {
+        "upright_potential": 0.27312161189245837
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.1083933212557706
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": 0.00023813446750864387,
+      "final_cart_position": 0.26547619700431824,
+      "seed": 210092
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.2827596989395,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.10543239738495,
+      "term_returns": {
+        "upright_potential": 0.28275969893957204
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.1074835966422337
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": -0.000793767801951617,
+      "final_cart_position": -0.18269704282283783,
+      "seed": 210093
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.1424054262992,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.016099450839,
+      "term_returns": {
+        "upright_potential": 0.14240542629937064
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.018150650096310658
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": -0.0038853888399899006,
+      "final_cart_position": -0.10444768518209457,
+      "seed": 210094
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.1517659582548,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.0224939408492,
+      "term_returns": {
+        "upright_potential": 0.15176595825495864
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.024545140106538816
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": -0.005315680988132954,
+      "final_cart_position": 0.38255611062049866,
+      "seed": 210095
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.13778368509765,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.01181258327598,
+      "term_returns": {
+        "upright_potential": 0.1377836850975087
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.013863782533285785
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": -0.004623451270163059,
+      "final_cart_position": -0.23381848633289337,
+      "seed": 210096
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.3916541276845,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.23118852744795,
+      "term_returns": {
+        "upright_potential": 0.391654127684665
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.23323972670524196
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": 0.006770227570086718,
+      "final_cart_position": 0.268666535615921,
+      "seed": 210097
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.38366176833654,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.22224592148041,
+      "term_returns": {
+        "upright_potential": 0.38366176833678034
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.224297120737808
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": 0.003062058938667178,
+      "final_cart_position": 1.3782421350479126,
+      "seed": 210098
+    },
+    {
+      "length": 500,
+      "original_return": 500.0,
+      "training_return": 500.35179911903913,
+      "discounted_original_return": 49.997948800742655,
+      "discounted_training_return": 50.19483736890418,
+      "term_returns": {
+        "upright_potential": 0.3517991190391216
+      },
+      "term_discounted_returns": {
+        "upright_potential": 0.19688856816150307
+      },
+      "terminated": false,
+      "truncated": true,
+      "reward_hash": "d954e803310888f5",
+      "reward_definition_sha256": "48f30a8eaf3222f4fb82d076efed30d8bc5c9ce0c8a23f103cbb4f713fb2d216",
+      "outcome": "balanced_to_time_limit",
+      "final_pole_angle_rad": -0.0036043841391801834,
+      "final_cart_position": -0.39735934138298035,
+      "seed": 210099
+    }
+  ]
+}
