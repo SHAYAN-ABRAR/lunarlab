@@ -13,9 +13,11 @@ diagnostic, how to add an environment, and what would still be needed to run the
 | Original and training returns kept apart, undiscounted and discounted, per term | `audit.core.EpisodeAudit`; `rewards.accounting` | **yes** (`audit.core`) |
 | Potential-based shaping with absorbing terminal and correct truncation | `audit.core.potential_shaping`; `rewards.terms.potential_shaping` | **yes** (any potential function) |
 | Per-step and state-predicate terms (the shape of the flawed hover bonus) | `audit.core.per_step`, `audit.core.state_bonus` | **yes** |
-| Reward-definition identity (content hash) | `audit.core.terms_hash`; `RewardConfig.content_hash` | **yes** |
-| Disjoint validation/test seed check | `audit.evaluate.seed_split_problems`; `EvalProtocol.problems` | **yes** (`audit`); `EvalProtocol` accepts only `LunarLander-v3` by design |
+| Reward-definition identity | `audit.core.terms_hash` (schema 0: 16-hex digest of the declared descriptions); `audit.provenance.reward_provenance` (versioned record: full definition digest, plus the digest and git status of each term's source file, or `incomplete` when the code cannot be located); `RewardConfig.content_hash` | **yes** |
+| Seed contract: non-empty, nonnegative integers, nothing coerced, no duplicates, disjoint splits; checked before any environment exists | `audit.contracts`, `audit.evaluate.seed_split_problems`; `EvalProtocol.problems` | **yes** (`audit`); `EvalProtocol` accepts only `LunarLander-v3` by design |
+| Finite rewards, term outputs, weights and descriptions (NaN or infinity refused, naming the source) | `audit.contracts`, `audit.core.RewardAccountingWrapper` | **yes** |
 | Policy audit on fixed seeds with the original reward | `audit.evaluate.audit_policy`; `evaluation.evaluate_policy` | **yes** (`audit`) |
+| A prespecified PPO study: training with scheduled original-reward validation, selection rule, freezing (`freeze.immutable_copy`), digest-checked final test, artifacts verified before replay | `audit.study`, `examples/cartpole_study.py`, `lunarlab audit-artifact` | **yes** (PPO only) |
 | Statistics across training seeds (IQM, bootstrap CIs, P(improvement), profiles) | `lunarlab.rl_stats`, `lunarlab.stats` | **yes** (plain arrays) |
 | Checkpoint digests, configuration hashes, segments, provenance | `runs`, `storage`, `freeze`, `continuation` | the mechanisms are generic; `RunConfig` is LunarLander's |
 | Outcome classification (strict pad landing, pad geography, body contact) | `lunarlab.outcomes` | **no**: lander geometry |
@@ -81,7 +83,21 @@ report["aggregate"]   # mean original return, mean shaped return, outcome counts
 
 `examples/cartpole_audit.py` trains PPO on CartPole twice (original reward; original plus the upright potential)
 through `RewardAccountingWrapper`, then audits both policies with the original reward on the same held-out seeds.
-It demonstrates the contract; it is not a research result about CartPole.
+It demonstrates the contract; it is not a research result about CartPole. `PPO(seed=...)` re-seeds the
+environments, so the example sets their seeds after building the model.
+
+For a controlled study, write a protocol (`lunarlab.audit.study`; examples in `examples/protocols/` and
+`reports/neurocomputing-2026-10-27/cartpole-study/protocol/`) and run `examples/cartpole_study.py`. The protocol
+fixes the reward designs, the learner, the budget, the training and environment seeds, the validation and test
+seeds and the selection rule; it is validated before training. Each run:
+
+- records the effective first-reset seeds and refuses to finish if they differ from the protocol;
+- selects a checkpoint on original-reward validation only, then freezes it and the final checkpoint;
+- tests only after every frozen digest is verified, and exports an artifact.
+
+`lunarlab audit-artifact verify|reproduce` checks the artifact's files, protocol, reward definition and records
+before any episode runs. The 27 October 2026 CartPole study and its analysis are in
+`reports/neurocomputing-2026-10-27/cartpole-study/`.
 
 ## Adding a reward term to the main LunarLander pipeline
 
@@ -101,8 +117,10 @@ adapter's `diagnostics`; its value is stored in every episode record.
 
 ## What running the full pipeline on another task would still need
 
-The adapter layer covers accounting, audits and statistics. Running *training jobs, final-test freezing and the
-web interface* on another environment would additionally need:
+The adapter layer covers accounting, audits, statistics and, with `audit.study`, a prespecified PPO study with
+selection, freezing, final tests and verified artifacts. Running the main application on another environment
+would additionally need the following. That application covers resumable training jobs, DQN, the run registry,
+robustness and tuning studies, preference learning and the web interface.
 
 - `RunConfig`/`EvalProtocol` to carry an adapter name instead of the fixed `LunarLander-v3` declaration (and
   `EvalProtocol.problems` to validate against the adapter), with a configuration-hash rule that keeps every
