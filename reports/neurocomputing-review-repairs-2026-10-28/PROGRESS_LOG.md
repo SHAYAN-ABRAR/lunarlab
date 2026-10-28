@@ -139,3 +139,16 @@ defects found by an independent review of the Neurocomputing revision. It trains
 - 17:18 Integrity (`integrity/`). The 2,359 protected historical files are unchanged; the combined digest
   equals the one before any change. Since `d5881cb`, the 27 October evidence folder has 72 added run records
   and 5 documentation edits, and no change to protocols, raw outputs, results or figure inputs.
+- 17:20-17:35 Deposit candidate and review package built from `83176fb`, then a validation from a fresh
+  extraction (`tools/validate_review_package.py … --fresh-venv --commands`, started 17:33).
+  - **The validator found a packaging fault:** `build_figures.py` stopped because `docs/results/results.json`
+    no longer matched its recorded digest.
+  - **Cause:** the package builder used plain `git archive`. With `core.autocrlf=true` on this machine, that
+    converts line endings: the package copy had 6,981 CRLFs. The Git blob, the recorded digest and
+    `git -c core.autocrlf=false archive` all agree (`35dcd0f9…`).
+  - **Effect on the earlier package:** the 27 October return package used `git archive` only for `-text`
+    folders and documentation, so its hashed evidence was unaffected.
+  - **Fix:** the run was stopped. Both builders now archive the committed bytes
+    (`git -c core.autocrlf=false archive`). The package builder is committed as `package/build_review_package.py`,
+    with machine paths as arguments.
+- Visual review of manuscript builds 4 and 5 recorded in `manuscript/VISUAL_REVIEW.md`, with their text logs.

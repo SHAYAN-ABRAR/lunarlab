@@ -88,6 +88,8 @@ def main() -> int:
     archive = subprocess.run(
         [
             "git",
+            "-c",
+            "core.autocrlf=false",  # the committed bytes, without line-ending conversion
             "archive",
             "--format=tar",
             a.commit,
