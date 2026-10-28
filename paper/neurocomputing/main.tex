@@ -17,6 +17,11 @@
 \newcommand{\swrev}{11145b3}
 \newcommand{\cirun}{40546091715}
 \newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+% The figures are tall: let them share a page with text, or fill a float page, near their first mention.
+\renewcommand{\topfraction}{0.9}
+\renewcommand{\bottomfraction}{0.8}
+\renewcommand{\textfraction}{0.07}
+\renewcommand{\floatpagefraction}{0.7}
 \journal{Neurocomputing}
 \biboptions{sort&compress}
 % A prepared manuscript is not a submitted manuscript: use a plain title footer.
@@ -50,14 +55,14 @@ Established packages supply many of the necessary components. Stable-Baselines3 
 \subsection{Architecture and access}
 The Python research core uses Gymnasium environments \citep{towers2025gymnasium} and contains reward functions, training and evaluation, artifact handling and analysis (Fig.~\ref{fig:architecture}). A FastAPI service and React/TypeScript client expose local experiment management, telemetry and replay for LunarLander; a three-dimensional view reconstructs the underlying two-dimensional simulation. File-based artifacts and local storage connect the interfaces without a hosted account. Table~\ref{tab:metadata} identifies the implementation described here. The software includes tutorials, Python and HTTP API documentation, extension guidance, issue templates and automated tests.
 
-\begin{figure}[tb]
+\begin{figure}[!tbp]
 \centering
 \includegraphics[width=\linewidth]{figures/architecture.pdf}
-\caption{Evidence flow and implementation boundaries. Boxes are stages of the reusable research core; solid arrows pass data between stages along the functions named in the figure's source manifest, each checked to exist in the code. Red diamonds are checks that must pass before the next stage. The LunarLander application supplies outcome definitions and diagnostics through the task adapter and reads recorded artifacts; it is not needed by the core.}
+\caption{Evidence flow and implementation boundaries. Boxes are stages of the reusable research core; solid arrows pass data between stages along the functions named in the figure's source manifest, each checked to exist in the code. Diamonds mark checks that must pass before the next stage. The LunarLander application (dashed arrows) supplies outcome definitions and diagnostics through the task adapter and reads recorded artifacts; the core does not need it.}
 \label{fig:architecture}
 \end{figure}
 
-\begin{table}[tb]
+\begin{table}[!tbp]
 \caption{Software identity and access for the implementation examined in this paper.}
 \label{tab:metadata}
 \centering\small
@@ -111,7 +116,7 @@ Checkpoint selection uses ten validation seeds, 10,000--10,009. Each selected po
 
 The unit of aggregation is a trained policy. We report the interquartile mean (IQM) of its 100-episode mean original returns, implemented as a 25\% trimmed mean with integer boundary removal: for five runs, the lowest and highest run means are removed. Percentile intervals use 5,000 bootstrap resamples of training runs. They condition on the fixed evaluation seeds and do not quantify uncertainty from alternative test-seed sets. Five training seeds provide limited precision, so individual policy results remain visible in Fig.~\ref{fig:audit}.
 
-\begin{figure}[tb]
+\begin{figure}[!tbp]
 \centering
 \includegraphics[width=\linewidth]{figures/final_test_audit.pdf}
 \caption{Reward-design audit with five trained PPO policies per design and 100 final-test episodes per policy. Circles show policy means in (a) and strict landing rates in (b); vertical displacement separates overlapping markers and leaves horizontal values unchanged. Diamonds denote the group IQM in (a) and mean landing rate in (b). Bars in (a) are 95\% training-run bootstrap intervals. The five hover policies have identical zero landing rates; all five markers are shown. Zero observed landings does not establish a zero population success probability.}
@@ -131,7 +136,7 @@ To test whether the integrated workflow checks anything a competent SB3 user cou
 
 The inventory has two controls and twelve faults, each changing one property while every digest that could otherwise catch it is recomputed (Fig.~\ref{fig:comparison}). W2 and W3 produced identical results for every check in all fourteen cases: both accepted the clean control with an exact replay and the cross-platform control as a permitted numerical difference, and both rejected all twelve faults through the targeted check before executing the policy. W1 attempted none of the specification's checks; it evaluated 100 episodes in every case without a warning, including a swapped checkpoint whose returns were indistinguishable from the selected one. The program sizes were 65, 277 and 152 counted lines (non-blank, non-comment, non-docstring); W3's lines map the neutral format onto LunarLab, whose own artifacts are checked by one command. On the clean control, five randomized runs per program had median wall times of 20.9, 21.0 and 21.7~s and peak memory of 288, 289 and 293~MB; run-to-run variation from the machine exceeded the differences, so no cost difference is claimed.
 
-\begin{figure}[tb]
+\begin{figure}[!tbp]
 \centering
 \includegraphics[width=\linewidth]{figures/workflow_comparison.pdf}
 \caption{Outcomes of the prespecified fault-injection comparison: fourteen designed cases, each run once by each program. S1--S9 name the specification's integrity checks (policy digest, file and dependency digests, recorded protocol, seed contract, finite parameters, reward channels, accounting identity, potential convention, outcome schema). The results describe these designed cases only; they do not estimate how often such faults occur or the detection of faults outside the set.}
@@ -145,7 +150,7 @@ To exercise the task-independent layer on a separate controlled problem, we pres
 
 The original and potential designs reached the 500-step limit in every test episode for all ten policies, a ceiling at which the two cannot be distinguished. All five flawed-bonus policies failed after about nine steps (mean original return 9.31, 95\% bootstrap interval over policies 9.22--9.40; no completions in 500 episodes), although their own training return of about 1009 exceeded the 500 earned by a successful policy (Fig.~\ref{fig:cartpole}). Selection on original reward could not recover a useful checkpoint, because failing quickly was learned before the first evaluated checkpoint. The study shows a second use of the layer and a reward conflict the audit records expose; with one simple task and a ceiling effect, it does not establish general applicability.
 
-\begin{figure}[tb]
+\begin{figure}[!tbp]
 \centering
 \includegraphics[width=\linewidth]{figures/cartpole_study.pdf}
 \caption{CartPole audit, validation-selected policies. Circles are the five trained policies per design (the sampling unit), each the mean over the same 100 held-out test seeds, offset vertically in seed order; diamonds and bars are the mean and 95\% percentile bootstrap interval over policies (10,000 resamples), conditional on those seeds. Intervals collapse where all five policies coincide. Panel (c) uses each design's own training reward and is not comparable with (a).}
@@ -158,7 +163,7 @@ At revision \texttt{\swrev}, public continuous integration (run \cirun) records 
 
 Table~\ref{tab:cost} compares SB3 with a monitoring wrapper, SB3 with LunarLab accounting, and the full LunarLab training workflow. Hyperparameters, training transitions and thread count are matched. The full workflow's loop time is 5.3\% higher, while its additional validation and checkpointing raise elapsed time by 22.1\%. The loop interval includes initialization and excludes separately timed validation and checkpoint operations. Memory is the mean of per-run process peaks measured through training and checkpointing, before optional replay generation. The benchmark records an uncommitted source state based on \texttt{67440c6}; its source manifest is preserved separately from later revisions. The measurements apply to the recorded machine, source state and workload.
 
-\begin{table}[tb]
+\begin{table}[!tbp]
 \caption{PPO execution-cost benchmark: 102,400 training transitions per run, three repetitions, Windows 11, Intel i7-13620H and one PyTorch thread. Throughput is mean $\pm$ sample standard deviation; ratios use mean durations. The full workflow performs 18,780 additional validation transitions, taking 7.9 seconds on average. MB denotes $10^6$ bytes.}
 \label{tab:cost}
 \centering\small
@@ -183,7 +188,7 @@ Third, cross-platform reports assess whether the observations motivating an inte
 \subsection{Reproduction and inspection procedure}
 A researcher can begin with the three complete example packages, verify their manifests, re-evaluate a baseline and the hover-bonus policy, and inspect the reported original return and strict landing outcome. The artifact reproduction command reports integrity and re-evaluation status separately. Per-step trace comparisons support more detailed investigation. Recomputing the recorded study summaries requires no retraining. Re-running a policy is a separate operation, and training a new policy adds another source of variability. The CartPole study is rerun from its protocol with one example script, and the comparison from its hashed fixtures. The accompanying reproduction instructions preserve these distinctions and identify the source revisions and required learned-reward dependencies.
 
-Figures~\ref{fig:audit}--\ref{fig:cartpole} are produced by deterministic plotting scripts from stored records; each figure's inputs, plotted values and output digests are recorded in a manifest, and Fig.~\ref{fig:audit}'s plotted values are re-derived from the historical summaries. AI tools assisted the software and figure work. ChatGPT/Codex (OpenAI) assisted software review, the editorial revision and research planning; historical ChatGPT model identifiers were unavailable in the reviewed records. Claude Code (Anthropic) assisted implementation, verification scripts and figure code; retained development metadata identifies Claude Code versions 2.1.283 and 2.1.299 with model identifier \texttt{claude-opus-5-5}, and the code, studies and figures of this revision were prepared with version 2.1.299. The plotted values are read from recorded artifacts rather than generated by a language model.
+Every figure is produced by a deterministic script: the plots from stored records, and Fig.~\ref{fig:architecture} from a specification whose code references are checked against the source. A manifest records each figure's inputs, plotted values and output digests, and Fig.~\ref{fig:audit}'s plotted values are re-derived from the historical summaries. AI tools assisted the software and figure work. ChatGPT/Codex (OpenAI) assisted software review, the editorial revision and research planning; historical ChatGPT model identifiers were unavailable in the reviewed records. Claude Code (Anthropic) assisted implementation, verification scripts and figure code; retained development metadata identifies Claude Code versions 2.1.283 and 2.1.299 with model identifier \texttt{claude-opus-5-5}, and the code, studies and figures of this revision were prepared with version 2.1.299. The plotted values are read from recorded artifacts rather than generated by a language model.
 
 \section{Research use and limitations}
 The hover experiment illustrates the intended research use. A researcher first identifies the incentive paid by the reward term, then verifies which validation-selected checkpoint was evaluated, and finally examines its reward components, strict landing outcomes and timeouts. Re-scoring a trajectory supports inspection of that incentive; artifact verification and re-evaluation test the identity and repeatability of the recorded evidence. These operations make the explanation of a failure inspectable from reward specification through observed behavior, and the CartPole study shows the same chain through the task-independent layer.
@@ -193,8 +198,9 @@ The empirical evidence remains concentrated on LunarLander, with one additional 
 \section{Conclusion}
 LunarLab links reward specifications to component records, checkpoint selection to protected policy artifacts, and those artifacts to task outcomes. The LunarLander study illustrates how these links support investigation of a reward-design failure, a second task exercises the same links through a task-independent layer, and an independent implementation of the audit reaches the same verdicts on designed faults. Re-evaluation separates file integrity from numerical agreement and behavioral conclusions. The open implementation and exported artifacts make the demonstrated failures and the experimental process available for inspection and reuse.
 
+\FloatBarrier
 \section*{Code and data availability}
-The MIT-licensed source, documentation, recorded result summaries, three complete example packages and the six learned-reward packages are available at \url{https://github.com/SHAYAN-ABRAR/lunarlab}; this revision's evidence (protocols, raw episode records, comparison outputs, Linux replay reports and figure manifests) is under \texttt{reports/neurocomputing-2026-10-27/} at revision \texttt{\swrev}. The complete 38-policy export, including learned-reward dependencies, is provided in \texttt{LunarLab\_38\_Policy\_Study.zip} with the matching source archive \texttt{lunarlab-0.1.0-444a4c5-src.tar.gz}, and the CartPole study's frozen checkpoints accompany the review package. These accompany this manuscript as supplementary material and have not yet been deposited in a separate public archive.
+The MIT-licensed source, documentation, recorded result summaries, three complete example packages and the six learned-reward packages are available at \url{https://github.com/SHAYAN-ABRAR/lunarlab}. The evidence for this paper (protocols, raw episode records, comparison outputs, Linux replay reports and figure manifests) is under \texttt{reports/neurocomputing-2026-10-27/} on the repository branch \texttt{research/neurocomputing-audit-evidence}, which has not yet been merged or released; the software it evaluates is revision \texttt{\swrev} on that branch. The complete 38-policy export, including learned-reward dependencies, is provided in \texttt{LunarLab\_38\_Policy\_Study.zip} with the matching source archive \texttt{lunarlab-0.1.0-444a4c5-src.tar.gz}, and the CartPole study's frozen checkpoints accompany the review package. These accompany this manuscript as supplementary material and have not yet been deposited in a separate public archive.
 
 \section*{Funding}
 This research was self-funded. It received no specific grant from funding agencies in the public, commercial or not-for-profit sectors.
@@ -209,13 +215,16 @@ The author thanks American International University-Bangladesh (AIUB) for its in
 % \input{AI_Disclosure_For_Submission}
 
 \appendix
+% elsarticle numbers appendix figures A.n but does not reset the counter.
+\setcounter{figure}{0}
 \section{Cross-platform replay of the learned-reward policies}
-\begin{figure}[htb]
+\begin{figure}[!htbp]
 \centering
 \includegraphics[width=\linewidth]{figures/linux_replay.pdf}
 \caption{Linux replay of the six learned-reward policies (CI run 40545198707) against their recording-machine evaluation. (a) Difference in original return for every one of the 100 test episodes per policy, on a symmetric logarithmic axis that is linear within $\pm10^{-3}$; vertical jitter only; bars mark the median. (b) Strict pad-landing rate as recorded and on Linux. Integrity checks passed for every package before any episode ran.}
 \label{fig:linux}
 \end{figure}
+\FloatBarrier
 
 \bibliographystyle{elsarticle-num}
 \bibliography{references}

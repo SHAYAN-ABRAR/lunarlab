@@ -40,7 +40,9 @@ in `reports/neurocomputing-2026-10-27/manuscript/`.
 `figures/build_figures.py` builds Figures 1, 3 and 4 and the appendix figure from the recorded data. It copies
 Figure 2 byte for byte from `paper/jmlr-mloss/figures`, then re-derives each of its plotted values from
 `docs/results/results.json`. `figures/MANIFEST.json` records the SHA-256 of every input and output, and each
-figure has a `.values.json` of what was plotted. Text is at least 9 pt at the designed width of 6.0 inches.
+figure has a `.values.json` of what was plotted. The new figures are drawn at the text width (390 pt, 5.39
+inches) with text of at least 9 pt. Figure 2 was drawn at 6.0 inches with text of at least 10 pt and is scaled
+to the text width, so its smallest text prints at 9.03 pt.
 
 ## Before submission
 

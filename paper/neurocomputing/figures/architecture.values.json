@@ -2,7 +2,7 @@
  "stages": [
   {
    "title": "Reward specification",
-   "detail": "named terms + original-reward weight; versioned provenance record (definition and source digests)",
+   "detail": "named terms, original-reward weight and a versioned provenance record",
    "code": [
     "lunarlab.audit.core:RewardTerm",
     "lunarlab.audit.provenance:reward_provenance",
@@ -11,7 +11,7 @@
   },
   {
    "title": "Training with reward accounting",
-   "detail": "SB3 learns the training reward; the original reward and every term are recorded beside it",
+   "detail": "SB3 learns the training reward; the original reward and every term are recorded with it",
    "code": [
     "lunarlab.audit.core:RewardAccountingWrapper",
     "lunarlab.rewards.wrapper:LunarLabRewardWrapper",
@@ -20,7 +20,7 @@
   },
   {
    "title": "Checkpoint selection",
-   "detail": "scheduled checkpoints scored with the original reward on validation seeds; prespecified rule",
+   "detail": "checkpoints scored with the original reward on validation seeds; prespecified rule",
    "code": [
     "lunarlab.audit.evaluate:audit_policy",
     "lunarlab.audit.study:select_checkpoint",
@@ -37,7 +37,7 @@
   },
   {
    "title": "Held-out test",
-   "detail": "fixed test seeds; per episode: original, training and term returns, ending flags, outcome",
+   "detail": "fixed test seeds; per episode: original, training and term returns, ending, outcome",
    "code": [
     "lunarlab.audit.study:final_test",
     "lunarlab.evaluation:evaluate_run"

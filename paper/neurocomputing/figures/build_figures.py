@@ -16,8 +16,9 @@
 
 Each new figure is written as PDF (TrueType fonts embedded) and SVG, with a PNG preview and a
 ``.values.json`` of what was plotted. ``MANIFEST.json`` records the SHA-256 of every input and output.
-Text is at least 9 pt at the figure's designed width of 6.0 inches, so the size is right when the figure
-is included at that width.
+The new figures are drawn at the manuscript's text width (390 pt, 5.39 inches) with text of at least 9 pt,
+so they print at that size when included at full width. Figure 2 was drawn at 6.0 inches with text of at
+least 10 pt; at the text width it prints at 390/432 of that, so its smallest text is 9.03 pt.
 """
 
 from __future__ import annotations
@@ -39,7 +40,7 @@ HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[2]
 sys.path.insert(0, str(ROOT))
 EVIDENCE = ROOT / "reports" / "neurocomputing-2026-10-27"
-WIDTH = 6.0
+WIDTH = 5.39  # the manuscript's text width (390 pt): figures print at their designed size
 FONT = 9.5
 # Okabe-Ito colours (colour-blind safe); every encoding is also carried by a symbol or text.
 BLACK, ORANGE, SKY, GREEN, BLUE, VERMILLION, PURPLE, GREY = (
@@ -104,7 +105,7 @@ def save(fig, stem: str, values: dict, inputs: list[Path], manifest: dict) -> No
 STAGES = [
     (
         "Reward specification",
-        "named terms + original-reward weight; versioned\nprovenance record (definition and source digests)",
+        "named terms, original-reward weight and a\nversioned provenance record",
         [
             "lunarlab.audit.core:RewardTerm",
             "lunarlab.audit.provenance:reward_provenance",
@@ -113,7 +114,7 @@ STAGES = [
     ),
     (
         "Training with reward accounting",
-        "SB3 learns the training reward; the original reward\nand every term are recorded beside it",
+        "SB3 learns the training reward; the original\nreward and every term are recorded with it",
         [
             "lunarlab.audit.core:RewardAccountingWrapper",
             "lunarlab.rewards.wrapper:LunarLabRewardWrapper",
@@ -122,7 +123,7 @@ STAGES = [
     ),
     (
         "Checkpoint selection",
-        "scheduled checkpoints scored with the original\nreward on validation seeds; prespecified rule",
+        "checkpoints scored with the original reward\non validation seeds; prespecified rule",
         [
             "lunarlab.audit.evaluate:audit_policy",
             "lunarlab.audit.study:select_checkpoint",
@@ -136,7 +137,7 @@ STAGES = [
     ),
     (
         "Held-out test",
-        "fixed test seeds; per episode: original, training\nand term returns, ending flags, outcome",
+        "fixed test seeds; per episode: original,\ntraining and term returns, ending, outcome",
         ["lunarlab.audit.study:final_test", "lunarlab.evaluation:evaluate_run"],
     ),
     (
@@ -152,11 +153,11 @@ STAGES = [
 CHECKS = [
     (
         0.5,
-        "seed contract, finite values,\nprotocol validated",
+        "seed contract, finite\nvalues, protocol validated",
         ["lunarlab.audit.contracts:normalize_seeds", "lunarlab.config:EvalProtocol"],
     ),
     (1.5, "SHA-256 of every\ncheckpoint recorded", ["lunarlab.storage:sha256_file"]),
-    (2.5, "selection sees validation\nseeds only", ["lunarlab.audit.study:protocol_problems"]),
+    (2.5, "selection sees\nvalidation seeds only", ["lunarlab.audit.study:protocol_problems"]),
     (
         3.5,
         "frozen digest checked\nbefore the test opens",
@@ -222,7 +223,7 @@ def figure_architecture(manifest: dict) -> None:
     ax.set_xlim(0, WIDTH)
     ax.set_ylim(0, height)
     ax.axis("off")
-    x0, w, h, gap, top = 0.22, 3.42, 0.56, 0.17, height - 0.42
+    x0, w, h, gap, top = 0.18, 3.0, 0.56, 0.17, height - 0.42
     core_bottom = top - 6 * h - 5 * gap - 0.1
     ax.add_patch(
         Rectangle(
@@ -237,7 +238,7 @@ def figure_architecture(manifest: dict) -> None:
     ax.text(
         0.14,
         top + 0.12,
-        "Reusable research core: any Gymnasium task, through a task adapter",
+        "Reusable research core: any Gymnasium task, via an adapter",
         ha="left",
         va="bottom",
         fontsize=FONT,
@@ -294,10 +295,10 @@ def figure_architecture(manifest: dict) -> None:
         color="#444444",
         linespacing=1.1,
     )
-    bw, bh, by = 1.42, 0.46, 0.12
+    bw, bh, by = 1.22, 0.46, 0.12
     centers = []
     for k, (label, _ref, _stage) in enumerate(APPLICATION):
-        bx = 1.32 + k * (bw + 0.12)
+        bx = 1.3 + k * (bw + 0.06)
         centers.append(bx + bw / 2)
         _box(ax, bx, by, bw, bh, "#777777", lw=0.9)
         ax.text(
@@ -421,19 +422,19 @@ def figure_historical(manifest: dict) -> None:
 
 CASE_LABELS = {
     "C0-clean": "C0 clean control",
-    "C1-numerical-difference": "C1 other-platform replay difference",
+    "C1-numerical-difference": "C1 replay on another platform",
     "F01-checkpoint-swapped": "F01 selected checkpoint swapped",
     "F02-recorded-digest-corrupted": "F02 recorded digest corrupted",
     "F03-protocol-mismatch": "F03 protocol and record disagree",
     "F04-dependency-missing": "F04 reward dependency missing",
     "F05-dependency-changed": "F05 reward dependency changed",
     "F06-coercible-seed": "F06 seed given as a float",
-    "F07-overlapping-seeds": "F07 validation and test seeds overlap",
+    "F07-overlapping-seeds": "F07 validation, test seeds overlap",
     "F08-nonfinite-parameter": "F08 non-finite reward parameter",
-    "F09-original-channel-absent": "F09 original-reward channel absent",
+    "F09-original-channel-absent": "F09 no original-reward channel",
     "F10-inconsistent-totals": "F10 recorded totals inconsistent",
     "F11-potential-at-truncation": "F11 potential wrong at truncation",
-    "F12-outcome-schema-mismatch": "F12 outcomes from another schema",
+    "F12-outcome-schema-mismatch": "F12 outcomes from other schema",
 }
 OUTCOME_STYLE = {
     "correct": ("✓", GREEN),
@@ -468,7 +469,7 @@ def figure_workflows(manifest: dict) -> None:
     titles = ["W1 SB3\nconventional", "W2 SB3\nreference", "W3\nLunarLab"]
     rows = {(r["case"], r["workflow"]): r for r in summary["rows"]}
     n = len(cases)
-    label_w, col_w, row_h = 2.55, 1.13, 0.27
+    label_w, col_w, row_h = 2.24, 1.03, 0.27
     height = 0.62 + n * row_h + 0.95
     fig = plt.figure(figsize=(WIDTH, height))
     ax = fig.add_axes((0, 0, 1, 1))
@@ -518,7 +519,7 @@ def figure_workflows(manifest: dict) -> None:
                 )
             )
             ax.text(
-                x + 0.2,
+                x + 0.15,
                 y + row_h / 2,
                 sym,
                 ha="center",
@@ -527,7 +528,7 @@ def figure_workflows(manifest: dict) -> None:
                 color=color,
                 fontweight="bold",
             )
-            ax.text(x + 0.36, y + row_h / 2, cell_text(r), ha="left", va="center", fontsize=FONT - 0.5)
+            ax.text(x + 0.29, y + row_h / 2, cell_text(r), ha="left", va="center", fontsize=FONT - 0.5)
             values.append(
                 {
                     "case": case,
@@ -584,13 +585,13 @@ def figure_cartpole(manifest: dict) -> None:
         ("mean_original_return", "(a) Original return (mean of 100 test episodes)", (-15, 520), 1.0),
         (
             "horizon_completion_rate",
-            "(b) Horizon-completion rate (balanced to the 500-step limit)",
+            "(b) Horizon completion (500-step limit reached)",
             (-0.03, 1.04),
             1.0,
         ),
         (
             "mean_training_return_own_design",
-            "(c) Training return under the policy's own reward (separate scale)",
+            "(c) Training return under the policy's own reward",
             (-25, 1100),
             1.0,
         ),
@@ -626,7 +627,7 @@ def figure_cartpole(manifest: dict) -> None:
         ax.tick_params(axis="y", length=0)
         ax.grid(axis="x", color="#DDDDDD", linewidth=0.6)
         ax.set_axisbelow(True)
-    fig.subplots_adjust(left=0.25, right=0.97, top=0.96, bottom=0.05)
+    fig.subplots_adjust(left=0.27, right=0.97, top=0.96, bottom=0.05)
     save(fig, "cartpole_study", values, [path], manifest)
 
 
@@ -649,7 +650,7 @@ def figure_linux_replay(manifest: dict) -> None:
     paths = [LINUX_RUN / f"reproduce-{rid}-linux.json" for rid, _ in LEARNED]
     reports = [json.loads(p.read_text(encoding="utf-8")) for p in paths]
     fig, (ax_a, ax_b) = plt.subplots(
-        1, 2, figsize=(WIDTH, 3.3), gridspec_kw={"width_ratios": [2.1, 1.0], "wspace": 0.08}, sharey=True
+        1, 2, figsize=(WIDTH, 3.3), gridspec_kw={"width_ratios": [1.75, 1.0], "wspace": 0.08}, sharey=True
     )
     rng = np.random.default_rng(0)  # vertical jitter only; horizontal values are unchanged
     values = []
@@ -706,12 +707,12 @@ def figure_linux_replay(manifest: dict) -> None:
     ax_b.set_xlim(-0.05, 0.8)
     ax_b.xaxis.set_major_formatter(matplotlib.ticker.PercentFormatter(1.0, decimals=0))
     ax_b.set_xticks([0, 0.25, 0.5, 0.75])
-    ax_b.set_title("(b) Strict pad landing:\n○ recorded  ▲ Linux", loc="left", fontsize=FONT)
+    ax_b.set_title("(b) Pad landing\n○ recorded  ▲ Linux", loc="left", fontsize=FONT)
     ax_b.tick_params(axis="y", length=0)
     for ax in (ax_a, ax_b):
         ax.grid(axis="x", color="#DDDDDD", linewidth=0.6)
         ax.set_axisbelow(True)
-    fig.subplots_adjust(left=0.235, right=0.98, top=0.83, bottom=0.1)
+    fig.subplots_adjust(left=0.265, right=0.98, top=0.83, bottom=0.1)
     save(
         fig, "linux_replay", {"ci_run": 40545198707, "commit": "dea292c", "policies": values}, paths, manifest
     )
