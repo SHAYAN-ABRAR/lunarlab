@@ -1,7 +1,8 @@
 # Neurocomputing submission requirements
 
 Captured 26 October 2026 from the journal's official pages. Quotations are verbatim. Nothing was submitted, paid
-or sent, and the journal was not contacted.
+or sent, and the journal was not contacted. The journal has since answered a written inquiry from the author;
+see the update of 30 October below.
 
 ScienceDirect refuses automated requests (HTTP 403). The author therefore saved the Guide for Authors, the
 open-access page and the journal homepage from a normal browser between 17:33 and 17:37 UTC. Elsevier's shop
@@ -10,7 +11,28 @@ and 17:40 UTC. The saved copies, PDFs rendered from them and their SHA-256 diges
 `LunarLab-neurocomputing-requirements-2026-10-26.zip`. They are not committed here because the pages are
 Elsevier's copyright.
 
-## Fee-free OSP route: not verified
+## Update, 30 October 2026: the journal's answer
+
+On 30 October 2026 the journal answered the author's written inquiry (case 261027-019124). The reply came from
+Elsevier's Senior Journal Manager for Neurocomputing (`neucom@elsevier.com`) and confirmed four points:
+
+- **Article type:** OSP submissions use the article type "Software publication".
+- **Fees:** there is no publication fee if Subscription is chosen upon acceptance.
+- **Open access:** it is optional, and it carries an Article Publishing Charge.
+- **Template:** there is no OSP-specific template.
+
+So the fee-free route is the subscription option. The reply did not cover:
+
+- separate submission, page or colour charges, which it did not itemize;
+- page or word limits;
+- when an archive DOI must exist;
+- review timelines;
+- whether presentations are required.
+
+Those points remain as described below. The capture of 26 October follows unchanged. Where it says "not
+verified", the answer above now applies.
+
+## Fee-free OSP route, as captured on 26 October: not verified
 
 The current pages describe a subscription option with no publication fee, but they describe it for the journal
 as a whole. None of them addresses Original Software Publications (OSPs), and the OSP instructions they link to no
@@ -52,13 +74,15 @@ and they are journal-wide. The author could settle the question in two ways; nei
   continues: "the software will be a full peer reviewed publication that is able to capture your software
   updates once they are released". The guide therefore uses two names for the format: "Software publication" in
   the article-type list and "Original Software Publication (OSP)" in the Software Track text. The label used by
-  the submission system was not checked.
+  the submission system was not checked. (30 October: the journal confirmed that OSP submissions use the article
+  type "Software publication"; see the update above.)
 - Template. The guide links no OSP template, and its OSP instructions link is dead (above). The one template it
   links is Elsevier's general LaTeX template, under "We encourage you use our LaTeX template when preparing a
   LaTeX submission": `els-cas-templates.zip`. That file holds the CAS single- and double-column classes; it is
   3,305,507 bytes, carries a server date of 13 May 2024 and has SHA-256
   `36d97da01c6bbd134f315bff6c3de553735e2550444a6ddd4f869ddc67a20757`. SoftwareX and Software Impacts publish
-  their own OSP templates; those were not used.
+  their own OSP templates; those were not used. (30 October: the journal confirmed that there is no OSP-specific
+  template.)
 
 ## Requirements
 

@@ -1,0 +1,67 @@
+LUNARLAB — INDEPENDENT PACKAGE VERIFICATION
+29 October 2026 (Asia/Dhaka)
+
+Assessment: the principal scientific repair findings are resolved. The supplied review package passes integrity, dependency, raw-record recomputation and figure checks here. Its unmodified full command validator does NOT complete successfully in this sandbox. The exact limitation and a separately labelled diagnostic rerun are documented below. The paper remains a working draft, not submission-ready. The qualitative paper-quality assessment remains approximately 8/10; this is not an acceptance probability.
+
+1. INPUT IDENTITY
+
+File: LunarLab-neurocomputing-review-repairs-2026-10-28-e94ec5d.zip
+Bytes: 39,745,069
+SHA-256: 0a3bc3048fa4efcb7732eff08755c6776c3730feb84baf4b6e383ca65534dbe6
+ZIP CRC: passed. All 1,644 SHA256SUMS entries passed; no unlisted files under the package validator's check.
+Supplied manuscript: manuscript/build/main.pdf, 480,761 bytes.
+PDF SHA-256: c42cf90e1909defe28d1ac4ea95b49bc4b8f2bddb52a56e53e30789e5ed1964e
+Package source state: 82518c6; final branch commit e94ec5d adds documented process records. Library code described by the manuscript: c9b9384.
+Separately verified public state: PR #2 merged the repair branch as 98be27ac20b7b35bc82c8ec806edeffe2eee4efb; merged CI run 40755305285 passed. The package and manuscript's unmerged wording predates that merge.
+
+2. EXECUTED CHECKS
+
+The package was extracted to a separate directory. The --fresh-venv --commands path installed locked dependencies in a new environment and evaluated existing models; nothing was trained. The supplied package was not modified.
+
+The independent run of the basic validator completed successfully:
+- 1,644 checksums, no missing, mismatching or unlisted file.
+- 423 dependency checks: study index 72; analysis inputs 54; CartPole protocol 4; frozen checkpoints 36; exported-artifact files 108; comparison fixtures/programs 79; figure inputs 10; learned-reward package files 60. These are check counts, not 423 distinct files.
+- Main and pilot CartPole analyses reproduced; results JSON agrees and generated result text is byte-identical.
+- All 18 run records passed budget, seed, validation, selection/tie, frozen-checkpoint and test-record checks. The 36 frozen checkpoint files supplied here were checked, not all intermediate training checkpoint binaries.
+- All five figures rebuilt. Four plotted-value JSON files agree; the historical audit figure's values are checked against its source summaries. Some PNG/SVG bytes differ by runtime, but the scientific values agree.
+
+Related source review already independently completed on the supplied main snapshot: all 72 recovered JSON records match the unchanged study indexes; 95 targeted tests pass; the cumulative-overflow and null-record failures are corrected. Those checks are distinct from the execution of this review ZIP.
+
+3. NEW LINUX REPLAY EVIDENCE
+
+All 18 exported CartPole policies were verified and replayed, for 1,560 episodes (15 main policies x 100, three pilot policies x 20).
+- 12 policies: exact equality on the selected episode-summary fields.
+- Six upright-potential policies: numerical-difference, nonblocking under the existing cross-platform classification.
+- Original returns, episode lengths and task-outcome flags agree for every replayed CartPole episode.
+- Differences concern training-return summaries; the largest absolute episode difference is 0.019997491324090788. This is not a claim of identical simulator trajectories or statistical equivalence.
+
+The supplied hover example and one learned-reward LunarLander example also replayed with integrity intact and a nonblocking numerical-difference classification. This reviewer execution does not extend historical LunarLander coverage to all 38 policies.
+
+4. WHY THE UNMODIFIED FULL VALIDATOR DID NOT PASS
+
+All three comparison programs call psutil.Process().memory_info() to collect optional memory telemetry. This sandbox cannot expose the running process's own PID to psutil, which raises NoSuchProcess. The programs therefore terminate before printing their JSON result. This is an execution-environment limitation at the telemetry step, not evidence that reward accounting or the prespecified fault checks failed.
+
+The outer tools/validate_review_package.py then raises AttributeError when key() calls .items() on a crashed row's checks=None. It exits without producing its final validation.json. The unmodified failure log and raw comparison logs are retained. No blanket pass is claimed.
+
+A separate diagnostic copy changes only peak_rss() in the three comparison programs: unavailable memory yields JSON null on NoSuchProcess/AccessDenied. No memory measurement is claimed, and this is explicitly NOT an unmodified reproduction of the hashed programs. Checks, fixtures, policies and numerical thresholds are unchanged. The three-file diff is supplied.
+
+Diagnostic findings:
+- All 42 case/program combinations completed without crashes.
+- W2/W3 check-status vectors remain identical in all 14 cases.
+- Both reject every one of the 12 faults before executing a policy.
+- W1 remains unchecked as specified.
+- The two C0-clean rows change from accepted on Windows to accepted-numerical-difference on Linux, with S1-S10 passing. The comparison runner calls this a false alarm because it compares one literal expected verdict, and the outer validator likewise compares literal Windows row labels. This should be reported as platform-dependent valid replay classification rather than silently normalized or used to claim identical rows.
+
+5. MANUSCRIPT VISUAL REVIEW
+
+Every one of the 19 supplied PDF pages was rendered at 100 dpi and inspected. No clipping, overlapping text, missing visible glyphs or crowded figure panels was observed. All 34 fonts are embedded. The abstract contains 180 whitespace-delimited words. The four main figures appear on pages 4, 8, 11 and 13; Appendix Figure A.1 appears on page 18. Plot fonts are approximately 9 pt or larger (TeX points and PDF points use slightly different units).
+
+The paper preserves the specified AIUB affiliation, lowercase email, self-funding, institutional-support acknowledgment and exact no-competing-interests sentence.
+
+6. REMAINING ACTIONS
+
+Technical/editorial: make optional telemetry graceful; make the validator retain a structured failure report for crashed/malformed child results; distinguish a permitted platform-dependent clean-control classification from a false alarm; update the current availability paragraph after PR #2. Preserve original protocol/program hashes and historical Windows results. A focused repair note is included.
+
+Author/submission: confirm fee-free OSP eligibility and format; approve complete public archive contents and licensing, deposit and cite the record; restore/finalize the AI declaration; confirm human CRediT roles; approve highlights and final materials. No DOI, external user or acceptance evidence is invented. The historical 38-policy bundle is represented here by digests, not included in this review ZIP; verify it as part of the actual deposit candidate.
+
+This verification is an assistant-executed independent review, not evidence that an external human researcher has adopted LunarLab. No push, commit, merge, release, public deposit, journal submission or outside message was performed by this reviewer.

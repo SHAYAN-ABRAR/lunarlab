@@ -1,0 +1,15 @@
+Traceback (most recent call last):
+  File "/workspace/scratch/1c599345f09c/final-package-audit-2026-10-29/validation/work/reports/neurocomputing-2026-10-27/workflow-comparison/workflows/w3_lunarlab.py", line 179, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/workspace/scratch/1c599345f09c/final-package-audit-2026-10-29/validation/work/reports/neurocomputing-2026-10-27/workflow-comparison/workflows/w3_lunarlab.py", line 173, in main
+    result.update(seconds=time.perf_counter() - t0, peak_rss_bytes_self=peak_rss())
+                                                                        ^^^^^^^^^^
+  File "/workspace/scratch/1c599345f09c/final-package-audit-2026-10-29/validation/work/reports/neurocomputing-2026-10-27/workflow-comparison/workflows/w3_lunarlab.py", line 31, in peak_rss
+    info = psutil.Process().memory_info()
+           ^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/1c599345f09c/final-package-audit-2026-10-29/validation/venv/lib/python3.12/site-packages/psutil/__init__.py", line 314, in __init__
+    self._init(pid)
+  File "/workspace/scratch/1c599345f09c/final-package-audit-2026-10-29/validation/venv/lib/python3.12/site-packages/psutil/__init__.py", line 360, in _init
+    raise NoSuchProcess(pid, msg=msg) from None
+psutil.NoSuchProcess: process PID not found (pid=551)

@@ -1,0 +1,189 @@
+--- neurocomputing-2026-10-27/workflow-comparison/workflows/w1_sb3_conventional.py
++++ neurocomputing-final-validation-2026-11-01/comparison-v2/workflows/w1_sb3_conventional_v2.py
+@@ -2,7 +2,7 @@
+ # SPDX-License-Identifier: MIT
+ """W1: the conventional Stable-Baselines3 evaluation of a neutral audit case, with no custom audit checks.
+ 
+-    python w1_sb3_conventional.py CASE_DIR
++    python w1_sb3_conventional_v2.py CASE_DIR
+ 
+ This is what a competent SB3 user writes to evaluate a saved policy. It loads the model with ``PPO.load``,
+ which validates the archive and prints the saved and the current system information. It reads the
+@@ -15,6 +15,11 @@
+ finite parameters, reward channels, the accounting identity, the potential convention, the outcome
+ schema, replay comparison) are not part of SB3's evaluation tools. They are reported as unsupported.
+ Prints one JSON object on stdout; exit status 4 ("unchecked").
++
++Follow-up version 2 (1 November 2026) of the hashed ``workflows/w1_sb3_conventional.py``, which is unchanged.
++The only change is the optional process-memory telemetry: where the operating system does not expose
++this process to psutil, ``peak_rss_bytes_self`` is null and ``peak_rss_status`` gives the reason, instead
++of the program ending before it prints its result. See ``../CHANGES.diff``.
+ """
+ 
+ from __future__ import annotations
+@@ -46,9 +51,22 @@
+ }
+ 
+ 
+-def peak_rss() -> int:
+-    info = psutil.Process().memory_info()
+-    return int(getattr(info, "peak_wset", 0) or getattr(info, "rss", 0))
++def peak_rss() -> tuple[int | None, str]:
++    """This process's peak working set (Windows) or resident set (elsewhere) at exit, in bytes, and its status.
++
++    When memory is available, the value is the one the hashed program reports. It is optional telemetry: where
++    the operating system does not expose this process to psutil (``NoSuchProcess``, ``AccessDenied``), the value
++    is None and the status gives the reason. It is never replaced by zero. Other errors are not caught.
++    """
++    try:
++        info = psutil.Process().memory_info()
++    except (psutil.NoSuchProcess, psutil.AccessDenied) as exc:
++        return None, f"unavailable: {type(exc).__name__}: {exc}"
++    for field in ("peak_wset", "rss"):
++        value = getattr(info, field, None)
++        if value:
++            return int(value), f"measured: {field}"
++    return None, "unavailable: psutil reported neither peak_wset nor rss"
+ 
+ 
+ def main() -> int:
+@@ -71,6 +89,8 @@
+         lengths.append(int(info["episode"]["l"]))
+         completed += bool(truncated and not terminated)
+     env.close()
++    seconds = time.perf_counter() - t0
++    rss, rss_status = peak_rss()
+     result = {
+         "workflow": "W1",
+         "case": case.get("case"),
+@@ -82,8 +102,9 @@
+         "std_original_return": float(np.std(returns)),
+         "mean_length": float(np.mean(lengths)),
+         "completion_rate": completed / len(returns),
+-        "seconds": time.perf_counter() - t0,
+-        "peak_rss_bytes_self": peak_rss(),
++        "seconds": seconds,
++        "peak_rss_bytes_self": rss,
++        "peak_rss_status": rss_status,
+     }
+     print(json.dumps(result))
+     return 4
+--- neurocomputing-2026-10-27/workflow-comparison/workflows/w2_sb3_reference.py
++++ neurocomputing-final-validation-2026-11-01/comparison-v2/workflows/w2_sb3_reference_v2.py
+@@ -2,13 +2,18 @@
+ # SPDX-License-Identifier: MIT
+ """W2: an independent reference implementation of the audit specification on Stable-Baselines3.
+ 
+-    python w2_sb3_reference.py CASE_DIR
++    python w2_sb3_reference_v2.py CASE_DIR
+ 
+ It implements checks S1-S10 of ``protocol/specification.json`` in explicit custom code, using
+ Stable-Baselines3, Gymnasium, NumPy, psutil and the Python standard library. It imports nothing from
+ LunarLab. Checks S1-S9 run before the policy is executed; any failure rejects the case and no episode is
+ played. Prints one JSON object on stdout. Exit status: 0 accepted, 3 permitted numerical difference,
+ 1 rejected.
++
++Follow-up version 2 (1 November 2026) of the hashed ``workflows/w2_sb3_reference.py``, which is unchanged.
++The only change is the optional process-memory telemetry: where the operating system does not expose
++this process to psutil, ``peak_rss_bytes_self`` is null and ``peak_rss_status`` gives the reason, instead
++of the program ending before it prints its result. See ``../CHANGES.diff``.
+ """
+ 
+ from __future__ import annotations
+@@ -275,9 +280,22 @@
+     return all(packages.get(p) == version(p) for p in NUMERICAL)
+ 
+ 
+-def peak_rss() -> int:
+-    info = psutil.Process().memory_info()
+-    return int(getattr(info, "peak_wset", 0) or getattr(info, "rss", 0))
++def peak_rss() -> tuple[int | None, str]:
++    """This process's peak working set (Windows) or resident set (elsewhere) at exit, in bytes, and its status.
++
++    When memory is available, the value is the one the hashed program reports. It is optional telemetry: where
++    the operating system does not expose this process to psutil (``NoSuchProcess``, ``AccessDenied``), the value
++    is None and the status gives the reason. It is never replaced by zero. Other errors are not caught.
++    """
++    try:
++        info = psutil.Process().memory_info()
++    except (psutil.NoSuchProcess, psutil.AccessDenied) as exc:
++        return None, f"unavailable: {type(exc).__name__}: {exc}"
++    for field in ("peak_wset", "rss"):
++        value = getattr(info, field, None)
++        if value:
++            return int(value), f"measured: {field}"
++    return None, "unavailable: psutil reported neither peak_wset nor rss"
+ 
+ 
+ def main() -> int:
+@@ -320,7 +338,9 @@
+             mean_original_return=float(np.mean([e["original_return"] for e in reproduced])),
+             completion_rate=sum(e["outcome"] == SUCCESS for e in reproduced) / len(reproduced),
+         )
+-    result.update(seconds=time.perf_counter() - t0, peak_rss_bytes_self=peak_rss())
++    seconds = time.perf_counter() - t0
++    rss, rss_status = peak_rss()
++    result.update(seconds=seconds, peak_rss_bytes_self=rss, peak_rss_status=rss_status)
+     print(json.dumps(result))
+     return code
+ 
+--- neurocomputing-2026-10-27/workflow-comparison/workflows/w3_lunarlab.py
++++ neurocomputing-final-validation-2026-11-01/comparison-v2/workflows/w3_lunarlab_v2.py
+@@ -2,7 +2,7 @@
+ # SPDX-License-Identifier: MIT
+ """W3: LunarLab's public interfaces applied to a neutral audit case.
+ 
+-    python w3_lunarlab.py CASE_DIR
++    python w3_lunarlab_v2.py CASE_DIR
+ 
+ This program maps the neutral case onto LunarLab. The checks themselves are LunarLab functions:
+ ``check_file_digests``, ``seed_split_problems``, the ``cartpole`` adapter's terms (which refuse non-finite
+@@ -10,6 +10,11 @@
+ ``compare_episodes``, ``compare_generic_aggregates``, ``compare_platforms`` and ``classify_reproduction``.
+ Checks S1-S9 run before the policy is executed. Prints one JSON object on stdout. Exit status: 0 accepted,
+ 3 permitted numerical difference, 1 rejected.
++
++Follow-up version 2 (1 November 2026) of the hashed ``workflows/w3_lunarlab.py``, which is unchanged.
++The only change is the optional process-memory telemetry: where the operating system does not expose
++this process to psutil, ``peak_rss_bytes_self`` is null and ``peak_rss_status`` gives the reason, instead
++of the program ending before it prints its result. See ``../CHANGES.diff``.
+ """
+ 
+ from __future__ import annotations
+@@ -27,9 +32,22 @@
+ from lunarlab.sysinfo import version_info
+ 
+ 
+-def peak_rss() -> int:
+-    info = psutil.Process().memory_info()
+-    return int(getattr(info, "peak_wset", 0) or getattr(info, "rss", 0))
++def peak_rss() -> tuple[int | None, str]:
++    """This process's peak working set (Windows) or resident set (elsewhere) at exit, in bytes, and its status.
++
++    When memory is available, the value is the one the hashed program reports. It is optional telemetry: where
++    the operating system does not expose this process to psutil (``NoSuchProcess``, ``AccessDenied``), the value
++    is None and the status gives the reason. It is never replaced by zero. Other errors are not caught.
++    """
++    try:
++        info = psutil.Process().memory_info()
++    except (psutil.NoSuchProcess, psutil.AccessDenied) as exc:
++        return None, f"unavailable: {type(exc).__name__}: {exc}"
++    for field in ("peak_wset", "rss"):
++        value = getattr(info, field, None)
++        if value:
++            return int(value), f"measured: {field}"
++    return None, "unavailable: psutil reported neither peak_wset nor rss"
+ 
+ 
+ def main() -> int:
+@@ -170,7 +188,9 @@
+             mean_original_return=report["aggregate"]["mean_original_return"],
+             completion_rate=report["aggregate"]["metrics"]["time_limit_rate"],
+         )
+-    result.update(seconds=time.perf_counter() - t0, peak_rss_bytes_self=peak_rss())
++    seconds = time.perf_counter() - t0
++    rss, rss_status = peak_rss()
++    result.update(seconds=seconds, peak_rss_bytes_self=rss, peak_rss_status=rss_status)
+     print(json.dumps(result))
+     return code
+ 

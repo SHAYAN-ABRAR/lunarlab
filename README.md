@@ -308,6 +308,7 @@ examples/learned-reward-artifacts/   the six learned-reward policies with their 
 reports/jmlr/               coverage, overhead benchmarks, figures and reproduction reports (committed)
 reports/neurocomputing-2026-10-27/   protocols, records and reports of the October 2026 evidence (committed)
 reports/neurocomputing-review-repairs-2026-10-28/   record recovery, defect reproductions, validation (committed)
+reports/neurocomputing-final-validation-2026-11-01/   follow-up comparison set, validator repairs, archive (committed)
 ```
 
 Nothing is deleted automatically, with one exception: a DQN run keeps the replay and state files of its two most
@@ -331,8 +332,9 @@ a 64×64 MLP are about 150 KB each; a DQN replay file with the default 50k buffe
   by `build_audit_figure.py`, and [EVIDENCE.md](paper/jmlr-mloss/EVIDENCE.md) maps each claim to its evidence.
 - [docs/neurocomputing/](docs/neurocomputing/README.md): Neurocomputing's submission rules as captured from the
   official guide on 26 October 2026. It covers the software article type, which items are required and which
-  only encouraged, the fees, and what is still unresolved, including whether a software paper can be published
-  without a fee. [AI_TOOL_VERSIONS.md](docs/neurocomputing/AI_TOOL_VERSIONS.md) lists the AI tools and model
+  only encouraged, and the fees. It also records the journal's answer of 30 October 2026: OSPs use the article
+  type "Software publication", there is no publication fee under the subscription option, open access is
+  optional and carries a charge, and there is no OSP-specific template. [AI_TOOL_VERSIONS.md](docs/neurocomputing/AI_TOOL_VERSIONS.md) lists the AI tools and model
   versions recorded during development.
 - [paper/neurocomputing/](paper/neurocomputing/BUILD.md): the Neurocomputing manuscript, a working draft that has
   not been submitted. CI builds it with pdfLaTeX and BibTeX. `figures/build_figures.py` draws its figures from
@@ -405,7 +407,7 @@ episodes) from an empty data home. Local validation of this change: 498 Python t
 [`reports/jmlr/learned-reward-repair-2026-10-24/`](reports/jmlr/learned-reward-repair-2026-10-24/).
 
 **Research-strengthening revision (27 and 28 October 2026, review branch
-`research/neurocomputing-audit-evidence`, not merged):**
+`research/neurocomputing-audit-evidence`, merged into `main` by pull request #1 as `d5881cb`):**
 
 - **Contract defects:** seed, finite-value and seeding defects of the adapter-based layer were reproduced
   and fixed. Sixteen reproductions fail on the previous code and pass now; a valid-input control passes on both.
@@ -429,7 +431,9 @@ episodes) from an empty data home. Local validation of this change: 498 Python t
 
 Records: [`reports/neurocomputing-2026-10-27/`](reports/neurocomputing-2026-10-27/README.md).
 
-**Review repairs (28 October 2026, branch `research/neurocomputing-review-repairs`, not merged):**
+**Review repairs (28 October 2026, branch `research/neurocomputing-review-repairs`, merged into `main` by pull
+request #2 as `98be27a`, whose CI run [40755305285](https://github.com/SHAYAN-ABRAR/lunarlab/actions/runs/40755305285)
+passed):**
 
 - **Missing records:** an unanchored `runs/` ignore rule had kept the CartPole study's 72 run records out
   of Git, so every distribution built from Git omitted the inputs of its analysis. They are now committed

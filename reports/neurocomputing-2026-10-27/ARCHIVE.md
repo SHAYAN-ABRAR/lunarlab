@@ -1,5 +1,14 @@
 # Archive and release preparation
 
+> **Note of 1 November 2026:**
+>
+> - **Merged:** the review branches were merged into `main` (`d5881cb`, then `98be27a`).
+> - **Still nothing published:** nothing has been deposited or published, and there is no DOI.
+> - **Current candidate:** the archive candidate, its metadata and the licensing proposal are in
+>   [`../neurocomputing-final-validation-2026-11-01/archive/`](../neurocomputing-final-validation-2026-11-01/archive/).
+>
+> The text below is kept as written.
+
 Status on 28 October 2026: nothing has been deposited, so there is no DOI. No release has been tagged or
 published, and the review branch is not merged. Each of these steps publishes something, so each is the
 author's decision. The brief authorized only pushing the review branch.

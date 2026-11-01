@@ -1,5 +1,14 @@
 # Readiness assessment: Neurocomputing research-strengthening revision
 
+> **Note of 1 November 2026:**
+>
+> - **Merged:** this branch was merged into `main` by pull request #1 as `d5881cb`.
+> - **Fees answered:** on 30 October 2026 the journal answered the fee and article-type questions listed
+>   below as unresolved. OSPs use the article type "Software publication", and the subscription option
+>   carries no publication fee.
+> - **Current record:**
+>   [`../neurocomputing-final-validation-2026-11-01/READINESS.md`](../neurocomputing-final-validation-2026-11-01/READINESS.md).
+
 > **Superseded on 28 October 2026** by
 > [`../neurocomputing-review-repairs-2026-10-28/READINESS.md`](../neurocomputing-review-repairs-2026-10-28/READINESS.md).
 > A review found three problems with this assessment:

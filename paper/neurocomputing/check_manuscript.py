@@ -8,7 +8,8 @@
 * every figure the source includes exists, and its digest equals the figure manifest;
 * every cited key is in references.bib;
 * the author details and the declarations the author fixed are present verbatim;
-* with ``--final``, no placeholder for the software revision or CI counts remains.
+* with ``--final``, no placeholder for the software revision or CI counts remains, and no file the source
+  inputs (such as the AI declaration, once restored) still holds an "AUTHOR TO CONFIRM" item.
 
 Exit status 0 when every check passes, 1 otherwise.
 """
@@ -75,6 +76,14 @@ def main() -> int:
         print("placeholders still in the source:", left)
         if final:
             problems.append(f"placeholders remain: {left}")
+    # A commented-out \input includes nothing.
+    active = "\n".join(line.split("%", 1)[0] for line in tex.splitlines())
+    for name in re.findall(r"\\input\{([^}]+)\}", active):
+        source = HERE / (name if name.endswith(".tex") else f"{name}.tex")
+        if source.is_file() and "AUTHOR TO CONFIRM" in source.read_text(encoding="utf-8"):
+            print(f"{source.name} still holds AUTHOR TO CONFIRM items")
+            if final:
+                problems.append(f"{source.name} holds AUTHOR TO CONFIRM items for the author to complete")
     print(f"{len(cited)} cited keys, {len(keys)} in references.bib")
     for p in problems:
         print("PROBLEM:", p)
