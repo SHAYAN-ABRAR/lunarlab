@@ -224,9 +224,13 @@ The author thanks American International University-Bangladesh (AIUB) for its in
 % AI_USE_INVENTORY.md); restore it here, immediately before the references, once the author has completed it.
 % \input{AI_Disclosure_For_Submission}
 
+% The appendix starts on a new page, so that its heading stays with its figure.
+\clearpage
 \appendix
-% elsarticle numbers appendix figures A.n but does not reset the counter.
+% elsarticle numbers appendix figures A.n but does not reset the counter. Distinct hyperlink anchors keep the
+% link to Fig. A.1 from leading to Fig. 1.
 \setcounter{figure}{0}
+\renewcommand{\theHfigure}{A.\arabic{figure}}
 \section{Cross-platform replay of the learned-reward policies}
 \begin{figure}[!htbp]
 \centering
