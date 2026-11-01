@@ -134,3 +134,73 @@ Times are UTC. Machine: the author's Windows 11 laptop (Intel i7-13620H), Python
   This was a development check, not the recorded validation.
 - 20:16 Integrity (`integrity/`): 2,359 of 2,359 protected historical files unchanged, combined digest
   `7366ba1b…`. The dated folders gained only four superseding notes (37 added lines).
+- 20:14-20:38 Dry run of the validator **with** `--commands` on the dry-run candidate. Every step passed:
+  - **Replays:** both published replays `exact`, with their data homes left empty.
+  - **CartPole artifacts:** 18 of 18 `exact`.
+  - **Comparison through the validator:** 42 of 42 exact agreement, all three set-level checks passed.
+
+  This was a development check.
+
+### Manuscript builds and the archive revision
+
+- 20:24 Committed `28c811a` (the manuscript corrections and archive documents) and pushed it.
+- 20:25-20:31 Manuscript build 41346694714 of `28c811a`: every one of its 20 pages read
+  (`manuscript/VISUAL_REVIEW.md`). There were two faults:
+  - the "Appendix A" heading stood alone at the foot of page 18;
+  - a duplicate link anchor (`figure.1`), already present in the October builds.
+- 20:26 `d840f50`: the appendix starts on a new page, and its figures have their own anchors.
+  - Build 41347005235: 21 pages; pages 1-17 byte-identical to the previous renders; pages 18-21 read.
+  - Remaining blemish: the last two lines of reference [12] on page 21.
+- 20:29 `ea219fc`: enlarged the page before the references. Build 41347218412: the last line of reference [3]
+  collided with the working-draft footer.
+- 20:30 `a38d07f`: withdrew the enlargement. The tree equals `d840f50`'s.
+  - Build 41347412905: 21 pages, all 34 fonts embedded, no overfull box, no duplicate anchor, PDF SHA-256
+    `ebd27ba8…`.
+  - All 21 page renders are byte-identical to those of build 41347005235.
+  - **`a38d07f` is the archive revision.**
+- 20:31-20:36 Built the source archive of `a38d07f`: 1,569 files, SHA-256 `2bd398e5…8867b`. It installed
+  into a fresh environment and passed 194 of 194 release tests.
+- 20:36 Built the archive candidate from `a38d07f` (`archive/CANDIDATE.md`): 2,180 files, 137.6 MB,
+  `SHA256SUMS` digest `ab0a6471…`.
+- 20:37 Zipped it: 2,180 entries, 80,659,343 bytes, CRC test passed, SHA-256 `8a02752e…`, MD5 `f323c1b0…`.
+  Extracted it into a new, empty directory.
+- 20:38 Started the validator **from the fresh extraction**:
+  - **Interpreter:** the base uv-managed Python 3.12, which has no LunarLab, torch or any project package.
+    `VIRTUAL_ENV`, `PYTHONPATH` and `LUNARLAB_HOME` were unset.
+  - **Options:** `--fresh-venv --commands --unmodified-comparison --lunarlander-replays all`.
+- 20:39 Licence map of the candidate: all 2,178 inventoried files mapped, none unmapped
+  (`archive/licence-map-a38d07f.json`). The archive revision was filled into the Zenodo metadata.
+- 20:41-20:46 Negative checks on a deliberately damaged copy of the extraction (`validation/negative-damaged-copy/`):
+  - **Damage:** one fixture policy removed, one byte of a CartPole policy inverted.
+  - **Validator:** the report was written, with named checksum and dependency failures, and the run exited 1.
+  - **Follow-up runner:** it refused before any program ran, and exited 2.
+- 20:44-21:03 Full local test suite at `a38d07f`, run beside the validation: 690 passed
+  (`tests/local-full-suite-a38d07f-windows.log`).
+- 20:45-21:05 CI of `a38d07f`, run 41347412883: all six jobs passed (`ci/run-41347412883-a38d07f/`):
+  - Linux: 686 passed, 4 skipped, 86% coverage;
+  - Windows: 293 tests on each Python;
+  - source archive: 194 release tests;
+  - browser: 15 flows.
+
+  The CI runs of `28c811a`, `d840f50` and `ea219fc` were cancelled when the next commit superseded them.
+
+### The validation
+
+- 21:32:42 The validation from the fresh extraction finished with exit status 0. Every step passed
+  (`validation/`, 55 minutes):
+  - **Checksums:** 2,179 of 2,179.
+  - **Dependencies:** 624 checks with no problem.
+  - **CartPole records:** the analysis and all 18 runs reproduced.
+  - **Figures:** plotted values identical in 4 of 4, bytes in 20 of 20.
+  - **Bundle and statistics:** 333 of 333 bundle members verified; the statistics of the 3,800 episodes
+    recomputed, all matching.
+  - **Replays:** 38 of 38 LunarLander packages `exact`, and both published replays `exact`, each from an
+    empty data home that stayed empty.
+  - **CartPole artifacts:** 18 of 18 verified and `exact`.
+  - **Comparison:** 42 of 42 pairs in exact agreement, with the follow-up set and with the unmodified frozen
+    runner and programs. W2 and W3 agreed in 14 of 14 cases, rejected all 12 faults before execution, and W1
+    was unchecked.
+  - **Not observed:** no platform-dependent difference, since this is the recording platform.
+- 21:35 Recorded the environment the run used: `uv pip freeze` of its virtual environment. Its 65 packages
+  equal the lock's pins. A minor validator defect was found: the two `uv pip install` steps share a log
+  name. It is noted rather than fixed after the run.

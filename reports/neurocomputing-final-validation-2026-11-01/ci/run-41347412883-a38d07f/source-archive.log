@@ -1,0 +1,268 @@
+﻿2026-11-01T20:34:16.7980237Z Current runner version: '2.338.2'
+2026-11-01T20:34:16.8004213Z ##[group]Runner Image Provisioner
+2026-11-01T20:34:16.8005440Z Hosted Compute Agent
+2026-11-01T20:34:16.8006046Z Version: 20261021.618
+2026-11-01T20:34:16.8006771Z Commit: 21505ad2541d5be6135ed84fc33697146cf75b8e
+2026-11-01T20:34:16.8007558Z Build Date: 2026-10-21T00:45:21Z
+2026-11-01T20:34:16.8008324Z Worker ID: {e4c50dc6-3fbc-41b6-8ea2-3107d444ff49}
+2026-11-01T20:34:16.8009097Z Region: westus
+2026-11-01T20:34:16.8009650Z Cloud: Azure
+2026-11-01T20:34:16.8010170Z ##[endgroup]
+2026-11-01T20:34:16.8011764Z ##[group]Operating System
+2026-11-01T20:34:16.8012411Z Ubuntu
+2026-11-01T20:34:16.8012998Z 26.04.1
+2026-11-01T20:34:16.8013530Z LTS
+2026-11-01T20:34:16.8014050Z ##[endgroup]
+2026-11-01T20:34:16.8015014Z ##[group]Runner Image
+2026-11-01T20:34:16.8015787Z Image: ubuntu-26.04
+2026-11-01T20:34:16.8016437Z Version: 20261025.179.1
+2026-11-01T20:34:16.8017742Z Included Software: https://github.com/actions/runner-images/blob/ubuntu26/20261025.179/images/ubuntu/Ubuntu2604-Readme.md
+2026-11-01T20:34:16.8019396Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu26%2F20261025.179
+2026-11-01T20:34:16.8020370Z ##[endgroup]
+2026-11-01T20:34:16.8021867Z ##[group]GITHUB_TOKEN Permissions
+2026-11-01T20:34:16.8023794Z Contents: read
+2026-11-01T20:34:16.8024518Z Metadata: read
+2026-11-01T20:34:16.8025461Z ##[endgroup]
+2026-11-01T20:34:16.8027947Z Secret source: Actions
+2026-11-01T20:34:16.8029061Z Cache mode: write
+2026-11-01T20:34:16.8029983Z Prepare workflow directory
+2026-11-01T20:34:16.8447774Z Prepare all required actions
+2026-11-01T20:34:16.8498273Z Getting action download info
+2026-11-01T20:34:17.1846992Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+2026-11-01T20:34:17.3816039Z Download action repository 'astral-sh/setup-uv@v6' (SHA:d0cc045d04ccac9d8b7881df0226f9e82c39688e)
+2026-11-01T20:34:17.8287625Z Download action repository 'actions/upload-artifact@v4' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+2026-11-01T20:34:18.0432854Z Complete job name: Source archive · deterministic build, fresh install, tests
+2026-11-01T20:34:18.1302139Z ##[group]Run actions/checkout@v4
+2026-11-01T20:34:18.1303039Z with:
+2026-11-01T20:34:18.1303509Z   repository: SHAYAN-ABRAR/lunarlab
+2026-11-01T20:34:18.1307320Z   token: ***
+2026-11-01T20:34:18.1307771Z   ssh-strict: true
+2026-11-01T20:34:18.1308212Z   ssh-user: git
+2026-11-01T20:34:18.1308664Z   persist-credentials: true
+2026-11-01T20:34:18.1309147Z   clean: true
+2026-11-01T20:34:18.1309601Z   sparse-checkout-cone-mode: true
+2026-11-01T20:34:18.1310119Z   fetch-depth: 1
+2026-11-01T20:34:18.1310543Z   fetch-tags: false
+2026-11-01T20:34:18.1310984Z   show-progress: true
+2026-11-01T20:34:18.1311431Z   lfs: false
+2026-11-01T20:34:18.1311842Z   submodules: false
+2026-11-01T20:34:18.1312334Z   set-safe-directory: true
+2026-11-01T20:34:18.1312839Z   allow-unsafe-pr-checkout: false
+2026-11-01T20:34:18.1313622Z env:
+2026-11-01T20:34:18.1314048Z   SDL_VIDEODRIVER: dummy
+2026-11-01T20:34:18.1314565Z   SDL_AUDIODRIVER: dummy
+2026-11-01T20:34:18.1315208Z ##[endgroup]
+2026-11-01T20:34:18.3919948Z Syncing repository: SHAYAN-ABRAR/lunarlab
+2026-11-01T20:34:18.3923399Z ##[group]Getting Git version info
+2026-11-01T20:34:18.3925264Z Working directory is '/home/runner/work/lunarlab/lunarlab'
+2026-11-01T20:34:18.3927580Z [command]/usr/bin/git version
+2026-11-01T20:34:18.3928797Z git version 2.56.0
+2026-11-01T20:34:18.3956662Z ##[endgroup]
+2026-11-01T20:34:18.3963985Z Temporarily overriding HOME='/home/runner/work/_temp/97b018d6-aac8-478e-ad92-9f0a827e5d25' before making global git config changes
+2026-11-01T20:34:18.3967170Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-01T20:34:18.3969765Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/lunarlab/lunarlab
+2026-11-01T20:34:18.4049120Z Deleting the contents of '/home/runner/work/lunarlab/lunarlab'
+2026-11-01T20:34:18.4053096Z ##[group]Initializing the repository
+2026-11-01T20:34:18.4058093Z [command]/usr/bin/git init /home/runner/work/lunarlab/lunarlab
+2026-11-01T20:34:18.4180266Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-11-01T20:34:18.4181797Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-11-01T20:34:18.4182959Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-11-01T20:34:18.4183924Z hint: call:
+2026-11-01T20:34:18.4184483Z hint:
+2026-11-01T20:34:18.4185555Z hint: 	git config --global init.defaultBranch <name>
+2026-11-01T20:34:18.4186351Z hint:
+2026-11-01T20:34:18.4187082Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-11-01T20:34:18.4188195Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-11-01T20:34:18.4189401Z hint:
+2026-11-01T20:34:18.4190091Z hint: 	git branch -m <name>
+2026-11-01T20:34:18.4190828Z hint:
+2026-11-01T20:34:18.4191711Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-11-01T20:34:18.4203963Z Initialized empty Git repository in /home/runner/work/lunarlab/lunarlab/.git/
+2026-11-01T20:34:18.4217243Z [command]/usr/bin/git remote add origin https://github.com/SHAYAN-ABRAR/lunarlab
+2026-11-01T20:34:18.4271796Z ##[endgroup]
+2026-11-01T20:34:18.4273462Z ##[group]Disabling automatic garbage collection
+2026-11-01T20:34:18.4276924Z [command]/usr/bin/git config --local gc.auto 0
+2026-11-01T20:34:18.4312833Z ##[endgroup]
+2026-11-01T20:34:18.4314679Z ##[group]Setting up auth
+2026-11-01T20:34:18.4320850Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-01T20:34:18.4359009Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-01T20:34:18.4858215Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-01T20:34:18.4895476Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-01T20:34:18.5167154Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-01T20:34:18.5201816Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-01T20:34:18.5472565Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-11-01T20:34:18.5511410Z ##[endgroup]
+2026-11-01T20:34:18.5512812Z ##[group]Fetching the repository
+2026-11-01T20:34:18.5521282Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +a38d07f59f99dee53676b061955d25e8caef3e72:refs/remotes/origin/research/neurocomputing-final-validation
+2026-11-01T20:34:20.3432877Z From https://github.com/SHAYAN-ABRAR/lunarlab
+2026-11-01T20:34:20.3436592Z  * [new ref]         a38d07f59f99dee53676b061955d25e8caef3e72 -> origin/research/neurocomputing-final-validation
+2026-11-01T20:34:20.3440083Z ##[endgroup]
+2026-11-01T20:34:20.3441247Z ##[group]Determining the checkout info
+2026-11-01T20:34:20.3443090Z ##[endgroup]
+2026-11-01T20:34:20.3450048Z [command]/usr/bin/git sparse-checkout disable
+2026-11-01T20:34:20.3501831Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-11-01T20:34:20.3532477Z ##[group]Checking out the ref
+2026-11-01T20:34:20.3538602Z [command]/usr/bin/git checkout --progress --force -B research/neurocomputing-final-validation refs/remotes/origin/research/neurocomputing-final-validation
+2026-11-01T20:34:20.6297452Z Switched to a new branch 'research/neurocomputing-final-validation'
+2026-11-01T20:34:20.6300658Z branch 'research/neurocomputing-final-validation' set up to track 'origin/research/neurocomputing-final-validation'.
+2026-11-01T20:34:20.6379155Z ##[endgroup]
+2026-11-01T20:34:20.6383300Z [command]/usr/bin/git log -1 --format=%H
+2026-11-01T20:34:20.6408629Z a38d07f59f99dee53676b061955d25e8caef3e72
+2026-11-01T20:34:20.6766448Z ##[group]Run astral-sh/setup-uv@v6
+2026-11-01T20:34:20.6766804Z with:
+2026-11-01T20:34:20.6767015Z   python-version: 3.12
+2026-11-01T20:34:20.6767259Z   activate-environment: false
+2026-11-01T20:34:20.6767573Z   working-directory: /home/runner/work/lunarlab/lunarlab
+2026-11-01T20:34:20.6767953Z   server-url: https://github.com
+2026-11-01T20:34:20.6770542Z   github-token: ***
+2026-11-01T20:34:20.6770771Z   enable-cache: auto
+2026-11-01T20:34:20.6771365Z   cache-dependency-glob: **/*requirements*.txt
+**/*requirements*.in
+**/*constraints*.txt
+**/*constraints*.in
+**/pyproject.toml
+**/uv.lock
+**/*.py.lock
+
+2026-11-01T20:34:20.6772024Z   restore-cache: true
+2026-11-01T20:34:20.6772236Z   save-cache: true
+2026-11-01T20:34:20.6772457Z   prune-cache: true
+2026-11-01T20:34:20.6772685Z   ignore-nothing-to-cache: false
+2026-11-01T20:34:20.6772954Z   ignore-empty-workdir: false
+2026-11-01T20:34:20.6773235Z   add-problem-matchers: true
+2026-11-01T20:34:20.6773497Z env:
+2026-11-01T20:34:20.6773768Z   SDL_VIDEODRIVER: dummy
+2026-11-01T20:34:20.6774003Z   SDL_AUDIODRIVER: dummy
+2026-11-01T20:34:20.6774228Z ##[endgroup]
+2026-11-01T20:34:20.8845102Z (node:2225) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-11-01T20:34:20.8846099Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-11-01T20:34:20.9066016Z Trying to find version for uv in: /home/runner/work/lunarlab/lunarlab/uv.toml
+2026-11-01T20:34:20.9075521Z Could not find file: /home/runner/work/lunarlab/lunarlab/uv.toml
+2026-11-01T20:34:20.9101232Z Trying to find version for uv in: /home/runner/work/lunarlab/lunarlab/pyproject.toml
+2026-11-01T20:34:20.9110579Z Could not determine uv version from uv.toml or pyproject.toml. Falling back to latest.
+2026-11-01T20:34:20.9112451Z Getting latest version from GitHub API...
+2026-11-01T20:34:21.2277157Z manifest-file not provided, reading from local file.
+2026-11-01T20:34:21.2318725Z manifest-file does not contain version 0.13.6, arch x86_64, platform unknown-linux-gnu. Falling back to GitHub releases.
+2026-11-01T20:34:21.2320347Z Downloading uv from "https://github.com/astral-sh/uv/releases/download/0.13.6/uv-x86_64-unknown-linux-gnu.tar.gz" ...
+2026-11-01T20:34:21.5695977Z [command]/usr/bin/tar xz --warning=no-unknown-keyword --overwrite -C /home/runner/work/_temp/ad63382b-2ad5-4f28-beeb-c295728e3a58 -f /home/runner/work/_temp/0986c3a3-bed7-4b89-adaf-db368a106512
+2026-11-01T20:34:21.7879554Z Added /home/runner/.local/bin to the path
+2026-11-01T20:34:21.7882127Z Added /opt/hostedtoolcache/uv/0.13.6/x86_64 to the path
+2026-11-01T20:34:21.7883578Z Set UV_PYTHON to 3.12
+2026-11-01T20:34:21.7907451Z Set UV_CACHE_DIR to /home/runner/work/_temp/setup-uv-cache
+2026-11-01T20:34:21.7907857Z Successfully installed uv version 0.13.6
+2026-11-01T20:34:21.7909536Z Searching files using cache dependency glob: /home/runner/work/lunarlab/lunarlab/**/*requirements*.txt,/home/runner/work/lunarlab/lunarlab/**/*requirements*.in,/home/runner/work/lunarlab/lunarlab/**/*constraints*.txt,/home/runner/work/lunarlab/lunarlab/**/*constraints*.in,/home/runner/work/lunarlab/lunarlab/**/pyproject.toml,/home/runner/work/lunarlab/lunarlab/**/uv.lock,/home/runner/work/lunarlab/lunarlab/**/*.py.lock
+2026-11-01T20:34:21.8952187Z /home/runner/work/lunarlab/lunarlab/pyproject.toml
+2026-11-01T20:34:22.0942152Z /home/runner/work/lunarlab/lunarlab/requirements.in
+2026-11-01T20:34:22.1005565Z Found 2 files to hash.
+2026-11-01T20:34:22.1085322Z Trying to restore uv cache from GitHub Actions cache with key: setup-uv-1-x86_64-unknown-linux-gnu-3.12-pruned-1be0913b0a4e07550796023acc1f2601890af255974de00f6df5864f015c147d
+2026-11-01T20:34:22.3417515Z Cache hit for: setup-uv-1-x86_64-unknown-linux-gnu-3.12-pruned-1be0913b0a4e07550796023acc1f2601890af255974de00f6df5864f015c147d
+2026-11-01T20:34:22.3566599Z (node:2225) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-11-01T20:34:23.6454364Z Received 4258217 of 8452521 (50.4%), 4.1 MBs/sec
+2026-11-01T20:34:23.7569721Z Received 8452521 of 8452521 (100.0%), 7.2 MBs/sec
+2026-11-01T20:34:23.7570360Z Cache Size: ~8 MB (8452521 B)
+2026-11-01T20:34:23.7594909Z [command]/usr/bin/tar -xf /home/runner/work/_temp/fe9d3e61-b218-4f4c-b90a-e2734dc0c7cd/cache.tzst -P -C /home/runner/work/lunarlab/lunarlab --use-compress-program unzstd
+2026-11-01T20:34:23.8090506Z Cache restored successfully
+2026-11-01T20:34:23.8099987Z uv cache restored from GitHub Actions cache with key: setup-uv-1-x86_64-unknown-linux-gnu-3.12-pruned-1be0913b0a4e07550796023acc1f2601890af255974de00f6df5864f015c147d
+2026-11-01T20:34:23.8273059Z ##[group]Run python3 tools/build_source_archive.py --rev HEAD --out dist-a
+2026-11-01T20:34:23.8273707Z [36;1mpython3 tools/build_source_archive.py --rev HEAD --out dist-a[0m
+2026-11-01T20:34:23.8274238Z [36;1mpython3 tools/build_source_archive.py --rev HEAD --out dist-b[0m
+2026-11-01T20:34:23.8275026Z [36;1mcmp dist-a/lunarlab-*-src.tar.gz dist-b/lunarlab-*-src.tar.gz[0m
+2026-11-01T20:34:23.8309755Z shell: /usr/bin/bash -e {0}
+2026-11-01T20:34:23.8310031Z env:
+2026-11-01T20:34:23.8310363Z   SDL_VIDEODRIVER: dummy
+2026-11-01T20:34:23.8310610Z   SDL_AUDIODRIVER: dummy
+2026-11-01T20:34:23.8310834Z   UV_PYTHON: 3.12
+2026-11-01T20:34:23.8311096Z   UV_CACHE_DIR: /home/runner/work/_temp/setup-uv-cache
+2026-11-01T20:34:23.8311420Z ##[endgroup]
+2026-11-01T20:34:26.2428175Z lunarlab-0.1.0-src.tar.gz: 1569 files, 12.9 MB, sha256 2bd398e56f6f7f4bd1ebedd7d33af4268a6bd5623329bd83815fb38b1358867b
+2026-11-01T20:34:26.2429171Z source: revision a38d07f59f99
+2026-11-01T20:34:28.6099993Z lunarlab-0.1.0-src.tar.gz: 1569 files, 12.9 MB, sha256 2bd398e56f6f7f4bd1ebedd7d33af4268a6bd5623329bd83815fb38b1358867b
+2026-11-01T20:34:28.6100989Z source: revision a38d07f59f99
+2026-11-01T20:34:28.6337708Z ##[group]Run python3 tools/build_source_archive.py --rev HEAD --out dist --verify
+2026-11-01T20:34:28.6338332Z [36;1mpython3 tools/build_source_archive.py --rev HEAD --out dist --verify[0m
+2026-11-01T20:34:28.6369390Z shell: /usr/bin/bash -e {0}
+2026-11-01T20:34:28.6369637Z env:
+2026-11-01T20:34:28.6369836Z   SDL_VIDEODRIVER: dummy
+2026-11-01T20:34:28.6370083Z   SDL_AUDIODRIVER: dummy
+2026-11-01T20:34:28.6370304Z   UV_PYTHON: 3.12
+2026-11-01T20:34:28.6370569Z   UV_CACHE_DIR: /home/runner/work/_temp/setup-uv-cache
+2026-11-01T20:34:28.6370885Z ##[endgroup]
+2026-11-01T20:34:31.5059071Z lunarlab-0.1.0-src.tar.gz: 1569 files, 12.9 MB, sha256 2bd398e56f6f7f4bd1ebedd7d33af4268a6bd5623329bd83815fb38b1358867b
+2026-11-01T20:34:31.5060524Z source: revision a38d07f59f99
+2026-11-01T20:34:31.5061281Z $ uv venv --python 3.12 venv
+2026-11-01T20:34:32.3542455Z    Using CPython 3.12.16
+2026-11-01T20:34:32.3543157Z    Creating virtual environment at: /tmp/lunarlab-sdist-1q8x8s4m/venv
+2026-11-01T20:34:32.3544142Z    Activate with: /tmp/lunarlab-sdist-1q8x8s4m/venv/bin/activate
+2026-11-01T20:34:32.3545224Z $ uv pip install --python python -r requirements-ci.lock --torch-backend cpu
+2026-11-01T20:34:35.6668881Z     + typing-extensions==4.16.0
+2026-11-01T20:34:35.6669489Z     + typing-inspection==0.4.4
+2026-11-01T20:34:35.6670043Z     + uvicorn==0.54.0
+2026-11-01T20:34:35.6670607Z $ uv pip install --python python --no-deps lunarlab-0.1.0
+2026-11-01T20:34:37.1232384Z    Prepared 1 package in 232ms
+2026-11-01T20:34:37.1232751Z    Installed 1 package in 2ms
+2026-11-01T20:34:37.1233421Z     + lunarlab==0.1.0 (from file:///tmp/lunarlab-sdist-1q8x8s4m/lunarlab-0.1.0)
+2026-11-01T20:34:37.1234104Z $ python -m lunarlab --version
+2026-11-01T20:34:37.8745410Z    lunarlab 0.1.0 (source no git revision); Python 3.12.16 on Linux-7.0.0-1017-azure-x86_64-with-glibc2.43; gymnasium 1.4.0, stable-baselines3 2.9.0, torch 2.14.1+cpu
+2026-11-01T20:34:37.8746726Z $ python -m lunarlab doctor
+2026-11-01T20:34:43.3670152Z    [OK  ] node / frontend  node v24.22.1 (meets Vite's ^20.19 || >=22.12); frontend not built yet (run scripts/setup.ps1)
+2026-11-01T20:34:43.3670852Z    
+2026-11-01T20:34:43.3671203Z    9 ok, 1 warning(s), 0 failure(s). Home: /tmp/lunarlab-sdist-1q8x8s4m/home
+2026-11-01T20:34:43.3671730Z $ python -m lunarlab reproduce-smoke --transitions 2048
+2026-11-01T20:34:49.9916736Z      [ok] a repeated final-test evaluation matches the saved one exactly: 4/4 episodes identical
+2026-11-01T20:34:49.9917775Z      [ok] exported results re-read identically: sha256 943c969aafb4c52f
+2026-11-01T20:34:49.9918440Z    PASSED: 14/14 checks in 5.88 s
+2026-11-01T20:34:49.9919567Z $ python -m pytest -q -p no:cacheprovider test_project_metadata.py test_docs.py test_reproduce.py test_audit_core.py test_properties.py test_rewards.py
+2026-11-01T20:35:03.5826958Z    ........................................................................ [ 74%]
+2026-11-01T20:35:03.5828041Z    ..................................................                       [100%]
+2026-11-01T20:35:03.5828775Z    194 passed in 12.16s
+2026-11-01T20:35:04.0223884Z verified: the archive installs, runs and passes its release tests in a fresh environment
+2026-11-01T20:35:04.0425438Z ##[group]Run actions/upload-artifact@v4
+2026-11-01T20:35:04.0425770Z with:
+2026-11-01T20:35:04.0425972Z   name: source-archive
+2026-11-01T20:35:04.0426193Z   path: dist
+2026-11-01T20:35:04.0426409Z   retention-days: 30
+2026-11-01T20:35:04.0426628Z   if-no-files-found: warn
+2026-11-01T20:35:04.0426864Z   compression-level: 6
+2026-11-01T20:35:04.0427074Z   overwrite: false
+2026-11-01T20:35:04.0427288Z   include-hidden-files: false
+2026-11-01T20:35:04.0427528Z env:
+2026-11-01T20:35:04.0427720Z   SDL_VIDEODRIVER: dummy
+2026-11-01T20:35:04.0427946Z   SDL_AUDIODRIVER: dummy
+2026-11-01T20:35:04.0428162Z   UV_PYTHON: 3.12
+2026-11-01T20:35:04.0428414Z   UV_CACHE_DIR: /home/runner/work/_temp/setup-uv-cache
+2026-11-01T20:35:04.0428723Z ##[endgroup]
+2026-11-01T20:35:04.2116056Z (node:2612) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-11-01T20:35:04.2117408Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-11-01T20:35:04.2188488Z With the provided path, there will be 3 files uploaded
+2026-11-01T20:35:04.2196447Z Artifact name is valid!
+2026-11-01T20:35:04.2197422Z Root directory input is valid!
+2026-11-01T20:35:04.5900181Z Beginning upload of artifact content to blob storage
+2026-11-01T20:35:04.8982759Z (node:2612) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-11-01T20:35:05.8938415Z Uploaded bytes 8388608
+2026-11-01T20:35:06.1680016Z Uploaded bytes 12912124
+2026-11-01T20:35:06.2495358Z Finished uploading artifact content to blob storage!
+2026-11-01T20:35:06.2496681Z SHA256 digest of uploaded artifact zip is 73996a1c3035adc031ae2578f495bec5d00db0de0cefdee90935669172d075f6
+2026-11-01T20:35:06.2498971Z Finalizing artifact upload
+2026-11-01T20:35:06.6816824Z Artifact source-archive.zip successfully finalized. Artifact ID 13100021824
+2026-11-01T20:35:06.6817645Z Artifact source-archive has been successfully uploaded! Final size is 12912124 bytes. Artifact ID is 13100021824
+2026-11-01T20:35:06.6824025Z Artifact download URL: https://github.com/SHAYAN-ABRAR/lunarlab/actions/runs/41347412883/artifacts/13100021824
+2026-11-01T20:35:06.7083685Z Post job cleanup.
+2026-11-01T20:35:06.8366064Z Cache hit occurred on key setup-uv-1-x86_64-unknown-linux-gnu-3.12-pruned-1be0913b0a4e07550796023acc1f2601890af255974de00f6df5864f015c147d, not saving cache.
+2026-11-01T20:35:06.8367893Z (node:2624) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-11-01T20:35:06.8369044Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-11-01T20:35:06.8517869Z Post job cleanup.
+2026-11-01T20:35:06.9368971Z [command]/usr/bin/git version
+2026-11-01T20:35:06.9416163Z git version 2.56.0
+2026-11-01T20:35:06.9455904Z Temporarily overriding HOME='/home/runner/work/_temp/18b24583-e4e6-4bc1-a4a2-425adfb51706' before making global git config changes
+2026-11-01T20:35:06.9457369Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-01T20:35:06.9460559Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/lunarlab/lunarlab
+2026-11-01T20:35:06.9502213Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-01T20:35:06.9540476Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-01T20:35:06.9856238Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-01T20:35:06.9884043Z http.https://github.com/.extraheader
+2026-11-01T20:35:06.9896586Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-11-01T20:35:06.9933735Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-01T20:35:07.0357568Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-01T20:35:07.0400842Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-01T20:35:07.0886968Z Cleaning up orphan processes
+2026-11-01T20:35:07.1320996Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/upload-artifact@v4, astral-sh/setup-uv@v6. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

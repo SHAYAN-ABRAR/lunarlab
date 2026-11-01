@@ -1,0 +1,616 @@
+{
+ "kind": "lunarlab.study-summary-comparison",
+ "published": "results.json",
+ "raw_episode_recomputation": {
+  "scope": "per-policy means and rates and group IQMs recomputed with NumPy from the exported final-test episodes; bootstrap intervals are not recomputed",
+  "policies": 38,
+  "episodes": 3800,
+  "all_match": true,
+  "groups": [
+   {
+    "group": "Original baseline",
+    "policies": 5,
+    "episodes": 500,
+    "iqm_from_raw_episodes": 268.5609273776618,
+    "published_iqm": 268.5609273776618,
+    "iqm_matches": true,
+    "all_policies_match": true,
+    "per_policy": [
+     {
+      "run_id": "20261015-223113-baseline-s0-standard-c5af",
+      "n_episodes": 100,
+      "mean_original_return": 265.85578073699435,
+      "pad_landing_rate": 0.96,
+      "timeout_rate": 0.0,
+      "matches_published": {
+       "n_episodes": true,
+       "mean_original_return": true,
+       "pad_landing_rate": true,
+       "timeout_rate": true
+      }
+     },
+     {
+      "run_id": "20261015-223115-baseline-s1-standard-3b80",
+      "n_episodes": 100,
+      "mean_original_return": 272.9991942034805,
+      "pad_landing_rate": 1.0,
+      "timeout_rate": 0.0,
+      "matches_published": {
+       "n_episodes": true,
+       "mean_original_return": true,
+       "pad_landing_rate": true,
+       "timeout_rate": true
+      }
+     },
+     {
+      "run_id": "20261015-223115-baseline-s2-standard-5b5d",
+      "n_episodes": 100,
+      "mean_original_return": 250.12402092644936,
+      "pad_landing_rate": 0.94,
+      "timeout_rate": 0.0,
+      "matches_published": {
+       "n_episodes": true,
+       "mean_original_return": true,
+       "pad_landing_rate": true,
+       "timeout_rate": true
+      }
+     },
+     {
+      "run_id": "20261015-223115-baseline-s3-standard-7b0f",
+      "n_episodes": 100,
+      "mean_original_return": 268.3226064523492,
+      "pad_landing_rate": 0.99,
+      "timeout_rate": 0.0,
+      "matches_published": {
+       "n_episodes": true,
+       "mean_original_return": true,
+       "pad_landing_rate": true,
+       "timeout_rate": true
+      }
+     },
+     {
+      "run_id": "20261015-223115-baseline-s4-standard-f7f6",
+      "n_episodes": 100,
+      "mean_original_return": 271.504394943642,
+      "pad_landing_rate": 0.99,
+      "timeout_rate": 0.0,
+      "matches_published": {
+       "n_episodes": true,
+       "mean_original_return": true,
+       "pad_landing_rate": true,
+       "timeout_rate": true
+      }
+     }
+    ]
+   },
+   {
+    "group": "Time-penalty ablation",
+    "policies": 5,
+    "episodes": 500,
+    "iqm_from_raw_episodes": 265.32666464830214,
+    "published_iqm": 265.32666464830214,
+    "iqm_matches": true,
+    "all_policies_match": true,
+    "per_policy": [
+     {
+      "run_id": "20261015-223115-time-penalty-s0-standard-2582",
+      "n_episodes": 100,
+      "mean_original_return": 266.9751593803957,
+      "pad_landing_rate": 1.0,
+      "timeout_rate": 0.0,
+      "matches_published": {
+       "n_episodes": true,
+       "mean_original_return": true,
+       "pad_landing_rate": true,
+       "timeout_rate": true
+      }
+     },
+     {
+      "run_id": "20261015-223115-time-penalty-s1-standard-6fc9",
+      "n_episodes": 100,
+      "mean_original_return": 262.47710412866655,
+      "pad_landing_rate": 0.94,
+      "timeout_rate": 0.01,
+      "matches_published": {
+       "n_episodes": true,
+       "mean_original_return": true,
+       "pad_landing_rate": true,
+       "timeout_rate": true
+      }
+     },
+     {
+      "run_id": "20261015-223115-time-penalty-s2-standard-9f88",
+      "n_episodes": 100,
+      "mean_original_return": 269.70623362498,
+      "pad_landing_rate": 1.0,
+      "timeout_rate": 0.0,
+      "matches_published": {
+       "n_episodes": true,
+       "mean_original_return": true,
+       "pad_landing_rate": true,
+       "timeout_rate": true
+      }
+     },
+     {
+      "run_id": "20261015-223115-time-penalty-s3-standard-f398",
+      "n_episodes": 100,
+      "mean_original_return": 236.5374213534208,
+      "pad_landing_rate": 0.75,
+      "timeout_rate": 0.01,
+      "matches_published": {
+       "n_episodes": true,
+       "mean_original_return": true,
+       "pad_landing_rate": true,
+       "timeout_rate": true
+      }
+     },
+     {
+      "run_id": "20261015-223115-time-penalty-s4-standard-828d",
+      "n_episodes": 100,
+      "mean_original_return": 266.52773043584426,
+      "pad_landing_rate": 0.99,
+      "timeout_rate": 0.0,
+      "matches_published": {
+       "n_episodes": true,
+       "mean_original_return": true,
+       "pad_landing_rate": true,
+       "timeout_rate": true
+      }
+     }
+    ]
+   },
+   {
+    "group": "Flawed hover bonus",
+    "policies": 5,
+    "episodes": 500,
+    "iqm_from_raw_episodes": -33.12732762697869,
+    "published_iqm": -33.12732762697869,
+    "iqm_matches": true,
+    "all_policies_match": true,
+    "per_policy": [
+     {
+      "run_id": "20261015-223115-hover-bonus-s0-standard-3376",
+      "n_episodes": 100,
+      "mean_original_return": -21.245551373501357,
+      "pad_landing_rate": 0.0,
+      "timeout_rate": 1.0,
+      "matches_published": {
+       "n_episodes": true,
+       "mean_original_return": true,
+       "pad_landing_rate": true,
+       "timeout_rate": true
+      }
+     },
+     {
+      "run_id": "20261015-223115-hover-bonus-s1-standard-9a39",
+      "n_episodes": 100,
+      "mean_original_return": -30.334600508084417,
+      "pad_landing_rate": 0.0,
+      "timeout_rate": 0.98,
+      "matches_published": {
+       "n_episodes": true,
+       "mean_original_return": true,
+       "pad_landing_rate": true,
+       "timeout_rate": true
+      }
+     },
+     {
+      "run_id": "20261015-223115-hover-bonus-s2-standard-d887",
+      "n_episodes": 100,
+      "mean_original_return": -47.8018309993503,
+      "pad_landing_rate": 0.0,
+      "timeout_rate": 0.91,
+      "matches_published": {
+       "n_episodes": true,
+       "mean_original_return": true,
+       "pad_landing_rate": true,
+       "timeout_rate": true
+      }
+     },
+     {
+      "run_id": "20261015-223115-hover-bonus-s3-standard-c5ba",
+      "n_episodes": 100,
+      "mean_original_return": 38.58906718434083,
+      "pad_landing_rate": 0.0,
+      "timeout_rate": 0.11,
+      "matches_published": {
+       "n_episodes": true,
+       "mean_original_return": true,
+       "pad_landing_rate": true,
+       "timeout_rate": true
+      }
+     },
+     {
+      "run_id": "20261015-223115-hover-bonus-s4-standard-cc47",
+      "n_episodes": 100,
+      "mean_original_return": -56.95664310633683,
+      "pad_landing_rate": 0.0,
+      "timeout_rate": 1.0,
+      "matches_published": {
+       "n_episodes": true,
+       "mean_original_return": true,
+       "pad_landing_rate": true,
+       "timeout_rate": true
+      }
+     }
+    ]
+   },
+   {
+    "group": "Potential-based shaping",
+    "policies": 5,
+    "episodes": 500,
+    "iqm_from_raw_episodes": 262.26677638226283,
+    "published_iqm": 262.26677638226283,
+    "iqm_matches": true,
+    "all_policies_match": true,
+    "per_policy": [
+     {
+      "run_id": "20261015-223115-potential-s0-standard-0162",
+      "n_episodes": 100,
+      "mean_original_return": 261.6883652350106,
+      "pad_landing_rate": 0.96,
+      "timeout_rate": 0.03,
+      "matches_published": {
+       "n_episodes": true,
+       "mean_original_return": true,
+       "pad_landing_rate": true,
+       "timeout_rate": true
+      }
+     },
+     {
+      "run_id": "20261015-223115-potential-s1-standard-9f70",
+      "n_episodes": 100,
+      "mean_original_return": 228.92948983533256,
+      "pad_landing_rate": 0.81,
+      "timeout_rate": 0.11,
+      "matches_published": {
+       "n_episodes": true,
+       "mean_original_return": true,
+       "pad_landing_rate": true,
+       "timeout_rate": true
+      }
+     },
+     {
+      "run_id": "20261015-223115-potential-s2-standard-7f75",
+      "n_episodes": 100,
+      "mean_original_return": 256.94277596102586,
+      "pad_landing_rate": 0.94,
+      "timeout_rate": 0.06,
+      "matches_published": {
+       "n_episodes": true,
+       "mean_original_return": true,
+       "pad_landing_rate": true,
+       "timeout_rate": true
+      }
+     },
+     {
+      "run_id": "20261015-223115-potential-s3-standard-91e6",
+      "n_episodes": 100,
+      "mean_original_return": 277.1767514894481,
+      "pad_landing_rate": 1.0,
+      "timeout_rate": 0.0,
+      "matches_published": {
+       "n_episodes": true,
+       "mean_original_return": true,
+       "pad_landing_rate": true,
+       "timeout_rate": true
+      }
+     },
+     {
+      "run_id": "20261015-223115-potential-s4-standard-0b22",
+      "n_episodes": 100,
+      "mean_original_return": 268.169187950752,
+      "pad_landing_rate": 0.99,
+      "timeout_rate": 0.0,
+      "matches_published": {
+       "n_episodes": true,
+       "mean_original_return": true,
+       "pad_landing_rate": true,
+       "timeout_rate": true
+      }
+     }
+    ]
+   },
+   {
+    "group": "Learned reward 300 pairs",
+    "policies": 3,
+    "episodes": 300,
+    "iqm_from_raw_episodes": -165.24681809312855,
+    "published_iqm": -165.24681809312855,
+    "iqm_matches": true,
+    "all_policies_match": true,
+    "per_policy": [
+     {
+      "run_id": "20261015-235939-custom-s0-standard-0274",
+      "n_episodes": 100,
+      "mean_original_return": 150.98278994441668,
+      "pad_landing_rate": 0.35,
+      "timeout_rate": 0.0,
+      "matches_published": {
+       "n_episodes": true,
+       "mean_original_return": true,
+       "pad_landing_rate": true,
+       "timeout_rate": true
+      }
+     },
+     {
+      "run_id": "20261015-235939-custom-s1-standard-b692",
+      "n_episodes": 100,
+      "mean_original_return": -304.53622735680005,
+      "pad_landing_rate": 0.01,
+      "timeout_rate": 0.0,
+      "matches_published": {
+       "n_episodes": true,
+       "mean_original_return": true,
+       "pad_landing_rate": true,
+       "timeout_rate": true
+      }
+     },
+     {
+      "run_id": "20261015-235940-custom-s2-standard-a299",
+      "n_episodes": 100,
+      "mean_original_return": -342.1870168670023,
+      "pad_landing_rate": 0.0,
+      "timeout_rate": 0.0,
+      "matches_published": {
+       "n_episodes": true,
+       "mean_original_return": true,
+       "pad_landing_rate": true,
+       "timeout_rate": true
+      }
+     }
+    ]
+   },
+   {
+    "group": "Learned reward 3000 pairs",
+    "policies": 3,
+    "episodes": 300,
+    "iqm_from_raw_episodes": 200.1949325620709,
+    "published_iqm": 200.1949325620709,
+    "iqm_matches": true,
+    "all_policies_match": true,
+    "per_policy": [
+     {
+      "run_id": "20261015-235940-custom-s0-standard-d28b",
+      "n_episodes": 100,
+      "mean_original_return": 196.25725267965453,
+      "pad_landing_rate": 0.66,
+      "timeout_rate": 0.01,
+      "matches_published": {
+       "n_episodes": true,
+       "mean_original_return": true,
+       "pad_landing_rate": true,
+       "timeout_rate": true
+      }
+     },
+     {
+      "run_id": "20261015-235940-custom-s1-standard-ce26",
+      "n_episodes": 100,
+      "mean_original_return": 221.5753306348656,
+      "pad_landing_rate": 0.54,
+      "timeout_rate": 0.02,
+      "matches_published": {
+       "n_episodes": true,
+       "mean_original_return": true,
+       "pad_landing_rate": true,
+       "timeout_rate": true
+      }
+     },
+     {
+      "run_id": "20261015-235940-custom-s2-standard-dbc1",
+      "n_episodes": 100,
+      "mean_original_return": 182.75221437169256,
+      "pad_landing_rate": 0.42,
+      "timeout_rate": 0.01,
+      "matches_published": {
+       "n_episodes": true,
+       "mean_original_return": true,
+       "pad_landing_rate": true,
+       "timeout_rate": true
+      }
+     }
+    ]
+   },
+   {
+    "group": "DQN \u00b7 Original baseline",
+    "policies": 3,
+    "episodes": 300,
+    "iqm_from_raw_episodes": 211.00541110923822,
+    "published_iqm": 211.00541110923822,
+    "iqm_matches": true,
+    "all_policies_match": true,
+    "per_policy": [
+     {
+      "run_id": "20261015-224317-dqn-baseline-s0-custom-2fe1",
+      "n_episodes": 100,
+      "mean_original_return": 155.36443783032232,
+      "pad_landing_rate": 0.29,
+      "timeout_rate": 0.13,
+      "matches_published": {
+       "n_episodes": true,
+       "mean_original_return": true,
+       "pad_landing_rate": true,
+       "timeout_rate": true
+      }
+     },
+     {
+      "run_id": "20261015-224318-dqn-baseline-s1-custom-1fa1",
+      "n_episodes": 100,
+      "mean_original_return": 207.5893679476933,
+      "pad_landing_rate": 0.35,
+      "timeout_rate": 0.2,
+      "matches_published": {
+       "n_episodes": true,
+       "mean_original_return": true,
+       "pad_landing_rate": true,
+       "timeout_rate": true
+      }
+     },
+     {
+      "run_id": "20261015-224318-dqn-baseline-s2-custom-f083",
+      "n_episodes": 100,
+      "mean_original_return": 270.062427549699,
+      "pad_landing_rate": 0.97,
+      "timeout_rate": 0.0,
+      "matches_published": {
+       "n_episodes": true,
+       "mean_original_return": true,
+       "pad_landing_rate": true,
+       "timeout_rate": true
+      }
+     }
+    ]
+   },
+   {
+    "group": "DQN \u00b7 Time-penalty ablation",
+    "policies": 3,
+    "episodes": 300,
+    "iqm_from_raw_episodes": 177.18572047343844,
+    "published_iqm": 177.18572047343844,
+    "iqm_matches": true,
+    "all_policies_match": true,
+    "per_policy": [
+     {
+      "run_id": "20261015-224318-dqn-time-penalty-s0-custom-c4a9",
+      "n_episodes": 100,
+      "mean_original_return": 116.75936407572172,
+      "pad_landing_rate": 0.03,
+      "timeout_rate": 0.7,
+      "matches_published": {
+       "n_episodes": true,
+       "mean_original_return": true,
+       "pad_landing_rate": true,
+       "timeout_rate": true
+      }
+     },
+     {
+      "run_id": "20261015-224318-dqn-time-penalty-s1-custom-dc89",
+      "n_episodes": 100,
+      "mean_original_return": 207.34543268436803,
+      "pad_landing_rate": 0.49,
+      "timeout_rate": 0.07,
+      "matches_published": {
+       "n_episodes": true,
+       "mean_original_return": true,
+       "pad_landing_rate": true,
+       "timeout_rate": true
+      }
+     },
+     {
+      "run_id": "20261015-224318-dqn-time-penalty-s2-custom-9494",
+      "n_episodes": 100,
+      "mean_original_return": 207.45236466022558,
+      "pad_landing_rate": 0.42,
+      "timeout_rate": 0.08,
+      "matches_published": {
+       "n_episodes": true,
+       "mean_original_return": true,
+       "pad_landing_rate": true,
+       "timeout_rate": true
+      }
+     }
+    ]
+   },
+   {
+    "group": "DQN \u00b7 Flawed hover bonus",
+    "policies": 3,
+    "episodes": 300,
+    "iqm_from_raw_episodes": 109.55200804084933,
+    "published_iqm": 109.55200804084933,
+    "iqm_matches": true,
+    "all_policies_match": true,
+    "per_policy": [
+     {
+      "run_id": "20261015-224318-dqn-hover-bonus-s0-custom-aefc",
+      "n_episodes": 100,
+      "mean_original_return": 224.06994853107503,
+      "pad_landing_rate": 0.84,
+      "timeout_rate": 0.04,
+      "matches_published": {
+       "n_episodes": true,
+       "mean_original_return": true,
+       "pad_landing_rate": true,
+       "timeout_rate": true
+      }
+     },
+     {
+      "run_id": "20261015-224318-dqn-hover-bonus-s1-custom-e122",
+      "n_episodes": 100,
+      "mean_original_return": 97.16878418429046,
+      "pad_landing_rate": 0.24,
+      "timeout_rate": 0.31,
+      "matches_published": {
+       "n_episodes": true,
+       "mean_original_return": true,
+       "pad_landing_rate": true,
+       "timeout_rate": true
+      }
+     },
+     {
+      "run_id": "20261015-224318-dqn-hover-bonus-s2-custom-9c0f",
+      "n_episodes": 100,
+      "mean_original_return": 7.417291407182484,
+      "pad_landing_rate": 0.14,
+      "timeout_rate": 0.06,
+      "matches_published": {
+       "n_episodes": true,
+       "mean_original_return": true,
+       "pad_landing_rate": true,
+       "timeout_rate": true
+      }
+     }
+    ]
+   },
+   {
+    "group": "DQN \u00b7 Potential-based shaping",
+    "policies": 3,
+    "episodes": 300,
+    "iqm_from_raw_episodes": 207.24773929392418,
+    "published_iqm": 207.24773929392418,
+    "iqm_matches": true,
+    "all_policies_match": true,
+    "per_policy": [
+     {
+      "run_id": "20261015-224318-dqn-potential-s0-custom-ee4b",
+      "n_episodes": 100,
+      "mean_original_return": 227.1780443926577,
+      "pad_landing_rate": 0.63,
+      "timeout_rate": 0.05,
+      "matches_published": {
+       "n_episodes": true,
+       "mean_original_return": true,
+       "pad_landing_rate": true,
+       "timeout_rate": true
+      }
+     },
+     {
+      "run_id": "20261015-224318-dqn-potential-s1-custom-5487",
+      "n_episodes": 100,
+      "mean_original_return": 244.85575096613294,
+      "pad_landing_rate": 0.9,
+      "timeout_rate": 0.02,
+      "matches_published": {
+       "n_episodes": true,
+       "mean_original_return": true,
+       "pad_landing_rate": true,
+       "timeout_rate": true
+      }
+     },
+     {
+      "run_id": "20261015-224318-dqn-potential-s2-custom-5b10",
+      "n_episodes": 100,
+      "mean_original_return": 149.7094225229819,
+      "pad_landing_rate": 0.29,
+      "timeout_rate": 0.08,
+      "matches_published": {
+       "n_episodes": true,
+       "mean_original_return": true,
+       "pad_landing_rate": true,
+       "timeout_rate": true
+      }
+     }
+    ]
+   }
+  ]
+ }
+}

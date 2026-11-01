@@ -12,11 +12,11 @@ published.
 | Title | LunarLab: software, study records and trained policies for auditable reward-design experiments | |
 | Creator | Abrar, Shayan; affiliation American International University-Bangladesh (AIUB) | Add an ORCID iD if the author has one |
 | Description | See below | Paste as is; Zenodo accepts simple HTML |
-| Version | 0.1.0 | The software version. The exact source revision is named in the description and in the archive's `REVISIONS.md` |
+| Version | 0.1.0 | The software version. The exact source revision is named in the description and in the archive's `REVISIONS.md`. For the candidate of 1 November it is `a38d07f59f99dee53676b061955d25e8caef3e72` (`CANDIDATE.md`) |
 | Publication date | Set when the record is published | |
 | Licences | **To be chosen by the author** (`LICENSING_PROPOSAL.md`; proposed: MIT and CC BY 4.0, with `LICENSES.md` as the file map) | Do not accept Zenodo's pre-selected licence for the whole record |
 | Keywords | reinforcement learning; reward shaping; reward hacking; reproducibility; evaluation; research software; Stable-Baselines3; Gymnasium; LunarLander; CartPole | |
-| Related works | `https://github.com/SHAYAN-ABRAR/lunarlab`, "is supplement to", resource type software | Add the article's DOI ("is described by") once it exists |
+| Related works | `https://github.com/SHAYAN-ABRAR/lunarlab`, "is supplement to", resource type software. Also the tree of the archived revision, `https://github.com/SHAYAN-ABRAR/lunarlab/tree/a38d07f59f99dee53676b061955d25e8caef3e72` (the branch must be pushed; it is) | Add the article's DOI ("is described by") once it exists |
 | Language | English | |
 | Funding | None | The work was self-funded |
 | Access | Open | |

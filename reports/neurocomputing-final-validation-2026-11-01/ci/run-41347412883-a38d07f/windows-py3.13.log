@@ -1,0 +1,537 @@
+﻿2026-11-01T20:34:16.7108581Z Current runner version: '2.338.2'
+2026-11-01T20:34:16.7134200Z ##[group]Runner Image Provisioner
+2026-11-01T20:34:16.7135085Z Hosted Compute Agent
+2026-11-01T20:34:16.7135654Z Version: 20261021.618
+2026-11-01T20:34:16.7136260Z Commit: 21505ad2541d5be6135ed84fc33697146cf75b8e
+2026-11-01T20:34:16.7136979Z Build Date: 2026-10-21T00:45:21Z
+2026-11-01T20:34:16.7137661Z Worker ID: {55fec698-f5db-4c97-9707-8a7d6dcb167c}
+2026-11-01T20:34:16.7138351Z Region: westcentralus
+2026-11-01T20:34:16.7138928Z Cloud: Azure
+2026-11-01T20:34:16.7139473Z ##[endgroup]
+2026-11-01T20:34:16.7140887Z ##[group]Operating System
+2026-11-01T20:34:16.7141590Z Microsoft Windows Server 2025
+2026-11-01T20:34:16.7142222Z 10.0.26100
+2026-11-01T20:34:16.7143078Z Datacenter
+2026-11-01T20:34:16.7143600Z ##[endgroup]
+2026-11-01T20:34:16.7144132Z ##[group]Runner Image
+2026-11-01T20:34:16.7144707Z Image: windows-2025-vs2026
+2026-11-01T20:34:16.7145275Z Version: 20261021.278.1
+2026-11-01T20:34:16.7147040Z Included Software: https://github.com/actions/runner-images/blob/win25-vs2026/20261021.278/images/windows/Windows2025-VS2026-Readme.md
+2026-11-01T20:34:16.7148705Z Image Release: https://github.com/actions/runner-images/releases/tag/win25-vs2026%2F20261021.278
+2026-11-01T20:34:16.7149670Z ##[endgroup]
+2026-11-01T20:34:16.7150749Z ##[group]GITHUB_TOKEN Permissions
+2026-11-01T20:34:16.7152536Z Contents: read
+2026-11-01T20:34:16.7153114Z Metadata: read
+2026-11-01T20:34:16.7153681Z ##[endgroup]
+2026-11-01T20:34:16.7155659Z Secret source: Actions
+2026-11-01T20:34:16.7157088Z Cache mode: write
+2026-11-01T20:34:16.7158197Z Prepare workflow directory
+2026-11-01T20:34:16.7623097Z Prepare all required actions
+2026-11-01T20:34:16.7670823Z Getting action download info
+2026-11-01T20:34:17.0222969Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+2026-11-01T20:34:17.1892125Z Download action repository 'astral-sh/setup-uv@v6' (SHA:d0cc045d04ccac9d8b7881df0226f9e82c39688e)
+2026-11-01T20:34:17.7590489Z Download action repository 'actions/upload-artifact@v4' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+2026-11-01T20:34:18.1152214Z Complete job name: Windows · Python 3.13 · install, locks, scripts
+2026-11-01T20:34:18.2881789Z ##[group]Run actions/checkout@v4
+2026-11-01T20:34:18.2882938Z with:
+2026-11-01T20:34:18.2883570Z   repository: SHAYAN-ABRAR/lunarlab
+2026-11-01T20:34:18.2888825Z   token: ***
+2026-11-01T20:34:18.2889440Z   ssh-strict: true
+2026-11-01T20:34:18.2890051Z   ssh-user: git
+2026-11-01T20:34:18.2890750Z   persist-credentials: true
+2026-11-01T20:34:18.2891401Z   clean: true
+2026-11-01T20:34:18.2892042Z   sparse-checkout-cone-mode: true
+2026-11-01T20:34:18.2892768Z   fetch-depth: 1
+2026-11-01T20:34:18.2893371Z   fetch-tags: false
+2026-11-01T20:34:18.2894006Z   show-progress: true
+2026-11-01T20:34:18.2894629Z   lfs: false
+2026-11-01T20:34:18.2895254Z   submodules: false
+2026-11-01T20:34:18.2895890Z   set-safe-directory: true
+2026-11-01T20:34:18.2896609Z   allow-unsafe-pr-checkout: false
+2026-11-01T20:34:18.2897665Z env:
+2026-11-01T20:34:18.2898273Z   SDL_VIDEODRIVER: dummy
+2026-11-01T20:34:18.2898960Z   SDL_AUDIODRIVER: dummy
+2026-11-01T20:34:18.2899611Z ##[endgroup]
+2026-11-01T20:34:18.4601550Z Syncing repository: SHAYAN-ABRAR/lunarlab
+2026-11-01T20:34:18.4603535Z ##[group]Getting Git version info
+2026-11-01T20:34:18.4604406Z Working directory is 'D:\a\lunarlab\lunarlab'
+2026-11-01T20:34:18.5535570Z [command]"C:\Program Files\Git\bin\git.exe" version
+2026-11-01T20:34:19.0146372Z git version 2.56.0.windows.2
+2026-11-01T20:34:19.0197423Z ##[endgroup]
+2026-11-01T20:34:19.0215712Z Temporarily overriding HOME='D:\a\_temp\c8404e90-4dec-4694-baf8-0032872fb827' before making global git config changes
+2026-11-01T20:34:19.0217990Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-01T20:34:19.0226156Z [command]"C:\Program Files\Git\bin\git.exe" config --global --add safe.directory D:\a\lunarlab\lunarlab
+2026-11-01T20:34:19.1049738Z Deleting the contents of 'D:\a\lunarlab\lunarlab'
+2026-11-01T20:34:19.1133467Z ##[group]Initializing the repository
+2026-11-01T20:34:19.1134768Z [command]"C:\Program Files\Git\bin\git.exe" init D:\a\lunarlab\lunarlab
+2026-11-01T20:34:19.2337159Z Initialized empty Git repository in D:/a/lunarlab/lunarlab/.git/
+2026-11-01T20:34:19.2383192Z [command]"C:\Program Files\Git\bin\git.exe" remote add origin https://github.com/SHAYAN-ABRAR/lunarlab
+2026-11-01T20:34:19.3136614Z ##[endgroup]
+2026-11-01T20:34:19.3137701Z ##[group]Disabling automatic garbage collection
+2026-11-01T20:34:19.3145251Z [command]"C:\Program Files\Git\bin\git.exe" config --local gc.auto 0
+2026-11-01T20:34:19.3503633Z ##[endgroup]
+2026-11-01T20:34:19.3504660Z ##[group]Setting up auth
+2026-11-01T20:34:19.3515424Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp core\.sshCommand
+2026-11-01T20:34:19.3876121Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :\""
+2026-11-01T20:34:21.1806004Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-01T20:34:21.2170563Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :\""
+2026-11-01T20:34:21.7608371Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-01T20:34:21.7976122Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "git config --local --show-origin --name-only --get-regexp remote.origin.url"
+2026-11-01T20:34:22.3289551Z [command]"C:\Program Files\Git\bin\git.exe" config --local http.https://github.com/.extraheader "AUTHORIZATION: basic ***"
+2026-11-01T20:34:22.3665772Z ##[endgroup]
+2026-11-01T20:34:22.3666566Z ##[group]Fetching the repository
+2026-11-01T20:34:22.3681314Z [command]"C:\Program Files\Git\bin\git.exe" -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +a38d07f59f99dee53676b061955d25e8caef3e72:refs/remotes/origin/research/neurocomputing-final-validation
+2026-11-01T20:34:25.2790203Z From https://github.com/SHAYAN-ABRAR/lunarlab
+2026-11-01T20:34:25.2791345Z  * [new ref]         a38d07f59f99dee53676b061955d25e8caef3e72 -> origin/research/neurocomputing-final-validation
+2026-11-01T20:34:25.2830128Z ##[endgroup]
+2026-11-01T20:34:25.2830508Z ##[group]Determining the checkout info
+2026-11-01T20:34:25.2833184Z ##[endgroup]
+2026-11-01T20:34:25.2841835Z [command]"C:\Program Files\Git\bin\git.exe" sparse-checkout disable
+2026-11-01T20:34:25.3370204Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset-all extensions.worktreeConfig
+2026-11-01T20:34:25.3719683Z ##[group]Checking out the ref
+2026-11-01T20:34:25.3727959Z [command]"C:\Program Files\Git\bin\git.exe" checkout --progress --force -B research/neurocomputing-final-validation refs/remotes/origin/research/neurocomputing-final-validation
+2026-11-01T20:34:26.1868322Z Switched to a new branch 'research/neurocomputing-final-validation'
+2026-11-01T20:34:26.1890449Z branch 'research/neurocomputing-final-validation' set up to track 'origin/research/neurocomputing-final-validation'.
+2026-11-01T20:34:26.1965396Z ##[endgroup]
+2026-11-01T20:34:26.2430167Z [command]"C:\Program Files\Git\bin\git.exe" log -1 --format=%H
+2026-11-01T20:34:26.2758518Z a38d07f59f99dee53676b061955d25e8caef3e72
+2026-11-01T20:34:26.3240474Z ##[group]Run astral-sh/setup-uv@v6
+2026-11-01T20:34:26.3240857Z with:
+2026-11-01T20:34:26.3241077Z   python-version: 3.13
+2026-11-01T20:34:26.3241357Z   activate-environment: false
+2026-11-01T20:34:26.3241658Z   working-directory: D:\a\lunarlab\lunarlab
+2026-11-01T20:34:26.3242004Z   server-url: https://github.com
+2026-11-01T20:34:26.3246471Z   github-token: ***
+2026-11-01T20:34:26.3246742Z   enable-cache: auto
+2026-11-01T20:34:26.3247471Z   cache-dependency-glob: **/*requirements*.txt
+**/*requirements*.in
+**/*constraints*.txt
+**/*constraints*.in
+**/pyproject.toml
+**/uv.lock
+**/*.py.lock
+
+2026-11-01T20:34:26.3248242Z   restore-cache: true
+2026-11-01T20:34:26.3248473Z   save-cache: true
+2026-11-01T20:34:26.3248692Z   prune-cache: true
+2026-11-01T20:34:26.3248933Z   ignore-nothing-to-cache: false
+2026-11-01T20:34:26.3249227Z   ignore-empty-workdir: false
+2026-11-01T20:34:26.3249518Z   add-problem-matchers: true
+2026-11-01T20:34:26.3249779Z env:
+2026-11-01T20:34:26.3250028Z   SDL_VIDEODRIVER: dummy
+2026-11-01T20:34:26.3250283Z   SDL_AUDIODRIVER: dummy
+2026-11-01T20:34:26.3250519Z ##[endgroup]
+2026-11-01T20:34:26.5310719Z (node:5928) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-11-01T20:34:26.5311956Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-11-01T20:34:26.5314834Z Trying to find version for uv in: D:\a\lunarlab\lunarlab\uv.toml
+2026-11-01T20:34:26.5315916Z Could not find file: D:\a\lunarlab\lunarlab\uv.toml
+2026-11-01T20:34:26.5316684Z Trying to find version for uv in: D:\a\lunarlab\lunarlab\pyproject.toml
+2026-11-01T20:34:26.5353574Z Could not determine uv version from uv.toml or pyproject.toml. Falling back to latest.
+2026-11-01T20:34:26.5355901Z Getting latest version from GitHub API...
+2026-11-01T20:34:26.9050430Z manifest-file not provided, reading from local file.
+2026-11-01T20:34:26.9121628Z manifest-file does not contain version 0.13.6, arch x86_64, platform pc-windows-msvc. Falling back to GitHub releases.
+2026-11-01T20:34:26.9123609Z Downloading uv from "https://github.com/astral-sh/uv/releases/download/0.13.6/uv-x86_64-pc-windows-msvc.zip" ...
+2026-11-01T20:34:27.5801313Z [command]"C:\Program Files\PowerShell\7\pwsh.exe" -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Unrestricted -Command "$ErrorActionPreference = 'Stop' ; try { Add-Type -AssemblyName System.IO.Compression.ZipFile } catch { } ; try { [System.IO.Compression.ZipFile]::ExtractToDirectory('D:\a\_temp\c4ab9731-7998-4113-b04d-67fa67970be5.zip', 'D:\a\_temp\a73f0bd0-695b-48de-a8d8-dd0c6f9f9acc', $true) } catch { if (($_.Exception.GetType().FullName -eq 'System.Management.Automation.MethodException') -or ($_.Exception.GetType().FullName -eq 'System.Management.Automation.RuntimeException') ){ Expand-Archive -LiteralPath 'D:\a\_temp\c4ab9731-7998-4113-b04d-67fa67970be5.zip' -DestinationPath 'D:\a\_temp\a73f0bd0-695b-48de-a8d8-dd0c6f9f9acc' -Force } else { throw $_ } } ;"
+2026-11-01T20:34:28.1382764Z Set UV_TOOL_BIN_DIR to D:\a\_temp\uv-tool-bin-dir
+2026-11-01T20:34:28.1387604Z Added D:\a\_temp\uv-tool-bin-dir to the path
+2026-11-01T20:34:28.1395123Z Added C:\hostedtoolcache\windows\uv\0.13.6\x86_64 to the path
+2026-11-01T20:34:28.1397902Z Set UV_TOOL_DIR to D:\a\_temp\uv-tool-dir
+2026-11-01T20:34:28.1400713Z Set UV_PYTHON to 3.13
+2026-11-01T20:34:28.1419615Z Set UV_CACHE_DIR to D:\a\_temp\setup-uv-cache
+2026-11-01T20:34:28.1419951Z Successfully installed uv version 0.13.6
+2026-11-01T20:34:28.1421210Z Searching files using cache dependency glob: D:\a\lunarlab\lunarlab\**\*requirements*.txt,D:\a\lunarlab\lunarlab\**\*requirements*.in,D:\a\lunarlab\lunarlab\**\*constraints*.txt,D:\a\lunarlab\lunarlab\**\*constraints*.in,D:\a\lunarlab\lunarlab\**\pyproject.toml,D:\a\lunarlab\lunarlab\**\uv.lock,D:\a\lunarlab\lunarlab\**\*.py.lock
+2026-11-01T20:34:28.3346419Z D:\a\lunarlab\lunarlab\pyproject.toml
+2026-11-01T20:34:28.7293283Z D:\a\lunarlab\lunarlab\requirements.in
+2026-11-01T20:34:28.7436911Z Found 2 files to hash.
+2026-11-01T20:34:28.7440645Z Trying to restore uv cache from GitHub Actions cache with key: setup-uv-1-x86_64-pc-windows-msvc-3.13-pruned-60909da807a63ea5a45b7f08723c4fc4bbcf492e1422ff742f3db5900cc25af2
+2026-11-01T20:34:29.0502587Z Cache hit for: setup-uv-1-x86_64-pc-windows-msvc-3.13-pruned-60909da807a63ea5a45b7f08723c4fc4bbcf492e1422ff742f3db5900cc25af2
+2026-11-01T20:34:29.0618875Z (node:5928) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-11-01T20:34:29.9521265Z Received 8291792 of 8291792 (100.0%), 11.4 MBs/sec
+2026-11-01T20:34:29.9523404Z Cache Size: ~8 MB (8291792 B)
+2026-11-01T20:34:29.9550486Z [command]"C:\Program Files\Git\usr\bin\tar.exe" -xf D:/a/_temp/96b85d41-3950-4b60-8d33-7ecd3338c047/cache.tzst -P -C D:/a/lunarlab/lunarlab --force-local --use-compress-program "zstd -d"
+2026-11-01T20:34:30.2042758Z Cache restored successfully
+2026-11-01T20:34:30.2054813Z uv cache restored from GitHub Actions cache with key: setup-uv-1-x86_64-pc-windows-msvc-3.13-pruned-60909da807a63ea5a45b7f08723c4fc4bbcf492e1422ff742f3db5900cc25af2
+2026-11-01T20:34:30.2355581Z ##[group]Run uv venv .venv
+2026-11-01T20:34:30.2356013Z [36;1muv venv .venv[0m
+2026-11-01T20:34:30.2356493Z [36;1muv pip install --python .venv\Scripts\python.exe -r requirements.lock[0m
+2026-11-01T20:34:30.2357004Z [36;1muv pip install --python .venv\Scripts\python.exe -e . --no-deps[0m
+2026-11-01T20:34:30.2969455Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+2026-11-01T20:34:30.2969869Z env:
+2026-11-01T20:34:30.2970081Z   SDL_VIDEODRIVER: dummy
+2026-11-01T20:34:30.2970345Z   SDL_AUDIODRIVER: dummy
+2026-11-01T20:34:30.2970635Z   UV_TOOL_BIN_DIR: D:\a\_temp\uv-tool-bin-dir
+2026-11-01T20:34:30.2970975Z   UV_TOOL_DIR: D:\a\_temp\uv-tool-dir
+2026-11-01T20:34:30.2971274Z   UV_PYTHON: 3.13
+2026-11-01T20:34:30.2971526Z   UV_CACHE_DIR: D:\a\_temp\setup-uv-cache
+2026-11-01T20:34:30.2971822Z ##[endgroup]
+2026-11-01T20:34:33.2674482Z Using CPython 3.13.16 interpreter at: C:\hostedtoolcache\windows\Python\3.13.16\x64\python.exe
+2026-11-01T20:34:33.2675093Z Creating virtual environment at: .venv
+2026-11-01T20:34:33.3010847Z Activate with: .venv\Scripts\activate
+2026-11-01T20:34:33.9694460Z Resolved 65 packages in 532ms
+2026-11-01T20:34:34.0266303Z Downloading networkx (2.0MiB)
+2026-11-01T20:34:34.0325916Z Downloading sympy (6.0MiB)
+2026-11-01T20:34:34.0360759Z Downloading box2d (1.3MiB)
+2026-11-01T20:34:34.0384291Z Downloading pygments (1.2MiB)
+2026-11-01T20:34:34.0404839Z Downloading torch (118.4MiB)
+2026-11-01T20:34:34.0432608Z Downloading imageio-ffmpeg (29.8MiB)
+2026-11-01T20:34:34.0441975Z Downloading pygame (10.1MiB)
+2026-11-01T20:34:34.0456416Z Downloading pandas (9.2MiB)
+2026-11-01T20:34:34.0461415Z Downloading sqlalchemy (2.3MiB)
+2026-11-01T20:34:34.0481871Z Downloading fonttools (2.4MiB)
+2026-11-01T20:34:34.0488814Z Downloading numpy (12.0MiB)
+2026-11-01T20:34:34.0493049Z Downloading pydantic-core (2.1MiB)
+2026-11-01T20:34:34.0498596Z Downloading matplotlib (8.9MiB)
+2026-11-01T20:34:34.0504113Z Downloading ruff (9.6MiB)
+2026-11-01T20:34:34.0604829Z Downloading pillow (6.9MiB)
+2026-11-01T20:34:34.8073875Z  Downloaded pydantic-core
+2026-11-01T20:34:34.8237502Z  Downloaded box2d
+2026-11-01T20:34:34.8495756Z  Downloaded pygments
+2026-11-01T20:34:34.9075481Z  Downloaded sqlalchemy
+2026-11-01T20:34:35.0370360Z  Downloaded fonttools
+2026-11-01T20:34:35.1158211Z  Downloaded networkx
+2026-11-01T20:34:35.5261442Z  Downloaded pillow
+2026-11-01T20:34:35.6388832Z  Downloaded sympy
+2026-11-01T20:34:35.6583198Z  Downloaded matplotlib
+2026-11-01T20:34:35.6704228Z  Downloaded ruff
+2026-11-01T20:34:35.7215126Z  Downloaded pandas
+2026-11-01T20:34:35.7389669Z  Downloaded pygame
+2026-11-01T20:34:35.7443551Z  Downloaded numpy
+2026-11-01T20:34:36.0019551Z  Downloaded imageio-ffmpeg
+2026-11-01T20:34:39.4747936Z  Downloaded torch
+2026-11-01T20:34:39.4755003Z Prepared 65 packages in 5.50s
+2026-11-01T20:34:41.4261578Z Installed 65 packages in 1.95s
+2026-11-01T20:34:41.4263559Z  + alembic==1.20.0
+2026-11-01T20:34:41.4264523Z  + annotated-doc==0.0.5
+2026-11-01T20:34:41.4266462Z  + annotated-types==0.8.0
+2026-11-01T20:34:41.4267568Z  + anyio==4.15.1
+2026-11-01T20:34:41.4269438Z  + box2d==2.3.10
+2026-11-01T20:34:41.4270694Z  + certifi==2026.7.22
+2026-11-01T20:34:41.4272200Z  + click==8.5.0
+2026-11-01T20:34:41.4273436Z  + cloudpickle==3.1.2
+2026-11-01T20:34:41.4274959Z  + colorama==0.4.6
+2026-11-01T20:34:41.4276198Z  + colorlog==6.12.0
+2026-11-01T20:34:41.4277723Z  + contourpy==1.4.0
+2026-11-01T20:34:41.4279052Z  + coverage==7.16.2
+2026-11-01T20:34:41.4280435Z  + cycler==0.12.1
+2026-11-01T20:34:41.4281773Z  + farama-notifications==0.0.6
+2026-11-01T20:34:41.4283037Z  + fastapi==0.143.1
+2026-11-01T20:34:41.4284771Z  + filelock==4.1.1
+2026-11-01T20:34:41.4286049Z  + fonttools==4.67.0
+2026-11-01T20:34:41.4287374Z  + fsspec==2026.9.0
+2026-11-01T20:34:41.4288554Z  + gymnasium==1.4.0
+2026-11-01T20:34:41.4290152Z  + h11==0.16.0
+2026-11-01T20:34:41.4291383Z  + httpcore==1.0.9
+2026-11-01T20:34:41.4292751Z  + httpx==0.28.1
+2026-11-01T20:34:41.4297131Z  + hypothesis==6.170.1
+2026-11-01T20:34:41.4297633Z  + idna==3.20
+2026-11-01T20:34:41.4297996Z  + imageio==2.38.1
+2026-11-01T20:34:41.4298368Z  + imageio-ffmpeg==0.6.0
+2026-11-01T20:34:41.4299845Z  + iniconfig==2.3.1
+2026-11-01T20:34:41.4301128Z  + jinja2==3.1.6
+2026-11-01T20:34:41.4302490Z  + kiwisolver==1.5.1
+2026-11-01T20:34:41.4303645Z  + mako==1.4.3
+2026-11-01T20:34:41.4305340Z  + markupsafe==3.0.4
+2026-11-01T20:34:41.4306729Z  + matplotlib==3.11.2
+2026-11-01T20:34:41.4307408Z  + mpmath==1.3.0
+2026-11-01T20:34:41.4309018Z  + networkx==3.7
+2026-11-01T20:34:41.4310165Z  + numpy==2.5.4
+2026-11-01T20:34:41.4311787Z  + opentelemetry-api==1.45.1
+2026-11-01T20:34:41.4312602Z  + optuna==5.0.0
+2026-11-01T20:34:41.4314518Z  + packaging==26.3
+2026-11-01T20:34:41.4314844Z  + pandas==3.0.6
+2026-11-01T20:34:41.4316703Z  + pillow==12.3.0
+2026-11-01T20:34:41.4318059Z  + pluggy==1.6.0
+2026-11-01T20:34:41.4319254Z  + psutil==7.2.2
+2026-11-01T20:34:41.4320814Z  + pydantic==2.14.1
+2026-11-01T20:34:41.4322116Z  + pydantic-core==2.50.1
+2026-11-01T20:34:41.4322957Z  + pygame==2.6.1
+2026-11-01T20:34:41.4324538Z  + pygments==2.21.0
+2026-11-01T20:34:41.4325879Z  + pyparsing==3.3.3
+2026-11-01T20:34:41.4326988Z  + pytest==9.1.1
+2026-11-01T20:34:41.4328648Z  + pytest-cov==7.1.0
+2026-11-01T20:34:41.4329982Z  + python-dateutil==2.9.0.post0
+2026-11-01T20:34:41.4331181Z  + pyyaml==6.0.3
+2026-11-01T20:34:41.4332784Z  + ruff==0.17.0
+2026-11-01T20:34:41.4334075Z  + setuptools==84.0.0
+2026-11-01T20:34:41.4335249Z  + six==1.17.0
+2026-11-01T20:34:41.4337073Z  + sortedcontainers==2.4.0
+2026-11-01T20:34:41.4338261Z  + sqlalchemy==2.1.4
+2026-11-01T20:34:41.4340009Z  + stable-baselines3==2.9.0
+2026-11-01T20:34:41.4341056Z  + starlette==1.8.0
+2026-11-01T20:34:41.4342858Z  + sympy==1.14.0
+2026-11-01T20:34:41.4344176Z  + torch==2.14.1
+2026-11-01T20:34:41.4345348Z  + tqdm==4.70.1
+2026-11-01T20:34:41.4346566Z  + typing-extensions==4.16.0
+2026-11-01T20:34:41.4348247Z  + typing-inspection==0.4.4
+2026-11-01T20:34:41.4348879Z  + tzdata==2026.5
+2026-11-01T20:34:41.4350636Z  + uvicorn==0.54.0
+2026-11-01T20:34:44.3299899Z Resolved 1 package in 2.74s
+2026-11-01T20:34:44.3311276Z    Building lunarlab @ file:///D:/a/lunarlab/lunarlab
+2026-11-01T20:34:44.7535709Z       Built lunarlab @ file:///D:/a/lunarlab/lunarlab
+2026-11-01T20:34:44.7579427Z Prepared 1 package in 427ms
+2026-11-01T20:34:44.7627096Z Installed 1 package in 4ms
+2026-11-01T20:34:44.7629499Z  + lunarlab==0.1.0 (from file:///D:/a/lunarlab/lunarlab)
+2026-11-01T20:34:44.9161448Z ##[group]Run .venv\Scripts\python.exe -m lunarlab doctor
+2026-11-01T20:34:44.9161935Z [36;1m.venv\Scripts\python.exe -m lunarlab doctor[0m
+2026-11-01T20:34:44.9232731Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+2026-11-01T20:34:44.9233080Z env:
+2026-11-01T20:34:44.9233342Z   SDL_VIDEODRIVER: dummy
+2026-11-01T20:34:44.9233710Z   SDL_AUDIODRIVER: dummy
+2026-11-01T20:34:44.9234104Z   UV_TOOL_BIN_DIR: D:\a\_temp\uv-tool-bin-dir
+2026-11-01T20:34:44.9234400Z   UV_TOOL_DIR: D:\a\_temp\uv-tool-dir
+2026-11-01T20:34:44.9234642Z   UV_PYTHON: 3.13
+2026-11-01T20:34:44.9234853Z   UV_CACHE_DIR: D:\a\_temp\setup-uv-cache
+2026-11-01T20:34:44.9235958Z ##[endgroup]
+2026-11-01T20:34:52.8208126Z [OK  ] python           3.13.16 at D:\a\lunarlab\lunarlab\.venv\Scripts\python.exe
+2026-11-01T20:34:52.8209069Z [OK  ] dependency lock  65 locked packages match
+2026-11-01T20:34:52.8209571Z [OK  ] box2d            Box2D 2.3.10
+2026-11-01T20:34:52.8210685Z [OK  ] environment      LunarLander-v3 gymnasium 1.4.0, max_episode_steps=1000, gravity=-10.0, wind=False, reset/step + internals adapter OK
+2026-11-01T20:34:52.8211752Z [OK  ] rendering        rgb_array frame (400, 600, 3)
+2026-11-01T20:34:52.8212570Z [OK  ] video encoding   H.264 MP4 encode+decode verified (libx264 via imageio-ffmpeg)
+2026-11-01T20:34:52.8213532Z [OK  ] directories      writable: D:\a\lunarlab\lunarlab (free disk 156.7 GB)
+2026-11-01T20:34:52.8214290Z [OK  ] sqlite           D:\a\lunarlab\lunarlab\data\lunarlab.sqlite (4 reward configurations)
+2026-11-01T20:34:52.8215128Z [OK  ] torch            torch 2.14.1+cpu, CUDA build none, CUDA available False. CPU is the default device for this small MLP workload.
+2026-11-01T20:34:52.8216068Z [OK  ] node / frontend  node v22.23.4 (meets Vite's ^20.19 || >=22.12); frontend not built yet (run scripts/setup.ps1)
+2026-11-01T20:34:52.8216557Z 
+2026-11-01T20:34:52.8216742Z 10 ok, 0 warning(s), 0 failure(s). Home: D:\a\lunarlab\lunarlab
+2026-11-01T20:34:53.4006187Z ##[group]Run .venv\Scripts\python.exe -m pytest -q --basetemp "D:\a\_temp\lunar lab tmp" tests/test_windows.py tests/test_dqn_continuation.py tests/test_freeze.py tests/test_training.py tests/test_jobs.py tests/test_env_integration.py tests/test_video_rescoring.py tests/test_protocol.py tests/test_outcomes_v2.py tests/test_outcomes_stats_storage.py tests/test_reproduce.py tests/test_continuation_validation.py tests/test_audit_core.py tests/test_project_metadata.py tests/test_docs.py tests/test_source_archive.py
+2026-11-01T20:34:53.4009891Z [36;1m.venv\Scripts\python.exe -m pytest -q --basetemp "D:\a\_temp\lunar lab tmp" tests/test_windows.py tests/test_dqn_continuation.py tests/test_freeze.py tests/test_training.py tests/test_jobs.py tests/test_env_integration.py tests/test_video_rescoring.py tests/test_protocol.py tests/test_outcomes_v2.py tests/test_outcomes_stats_storage.py tests/test_reproduce.py tests/test_continuation_validation.py tests/test_audit_core.py tests/test_project_metadata.py tests/test_docs.py tests/test_source_archive.py[0m
+2026-11-01T20:34:53.4083043Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+2026-11-01T20:34:53.4083401Z env:
+2026-11-01T20:34:53.4083588Z   SDL_VIDEODRIVER: dummy
+2026-11-01T20:34:53.4083809Z   SDL_AUDIODRIVER: dummy
+2026-11-01T20:34:53.4084053Z   UV_TOOL_BIN_DIR: D:\a\_temp\uv-tool-bin-dir
+2026-11-01T20:34:53.4084334Z   UV_TOOL_DIR: D:\a\_temp\uv-tool-dir
+2026-11-01T20:34:53.4084574Z   UV_PYTHON: 3.13
+2026-11-01T20:34:53.4084780Z   UV_CACHE_DIR: D:\a\_temp\setup-uv-cache
+2026-11-01T20:34:53.4085033Z ##[endgroup]
+2026-11-01T20:35:56.3165747Z ........................................................................ [ 24%]
+2026-11-01T20:36:03.8462805Z ........................................................................ [ 49%]
+2026-11-01T20:36:09.3007968Z ........................................................................ [ 73%]
+2026-11-01T20:36:10.2994261Z ........................................................................ [ 98%]
+2026-11-01T20:36:17.0688528Z .....                                                                    [100%]
+2026-11-01T20:36:17.0689152Z 293 passed in 81.93s (0:01:21)
+2026-11-01T20:36:17.9648192Z ##[group]Run .venv\Scripts\python.exe -m lunarlab reproduce-smoke --training-determinism --report reproduce-smoke-windows.json
+2026-11-01T20:36:17.9649258Z [36;1m.venv\Scripts\python.exe -m lunarlab reproduce-smoke --training-determinism --report reproduce-smoke-windows.json[0m
+2026-11-01T20:36:17.9649900Z [36;1mif ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }[0m
+2026-11-01T20:36:17.9650312Z [36;1mSet-Content -Path reproduce-exit-codes.txt -Value $null[0m
+2026-11-01T20:36:17.9650896Z [36;1m$reports = @(); $divergence = @()[0m
+2026-11-01T20:36:17.9651335Z [36;1mforeach ($a in 'ppo-baseline-s0', 'ppo-hover-bonus-s0', 'dqn-baseline-s0') {[0m
+2026-11-01T20:36:17.9652147Z [36;1m  .venv\Scripts\python.exe -m lunarlab reproduce-artifact --artifact examples\artifacts\$a --report "reproduce-$a-windows.json"[0m
+2026-11-01T20:36:17.9652886Z [36;1m  Add-Content -Path reproduce-exit-codes.txt -Value "$a $LASTEXITCODE"[0m
+2026-11-01T20:36:17.9653356Z [36;1m  $reports += "reproduce-$a-windows.json"[0m
+2026-11-01T20:36:17.9654187Z [36;1m  .venv\Scripts\python.exe -m lunarlab trace-artifact --artifact examples\artifacts\$a --compare "reports\jmlr\reproducibility\traces\$a-windows.npz" --report "divergence-$a-windows.json"[0m
+2026-11-01T20:36:17.9655203Z [36;1m  if ($LASTEXITCODE -ne 0 -and $LASTEXITCODE -ne 3) { Write-Host "trace-artifact failed for $a"; exit 1 }[0m
+2026-11-01T20:36:17.9655745Z [36;1m  $divergence += "divergence-$a-windows.json"[0m
+2026-11-01T20:36:17.9656043Z [36;1m}[0m
+2026-11-01T20:36:17.9657009Z [36;1m.venv\Scripts\python.exe tools\reproduction_summary.py --platform "windows-py3.13" --exit-codes reproduce-exit-codes.txt --reports $reports --divergence $divergence --json reproduction-summary-windows.json --markdown $env:GITHUB_STEP_SUMMARY[0m
+2026-11-01T20:36:17.9658050Z [36;1mexit $LASTEXITCODE[0m
+2026-11-01T20:36:17.9730497Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+2026-11-01T20:36:17.9730893Z env:
+2026-11-01T20:36:17.9731109Z   SDL_VIDEODRIVER: dummy
+2026-11-01T20:36:17.9731362Z   SDL_AUDIODRIVER: dummy
+2026-11-01T20:36:17.9731641Z   UV_TOOL_BIN_DIR: D:\a\_temp\uv-tool-bin-dir
+2026-11-01T20:36:17.9731972Z   UV_TOOL_DIR: D:\a\_temp\uv-tool-dir
+2026-11-01T20:36:17.9732255Z   UV_PYTHON: 3.13
+2026-11-01T20:36:17.9732488Z   UV_CACHE_DIR: D:\a\_temp\setup-uv-cache
+2026-11-01T20:36:17.9732783Z ##[endgroup]
+2026-11-01T20:36:28.3682295Z Reproducibility smoke test: PPO, preset potential, 4,096 transitions, seed 0, training twice (isolated temporary home)
+2026-11-01T20:36:28.3683527Z isolated home: C:\Users\RUNNER~1\AppData\Local\Temp\lunarlab-repro-ajl8_1j0\home
+2026-11-01T20:36:28.3684532Z   [ok] configuration identity survives a reload: 9574bcb8219ef7f9
+2026-11-01T20:36:28.3685208Z   [ok] reward configuration recorded: 55ba1d4da088b94a
+2026-11-01T20:36:28.3685953Z   [ok] validation and final-test seeds are disjoint and valid: 3 validation, 4 test seeds
+2026-11-01T20:36:28.3686515Z   [ok] training completed: exit code 0
+2026-11-01T20:36:28.3687025Z   [ok] training budget recorded in environment transitions: 4096 transitions (requested 4096, planned 4096)
+2026-11-01T20:36:28.3687982Z   [ok] worker seeds and source revision recorded: worker seeds [1000000, 1000001]
+2026-11-01T20:36:28.3688684Z   [ok] every checkpoint matches its recorded size, SHA-256 and configuration hash: 3 checkpoints
+2026-11-01T20:36:28.3689991Z   [ok] training episodes record original and shaped returns separately (identity holds): 44 episodes, largest identity error 1.0e-05 (CSV rounding bound 3.0e-05)
+2026-11-01T20:36:28.3690860Z   [ok] validation-selected checkpoint reloads (weights only): best_validation-0000000000.zip
+2026-11-01T20:36:28.3691583Z   [ok] validation evaluation uses the original reward and records the shaped return: mean original return -333.47
+2026-11-01T20:36:28.3692294Z   [ok] final test evaluated the frozen copy of the validation-selected checkpoint: f86ae994d857b24d
+2026-11-01T20:36:28.3695186Z   [ok] frozen checkpoint is read-only on disk: checkpoints/frozen/f86ae994d857b24d4f96544f9867d6da9468678e2cf681c502a35b096e88727c.zip
+2026-11-01T20:36:28.3696084Z   [ok] a repeated final-test evaluation matches the saved one exactly: 4/4 episodes identical
+2026-11-01T20:36:28.3696638Z   [ok] exported results re-read identically: sha256 ccd177bf40ebcd70
+2026-11-01T20:36:28.3697439Z   [ok] training the same configuration twice gives identical weights and episodes (this machine): same process, same software stack; not a cross-platform guarantee
+2026-11-01T20:36:28.3698356Z PASSED: 15/15 checks in 9.71 s
+2026-11-01T20:36:28.3698648Z report written to reproduce-smoke-windows.json
+2026-11-01T20:36:43.6196319Z   [ok] checkpoint.zip matches its recorded SHA-256: a3a89f43dd2d10e8
+2026-11-01T20:36:43.6197091Z   [ok] config.yaml matches its recorded SHA-256: e40c3f7164c4cae1
+2026-11-01T20:36:43.6197806Z   [ok] evaluation.json matches its recorded SHA-256: 8727d75ba2e9875a
+2026-11-01T20:36:43.6198533Z   [ok] configuration hash matches the record: 4b544ec6345deaa9
+2026-11-01T20:36:43.6199106Z   [ok] the recorded evaluation used this checkpoint
+2026-11-01T20:36:43.6199833Z   [ok] the recorded evaluation is the final test on the configuration's test seeds: 100 seeds
+2026-11-01T20:36:43.6200720Z   [ok] the recorded evaluation used the configuration's protocol and reward
+2026-11-01T20:36:43.6201414Z   [ok] the recorded episodes are exactly the recorded seeds
+2026-11-01T20:36:43.6202065Z   [ok] the evaluated network holds exactly the checkpoint's weights
+2026-11-01T20:36:43.6203344Z   [ok] every re-evaluated episode matches the record exactly: 100/100 episode summaries; largest original-return difference 0; largest training-return difference 0
+2026-11-01T20:36:43.6205650Z   [ok] no aggregate differs significantly from the record (paired tests, Holm-corrected): mean_original_return 265.9 -> 265.9 (p 1), pad_landing_rate 0.96 -> 0.96 (p 1), timeout_rate 0 -> 0 (p 1), crash_rate 0.03 -> 0.03 (p 1), out_of_bounds_rate 0 -> 0 (p 1)
+2026-11-01T20:36:43.6207536Z   status: exact (not blocking): all 100 episodes match on the selected summary fields
+2026-11-01T20:36:43.6208933Z EXACT: 20261015-223113-baseline-s0-standard-c5af, 100 episodes; mean original return recorded 265.8558, reproduced 265.8558; pad landing recorded 96%, reproduced 96%
+2026-11-01T20:36:43.6210149Z   all 100 episodes match on the selected summary fields
+2026-11-01T20:36:43.6210752Z report written to reproduce-ppo-baseline-s0-windows.json
+2026-11-01T20:36:48.3922658Z   seed 20000: policy inference; first output difference at step 1 (0 action flips), first open-loop observation difference at step None; closed loop parts at step None, return 282.6382 -> 282.6382
+2026-11-01T20:36:48.3924990Z   seed 20001: policy inference; first output difference at step 0 (0 action flips), first open-loop observation difference at step None; closed loop parts at step None, return 303.9085 -> 303.9085
+2026-11-01T20:36:48.3927305Z   seed 20002: policy inference; first output difference at step 0 (0 action flips), first open-loop observation difference at step None; closed loop parts at step None, return 272.0115 -> 272.0115
+2026-11-01T20:36:48.3929116Z DIFFERENT: 20261015-223113-baseline-s0-standard-c5af against ppo-baseline-s0-windows.npz; sources: policy inference
+2026-11-01T20:36:48.3930174Z report written to divergence-ppo-baseline-s0-windows.json
+2026-11-01T20:37:33.1921438Z   [ok] checkpoint.zip matches its recorded SHA-256: 0ee843850038ef0f
+2026-11-01T20:37:33.1922358Z   [ok] config.yaml matches its recorded SHA-256: a85c668d55127c67
+2026-11-01T20:37:33.1923216Z   [ok] evaluation.json matches its recorded SHA-256: e27c425dbe80a7e1
+2026-11-01T20:37:33.1924339Z   [ok] configuration hash matches the record: cc202b416a62154c
+2026-11-01T20:37:33.1925368Z   [ok] the recorded evaluation used this checkpoint
+2026-11-01T20:37:33.1926200Z   [ok] the recorded evaluation is the final test on the configuration's test seeds: 100 seeds
+2026-11-01T20:37:33.1927695Z   [ok] the recorded evaluation used the configuration's protocol and reward
+2026-11-01T20:37:33.1928296Z   [ok] the recorded episodes are exactly the recorded seeds
+2026-11-01T20:37:33.1928766Z   [ok] the evaluated network holds exactly the checkpoint's weights
+2026-11-01T20:37:33.1929619Z   [ok] every re-evaluated episode matches the record exactly: 100/100 episode summaries; largest original-return difference 0; largest training-return difference 0
+2026-11-01T20:37:33.1931160Z   [ok] no aggregate differs significantly from the record (paired tests, Holm-corrected): mean_original_return -21.25 -> -21.25 (p 1), pad_landing_rate 0 -> 0 (p 1), timeout_rate 1 -> 1 (p 1), crash_rate 0 -> 0 (p 1), out_of_bounds_rate 0 -> 0 (p 1)
+2026-11-01T20:37:33.1932469Z   status: exact (not blocking): all 100 episodes match on the selected summary fields
+2026-11-01T20:37:33.1933386Z EXACT: 20261015-223115-hover-bonus-s0-standard-3376, 100 episodes; mean original return recorded -21.2456, reproduced -21.2456; pad landing recorded 0%, reproduced 0%
+2026-11-01T20:37:33.1934234Z   all 100 episodes match on the selected summary fields
+2026-11-01T20:37:33.1934687Z report written to reproduce-ppo-hover-bonus-s0-windows.json
+2026-11-01T20:37:40.7294351Z   seed 20000: policy inference; first output difference at step 0 (0 action flips), first open-loop observation difference at step None; closed loop parts at step None, return 0.8433 -> 0.8433
+2026-11-01T20:37:40.7295837Z   seed 20001: policy inference; first output difference at step 0 (0 action flips), first open-loop observation difference at step None; closed loop parts at step None, return -9.3670 -> -9.3670
+2026-11-01T20:37:40.7297219Z   seed 20002: policy inference; first output difference at step 1 (0 action flips), first open-loop observation difference at step None; closed loop parts at step None, return -17.8024 -> -17.8024
+2026-11-01T20:37:40.7298365Z DIFFERENT: 20261015-223115-hover-bonus-s0-standard-3376 against ppo-hover-bonus-s0-windows.npz; sources: policy inference
+2026-11-01T20:37:40.7299157Z report written to divergence-ppo-hover-bonus-s0-windows.json
+2026-11-01T20:37:54.7970861Z   [ok] checkpoint.zip matches its recorded SHA-256: 8f1438011d97158b
+2026-11-01T20:37:54.7971787Z   [ok] config.yaml matches its recorded SHA-256: 199dcc9efbe236ae
+2026-11-01T20:37:54.7972340Z   [ok] evaluation.json matches its recorded SHA-256: 008074c0512ab4a3
+2026-11-01T20:37:54.7972883Z   [ok] configuration hash matches the record: 70de6039ef5e09c6
+2026-11-01T20:37:54.7973387Z   [ok] the recorded evaluation used this checkpoint
+2026-11-01T20:37:54.7973995Z   [ok] the recorded evaluation is the final test on the configuration's test seeds: 100 seeds
+2026-11-01T20:37:54.7974660Z   [ok] the recorded evaluation used the configuration's protocol and reward
+2026-11-01T20:37:54.7975202Z   [ok] the recorded episodes are exactly the recorded seeds
+2026-11-01T20:37:54.7975736Z   [ok] the evaluated network holds exactly the checkpoint's weights
+2026-11-01T20:37:54.7976795Z   [ok] every re-evaluated episode matches the record exactly: 100/100 episode summaries; largest original-return difference 0; largest training-return difference 0
+2026-11-01T20:37:54.7978580Z   [ok] no aggregate differs significantly from the record (paired tests, Holm-corrected): mean_original_return 155.4 -> 155.4 (p 1), pad_landing_rate 0.29 -> 0.29 (p 1), timeout_rate 0.13 -> 0.13 (p 1), crash_rate 0.28 -> 0.28 (p 1), out_of_bounds_rate 0.01 -> 0.01 (p 1)
+2026-11-01T20:37:54.7980041Z   status: exact (not blocking): all 100 episodes match on the selected summary fields
+2026-11-01T20:37:54.7981143Z EXACT: 20261015-224317-dqn-baseline-s0-custom-2fe1, 100 episodes; mean original return recorded 155.3644, reproduced 155.3644; pad landing recorded 29%, reproduced 29%
+2026-11-01T20:37:54.7982126Z   all 100 episodes match on the selected summary fields
+2026-11-01T20:37:54.7982647Z report written to reproduce-dqn-baseline-s0-windows.json
+2026-11-01T20:37:58.9813971Z   seed 20000: policy inference; first output difference at step 0 (0 action flips), first open-loop observation difference at step None; closed loop parts at step None, return 271.8304 -> 271.8304
+2026-11-01T20:37:58.9816426Z   seed 20001: policy inference; first output difference at step 0 (0 action flips), first open-loop observation difference at step None; closed loop parts at step None, return -13.8666 -> -13.8666
+2026-11-01T20:37:58.9818699Z   seed 20002: policy inference; first output difference at step 0 (0 action flips), first open-loop observation difference at step None; closed loop parts at step None, return -28.4152 -> -28.4152
+2026-11-01T20:37:58.9821719Z DIFFERENT: 20261015-224317-dqn-baseline-s0-custom-2fe1 against dqn-baseline-s0-windows.npz; sources: policy inference
+2026-11-01T20:37:58.9822875Z report written to divergence-dqn-baseline-s0-windows.json
+2026-11-01T20:37:59.6614944Z ## Artifact reproduction on windows-py3.13
+2026-11-01T20:37:59.6615340Z 
+2026-11-01T20:37:59.6616182Z | Artifact | Status | Exit | Integrity | Exact summary fields | Outcomes agree | Median / max abs original-return diff | Mean return (recorded -> here) | Pad landing | Aggregates |
+2026-11-01T20:37:59.6617285Z |---|---|---:|---|---:|---:|---:|---:|---:|---|
+2026-11-01T20:37:59.6618037Z | dqn-baseline-s0 | **exact** | 0 | ok | 100/100 | 100% | 0 / 0 | 155.36 -> 155.36 | 29% -> 29% | no significant difference |
+2026-11-01T20:37:59.6619008Z | ppo-baseline-s0 | **exact** | 0 | ok | 100/100 | 100% | 0 / 0 | 265.86 -> 265.86 | 96% -> 96% | no significant difference |
+2026-11-01T20:37:59.6619973Z | ppo-hover-bonus-s0 | **exact** | 0 | ok | 100/100 | 100% | 0 / 0 | -21.25 -> -21.25 | 0% -> 0% | no significant difference |
+2026-11-01T20:37:59.6620558Z 
+2026-11-01T20:37:59.6621425Z Exact matches concern five selected episode-summary fields, not complete trajectories. Non-significant differences do not establish equivalence; no equivalence margins were specified.
+2026-11-01T20:37:59.6622752Z 
+2026-11-01T20:37:59.6623038Z ### Where the trajectories part (against the recorded Windows traces)
+2026-11-01T20:37:59.6623465Z 
+2026-11-01T20:37:59.6624095Z | Artifact | Seed | Source | First output difference | Action flips | First open-loop obs. difference (size) | Closed loop parts at | abs return diff |
+2026-11-01T20:37:59.6625034Z |---|---:|---|---:|---:|---:|---:|---:|
+2026-11-01T20:37:59.6625681Z | 20261015-224317-dqn-baseline-s0-custom-2fe1 | 20000 | policy inference | 0 | 0 | - (-) | - | 0 |
+2026-11-01T20:37:59.6626600Z | 20261015-224317-dqn-baseline-s0-custom-2fe1 | 20001 | policy inference | 0 | 0 | - (-) | - | 0 |
+2026-11-01T20:37:59.6627505Z | 20261015-224317-dqn-baseline-s0-custom-2fe1 | 20002 | policy inference | 0 | 0 | - (-) | - | 0 |
+2026-11-01T20:37:59.6628221Z | 20261015-223113-baseline-s0-standard-c5af | 20000 | policy inference | 1 | 0 | - (-) | - | 0 |
+2026-11-01T20:37:59.6628889Z | 20261015-223113-baseline-s0-standard-c5af | 20001 | policy inference | 0 | 0 | - (-) | - | 0 |
+2026-11-01T20:37:59.6629554Z | 20261015-223113-baseline-s0-standard-c5af | 20002 | policy inference | 0 | 0 | - (-) | - | 0 |
+2026-11-01T20:37:59.6630264Z | 20261015-223115-hover-bonus-s0-standard-3376 | 20000 | policy inference | 0 | 0 | - (-) | - | 0 |
+2026-11-01T20:37:59.6630982Z | 20261015-223115-hover-bonus-s0-standard-3376 | 20001 | policy inference | 0 | 0 | - (-) | - | 0 |
+2026-11-01T20:37:59.6631689Z | 20261015-223115-hover-bonus-s0-standard-3376 | 20002 | policy inference | 1 | 0 | - (-) | - | 0 |
+2026-11-01T20:37:59.6632102Z 
+2026-11-01T20:37:59.6632204Z **Problems:** none
+2026-11-01T20:37:59.6632376Z 
+2026-11-01T20:37:59.7192552Z ##[group]Run actions/upload-artifact@v4
+2026-11-01T20:37:59.7192984Z with:
+2026-11-01T20:37:59.7193297Z   name: reproducibility-windows-py3.13
+2026-11-01T20:37:59.7193864Z   path: reproduce-*.json
+divergence-*.json
+reproduction-summary-*.json
+reproduce-exit-codes.txt
+
+2026-11-01T20:37:59.7194395Z   retention-days: 30
+2026-11-01T20:37:59.7194674Z   if-no-files-found: warn
+2026-11-01T20:37:59.7195003Z   compression-level: 6
+2026-11-01T20:37:59.7195278Z   overwrite: false
+2026-11-01T20:37:59.7195546Z   include-hidden-files: false
+2026-11-01T20:37:59.7195824Z env:
+2026-11-01T20:37:59.7196083Z   SDL_VIDEODRIVER: dummy
+2026-11-01T20:37:59.7196360Z   SDL_AUDIODRIVER: dummy
+2026-11-01T20:37:59.7196658Z   UV_TOOL_BIN_DIR: D:\a\_temp\uv-tool-bin-dir
+2026-11-01T20:37:59.7197002Z   UV_TOOL_DIR: D:\a\_temp\uv-tool-dir
+2026-11-01T20:37:59.7197296Z   UV_PYTHON: 3.13
+2026-11-01T20:37:59.7197587Z   UV_CACHE_DIR: D:\a\_temp\setup-uv-cache
+2026-11-01T20:37:59.7198109Z ##[endgroup]
+2026-11-01T20:37:59.9118757Z (node:6140) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-11-01T20:37:59.9119698Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-11-01T20:37:59.9262280Z With the provided path, there will be 9 files uploaded
+2026-11-01T20:37:59.9268148Z Artifact name is valid!
+2026-11-01T20:37:59.9269772Z Root directory input is valid!
+2026-11-01T20:38:00.2467699Z Beginning upload of artifact content to blob storage
+2026-11-01T20:38:00.2884884Z (node:6140) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-11-01T20:38:00.5261020Z Uploaded bytes 24017
+2026-11-01T20:38:00.5857713Z Finished uploading artifact content to blob storage!
+2026-11-01T20:38:00.5859410Z SHA256 digest of uploaded artifact zip is 3576dbca2f803842a8892e70dc6ecff4c2936100c96e3848618cc2d77742dd25
+2026-11-01T20:38:00.5862802Z Finalizing artifact upload
+2026-11-01T20:38:01.0436327Z Artifact reproducibility-windows-py3.13.zip successfully finalized. Artifact ID 13100345863
+2026-11-01T20:38:01.0437751Z Artifact reproducibility-windows-py3.13 has been successfully uploaded! Final size is 24017 bytes. Artifact ID is 13100345863
+2026-11-01T20:38:01.0448592Z Artifact download URL: https://github.com/SHAYAN-ABRAR/lunarlab/actions/runs/41347412883/artifacts/13100345863
+2026-11-01T20:38:01.0815052Z ##[group]Run $failed = $false
+2026-11-01T20:38:01.0815434Z [36;1m$failed = $false[0m
+2026-11-01T20:38:01.0815737Z [36;1mGet-ChildItem scripts\*.ps1 | ForEach-Object {[0m
+2026-11-01T20:38:01.0816061Z [36;1m  $errs = $null[0m
+2026-11-01T20:38:01.0816571Z [36;1m  [System.Management.Automation.Language.Parser]::ParseFile($_.FullName, [ref]$null, [ref]$errs) | Out-Null[0m
+2026-11-01T20:38:01.0817377Z [36;1m  if ($errs.Count) { $failed = $true; $errs | ForEach-Object { Write-Host "$($_.Extent.File): $($_.Message)" } }[0m
+2026-11-01T20:38:01.0817872Z [36;1m}[0m
+2026-11-01T20:38:01.0818068Z [36;1mif ($failed) { exit 1 }[0m
+2026-11-01T20:38:01.0891500Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+2026-11-01T20:38:01.0891861Z env:
+2026-11-01T20:38:01.0892048Z   SDL_VIDEODRIVER: dummy
+2026-11-01T20:38:01.0892270Z   SDL_AUDIODRIVER: dummy
+2026-11-01T20:38:01.0892518Z   UV_TOOL_BIN_DIR: D:\a\_temp\uv-tool-bin-dir
+2026-11-01T20:38:01.0893056Z   UV_TOOL_DIR: D:\a\_temp\uv-tool-dir
+2026-11-01T20:38:01.0893332Z   UV_PYTHON: 3.13
+2026-11-01T20:38:01.0893537Z   UV_CACHE_DIR: D:\a\_temp\setup-uv-cache
+2026-11-01T20:38:01.0893796Z ##[endgroup]
+2026-11-01T20:38:01.5370806Z ##[group]Run powershell -ExecutionPolicy Bypass -File scripts\start.ps1 -Background -NoBrowser -Port 8799
+2026-11-01T20:38:01.5371719Z [36;1mpowershell -ExecutionPolicy Bypass -File scripts\start.ps1 -Background -NoBrowser -Port 8799[0m
+2026-11-01T20:38:01.5372327Z [36;1mif ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }[0m
+2026-11-01T20:38:01.5372660Z [36;1m$ok = $false[0m
+2026-11-01T20:38:01.5372921Z [36;1mfor ($i = 0; $i -lt 60 -and -not $ok; $i++) {[0m
+2026-11-01T20:38:01.5373583Z [36;1m  try { $ok = ((Invoke-RestMethod http://127.0.0.1:8799/api/health -TimeoutSec 2).status -eq 'ok') } catch { Start-Sleep -Seconds 1 }[0m
+2026-11-01T20:38:01.5374181Z [36;1m}[0m
+2026-11-01T20:38:01.5374499Z [36;1mif (-not $ok) { Write-Host 'the backend did not become healthy'; exit 1 }[0m
+2026-11-01T20:38:01.5375030Z [36;1mpowershell -ExecutionPolicy Bypass -File scripts\stop.ps1 -Port 8799[0m
+2026-11-01T20:38:01.5375513Z [36;1mif ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }[0m
+2026-11-01T20:38:01.5442514Z shell: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.EXE -command ". '{0}'"
+2026-11-01T20:38:01.5442945Z env:
+2026-11-01T20:38:01.5443129Z   SDL_VIDEODRIVER: dummy
+2026-11-01T20:38:01.5443350Z   SDL_AUDIODRIVER: dummy
+2026-11-01T20:38:01.5443766Z   UV_TOOL_BIN_DIR: D:\a\_temp\uv-tool-bin-dir
+2026-11-01T20:38:01.5444050Z   UV_TOOL_DIR: D:\a\_temp\uv-tool-dir
+2026-11-01T20:38:01.5444292Z   UV_PYTHON: 3.13
+2026-11-01T20:38:01.5444506Z   UV_CACHE_DIR: D:\a\_temp\setup-uv-cache
+2026-11-01T20:38:01.5445067Z ##[endgroup]
+2026-11-01T20:38:02.7771294Z Note: the web UI is not built (frontend\dist missing). Run scripts\setup.ps1 with Node.js installed. The API still starts.
+2026-11-01T20:38:07.8268311Z LunarLab is running in the background at http://127.0.0.1:8799 (pid 8900). Stop it with scripts\stop.ps1
+2026-11-01T20:38:08.4555269Z Asking LunarLab at http://127.0.0.1:8799 to shut down (running jobs are checkpointed first)...
+2026-11-01T20:38:13.5076253Z LunarLab backend stopped.
+2026-11-01T20:38:15.0991333Z Post job cleanup.
+2026-11-01T20:38:15.2587350Z Cache hit occurred on key setup-uv-1-x86_64-pc-windows-msvc-3.13-pruned-60909da807a63ea5a45b7f08723c4fc4bbcf492e1422ff742f3db5900cc25af2, not saving cache.
+2026-11-01T20:38:15.2589122Z (node:6932) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-11-01T20:38:15.2590384Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-11-01T20:38:15.2913399Z Post job cleanup.
+2026-11-01T20:38:15.5054231Z [command]"C:\Program Files\Git\bin\git.exe" version
+2026-11-01T20:38:15.5417662Z git version 2.56.0.windows.2
+2026-11-01T20:38:15.5517496Z Temporarily overriding HOME='D:\a\_temp\121d478f-3692-4b29-9a60-aa5241261e88' before making global git config changes
+2026-11-01T20:38:15.5518976Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-01T20:38:15.5520339Z [command]"C:\Program Files\Git\bin\git.exe" config --global --add safe.directory D:\a\lunarlab\lunarlab
+2026-11-01T20:38:15.5967215Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp core\.sshCommand
+2026-11-01T20:38:15.6387884Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :\""
+2026-11-01T20:38:16.2326407Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-01T20:38:16.2692614Z http.https://github.com/.extraheader
+2026-11-01T20:38:16.2741189Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset-all http.https://github.com/.extraheader
+2026-11-01T20:38:16.3151570Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :\""
+2026-11-01T20:38:16.9092428Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-01T20:38:16.9506273Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "git config --local --show-origin --name-only --get-regexp remote.origin.url"
+2026-11-01T20:38:17.5724575Z Cleaning up orphan processes
+2026-11-01T20:38:17.5821314Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/upload-artifact@v4, astral-sh/setup-uv@v6. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

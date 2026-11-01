@@ -25,7 +25,9 @@ did not address several points, and nothing about them is assumed here:
 |---|---|
 | `c9b9384` | The library revision the manuscript describes (merged into `main` as `98be27a`, pull request #2; CI run 40755305285 passed) |
 | `954607b` | Validator revision: the follow-up comparison set and the repaired package validator. No library change since `c9b9384` |
-| Later commits on `research/neurocomputing-final-validation` | The manuscript corrections; the archive candidate's source revision; the validation records. Each is named in `PROGRESS_LOG.md` and in the archive's `REVISIONS.md` |
+| `28c811a`, `d840f50`, `ea219fc` | The manuscript corrections and archive documents; two layout fixes; a page enlargement withdrawn in `a38d07f` |
+| `a38d07f` | The archive candidate's source revision and the final manuscript build (41347412905); tree equal to `d840f50`'s. CI run 41347412883 passed |
+| The final commit of the branch | The validation records and this file's final form (`PROGRESS_LOG.md`) |
 
 ## What the verification found, and what was done
 
@@ -43,9 +45,11 @@ modified run), **pending**.
 | Item | Status |
 |---|---|
 | Follow-up comparison on Windows, from the working tree | **Executed:** 42 of 42 exact agreement |
-| New regression tests | **Executed** on Windows (full suite: 690 passed). **CI** on Linux: see `PROGRESS_LOG.md` |
+| New regression tests | **Executed** on Windows: full suite 690 passed at `a38d07f` (`tests/`). **CI** on Linux: 686 passed, 4 Windows-only skips, on both `954607b` (run 41345065489) and `a38d07f` (run 41347412883); all six jobs of each passed (`ci/`) |
 | Historical evidence unchanged | **Executed:** 2,359 of 2,359 protected files unchanged, combined digest `7366ba1b…`. The dated folders of 27 and 28 October gained only superseding notes (`integrity/`) |
-| Fresh-extraction validation of the archive candidate on Windows | **Pending** at the revision that holds this file; its record is added later on this branch (`validation/`) |
+| Fresh-extraction validation of the archive candidate (`a38d07f`) on Windows | **Executed**, every step passed (`validation/`):<br>• checksums 2,179/2,179; 624 dependency checks;<br>• CartPole analysis and 18 runs;<br>• figures: values 4/4, bytes 20/20;<br>• bundle 333/333 members; statistics of 3,800 episodes recomputed;<br>• **38 of 38 LunarLander replays `exact`**; 18 of 18 CartPole artifacts `exact`;<br>• comparison 42/42 exact agreement, with both the follow-up and the unmodified programs |
+| Validator failure handling on real damaged data | **Executed:** a damaged copy gives named checksum and dependency failures, a written report and exit 1. The follow-up runner refuses unverified inputs and runs nothing (`validation/negative-damaged-copy/`) |
+| Manuscript | **CI** build 41347412905 of `a38d07f`; every page **inspected** (`manuscript/VISUAL_REVIEW.md`): 21 pages, fonts embedded, no overflow beyond the margins, working-draft footer on every page |
 | The full validator on Linux | **Pending.** No Linux machine with the fixture policies was available: they are not in Git, and no WSL or container runtime is installed. The reviewer's Linux results are **diagnostic** only |
 | Linux replay of all 38 LunarLander policies | **Not done.** Nine have been replayed on Linux in CI (**historical**) |
 
@@ -84,7 +88,9 @@ modified run), **pending**.
 
 1. Run the validator on Linux with the archive candidate, as its `START_HERE.md` shows.
 2. Extend the Linux replay to all 38 LunarLander policies.
-3. Record a trajectory in audit artifacts, so that `audit-artifact verify` can also run S8.
-4. Build the PDF locally if a permitted TeX distribution is installed.
+3. Give the validator's two `uv pip install` logs distinct names; the lock install's log is overwritten
+   today (`validation/README.md`). Its exit status is checked, so no result depends on this.
+4. Record a trajectory in audit artifacts, so that `audit-artifact verify` can also run S8.
+5. Build the PDF locally if a permitted TeX distribution is installed.
 
 **Smallest useful next step:** the author's licence decision (item 1), which unblocks the deposit.

@@ -154,6 +154,8 @@ none of them affected the published results: no number above changed
   learned-reward packages) is in [`reports/neurocomputing-2026-10-27/`](reports/neurocomputing-2026-10-27/README.md),
   and the repairs that followed a review of it are in
   [`reports/neurocomputing-review-repairs-2026-10-28/`](reports/neurocomputing-review-repairs-2026-10-28/README.md).
+  The portability repairs, the archive candidate and its validation are in
+  [`reports/neurocomputing-final-validation-2026-11-01/`](reports/neurocomputing-final-validation-2026-11-01/README.md).
 
 ## Requirements
 
@@ -458,6 +460,37 @@ passed):**
   commands from a fresh extraction.
 
 Records: [`reports/neurocomputing-review-repairs-2026-10-28/`](reports/neurocomputing-review-repairs-2026-10-28/README.md).
+
+**Validator repairs and archive preparation (1 November 2026, branch
+`research/neurocomputing-final-validation`, not merged):**
+
+- **Portability:** an independent verification on Linux found that the comparison programs crashed on
+  unavailable memory telemetry. A versioned follow-up set records that telemetry as unavailable; the hashed
+  programs, protocol and results are unchanged. Run directly on Windows, it agrees exactly with the
+  historical results in all 42 pairs.
+- **Validator:** `tools/validate_review_package.py` now records every failed step and always writes its
+  report. It classes a clean control's permitted cross-platform difference separately from exact agreement
+  and from failures. It also checks the 38-policy bundle and recomputes its 3,800 episodes' statistics.
+- **Tests:** 89 new tests. CI run [41345065489](https://github.com/SHAYAN-ABRAR/lunarlab/actions/runs/41345065489)
+  passed all six jobs: Linux 686 passed and 4 Windows-only tests skipped; Windows 293 tests on each Python;
+  194 release tests; 15 browser flows.
+- **Archive candidate:** built locally with the software, the study records, the trained policies and the
+  validator. Nothing has been deposited, and no DOI exists. A licensing proposal and the Zenodo metadata await
+  the author's decision.
+- **Validation:** the candidate (from `a38d07f`) was validated from a fresh extraction on Windows, in a new
+  locked environment with an empty data home, and every step passed:
+  - checksums and 624 dependency checks;
+  - the CartPole analysis;
+  - the plotted values;
+  - the LunarLander statistics recomputed from the 3,800 episodes;
+  - all 38 LunarLander replays and all 18 CartPole artifacts `exact`;
+  - the comparison, 42 of 42 pairs in exact agreement, with the follow-up and the unmodified programs.
+
+  On Linux, the full validator has not yet been run.
+- **Journal:** the journal confirmed on 30 October 2026 that the subscription route carries no publication
+  fee.
+
+Records: [`reports/neurocomputing-final-validation-2026-11-01/`](reports/neurocomputing-final-validation-2026-11-01/README.md).
 
 ## License and citation
 
