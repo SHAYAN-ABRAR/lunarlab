@@ -85,3 +85,52 @@ Times are UTC. Machine: the author's Windows 11 laptop (Intel i7-13620H), Python
   item; this was tested both ways. Added `CREDIT_CHECKLIST.md`, with nothing ticked, and with Funding
   acquisition and Supervision excluded.
 - 15:49 Full local test suite: 690 passed, none skipped or failed.
+
+### The validator revision and its CI
+
+- 20:06 Committed **`954607b83853d3fbd1018b5992158f1c924ff0d5`** (the validator revision), with the
+  author's identity and no co-author lines. Pushed `research/neurocomputing-final-validation` to `origin`
+  with a normal push. Before the commit, these passed locally: Ruff lint and format on the CI's paths, the
+  licence headers, and the generated API reference.
+- 20:07-20:33 CI of `954607b`; every job of all three runs succeeded (`ci/run-41345065489-954607b/`):
+  - **CI run 41345065489:**
+    - Linux: 686 passed, 4 Windows-only skips, 86% combined coverage;
+    - Windows Python 3.12 and 3.13: 293 tests each;
+    - source archive: 194 release tests;
+    - browser: 15 flows.
+  - **Manuscript build 41345065455** and **Linux learned-reward replay 41345065461:** both succeeded.
+
+### Manuscript and archive documents
+
+- 20:08-20:20 Bounded manuscript corrections in `paper/neurocomputing/main.tex`:
+  - **Footer:** every page now reads "Working draft, not submitted".
+  - **Header:** the header comment records the journal's answer.
+  - **Comparison section:** it says its replay labels belong to the recording platform.
+  - **Limitation sentence:** it says one developer produced the specification and programs with AI tools.
+  - **Section 5.2:** it names its three kinds of evidence as integrity, exact reproduction and outcome
+    agreement.
+  - **Section 5.3:** it describes the package validator and the follow-up set, and gives an accurate account
+    of the AI work (versions 2.1.283, 2.1.299, 2.1.312).
+  - **Availability statement:** it separates the described library revision (merged as `98be27a`), the
+    validator revision (`954607b`, not merged), the LunarLander training state (`32823f3`, modified working
+    tree) and export (`4116599`), and the other experiments' source states. It names the archive candidate,
+    not deposited.
+
+  `EVIDENCE.md` and `BUILD.md` follow these changes. `check_manuscript.py --final` passes; the abstract is
+  unchanged (180 words).
+- 20:12-20:20 Wrote the licensing proposal and `archive/licence_map.py`, `archive/ZENODO_METADATA.md`,
+  `zenodo-metadata.json` (licence left for the author), `archive/DEPOSIT_INSTRUCTIONS.md` and
+  `READINESS.md`. Nothing was uploaded, reserved or published.
+- 20:13 Dry run of `archive/build_archive_candidate.py` from `954607b` (2,164 files, 136.7 MB). The validator's
+  steps without `--commands` passed on it:
+  - **Checksums:** 2,163 listed, nothing unlisted or malformed.
+  - **Dependencies:** 624 checks with no problem. They include 192 checkpoints named by the run records
+    (36 distributed, 156 inventoried) and the follow-up programs (7).
+  - **Bundle:** 333 members checked; 38 packages, 6 with reward models.
+  - **LunarLander statistics:** 38 policies and 3,800 episodes recomputed, all matching.
+  - **Figures:** plotted values identical in 4 of 4, bytes identical in 20 of 20.
+  - **CartPole records:** passed.
+
+  This was a development check, not the recorded validation.
+- 20:16 Integrity (`integrity/`): 2,359 of 2,359 protected historical files unchanged, combined digest
+  `7366ba1b…`. The dated folders gained only four superseding notes (37 added lines).

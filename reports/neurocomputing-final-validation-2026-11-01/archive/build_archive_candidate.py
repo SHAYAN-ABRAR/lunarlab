@@ -46,20 +46,41 @@ FINAL = "reports/neurocomputing-final-validation-2026-11-01"
 DESCRIBED = "c9b938446d26fd4890ecd7ff7e6099a319586ae8"
 DIGEST_LINE = re.compile(r"^([0-9a-f]{64}) [ *](.+)$")
 REVISIONS = [
-    ("32823f35fd1b4b7495701ee0afa5a766119248d4", "Trained the 38 LunarLander policies (15 October 2026)",
-     "`provenance/metadata.json` of every package (`system.git.revision`)"),
-    ("41165997f9cda78bf30b26cf676b9db894c5d9e3", "Exported the 38 LunarLander packages",
-     "`artifact.json` of every package (`exported_with`)"),
-    ("444a4c5dc086ec6eb844b408453bd571c034ad96", "Repaired the bundle by adding the six learned-reward models (24 October)",
-     "`lunarlander-study/lunarlab-0.1.0-444a4c5-src.tar.gz`; the bundle's `DEPENDENCIES.md`"),
-    ("e7c3fabcc986ee66f56de6403f8772968559824d", "Ran the CartPole study and recorded the comparison fixtures (27 October)",
-     "`run.json` (`software.git.revision`) and each fixture's `recorded_platform`"),
-    ("30bd3f64b392b73f5a8d64422b05d801ba281f71", "Library revision described by the 27 October manuscript",
-     f"`source/{E}/READINESS.md`"),
-    (DESCRIBED, "Library revision the manuscript describes: the last commit that changed library code (28 October)",
-     "`software/c9b9384/` (byte-identical to the Linux CI build of run 40712412847)"),
-    ("98be27ac20b7b35bc82c8ec806edeffe2eee4efb", "`main` after the review repairs were merged (pull request #2; CI run 40755305285 passed)",
-     "GitHub"),
+    (
+        "32823f35fd1b4b7495701ee0afa5a766119248d4",
+        "Trained the 38 LunarLander policies (15 October 2026)",
+        "`provenance/metadata.json` of every package (`system.git.revision`)",
+    ),
+    (
+        "41165997f9cda78bf30b26cf676b9db894c5d9e3",
+        "Exported the 38 LunarLander packages",
+        "`artifact.json` of every package (`exported_with`)",
+    ),
+    (
+        "444a4c5dc086ec6eb844b408453bd571c034ad96",
+        "Repaired the bundle by adding the six learned-reward models (24 October)",
+        "`lunarlander-study/lunarlab-0.1.0-444a4c5-src.tar.gz`; the bundle's `DEPENDENCIES.md`",
+    ),
+    (
+        "e7c3fabcc986ee66f56de6403f8772968559824d",
+        "Ran the CartPole study and recorded the comparison fixtures (27 October)",
+        "`run.json` (`software.git.revision`) and each fixture's `recorded_platform`",
+    ),
+    (
+        "30bd3f64b392b73f5a8d64422b05d801ba281f71",
+        "Library revision described by the 27 October manuscript",
+        f"`source/{E}/READINESS.md`",
+    ),
+    (
+        DESCRIBED,
+        "Library revision the manuscript describes: the last commit that changed library code (28 October)",
+        "`software/c9b9384/` (byte-identical to the Linux CI build of run 40712412847)",
+    ),
+    (
+        "98be27ac20b7b35bc82c8ec806edeffe2eee4efb",
+        "`main` after the review repairs were merged (pull request #2; CI run 40755305285 passed)",
+        "GitHub",
+    ),
 ]
 
 
@@ -81,7 +102,9 @@ def rows(listing: Path) -> list[tuple[str, str]]:
 
 
 def git(*args: str) -> bytes:
-    return subprocess.run(["git", "-c", "core.autocrlf=false", *args], cwd=ROOT, check=True, capture_output=True).stdout
+    return subprocess.run(
+        ["git", "-c", "core.autocrlf=false", *args], cwd=ROOT, check=True, capture_output=True
+    ).stdout
 
 
 def copy_checked(src: Path, dst: Path, digest: str) -> None:
@@ -193,10 +216,16 @@ def historical(out: Path, folder: Path) -> None:
 
 
 PARTS = [
-    ("source/", "The repository at the archive revision: code, tests, documentation, manuscript source, study records, protocols, comparison programs and results, figure scripts and plotted values"),
+    (
+        "source/",
+        "The repository at the archive revision: code, tests, documentation, manuscript source, study records, protocols, comparison programs and results, figure scripts and plotted values",
+    ),
     ("software/", "Deterministic source archives (pip-installable)"),
     ("outside-git/", "Comparison-fixture policies, at their repository paths"),
-    ("cartpole-study-output/", "CartPole frozen checkpoints, exported artifacts, inventory of undistributed checkpoints"),
+    (
+        "cartpole-study-output/",
+        "CartPole frozen checkpoints, exported artifacts, inventory of undistributed checkpoints",
+    ),
     ("lunarlander-study/", "Historical 38-policy LunarLander bundle and its repair-time source archive"),
     ("", "This candidate's own documents"),
 ]
@@ -209,7 +238,7 @@ def part_of(rel: str) -> str:
 def inventory(out: Path) -> list[dict]:
     files = []
     for p in sorted(out.rglob("*")):
-        if p.is_file() and p.name != "SHA256SUMS" or (p.is_file() and p.parent != out):
+        if p.is_file() and p != out / "SHA256SUMS":
             rel = p.relative_to(out).as_posix()
             files.append({"path": rel, "bytes": p.stat().st_size, "sha256": sha256(p), "part": part_of(rel)})
     return files
@@ -350,8 +379,8 @@ def inventory_md(files: list[dict], facts: dict) -> str:
     lines = [
         "# Inventory",
         "",
-        "`inventory.json` lists every file of this candidate with its size and SHA-256 (as `SHA256SUMS` does) and",
-        "the part it belongs to.",
+        "`inventory.json` lists every file of this candidate with its size, SHA-256 and the part it belongs to,",
+        "except itself and `SHA256SUMS`, which lists every other file. The counts below also leave out this file.",
         "",
         "| Part | Files | MB | Contents |",
         "|---|---:|---:|---|",
@@ -360,7 +389,7 @@ def inventory_md(files: list[dict], facts: dict) -> str:
         n, b = by_part.get(prefix, [0, 0])
         lines.append(f"| `{prefix or '(top level)'}` | {n:,} | {b / 1e6:.1f} | {what} |")
     lines += [
-        f"| **Total** | **{len(files):,}** | **{sum(f['bytes'] for f in files) / 1e6:.1f}** | (and `SHA256SUMS`) |",
+        f"| **Total** | **{len(files):,}** | **{sum(f['bytes'] for f in files) / 1e6:.1f}** | |",
         "",
         "## Scientific dependencies and the records that name them",
         "",
@@ -402,7 +431,9 @@ def main() -> int:
         "cartpole": cartpole_output(out, a.evidence),
     }
     if facts["source_archives"][rev[:7]]["revision"] not in (rev, rev[:7], None):
-        raise SystemExit(f"--source-archive was built from {facts['source_archives'][rev[:7]]['revision']}, not {rev}")
+        raise SystemExit(
+            f"--source-archive was built from {facts['source_archives'][rev[:7]]['revision']}, not {rev}"
+        )
     historical(out, a.historical)
     write(out / "START_HERE.md", start_here(rev, facts))
     write(out / "REVISIONS.md", revisions(rev, facts))
@@ -413,11 +444,18 @@ def main() -> int:
     record = {"kind": "lunarlab.archive-inventory", "revision": rev, "facts": facts, "files": files}
     write(out / "inventory.json", json.dumps(record, indent=1) + "\n")
     listing = [
-        f"{sha256(p)} *{p.relative_to(out).as_posix()}" for p in sorted(out.rglob("*")) if p.is_file() and p != out / "SHA256SUMS"
+        f"{sha256(p)} *{p.relative_to(out).as_posix()}"
+        for p in sorted(out.rglob("*"))
+        if p.is_file() and p != out / "SHA256SUMS"
     ]
     write(out / "SHA256SUMS", "\n".join(listing) + "\n")
     size = sum(p.stat().st_size for p in out.rglob("*") if p.is_file())
-    print(json.dumps({**facts, "files": len(listing) + 1, "bytes": size, "sha256sums": sha256(out / "SHA256SUMS")}, indent=1))
+    print(
+        json.dumps(
+            {**facts, "files": len(listing) + 1, "bytes": size, "sha256sums": sha256(out / "SHA256SUMS")},
+            indent=1,
+        )
+    )
     return 0
 
 

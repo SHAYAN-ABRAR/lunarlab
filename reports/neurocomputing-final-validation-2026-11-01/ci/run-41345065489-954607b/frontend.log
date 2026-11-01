@@ -1,0 +1,275 @@
+﻿2026-11-01T20:05:56.6477313Z Current runner version: '2.338.2'
+2026-11-01T20:05:56.6499593Z ##[group]Runner Image Provisioner
+2026-11-01T20:05:56.6500298Z Hosted Compute Agent
+2026-11-01T20:05:56.6500853Z Version: 20261021.618
+2026-11-01T20:05:56.6501399Z Commit: 21505ad2541d5be6135ed84fc33697146cf75b8e
+2026-11-01T20:05:56.6502050Z Build Date: 2026-10-21T00:45:21Z
+2026-11-01T20:05:56.6502663Z Worker ID: {4b6dedcd-09aa-417f-9e9c-c8d7f2262e23}
+2026-11-01T20:05:56.6503280Z Region: centralus
+2026-11-01T20:05:56.6503773Z Cloud: Azure
+2026-11-01T20:05:56.6504234Z ##[endgroup]
+2026-11-01T20:05:56.6505389Z ##[group]Operating System
+2026-11-01T20:05:56.6505981Z Ubuntu
+2026-11-01T20:05:56.6506780Z 26.04.1
+2026-11-01T20:05:56.6507195Z LTS
+2026-11-01T20:05:56.6507780Z ##[endgroup]
+2026-11-01T20:05:56.6508273Z ##[group]Runner Image
+2026-11-01T20:05:56.6508847Z Image: ubuntu-26.04
+2026-11-01T20:05:56.6509315Z Version: 20261025.179.1
+2026-11-01T20:05:56.6510686Z Included Software: https://github.com/actions/runner-images/blob/ubuntu26/20261025.179/images/ubuntu/Ubuntu2604-Readme.md
+2026-11-01T20:05:56.6511997Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu26%2F20261025.179
+2026-11-01T20:05:56.6512879Z ##[endgroup]
+2026-11-01T20:05:56.6513767Z ##[group]GITHUB_TOKEN Permissions
+2026-11-01T20:05:56.6515563Z Contents: read
+2026-11-01T20:05:56.6516284Z Metadata: read
+2026-11-01T20:05:56.6516860Z ##[endgroup]
+2026-11-01T20:05:56.6518735Z Secret source: Actions
+2026-11-01T20:05:56.6519568Z Cache mode: write
+2026-11-01T20:05:56.6520456Z Prepare workflow directory
+2026-11-01T20:05:56.6849178Z Prepare all required actions
+2026-11-01T20:05:56.6888689Z Getting action download info
+2026-11-01T20:05:56.8928307Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+2026-11-01T20:05:57.2760729Z Download action repository 'actions/setup-node@v4' (SHA:49933ea5288caeca8642d1e84afbd3f7d6820020)
+2026-11-01T20:05:57.5319630Z Complete job name: Frontend · typecheck + lint + build
+2026-11-01T20:05:57.6114890Z ##[group]Run actions/checkout@v4
+2026-11-01T20:05:57.6116008Z with:
+2026-11-01T20:05:57.6116870Z   repository: SHAYAN-ABRAR/lunarlab
+2026-11-01T20:05:57.6124058Z   token: ***
+2026-11-01T20:05:57.6124728Z   ssh-strict: true
+2026-11-01T20:05:57.6125426Z   ssh-user: git
+2026-11-01T20:05:57.6126240Z   persist-credentials: true
+2026-11-01T20:05:57.6127023Z   clean: true
+2026-11-01T20:05:57.6127727Z   sparse-checkout-cone-mode: true
+2026-11-01T20:05:57.6128573Z   fetch-depth: 1
+2026-11-01T20:05:57.6129249Z   fetch-tags: false
+2026-11-01T20:05:57.6129966Z   show-progress: true
+2026-11-01T20:05:57.6130686Z   lfs: false
+2026-11-01T20:05:57.6131348Z   submodules: false
+2026-11-01T20:05:57.6132068Z   set-safe-directory: true
+2026-11-01T20:05:57.6132893Z   allow-unsafe-pr-checkout: false
+2026-11-01T20:05:57.6133893Z env:
+2026-11-01T20:05:57.6134540Z   SDL_VIDEODRIVER: dummy
+2026-11-01T20:05:57.6135314Z   SDL_AUDIODRIVER: dummy
+2026-11-01T20:05:57.6136049Z ##[endgroup]
+2026-11-01T20:05:57.8813954Z Syncing repository: SHAYAN-ABRAR/lunarlab
+2026-11-01T20:05:57.8817489Z ##[group]Getting Git version info
+2026-11-01T20:05:57.8819296Z Working directory is '/home/runner/work/lunarlab/lunarlab'
+2026-11-01T20:05:57.8821622Z [command]/usr/bin/git version
+2026-11-01T20:05:57.8827905Z git version 2.56.0
+2026-11-01T20:05:57.8849387Z ##[endgroup]
+2026-11-01T20:05:57.8869765Z Temporarily overriding HOME='/home/runner/work/_temp/09a7f1df-4811-4728-9354-6ab97ee48618' before making global git config changes
+2026-11-01T20:05:57.8873968Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-01T20:05:57.8877423Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/lunarlab/lunarlab
+2026-11-01T20:05:57.9362577Z Deleting the contents of '/home/runner/work/lunarlab/lunarlab'
+2026-11-01T20:05:57.9369160Z ##[group]Initializing the repository
+2026-11-01T20:05:57.9373189Z [command]/usr/bin/git init /home/runner/work/lunarlab/lunarlab
+2026-11-01T20:05:57.9454223Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-11-01T20:05:57.9456415Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-11-01T20:05:57.9458123Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-11-01T20:05:57.9459484Z hint: call:
+2026-11-01T20:05:57.9460270Z hint:
+2026-11-01T20:05:57.9461241Z hint: 	git config --global init.defaultBranch <name>
+2026-11-01T20:05:57.9462364Z hint:
+2026-11-01T20:05:57.9463426Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-11-01T20:05:57.9465089Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-11-01T20:05:57.9466686Z hint:
+2026-11-01T20:05:57.9467424Z hint: 	git branch -m <name>
+2026-11-01T20:05:57.9468356Z hint:
+2026-11-01T20:05:57.9469667Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-11-01T20:05:57.9475006Z Initialized empty Git repository in /home/runner/work/lunarlab/lunarlab/.git/
+2026-11-01T20:05:57.9489532Z [command]/usr/bin/git remote add origin https://github.com/SHAYAN-ABRAR/lunarlab
+2026-11-01T20:05:58.0729257Z ##[endgroup]
+2026-11-01T20:05:58.0730769Z ##[group]Disabling automatic garbage collection
+2026-11-01T20:05:58.0732315Z [command]/usr/bin/git config --local gc.auto 0
+2026-11-01T20:05:58.0763936Z ##[endgroup]
+2026-11-01T20:05:58.0765084Z ##[group]Setting up auth
+2026-11-01T20:05:58.0769317Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-01T20:05:58.0797029Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-01T20:05:58.1120042Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-01T20:05:58.1149980Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-01T20:05:58.1387211Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-01T20:05:58.1418664Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-01T20:05:58.1655913Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-11-01T20:05:58.1690633Z ##[endgroup]
+2026-11-01T20:05:58.1692339Z ##[group]Fetching the repository
+2026-11-01T20:05:58.1698950Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +954607b83853d3fbd1018b5992158f1c924ff0d5:refs/remotes/origin/research/neurocomputing-final-validation
+2026-11-01T20:06:00.2348705Z From https://github.com/SHAYAN-ABRAR/lunarlab
+2026-11-01T20:06:00.2350108Z  * [new ref]         954607b83853d3fbd1018b5992158f1c924ff0d5 -> origin/research/neurocomputing-final-validation
+2026-11-01T20:06:00.2351906Z ##[endgroup]
+2026-11-01T20:06:00.2352327Z ##[group]Determining the checkout info
+2026-11-01T20:06:00.2354220Z ##[endgroup]
+2026-11-01T20:06:00.2359192Z [command]/usr/bin/git sparse-checkout disable
+2026-11-01T20:06:00.2404122Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-11-01T20:06:00.2433073Z ##[group]Checking out the ref
+2026-11-01T20:06:00.2436978Z [command]/usr/bin/git checkout --progress --force -B research/neurocomputing-final-validation refs/remotes/origin/research/neurocomputing-final-validation
+2026-11-01T20:06:00.6264074Z Switched to a new branch 'research/neurocomputing-final-validation'
+2026-11-01T20:06:00.6268762Z branch 'research/neurocomputing-final-validation' set up to track 'origin/research/neurocomputing-final-validation'.
+2026-11-01T20:06:00.6290388Z ##[endgroup]
+2026-11-01T20:06:00.6332593Z [command]/usr/bin/git log -1 --format=%H
+2026-11-01T20:06:00.6354987Z 954607b83853d3fbd1018b5992158f1c924ff0d5
+2026-11-01T20:06:00.6582210Z ##[group]Run actions/setup-node@v4
+2026-11-01T20:06:00.6582484Z with:
+2026-11-01T20:06:00.6582665Z   node-version: 22
+2026-11-01T20:06:00.6582847Z   cache: npm
+2026-11-01T20:06:00.6583062Z   cache-dependency-path: frontend/package-lock.json
+2026-11-01T20:06:00.6583333Z   always-auth: false
+2026-11-01T20:06:00.6583528Z   check-latest: false
+2026-11-01T20:06:00.6585434Z   token: ***
+2026-11-01T20:06:00.6585624Z env:
+2026-11-01T20:06:00.6585807Z   SDL_VIDEODRIVER: dummy
+2026-11-01T20:06:00.6586018Z   SDL_AUDIODRIVER: dummy
+2026-11-01T20:06:00.6586466Z ##[endgroup]
+2026-11-01T20:06:00.7743878Z (node:2174) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-11-01T20:06:00.7744854Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-11-01T20:06:00.7745720Z Found in cache @ /opt/hostedtoolcache/node/22.23.4/x64
+2026-11-01T20:06:00.7746985Z ##[group]Environment details
+2026-11-01T20:06:01.2680173Z node: v22.23.4
+2026-11-01T20:06:01.2680785Z npm: 10.9.9
+2026-11-01T20:06:01.2681660Z yarn: 1.22.22
+2026-11-01T20:06:01.2682383Z ##[endgroup]
+2026-11-01T20:06:01.2697002Z [command]/opt/hostedtoolcache/node/22.23.4/x64/bin/npm config get cache
+2026-11-01T20:06:01.3647264Z /home/runner/.npm
+2026-11-01T20:06:01.5211857Z Cache hit for: node-cache-Linux-x64-npm-48a8e37fb158e1562edbbf953ad9b3dbdcc7ab97e3e06de76867566f7e5ea12c
+2026-11-01T20:06:01.5298436Z (node:2174) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-11-01T20:06:02.3188080Z Received 56804860 of 56804860 (100.0%), 82.1 MBs/sec
+2026-11-01T20:06:02.3188746Z Cache Size: ~54 MB (56804860 B)
+2026-11-01T20:06:02.3245452Z [command]/usr/bin/tar -xf /home/runner/work/_temp/9c8fcc52-cdc0-4efd-a727-12cb9b1fdd9a/cache.tzst -P -C /home/runner/work/lunarlab/lunarlab --use-compress-program unzstd
+2026-11-01T20:06:02.4073323Z Cache restored successfully
+2026-11-01T20:06:02.4105320Z Cache restored from key: node-cache-Linux-x64-npm-48a8e37fb158e1562edbbf953ad9b3dbdcc7ab97e3e06de76867566f7e5ea12c
+2026-11-01T20:06:02.4298999Z ##[group]Run npm ci
+2026-11-01T20:06:02.4299285Z [36;1mnpm ci[0m
+2026-11-01T20:06:02.4337022Z shell: /usr/bin/bash -e {0}
+2026-11-01T20:06:02.4337264Z env:
+2026-11-01T20:06:02.4337464Z   SDL_VIDEODRIVER: dummy
+2026-11-01T20:06:02.4337676Z   SDL_AUDIODRIVER: dummy
+2026-11-01T20:06:02.4337876Z ##[endgroup]
+2026-11-01T20:06:06.3936746Z 
+2026-11-01T20:06:06.3944140Z added 100 packages, and audited 101 packages in 4s
+2026-11-01T20:06:06.3944542Z 
+2026-11-01T20:06:06.3944743Z 15 packages are looking for funding
+2026-11-01T20:06:06.3945144Z   run `npm fund` for details
+2026-11-01T20:06:06.3945311Z 
+2026-11-01T20:06:06.3945430Z found 0 vulnerabilities
+2026-11-01T20:06:06.4278309Z ##[group]Run npm run typecheck
+2026-11-01T20:06:06.4278667Z [36;1mnpm run typecheck[0m
+2026-11-01T20:06:06.4306245Z shell: /usr/bin/bash -e {0}
+2026-11-01T20:06:06.4306493Z env:
+2026-11-01T20:06:06.4306674Z   SDL_VIDEODRIVER: dummy
+2026-11-01T20:06:06.4306893Z   SDL_AUDIODRIVER: dummy
+2026-11-01T20:06:06.4307092Z ##[endgroup]
+2026-11-01T20:06:06.5215933Z 
+2026-11-01T20:06:06.5216759Z > lunarlab-frontend@0.1.0 typecheck
+2026-11-01T20:06:06.5217079Z > tsc -b
+2026-11-01T20:06:06.5217191Z 
+2026-11-01T20:06:11.6397103Z ##[group]Run npm run lint
+2026-11-01T20:06:11.6397377Z [36;1mnpm run lint[0m
+2026-11-01T20:06:11.6424531Z shell: /usr/bin/bash -e {0}
+2026-11-01T20:06:11.6424773Z env:
+2026-11-01T20:06:11.6424954Z   SDL_VIDEODRIVER: dummy
+2026-11-01T20:06:11.6425164Z   SDL_AUDIODRIVER: dummy
+2026-11-01T20:06:11.6425355Z ##[endgroup]
+2026-11-01T20:06:11.7288192Z 
+2026-11-01T20:06:11.7289058Z > lunarlab-frontend@0.1.0 lint
+2026-11-01T20:06:11.7289545Z > oxlint -D correctness -D suspicious src e2e
+2026-11-01T20:06:11.7289737Z 
+2026-11-01T20:06:11.7851403Z Found 0 warnings and 0 errors.
+2026-11-01T20:06:11.7852021Z Finished in 20ms on 32 files with 126 rules using 4 threads.
+2026-11-01T20:06:11.8036516Z ##[group]Run npm run build
+2026-11-01T20:06:11.8036895Z [36;1mnpm run build[0m
+2026-11-01T20:06:11.8071380Z shell: /usr/bin/bash -e {0}
+2026-11-01T20:06:11.8071684Z env:
+2026-11-01T20:06:11.8071929Z   SDL_VIDEODRIVER: dummy
+2026-11-01T20:06:11.8072228Z   SDL_AUDIODRIVER: dummy
+2026-11-01T20:06:11.8072502Z ##[endgroup]
+2026-11-01T20:06:11.8975467Z 
+2026-11-01T20:06:11.8976442Z > lunarlab-frontend@0.1.0 build
+2026-11-01T20:06:11.8976993Z > tsc -b && vite build
+2026-11-01T20:06:11.8977204Z 
+2026-11-01T20:06:17.5507995Z [36mvite v8.3.4 [32mbuilding client environment for production...[36m[39m
+2026-11-01T20:06:17.5585863Z transforming...
+2026-11-01T20:06:17.8634065Z ✓ 2598 modules transformed.
+2026-11-01T20:06:17.9475372Z rendering chunks...
+2026-11-01T20:06:18.0973879Z computing gzip size...
+2026-11-01T20:06:18.1096472Z dist/index.html                                                     0.62 kB │ gzip:   0.40 kB
+2026-11-01T20:06:18.1097355Z dist/assets/ibm-plex-mono-vietnamese-500-normal-C8zxqsMH.woff       5.61 kB
+2026-11-01T20:06:18.1098120Z dist/assets/ibm-plex-mono-vietnamese-400-normal-DDuiU_S-.woff       5.62 kB
+2026-11-01T20:06:18.1098861Z dist/assets/ibm-plex-mono-cyrillic-ext-500-normal-BIfNGwUT.woff     5.77 kB
+2026-11-01T20:06:18.1099640Z dist/assets/ibm-plex-mono-cyrillic-ext-400-normal-DMdlQ8Kv.woff     5.82 kB
+2026-11-01T20:06:18.1100264Z dist/assets/ibm-plex-mono-vietnamese-400-normal-BulugwFq.woff2      5.86 kB
+2026-11-01T20:06:18.1100755Z dist/assets/ibm-plex-mono-vietnamese-500-normal-DZ4AoWbu.woff2      6.04 kB
+2026-11-01T20:06:18.1101312Z dist/assets/ibm-plex-sans-vietnamese-400-normal-fK1oJ5dG.woff       6.39 kB
+2026-11-01T20:06:18.1101908Z dist/assets/ibm-plex-sans-vietnamese-600-normal-DgdngZtN.woff       6.58 kB
+2026-11-01T20:06:18.1102617Z dist/assets/ibm-plex-sans-vietnamese-500-normal-BEb3_waV.woff       6.58 kB
+2026-11-01T20:06:18.1103408Z dist/assets/ibm-plex-mono-cyrillic-ext-400-normal-xuaO2J-f.woff2    6.91 kB
+2026-11-01T20:06:18.1104218Z dist/assets/ibm-plex-mono-cyrillic-ext-500-normal-BqneJy0T.woff2    6.97 kB
+2026-11-01T20:06:18.1104996Z dist/assets/ibm-plex-mono-cyrillic-400-normal-CEL4l2ZJ.woff         7.20 kB
+2026-11-01T20:06:18.1105781Z dist/assets/ibm-plex-mono-cyrillic-500-normal-Ael50iVv.woff         7.20 kB
+2026-11-01T20:06:18.1106729Z dist/assets/ibm-plex-sans-vietnamese-400-normal-DG4YqDda.woff2      8.20 kB
+2026-11-01T20:06:18.1107419Z dist/assets/ibm-plex-mono-cyrillic-400-normal-BSMlKf0J.woff2        8.35 kB
+2026-11-01T20:06:18.1108193Z dist/assets/ibm-plex-sans-vietnamese-500-normal-e4dixQRQ.woff2      8.41 kB
+2026-11-01T20:06:18.1108970Z dist/assets/ibm-plex-mono-cyrillic-500-normal-Bq9vWWag.woff2        8.46 kB
+2026-11-01T20:06:18.1109796Z dist/assets/ibm-plex-sans-vietnamese-600-normal-DpPYBSTl.woff2      8.46 kB
+2026-11-01T20:06:18.1110596Z dist/assets/ibm-plex-sans-greek-400-normal-D9ESIMu3.woff            8.76 kB
+2026-11-01T20:06:18.1111376Z dist/assets/ibm-plex-sans-greek-500-normal-CuWXN6rf.woff            9.14 kB
+2026-11-01T20:06:18.1112157Z dist/assets/ibm-plex-sans-greek-600-normal-D-CqTdkO.woff            9.22 kB
+2026-11-01T20:06:18.1112991Z dist/assets/ibm-plex-sans-greek-400-normal-_efipK4i.woff2           9.94 kB
+2026-11-01T20:06:18.1113795Z dist/assets/ibm-plex-sans-cyrillic-ext-400-normal-Dsrv2Tcn.woff    10.28 kB
+2026-11-01T20:06:18.1114568Z dist/assets/ibm-plex-sans-greek-600-normal-DzTrcv_p.woff2          10.36 kB
+2026-11-01T20:06:18.1115354Z dist/assets/ibm-plex-sans-greek-500-normal-JMMifIXV.woff2          10.37 kB
+2026-11-01T20:06:18.1116339Z dist/assets/ibm-plex-sans-cyrillic-ext-500-normal-DB5PtV2g.woff    10.59 kB
+2026-11-01T20:06:18.1117143Z dist/assets/ibm-plex-sans-cyrillic-ext-600-normal-Bz0x94Yp.woff    10.61 kB
+2026-11-01T20:06:18.1117970Z dist/assets/ibm-plex-mono-latin-ext-400-normal-D3D2R8hC.woff       11.76 kB
+2026-11-01T20:06:18.1118761Z dist/assets/ibm-plex-mono-latin-ext-500-normal-CZ70TYgx.woff       11.76 kB
+2026-11-01T20:06:18.1120013Z dist/assets/ibm-plex-sans-cyrillic-ext-400-normal-g30qAdWV.woff2   12.14 kB
+2026-11-01T20:06:18.1121076Z dist/assets/ibm-plex-sans-cyrillic-ext-600-normal-DUMzJB7m.woff2   12.30 kB
+2026-11-01T20:06:18.1121861Z dist/assets/ibm-plex-sans-cyrillic-ext-500-normal-Cs5J6C77.woff2   12.30 kB
+2026-11-01T20:06:18.1122690Z dist/assets/ibm-plex-mono-latin-400-normal-CvHOgSBP.woff           13.14 kB
+2026-11-01T20:06:18.1123477Z dist/assets/ibm-plex-mono-latin-500-normal-CB9ihrfo.woff           13.15 kB
+2026-11-01T20:06:18.1124218Z dist/assets/ibm-plex-mono-latin-ext-400-normal-BmRBH3aV.woff2      13.34 kB
+2026-11-01T20:06:18.1124963Z dist/assets/ibm-plex-mono-latin-ext-500-normal-CAhNIIs5.woff2      13.43 kB
+2026-11-01T20:06:18.1125725Z dist/assets/ibm-plex-sans-cyrillic-400-normal-BTotfTJu.woff        13.51 kB
+2026-11-01T20:06:18.1126670Z dist/assets/ibm-plex-sans-cyrillic-500-normal-ByOcLdNv.woff        13.85 kB
+2026-11-01T20:06:18.1127426Z dist/assets/ibm-plex-sans-cyrillic-600-normal-BGq0mW3O.woff        13.88 kB
+2026-11-01T20:06:18.1128207Z dist/assets/ibm-plex-sans-latin-ext-400-normal-RBey6euL.woff       14.36 kB
+2026-11-01T20:06:18.1129032Z dist/assets/ibm-plex-mono-latin-400-normal-DMJ8VG8y.woff2          14.70 kB
+2026-11-01T20:06:18.1129832Z dist/assets/ibm-plex-sans-latin-ext-500-normal-D0aIdm-b.woff       14.73 kB
+2026-11-01T20:06:18.1130670Z dist/assets/ibm-plex-sans-latin-ext-600-normal-DIrixKbi.woff       14.77 kB
+2026-11-01T20:06:18.1131475Z dist/assets/ibm-plex-sans-cyrillic-400-normal-DZqxrq2p.woff2       14.80 kB
+2026-11-01T20:06:18.1132282Z dist/assets/ibm-plex-mono-latin-500-normal-DSY6xOcd.woff2          14.88 kB
+2026-11-01T20:06:18.1133087Z dist/assets/ibm-plex-sans-cyrillic-500-normal-CocWQlwt.woff2       15.00 kB
+2026-11-01T20:06:18.1133893Z dist/assets/ibm-plex-sans-cyrillic-600-normal-71GNu3SW.woff2       15.04 kB
+2026-11-01T20:06:18.1134710Z dist/assets/ibm-plex-sans-latin-ext-400-normal-C5H60-Va.woff2      15.98 kB
+2026-11-01T20:06:18.1135511Z dist/assets/ibm-plex-sans-latin-ext-600-normal-DOrvGEcy.woff2      16.44 kB
+2026-11-01T20:06:18.1138094Z dist/assets/ibm-plex-sans-latin-ext-500-normal-DakdToA3.woff2      16.45 kB
+2026-11-01T20:06:18.1138722Z dist/assets/ibm-plex-sans-latin-400-normal-CYLoc0-x.woff           22.10 kB
+2026-11-01T20:06:18.1139319Z dist/assets/ibm-plex-sans-latin-400-normal-CDDApCn2.woff2          22.58 kB
+2026-11-01T20:06:18.1139931Z dist/assets/ibm-plex-sans-latin-600-normal-Cu4Hd6ag.woff           23.87 kB
+2026-11-01T20:06:18.1140567Z dist/assets/ibm-plex-sans-latin-500-normal-BgVn5rGT.woff           23.91 kB
+2026-11-01T20:06:18.1141165Z dist/assets/ibm-plex-sans-latin-500-normal-6ng42L7E.woff2          24.18 kB
+2026-11-01T20:06:18.1141749Z dist/assets/ibm-plex-sans-latin-600-normal-CuJfVYMP.woff2          24.25 kB
+2026-11-01T20:06:18.1142565Z dist/assets/index-B9aBJISs.css                                     56.43 kB │ gzip:   9.83 kB
+2026-11-01T20:06:18.1143292Z dist/assets/FlightScene-D3VJka2J.js                                 2.43 kB │ gzip:   1.21 kB
+2026-11-01T20:06:18.1143999Z dist/assets/Scene3D-DKEDt0-w.js                                   621.28 kB │ gzip: 157.25 kB
+2026-11-01T20:06:18.1144686Z dist/assets/index-BbdU92JO.js                                     934.99 kB │ gzip: 273.82 kB
+2026-11-01T20:06:18.1144993Z 
+2026-11-01T20:06:18.1145377Z [32m✓ built in 559ms[39m
+2026-11-01T20:06:18.1463953Z Post job cleanup.
+2026-11-01T20:06:18.2457180Z (node:2339) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-11-01T20:06:18.2457854Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-11-01T20:06:18.2460060Z Cache hit occurred on the primary key node-cache-Linux-x64-npm-48a8e37fb158e1562edbbf953ad9b3dbdcc7ab97e3e06de76867566f7e5ea12c, not saving cache.
+2026-11-01T20:06:18.2615973Z Post job cleanup.
+2026-11-01T20:06:18.3307553Z [command]/usr/bin/git version
+2026-11-01T20:06:18.3346663Z git version 2.56.0
+2026-11-01T20:06:18.3379752Z Temporarily overriding HOME='/home/runner/work/_temp/8f5dc893-dc17-4ba5-9e7c-3ce33ae13719' before making global git config changes
+2026-11-01T20:06:18.3381072Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-01T20:06:18.3384260Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/lunarlab/lunarlab
+2026-11-01T20:06:18.3420643Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-01T20:06:18.3452980Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-01T20:06:18.3721577Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-01T20:06:18.3745206Z http.https://github.com/.extraheader
+2026-11-01T20:06:18.3754502Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-11-01T20:06:18.3786552Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-01T20:06:18.4060015Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-01T20:06:18.4091557Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-01T20:06:18.4506841Z Cleaning up orphan processes
+2026-11-01T20:06:18.4816997Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/setup-node@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

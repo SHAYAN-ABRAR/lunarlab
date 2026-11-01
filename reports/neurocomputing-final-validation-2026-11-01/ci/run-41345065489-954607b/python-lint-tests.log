@@ -1,0 +1,644 @@
+﻿2026-11-01T20:05:57.1835114Z Current runner version: '2.338.2'
+2026-11-01T20:05:57.1861929Z ##[group]Runner Image Provisioner
+2026-11-01T20:05:57.1862957Z Hosted Compute Agent
+2026-11-01T20:05:57.1863594Z Version: 20261021.618
+2026-11-01T20:05:57.1864239Z Commit: 21505ad2541d5be6135ed84fc33697146cf75b8e
+2026-11-01T20:05:57.1865057Z Build Date: 2026-10-21T00:45:21Z
+2026-11-01T20:05:57.1865791Z Worker ID: {e032c07b-5641-41ae-809a-25b29961e79f}
+2026-11-01T20:05:57.1866485Z Region: westus
+2026-11-01T20:05:57.1867101Z Cloud: Azure
+2026-11-01T20:05:57.1867931Z ##[endgroup]
+2026-11-01T20:05:57.1870000Z ##[group]Operating System
+2026-11-01T20:05:57.1870777Z Ubuntu
+2026-11-01T20:05:57.1871306Z 26.04.1
+2026-11-01T20:05:57.1871897Z LTS
+2026-11-01T20:05:57.1872424Z ##[endgroup]
+2026-11-01T20:05:57.1873027Z ##[group]Runner Image
+2026-11-01T20:05:57.1873699Z Image: ubuntu-26.04
+2026-11-01T20:05:57.1874283Z Version: 20261025.179.1
+2026-11-01T20:05:57.1875662Z Included Software: https://github.com/actions/runner-images/blob/ubuntu26/20261025.179/images/ubuntu/Ubuntu2604-Readme.md
+2026-11-01T20:05:57.1877267Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu26%2F20261025.179
+2026-11-01T20:05:57.1878547Z ##[endgroup]
+2026-11-01T20:05:57.1879740Z ##[group]GITHUB_TOKEN Permissions
+2026-11-01T20:05:57.1882098Z Contents: read
+2026-11-01T20:05:57.1882728Z Metadata: read
+2026-11-01T20:05:57.1883423Z ##[endgroup]
+2026-11-01T20:05:57.1885661Z Secret source: Actions
+2026-11-01T20:05:57.1886739Z Cache mode: write
+2026-11-01T20:05:57.1888017Z Prepare workflow directory
+2026-11-01T20:05:57.2365628Z Prepare all required actions
+2026-11-01T20:05:57.2427365Z Getting action download info
+2026-11-01T20:05:57.5792556Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+2026-11-01T20:05:57.7193276Z Download action repository 'astral-sh/setup-uv@v6' (SHA:d0cc045d04ccac9d8b7881df0226f9e82c39688e)
+2026-11-01T20:05:58.1291104Z Download action repository 'actions/upload-artifact@v4' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+2026-11-01T20:05:58.3689554Z Complete job name: Python · lint + tests
+2026-11-01T20:05:58.5139091Z ##[group]Run actions/checkout@v4
+2026-11-01T20:05:58.5140259Z with:
+2026-11-01T20:05:58.5140797Z   repository: SHAYAN-ABRAR/lunarlab
+2026-11-01T20:05:58.5144893Z   token: ***
+2026-11-01T20:05:58.5145391Z   ssh-strict: true
+2026-11-01T20:05:58.5145885Z   ssh-user: git
+2026-11-01T20:05:58.5146386Z   persist-credentials: true
+2026-11-01T20:05:58.5146933Z   clean: true
+2026-11-01T20:05:58.5147428Z   sparse-checkout-cone-mode: true
+2026-11-01T20:05:58.5148464Z   fetch-depth: 1
+2026-11-01T20:05:58.5148969Z   fetch-tags: false
+2026-11-01T20:05:58.5149486Z   show-progress: true
+2026-11-01T20:05:58.5149991Z   lfs: false
+2026-11-01T20:05:58.5150469Z   submodules: false
+2026-11-01T20:05:58.5150971Z   set-safe-directory: true
+2026-11-01T20:05:58.5151539Z   allow-unsafe-pr-checkout: false
+2026-11-01T20:05:58.5152469Z env:
+2026-11-01T20:05:58.5152953Z   SDL_VIDEODRIVER: dummy
+2026-11-01T20:05:58.5153515Z   SDL_AUDIODRIVER: dummy
+2026-11-01T20:05:58.5154082Z ##[endgroup]
+2026-11-01T20:05:58.8131416Z Syncing repository: SHAYAN-ABRAR/lunarlab
+2026-11-01T20:05:58.8135394Z ##[group]Getting Git version info
+2026-11-01T20:05:58.8137101Z Working directory is '/home/runner/work/lunarlab/lunarlab'
+2026-11-01T20:05:58.8139235Z [command]/usr/bin/git version
+2026-11-01T20:05:58.8199159Z git version 2.56.0
+2026-11-01T20:05:58.8256019Z ##[endgroup]
+2026-11-01T20:05:58.8266030Z Temporarily overriding HOME='/home/runner/work/_temp/c47a07bd-0763-4abe-bc08-36fc4f589095' before making global git config changes
+2026-11-01T20:05:58.8269177Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-01T20:05:58.8271569Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/lunarlab/lunarlab
+2026-11-01T20:05:58.8377513Z Deleting the contents of '/home/runner/work/lunarlab/lunarlab'
+2026-11-01T20:05:58.8393175Z ##[group]Initializing the repository
+2026-11-01T20:05:58.8399165Z [command]/usr/bin/git init /home/runner/work/lunarlab/lunarlab
+2026-11-01T20:05:58.8540827Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-11-01T20:05:58.8543034Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-11-01T20:05:58.8545258Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-11-01T20:05:58.8546979Z hint: call:
+2026-11-01T20:05:58.8548191Z hint:
+2026-11-01T20:05:58.8551502Z hint: 	git config --global init.defaultBranch <name>
+2026-11-01T20:05:58.8552995Z hint:
+2026-11-01T20:05:58.8553860Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-11-01T20:05:58.8556029Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-11-01T20:05:58.8557850Z hint:
+2026-11-01T20:05:58.8558929Z hint: 	git branch -m <name>
+2026-11-01T20:05:58.8560079Z hint:
+2026-11-01T20:05:58.8561434Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-11-01T20:05:58.8563855Z Initialized empty Git repository in /home/runner/work/lunarlab/lunarlab/.git/
+2026-11-01T20:05:58.8572716Z [command]/usr/bin/git remote add origin https://github.com/SHAYAN-ABRAR/lunarlab
+2026-11-01T20:05:58.8633112Z ##[endgroup]
+2026-11-01T20:05:58.8634290Z ##[group]Disabling automatic garbage collection
+2026-11-01T20:05:58.8637981Z [command]/usr/bin/git config --local gc.auto 0
+2026-11-01T20:05:58.8681497Z ##[endgroup]
+2026-11-01T20:05:58.8682543Z ##[group]Setting up auth
+2026-11-01T20:05:58.8690721Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-01T20:05:58.8753516Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-01T20:05:58.9269575Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-01T20:05:58.9319863Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-01T20:05:58.9645429Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-01T20:05:58.9691062Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-01T20:05:59.0000907Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-11-01T20:05:59.0050360Z ##[endgroup]
+2026-11-01T20:05:59.0052800Z ##[group]Fetching the repository
+2026-11-01T20:05:59.0063697Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +954607b83853d3fbd1018b5992158f1c924ff0d5:refs/remotes/origin/research/neurocomputing-final-validation
+2026-11-01T20:06:01.0002398Z From https://github.com/SHAYAN-ABRAR/lunarlab
+2026-11-01T20:06:01.0010189Z  * [new ref]         954607b83853d3fbd1018b5992158f1c924ff0d5 -> origin/research/neurocomputing-final-validation
+2026-11-01T20:06:01.0013448Z ##[endgroup]
+2026-11-01T20:06:01.0014427Z ##[group]Determining the checkout info
+2026-11-01T20:06:01.0015379Z ##[endgroup]
+2026-11-01T20:06:01.0019444Z [command]/usr/bin/git sparse-checkout disable
+2026-11-01T20:06:01.0076024Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-11-01T20:06:01.0114496Z ##[group]Checking out the ref
+2026-11-01T20:06:01.0118958Z [command]/usr/bin/git checkout --progress --force -B research/neurocomputing-final-validation refs/remotes/origin/research/neurocomputing-final-validation
+2026-11-01T20:06:01.2898130Z Switched to a new branch 'research/neurocomputing-final-validation'
+2026-11-01T20:06:01.2903815Z branch 'research/neurocomputing-final-validation' set up to track 'origin/research/neurocomputing-final-validation'.
+2026-11-01T20:06:01.2929014Z ##[endgroup]
+2026-11-01T20:06:01.2980134Z [command]/usr/bin/git log -1 --format=%H
+2026-11-01T20:06:01.3011289Z 954607b83853d3fbd1018b5992158f1c924ff0d5
+2026-11-01T20:06:01.3352984Z ##[group]Run astral-sh/setup-uv@v6
+2026-11-01T20:06:01.3353419Z with:
+2026-11-01T20:06:01.3353677Z   python-version: 3.12
+2026-11-01T20:06:01.3353976Z   activate-environment: false
+2026-11-01T20:06:01.3354356Z   working-directory: /home/runner/work/lunarlab/lunarlab
+2026-11-01T20:06:01.3354798Z   server-url: https://github.com
+2026-11-01T20:06:01.3357767Z   github-token: ***
+2026-11-01T20:06:01.3358071Z   enable-cache: auto
+2026-11-01T20:06:01.3358712Z   cache-dependency-glob: **/*requirements*.txt
+**/*requirements*.in
+**/*constraints*.txt
+**/*constraints*.in
+**/pyproject.toml
+**/uv.lock
+**/*.py.lock
+
+2026-11-01T20:06:01.3359397Z   restore-cache: true
+2026-11-01T20:06:01.3359666Z   save-cache: true
+2026-11-01T20:06:01.3359933Z   prune-cache: true
+2026-11-01T20:06:01.3360209Z   ignore-nothing-to-cache: false
+2026-11-01T20:06:01.3360527Z   ignore-empty-workdir: false
+2026-11-01T20:06:01.3360882Z   add-problem-matchers: true
+2026-11-01T20:06:01.3361189Z env:
+2026-11-01T20:06:01.3361514Z   SDL_VIDEODRIVER: dummy
+2026-11-01T20:06:01.3361800Z   SDL_AUDIODRIVER: dummy
+2026-11-01T20:06:01.3362073Z ##[endgroup]
+2026-11-01T20:06:01.5519473Z (node:2351) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-11-01T20:06:01.5520819Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-11-01T20:06:01.5673141Z Trying to find version for uv in: /home/runner/work/lunarlab/lunarlab/uv.toml
+2026-11-01T20:06:01.5674955Z Could not find file: /home/runner/work/lunarlab/lunarlab/uv.toml
+2026-11-01T20:06:01.5676953Z Trying to find version for uv in: /home/runner/work/lunarlab/lunarlab/pyproject.toml
+2026-11-01T20:06:01.5716103Z Could not determine uv version from uv.toml or pyproject.toml. Falling back to latest.
+2026-11-01T20:06:01.5719083Z Getting latest version from GitHub API...
+2026-11-01T20:06:01.9630580Z manifest-file not provided, reading from local file.
+2026-11-01T20:06:01.9690522Z manifest-file does not contain version 0.13.6, arch x86_64, platform unknown-linux-gnu. Falling back to GitHub releases.
+2026-11-01T20:06:01.9692165Z Downloading uv from "https://github.com/astral-sh/uv/releases/download/0.13.6/uv-x86_64-unknown-linux-gnu.tar.gz" ...
+2026-11-01T20:06:02.2723754Z [command]/usr/bin/tar xz --warning=no-unknown-keyword --overwrite -C /home/runner/work/_temp/e0a7c196-bf30-4e5d-8d8d-c71b9a6e9b2b -f /home/runner/work/_temp/756e155c-3414-4945-88ae-0e3f958982c5
+2026-11-01T20:06:02.4951004Z Added /home/runner/.local/bin to the path
+2026-11-01T20:06:02.4954602Z Added /opt/hostedtoolcache/uv/0.13.6/x86_64 to the path
+2026-11-01T20:06:02.4956219Z Set UV_PYTHON to 3.12
+2026-11-01T20:06:02.4982777Z Set UV_CACHE_DIR to /home/runner/work/_temp/setup-uv-cache
+2026-11-01T20:06:02.4983507Z Successfully installed uv version 0.13.6
+2026-11-01T20:06:02.4986797Z Searching files using cache dependency glob: /home/runner/work/lunarlab/lunarlab/**/*requirements*.txt,/home/runner/work/lunarlab/lunarlab/**/*requirements*.in,/home/runner/work/lunarlab/lunarlab/**/*constraints*.txt,/home/runner/work/lunarlab/lunarlab/**/*constraints*.in,/home/runner/work/lunarlab/lunarlab/**/pyproject.toml,/home/runner/work/lunarlab/lunarlab/**/uv.lock,/home/runner/work/lunarlab/lunarlab/**/*.py.lock
+2026-11-01T20:06:02.6079053Z /home/runner/work/lunarlab/lunarlab/pyproject.toml
+2026-11-01T20:06:02.8071240Z /home/runner/work/lunarlab/lunarlab/requirements.in
+2026-11-01T20:06:02.8127843Z Found 2 files to hash.
+2026-11-01T20:06:02.8213873Z Trying to restore uv cache from GitHub Actions cache with key: setup-uv-1-x86_64-unknown-linux-gnu-3.12-pruned-1be0913b0a4e07550796023acc1f2601890af255974de00f6df5864f015c147d
+2026-11-01T20:06:03.0551923Z Cache hit for: setup-uv-1-x86_64-unknown-linux-gnu-3.12-pruned-1be0913b0a4e07550796023acc1f2601890af255974de00f6df5864f015c147d
+2026-11-01T20:06:03.0673187Z (node:2351) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-11-01T20:06:04.3597395Z Received 63913 of 8452521 (0.8%), 0.1 MBs/sec
+2026-11-01T20:06:04.7361522Z Received 8452521 of 8452521 (100.0%), 5.9 MBs/sec
+2026-11-01T20:06:04.7362119Z Cache Size: ~8 MB (8452521 B)
+2026-11-01T20:06:04.7388467Z [command]/usr/bin/tar -xf /home/runner/work/_temp/06ecaeec-8b6f-4e8e-8a25-0cd4c8eaeb58/cache.tzst -P -C /home/runner/work/lunarlab/lunarlab --use-compress-program unzstd
+2026-11-01T20:06:04.7854978Z Cache restored successfully
+2026-11-01T20:06:04.7864508Z uv cache restored from GitHub Actions cache with key: setup-uv-1-x86_64-unknown-linux-gnu-3.12-pruned-1be0913b0a4e07550796023acc1f2601890af255974de00f6df5864f015c147d
+2026-11-01T20:06:04.8053056Z ##[group]Run uv venv .venv
+2026-11-01T20:06:04.8053433Z [36;1muv venv .venv[0m
+2026-11-01T20:06:04.8053896Z [36;1muv pip install --python .venv/bin/python -r requirements-ci.lock --torch-backend cpu[0m
+2026-11-01T20:06:04.8054476Z [36;1muv pip install --python .venv/bin/python -e . --no-deps[0m
+2026-11-01T20:06:04.8093248Z shell: /usr/bin/bash -e {0}
+2026-11-01T20:06:04.8093534Z env:
+2026-11-01T20:06:04.8093746Z   SDL_VIDEODRIVER: dummy
+2026-11-01T20:06:04.8094002Z   SDL_AUDIODRIVER: dummy
+2026-11-01T20:06:04.8094228Z   UV_PYTHON: 3.12
+2026-11-01T20:06:04.8094501Z   UV_CACHE_DIR: /home/runner/work/_temp/setup-uv-cache
+2026-11-01T20:06:04.8094810Z ##[endgroup]
+2026-11-01T20:06:05.0302551Z Downloading cpython-3.12.16-linux-x86_64-gnu (download) (32.9MiB)
+2026-11-01T20:06:05.6034258Z  Downloaded cpython-3.12.16-linux-x86_64-gnu (download)
+2026-11-01T20:06:05.7530270Z Using CPython 3.12.16
+2026-11-01T20:06:05.7530939Z Creating virtual environment at: .venv
+2026-11-01T20:06:05.7537889Z Activate with: .venv/bin/activate
+2026-11-01T20:06:06.9332534Z Resolved 63 packages in 1.02s
+2026-11-01T20:06:06.9510522Z Downloading torch (187.2MiB)
+2026-11-01T20:06:06.9652620Z Downloading numpy (16.0MiB)
+2026-11-01T20:06:06.9653256Z Downloading sympy (6.0MiB)
+2026-11-01T20:06:06.9764500Z Downloading networkx (2.0MiB)
+2026-11-01T20:06:06.9770207Z Downloading pygments (1.2MiB)
+2026-11-01T20:06:06.9890410Z Downloading pillow (6.6MiB)
+2026-11-01T20:06:06.9900443Z Downloading pydantic-core (2.1MiB)
+2026-11-01T20:06:06.9902097Z Downloading kiwisolver (1.4MiB)
+2026-11-01T20:06:06.9905890Z Downloading matplotlib (9.4MiB)
+2026-11-01T20:06:06.9914669Z Downloading hypothesis (1.1MiB)
+2026-11-01T20:06:06.9919615Z Downloading box2d (3.5MiB)
+2026-11-01T20:06:06.9921402Z Downloading pandas (10.3MiB)
+2026-11-01T20:06:06.9948150Z Downloading fonttools (5.2MiB)
+2026-11-01T20:06:07.0006728Z Downloading ruff (9.9MiB)
+2026-11-01T20:06:07.0007919Z Downloading sqlalchemy (4.5MiB)
+2026-11-01T20:06:07.0016782Z Downloading imageio-ffmpeg (28.1MiB)
+2026-11-01T20:06:07.0021729Z Downloading pygame (13.3MiB)
+2026-11-01T20:06:07.2929353Z  Downloaded hypothesis
+2026-11-01T20:06:07.3011251Z  Downloaded kiwisolver
+2026-11-01T20:06:07.3017862Z  Downloaded pygments
+2026-11-01T20:06:07.3548709Z  Downloaded networkx
+2026-11-01T20:06:07.3618076Z  Downloaded pydantic-core
+2026-11-01T20:06:07.4481567Z  Downloaded box2d
+2026-11-01T20:06:07.5413332Z  Downloaded fonttools
+2026-11-01T20:06:07.5796591Z  Downloaded pillow
+2026-11-01T20:06:07.5856385Z  Downloaded sqlalchemy
+2026-11-01T20:06:07.6070098Z  Downloaded sympy
+2026-11-01T20:06:07.7126843Z  Downloaded ruff
+2026-11-01T20:06:07.7213280Z  Downloaded matplotlib
+2026-11-01T20:06:07.7954185Z  Downloaded pygame
+2026-11-01T20:06:07.7956116Z  Downloaded pandas
+2026-11-01T20:06:07.8115286Z  Downloaded numpy
+2026-11-01T20:06:07.9812254Z  Downloaded imageio-ffmpeg
+2026-11-01T20:06:09.5355463Z  Downloaded torch
+2026-11-01T20:06:09.5359171Z Prepared 63 packages in 2.60s
+2026-11-01T20:06:09.8153301Z Installed 63 packages in 278ms
+2026-11-01T20:06:09.8153792Z  + alembic==1.20.0
+2026-11-01T20:06:09.8154172Z  + annotated-doc==0.0.5
+2026-11-01T20:06:09.8154576Z  + annotated-types==0.8.0
+2026-11-01T20:06:09.8155302Z  + anyio==4.15.1
+2026-11-01T20:06:09.8155641Z  + box2d==2.3.10
+2026-11-01T20:06:09.8155994Z  + certifi==2026.7.22
+2026-11-01T20:06:09.8156352Z  + click==8.5.0
+2026-11-01T20:06:09.8156679Z  + cloudpickle==3.1.2
+2026-11-01T20:06:09.8157011Z  + colorlog==6.12.0
+2026-11-01T20:06:09.8157331Z  + contourpy==1.4.0
+2026-11-01T20:06:09.8158050Z  + coverage==7.16.2
+2026-11-01T20:06:09.8158429Z  + cycler==0.12.1
+2026-11-01T20:06:09.8159166Z  + farama-notifications==0.0.6
+2026-11-01T20:06:09.8159762Z  + fastapi==0.143.2
+2026-11-01T20:06:09.8160175Z  + filelock==4.2.0
+2026-11-01T20:06:09.8160571Z  + fonttools==4.67.0
+2026-11-01T20:06:09.8161647Z  + fsspec==2026.9.0
+2026-11-01T20:06:09.8162074Z  + gymnasium==1.4.0
+2026-11-01T20:06:09.8162448Z  + h11==0.16.0
+2026-11-01T20:06:09.8162781Z  + httpcore==1.0.9
+2026-11-01T20:06:09.8163439Z  + httpx==0.28.1
+2026-11-01T20:06:09.8163830Z  + hypothesis==6.170.1
+2026-11-01T20:06:09.8164185Z  + idna==3.20
+2026-11-01T20:06:09.8164495Z  + imageio==2.38.1
+2026-11-01T20:06:09.8164921Z  + imageio-ffmpeg==0.6.0
+2026-11-01T20:06:09.8165340Z  + iniconfig==2.3.1
+2026-11-01T20:06:09.8165717Z  + jinja2==3.1.6
+2026-11-01T20:06:09.8166089Z  + kiwisolver==1.5.1
+2026-11-01T20:06:09.8166467Z  + mako==1.4.3
+2026-11-01T20:06:09.8166834Z  + markupsafe==3.0.4
+2026-11-01T20:06:09.8167230Z  + matplotlib==3.11.2
+2026-11-01T20:06:09.8167931Z  + mpmath==1.3.0
+2026-11-01T20:06:09.8168325Z  + networkx==3.7
+2026-11-01T20:06:09.8168699Z  + numpy==2.5.4
+2026-11-01T20:06:09.8169085Z  + opentelemetry-api==1.45.1
+2026-11-01T20:06:09.8169509Z  + optuna==5.0.0
+2026-11-01T20:06:09.8169872Z  + packaging==26.3
+2026-11-01T20:06:09.8170235Z  + pandas==3.0.6
+2026-11-01T20:06:09.8170598Z  + pillow==12.3.0
+2026-11-01T20:06:09.8170966Z  + pluggy==1.7.0
+2026-11-01T20:06:09.8171343Z  + psutil==7.2.2
+2026-11-01T20:06:09.8171741Z  + pydantic==2.14.1
+2026-11-01T20:06:09.8172162Z  + pydantic-core==2.50.1
+2026-11-01T20:06:09.8172583Z  + pygame==2.6.1
+2026-11-01T20:06:09.8172957Z  + pygments==2.21.0
+2026-11-01T20:06:09.8173347Z  + pyparsing==3.3.3
+2026-11-01T20:06:09.8173738Z  + pytest==9.1.1
+2026-11-01T20:06:09.8174109Z  + pytest-cov==7.1.0
+2026-11-01T20:06:09.8174528Z  + python-dateutil==2.9.0.post0
+2026-11-01T20:06:09.8174983Z  + pyyaml==6.0.3
+2026-11-01T20:06:09.8175353Z  + ruff==0.17.1
+2026-11-01T20:06:09.8175736Z  + setuptools==84.0.0
+2026-11-01T20:06:09.8176131Z  + six==1.17.0
+2026-11-01T20:06:09.8176515Z  + sortedcontainers==2.4.0
+2026-11-01T20:06:09.8177024Z  + sqlalchemy==2.1.4
+2026-11-01T20:06:09.8177453Z  + stable-baselines3==2.9.0
+2026-11-01T20:06:09.8178148Z  + starlette==1.8.0
+2026-11-01T20:06:09.8178534Z  + sympy==1.14.0
+2026-11-01T20:06:09.8178925Z  + torch==2.14.1+cpu
+2026-11-01T20:06:09.8179343Z  + tqdm==4.70.1
+2026-11-01T20:06:09.8179575Z  + typing-extensions==4.16.0
+2026-11-01T20:06:09.8179840Z  + typing-inspection==0.4.4
+2026-11-01T20:06:09.8180085Z  + uvicorn==0.54.0
+2026-11-01T20:06:11.1865264Z Resolved 1 package in 1.20s
+2026-11-01T20:06:11.1868243Z    Building lunarlab @ file:///home/runner/work/lunarlab/lunarlab
+2026-11-01T20:06:11.3969707Z       Built lunarlab @ file:///home/runner/work/lunarlab/lunarlab
+2026-11-01T20:06:11.3985487Z Prepared 1 package in 212ms
+2026-11-01T20:06:11.4005282Z Installed 1 package in 1ms
+2026-11-01T20:06:11.4005950Z  + lunarlab==0.1.0 (from file:///home/runner/work/lunarlab/lunarlab)
+2026-11-01T20:06:11.4144736Z ##[group]Run .venv/bin/python -m ruff check lunarlab tests tools examples paper
+2026-11-01T20:06:11.4145385Z [36;1m.venv/bin/python -m ruff check lunarlab tests tools examples paper[0m
+2026-11-01T20:06:11.4145940Z [36;1m.venv/bin/python -m ruff format --check lunarlab tests tools examples paper[0m
+2026-11-01T20:06:11.4177159Z shell: /usr/bin/bash -e {0}
+2026-11-01T20:06:11.4177449Z env:
+2026-11-01T20:06:11.4177948Z   SDL_VIDEODRIVER: dummy
+2026-11-01T20:06:11.4178202Z   SDL_AUDIODRIVER: dummy
+2026-11-01T20:06:11.4178481Z   UV_PYTHON: 3.12
+2026-11-01T20:06:11.4178761Z   UV_CACHE_DIR: /home/runner/work/_temp/setup-uv-cache
+2026-11-01T20:06:11.4179084Z ##[endgroup]
+2026-11-01T20:06:11.4919644Z All checks passed!
+2026-11-01T20:06:11.5600042Z 135 files already formatted
+2026-11-01T20:06:11.5648715Z ##[group]Run .venv/bin/python -m pytest -q --cov --cov-report=term --cov-report=json:coverage.json --cov-report=html:htmlcov
+2026-11-01T20:06:11.5649641Z [36;1m.venv/bin/python -m pytest -q --cov --cov-report=term --cov-report=json:coverage.json --cov-report=html:htmlcov[0m
+2026-11-01T20:06:11.5680332Z shell: /usr/bin/bash -e {0}
+2026-11-01T20:06:11.5680596Z env:
+2026-11-01T20:06:11.5680816Z   SDL_VIDEODRIVER: dummy
+2026-11-01T20:06:11.5681068Z   SDL_AUDIODRIVER: dummy
+2026-11-01T20:06:11.5681297Z   UV_PYTHON: 3.12
+2026-11-01T20:06:11.5681573Z   UV_CACHE_DIR: /home/runner/work/_temp/setup-uv-cache
+2026-11-01T20:06:11.5681890Z ##[endgroup]
+2026-11-01T20:06:38.5486135Z ........................................................................ [ 10%]
+2026-11-01T20:06:45.2359556Z ........................................................................ [ 20%]
+2026-11-01T20:06:54.7311069Z ........................................................................ [ 31%]
+2026-11-01T20:06:56.4086682Z ........................................................................ [ 41%]
+2026-11-01T20:08:00.0178702Z ........................................................................ [ 52%]
+2026-11-01T20:08:24.8892677Z ........................................................................ [ 62%]
+2026-11-01T20:09:43.3534848Z ........................................................................ [ 73%]
+2026-11-01T20:10:18.8380745Z ........................................................................ [ 83%]
+2026-11-01T20:12:45.0563312Z ........................................................................ [ 93%]
+2026-11-01T20:14:21.2274044Z ..................................s...sss.                               [100%]
+2026-11-01T20:14:21.2274726Z ================================ tests coverage ================================
+2026-11-01T20:14:21.2275390Z _______________ coverage: platform linux, python 3.12.16-final-0 _______________
+2026-11-01T20:14:21.2275877Z 
+2026-11-01T20:14:21.2276128Z Name                               Stmts   Miss Branch BrPart  Cover   Missing
+2026-11-01T20:14:21.2276748Z ------------------------------------------------------------------------------
+2026-11-01T20:14:21.2277396Z lunarlab/__init__.py                   1      0      0      0   100%
+2026-11-01T20:14:21.2278218Z lunarlab/__main__.py                   2      0      0      0   100%
+2026-11-01T20:14:21.2278822Z lunarlab/audit/__init__.py             6      0      0      0   100%
+2026-11-01T20:14:21.2279480Z lunarlab/audit/adapters.py            84      3     12      1    94%   185-188
+2026-11-01T20:14:21.2280203Z lunarlab/audit/contracts.py          116      4     62      2    97%   69, 118-119, 159
+2026-11-01T20:14:21.2280920Z lunarlab/audit/core.py               168      3     30      3    97%   128, 173, 312
+2026-11-01T20:14:21.2281598Z lunarlab/audit/evaluate.py            36      1      8      1    95%   79
+2026-11-01T20:14:21.2282448Z lunarlab/audit/provenance.py         166     17     60      7    89%   104-105, 118, 120, 139, 146, 178, 222-226, 239-242, 293
+2026-11-01T20:14:21.2284098Z lunarlab/audit/study.py              516     67    160     26    85%   116, 134, 137, 165, 168-169, 180, 183, 186, 189, 197, 199, 208, 221-222, 236, 239, 249->248, 274-276, 339, 378, 440, 494, 524, 551, 600, 604, 643-653, 728, 737-738, 740, 781-818, 906-908, 913, 919, 936-938, 966-968, 1077-1079
+2026-11-01T20:14:21.2285871Z lunarlab/benchmark.py                 54      1     10      2    95%   89, 91->93
+2026-11-01T20:14:21.2289906Z lunarlab/cli.py                     1080    355    256     37    62%   30-33, 52, 89-95, 112-115, 120-135, 182, 206-215, 253, 272, 274-276, 284-285, 300-301, 320, 325-346, 368-369, 371, 382->exit, 400, 436-437, 439, 445, 459, 461, 465-469, 470->474, 481-513, 517, 529-544, 548-558, 563-575, 592-599, 630-631, 635-638, 646-678, 709, 714-745, 749-771, 775-801, 805-808, 817-823, 830-831, 835-857, 863-888, 893-907, 921->925, 931, 939-962, 972, 973->975, 976, 989, 994-996, 1007-1023, 1107, 1128, 1151, 1153-1160, 1164-1187, 1191-1203, 1208-1241, 1250-1251, 1288-1302, 1316, 1321, 1326-1337, 1811->1810
+2026-11-01T20:14:21.2293689Z lunarlab/compare.py                  375     44    156     20    87%   133, 143-154, 193, 195, 256, 262, 272, 295, 299, 310, 397-420, 442-443, 497-500, 502, 519, 570, 608, 618, 635, 786, 788, 790, 792->797, 815
+2026-11-01T20:14:21.2295020Z lunarlab/config.py                   239      6     64      5    96%   203, 292, 392, 404, 417, 419
+2026-11-01T20:14:21.2296268Z lunarlab/continuation.py             257     23    104     17    88%   118, 127->129, 169->171, 194, 280-283, 329, 346, 349, 351, 358, 360, 367, 379-380, 382, 384, 393, 398, 427-430, 448
+2026-11-01T20:14:21.2297366Z lunarlab/db.py                       113      3     24      3    96%   151, 164, 229
+2026-11-01T20:14:21.2298661Z lunarlab/demo.py                     239     29     74     12    86%   63->62, 92-98, 102-112, 124, 144-145, 147, 149->154, 181, 238, 266, 324-325, 345->342, 366, 370, 376-401
+2026-11-01T20:14:21.2299732Z lunarlab/divergence.py               125      2     22      3    97%   102->107, 173, 208
+2026-11-01T20:14:21.2300599Z lunarlab/doctor.py                   129     16     32      8    84%   26-27, 38, 44, 53, 66-67, 78, 84-85, 103, 120, 130, 164-166
+2026-11-01T20:14:21.2301450Z lunarlab/env.py                      143      8      8      2    93%   54, 242-243, 258, 327-328, 419-420
+2026-11-01T20:14:21.2302251Z lunarlab/evaluation.py               148      9     28      5    92%   77, 107-108, 310, 332-334, 396, 400
+2026-11-01T20:14:21.2303097Z lunarlab/experiments.py              103      5     42      6    92%   56, 117, 124, 156, 158, 240->238
+2026-11-01T20:14:21.2304061Z lunarlab/freeze.py                   165     20     44     11    84%   72, 80, 113, 145, 159-164, 188-196, 199, 246, 292, 294, 315, 317, 321-322
+2026-11-01T20:14:21.2304909Z lunarlab/hover.py                     30      0     10      0   100%
+2026-11-01T20:14:21.2306333Z lunarlab/jobs.py                     367     66    132     23    80%   129-130, 145->150, 193->199, 196, 219, 221->223, 234, 240-241, 247->250, 256->268, 276, 286, 301-302, 335, 339, 348, 374, 395, 409-414, 420-421, 460-464, 472-480, 497-498, 517, 531-541, 543-548, 556-602, 604, 614
+2026-11-01T20:14:21.2308133Z lunarlab/lineage.py                   88     19     28      4    73%   68-70, 127-140, 199-200, 202, 204-206, 229
+2026-11-01T20:14:21.2308923Z lunarlab/locks.py                     63     12      8      3    76%   31-34, 51, 54-58, 90-93
+2026-11-01T20:14:21.2309710Z lunarlab/outcomes.py                 133      8     50      4    93%   141-142, 178, 271, 273, 292, 297-298
+2026-11-01T20:14:21.2310586Z lunarlab/overhead.py                 253      9     54      9    94%   59, 192, 257, 262, 296->299, 437, 467, 501-502, 504
+2026-11-01T20:14:21.2311365Z lunarlab/parallel.py                  47      0     16      0   100%
+2026-11-01T20:14:21.2311987Z lunarlab/physics.py                   38      0      4      0   100%
+2026-11-01T20:14:21.2312755Z lunarlab/play.py                     123     17     28      6    85%   79-80, 83-97, 134, 156-157, 160, 180, 182, 215-216
+2026-11-01T20:14:21.2313534Z lunarlab/policies.py                  73      1      6      1    97%   101
+2026-11-01T20:14:21.2314204Z lunarlab/preferences/__init__.py       0      0      0      0   100%
+2026-11-01T20:14:21.2315116Z lunarlab/preferences/active.py       220     40     58      9    76%   129, 141, 216, 258, 266, 287, 433, 440, 443, 462-464, 469-488, 500-522, 526-544
+2026-11-01T20:14:21.2316184Z lunarlab/preferences/data.py         186      9     40      5    93%   188-190, 228, 246, 317, 338->336, 362-365
+2026-11-01T20:14:21.2317029Z lunarlab/preferences/model.py        109      4     24      2    94%   174, 183-185
+2026-11-01T20:14:21.2317995Z lunarlab/preferences/train.py        131     10     12      1    92%   242, 330-373
+2026-11-01T20:14:21.2318739Z lunarlab/procs.py                     48      8     16      1    86%   48-49, 63-64, 68-71
+2026-11-01T20:14:21.2320028Z lunarlab/reclassify.py                42      0     10      1    98%   70->68
+2026-11-01T20:14:21.2321237Z lunarlab/recording.py                244     25     48     10    88%   102, 121, 132->137, 141, 204, 212-214, 223-225, 229, 252, 256-258, 270, 273-275, 281, 373-375, 425, 494, 497->495
+2026-11-01T20:14:21.2322704Z lunarlab/report.py                   248     15     98     18    90%   59, 73, 79, 95-96, 113, 151, 171, 186->185, 219->212, 276-279, 300->309, 309->311, 326, 327->329, 329->331, 414-421, 489, 490->492
+2026-11-01T20:14:21.2324118Z lunarlab/reproduce.py                444      7     86      5    98%   114, 123-124, 780->778, 783, 863, 898->902, 900-901
+2026-11-01T20:14:21.2324930Z lunarlab/rescoring.py                 60      4     20      3    91%   57, 66, 78-80
+2026-11-01T20:14:21.2325991Z lunarlab/results.py                  403     41    120     18    88%   50-52, 90, 99->102, 102->104, 148, 154, 167, 177, 207->206, 250, 285, 367-394, 481, 494->496, 526->529, 537->505, 646, 661
+2026-11-01T20:14:21.2327053Z lunarlab/rewards/__init__.py           3      0      0      0   100%
+2026-11-01T20:14:21.2327917Z lunarlab/rewards/accounting.py        68      0      6      0   100%
+2026-11-01T20:14:21.2328643Z lunarlab/rewards/analysis.py          26      3      6      2    84%   19, 28, 93
+2026-11-01T20:14:21.2329420Z lunarlab/rewards/config.py           101      6     36      6    91%   167, 174, 179, 181, 185, 230
+2026-11-01T20:14:21.2330163Z lunarlab/rewards/terms.py             28      1     10      1    95%   92
+2026-11-01T20:14:21.2330849Z lunarlab/rewards/wrapper.py           72      1     16      1    98%   68
+2026-11-01T20:14:21.2331529Z lunarlab/rl_stats.py                  77      1     20      2    97%   108, 148->157
+2026-11-01T20:14:21.2332202Z lunarlab/robustness.py                30      0      6      0   100%
+2026-11-01T20:14:21.2332980Z lunarlab/runs.py                     146     17     50      8    83%   96, 263-272, 296, 300, 304, 310, 313, 315
+2026-11-01T20:14:21.2333720Z lunarlab/server/__init__.py            0      0      0      0   100%
+2026-11-01T20:14:21.2335697Z lunarlab/server/api.py               625    111    100     24    79%   238-240, 281-282, 304-305, 315-316, 324-325, 336, 341-343, 360-365, 369, 463-464, 468, 490, 498, 509, 514, 527-533, 552-553, 564-571, 582-583, 600-601, 604, 631, 648-649, 654-655, 667, 689, 706, 732-733, 753-754, 802-804, 850, 930-931, 938, 941, 947-951, 959-962, 964, 984-985, 991-994, 996, 1008-1009, 1042, 1054-1055, 1070-1080, 1090-1101, 1113, 1132-1136
+2026-11-01T20:14:21.2337983Z lunarlab/server/main.py              121     20     26      4    80%   57-58, 64-65, 89, 107-108, 146-158, 169
+2026-11-01T20:14:21.2338736Z lunarlab/server/schemas.py           130      0      0      0   100%
+2026-11-01T20:14:21.2339353Z lunarlab/stats.py                     34      0      6      0   100%
+2026-11-01T20:14:21.2340201Z lunarlab/storage.py                  248     22     42      7    87%   115, 137-141, 177-183, 193-197, 212-214, 227, 230-231, 356->355, 379->exit
+2026-11-01T20:14:21.2341143Z lunarlab/sysinfo.py                   68     12     16      4    81%   52-60, 67-69, 113, 115-116
+2026-11-01T20:14:21.2342452Z lunarlab/training.py                 498     36    122     13    91%   180, 237-243, 347, 389-390, 476, 619, 693, 772->774, 777-781, 784->exit, 842-843, 914, 916-918, 986-987, 1056-1070, 1072->1076
+2026-11-01T20:14:21.2343872Z lunarlab/tuning.py                   265     17     70     13    90%   138, 140, 149, 209-212, 229, 230->224, 237->239, 280, 336, 386->388, 396, 421-424, 479, 482-483
+2026-11-01T20:14:21.2344818Z ------------------------------------------------------------------------------
+2026-11-01T20:14:21.2345415Z TOTAL                              10155   1158   2596    379    86%
+2026-11-01T20:14:21.2345893Z Coverage HTML written to dir htmlcov
+2026-11-01T20:14:21.2346339Z Coverage JSON written to file coverage.json
+2026-11-01T20:14:21.8084670Z =========================== short test summary info ============================
+2026-11-01T20:14:21.8085742Z SKIPPED [1] tests/test_windows.py:154: Windows file-sharing semantics
+2026-11-01T20:14:21.8086248Z SKIPPED [1] tests/test_windows.py:261: Windows file-sharing semantics
+2026-11-01T20:14:21.8086724Z SKIPPED [1] tests/test_windows.py:278: Windows file-sharing semantics
+2026-11-01T20:14:21.8087199Z SKIPPED [1] tests/test_windows.py:297: Windows file-sharing semantics
+2026-11-01T20:14:21.8087972Z 686 passed, 4 skipped in 488.28s (0:08:08)
+2026-11-01T20:14:23.4274296Z ##[group]Run actions/upload-artifact@v4
+2026-11-01T20:14:23.4274616Z with:
+2026-11-01T20:14:23.4274815Z   name: coverage-linux
+2026-11-01T20:14:23.4275051Z   path: coverage.json
+htmlcov
+
+2026-11-01T20:14:23.4275305Z   retention-days: 30
+2026-11-01T20:14:23.4275525Z   if-no-files-found: warn
+2026-11-01T20:14:23.4275761Z   compression-level: 6
+2026-11-01T20:14:23.4275975Z   overwrite: false
+2026-11-01T20:14:23.4276193Z   include-hidden-files: false
+2026-11-01T20:14:23.4276473Z env:
+2026-11-01T20:14:23.4276664Z   SDL_VIDEODRIVER: dummy
+2026-11-01T20:14:23.4276891Z   SDL_AUDIODRIVER: dummy
+2026-11-01T20:14:23.4277110Z   UV_PYTHON: 3.12
+2026-11-01T20:14:23.4277381Z   UV_CACHE_DIR: /home/runner/work/_temp/setup-uv-cache
+2026-11-01T20:14:23.4278020Z ##[endgroup]
+2026-11-01T20:14:23.6128308Z (node:6016) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-11-01T20:14:23.6129184Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-11-01T20:14:23.6495626Z Multiple search paths detected. Calculating the least common ancestor of all paths
+2026-11-01T20:14:23.6496824Z The least common ancestor is /home/runner/work/lunarlab/lunarlab. This will be the root directory of the artifact
+2026-11-01T20:14:23.6498143Z With the provided path, there will be 71 files uploaded
+2026-11-01T20:14:23.6498653Z Artifact name is valid!
+2026-11-01T20:14:23.6498898Z Root directory input is valid!
+2026-11-01T20:14:24.0252277Z Beginning upload of artifact content to blob storage
+2026-11-01T20:14:24.2217131Z (node:6016) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-11-01T20:14:24.7810718Z Uploaded bytes 894365
+2026-11-01T20:14:24.8534182Z Finished uploading artifact content to blob storage!
+2026-11-01T20:14:24.8535170Z SHA256 digest of uploaded artifact zip is 76e50446dd7705bd3b6e83ceca74ef5f5d8876c0bdcafe9e1de3a2c6367d7f77
+2026-11-01T20:14:24.8536278Z Finalizing artifact upload
+2026-11-01T20:14:25.2944551Z Artifact coverage-linux.zip successfully finalized. Artifact ID 13098783596
+2026-11-01T20:14:25.2945830Z Artifact coverage-linux has been successfully uploaded! Final size is 894365 bytes. Artifact ID is 13098783596
+2026-11-01T20:14:25.2949974Z Artifact download URL: https://github.com/SHAYAN-ABRAR/lunarlab/actions/runs/41345065489/artifacts/13098783596
+2026-11-01T20:14:25.3120239Z ##[group]Run .venv/bin/python tools/gen_api_docs.py --check
+2026-11-01T20:14:25.3120749Z [36;1m.venv/bin/python tools/gen_api_docs.py --check[0m
+2026-11-01T20:14:25.3121128Z [36;1m.venv/bin/python tools/spdx_headers.py[0m
+2026-11-01T20:14:25.3121525Z [36;1m.venv/bin/python paper/jmlr-mloss/check_manuscript.py[0m
+2026-11-01T20:14:25.3151550Z shell: /usr/bin/bash -e {0}
+2026-11-01T20:14:25.3151829Z env:
+2026-11-01T20:14:25.3152041Z   SDL_VIDEODRIVER: dummy
+2026-11-01T20:14:25.3152292Z   SDL_AUDIODRIVER: dummy
+2026-11-01T20:14:25.3152533Z   UV_PYTHON: 3.12
+2026-11-01T20:14:25.3152810Z   UV_CACHE_DIR: /home/runner/work/_temp/setup-uv-cache
+2026-11-01T20:14:25.3153138Z ##[endgroup]
+2026-11-01T20:14:26.4797267Z docs/api is current
+2026-11-01T20:14:26.7906293Z 0 source file(s) without an SPDX header
+2026-11-01T20:14:26.8215547Z abstract: 152 words (limit 200)
+2026-11-01T20:14:26.8216392Z running title: 'LunarLab: Auditable Reward-Design Experiments', 45 characters (limit 50)
+2026-11-01T20:14:26.8217929Z keywords: 5 (JMLR asks for five)
+2026-11-01T20:14:26.8218391Z citations: 11 keys, all in references.bib
+2026-11-01T20:14:26.8219539Z bibliography entries not cited (they will not be printed): ['akiba2019optuna', 'amodei2016concrete', 'bradley1952paired', 'christiano2017preferences', 'mnih2015dqn']
+2026-11-01T20:14:26.8220773Z body text: about 1170 words (page count needs a LaTeX build)
+2026-11-01T20:14:26.8221291Z TODO markers: 2
+2026-11-01T20:14:26.8221695Z   - final source revision and public study archive
+2026-11-01T20:14:26.8222230Z   - Competing-interest declaration required.
+2026-11-01T20:14:26.8326570Z ##[group]Run .venv/bin/python -m lunarlab reproduce-smoke --training-determinism --report reproduce-smoke-linux.json
+2026-11-01T20:14:26.8328432Z [36;1m.venv/bin/python -m lunarlab reproduce-smoke --training-determinism --report reproduce-smoke-linux.json[0m
+2026-11-01T20:14:26.8363688Z shell: /usr/bin/bash -e {0}
+2026-11-01T20:14:26.8363971Z env:
+2026-11-01T20:14:26.8364190Z   SDL_VIDEODRIVER: dummy
+2026-11-01T20:14:26.8364476Z   SDL_AUDIODRIVER: dummy
+2026-11-01T20:14:26.8364705Z   UV_PYTHON: 3.12
+2026-11-01T20:14:26.8364983Z   UV_CACHE_DIR: /home/runner/work/_temp/setup-uv-cache
+2026-11-01T20:14:26.8365319Z ##[endgroup]
+2026-11-01T20:14:33.7444069Z Reproducibility smoke test: PPO, preset potential, 4,096 transitions, seed 0, training twice (isolated temporary home)
+2026-11-01T20:14:33.7444768Z isolated home: /tmp/lunarlab-repro-5qnj0rfx/home
+2026-11-01T20:14:33.7445205Z   [ok] configuration identity survives a reload: 9574bcb8219ef7f9
+2026-11-01T20:14:33.7445713Z   [ok] reward configuration recorded: 55ba1d4da088b94a
+2026-11-01T20:14:33.7446204Z   [ok] validation and final-test seeds are disjoint and valid: 3 validation, 4 test seeds
+2026-11-01T20:14:33.7446682Z   [ok] training completed: exit code 0
+2026-11-01T20:14:33.7447213Z   [ok] training budget recorded in environment transitions: 4096 transitions (requested 4096, planned 4096)
+2026-11-01T20:14:33.7448325Z   [ok] worker seeds and source revision recorded: worker seeds [1000000, 1000001]
+2026-11-01T20:14:33.7448972Z   [ok] every checkpoint matches its recorded size, SHA-256 and configuration hash: 3 checkpoints
+2026-11-01T20:14:33.7449896Z   [ok] training episodes record original and shaped returns separately (identity holds): 44 episodes, largest identity error 1.0e-05 (CSV rounding bound 3.0e-05)
+2026-11-01T20:14:33.7450816Z   [ok] validation-selected checkpoint reloads (weights only): best_validation-0000000000.zip
+2026-11-01T20:14:33.7451569Z   [ok] validation evaluation uses the original reward and records the shaped return: mean original return -333.47
+2026-11-01T20:14:33.7452319Z   [ok] final test evaluated the frozen copy of the validation-selected checkpoint: 110209577178ed4c
+2026-11-01T20:14:33.7453162Z   [ok] frozen checkpoint is read-only on disk: checkpoints/frozen/110209577178ed4c21b9b5470069c261ec520716ed57136be479e010aa876b75.zip
+2026-11-01T20:14:33.7453981Z   [ok] a repeated final-test evaluation matches the saved one exactly: 4/4 episodes identical
+2026-11-01T20:14:33.7454562Z   [ok] exported results re-read identically: sha256 029445f7da92344f
+2026-11-01T20:14:33.7455390Z   [ok] training the same configuration twice gives identical weights and episodes (this machine): same process, same software stack; not a cross-platform guarantee
+2026-11-01T20:14:33.7456145Z PASSED: 15/15 checks in 6.61 s
+2026-11-01T20:14:33.7456455Z report written to reproduce-smoke-linux.json
+2026-11-01T20:14:34.4553680Z ##[group]Run artifacts="ppo-baseline-s0 ppo-hover-bonus-s0 dqn-baseline-s0"
+2026-11-01T20:14:34.4554757Z [36;1martifacts="ppo-baseline-s0 ppo-hover-bonus-s0 dqn-baseline-s0"[0m
+2026-11-01T20:14:34.4555512Z [36;1m: > reproduce-exit-codes.txt[0m
+2026-11-01T20:14:34.4556035Z [36;1mreports=""; divergence=""[0m
+2026-11-01T20:14:34.4556522Z [36;1mfor a in $artifacts; do[0m
+2026-11-01T20:14:34.4556976Z [36;1m  code=0[0m
+2026-11-01T20:14:34.4558232Z [36;1m  .venv/bin/python -m lunarlab reproduce-artifact --artifact examples/artifacts/$a --report reproduce-$a-linux.json || code=$?[0m
+2026-11-01T20:14:34.4559847Z [36;1m  echo "$a $code" >> reproduce-exit-codes.txt[0m
+2026-11-01T20:14:34.4560524Z [36;1m  reports="$reports reproduce-$a-linux.json"[0m
+2026-11-01T20:14:34.4561102Z [36;1m  tcode=0[0m
+2026-11-01T20:14:34.4561803Z [36;1m  .venv/bin/python -m lunarlab trace-artifact --artifact examples/artifacts/$a \[0m
+2026-11-01T20:14:34.4563205Z [36;1m    --compare reports/jmlr/reproducibility/traces/$a-windows.npz --report divergence-$a-linux.json || tcode=$?[0m
+2026-11-01T20:14:34.4564652Z [36;1m  if [ "$tcode" -ne 0 ] && [ "$tcode" -ne 3 ]; then echo "trace-artifact failed for $a (exit $tcode)"; exit 1; fi[0m
+2026-11-01T20:14:34.4565702Z [36;1m  divergence="$divergence divergence-$a-linux.json"[0m
+2026-11-01T20:14:34.4566331Z [36;1mdone[0m
+2026-11-01T20:14:34.4567164Z [36;1m.venv/bin/python tools/reproduction_summary.py --platform linux --exit-codes reproduce-exit-codes.txt \[0m
+2026-11-01T20:14:34.4568514Z [36;1m  --reports $reports --divergence $divergence \[0m
+2026-11-01T20:14:34.4569410Z [36;1m  --json reproduction-summary-linux.json --markdown "$GITHUB_STEP_SUMMARY"[0m
+2026-11-01T20:14:34.4613556Z shell: /usr/bin/bash -e {0}
+2026-11-01T20:14:34.4614090Z env:
+2026-11-01T20:14:34.4614454Z   SDL_VIDEODRIVER: dummy
+2026-11-01T20:14:34.4614892Z   SDL_AUDIODRIVER: dummy
+2026-11-01T20:14:34.4615311Z   UV_PYTHON: 3.12
+2026-11-01T20:14:34.4615798Z   UV_CACHE_DIR: /home/runner/work/_temp/setup-uv-cache
+2026-11-01T20:14:34.4616381Z ##[endgroup]
+2026-11-01T20:14:45.6513872Z   [ok] checkpoint.zip matches its recorded SHA-256: a3a89f43dd2d10e8
+2026-11-01T20:14:45.6514933Z   [ok] config.yaml matches its recorded SHA-256: e40c3f7164c4cae1
+2026-11-01T20:14:45.6515904Z   [ok] evaluation.json matches its recorded SHA-256: 8727d75ba2e9875a
+2026-11-01T20:14:45.6516557Z   [ok] configuration hash matches the record: 4b544ec6345deaa9
+2026-11-01T20:14:45.6517055Z   [ok] the recorded evaluation used this checkpoint
+2026-11-01T20:14:45.6518193Z   [ok] the recorded evaluation is the final test on the configuration's test seeds: 100 seeds
+2026-11-01T20:14:45.6518927Z   [ok] the recorded evaluation used the configuration's protocol and reward
+2026-11-01T20:14:45.6519481Z   [ok] the recorded episodes are exactly the recorded seeds
+2026-11-01T20:14:45.6519996Z   [ok] the evaluated network holds exactly the checkpoint's weights
+2026-11-01T20:14:45.6521017Z   [FAIL] every re-evaluated episode matches the record exactly: 0/100 episode summaries; largest original-return difference 0.277; largest training-return difference 0.277
+2026-11-01T20:14:45.6522731Z   [ok] no aggregate differs significantly from the record (paired tests, Holm-corrected): mean_original_return 265.9 -> 265.9 (p 0.28), pad_landing_rate 0.96 -> 0.96 (p 1), timeout_rate 0 -> 0 (p 1), crash_rate 0.03 -> 0.03 (p 1), out_of_bounds_rate 0 -> 0 (p 1)
+2026-11-01T20:14:45.6524647Z   status: numerical-difference (not blocking): 100 of 100 episodes differ; median |return difference| 0.000843, largest 0.277; outcomes agree in 100%, on a different platform (os, torch differ); no compared aggregate differs significantly from the record
+2026-11-01T20:14:45.6526345Z NUMERICAL-DIFFERENCE: 20261015-223113-baseline-s0-standard-c5af, 100 episodes; mean original return recorded 265.8558, reproduced 265.8615; pad landing recorded 96%, reproduced 96%
+2026-11-01T20:14:45.6528520Z   100 of 100 episodes differ; median |return difference| 0.000843, largest 0.277; outcomes agree in 100%, on a different platform (os, torch differ); no compared aggregate differs significantly from the record
+2026-11-01T20:14:45.6529575Z report written to reproduce-ppo-baseline-s0-linux.json
+2026-11-01T20:14:49.6008894Z   seed 20000: both; first output difference at step 0 (0 action flips), first open-loop observation difference at step 14; closed loop parts at step 14, return 282.6382 -> 282.6354
+2026-11-01T20:14:49.6011573Z   seed 20001: both; first output difference at step 0 (0 action flips), first open-loop observation difference at step 2; closed loop parts at step 2, return 303.9085 -> 303.9013
+2026-11-01T20:14:49.6013679Z   seed 20002: both; first output difference at step 0 (0 action flips), first open-loop observation difference at step 12; closed loop parts at step 12, return 272.0115 -> 272.0115
+2026-11-01T20:14:49.6014896Z DIFFERENT: 20261015-223113-baseline-s0-standard-c5af against ppo-baseline-s0-windows.npz; sources: both
+2026-11-01T20:14:49.6015659Z report written to divergence-ppo-baseline-s0-linux.json
+2026-11-01T20:15:23.2300541Z   [ok] checkpoint.zip matches its recorded SHA-256: 0ee843850038ef0f
+2026-11-01T20:15:23.2301582Z   [ok] config.yaml matches its recorded SHA-256: a85c668d55127c67
+2026-11-01T20:15:23.2302555Z   [ok] evaluation.json matches its recorded SHA-256: e27c425dbe80a7e1
+2026-11-01T20:15:23.2303502Z   [ok] configuration hash matches the record: cc202b416a62154c
+2026-11-01T20:15:23.2304242Z   [ok] the recorded evaluation used this checkpoint
+2026-11-01T20:15:23.2304871Z   [ok] the recorded evaluation is the final test on the configuration's test seeds: 100 seeds
+2026-11-01T20:15:23.2305594Z   [ok] the recorded evaluation used the configuration's protocol and reward
+2026-11-01T20:15:23.2306170Z   [ok] the recorded episodes are exactly the recorded seeds
+2026-11-01T20:15:23.2306693Z   [ok] the evaluated network holds exactly the checkpoint's weights
+2026-11-01T20:15:23.2308102Z   [FAIL] every re-evaluated episode matches the record exactly: 0/100 episode summaries; largest original-return difference 11.9; largest training-return difference 126
+2026-11-01T20:15:23.2309839Z   [ok] no aggregate differs significantly from the record (paired tests, Holm-corrected): mean_original_return -21.25 -> -20.77 (p 0.28), pad_landing_rate 0 -> 0 (p 1), timeout_rate 1 -> 1 (p 1), crash_rate 0 -> 0 (p 1), out_of_bounds_rate 0 -> 0 (p 1)
+2026-11-01T20:15:23.2311791Z   status: numerical-difference (not blocking): 100 of 100 episodes differ; median |return difference| 2.37, largest 11.9; outcomes agree in 100%, on a different platform (os, torch differ); no compared aggregate differs significantly from the record
+2026-11-01T20:15:23.2313465Z NUMERICAL-DIFFERENCE: 20261015-223115-hover-bonus-s0-standard-3376, 100 episodes; mean original return recorded -21.2456, reproduced -20.7658; pad landing recorded 0%, reproduced 0%
+2026-11-01T20:15:23.2314944Z   100 of 100 episodes differ; median |return difference| 2.37, largest 11.9; outcomes agree in 100%, on a different platform (os, torch differ); no compared aggregate differs significantly from the record
+2026-11-01T20:15:23.2315937Z report written to reproduce-ppo-hover-bonus-s0-linux.json
+2026-11-01T20:15:28.9674723Z   seed 20000: both; first output difference at step 0 (0 action flips), first open-loop observation difference at step 14; closed loop parts at step 14, return 0.8433 -> -0.0573
+2026-11-01T20:15:28.9676250Z   seed 20001: both; first output difference at step 0 (0 action flips), first open-loop observation difference at step 2; closed loop parts at step 2, return -9.3670 -> -7.1040
+2026-11-01T20:15:28.9678159Z   seed 20002: both; first output difference at step 0 (0 action flips), first open-loop observation difference at step 24; closed loop parts at step 24, return -17.8024 -> -23.7028
+2026-11-01T20:15:28.9679426Z DIFFERENT: 20261015-223115-hover-bonus-s0-standard-3376 against ppo-hover-bonus-s0-windows.npz; sources: both
+2026-11-01T20:15:28.9680142Z report written to divergence-ppo-hover-bonus-s0-linux.json
+2026-11-01T20:15:40.0009565Z   [ok] checkpoint.zip matches its recorded SHA-256: 8f1438011d97158b
+2026-11-01T20:15:40.0010743Z   [ok] config.yaml matches its recorded SHA-256: 199dcc9efbe236ae
+2026-11-01T20:15:40.0011778Z   [ok] evaluation.json matches its recorded SHA-256: 008074c0512ab4a3
+2026-11-01T20:15:40.0012791Z   [ok] configuration hash matches the record: 70de6039ef5e09c6
+2026-11-01T20:15:40.0013562Z   [ok] the recorded evaluation used this checkpoint
+2026-11-01T20:15:40.0014273Z   [ok] the recorded evaluation is the final test on the configuration's test seeds: 100 seeds
+2026-11-01T20:15:40.0015375Z   [ok] the recorded evaluation used the configuration's protocol and reward
+2026-11-01T20:15:40.0016060Z   [ok] the recorded episodes are exactly the recorded seeds
+2026-11-01T20:15:40.0016688Z   [ok] the evaluated network holds exactly the checkpoint's weights
+2026-11-01T20:15:40.0018082Z   [FAIL] every re-evaluated episode matches the record exactly: 0/100 episode summaries; largest original-return difference 192; largest training-return difference 192
+2026-11-01T20:15:40.0019868Z   [ok] no aggregate differs significantly from the record (paired tests, Holm-corrected): mean_original_return 155.4 -> 156.9 (p 0.52), pad_landing_rate 0.29 -> 0.29 (p 1), timeout_rate 0.13 -> 0.12 (p 1), crash_rate 0.28 -> 0.28 (p 1), out_of_bounds_rate 0.01 -> 0.01 (p 1)
+2026-11-01T20:15:40.0021931Z   status: numerical-difference (not blocking): 100 of 100 episodes differ; median |return difference| 0.000412, largest 192; outcomes agree in 99%, on a different platform (os, torch differ); no compared aggregate differs significantly from the record
+2026-11-01T20:15:40.0023761Z NUMERICAL-DIFFERENCE: 20261015-224317-dqn-baseline-s0-custom-2fe1, 100 episodes; mean original return recorded 155.3644, reproduced 156.8764; pad landing recorded 29%, reproduced 29%
+2026-11-01T20:15:40.0025375Z   100 of 100 episodes differ; median |return difference| 0.000412, largest 192; outcomes agree in 99%, on a different platform (os, torch differ); no compared aggregate differs significantly from the record
+2026-11-01T20:15:40.0026447Z report written to reproduce-dqn-baseline-s0-linux.json
+2026-11-01T20:15:43.4094898Z   seed 20000: both; first output difference at step 0 (0 action flips), first open-loop observation difference at step 15; closed loop parts at step 15, return 271.8304 -> 271.8295
+2026-11-01T20:15:43.4096674Z   seed 20001: both; first output difference at step 0 (0 action flips), first open-loop observation difference at step 2; closed loop parts at step 2, return -13.8666 -> -13.8666
+2026-11-01T20:15:43.4099144Z   seed 20002: both; first output difference at step 0 (0 action flips), first open-loop observation difference at step 20; closed loop parts at step 20, return -28.4152 -> -28.4149
+2026-11-01T20:15:43.4100574Z DIFFERENT: 20261015-224317-dqn-baseline-s0-custom-2fe1 against dqn-baseline-s0-windows.npz; sources: both
+2026-11-01T20:15:43.4101388Z report written to divergence-dqn-baseline-s0-linux.json
+2026-11-01T20:15:44.1219593Z ## Artifact reproduction on linux
+2026-11-01T20:15:44.1219989Z 
+2026-11-01T20:15:44.1220927Z | Artifact | Status | Exit | Integrity | Exact summary fields | Outcomes agree | Median / max abs original-return diff | Mean return (recorded -> here) | Pad landing | Aggregates |
+2026-11-01T20:15:44.1222168Z |---|---|---:|---|---:|---:|---:|---:|---:|---|
+2026-11-01T20:15:44.1223108Z | dqn-baseline-s0 | **numerical-difference** | 3 | ok | 0/100 | 99% | 0.000412 / 192 | 155.36 -> 156.88 | 29% -> 29% | no significant difference |
+2026-11-01T20:15:44.1224463Z | ppo-baseline-s0 | **numerical-difference** | 3 | ok | 0/100 | 100% | 0.000843 / 0.277 | 265.86 -> 265.86 | 96% -> 96% | no significant difference |
+2026-11-01T20:15:44.1225786Z | ppo-hover-bonus-s0 | **numerical-difference** | 3 | ok | 0/100 | 100% | 2.37 / 11.9 | -21.25 -> -20.77 | 0% -> 0% | no significant difference |
+2026-11-01T20:15:44.1226528Z 
+2026-11-01T20:15:44.1228127Z Exact matches concern five selected episode-summary fields, not complete trajectories. Non-significant differences do not establish equivalence; no equivalence margins were specified.
+2026-11-01T20:15:44.1229265Z 
+2026-11-01T20:15:44.1230528Z Tolerated (not failed): dqn-baseline-s0, ppo-baseline-s0, ppo-hover-bonus-s0: exact cross-platform identity is not a supported guarantee (docs/jmlr/REPRODUCIBILITY.md); integrity holds and no aggregate differs significantly from the record.
+2026-11-01T20:15:44.1232073Z 
+2026-11-01T20:15:44.1232412Z ### Where the trajectories part (against the recorded Windows traces)
+2026-11-01T20:15:44.1232889Z 
+2026-11-01T20:15:44.1233845Z | Artifact | Seed | Source | First output difference | Action flips | First open-loop obs. difference (size) | Closed loop parts at | abs return diff |
+2026-11-01T20:15:44.1234885Z |---|---:|---|---:|---:|---:|---:|---:|
+2026-11-01T20:15:44.1235609Z | 20261015-224317-dqn-baseline-s0-custom-2fe1 | 20000 | both | 0 | 0 | 15 (1.49e-08) | 15 | 0.000885 |
+2026-11-01T20:15:44.1236697Z | 20261015-224317-dqn-baseline-s0-custom-2fe1 | 20001 | both | 0 | 0 | 2 (5.22e-08) | 2 | 1.71e-05 |
+2026-11-01T20:15:44.1237970Z | 20261015-224317-dqn-baseline-s0-custom-2fe1 | 20002 | both | 0 | 0 | 20 (5.96e-08) | 20 | 0.000265 |
+2026-11-01T20:15:44.1239034Z | 20261015-223113-baseline-s0-standard-c5af | 20000 | both | 0 | 0 | 14 (4.47e-08) | 14 | 0.0028 |
+2026-11-01T20:15:44.1240086Z | 20261015-223113-baseline-s0-standard-c5af | 20001 | both | 0 | 0 | 2 (5.22e-08) | 2 | 0.00718 |
+2026-11-01T20:15:44.1241162Z | 20261015-223113-baseline-s0-standard-c5af | 20002 | both | 0 | 0 | 12 (8.94e-08) | 12 | 4.64e-05 |
+2026-11-01T20:15:44.1242264Z | 20261015-223115-hover-bonus-s0-standard-3376 | 20000 | both | 0 | 0 | 14 (5.96e-08) | 14 | 0.901 |
+2026-11-01T20:15:44.1243303Z | 20261015-223115-hover-bonus-s0-standard-3376 | 20001 | both | 0 | 0 | 2 (5.22e-08) | 2 | 2.26 |
+2026-11-01T20:15:44.1244254Z | 20261015-223115-hover-bonus-s0-standard-3376 | 20002 | both | 0 | 0 | 24 (8.94e-08) | 24 | 5.9 |
+2026-11-01T20:15:44.1244870Z 
+2026-11-01T20:15:44.1245022Z **Problems:** none
+2026-11-01T20:15:44.1245270Z 
+2026-11-01T20:15:44.1374372Z ##[group]Run actions/upload-artifact@v4
+2026-11-01T20:15:44.1374695Z with:
+2026-11-01T20:15:44.1374922Z   name: reproducibility-linux
+2026-11-01T20:15:44.1375389Z   path: reproduce-*.json
+divergence-*.json
+reproduction-summary-*.json
+reproduce-exit-codes.txt
+
+2026-11-01T20:15:44.1375873Z   retention-days: 30
+2026-11-01T20:15:44.1376107Z   if-no-files-found: warn
+2026-11-01T20:15:44.1376346Z   compression-level: 6
+2026-11-01T20:15:44.1376736Z   overwrite: false
+2026-11-01T20:15:44.1376963Z   include-hidden-files: false
+2026-11-01T20:15:44.1377226Z env:
+2026-11-01T20:15:44.1377427Z   SDL_VIDEODRIVER: dummy
+2026-11-01T20:15:44.1377895Z   SDL_AUDIODRIVER: dummy
+2026-11-01T20:15:44.1378127Z   UV_PYTHON: 3.12
+2026-11-01T20:15:44.1378397Z   UV_CACHE_DIR: /home/runner/work/_temp/setup-uv-cache
+2026-11-01T20:15:44.1378712Z ##[endgroup]
+2026-11-01T20:15:44.3235178Z (node:6176) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-11-01T20:15:44.3236106Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-11-01T20:15:44.3411628Z With the provided path, there will be 9 files uploaded
+2026-11-01T20:15:44.3412796Z Artifact name is valid!
+2026-11-01T20:15:44.3413353Z Root directory input is valid!
+2026-11-01T20:15:44.7022712Z Beginning upload of artifact content to blob storage
+2026-11-01T20:15:44.7470770Z (node:6176) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-11-01T20:15:45.0591185Z Uploaded bytes 41171
+2026-11-01T20:15:45.1309214Z Finished uploading artifact content to blob storage!
+2026-11-01T20:15:45.1310539Z SHA256 digest of uploaded artifact zip is 29ecd54a0cb25d6f220cef3b6f3c759c150cd094e8f18416da7c2f8f6652f949
+2026-11-01T20:15:45.1311819Z Finalizing artifact upload
+2026-11-01T20:15:45.5950029Z Artifact reproducibility-linux.zip successfully finalized. Artifact ID 13098893285
+2026-11-01T20:15:45.5951469Z Artifact reproducibility-linux has been successfully uploaded! Final size is 41171 bytes. Artifact ID is 13098893285
+2026-11-01T20:15:45.5956159Z Artifact download URL: https://github.com/SHAYAN-ABRAR/lunarlab/actions/runs/41345065489/artifacts/13098893285
+2026-11-01T20:15:45.6178769Z Post job cleanup.
+2026-11-01T20:15:45.7602857Z Cache hit occurred on key setup-uv-1-x86_64-unknown-linux-gnu-3.12-pruned-1be0913b0a4e07550796023acc1f2601890af255974de00f6df5864f015c147d, not saving cache.
+2026-11-01T20:15:45.7605364Z (node:6188) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-11-01T20:15:45.7606544Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-11-01T20:15:45.7756701Z Post job cleanup.
+2026-11-01T20:15:45.8760910Z [command]/usr/bin/git version
+2026-11-01T20:15:45.8813982Z git version 2.56.0
+2026-11-01T20:15:45.8861430Z Temporarily overriding HOME='/home/runner/work/_temp/eb43208e-9706-4905-b969-184ccfe958b0' before making global git config changes
+2026-11-01T20:15:45.8863302Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-01T20:15:45.8869846Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/lunarlab/lunarlab
+2026-11-01T20:15:45.8934766Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-01T20:15:45.8982104Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-01T20:15:45.9340969Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-01T20:15:45.9361496Z http.https://github.com/.extraheader
+2026-11-01T20:15:45.9375653Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-11-01T20:15:45.9451732Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-01T20:15:45.9795849Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-01T20:15:45.9836805Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-01T20:15:46.0296854Z Cleaning up orphan processes
+2026-11-01T20:15:46.0795932Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/upload-artifact@v4, astral-sh/setup-uv@v6. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

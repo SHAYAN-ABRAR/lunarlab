@@ -10,7 +10,8 @@ historical and unchanged.
 The source uses Elsevier's generic `elsarticle` class in preprint mode. `elsarticle.cls` and
 `elsarticle-num.bst` are unmodified copies from CTAN's official distribution, generated from the vendor
 archive whose SHA-256 is in `IMPORTED_FROM_PACKAGE.sha256`. They remain under their own licence. This class is
-not asserted to be a Neurocomputing OSP-specific template; none was found on the captured official pages.
+not asserted to be a Neurocomputing OSP-specific template; none was found on the captured official pages, and
+on 30 October 2026 the journal confirmed that none exists.
 
 ## Build
 
@@ -46,15 +47,24 @@ to the text width, so its smallest text prints at 9.03 pt.
 
 ## Before submission
 
-- The manuscript-preparation AI disclosure is kept separately, at the author's request, in
-  `AI_Disclosure_For_Submission.tex`. Elsevier's policy requires it in the submitted manuscript: review it,
-  then restore `\input{AI_Disclosure_For_Submission}` before the bibliography.
-- The study archive has no DOI yet. Replace the availability statement with the real record once it is
-  deposited.
-- The OSP-specific fee and format conditions remain unresolved (`docs/neurocomputing/README.md`).
+- **AI declaration:** kept separately, at the author's request, in `AI_Disclosure_For_Submission.tex`. It
+  is a draft of 1 November 2026, based on `AI_USE_INVENTORY.md`, with "AUTHOR TO CONFIRM" items. The author
+  completes them, then restores `\input{AI_Disclosure_For_Submission}` immediately before the references.
+  `check_manuscript.py --final` fails while a restored input still holds such an item. The Methods-level
+  account of AI use is in Section 5.3.
+- **Archive:** an archive candidate exists locally, but it has no DOI because nothing is deposited
+  (`reports/neurocomputing-final-validation-2026-11-01/archive/`). Once it is deposited, cite the record
+  in the availability statement.
+- **Article type and fees:** answered on 30 October 2026. The type is "Software publication"; there is no
+  publication fee under the subscription option; open access is optional, with a charge; there is no
+  OSP-specific template. Length limits and archive timing were not addressed (`docs/neurocomputing/README.md`).
 - **CRediT statement:** the guide requires one ("Corresponding authors are required to acknowledge co-author
-  contributions using CRediT roles"). The manuscript has none yet, and the roles are the author's to state.
+  contributions using CRediT roles"). The manuscript has none yet. The roles are the author's to state:
+  `CREDIT_CHECKLIST.md`.
 - **Highlights:** encouraged but optional. Give 3 to 5 bullets of at most 85 characters each, in a separate
   file.
-- **Software revision:** the availability statement cites the review branch. After a merge and a release,
-  cite the released revision instead.
+- **Software revision:** the availability statement names the described library revision (`c9b9384`, merged
+  as `98be27a`), the follow-up validator revision (`954607b`, on a review branch) and each experiment's
+  recorded source state. After a merge and a release, cite the released revision.
+- **Working-draft footer:** every page's footer reads "Working draft, not submitted". Remove the `draft` page
+  style from `main.tex` only when the archive, the declarations and the author's approval are complete.
