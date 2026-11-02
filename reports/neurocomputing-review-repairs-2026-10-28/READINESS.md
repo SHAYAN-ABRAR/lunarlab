@@ -1,5 +1,21 @@
 # Readiness after the review repairs
 
+> **Superseded on 1 November 2026** by
+> [`../neurocomputing-final-validation-2026-11-01/READINESS.md`](../neurocomputing-final-validation-2026-11-01/READINESS.md).
+> Since this was written:
+>
+> - **Merged:** the branch was merged into `main` by pull request #2 as `98be27a`, whose CI run 40755305285
+>   passed.
+> - **Fees answered:** on 30 October 2026 the journal answered inquiry 261027-019124. OSP submissions use the
+>   article type "Software publication", the subscription option carries no publication fee, open access is
+>   optional and carries a charge, and there is no OSP-specific template. Author decision 1 below is
+>   answered on fees and article type; length rules and archive timing remain unanswered.
+> - **Portability faults:** an independent verification on Linux found three faults in the comparison
+>   programs and the package validator. They are repaired in the follow-up folder, and the frozen
+>   comparison is unchanged.
+>
+> The text below is kept as written.
+
 Written 28 October 2026. This is a record of evidence, not a rating, and it estimates no acceptance. The
 manuscript is **not submission-ready**; see "Author decisions" below.
 

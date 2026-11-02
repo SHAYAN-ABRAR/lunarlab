@@ -1,0 +1,57 @@
+--- original/w1_sb3_conventional.py
++++ diagnostic/w1_sb3_conventional.py
+@@ -46,9 +46,13 @@
+ }
+ 
+ 
+-def peak_rss() -> int:
+-    info = psutil.Process().memory_info()
+-    return int(getattr(info, "peak_wset", 0) or getattr(info, "rss", 0))
++def peak_rss() -> int | None:
++    """Diagnostic copy: report unavailable process memory as null, without changing audit checks."""
++    try:
++        info = psutil.Process().memory_info()
++        return int(getattr(info, "peak_wset", 0) or getattr(info, "rss", 0))
++    except (psutil.NoSuchProcess, psutil.AccessDenied):
++        return None
+ 
+ 
+ def main() -> int:
+--- original/w2_sb3_reference.py
++++ diagnostic/w2_sb3_reference.py
+@@ -275,9 +275,13 @@
+     return all(packages.get(p) == version(p) for p in NUMERICAL)
+ 
+ 
+-def peak_rss() -> int:
+-    info = psutil.Process().memory_info()
+-    return int(getattr(info, "peak_wset", 0) or getattr(info, "rss", 0))
++def peak_rss() -> int | None:
++    """Diagnostic copy: report unavailable process memory as null, without changing audit checks."""
++    try:
++        info = psutil.Process().memory_info()
++        return int(getattr(info, "peak_wset", 0) or getattr(info, "rss", 0))
++    except (psutil.NoSuchProcess, psutil.AccessDenied):
++        return None
+ 
+ 
+ def main() -> int:
+--- original/w3_lunarlab.py
++++ diagnostic/w3_lunarlab.py
+@@ -27,9 +27,13 @@
+ from lunarlab.sysinfo import version_info
+ 
+ 
+-def peak_rss() -> int:
+-    info = psutil.Process().memory_info()
+-    return int(getattr(info, "peak_wset", 0) or getattr(info, "rss", 0))
++def peak_rss() -> int | None:
++    """Diagnostic copy: report unavailable process memory as null, without changing audit checks."""
++    try:
++        info = psutil.Process().memory_info()
++        return int(getattr(info, "peak_wset", 0) or getattr(info, "rss", 0))
++    except (psutil.NoSuchProcess, psutil.AccessDenied):
++        return None
+ 
+ 
+ def main() -> int:

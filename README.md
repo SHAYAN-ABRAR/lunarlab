@@ -154,6 +154,8 @@ none of them affected the published results: no number above changed
   learned-reward packages) is in [`reports/neurocomputing-2026-10-27/`](reports/neurocomputing-2026-10-27/README.md),
   and the repairs that followed a review of it are in
   [`reports/neurocomputing-review-repairs-2026-10-28/`](reports/neurocomputing-review-repairs-2026-10-28/README.md).
+  The portability repairs, the archive candidate and its validation are in
+  [`reports/neurocomputing-final-validation-2026-11-01/`](reports/neurocomputing-final-validation-2026-11-01/README.md).
 
 ## Requirements
 
@@ -308,6 +310,7 @@ examples/learned-reward-artifacts/   the six learned-reward policies with their 
 reports/jmlr/               coverage, overhead benchmarks, figures and reproduction reports (committed)
 reports/neurocomputing-2026-10-27/   protocols, records and reports of the October 2026 evidence (committed)
 reports/neurocomputing-review-repairs-2026-10-28/   record recovery, defect reproductions, validation (committed)
+reports/neurocomputing-final-validation-2026-11-01/   follow-up comparison set, validator repairs, archive (committed)
 ```
 
 Nothing is deleted automatically, with one exception: a DQN run keeps the replay and state files of its two most
@@ -331,8 +334,9 @@ a 64×64 MLP are about 150 KB each; a DQN replay file with the default 50k buffe
   by `build_audit_figure.py`, and [EVIDENCE.md](paper/jmlr-mloss/EVIDENCE.md) maps each claim to its evidence.
 - [docs/neurocomputing/](docs/neurocomputing/README.md): Neurocomputing's submission rules as captured from the
   official guide on 26 October 2026. It covers the software article type, which items are required and which
-  only encouraged, the fees, and what is still unresolved, including whether a software paper can be published
-  without a fee. [AI_TOOL_VERSIONS.md](docs/neurocomputing/AI_TOOL_VERSIONS.md) lists the AI tools and model
+  only encouraged, and the fees. It also records the journal's answer of 30 October 2026: OSPs use the article
+  type "Software publication", there is no publication fee under the subscription option, open access is
+  optional and carries a charge, and there is no OSP-specific template. [AI_TOOL_VERSIONS.md](docs/neurocomputing/AI_TOOL_VERSIONS.md) lists the AI tools and model
   versions recorded during development.
 - [paper/neurocomputing/](paper/neurocomputing/BUILD.md): the Neurocomputing manuscript, a working draft that has
   not been submitted. CI builds it with pdfLaTeX and BibTeX. `figures/build_figures.py` draws its figures from
@@ -405,7 +409,7 @@ episodes) from an empty data home. Local validation of this change: 498 Python t
 [`reports/jmlr/learned-reward-repair-2026-10-24/`](reports/jmlr/learned-reward-repair-2026-10-24/).
 
 **Research-strengthening revision (27 and 28 October 2026, review branch
-`research/neurocomputing-audit-evidence`, not merged):**
+`research/neurocomputing-audit-evidence`, merged into `main` by pull request #1 as `d5881cb`):**
 
 - **Contract defects:** seed, finite-value and seeding defects of the adapter-based layer were reproduced
   and fixed. Sixteen reproductions fail on the previous code and pass now; a valid-input control passes on both.
@@ -429,7 +433,9 @@ episodes) from an empty data home. Local validation of this change: 498 Python t
 
 Records: [`reports/neurocomputing-2026-10-27/`](reports/neurocomputing-2026-10-27/README.md).
 
-**Review repairs (28 October 2026, branch `research/neurocomputing-review-repairs`, not merged):**
+**Review repairs (28 October 2026, branch `research/neurocomputing-review-repairs`, merged into `main` by pull
+request #2 as `98be27a`, whose CI run [40755305285](https://github.com/SHAYAN-ABRAR/lunarlab/actions/runs/40755305285)
+passed):**
 
 - **Missing records:** an unanchored `runs/` ignore rule had kept the CartPole study's 72 run records out
   of Git, so every distribution built from Git omitted the inputs of its analysis. They are now committed
@@ -454,6 +460,37 @@ Records: [`reports/neurocomputing-2026-10-27/`](reports/neurocomputing-2026-10-2
   commands from a fresh extraction.
 
 Records: [`reports/neurocomputing-review-repairs-2026-10-28/`](reports/neurocomputing-review-repairs-2026-10-28/README.md).
+
+**Validator repairs and archive preparation (1 November 2026, branch
+`research/neurocomputing-final-validation`, not merged):**
+
+- **Portability:** an independent verification on Linux found that the comparison programs crashed on
+  unavailable memory telemetry. A versioned follow-up set records that telemetry as unavailable; the hashed
+  programs, protocol and results are unchanged. Run directly on Windows, it agrees exactly with the
+  historical results in all 42 pairs.
+- **Validator:** `tools/validate_review_package.py` now records every failed step and always writes its
+  report. It classes a clean control's permitted cross-platform difference separately from exact agreement
+  and from failures. It also checks the 38-policy bundle and recomputes its 3,800 episodes' statistics.
+- **Tests:** 89 new tests. CI run [41345065489](https://github.com/SHAYAN-ABRAR/lunarlab/actions/runs/41345065489)
+  passed all six jobs: Linux 686 passed and 4 Windows-only tests skipped; Windows 293 tests on each Python;
+  194 release tests; 15 browser flows.
+- **Archive candidate:** built locally with the software, the study records, the trained policies and the
+  validator. Nothing has been deposited, and no DOI exists. A licensing proposal and the Zenodo metadata await
+  the author's decision.
+- **Validation:** the candidate (from `a38d07f`) was validated from a fresh extraction on Windows, in a new
+  locked environment with an empty data home, and every step passed:
+  - checksums and 624 dependency checks;
+  - the CartPole analysis;
+  - the plotted values;
+  - the LunarLander statistics recomputed from the 3,800 episodes;
+  - all 38 LunarLander replays and all 18 CartPole artifacts `exact`;
+  - the comparison, 42 of 42 pairs in exact agreement, with the follow-up and the unmodified programs.
+
+  On Linux, the full validator has not yet been run.
+- **Journal:** the journal confirmed on 30 October 2026 that the subscription route carries no publication
+  fee.
+
+Records: [`reports/neurocomputing-final-validation-2026-11-01/`](reports/neurocomputing-final-validation-2026-11-01/README.md).
 
 ## License and citation
 

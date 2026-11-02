@@ -10,6 +10,9 @@ A review of the research-strengthening revision (`reports/neurocomputing-2026-10
 This folder holds the reproduction of each finding, the repair and its verification. The branch is
 `research/neurocomputing-review-repairs`, which has not been merged. Nothing was trained.
 
+(Note of 1 November 2026: the branch was merged into `main` by pull request #2 as `98be27a`. The follow-up
+validation is in [`../neurocomputing-final-validation-2026-11-01/`](../neurocomputing-final-validation-2026-11-01/README.md).)
+
 | Path | What it holds |
 |---|---|
 | [PROGRESS_LOG.md](PROGRESS_LOG.md) | The dated log (UTC): base state, each finding and repair, the commands run |

@@ -1,0 +1,14 @@
+Traceback (most recent call last):
+  File "/workspace/scratch/1c599345f09c/final-package-audit-2026-10-29/extracted/LunarLab-neurocomputing-review-repairs-2026-10-28/source/tools/validate_review_package.py", line 417, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "/workspace/scratch/1c599345f09c/final-package-audit-2026-10-29/extracted/LunarLab-neurocomputing-review-repairs-2026-10-28/source/tools/validate_review_package.py", line 394, in main
+    results = commands(python, work, out, env, study_output)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/1c599345f09c/final-package-audit-2026-10-29/extracted/LunarLab-neurocomputing-review-repairs-2026-10-28/source/tools/validate_review_package.py", line 312, in commands
+    f"{w}/{c}" for (w, c), r in recorded.items() if (w, c) not in now or key(now[(w, c)]) != key(r)
+                                                                         ^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/1c599345f09c/final-package-audit-2026-10-29/extracted/LunarLab-neurocomputing-review-repairs-2026-10-28/source/tools/validate_review_package.py", line 308, in key
+    {k: v["status"] for k, v in r["checks"].items()},
+                                ^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'items'

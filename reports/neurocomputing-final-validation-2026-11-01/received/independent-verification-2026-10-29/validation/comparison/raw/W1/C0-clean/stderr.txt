@@ -1,0 +1,35 @@
+== CURRENT SYSTEM INFO ==
+- OS: Linux-6.18.55-x86_64-with-glibc2.39 # 1 SMP Wed Oct 14 19:45:18 UTC 2026
+- Python: 3.12.14
+- Stable-Baselines3: 2.9.0
+- PyTorch: 2.14.1+cpu
+- GPU Enabled: False
+- Numpy: 2.5.4
+- Cloudpickle: 3.1.2
+- Gymnasium: 1.4.0
+
+== SAVED MODEL SYSTEM INFO ==
+- OS: Windows-11-10.0.26300-SP0 10.0.26300
+- Python: 3.12.13
+- Stable-Baselines3: 2.9.0
+- PyTorch: 2.14.1+cpu
+- GPU Enabled: False
+- Numpy: 2.5.4
+- Cloudpickle: 3.1.2
+- Gymnasium: 1.4.0
+
+Traceback (most recent call last):
+  File "/workspace/scratch/1c599345f09c/final-package-audit-2026-10-29/validation/work/reports/neurocomputing-2026-10-27/workflow-comparison/workflows/w1_sb3_conventional.py", line 93, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/workspace/scratch/1c599345f09c/final-package-audit-2026-10-29/validation/work/reports/neurocomputing-2026-10-27/workflow-comparison/workflows/w1_sb3_conventional.py", line 86, in main
+    "peak_rss_bytes_self": peak_rss(),
+                           ^^^^^^^^^^
+  File "/workspace/scratch/1c599345f09c/final-package-audit-2026-10-29/validation/work/reports/neurocomputing-2026-10-27/workflow-comparison/workflows/w1_sb3_conventional.py", line 50, in peak_rss
+    info = psutil.Process().memory_info()
+           ^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/1c599345f09c/final-package-audit-2026-10-29/validation/venv/lib/python3.12/site-packages/psutil/__init__.py", line 314, in __init__
+    self._init(pid)
+  File "/workspace/scratch/1c599345f09c/final-package-audit-2026-10-29/validation/venv/lib/python3.12/site-packages/psutil/__init__.py", line 360, in _init
+    raise NoSuchProcess(pid, msg=msg) from None
+psutil.NoSuchProcess: process PID not found (pid=547)

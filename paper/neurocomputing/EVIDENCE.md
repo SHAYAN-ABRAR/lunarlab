@@ -2,21 +2,22 @@
 
 - **Scope:** every quantitative or checkable claim in `main.tex`, the file that holds it, and how it was
   checked.
-- **Paths:** repository-relative. `E/` is `reports/neurocomputing-2026-10-27/`, the research-strengthening
-  evidence. `R/` is `reports/neurocomputing-review-repairs-2026-10-28/`, the repairs made after a review of
-  it.
-- **Checking:** each number was recomputed from the named file on 28 October 2026. Historical numbers were
-  recomputed from the unchanged historical files, or traced to the JMLR evidence map
-  (`paper/jmlr-mloss/EVIDENCE.md`) that checked them.
-- **Not claimed:** none of this makes the manuscript submission-ready; see `R/READINESS.md`.
+- **Paths:** repository-relative.
+  - `E/` is `reports/neurocomputing-2026-10-27/`, the research-strengthening evidence.
+  - `R/` is `reports/neurocomputing-review-repairs-2026-10-28/`, the repairs made after a review of it.
+  - `F/` is `reports/neurocomputing-final-validation-2026-11-01/`, the follow-up validation.
+- **Checking:** each number was recomputed from the named file on 28 October 2026. Rows added or changed on
+  1 November 2026 were checked that day. Historical numbers were recomputed from the unchanged historical
+  files, or traced to the JMLR evidence map (`paper/jmlr-mloss/EVIDENCE.md`) that checked them.
+- **Not claimed:** none of this makes the manuscript submission-ready; see `F/READINESS.md`.
 
 ## Software and its identity (Sections 2.1 to 2.4, Table 1, availability)
 
 | Claim | Evidence | How checked; limits |
 |---|---|---|
-| The implementation described is revision `c9b9384` | `git log`; `R/PROGRESS_LOG.md` | `c9b9384` is the last commit that changed library code. It corrects two validation defects in `30bd3f6`, the previously described revision, which is merged into `main` (`d5881cb`). Later commits change only evidence, documentation, tooling and the manuscript |
+| The implementation described is revision `c9b9384` | `git log`; `R/PROGRESS_LOG.md` | `c9b9384` is the last commit that changed library code. It corrects two validation defects in `30bd3f6`, the previously described revision (merged as `d5881cb`). `c9b9384` was merged into `main` with the review repairs as `98be27a` (pull request #2; CI run 40755305285 passed). Later commits, including `954607b`, change only evidence, documentation, tooling and the manuscript (`git diff c9b9384 954607b -- lunarlab` is empty) |
 | No reported result changes with the repairs | `R/regression/w3-repaired/comparison.json`; `R/recovery/verification/` | W3, rerun on `c9b9384`, has identical status vectors, verdicts, exit statuses and episode counts on all 14 fixtures. The CartPole analysis reads JSON records, so the code change cannot alter it. The LunarLander evidence is historical and unchanged (`R/integrity/`) |
-| Each experiment's recorded source state | `E/cartpole-study/records/main/study.json` (`software.git`: `e7c3fab`, clean); `E/workflow-comparison/FINDINGS.md` (`5c7a62a`); `E/linux-replay/run-40545198707-dea292c/` (`dea292c`); the LunarLander runs' own metadata | The paper names these separately from the described revision |
+| Each experiment's recorded source state | `E/cartpole-study/records/main/study.json` (`software.git`: `e7c3fab`, clean); `E/workflow-comparison/FINDINGS.md` (`5c7a62a`); `E/linux-replay/run-40545198707-dea292c/` (`dea292c`). The 38 LunarLander packages: `provenance/metadata.json` records `system.git` revision `32823f3` with `dirty: true` in all 38, and `artifact.json` records `exported_with` `4116599` | The paper names these separately from the described revision. The LunarLander policies were trained from a modified working tree, which the record marks but does not reproduce |
 | MIT, version 0.1.0, Python 3.12 and 3.13 in CI | `LICENSE`, `lunarlab/__init__.py`, `.github/workflows/ci.yml` | Direct inspection |
 | The adapter layer is available to any task with an adapter. Adapters exist for LunarLander-v3 and CartPole-v1. Policies are audited through a function from observation to action, and the study workflow trains only PPO | `lunarlab/audit/adapters.py` (two registered adapters); `lunarlab/audit/evaluate.py::audit_policy`; `lunarlab/audit/study.py::protocol_problems` ("only PPO is supported") | Demonstrated on these two tasks only; untested on others (Section 6) |
 | The wrapper refuses a non-finite original reward, term output or weight, and finite values whose episode total would overflow, naming the quantity. A failed episode yields no summary, and steps are refused until reset | `lunarlab/audit/core.py` (`EpisodeAudit.add`, `training_reward`, `RewardAccountingWrapper.step`); `tests/test_audit_contracts.py` (the six overflow tests and the finite-value tests) | Before and after: `R/defects/before-fix-d1f69c6.json` (a completed episode with infinite totals, a bare `OverflowError`) and `after-fix-working-tree.json`. The guarantee covers the values the wrapper checks |
@@ -43,7 +44,8 @@
 | Claim | Evidence | How checked; limits |
 |---|---|---|
 | Protocol, fault inventory, fixtures and programs hashed before any program ran on the fixtures | `E/workflow-comparison/protocol/HASHES.sha256` (16:35:26 UTC), committed in `5c7a62a` before the results commit `8d4f6c4`; run start 16:35:55 | Order shown by commit and file times. Development used fixtures from the pilot policy |
-| W2, a separately implemented reference, and W3 agree on every check in all 14 designed cases, rejecting the 12 faults before any episode. W1 attempted none of the checks | `E/workflow-comparison/results/summary.json`, `MATRIX.md`, `raw/` | Recomputed: equal S1-S10 status vectors on all 14 cases, and W2 and W3 executed no episode on any fault. The same developer, assisted by AI tools, wrote the specification and all three programs; no independent team validated them |
+| W2, a separately implemented reference, and W3 agree on every check in all 14 designed cases, rejecting the 12 faults before any episode. W1 attempted none of the checks | `E/workflow-comparison/results/summary.json`, `MATRIX.md`, `raw/` | Recomputed: equal S1-S10 status vectors on all 14 cases, and W2 and W3 executed no episode on any fault. One developer, working with AI tools, produced the specification and all three programs: the programs were written by Claude Code (`paper/neurocomputing/AI_USE_INVENTORY.md`). No independent team validated them |
+| These replay labels belong to the recording platform; elsewhere S10 can classify the clean control as a permitted numerical difference, which a follow-up runner reports separately | S10's rule (`E/workflow-comparison/protocol/PROTOCOL.md`); `F/comparison-v2/assessment.py`; `tests/test_followup_comparison.py` | Rerun directly on Windows with the follow-up set, all 42 pairs agree exactly (`F/comparison-v2/results-windows-2026-11-01/`). A Linux observation of the C0 label change exists only as a reviewer's **diagnostic result** (`F/received/`), not as a run of this work |
 | The swapped checkpoint's returns under W1 were indistinguishable | `raw/W1/F01-checkpoint-swapped/stdout.txt` | 500.0 ± 0, as for C0 |
 | 65, 277 and 152 counted lines | `E/workflow-comparison/results/code_size.json`; `count_code.py` | Not a measure of researcher time |
 | Medians 20.9, 21.0 and 21.7 s; peak memory 288, 289 and 293 MB; no cost difference claimed | `E/workflow-comparison/results/cost/cost.json` | Five randomized blocks, bimodal wall times |
@@ -74,14 +76,16 @@
 | Linux, six learned-reward policies: integrity kept; median differences at most 0.0013 in magnitude; largest 0.007 to 18.3; outcome agreement 99 to 100%; landing unchanged except 35% versus 34%; no Holm-corrected difference | `E/linux-replay/run-40545198707-dea292c/` | Recomputed from per-episode rows. Not a test of equivalence |
 | Nine open-loop trace comparisons | `reports/jmlr/reproducibility/traces/`; `R/ci/run-40712412847-c9b9384/reproducibility-linux/divergence-*-linux.json` | Historical analysis; a mechanism class, not a unique cause |
 | Every figure is produced by a deterministic script with a manifest; Figure 1's code references are checked | `paper/neurocomputing/figures/build_figures.py`, `MANIFEST.json`, `*.values.json`, `FIGURES.md` | Rebuilt from a fresh extraction with identical plotted values (`R/validation/`) |
-| AI tools and versions | `docs/neurocomputing/AI_TOOL_VERSIONS.md` | Session metadata for 27 and 28 October: Claude Code 2.1.299, `claude-opus-5-5` (local transcript, not in the repository) |
+| A package validator checks every named file, recomputes the CartPole analysis and the LunarLander statistics from their episode records, compares plotted values separately from bytes, and reruns the replays and the comparison; crashed, absent or malformed results fail | `tools/validate_review_package.py` (at `954607b`); `tests/test_validator_failures.py`; `F/validation/` | The reviewer's crashed run is reproduced in the tests as 42 named failures with a written report |
+| The hashed programs read process memory when they finish; a versioned follow-up set records it as unavailable, leaving the hashed programs and results unchanged | `F/comparison-v2/CHANGES.diff`, `derive_v2_programs.py --check`; the received unmodified run's stderr (`psutil.NoSuchProcess`, `F/received/`) | `HASHES.sha256` still verifies 79 of 79 (`run_comparison_v2.py` refuses to run otherwise) |
+| AI tools produced much of this work: Claude Code (`claude-opus-5-5`; 2.1.283, 2.1.299, 2.1.312; 14 October to 1 November 2026) wrote the software, tests, runners, scripts and figure code and ran the commands; ChatGPT/Codex reviewed, prepared editorial revisions and plans, and supplied two patches | `paper/neurocomputing/AI_USE_INVENTORY.md`; `docs/neurocomputing/AI_TOOL_VERSIONS.md` | Session metadata (local transcript, not in the repository): 9,195 model messages, all `claude-opus-5-5`; 622 repository edits; 82 of the 94 first-commit files; the launch commands of the 15 and 27 October runs. OpenAI model identifiers are not recorded. No human review is recorded |
 
 ## Availability statement
 
 | Claim | Evidence | How checked; limits |
 |---|---|---|
-| `30bd3f6` is merged into `main`; the repairs are on `research/neurocomputing-review-repairs`, not merged | `git log origin/main` (`d5881cb`, PR #1); the branch | True on 28 October 2026 |
+| `c9b9384` is merged into `main` (`98be27a`); `954607b` is on `research/neurocomputing-final-validation`, not merged | `git log origin/main` (`98be27a`, PR #2; earlier `d5881cb`, PR #1); the branch | True on 1 November 2026 |
 | Protocols, raw episode records, comparison outputs, Linux replay reports and figure manifests are in the repository | `E/`, including `cartpole-study/records/*/runs/` since `417b91a`; `tools/validate_review_package.py` | The dependency check confirms every file the records name is present (`R/validation/`) |
 | The six learned-reward packages are in the repository | `examples/learned-reward-artifacts/SHA256SUMS` | 60 files, identical to the repaired bundle's list |
-| The CartPole checkpoints and the comparison fixtures' policies accompany the review package | `E/cartpole-study/records/frozen-checkpoints.sha256`; `E/workflow-comparison/protocol/HASHES.sha256` | Outside Git; verified in the package (`R/validation/`) |
-| No release or archive identifier exists yet | `R/DEPOSIT.md` | A local deposit candidate exists; nothing was published |
+| An archive candidate gathers the source, the 38-policy export with its learned-reward dependencies, the CartPole frozen checkpoints and exported artifacts, the comparison fixtures and the validation tools | `F/archive/` (builder, inventory, metadata); `E/cartpole-study/records/frozen-checkpoints.sha256`; `E/workflow-comparison/protocol/HASHES.sha256`; `F/archive/historical-bundle.sha256` | Outside Git; validated from a fresh extraction (`F/validation/`) |
+| No release or archive identifier exists yet | `F/archive/DEPOSIT_INSTRUCTIONS.md` | Nothing was deposited, uploaded or published; no DOI was reserved |

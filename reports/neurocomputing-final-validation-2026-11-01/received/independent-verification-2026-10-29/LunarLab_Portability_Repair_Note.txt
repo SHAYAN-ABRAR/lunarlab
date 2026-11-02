@@ -1,0 +1,15 @@
+FOCUSED PORTABILITY REPAIR NOTE FOR CLAUDE
+
+Use the attached independent verification evidence. Do not alter scientific results or the original hashed comparison programs in place merely to make a reproduction pass.
+
+1. Optional process-memory collection must not prevent the audit result from being printed. In a new dated implementation or explicit diagnostic wrapper, handle psutil.NoSuchProcess/AccessDenied by returning null plus an unavailable reason. Never invent zero MB, and never suppress audit/integrity failures. Preserve the original benchmark measurements and their source identity. The supplied diagnostic diff demonstrates the narrow fallback; it was used only in a separate reviewer copy.
+
+2. tools/validate_review_package.py: key() currently assumes checks is a mapping. A crashed comparison row has checks=None, causing AttributeError and loss of the final report. Validate result shapes first, record the child failure/log/exit code, finish writing structured validation output, and return a failing exit status. Apply this to malformed JSON and exceptions in individual stages as well. Add a focused regression test using a child result with checks=None.
+
+3. The clean control's expected replay classification is platform-dependent under the existing S10 rules. On this Linux run W2 and W3 both pass S1-S10 but return accepted-numerical-difference instead of the Windows accepted label. run_comparison.classify() marks those two rows false alarm; the outer validator also compares literal verdict/outcome/exit labels. Add an explicit platform-aware comparison/reporting rule, preserving both the exact-row comparison and the audit-contract assessment. A permitted variant requires verified platform difference, intact inputs, all required checks passing and the existing nonblocking reproduction classification. Do not accept arbitrary exit 3, loosen numerical thresholds, alter fault expectations, or accept same-platform/unexplained differences. Test exact control, permitted cross-platform control, same-platform mismatch, real rejection and crash. Keep the original Windows comparison and protocol unchanged; report any new validator behavior/version separately.
+
+4. Update only the current manuscript availability statement: the repair branch was merged through PR #2 as 98be27a, and merged CI 40755305285 passed. Preserve c9b9384 as the described code revision and each experiment's own recorded source state. Historical dated reports need a superseding note, not rewritten history.
+
+5. An optional supplementary reproduction note can state the new reviewer finding: 18 CartPole policies / 1,560 episodes; original return, length and task-outcome flags all unchanged; 12 exact summary replays and six potential-shaped policies with numerical training-return differences, maximum 0.019997491324090788. Attribute this to the provided reports, not an invented human user or untested causal explanation.
+
+No new training is needed. No journal submission or archive publication is authorized by this note. Follow the author's existing branch/push permissions rather than assuming permission to merge or release.

@@ -1,0 +1,676 @@
+﻿2026-11-01T20:15:51.3112724Z Current runner version: '2.338.2'
+2026-11-01T20:15:51.3132575Z ##[group]Runner Image Provisioner
+2026-11-01T20:15:51.3133218Z Hosted Compute Agent
+2026-11-01T20:15:51.3133611Z Version: 20261021.618
+2026-11-01T20:15:51.3133999Z Commit: 21505ad2541d5be6135ed84fc33697146cf75b8e
+2026-11-01T20:15:51.3134514Z Build Date: 2026-10-21T00:45:21Z
+2026-11-01T20:15:51.3134954Z Worker ID: {126725a9-5c3f-4f13-b1a7-047294dfdd0e}
+2026-11-01T20:15:51.3135363Z Region: centralus
+2026-11-01T20:15:51.3135760Z Cloud: Azure
+2026-11-01T20:15:51.3136119Z ##[endgroup]
+2026-11-01T20:15:51.3137322Z ##[group]Operating System
+2026-11-01T20:15:51.3137702Z Ubuntu
+2026-11-01T20:15:51.3137996Z 26.04.1
+2026-11-01T20:15:51.3138726Z LTS
+2026-11-01T20:15:51.3139039Z ##[endgroup]
+2026-11-01T20:15:51.3139435Z ##[group]Runner Image
+2026-11-01T20:15:51.3139802Z Image: ubuntu-26.04
+2026-11-01T20:15:51.3140153Z Version: 20261025.179.1
+2026-11-01T20:15:51.3140973Z Included Software: https://github.com/actions/runner-images/blob/ubuntu26/20261025.179/images/ubuntu/Ubuntu2604-Readme.md
+2026-11-01T20:15:51.3141930Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu26%2F20261025.179
+2026-11-01T20:15:51.3142511Z ##[endgroup]
+2026-11-01T20:15:51.3143223Z ##[group]GITHUB_TOKEN Permissions
+2026-11-01T20:15:51.3144499Z Contents: read
+2026-11-01T20:15:51.3144903Z Metadata: read
+2026-11-01T20:15:51.3145304Z ##[endgroup]
+2026-11-01T20:15:51.3146914Z Secret source: Actions
+2026-11-01T20:15:51.3147509Z Cache mode: write
+2026-11-01T20:15:51.3147968Z Prepare workflow directory
+2026-11-01T20:15:51.3497120Z Prepare all required actions
+2026-11-01T20:15:51.3536432Z Getting action download info
+2026-11-01T20:15:51.6316430Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+2026-11-01T20:15:51.7059050Z Download action repository 'astral-sh/setup-uv@v6' (SHA:d0cc045d04ccac9d8b7881df0226f9e82c39688e)
+2026-11-01T20:15:52.1575814Z Download action repository 'actions/setup-node@v4' (SHA:49933ea5288caeca8642d1e84afbd3f7d6820020)
+2026-11-01T20:15:52.2386702Z Download action repository 'actions/upload-artifact@v4' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+2026-11-01T20:15:52.4129775Z Complete job name: Browser end-to-end (real backend)
+2026-11-01T20:15:52.4699921Z ##[group]Run actions/checkout@v4
+2026-11-01T20:15:52.4700400Z with:
+2026-11-01T20:15:52.4700689Z   repository: SHAYAN-ABRAR/lunarlab
+2026-11-01T20:15:52.4702992Z   token: ***
+2026-11-01T20:15:52.4703263Z   ssh-strict: true
+2026-11-01T20:15:52.4703547Z   ssh-user: git
+2026-11-01T20:15:52.4703830Z   persist-credentials: true
+2026-11-01T20:15:52.4704136Z   clean: true
+2026-11-01T20:15:52.4704427Z   sparse-checkout-cone-mode: true
+2026-11-01T20:15:52.4704754Z   fetch-depth: 1
+2026-11-01T20:15:52.4705037Z   fetch-tags: false
+2026-11-01T20:15:52.4705326Z   show-progress: true
+2026-11-01T20:15:52.4705626Z   lfs: false
+2026-11-01T20:15:52.4705891Z   submodules: false
+2026-11-01T20:15:52.4706176Z   set-safe-directory: true
+2026-11-01T20:15:52.4706627Z   allow-unsafe-pr-checkout: false
+2026-11-01T20:15:52.4707153Z env:
+2026-11-01T20:15:52.4707529Z   SDL_VIDEODRIVER: dummy
+2026-11-01T20:15:52.4708010Z   SDL_AUDIODRIVER: dummy
+2026-11-01T20:15:52.4708421Z ##[endgroup]
+2026-11-01T20:15:52.7045073Z Syncing repository: SHAYAN-ABRAR/lunarlab
+2026-11-01T20:15:52.7047019Z ##[group]Getting Git version info
+2026-11-01T20:15:52.7047680Z Working directory is '/home/runner/work/lunarlab/lunarlab'
+2026-11-01T20:15:52.7048488Z [command]/usr/bin/git version
+2026-11-01T20:15:52.7063677Z git version 2.56.0
+2026-11-01T20:15:52.7075586Z ##[endgroup]
+2026-11-01T20:15:52.7084995Z Temporarily overriding HOME='/home/runner/work/_temp/e3813134-1af3-401a-bafb-102832f2075d' before making global git config changes
+2026-11-01T20:15:52.7086811Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-01T20:15:52.7088410Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/lunarlab/lunarlab
+2026-11-01T20:15:52.7151652Z Deleting the contents of '/home/runner/work/lunarlab/lunarlab'
+2026-11-01T20:15:52.7158068Z ##[group]Initializing the repository
+2026-11-01T20:15:52.7158672Z [command]/usr/bin/git init /home/runner/work/lunarlab/lunarlab
+2026-11-01T20:15:52.7265112Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-11-01T20:15:52.7266438Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-11-01T20:15:52.7267663Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-11-01T20:15:52.7268574Z hint: call:
+2026-11-01T20:15:52.7269082Z hint:
+2026-11-01T20:15:52.7269759Z hint: 	git config --global init.defaultBranch <name>
+2026-11-01T20:15:52.7270670Z hint:
+2026-11-01T20:15:52.7271390Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-11-01T20:15:52.7272531Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-11-01T20:15:52.7273436Z hint:
+2026-11-01T20:15:52.7273999Z hint: 	git branch -m <name>
+2026-11-01T20:15:52.7274674Z hint:
+2026-11-01T20:15:52.7275437Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-11-01T20:15:52.7278484Z Initialized empty Git repository in /home/runner/work/lunarlab/lunarlab/.git/
+2026-11-01T20:15:52.7288762Z [command]/usr/bin/git remote add origin https://github.com/SHAYAN-ABRAR/lunarlab
+2026-11-01T20:15:52.7335363Z ##[endgroup]
+2026-11-01T20:15:52.7336428Z ##[group]Disabling automatic garbage collection
+2026-11-01T20:15:52.7338105Z [command]/usr/bin/git config --local gc.auto 0
+2026-11-01T20:15:52.7369312Z ##[endgroup]
+2026-11-01T20:15:52.7370362Z ##[group]Setting up auth
+2026-11-01T20:15:52.7374337Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-01T20:15:52.7418634Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-01T20:15:52.7834291Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-01T20:15:52.7862230Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-01T20:15:52.8084786Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-01T20:15:52.8112411Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-01T20:15:52.8330693Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-11-01T20:15:52.8371518Z ##[endgroup]
+2026-11-01T20:15:52.8372432Z ##[group]Fetching the repository
+2026-11-01T20:15:52.8378719Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +954607b83853d3fbd1018b5992158f1c924ff0d5:refs/remotes/origin/research/neurocomputing-final-validation
+2026-11-01T20:15:54.8018716Z From https://github.com/SHAYAN-ABRAR/lunarlab
+2026-11-01T20:15:54.8019668Z  * [new ref]         954607b83853d3fbd1018b5992158f1c924ff0d5 -> origin/research/neurocomputing-final-validation
+2026-11-01T20:15:54.8022230Z ##[endgroup]
+2026-11-01T20:15:54.8022873Z ##[group]Determining the checkout info
+2026-11-01T20:15:54.8024860Z ##[endgroup]
+2026-11-01T20:15:54.8029119Z [command]/usr/bin/git sparse-checkout disable
+2026-11-01T20:15:54.8068987Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-11-01T20:15:54.8094518Z ##[group]Checking out the ref
+2026-11-01T20:15:54.8097060Z [command]/usr/bin/git checkout --progress --force -B research/neurocomputing-final-validation refs/remotes/origin/research/neurocomputing-final-validation
+2026-11-01T20:15:55.0057745Z Switched to a new branch 'research/neurocomputing-final-validation'
+2026-11-01T20:15:55.0067624Z branch 'research/neurocomputing-final-validation' set up to track 'origin/research/neurocomputing-final-validation'.
+2026-11-01T20:15:55.0144455Z ##[endgroup]
+2026-11-01T20:15:55.0146600Z [command]/usr/bin/git log -1 --format=%H
+2026-11-01T20:15:55.0157568Z 954607b83853d3fbd1018b5992158f1c924ff0d5
+2026-11-01T20:15:55.0362905Z ##[group]Run astral-sh/setup-uv@v6
+2026-11-01T20:15:55.0363148Z with:
+2026-11-01T20:15:55.0363302Z   python-version: 3.12
+2026-11-01T20:15:55.0363479Z   activate-environment: false
+2026-11-01T20:15:55.0363689Z   working-directory: /home/runner/work/lunarlab/lunarlab
+2026-11-01T20:15:55.0363936Z   server-url: https://github.com
+2026-11-01T20:15:55.0365403Z   github-token: ***
+2026-11-01T20:15:55.0365556Z   enable-cache: auto
+2026-11-01T20:15:55.0365906Z   cache-dependency-glob: **/*requirements*.txt
+**/*requirements*.in
+**/*constraints*.txt
+**/*constraints*.in
+**/pyproject.toml
+**/uv.lock
+**/*.py.lock
+
+2026-11-01T20:15:55.0366279Z   restore-cache: true
+2026-11-01T20:15:55.0366433Z   save-cache: true
+2026-11-01T20:15:55.0366826Z   prune-cache: true
+2026-11-01T20:15:55.0367006Z   ignore-nothing-to-cache: false
+2026-11-01T20:15:55.0367197Z   ignore-empty-workdir: false
+2026-11-01T20:15:55.0367385Z   add-problem-matchers: true
+2026-11-01T20:15:55.0367575Z env:
+2026-11-01T20:15:55.0367788Z   SDL_VIDEODRIVER: dummy
+2026-11-01T20:15:55.0367954Z   SDL_AUDIODRIVER: dummy
+2026-11-01T20:15:55.0368108Z ##[endgroup]
+2026-11-01T20:15:55.1630407Z (node:2172) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-11-01T20:15:55.1631164Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-11-01T20:15:55.1715652Z Trying to find version for uv in: /home/runner/work/lunarlab/lunarlab/uv.toml
+2026-11-01T20:15:55.1716334Z Could not find file: /home/runner/work/lunarlab/lunarlab/uv.toml
+2026-11-01T20:15:55.1717031Z Trying to find version for uv in: /home/runner/work/lunarlab/lunarlab/pyproject.toml
+2026-11-01T20:15:55.1766658Z Could not determine uv version from uv.toml or pyproject.toml. Falling back to latest.
+2026-11-01T20:15:55.1775474Z Getting latest version from GitHub API...
+2026-11-01T20:15:55.4427861Z manifest-file not provided, reading from local file.
+2026-11-01T20:15:55.4435774Z manifest-file does not contain version 0.13.6, arch x86_64, platform unknown-linux-gnu. Falling back to GitHub releases.
+2026-11-01T20:15:55.4436812Z Downloading uv from "https://github.com/astral-sh/uv/releases/download/0.13.6/uv-x86_64-unknown-linux-gnu.tar.gz" ...
+2026-11-01T20:15:55.8260344Z [command]/usr/bin/tar xz --warning=no-unknown-keyword --overwrite -C /home/runner/work/_temp/baafa007-9e13-4991-b556-4be006089544 -f /home/runner/work/_temp/a21c20bb-3379-4f55-adf4-a2754f3137cc
+2026-11-01T20:15:56.1100840Z Added /home/runner/.local/bin to the path
+2026-11-01T20:15:56.1102961Z Added /opt/hostedtoolcache/uv/0.13.6/x86_64 to the path
+2026-11-01T20:15:56.1103289Z Set UV_PYTHON to 3.12
+2026-11-01T20:15:56.1124735Z Set UV_CACHE_DIR to /home/runner/work/_temp/setup-uv-cache
+2026-11-01T20:15:56.1125151Z Successfully installed uv version 0.13.6
+2026-11-01T20:15:56.1127002Z Searching files using cache dependency glob: /home/runner/work/lunarlab/lunarlab/**/*requirements*.txt,/home/runner/work/lunarlab/lunarlab/**/*requirements*.in,/home/runner/work/lunarlab/lunarlab/**/*constraints*.txt,/home/runner/work/lunarlab/lunarlab/**/*constraints*.in,/home/runner/work/lunarlab/lunarlab/**/pyproject.toml,/home/runner/work/lunarlab/lunarlab/**/uv.lock,/home/runner/work/lunarlab/lunarlab/**/*.py.lock
+2026-11-01T20:15:56.1698782Z /home/runner/work/lunarlab/lunarlab/pyproject.toml
+2026-11-01T20:15:56.2660075Z /home/runner/work/lunarlab/lunarlab/requirements.in
+2026-11-01T20:15:56.2694449Z Found 2 files to hash.
+2026-11-01T20:15:56.2763144Z Trying to restore uv cache from GitHub Actions cache with key: setup-uv-1-x86_64-unknown-linux-gnu-3.12-pruned-1be0913b0a4e07550796023acc1f2601890af255974de00f6df5864f015c147d
+2026-11-01T20:15:56.3950263Z Cache hit for: setup-uv-1-x86_64-unknown-linux-gnu-3.12-pruned-1be0913b0a4e07550796023acc1f2601890af255974de00f6df5864f015c147d
+2026-11-01T20:15:56.4020148Z (node:2172) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-11-01T20:15:57.0260543Z Received 8452521 of 8452521 (100.0%), 17.5 MBs/sec
+2026-11-01T20:15:57.0260888Z Cache Size: ~8 MB (8452521 B)
+2026-11-01T20:15:57.0274888Z [command]/usr/bin/tar -xf /home/runner/work/_temp/8d4baeb1-3769-4430-94cf-8fb8b64fe9d7/cache.tzst -P -C /home/runner/work/lunarlab/lunarlab --use-compress-program unzstd
+2026-11-01T20:15:57.0549245Z Cache restored successfully
+2026-11-01T20:15:57.0557099Z uv cache restored from GitHub Actions cache with key: setup-uv-1-x86_64-unknown-linux-gnu-3.12-pruned-1be0913b0a4e07550796023acc1f2601890af255974de00f6df5864f015c147d
+2026-11-01T20:15:57.0745097Z ##[group]Run actions/setup-node@v4
+2026-11-01T20:15:57.0745262Z with:
+2026-11-01T20:15:57.0745377Z   node-version: 22
+2026-11-01T20:15:57.0745517Z   cache: npm
+2026-11-01T20:15:57.0745670Z   cache-dependency-path: frontend/package-lock.json
+2026-11-01T20:15:57.0745855Z   always-auth: false
+2026-11-01T20:15:57.0745986Z   check-latest: false
+2026-11-01T20:15:57.0747525Z   token: ***
+2026-11-01T20:15:57.0747638Z env:
+2026-11-01T20:15:57.0747751Z   SDL_VIDEODRIVER: dummy
+2026-11-01T20:15:57.0747886Z   SDL_AUDIODRIVER: dummy
+2026-11-01T20:15:57.0748018Z   UV_PYTHON: 3.12
+2026-11-01T20:15:57.0748164Z   UV_CACHE_DIR: /home/runner/work/_temp/setup-uv-cache
+2026-11-01T20:15:57.0748337Z ##[endgroup]
+2026-11-01T20:15:57.1655738Z Found in cache @ /opt/hostedtoolcache/node/22.23.4/x64
+2026-11-01T20:15:57.1660568Z (node:2196) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-11-01T20:15:57.1661325Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-11-01T20:15:57.1662504Z ##[group]Environment details
+2026-11-01T20:15:57.4712612Z node: v22.23.4
+2026-11-01T20:15:57.4712906Z npm: 10.9.9
+2026-11-01T20:15:57.4713022Z yarn: 1.22.22
+2026-11-01T20:15:57.4713404Z ##[endgroup]
+2026-11-01T20:15:57.4725263Z [command]/opt/hostedtoolcache/node/22.23.4/x64/bin/npm config get cache
+2026-11-01T20:15:57.5539690Z /home/runner/.npm
+2026-11-01T20:15:57.6827666Z Cache hit for: node-cache-Linux-x64-npm-48a8e37fb158e1562edbbf953ad9b3dbdcc7ab97e3e06de76867566f7e5ea12c
+2026-11-01T20:15:57.6897437Z (node:2196) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-11-01T20:15:58.5555639Z Received 56804860 of 56804860 (100.0%), 77.2 MBs/sec
+2026-11-01T20:15:58.5557127Z Cache Size: ~54 MB (56804860 B)
+2026-11-01T20:15:58.5577641Z [command]/usr/bin/tar -xf /home/runner/work/_temp/730e7c52-405c-4e2a-9ab8-ed51d304788d/cache.tzst -P -C /home/runner/work/lunarlab/lunarlab --use-compress-program unzstd
+2026-11-01T20:15:58.6269408Z Cache restored successfully
+2026-11-01T20:15:58.6299268Z Cache restored from key: node-cache-Linux-x64-npm-48a8e37fb158e1562edbbf953ad9b3dbdcc7ab97e3e06de76867566f7e5ea12c
+2026-11-01T20:15:58.6484325Z ##[group]Run uv venv .venv
+2026-11-01T20:15:58.6484553Z [36;1muv venv .venv[0m
+2026-11-01T20:15:58.6484817Z [36;1muv pip install --python .venv/bin/python -r requirements-ci.lock --torch-backend cpu[0m
+2026-11-01T20:15:58.6485135Z [36;1muv pip install --python .venv/bin/python -e . --no-deps[0m
+2026-11-01T20:15:58.6517640Z shell: /usr/bin/bash -e {0}
+2026-11-01T20:15:58.6517798Z env:
+2026-11-01T20:15:58.6517922Z   SDL_VIDEODRIVER: dummy
+2026-11-01T20:15:58.6518072Z   SDL_AUDIODRIVER: dummy
+2026-11-01T20:15:58.6518212Z   UV_PYTHON: 3.12
+2026-11-01T20:15:58.6518373Z   UV_CACHE_DIR: /home/runner/work/_temp/setup-uv-cache
+2026-11-01T20:15:58.6518561Z ##[endgroup]
+2026-11-01T20:15:58.8365286Z Downloading cpython-3.12.16-linux-x86_64-gnu (download) (32.9MiB)
+2026-11-01T20:15:59.4353066Z  Downloaded cpython-3.12.16-linux-x86_64-gnu (download)
+2026-11-01T20:15:59.5281763Z Using CPython 3.12.16
+2026-11-01T20:15:59.5282277Z Creating virtual environment at: .venv
+2026-11-01T20:15:59.5287067Z Activate with: .venv/bin/activate
+2026-11-01T20:16:00.2005567Z Resolved 63 packages in 574ms
+2026-11-01T20:16:00.2234468Z Downloading kiwisolver (1.4MiB)
+2026-11-01T20:16:00.2235093Z Downloading sympy (6.0MiB)
+2026-11-01T20:16:00.2236765Z Downloading pydantic-core (2.1MiB)
+2026-11-01T20:16:00.2237799Z Downloading ruff (9.9MiB)
+2026-11-01T20:16:00.2239794Z Downloading pandas (10.3MiB)
+2026-11-01T20:16:00.2240824Z Downloading pygments (1.2MiB)
+2026-11-01T20:16:00.2244784Z Downloading fonttools (5.2MiB)
+2026-11-01T20:16:00.2245321Z Downloading matplotlib (9.4MiB)
+2026-11-01T20:16:00.2246210Z Downloading numpy (16.0MiB)
+2026-11-01T20:16:00.2247475Z Downloading sqlalchemy (4.5MiB)
+2026-11-01T20:16:00.2248601Z Downloading pillow (6.6MiB)
+2026-11-01T20:16:00.2249597Z Downloading imageio-ffmpeg (28.1MiB)
+2026-11-01T20:16:00.2253924Z Downloading networkx (2.0MiB)
+2026-11-01T20:16:00.2255874Z Downloading pygame (13.3MiB)
+2026-11-01T20:16:00.2257283Z Downloading box2d (3.5MiB)
+2026-11-01T20:16:00.2281592Z Downloading torch (187.2MiB)
+2026-11-01T20:16:00.2383692Z Downloading hypothesis (1.1MiB)
+2026-11-01T20:16:00.3864437Z  Downloaded hypothesis
+2026-11-01T20:16:00.3977893Z  Downloaded pygments
+2026-11-01T20:16:00.4058724Z  Downloaded kiwisolver
+2026-11-01T20:16:00.4407848Z  Downloaded pydantic-core
+2026-11-01T20:16:00.4408535Z  Downloaded networkx
+2026-11-01T20:16:00.4878537Z  Downloaded box2d
+2026-11-01T20:16:00.5207763Z  Downloaded sqlalchemy
+2026-11-01T20:16:00.5441410Z  Downloaded fonttools
+2026-11-01T20:16:00.5525112Z  Downloaded sympy
+2026-11-01T20:16:00.5710073Z  Downloaded pillow
+2026-11-01T20:16:00.6397751Z  Downloaded ruff
+2026-11-01T20:16:00.6419691Z  Downloaded matplotlib
+2026-11-01T20:16:00.6660870Z  Downloaded pandas
+2026-11-01T20:16:00.6869181Z  Downloaded pygame
+2026-11-01T20:16:00.7042881Z  Downloaded numpy
+2026-11-01T20:16:00.7742010Z  Downloaded imageio-ffmpeg
+2026-11-01T20:16:01.8385625Z  Downloaded torch
+2026-11-01T20:16:01.8387180Z Prepared 63 packages in 1.63s
+2026-11-01T20:16:02.1331627Z Installed 63 packages in 294ms
+2026-11-01T20:16:02.1332006Z  + alembic==1.20.0
+2026-11-01T20:16:02.1332255Z  + annotated-doc==0.0.5
+2026-11-01T20:16:02.1332511Z  + annotated-types==0.8.0
+2026-11-01T20:16:02.1332731Z  + anyio==4.15.1
+2026-11-01T20:16:02.1332938Z  + box2d==2.3.10
+2026-11-01T20:16:02.1333151Z  + certifi==2026.7.22
+2026-11-01T20:16:02.1333357Z  + click==8.5.0
+2026-11-01T20:16:02.1333571Z  + cloudpickle==3.1.2
+2026-11-01T20:16:02.1333939Z  + colorlog==6.12.0
+2026-11-01T20:16:02.1334372Z  + contourpy==1.4.0
+2026-11-01T20:16:02.1334574Z  + coverage==7.16.2
+2026-11-01T20:16:02.1334765Z  + cycler==0.12.1
+2026-11-01T20:16:02.1335002Z  + farama-notifications==0.0.6
+2026-11-01T20:16:02.1335273Z  + fastapi==0.143.2
+2026-11-01T20:16:02.1335474Z  + filelock==4.2.0
+2026-11-01T20:16:02.1335666Z  + fonttools==4.67.0
+2026-11-01T20:16:02.1335887Z  + fsspec==2026.9.0
+2026-11-01T20:16:02.1336104Z  + gymnasium==1.4.0
+2026-11-01T20:16:02.1336416Z  + h11==0.16.0
+2026-11-01T20:16:02.1336784Z  + httpcore==1.0.9
+2026-11-01T20:16:02.1337288Z  + httpx==0.28.1
+2026-11-01T20:16:02.1337513Z  + hypothesis==6.170.1
+2026-11-01T20:16:02.1337741Z  + idna==3.20
+2026-11-01T20:16:02.1337928Z  + imageio==2.38.1
+2026-11-01T20:16:02.1338125Z  + imageio-ffmpeg==0.6.0
+2026-11-01T20:16:02.1338358Z  + iniconfig==2.3.1
+2026-11-01T20:16:02.1338577Z  + jinja2==3.1.6
+2026-11-01T20:16:02.1338814Z  + kiwisolver==1.5.1
+2026-11-01T20:16:02.1339025Z  + mako==1.4.3
+2026-11-01T20:16:02.1339243Z  + markupsafe==3.0.4
+2026-11-01T20:16:02.1339545Z  + matplotlib==3.11.2
+2026-11-01T20:16:02.1339764Z  + mpmath==1.3.0
+2026-11-01T20:16:02.1339957Z  + networkx==3.7
+2026-11-01T20:16:02.1340158Z  + numpy==2.5.4
+2026-11-01T20:16:02.1341384Z  + opentelemetry-api==1.45.1
+2026-11-01T20:16:02.1341619Z  + optuna==5.0.0
+2026-11-01T20:16:02.1341812Z  + packaging==26.3
+2026-11-01T20:16:02.1342221Z  + pandas==3.0.6
+2026-11-01T20:16:02.1342441Z  + pillow==12.3.0
+2026-11-01T20:16:02.1342655Z  + pluggy==1.7.0
+2026-11-01T20:16:02.1342854Z  + psutil==7.2.2
+2026-11-01T20:16:02.1343056Z  + pydantic==2.14.1
+2026-11-01T20:16:02.1343267Z  + pydantic-core==2.50.1
+2026-11-01T20:16:02.1343484Z  + pygame==2.6.1
+2026-11-01T20:16:02.1343682Z  + pygments==2.21.0
+2026-11-01T20:16:02.1343885Z  + pyparsing==3.3.3
+2026-11-01T20:16:02.1366726Z  + pytest==9.1.1
+2026-11-01T20:16:02.1367479Z  + pytest-cov==7.1.0
+2026-11-01T20:16:02.1371706Z  + python-dateutil==2.9.0.post0
+2026-11-01T20:16:02.1372162Z  + pyyaml==6.0.3
+2026-11-01T20:16:02.1372439Z  + ruff==0.17.1
+2026-11-01T20:16:02.1372797Z  + setuptools==84.0.0
+2026-11-01T20:16:02.1373076Z  + six==1.17.0
+2026-11-01T20:16:02.1373407Z  + sortedcontainers==2.4.0
+2026-11-01T20:16:02.1373735Z  + sqlalchemy==2.1.4
+2026-11-01T20:16:02.1373999Z  + stable-baselines3==2.9.0
+2026-11-01T20:16:02.1374247Z  + starlette==1.8.0
+2026-11-01T20:16:02.1374471Z  + sympy==1.14.0
+2026-11-01T20:16:02.1374665Z  + torch==2.14.1+cpu
+2026-11-01T20:16:02.1374816Z  + tqdm==4.70.1
+2026-11-01T20:16:02.1374963Z  + typing-extensions==4.16.0
+2026-11-01T20:16:02.1375162Z  + typing-inspection==0.4.4
+2026-11-01T20:16:02.1375348Z  + uvicorn==0.54.0
+2026-11-01T20:16:03.0639541Z Resolved 1 package in 814ms
+2026-11-01T20:16:03.0642417Z    Building lunarlab @ file:///home/runner/work/lunarlab/lunarlab
+2026-11-01T20:16:03.1921010Z       Built lunarlab @ file:///home/runner/work/lunarlab/lunarlab
+2026-11-01T20:16:03.1932739Z Prepared 1 package in 129ms
+2026-11-01T20:16:03.1946031Z Installed 1 package in 1ms
+2026-11-01T20:16:03.1946366Z  + lunarlab==0.1.0 (from file:///home/runner/work/lunarlab/lunarlab)
+2026-11-01T20:16:03.2053612Z ##[group]Run npm ci
+2026-11-01T20:16:03.2053796Z [36;1mnpm ci[0m
+2026-11-01T20:16:03.2053925Z [36;1mnpm run build[0m
+2026-11-01T20:16:03.2054101Z [36;1mnpx playwright install --with-deps chromium[0m
+2026-11-01T20:16:03.2080561Z shell: /usr/bin/bash -e {0}
+2026-11-01T20:16:03.2080754Z env:
+2026-11-01T20:16:03.2080924Z   SDL_VIDEODRIVER: dummy
+2026-11-01T20:16:03.2081104Z   SDL_AUDIODRIVER: dummy
+2026-11-01T20:16:03.2081269Z   UV_PYTHON: 3.12
+2026-11-01T20:16:03.2081466Z   UV_CACHE_DIR: /home/runner/work/_temp/setup-uv-cache
+2026-11-01T20:16:03.2081694Z ##[endgroup]
+2026-11-01T20:16:05.9622553Z 
+2026-11-01T20:16:05.9623281Z added 100 packages, and audited 101 packages in 3s
+2026-11-01T20:16:05.9623508Z 
+2026-11-01T20:16:05.9623611Z 15 packages are looking for funding
+2026-11-01T20:16:05.9623797Z   run `npm fund` for details
+2026-11-01T20:16:05.9628418Z 
+2026-11-01T20:16:05.9628498Z found 0 vulnerabilities
+2026-11-01T20:16:06.0651634Z 
+2026-11-01T20:16:06.0652133Z > lunarlab-frontend@0.1.0 build
+2026-11-01T20:16:06.0652497Z > tsc -b && vite build
+2026-11-01T20:16:06.0652646Z 
+2026-11-01T20:16:10.3854951Z [36mvite v8.3.4 [32mbuilding client environment for production...[36m[39m
+2026-11-01T20:16:10.3918740Z transforming...
+2026-11-01T20:16:10.6545245Z ✓ 2598 modules transformed.
+2026-11-01T20:16:10.7293392Z rendering chunks...
+2026-11-01T20:16:10.8722317Z computing gzip size...
+2026-11-01T20:16:10.8851061Z dist/index.html                                                     0.62 kB │ gzip:   0.40 kB
+2026-11-01T20:16:10.8851661Z dist/assets/ibm-plex-mono-vietnamese-500-normal-C8zxqsMH.woff       5.61 kB
+2026-11-01T20:16:10.8852091Z dist/assets/ibm-plex-mono-vietnamese-400-normal-DDuiU_S-.woff       5.62 kB
+2026-11-01T20:16:10.8852436Z dist/assets/ibm-plex-mono-cyrillic-ext-500-normal-BIfNGwUT.woff     5.77 kB
+2026-11-01T20:16:10.8852781Z dist/assets/ibm-plex-mono-cyrillic-ext-400-normal-DMdlQ8Kv.woff     5.82 kB
+2026-11-01T20:16:10.8853163Z dist/assets/ibm-plex-mono-vietnamese-400-normal-BulugwFq.woff2      5.86 kB
+2026-11-01T20:16:10.8853509Z dist/assets/ibm-plex-mono-vietnamese-500-normal-DZ4AoWbu.woff2      6.04 kB
+2026-11-01T20:16:10.8853847Z dist/assets/ibm-plex-sans-vietnamese-400-normal-fK1oJ5dG.woff       6.39 kB
+2026-11-01T20:16:10.8854188Z dist/assets/ibm-plex-sans-vietnamese-600-normal-DgdngZtN.woff       6.58 kB
+2026-11-01T20:16:10.8854839Z dist/assets/ibm-plex-sans-vietnamese-500-normal-BEb3_waV.woff       6.58 kB
+2026-11-01T20:16:10.8855201Z dist/assets/ibm-plex-mono-cyrillic-ext-400-normal-xuaO2J-f.woff2    6.91 kB
+2026-11-01T20:16:10.8855609Z dist/assets/ibm-plex-mono-cyrillic-ext-500-normal-BqneJy0T.woff2    6.97 kB
+2026-11-01T20:16:10.8856019Z dist/assets/ibm-plex-mono-cyrillic-400-normal-CEL4l2ZJ.woff         7.20 kB
+2026-11-01T20:16:10.8856387Z dist/assets/ibm-plex-mono-cyrillic-500-normal-Ael50iVv.woff         7.20 kB
+2026-11-01T20:16:10.8857074Z dist/assets/ibm-plex-sans-vietnamese-400-normal-DG4YqDda.woff2      8.20 kB
+2026-11-01T20:16:10.8857416Z dist/assets/ibm-plex-mono-cyrillic-400-normal-BSMlKf0J.woff2        8.35 kB
+2026-11-01T20:16:10.8857749Z dist/assets/ibm-plex-sans-vietnamese-500-normal-e4dixQRQ.woff2      8.41 kB
+2026-11-01T20:16:10.8858081Z dist/assets/ibm-plex-mono-cyrillic-500-normal-Bq9vWWag.woff2        8.46 kB
+2026-11-01T20:16:10.8858418Z dist/assets/ibm-plex-sans-vietnamese-600-normal-DpPYBSTl.woff2      8.46 kB
+2026-11-01T20:16:10.8858757Z dist/assets/ibm-plex-sans-greek-400-normal-D9ESIMu3.woff            8.76 kB
+2026-11-01T20:16:10.8859089Z dist/assets/ibm-plex-sans-greek-500-normal-CuWXN6rf.woff            9.14 kB
+2026-11-01T20:16:10.8859417Z dist/assets/ibm-plex-sans-greek-600-normal-D-CqTdkO.woff            9.22 kB
+2026-11-01T20:16:10.8859747Z dist/assets/ibm-plex-sans-greek-400-normal-_efipK4i.woff2           9.94 kB
+2026-11-01T20:16:10.8860077Z dist/assets/ibm-plex-sans-cyrillic-ext-400-normal-Dsrv2Tcn.woff    10.28 kB
+2026-11-01T20:16:10.8860418Z dist/assets/ibm-plex-sans-greek-600-normal-DzTrcv_p.woff2          10.36 kB
+2026-11-01T20:16:10.8860939Z dist/assets/ibm-plex-sans-greek-500-normal-JMMifIXV.woff2          10.37 kB
+2026-11-01T20:16:10.8861274Z dist/assets/ibm-plex-sans-cyrillic-ext-500-normal-DB5PtV2g.woff    10.59 kB
+2026-11-01T20:16:10.8861631Z dist/assets/ibm-plex-sans-cyrillic-ext-600-normal-Bz0x94Yp.woff    10.61 kB
+2026-11-01T20:16:10.8861973Z dist/assets/ibm-plex-mono-latin-ext-400-normal-D3D2R8hC.woff       11.76 kB
+2026-11-01T20:16:10.8862434Z dist/assets/ibm-plex-mono-latin-ext-500-normal-CZ70TYgx.woff       11.76 kB
+2026-11-01T20:16:10.8862975Z dist/assets/ibm-plex-sans-cyrillic-ext-400-normal-g30qAdWV.woff2   12.14 kB
+2026-11-01T20:16:10.8863380Z dist/assets/ibm-plex-sans-cyrillic-ext-600-normal-DUMzJB7m.woff2   12.30 kB
+2026-11-01T20:16:10.8863714Z dist/assets/ibm-plex-sans-cyrillic-ext-500-normal-Cs5J6C77.woff2   12.30 kB
+2026-11-01T20:16:10.8864092Z dist/assets/ibm-plex-mono-latin-400-normal-CvHOgSBP.woff           13.14 kB
+2026-11-01T20:16:10.8864518Z dist/assets/ibm-plex-mono-latin-500-normal-CB9ihrfo.woff           13.15 kB
+2026-11-01T20:16:10.8864853Z dist/assets/ibm-plex-mono-latin-ext-400-normal-BmRBH3aV.woff2      13.34 kB
+2026-11-01T20:16:10.8865185Z dist/assets/ibm-plex-mono-latin-ext-500-normal-CAhNIIs5.woff2      13.43 kB
+2026-11-01T20:16:10.8865522Z dist/assets/ibm-plex-sans-cyrillic-400-normal-BTotfTJu.woff        13.51 kB
+2026-11-01T20:16:10.8865856Z dist/assets/ibm-plex-sans-cyrillic-500-normal-ByOcLdNv.woff        13.85 kB
+2026-11-01T20:16:10.8866188Z dist/assets/ibm-plex-sans-cyrillic-600-normal-BGq0mW3O.woff        13.88 kB
+2026-11-01T20:16:10.8866653Z dist/assets/ibm-plex-sans-latin-ext-400-normal-RBey6euL.woff       14.36 kB
+2026-11-01T20:16:10.8866984Z dist/assets/ibm-plex-mono-latin-400-normal-DMJ8VG8y.woff2          14.70 kB
+2026-11-01T20:16:10.8867317Z dist/assets/ibm-plex-sans-latin-ext-500-normal-D0aIdm-b.woff       14.73 kB
+2026-11-01T20:16:10.8867647Z dist/assets/ibm-plex-sans-latin-ext-600-normal-DIrixKbi.woff       14.77 kB
+2026-11-01T20:16:10.8867999Z dist/assets/ibm-plex-sans-cyrillic-400-normal-DZqxrq2p.woff2       14.80 kB
+2026-11-01T20:16:10.8868330Z dist/assets/ibm-plex-mono-latin-500-normal-DSY6xOcd.woff2          14.88 kB
+2026-11-01T20:16:10.8868739Z dist/assets/ibm-plex-sans-cyrillic-500-normal-CocWQlwt.woff2       15.00 kB
+2026-11-01T20:16:10.8869236Z dist/assets/ibm-plex-sans-cyrillic-600-normal-71GNu3SW.woff2       15.04 kB
+2026-11-01T20:16:10.8869858Z dist/assets/ibm-plex-sans-latin-ext-400-normal-C5H60-Va.woff2      15.98 kB
+2026-11-01T20:16:10.8870340Z dist/assets/ibm-plex-sans-latin-ext-600-normal-DOrvGEcy.woff2      16.44 kB
+2026-11-01T20:16:10.8870833Z dist/assets/ibm-plex-sans-latin-ext-500-normal-DakdToA3.woff2      16.45 kB
+2026-11-01T20:16:10.8871308Z dist/assets/ibm-plex-sans-latin-400-normal-CYLoc0-x.woff           22.10 kB
+2026-11-01T20:16:10.8871782Z dist/assets/ibm-plex-sans-latin-400-normal-CDDApCn2.woff2          22.58 kB
+2026-11-01T20:16:10.8872259Z dist/assets/ibm-plex-sans-latin-600-normal-Cu4Hd6ag.woff           23.87 kB
+2026-11-01T20:16:10.8872732Z dist/assets/ibm-plex-sans-latin-500-normal-BgVn5rGT.woff           23.91 kB
+2026-11-01T20:16:10.8873215Z dist/assets/ibm-plex-sans-latin-500-normal-6ng42L7E.woff2          24.18 kB
+2026-11-01T20:16:10.8873689Z dist/assets/ibm-plex-sans-latin-600-normal-CuJfVYMP.woff2          24.25 kB
+2026-11-01T20:16:10.8874294Z dist/assets/index-B9aBJISs.css                                     56.43 kB │ gzip:   9.83 kB
+2026-11-01T20:16:10.8874867Z dist/assets/FlightScene-D3VJka2J.js                                 2.43 kB │ gzip:   1.21 kB
+2026-11-01T20:16:10.8875429Z dist/assets/Scene3D-DKEDt0-w.js                                   621.28 kB │ gzip: 157.25 kB
+2026-11-01T20:16:10.8875973Z dist/assets/index-BbdU92JO.js                                     934.99 kB │ gzip: 273.82 kB
+2026-11-01T20:16:10.8876221Z 
+2026-11-01T20:16:10.8876962Z [32m✓ built in 500ms[39m
+2026-11-01T20:16:11.4330866Z Installing dependencies...
+2026-11-01T20:16:11.4419724Z Switching to root user to install dependencies...
+2026-11-01T20:16:11.5218010Z Get:1 file:/etc/apt/apt-mirrors.txt Mirrorlist [144 B]
+2026-11-01T20:16:11.5625671Z Get:6 https://packages.microsoft.com/ubuntu/26.04/prod resolute InRelease [3964 B]
+2026-11-01T20:16:11.5728050Z Hit:2 http://azure.archive.ubuntu.com/ubuntu resolute InRelease
+2026-11-01T20:16:11.5747183Z Get:3 http://azure.archive.ubuntu.com/ubuntu resolute-updates InRelease [137 kB]
+2026-11-01T20:16:11.5769818Z Get:4 http://azure.archive.ubuntu.com/ubuntu resolute-backports InRelease [137 kB]
+2026-11-01T20:16:11.5788921Z Get:5 http://azure.archive.ubuntu.com/ubuntu resolute-security InRelease [137 kB]
+2026-11-01T20:16:11.5905878Z Get:7 https://packages.microsoft.com/ubuntu/26.04/prod resolute/main arm64 Packages [120 kB]
+2026-11-01T20:16:11.6064278Z Get:8 https://packages.microsoft.com/ubuntu/26.04/prod resolute/main amd64 Packages [131 kB]
+2026-11-01T20:16:11.6149588Z Get:9 http://azure.archive.ubuntu.com/ubuntu resolute-updates/main amd64v3 Packages [804 kB]
+2026-11-01T20:16:11.6497248Z Get:10 http://azure.archive.ubuntu.com/ubuntu resolute-updates/main Translation-en [184 kB]
+2026-11-01T20:16:11.6887615Z Get:11 http://azure.archive.ubuntu.com/ubuntu resolute-updates/universe amd64v3 Packages [375 kB]
+2026-11-01T20:16:11.7178217Z Get:12 http://azure.archive.ubuntu.com/ubuntu resolute-updates/universe Translation-en [118 kB]
+2026-11-01T20:16:11.7500872Z Get:13 http://azure.archive.ubuntu.com/ubuntu resolute-updates/restricted amd64v3 Packages [543 kB]
+2026-11-01T20:16:11.7578483Z Get:14 http://azure.archive.ubuntu.com/ubuntu resolute-updates/restricted Translation-en [112 kB]
+2026-11-01T20:16:11.7794291Z Get:15 http://azure.archive.ubuntu.com/ubuntu resolute-security/main amd64v3 Packages [608 kB]
+2026-11-01T20:16:11.7987747Z Get:16 http://azure.archive.ubuntu.com/ubuntu resolute-security/main Translation-en [141 kB]
+2026-11-01T20:16:11.7991697Z Get:17 http://azure.archive.ubuntu.com/ubuntu resolute-security/universe amd64v3 Packages [206 kB]
+2026-11-01T20:16:11.8005322Z Get:18 http://azure.archive.ubuntu.com/ubuntu resolute-security/universe Translation-en [67.9 kB]
+2026-11-01T20:16:14.6089826Z Fetched 3824 kB in 0s (11.0 MB/s)
+2026-11-01T20:16:15.1267086Z Reading package lists...
+2026-11-01T20:16:15.1489101Z Reading package lists...
+2026-11-01T20:16:15.3265378Z Building dependency tree...
+2026-11-01T20:16:15.3271529Z Reading state information...
+2026-11-01T20:16:15.3609688Z libasound2t64 is already the newest version (1.2.15.3-1ubuntu1.1).
+2026-11-01T20:16:15.3610187Z libasound2t64 set to manually installed.
+2026-11-01T20:16:15.3610617Z libatk-bridge2.0-0t64 is already the newest version (2.60.4-0ubuntu0.1).
+2026-11-01T20:16:15.3611043Z libatk-bridge2.0-0t64 set to manually installed.
+2026-11-01T20:16:15.3611453Z libatk1.0-0t64 is already the newest version (2.60.4-0ubuntu0.1).
+2026-11-01T20:16:15.3611821Z libatk1.0-0t64 set to manually installed.
+2026-11-01T20:16:15.3612224Z libatspi2.0-0t64 is already the newest version (2.60.4-0ubuntu0.1).
+2026-11-01T20:16:15.3612605Z libatspi2.0-0t64 set to manually installed.
+2026-11-01T20:16:15.3612987Z libcairo2 is already the newest version (1.18.4-3).
+2026-11-01T20:16:15.3613320Z libcairo2 set to manually installed.
+2026-11-01T20:16:15.3613688Z libcups2t64 is already the newest version (2.4.16-1ubuntu1.3).
+2026-11-01T20:16:15.3614053Z libcups2t64 set to manually installed.
+2026-11-01T20:16:15.3614413Z libdbus-1-3 is already the newest version (1.16.2-2ubuntu4).
+2026-11-01T20:16:15.3614780Z libdbus-1-3 set to manually installed.
+2026-11-01T20:16:15.3615104Z libdrm2 is already the newest version (2.4.131-1).
+2026-11-01T20:16:15.3615428Z libdrm2 set to manually installed.
+2026-11-01T20:16:15.3615770Z libgbm1 is already the newest version (26.0.8-1ubuntu0.3).
+2026-11-01T20:16:15.3616112Z libgbm1 set to manually installed.
+2026-11-01T20:16:15.3616603Z libglib2.0-0t64 is already the newest version (2.88.0-1ubuntu0.1).
+2026-11-01T20:16:15.3616979Z libglib2.0-0t64 set to manually installed.
+2026-11-01T20:16:15.3617368Z libnspr4 is already the newest version (2:4.38.2-1ubuntu1).
+2026-11-01T20:16:15.3618040Z libnspr4 set to manually installed.
+2026-11-01T20:16:15.3618399Z libnss3 is already the newest version (2:3.120-1ubuntu2.2).
+2026-11-01T20:16:15.3618733Z libnss3 set to manually installed.
+2026-11-01T20:16:15.3619082Z libpango-1.0-0 is already the newest version (1.57.0-1).
+2026-11-01T20:16:15.3619434Z libpango-1.0-0 set to manually installed.
+2026-11-01T20:16:15.3619822Z libx11-6 is already the newest version (2:1.8.13-1ubuntu0.1).
+2026-11-01T20:16:15.3620166Z libx11-6 set to manually installed.
+2026-11-01T20:16:15.3620509Z libxcb1 is already the newest version (1.17.0-2ubuntu1).
+2026-11-01T20:16:15.3620842Z libxcb1 set to manually installed.
+2026-11-01T20:16:15.3621212Z libxcomposite1 is already the newest version (1:0.4.6-1build1).
+2026-11-01T20:16:15.3621591Z libxcomposite1 set to manually installed.
+2026-11-01T20:16:15.3621951Z libxdamage1 is already the newest version (1:1.1.7-1).
+2026-11-01T20:16:15.3622289Z libxdamage1 set to manually installed.
+2026-11-01T20:16:15.3622647Z libxext6 is already the newest version (2:1.3.4-1build3).
+2026-11-01T20:16:15.3622985Z libxext6 set to manually installed.
+2026-11-01T20:16:15.3623342Z libxfixes3 is already the newest version (1:6.0.0-2build2).
+2026-11-01T20:16:15.3623690Z libxfixes3 set to manually installed.
+2026-11-01T20:16:15.3624038Z libxkbcommon0 is already the newest version (1.13.1-1).
+2026-11-01T20:16:15.3624394Z libxkbcommon0 set to manually installed.
+2026-11-01T20:16:15.3624759Z libxrandr2 is already the newest version (2:1.5.4-1build1).
+2026-11-01T20:16:15.3625106Z libxrandr2 set to manually installed.
+2026-11-01T20:16:15.3625466Z xvfb is already the newest version (2:21.1.22-1ubuntu1.3).
+2026-11-01T20:16:15.3625908Z fonts-noto-color-emoji is already the newest version (2.051-1build1).
+2026-11-01T20:16:15.3626383Z libfontconfig1 is already the newest version (2.17.1-3ubuntu1).
+2026-11-01T20:16:15.3626887Z libfontconfig1 set to manually installed.
+2026-11-01T20:16:15.3627306Z libfreetype6 is already the newest version (2.14.2+dfsg-1ubuntu0.2).
+2026-11-01T20:16:15.3627688Z libfreetype6 set to manually installed.
+2026-11-01T20:16:15.3628089Z fonts-liberation is already the newest version (1:2.1.5-3build1).
+2026-11-01T20:16:15.3628472Z fonts-liberation set to manually installed.
+2026-11-01T20:16:15.4108050Z Solving dependencies...
+2026-11-01T20:16:15.4955769Z The following additional packages will be installed:
+2026-11-01T20:16:15.4957375Z   xfonts-encodings xfonts-utils
+2026-11-01T20:16:15.4964781Z Recommended packages:
+2026-11-01T20:16:15.4965114Z   fonts-ipafont-mincho fonts-tlwg-loma
+2026-11-01T20:16:15.5181439Z The following NEW packages will be installed:
+2026-11-01T20:16:15.5182087Z   fonts-freefont-ttf fonts-ipafont-gothic fonts-tlwg-loma-otf fonts-unifont
+2026-11-01T20:16:15.5190682Z   fonts-wqy-zenhei xfonts-cyrillic xfonts-encodings xfonts-scalable
+2026-11-01T20:16:15.5191086Z   xfonts-utils
+2026-11-01T20:16:15.5386416Z 0 upgraded, 9 newly installed, 0 to remove and 16 not upgraded.
+2026-11-01T20:16:15.5386905Z Need to get 21.9 MB of archives.
+2026-11-01T20:16:15.5387186Z After this operation, 80.2 MB of additional disk space will be used.
+2026-11-01T20:16:15.5387481Z Get:1 file:/etc/apt/apt-mirrors.txt Mirrorlist [144 B]
+2026-11-01T20:16:15.5982700Z Get:2 http://azure.archive.ubuntu.com/ubuntu resolute/universe amd64v3 fonts-ipafont-gothic all 00303-23ubuntu1 [3703 kB]
+2026-11-01T20:16:15.6665100Z Get:3 http://azure.archive.ubuntu.com/ubuntu resolute/main amd64v3 fonts-freefont-ttf all 20211204+svn4273-4build1 [5656 kB]
+2026-11-01T20:16:15.7865855Z Get:4 http://azure.archive.ubuntu.com/ubuntu resolute/universe amd64v3 fonts-tlwg-loma-otf all 1:0.7.3-1build1 [106 kB]
+2026-11-01T20:16:15.8358368Z Get:5 http://azure.archive.ubuntu.com/ubuntu resolute/universe amd64v3 fonts-unifont all 1:16.0.04-1build1 [3169 kB]
+2026-11-01T20:16:15.9179728Z Get:6 http://azure.archive.ubuntu.com/ubuntu resolute/universe amd64v3 fonts-wqy-zenhei all 0.9.45-8build1 [7863 kB]
+2026-11-01T20:16:16.0693137Z Get:7 http://azure.archive.ubuntu.com/ubuntu resolute/main amd64v3 xfonts-encodings all 1:1.0.5-0ubuntu3 [576 kB]
+2026-11-01T20:16:16.1878336Z Get:8 http://azure.archive.ubuntu.com/ubuntu resolute/main amd64v3 xfonts-utils amd64 1:7.7+7build1 [97.3 kB]
+2026-11-01T20:16:16.2161491Z Get:9 http://azure.archive.ubuntu.com/ubuntu resolute/universe amd64v3 xfonts-cyrillic all 1:1.0.5+nmu1build1 [384 kB]
+2026-11-01T20:16:16.2453667Z Get:10 http://azure.archive.ubuntu.com/ubuntu resolute/universe amd64v3 xfonts-scalable all 1:1.0.3-1.3build1 [304 kB]
+2026-11-01T20:16:16.4981598Z Fetched 21.9 MB in 1s (30.4 MB/s)
+2026-11-01T20:16:16.5324452Z Selecting previously unselected package fonts-ipafont-gothic.
+2026-11-01T20:16:16.5581402Z (Reading database ... 
+2026-11-01T20:16:16.5581715Z (Reading database ... 5%
+2026-11-01T20:16:16.5581934Z (Reading database ... 10%
+2026-11-01T20:16:16.5582088Z (Reading database ... 15%
+2026-11-01T20:16:16.5582235Z (Reading database ... 20%
+2026-11-01T20:16:16.5582386Z (Reading database ... 25%
+2026-11-01T20:16:16.5582533Z (Reading database ... 30%
+2026-11-01T20:16:16.5582716Z (Reading database ... 35%
+2026-11-01T20:16:16.5582857Z (Reading database ... 40%
+2026-11-01T20:16:16.5582997Z (Reading database ... 45%
+2026-11-01T20:16:16.5583137Z (Reading database ... 50%
+2026-11-01T20:16:16.6602814Z (Reading database ... 55%
+2026-11-01T20:16:16.8071661Z (Reading database ... 60%
+2026-11-01T20:16:16.9660077Z (Reading database ... 65%
+2026-11-01T20:16:17.1666271Z (Reading database ... 70%
+2026-11-01T20:16:17.2649929Z (Reading database ... 75%
+2026-11-01T20:16:17.4110428Z (Reading database ... 80%
+2026-11-01T20:16:17.6132850Z (Reading database ... 85%
+2026-11-01T20:16:17.7857995Z (Reading database ... 90%
+2026-11-01T20:16:17.9163650Z (Reading database ... 95%
+2026-11-01T20:16:17.9163896Z (Reading database ... 100%
+2026-11-01T20:16:17.9164158Z (Reading database ... 212715 files and directories currently installed.)
+2026-11-01T20:16:17.9200697Z Preparing to unpack .../0-fonts-ipafont-gothic_00303-23ubuntu1_all.deb ...
+2026-11-01T20:16:17.9284247Z Unpacking fonts-ipafont-gothic (00303-23ubuntu1) ...
+2026-11-01T20:16:18.0220136Z Selecting previously unselected package fonts-freefont-ttf.
+2026-11-01T20:16:18.0325992Z Preparing to unpack .../1-fonts-freefont-ttf_20211204+svn4273-4build1_all.deb ...
+2026-11-01T20:16:18.0333417Z Unpacking fonts-freefont-ttf (20211204+svn4273-4build1) ...
+2026-11-01T20:16:18.1206018Z Selecting previously unselected package fonts-tlwg-loma-otf.
+2026-11-01T20:16:18.1312887Z Preparing to unpack .../2-fonts-tlwg-loma-otf_1%3a0.7.3-1build1_all.deb ...
+2026-11-01T20:16:18.1318100Z Unpacking fonts-tlwg-loma-otf (1:0.7.3-1build1) ...
+2026-11-01T20:16:18.1511495Z Selecting previously unselected package fonts-unifont.
+2026-11-01T20:16:18.1617947Z Preparing to unpack .../3-fonts-unifont_1%3a16.0.04-1build1_all.deb ...
+2026-11-01T20:16:18.1623616Z Unpacking fonts-unifont (1:16.0.04-1build1) ...
+2026-11-01T20:16:18.3588286Z Selecting previously unselected package fonts-wqy-zenhei.
+2026-11-01T20:16:18.3695561Z Preparing to unpack .../4-fonts-wqy-zenhei_0.9.45-8build1_all.deb ...
+2026-11-01T20:16:18.3807200Z Unpacking fonts-wqy-zenhei (0.9.45-8build1) ...
+2026-11-01T20:16:18.5063030Z Selecting previously unselected package xfonts-encodings.
+2026-11-01T20:16:18.5168624Z Preparing to unpack .../5-xfonts-encodings_1%3a1.0.5-0ubuntu3_all.deb ...
+2026-11-01T20:16:18.5173340Z Unpacking xfonts-encodings (1:1.0.5-0ubuntu3) ...
+2026-11-01T20:16:18.5404313Z Selecting previously unselected package xfonts-utils.
+2026-11-01T20:16:18.5513073Z Preparing to unpack .../6-xfonts-utils_1%3a7.7+7build1_amd64v3.deb ...
+2026-11-01T20:16:18.5519370Z Unpacking xfonts-utils (1:7.7+7build1) ...
+2026-11-01T20:16:18.5828968Z Selecting previously unselected package xfonts-cyrillic.
+2026-11-01T20:16:18.5942199Z Preparing to unpack .../7-xfonts-cyrillic_1%3a1.0.5+nmu1build1_all.deb ...
+2026-11-01T20:16:18.5948979Z Unpacking xfonts-cyrillic (1:1.0.5+nmu1build1) ...
+2026-11-01T20:16:18.6214821Z Selecting previously unselected package xfonts-scalable.
+2026-11-01T20:16:18.6324022Z Preparing to unpack .../8-xfonts-scalable_1%3a1.0.3-1.3build1_all.deb ...
+2026-11-01T20:16:18.6329598Z Unpacking xfonts-scalable (1:1.0.3-1.3build1) ...
+2026-11-01T20:16:18.6698532Z Setting up fonts-wqy-zenhei (0.9.45-8build1) ...
+2026-11-01T20:16:18.6819450Z Setting up fonts-freefont-ttf (20211204+svn4273-4build1) ...
+2026-11-01T20:16:18.6833925Z Setting up fonts-tlwg-loma-otf (1:0.7.3-1build1) ...
+2026-11-01T20:16:18.6849154Z Setting up xfonts-encodings (1:1.0.5-0ubuntu3) ...
+2026-11-01T20:16:18.6862993Z Setting up fonts-ipafont-gothic (00303-23ubuntu1) ...
+2026-11-01T20:16:18.6909622Z update-alternatives: using /usr/share/fonts/opentype/ipafont-gothic/ipag.ttf to provide /usr/share/fonts/truetype/fonts-japanese-gothic.ttf (fonts-japanese-gothic.ttf) in auto mode
+2026-11-01T20:16:18.6922057Z Setting up fonts-unifont (1:16.0.04-1build1) ...
+2026-11-01T20:16:18.6936584Z Setting up xfonts-utils (1:7.7+7build1) ...
+2026-11-01T20:16:18.6981395Z Setting up xfonts-cyrillic (1:1.0.5+nmu1build1) ...
+2026-11-01T20:16:18.8238155Z Setting up xfonts-scalable (1:1.0.3-1.3build1) ...
+2026-11-01T20:16:18.8568057Z Processing triggers for man-db (2.13.1-1build1) ...
+2026-11-01T20:16:18.8586276Z Not building database; man-db/auto-update is not 'true'.
+2026-11-01T20:16:18.8599065Z Processing triggers for fontconfig (2.17.1-3ubuntu1) ...
+2026-11-01T20:16:19.3685730Z 
+2026-11-01T20:16:19.3686452Z Running kernel seems to be up-to-date.
+2026-11-01T20:16:19.3686825Z 
+2026-11-01T20:16:19.3686910Z Restarting services...
+2026-11-01T20:16:19.3762377Z 
+2026-11-01T20:16:19.3763033Z Service restarts being deferred:
+2026-11-01T20:16:19.3765201Z  systemctl restart hosted-compute-agent.service
+2026-11-01T20:16:19.3765424Z 
+2026-11-01T20:16:19.3765999Z No containers need to be restarted.
+2026-11-01T20:16:19.3766173Z 
+2026-11-01T20:16:19.3766337Z No user sessions are running outdated binaries.
+2026-11-01T20:16:19.3766648Z 
+2026-11-01T20:16:19.3767056Z No VM guests are running outdated hypervisor (qemu) binaries on this host.
+2026-11-01T20:16:20.1410157Z Downloading Chrome for Testing 156.0.8078.4 (playwright chromium v1248) from https://cdn.playwright.dev/builds/cft/156.0.8078.4/linux64/chrome-linux64.zip
+2026-11-01T20:16:20.5052556Z |                                                                                |   0% of 191.1 MiB
+2026-11-01T20:16:20.7803367Z |■■■■■■■■                                                                        |  10% of 191.1 MiB
+2026-11-01T20:16:20.8915712Z |■■■■■■■■■■■■■■■■                                                                |  20% of 191.1 MiB
+2026-11-01T20:16:20.9456340Z |■■■■■■■■■■■■■■■■■■■■■■■■                                                        |  30% of 191.1 MiB
+2026-11-01T20:16:21.0170846Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                                |  40% of 191.1 MiB
+2026-11-01T20:16:21.0515875Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                        |  50% of 191.1 MiB
+2026-11-01T20:16:21.1026136Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                |  60% of 191.1 MiB
+2026-11-01T20:16:21.1594301Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                        |  70% of 191.1 MiB
+2026-11-01T20:16:21.2319356Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                |  80% of 191.1 MiB
+2026-11-01T20:16:21.2887618Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        |  90% of 191.1 MiB
+2026-11-01T20:16:21.3454154Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■| 100% of 191.1 MiB
+2026-11-01T20:16:22.9499471Z Chrome for Testing 156.0.8078.4 (playwright chromium v1248) downloaded to /home/runner/.cache/ms-playwright/chromium-1248
+2026-11-01T20:16:22.9501788Z Downloading FFmpeg (playwright ffmpeg v1013) from https://cdn.playwright.dev/dbazure/download/playwright/builds/ffmpeg/1013/ffmpeg-linux.zip
+2026-11-01T20:16:23.2545635Z |                                                                                |   0% of 2.2 MiB
+2026-11-01T20:16:23.2826677Z |■■■■■■■■                                                                        |  10% of 2.2 MiB
+2026-11-01T20:16:23.2924839Z |■■■■■■■■■■■■■■■■                                                                |  20% of 2.2 MiB
+2026-11-01T20:16:23.2994198Z |■■■■■■■■■■■■■■■■■■■■■■■■                                                        |  30% of 2.2 MiB
+2026-11-01T20:16:23.3036958Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                                |  40% of 2.2 MiB
+2026-11-01T20:16:23.3064849Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                        |  50% of 2.2 MiB
+2026-11-01T20:16:23.3106039Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                |  60% of 2.2 MiB
+2026-11-01T20:16:23.3123603Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                        |  70% of 2.2 MiB
+2026-11-01T20:16:23.3148618Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                |  80% of 2.2 MiB
+2026-11-01T20:16:23.3162403Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        |  90% of 2.2 MiB
+2026-11-01T20:16:23.3172564Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■| 100% of 2.2 MiB
+2026-11-01T20:16:23.3557995Z FFmpeg (playwright ffmpeg v1013) downloaded to /home/runner/.cache/ms-playwright/ffmpeg-1013
+2026-11-01T20:16:23.3560730Z Downloading Chrome Headless Shell 156.0.8078.4 (playwright chromium-headless-shell v1248) from https://cdn.playwright.dev/builds/cft/156.0.8078.4/linux64/chrome-headless-shell-linux64.zip
+2026-11-01T20:16:23.7095406Z |                                                                                |   0% of 120 MiB
+2026-11-01T20:16:23.9505925Z |■■■■■■■■                                                                        |  10% of 120 MiB
+2026-11-01T20:16:23.9812026Z |■■■■■■■■■■■■■■■■                                                                |  20% of 120 MiB
+2026-11-01T20:16:24.0154396Z |■■■■■■■■■■■■■■■■■■■■■■■■                                                        |  30% of 120 MiB
+2026-11-01T20:16:24.0370516Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                                |  40% of 120 MiB
+2026-11-01T20:16:24.0633105Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                        |  50% of 120 MiB
+2026-11-01T20:16:24.1035568Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                |  60% of 120 MiB
+2026-11-01T20:16:24.1272435Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                        |  70% of 120 MiB
+2026-11-01T20:16:24.1559869Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                |  80% of 120 MiB
+2026-11-01T20:16:24.1853014Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        |  90% of 120 MiB
+2026-11-01T20:16:24.2183175Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■| 100% of 120 MiB
+2026-11-01T20:16:25.3790098Z Chrome Headless Shell 156.0.8078.4 (playwright chromium-headless-shell v1248) downloaded to /home/runner/.cache/ms-playwright/chromium_headless_shell-1248
+2026-11-01T20:16:25.3996438Z ##[group]Run npx playwright test
+2026-11-01T20:16:25.3996853Z [36;1mnpx playwright test[0m
+2026-11-01T20:16:25.4021851Z shell: /usr/bin/bash -e {0}
+2026-11-01T20:16:25.4022003Z env:
+2026-11-01T20:16:25.4022146Z   SDL_VIDEODRIVER: dummy
+2026-11-01T20:16:25.4022288Z   SDL_AUDIODRIVER: dummy
+2026-11-01T20:16:25.4022419Z   UV_PYTHON: 3.12
+2026-11-01T20:16:25.4022571Z   UV_CACHE_DIR: /home/runner/work/_temp/setup-uv-cache
+2026-11-01T20:16:25.4022757Z   PW_CHANNEL: chromium
+2026-11-01T20:16:25.4022884Z ##[endgroup]
+2026-11-01T20:16:27.4598173Z [WebServer] LunarLab 0.1.0 - http://127.0.0.1:8766  (Ctrl+C to stop)
+2026-11-01T20:16:35.1418027Z [WebServer] LunarLab 0.1.0 - http://127.0.0.1:8767  (Ctrl+C to stop)
+2026-11-01T20:16:35.9587527Z 
+2026-11-01T20:16:35.9588184Z Running 15 tests using 1 worker
+2026-11-01T20:16:35.9588410Z 
+2026-11-01T20:16:43.3935891Z   ✓   1 e2e/audit.spec.ts:33:1 › a genuine DQN resume is offered with its contract and completes (6.8s)
+2026-11-01T20:16:44.4379539Z   ✓   2 e2e/audit.spec.ts:47:1 › a legacy DQN checkpoint never masquerades as a resume; warm restart needs confirmation (1.0s)
+2026-11-01T20:16:49.2539015Z   ✓   3 e2e/audit.spec.ts:64:1 › a frozen run never trains again; its interrupted final test is retried on the same checkpoint (4.8s)
+2026-11-01T20:16:49.9417279Z   ✓   4 e2e/audit.spec.ts:83:1 › an altered replay archive is refused with a clear message (678ms)
+2026-11-01T20:16:51.1768492Z   ✓   5 e2e/audit.spec.ts:91:1 › outcome details use the new categories; legacy results are marked as such (1.2s)
+2026-11-01T20:16:51.9442536Z   ✓   6 e2e/flows.spec.ts:20:1 › empty state offers a real first step (745ms)
+2026-11-01T20:17:01.1996665Z   ✓   7 e2e/flows.spec.ts:33:1 › watch a random agent: real recording opens in Flight Replay (9.2s)
+2026-11-01T20:17:02.2482999Z   ✓   8 e2e/flows.spec.ts:66:1 › create a reward configuration revision (1.0s)
+2026-11-01T20:17:10.3098427Z   ✓   9 e2e/flows.spec.ts:82:1 › launch a SMOKE job, observe progress, inspect the result (8.0s)
+2026-11-01T20:17:14.5353946Z   ✓  10 e2e/flows.spec.ts:96:1 › record a trained flight and replay it (4.2s)
+2026-11-01T20:17:27.6088050Z   ✓  11 e2e/flows.spec.ts:110:1 › stop a running STANDARD job at a safe boundary, then resume (13.1s)
+2026-11-01T20:17:28.5728973Z   ✓  12 e2e/flows.spec.ts:139:1 › compare and diagnose, learn (959ms)
+2026-11-01T20:17:37.4115949Z   ✓  13 e2e/flows.spec.ts:155:1 › fly it yourself: a keyboard flight is scored, recorded and replayable (8.8s)
+2026-11-01T20:17:38.1948993Z   ✓  14 e2e/flows.spec.ts:177:1 › learned rewards and robust statistics pages explain what is missing (760ms)
+2026-11-01T20:17:39.7008440Z   ✓  15 e2e/flows.spec.ts:188:1 › 3-D capture mode renders fixed time steps on demand (1.5s)
+2026-11-01T20:17:40.1352084Z 
+2026-11-01T20:17:40.1355009Z   15 passed (1.2m)
+2026-11-01T20:17:40.1645940Z Post job cleanup.
+2026-11-01T20:17:40.2520635Z (node:4194) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-11-01T20:17:40.2521426Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-11-01T20:17:40.2522669Z Cache hit occurred on the primary key node-cache-Linux-x64-npm-48a8e37fb158e1562edbbf953ad9b3dbdcc7ab97e3e06de76867566f7e5ea12c, not saving cache.
+2026-11-01T20:17:40.2643662Z Post job cleanup.
+2026-11-01T20:17:40.3708059Z (node:4208) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-11-01T20:17:40.3712277Z Cache hit occurred on key setup-uv-1-x86_64-unknown-linux-gnu-3.12-pruned-1be0913b0a4e07550796023acc1f2601890af255974de00f6df5864f015c147d, not saving cache.
+2026-11-01T20:17:40.3747515Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-11-01T20:17:40.3825165Z Post job cleanup.
+2026-11-01T20:17:40.4371903Z [command]/usr/bin/git version
+2026-11-01T20:17:40.4407243Z git version 2.56.0
+2026-11-01T20:17:40.4432279Z Temporarily overriding HOME='/home/runner/work/_temp/b9c798d6-6b29-49a1-8415-1384b3fe520b' before making global git config changes
+2026-11-01T20:17:40.4433094Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-01T20:17:40.4436351Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/lunarlab/lunarlab
+2026-11-01T20:17:40.4471068Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-01T20:17:40.4507324Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-01T20:17:40.4788774Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-01T20:17:40.4822852Z http.https://github.com/.extraheader
+2026-11-01T20:17:40.4830829Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-11-01T20:17:40.5110587Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-01T20:17:40.5361985Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-01T20:17:40.5389485Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-01T20:17:40.5775695Z Cleaning up orphan processes
+2026-11-01T20:17:40.6037056Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/setup-node@v4, astral-sh/setup-uv@v6. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
