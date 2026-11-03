@@ -28,6 +28,28 @@ three things.
 AI tools may not be authors. The guide requires a CRediT statement for human contributors only; see
 `CREDIT_CHECKLIST.md`.
 
+## The author's choices, 3 November 2026
+
+- **OpenAI model:** the author gave it as **GPT-6**, used for documentation. The records hold no OpenAI model
+  identifier, so this is the author's statement.
+- **Naming:** at the author's request, the manuscript names the tools by model and developer, "Anthropic's
+  Opus 5.5 model" and "OpenAI's GPT-6", rather than by product, Claude Code and ChatGPT. That still gives the
+  policy's model name, version and developer. "Opus 5.5" is the recorded model, `claude-opus-5-5`; the author
+  had written "Opus 5".
+- **Length:** the disclosure is cut to the policy's minimum:
+  - the two-sentence declaration before the references;
+  - one sentence in Section 5.3 (Methods) for the code, the runs and the figures;
+  - one clause in Figure 1's caption, for the explanatory image.
+
+  The Methods sentence keeps what the records show: Opus 5.5 also wrote the study runners, scripts and
+  figure code and ran the commands, and GPT-6 also supplied two code patches and the Linux audit. So it says
+  more than "code" and "documentation".
+- **Review sentence:** the declaration now includes "After using these tools, the author reviewed and edited
+  the content as needed and takes full responsibility for the content of the publication". This is the
+  author's statement, consistent with the CRediT roles the author confirmed the same day.
+
+This inventory keeps the product names, because they are what the records show.
+
 ## Claude Code (developer: Anthropic)
 
 Source: the workspace's Claude Code session transcript (session `719a132a-9630-4aa9-aea5-88625f532c94`, kept

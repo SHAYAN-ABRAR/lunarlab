@@ -92,22 +92,27 @@ received audit), **diagnostic**, **pending**.
 
 ## Author decisions (ranked by how much they block submission)
 
-1. **AI declaration:** complete its AUTHOR TO CONFIRM items (`paper/neurocomputing/AI_USE_INVENTORY.md`):
-   - the OpenAI products and models;
-   - any other use;
-   - whether references were selected or edited;
-   - the review-and-responsibility sentence, only if true.
-2. **CRediT roles** (`paper/neurocomputing/CREDIT_CHECKLIST.md`): nothing is ticked; a proposal is there.
-3. **Licences** for the models, records and manuscript text, in the repository and any deposit
-   (`../neurocomputing-final-validation-2026-11-01/archive/LICENSING_PROPOSAL.md`).
-4. **Availability of the local-only material:** 29 LunarLander policies, the CartPole checkpoints and
+**Settled by the author on 3 November 2026:**
+
+- **AI declaration:** the tools are named by model and developer, Anthropic's Opus 5.5 and OpenAI's GPT-6;
+  GPT-6 is as the author gave it. The text is cut to the policy's minimum (two sentences before the
+  references, one in the Methods, one clause in Figure 1's caption), and the review sentence is the
+  author's statement (`paper/neurocomputing/AI_USE_INVENTORY.md`).
+- **CRediT:** sole author, with twelve roles; Funding acquisition and Supervision are not claimed. AIUB's
+  faculty are thanked for ideas (`paper/neurocomputing/CREDIT_CHECKLIST.md`).
+
+**Still open:**
+
+1. **Licences** for the models, records and manuscript text, in the repository and any deposit. This is the
+   last AUTHOR TO CONFIRM item (`../neurocomputing-final-validation-2026-11-01/archive/LICENSING_PROPOSAL.md`).
+2. **Availability of the local-only material:** 29 LunarLander policies, the CartPole checkpoints and
    artifacts, and the fixture policies. Either deposit them (optional; `DEPOSIT_INSTRUCTIONS.md`) or keep the
    statement that they are not yet public.
-5. **Approval:** of the manuscript wording, the highlights (`paper/neurocomputing/highlights.txt`), the
-   cover-letter draft, the biography (not drafted) and the final files; then remove the working-draft
-   footer. `check_manuscript.py --final` must pass.
-6. **Merge:** pull request #4 merged the branch up to `f9c2906`. Whether to merge the second-round commits
-   (`26da5c7` and later) with a new pull request.
+3. **Approval:** of the manuscript wording, including the AI declaration; of the highlights
+   (`paper/neurocomputing/highlights.txt`), the cover-letter draft, the biography (not drafted) and the final
+   files. Then remove the working-draft footer, so that `check_manuscript.py --final` passes.
+4. **Merge:** the author merged pull requests #4 (up to `f9c2906`, as `d575925`) and #5 (up to `7e5a916`, as
+   `4b4751c`). The commit with the AI wording and the CRediT roles came after them and needs a new pull request.
 
 ## Technical items (ranked by value; none blocks an author decision)
 

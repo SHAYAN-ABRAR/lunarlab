@@ -110,3 +110,16 @@ Linux items stayed pending.
   completed an uninterrupted Linux run". The Linux audit's findings, the DQN disagreement, its interrupted
   parent run and its unidentified cause all stay disclosed, as the brief and the author's earlier instruction
   require. The builder's `START_HERE.md` text follows. The local candidate (`c0d9e5d`) is not rebuilt now.
+- **After the Linux decision — the author settled the AI wording and the CRediT roles.**
+  - **AI disclosure:** the author asked for a less prominent disclosure that names the models rather than
+    the products: Opus 5.5 for code, and GPT-6, which the author gave, for documentation. The manuscript now
+    has one Methods sentence, a two-sentence declaration before the references and a short Figure 1 caption
+    clause. Elsevier's policy requires all three, so they were kept, though shortened, and no product names
+    remain in the manuscript. The Methods sentence still lists what the records show each model did.
+  - **CRediT:** the author confirmed sole authorship. The statement lists twelve roles, and the
+    Acknowledgments add AIUB's faculty for discussions and ideas.
+  - **Remaining:** one AUTHOR TO CONFIRM item, the licence terms.
+- **17:54 — the author merged pull request #5,** at `7e5a916`, as `4b4751c`. This includes the second round
+  and the Linux decision. CI on `7e5a916` passed, both on the push and on the pull request; manuscript build
+  41686636057 was read for its changed pages (`manuscript/VISUAL_REVIEW.md`). The AI-wording and CRediT
+  changes came after the merge and were committed on the branch.

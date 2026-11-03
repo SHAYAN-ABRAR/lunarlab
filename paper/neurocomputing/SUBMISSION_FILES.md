@@ -12,12 +12,12 @@ the journal's replies.
 
 | File or item | Guide | Status | Remaining step |
 |---|---|---|---|
-| `main.tex`, `AI_Disclosure_For_Submission.tex`, `references.bib`, `elsarticle.cls`, `elsarticle-num.bst` | Source files are required ("A PDF is not an acceptable source file") | **Draft.** `check_manuscript.py --draft` passes; five AUTHOR TO CONFIRM items remain | The author's decisions below; then `check_manuscript.py --final` must pass |
+| `main.tex`, `AI_Disclosure_For_Submission.tex`, `references.bib`, `elsarticle.cls`, `elsarticle-num.bst` | Source files are required ("A PDF is not an acceptable source file") | **Draft.** `check_manuscript.py --draft` passes; one AUTHOR TO CONFIRM item remains (the licence terms) | The licence decision and the author's approval; then `check_manuscript.py --final` must pass |
 | `figures/*.pdf` (Figures 1 to 4 and A.1) | Separate files, each with a caption; vector PDF with embedded fonts | Built and digest-checked (`figures/MANIFEST.json`) | None, unless the author changes a figure |
 | Title page (in `main.tex`) | Title, author, affiliation with postal address, corresponding author and email | Present: Shayan Abrar; AIUB, 408/1 (Old KA 66/1), Kuratoli, Khilkhet, Dhaka 1229, Bangladesh; `shayanabrar7@gmail.com` | — |
 | `highlights.txt` | Encouraged: 3 to 5 bullets, at most 85 characters each, a separate editable file | **Draft**, 5 bullets of 78 to 85 characters | The author's approval |
-| AI declaration (section before the references) | Required when generative AI was used | **Draft** with AUTHOR TO CONFIRM items | The OpenAI products and models, any other use, references, and the review sentence only when true (`AI_USE_INVENTORY.md`) |
-| CRediT statement | Required | **AUTHOR TO CONFIRM** item | The roles (`CREDIT_CHECKLIST.md`) |
+| AI declaration (section before the references) | Required when generative AI was used | **Complete:** two sentences naming Anthropic's Opus 5.5 and OpenAI's GPT-6, their purposes, the one reference and the author's review (3 November) | The author's final approval |
+| CRediT statement | Required | **Complete:** confirmed by the author on 3 November 2026 (twelve roles; `CREDIT_CHECKLIST.md`) | — |
 | Competing interests | The declarations tool "should always be completed" | The sentence "The author declares no competing interests." is in the manuscript | The author completes the tool at submission ("I have nothing to declare") |
 | Funding | Required | "This research was self-funded. It received no specific grant…" | — |
 | Data availability | Required; the journal confirmed that the GitHub link can be cited | Drafted: the repository, the revisions, what is not yet public | The licence item; a deposit if the author wants the local-only policies public |
