@@ -2,10 +2,13 @@
 # SPDX-License-Identifier: MIT
 """The package validator reports every failure it meets, and nothing it cannot verify passes.
 
-In an independent run (29 October 2026), every comparison program crashed on unavailable memory telemetry. The
-validator then raised ``AttributeError`` on a row's ``checks=None`` and wrote no ``validation.json``. These
-tests reproduce that run's output and the other ways a step can fail: absent, invalid or foreign output, an
-exception inside a step, a reused output directory, and a broken historical bundle or checkpoint inventory.
+In an assistant-executed run (29 October 2026), every comparison program crashed on unavailable memory
+telemetry. The validator then raised ``AttributeError`` on a row's ``checks=None`` and wrote no
+``validation.json``. These tests reproduce that run's output and the other ways a step can fail: absent,
+invalid or foreign output, an exception inside a step, a reused output directory, and a broken historical
+bundle or checkpoint inventory. A Linux audit (3 November 2026) found that the lock install's log was
+overwritten by the source install's, and one replay with an aggregate disagreement: the last tests keep every
+setup command's log and exit status, and show that such a replay fails its command and is named.
 """
 
 from __future__ import annotations
@@ -361,3 +364,142 @@ def test_an_incomplete_or_wrong_checkpoint_inventory_is_named(v, tmp_path, fault
     deps = v.Dependencies()
     v.check_checkpoint_inventory(tree, package, deps)
     assert len(deps.problems) == 1, deps.problems
+
+
+# --- the fresh environment's setup logs ------------------------------------------------------------------
+
+
+def fake_setup(monkeypatch, v, fail_step: str | None = None) -> list[list[str]]:
+    """Stand-ins for uv and its subprocesses: each command prints a sentinel naming itself, so a log that
+    another command overwrote is detected. ``fail_step`` exits 1 (``-r`` marks the lock install)."""
+    calls = []
+
+    def fake_run(cmd, **kwargs):
+        calls.append(list(cmd))
+        step = "create" if cmd[1] == "venv" else "install-lock" if "-r" in cmd else "install-source"
+        code = 1 if step == fail_step else 0
+        return v.subprocess.CompletedProcess(cmd, code, stdout=f"SENTINEL {step}\n", stderr="")
+
+    monkeypatch.setattr(v.shutil, "which", lambda name: "uv")
+    monkeypatch.setattr(v.subprocess, "run", fake_run)
+    return calls
+
+
+def test_each_virtual_environment_command_keeps_its_own_log_and_exit_status(v, tmp_path, monkeypatch):
+    calls = fake_setup(monkeypatch, v)
+    result = v.make_venv(tmp_path / "work", tmp_path)
+    assert result["ok"] is True and len(calls) == 3
+    assert [(s["step"], s["exit"]) for s in result["steps"]] == [
+        ("create", 0),
+        ("install-lock", 0),
+        ("install-source", 0),
+    ]
+    for s in result["steps"]:
+        text = (tmp_path / s["log"]).read_text(encoding="utf-8")
+        assert f"SENTINEL {s['step']}" in text and "(exit 0," in text
+    assert not (tmp_path / "logs/venv-pip-install.log").exists()
+    assert sorted(p.name for p in (tmp_path / "logs").iterdir()) == [
+        "venv-create.log",
+        "venv-install-lock.log",
+        "venv-install-source.log",
+    ]
+
+
+def test_a_failed_install_stops_the_setup_and_names_its_log(v, tmp_path, monkeypatch):
+    calls = fake_setup(monkeypatch, v, fail_step="install-lock")
+    result = v.make_venv(tmp_path / "work", tmp_path)
+    assert result["ok"] is False and "python" not in result and len(calls) == 2
+    assert [(s["step"], s["exit"]) for s in result["steps"]] == [("create", 0), ("install-lock", 1)]
+    assert "install-lock" in result["problems"][0] and "logs/venv-install-lock.log" in result["problems"][0]
+    assert "SENTINEL install-lock" in (tmp_path / "logs/venv-install-lock.log").read_text(encoding="utf-8")
+    assert "SENTINEL create" in (tmp_path / "logs/venv-create.log").read_text(encoding="utf-8")
+    assert not (tmp_path / "logs/venv-install-source.log").exists()
+
+
+def test_the_target_install_uses_this_interpreter_and_its_own_directory(v, tmp_path, monkeypatch):
+    calls = fake_setup(monkeypatch, v)
+    monkeypatch.setattr(v, "TARGET_PYTHON", tuple(sys.version_info[:2]))
+    result = v.make_target(tmp_path / "work", tmp_path)
+    assert result["ok"] is True and result["python"] == sys.executable
+    assert result["site"] == str(tmp_path / "site")
+    assert [s["step"] for s in result["steps"]] == ["install-lock", "install-source"]
+    for cmd in calls:
+        assert cmd[cmd.index("--python") + 1] == sys.executable
+        assert cmd[cmd.index("--target") + 1] == str(tmp_path / "site")
+    for s in result["steps"]:
+        assert f"SENTINEL {s['step']}" in (tmp_path / s["log"]).read_text(encoding="utf-8")
+    assert isinstance(result["interpreter_packages"], list)
+
+
+def test_the_target_install_refuses_another_python_version(v, tmp_path, monkeypatch):
+    calls = fake_setup(monkeypatch, v)
+    monkeypatch.setattr(v, "TARGET_PYTHON", (2, 7))
+    result = v.make_target(tmp_path / "work", tmp_path)
+    assert result["ok"] is False and "needs Python 2.7" in result["problems"][0] and calls == []
+
+
+def test_fresh_venv_and_fresh_target_are_exclusive(v, tmp_path, capsys):
+    with pytest.raises(SystemExit):
+        v.main([str(tmp_path / "package"), str(tmp_path / "out"), "--fresh-venv", "--fresh-target"])
+    assert "not allowed with" in capsys.readouterr().err
+
+
+# --- a replay disagreement fails its command -------------------------------------------------------------
+
+FAKE_CLI = """
+import json, sys
+args = sys.argv[1:]
+artifact, report = args[args.index("--artifact") + 1], args[args.index("--report") + 1]
+status, code = {"disagrees": ("aggregate-disagreement", 1), "differs": ("numerical-difference", 3)}.get(
+    artifact.rsplit("-", 1)[-1], ("exact", 0)
+)
+with open(report, "w", encoding="utf-8") as f:
+    json.dump({"status": status}, f)
+sys.exit(code)
+"""
+
+
+def fake_lunarlab(tmp_path: Path) -> Path:
+    """A working copy whose ``python -m lunarlab reproduce-artifact`` reports a status chosen by the
+    artifact's name, so no policy runs."""
+    work = tmp_path / "work"
+    (work / "lunarlab").mkdir(parents=True)
+    (work / "lunarlab/__init__.py").write_text("", encoding="utf-8")
+    (work / "lunarlab/__main__.py").write_text(FAKE_CLI, encoding="utf-8")
+    return work
+
+
+@pytest.mark.parametrize(
+    ("name", "status", "exit_code", "ok"),
+    [
+        ("p-matches", "exact", 0, True),
+        ("p-differs", "numerical-difference", 3, True),
+        ("p-disagrees", "aggregate-disagreement", 1, False),
+    ],
+)
+def test_a_replay_is_accepted_only_as_exact_or_a_numerical_difference(
+    v, tmp_path, name, status, exit_code, ok
+):
+    work, out = fake_lunarlab(tmp_path), tmp_path / "out"
+    out.mkdir()
+    result = v.replay(sys.executable, work, out, dict(os.environ), name, tmp_path / name)
+    assert (result["status"], result["exit"], result["ok"]) == (status, exit_code, ok)
+    assert result["data_home_left_empty"] is True
+
+
+def test_one_aggregate_disagreement_among_38_replays_fails_and_is_named(v, tmp_path):
+    work, out = fake_lunarlab(tmp_path), tmp_path / "out"
+    bundle = out / "lunarlander-study/study-artifacts/group"
+    names = [f"policy{i:02d}-matches" for i in range(37)] + ["policy37-disagrees"]
+    for name in names:
+        (bundle / name).mkdir(parents=True)
+        (bundle / name / "artifact.json").write_text("{}", encoding="utf-8")
+    result = v.all_replays(sys.executable, work, out, dict(os.environ))
+    assert result["ok"] is False and result["packages"] == 38
+    assert result["statuses"] == {"exact": 37, "aggregate-disagreement": 1}
+    assert result["replays"]["policy37-disagrees"] == {
+        "exit": 1,
+        "status": "aggregate-disagreement",
+        "ok": False,
+        "data_home_left_empty": True,
+    }
