@@ -49,30 +49,15 @@ The two full validations of the new candidate (`../validation/`) also replay thi
 The second ran in a fresh virtual environment, after the author turned off Windows Application Control later
 on 3 November.
 
-## Pending: the Linux comparison
+## Not planned: the Linux comparison
 
-Not run: no Linux machine with the historical bundle is available here. GitHub's Linux CI cannot run it
-either, because the bundle is not public. On Linux, from a fresh install of the candidate's locked CPU
-dependencies (`requirements-ci.lock` with `--torch-backend cpu`) and a new, empty `LUNARLAB_HOME`:
+The Windows trace was not compared on Linux. No Linux machine with the historical bundle was available here,
+and on 3 November 2026 the author decided not to pursue further Linux runs. The disagreement stays disclosed,
+and blocking under the existing gate, with its cause unidentified. No cross-platform fix is promised.
+
+For reference, the comparison would run on Linux, from the candidate's locked CPU dependencies and an empty
+`LUNARLAB_HOME`, as:
 
 ```bash
-python -m lunarlab trace-artifact \
-    --artifact <bundle>/study-artifacts/dqn-flawed-hover-bonus/20261015-224318-dqn-hover-bonus-s0-custom-aefc \
-    --compare traces/windows-reference-2026-11-03.npz \
-    --report linux-trace-comparison-<date>.json
+python -m lunarlab trace-artifact     --artifact <bundle>/study-artifacts/dqn-flawed-hover-bonus/20261015-224318-dqn-hover-bonus-s0-custom-aefc     --compare traces/windows-reference-2026-11-03.npz --report linux-trace-comparison-<date>.json
 ```
-
-Exit status 0 means identical; 3 means differences were located (reported, not failed); 1 means the closed loop
-differs although neither policy inference nor simulator dynamics does. The report separates three things:
-
-- the first difference in the network's outputs, and any greedy-action flips, on the recorded observations
-  (policy inference);
-- the first open-loop observation difference under the recorded actions (simulator dynamics);
-- the step where the closed loop parts, and the resulting returns (the aggregate outcome).
-
-Read it with these limits:
-
-- An early, tiny state difference that grows would fit a simulator-numerics mechanism, as in the nine
-  historical trace comparisons. It would not prove that Box2D or a compiler causes every platform difference.
-- No exact cross-platform fix is promised.
-- The disagreement stays disclosed, and blocking under the existing gate, whatever the trace shows.

@@ -18,7 +18,7 @@ unchanged**, nothing was trained, and nothing was deposited, published or submit
 |---|---|
 | [PROGRESS_LOG.md](PROGRESS_LOG.md) | The dated log (UTC): starting state, every step and command |
 | [received/](received/linux-audit-2026-11-03/RECEIVED.md) | The labelled subset of the Linux audit, checked against its own digests |
-| [dqn-diagnostic/](dqn-diagnostic/README.md) | The policy that disagrees on Linux: the received reports summarized; its exact replays and trace on Windows; the pending Linux comparison |
+| [dqn-diagnostic/](dqn-diagnostic/README.md) | The policy that disagrees on Linux: the received reports summarized; its exact replays and trace on Windows; no further Linux run is planned |
 | [archive/](archive/CANDIDATE.md) | The new archive candidate (`c0d9e5d`): its record, its own documents and `SHA256SUMS`, its licence map, and the build logs. Nothing was deposited |
 | [validation/](validation/README.md) | The candidate's fresh-extraction validation on Windows, in both environment modes (every step passed; 38 of 38 replays exact), and three negative checks |
 | [manuscript/](manuscript/VISUAL_REVIEW.md) | The two CI builds of the manuscript (logs, digests, the page-by-page review) and a local Tectonic build |

@@ -1,7 +1,7 @@
 # Validation of the archive candidate of 3 November 2026 (`c0d9e5d`), on Windows
 
-**Executed** on the author's Windows 11 machine. This is the recording platform, so it cannot close the Linux
-task: the full validator has not yet completed an uninterrupted Linux run with all 38 replays.
+**Executed** on the author's Windows 11 machine, the recording platform. It says nothing new about Linux, where
+the evidence is the received assistant-executed audit's (`../received/`); no further Linux run is planned.
 
 ## The run
 

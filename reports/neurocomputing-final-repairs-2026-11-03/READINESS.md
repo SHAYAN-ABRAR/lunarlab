@@ -40,8 +40,8 @@ is promised, and none is inferred from journal-wide figures.
 | Audit finding (assistant-executed) | Done here | Status |
 |---|---|---|
 | Both `uv pip install` commands wrote `venv-pip-install.log`; the lock install's log was overwritten | Distinct logs and exit statuses for every setup command (`venv-create`, `venv-install-lock`, `venv-install-source`). Historical logs are unchanged, and the overwritten one is not reconstructed | **Repaired, tested:** both logs survive with distinct sentinel output; a failed install stops and names its log |
-| One DQN policy (`…-aefc`): `aggregate-disagreement` on Linux, 224.07 recorded vs 230.25 and 230.45 | Reproduced on Windows from a new extraction and empty data home: `exact`, 100 of 100 episodes, with default and with one thread. A trace of seeds 20068, 20011 and 20033 was recorded and re-flown identically | **Disclosed** in the manuscript and kept **blocking**. Its cause is not identified. **Pending:** the Linux `--compare` (`dqn-diagnostic/`) |
-| The all-38 Linux replay stage: integrity 38 of 38, 37 permitted numerical differences, one disagreement; its parent run was interrupted | Reported as a diagnostic with its runtime, separately from the nine historical Linux replays | Disclosed. **Pending:** an uninterrupted Linux validator run with all 38 replays |
+| One DQN policy (`…-aefc`): `aggregate-disagreement` on Linux, 224.07 recorded vs 230.25 and 230.45 | Reproduced on Windows from a new extraction and empty data home: `exact`, 100 of 100 episodes, with default and with one thread. A trace of seeds 20068, 20011 and 20033 was recorded and re-flown identically | **Disclosed** in the manuscript and kept **blocking**. Its cause is not identified. No further Linux run is planned: the author's decision of 3 November (`dqn-diagnostic/`) |
+| The all-38 Linux replay stage: integrity 38 of 38, 37 permitted numerical differences, one disagreement; its parent run was interrupted | Reported as a diagnostic with its runtime, separately from the nine historical Linux replays | Disclosed. No further Linux run is planned (the author's decision, 3 November) |
 | The unmodified comparison crashed in 36 of 42 pairs (`NoSuchProcess`); the follow-up set agreed in 40 pairs and reported two permitted differences | Reported with the correct counts (not "all 42") | Disclosed |
 | The manuscript claimed that every named file is present | Narrowed: 192 named CartPole checkpoints = 36 distributed + 156 inventoried with digests | Corrected in `main.tex`, `EVIDENCE.md`, the validator's docstring and the candidate's `START_HERE.md` |
 | Stale "not merged"; byte identity of figures; licence scope; data availability | Corrected, as the brief listed (`../../paper/neurocomputing/EVIDENCE.md`) | Corrected |
@@ -58,7 +58,7 @@ received audit), **diagnostic**, **pending**.
 |---|---|
 | Linux validation of the `a38d07f` candidate | **Assistant-executed** (`received/`): complete runs A (exit 0) and C one-thread (exit 1, on the unmodified comparison); the all-38 replay stage as a diagnostic with an interrupted parent |
 | DQN policy on Windows | **Executed:** `exact` twice; the trace is recorded |
-| DQN trace on Linux | **Pending** |
+| DQN trace on Linux | Not run, and not planned (the author's decision, 3 November). The Windows trace is kept |
 | Validator repair | **Executed:** the regression tests (`298562e`). In real runs every setup log survives: `target-install-lock` and `target-install-source` in the `--fresh-target` run, and `venv-create`, `venv-install-lock` and `venv-install-source` in the `--fresh-venv` run. While the launcher was blocked, `--fresh-venv` stopped at `install-lock` and named that step and its log (`validation/`) |
 | Tests | **Executed** on Windows: the full suite, 708 passed, both on the base interpreter with a target install and in the project's own `.venv` (`tests/`). **CI** on `c0d9e5d` (run 41667323177) and on `f9c2906` (41673748117): all six jobs passed; Linux 704 passed and 4 Windows-only skips; Windows 294 on each Python; 195 release tests; 15 browser flows |
 | New archive candidate (`c0d9e5d`) | **Executed:** built locally (`archive/CANDIDATE.md`). ZIP 82,988,733 bytes, SHA-256 `8e4889ce…610f`, MD5 `2b91a658…`. Its licence map covers 2,696 of 2,696 files. Not deposited |
@@ -66,13 +66,13 @@ received audit), **diagnostic**, **pending**.
 | Negative checks | **Executed:** a damaged copy gives named checksum and dependency failures, a written report and exit 1; the follow-up runner refuses its inputs and runs nothing; the blocked `--fresh-venv` gives a written report, the failed step's log and exit 1 |
 | Historical evidence | **Executed:** 2,359 of 2,359 protected files unchanged, combined digest `7366ba1b…` (`integrity/`) |
 | Manuscript | **CI** builds 41666276641 (`db8f937`: two lines past the margin) and 41667322790 (`c0d9e5d`: fixed). Every page **inspected**: 22 pages, all fonts embedded, no overfull box. **Executed** locally with Tectonic (XeTeX) once Application Control was off: 22 pages, but four lines run 1 to 12 pt past the margin, so the pdfTeX build stays the reference (`manuscript/VISUAL_REVIEW.md`) |
-| The full validator on Linux, uninterrupted, with all 38 replays | **Pending:** no Linux machine with the bundle is available here, and CI cannot reach the bundle. The command is in the candidate's `START_HERE.md` |
+| The full validator on Linux, uninterrupted, with all 38 replays | Not run, and not planned (the author's decision, 3 November). The Linux evidence is the received assistant-executed audit's, as recorded |
 
 ## Limitations that remain
 
 - **The DQN cross-platform disagreement:** `…-aefc` does not reproduce its recorded aggregate on Linux
   (224.07 recorded; 230.45 and 230.25 in three Linux executions; 8 of 100 outcomes changed). It is exact on
-  Windows. Its cause is not identified, and the Linux trace comparison has not been run. It stays disclosed,
+  Windows. Its cause is not identified, and no further Linux run is planned. It stays disclosed,
   and blocking under the replay gate. The other 37 Linux classifications do not establish equivalence.
 - **Linux runs are not fully repeatable:** two Linux executions of that policy differ on one episode (seed
   20065).
@@ -111,14 +111,15 @@ received audit), **diagnostic**, **pending**.
 
 ## Technical items (ranked by value; none blocks an author decision)
 
-1. **Run the Linux trace comparison** of `…-aefc` (`dqn-diagnostic/README.md`). It separates policy inference
-   from simulator dynamics for its three most-changed episodes.
-2. **Run the full validator on Linux, uninterrupted**, with all 38 replays, from a fresh extraction of the
-   `c0d9e5d` candidate (`START_HERE.md`). Declare the thread settings, and keep the final JSON whatever its
-   result. The known disagreement is expected to fail the replay step.
-3. Record a trajectory in audit artifacts, so that `audit-artifact verify` can also run S8.
-4. Optionally, make the five paragraphs that overrun under XeTeX reflow there too, if the submission system
+1. Record a trajectory in audit artifacts, so that `audit-artifact verify` can also run S8.
+2. Optionally, make the five paragraphs that overrun under XeTeX reflow there too, if the submission system
    compiles with XeLaTeX. With pdfLaTeX, nothing is needed.
+
+**Not planned:** further Linux runs, meaning the DQN trace comparison and an uninterrupted validator run with
+all 38 replays. The author decided on 3 November not to pursue them. The audit's Linux findings, including the
+disagreement, stay disclosed as received. The local candidate (`c0d9e5d`) still carries the earlier
+"not yet run" wording in its manuscript source; the rebuild that the licence decision requires will carry the
+current wording.
 
 ## Public-availability work that needs the author's authorization
 

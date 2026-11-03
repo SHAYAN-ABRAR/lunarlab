@@ -510,8 +510,8 @@ Records: [`reports/neurocomputing-final-validation-2026-11-01/`](reports/neuroco
   comparison programs crashed in 36 of 42 pairs; the follow-up set agreed in 40 and reported the clean
   control's two replays as permitted platform differences.
 - **The DQN disagreement:** on Windows, the recording platform, the policy replays exactly (100 of 100
-  episodes, with default and with one thread). A trace of its three most-changed episodes is recorded for a
-  Linux comparison, which is still to be run. Nothing was retrained, and no threshold or record was changed.
+  episodes, with default and with one thread). A Windows trace of its three most-changed episodes is kept;
+  no further Linux run is planned. Nothing was retrained, and no threshold or record was changed.
 - **Validator:** each setup command now keeps its own log and exit status (the lock install's log used to be
   overwritten). `--fresh-target` installs the lock into a new directory where Windows Application Control
   blocks virtual-environment launchers, as it does on the author's machine since 3 November. The manuscript

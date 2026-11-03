@@ -358,10 +358,10 @@ writes its report even when a step fails. Its steps are:
   report. All 38 kept integrity; 37 showed permitted numerical differences, and one,
   `dqn-flawed-hover-bonus/20261015-224318-dqn-hover-bonus-s0-custom-aefc`, an aggregate disagreement (mean
   original return 224.07 recorded, 230.45 on Linux), which remains blocking. On Windows it replays exactly.
-  Its cause is not identified; a Windows trace for the Linux comparison is in `source/{REPAIRS}/dqn-diagnostic/`.
-  Bit-identical results across operating systems are not a supported guarantee.
-- **Platforms of this validation:** it has been run on the author's Windows machine. The full validator has
-  not completed an uninterrupted Linux run with all 38 replays.
+  Its cause is not identified (`source/{REPAIRS}/dqn-diagnostic/`). Bit-identical results across operating
+  systems are not a supported guarantee.
+- **Platforms of this validation:** it has been run on the author's Windows machine. On Linux, the evidence
+  is the audit's, as described above.
 - **Not recomputed or distributed:** bootstrap intervals are not recomputed. The scheduled CartPole
   checkpoints are not distributed; the inventory lists them with their digests.
 - **Provenance:** reward-definition provenance does not cover imported modules, module-level data or library

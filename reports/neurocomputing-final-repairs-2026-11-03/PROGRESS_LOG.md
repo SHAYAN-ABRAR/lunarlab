@@ -102,3 +102,11 @@ Linux items stayed pending.
   merged it at 16:53:43 UTC, at `f9c2906`, as `d575925`. CI on the pull request (41675942076) passed. This
   round's commits were pushed after the merge, so they need a new pull request; I did not merge or push to
   `main`.
+- **After the second round — dropped the Linux follow-up, at the author's request.** The author decided not to
+  pursue further Linux runs, with neither WSL nor a Codespace. The DQN trace comparison and an uninterrupted
+  Linux validator run with all 38 replays are therefore marked "not planned", and removed from the to-do
+  lists. In the manuscript, two clauses that presented them as pending were removed: in Section 5.2, "a trace
+  … for a Linux comparison that has not yet been run", and in Section 6, "the full validator has not yet
+  completed an uninterrupted Linux run". The Linux audit's findings, the DQN disagreement, its interrupted
+  parent run and its unidentified cause all stay disclosed, as the brief and the author's earlier instruction
+  require. The builder's `START_HERE.md` text follows. The local candidate (`c0d9e5d`) is not rebuilt now.
