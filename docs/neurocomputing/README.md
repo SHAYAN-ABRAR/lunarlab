@@ -1,8 +1,32 @@
 # Neurocomputing submission requirements
 
 Captured 26 October 2026 from the journal's official pages. Quotations are verbatim. Nothing was submitted, paid
-or sent, and the journal was not contacted. The journal has since answered a written inquiry from the author;
-see the update of 30 October below.
+or sent, and the journal was not contacted. The journal has since answered written inquiries from the author;
+see the updates of 3 November and 30 October below. Their replies are **correspondence with the author**,
+summarized here; they are not published guidelines, and the messages themselves are not reproduced.
+
+## Update, 3 November 2026: the journal's further answer
+
+The author reports a further reply from Elsevier's Senior Journal Manager for Neurocomputing. It confirmed:
+
+- **Data availability:** the GitHub link can be cited under "Data Availability".
+- **Access during review:** the repository should remain accessible to the handling editor during review.
+- **Length:** the journal has no word or page restriction.
+- **Review:** the editorial process uses written peer review and revisions, without a mandatory interview.
+
+Together with the answer of 30 October, this settles every question the author asked. No further inquiry is
+needed, and none should be sent about these points. What follows from them:
+
+- **No length limit is imposed.** JMLR's four-page limit belongs to the earlier JMLR plan (`docs/jmlr/`) and
+  does not apply to this paper. Clarity, not a limit, decides the length.
+- **No DOI is required** solely because the earlier plan wanted one. The availability statement cites the
+  repository and the revisions. The reply did not settle when a DOI would be needed for a separate dataset
+  deposit, and nothing is assumed about that.
+- **Zenodo stays optional:** a durable archive is still the way to make the local-only trained policies,
+  checkpoints and records downloadable. A repository link does not do that for files that are not in the
+  repository (`paper/neurocomputing/SUBMISSION_FILES.md`).
+- **No timing promise:** the replies give no review time for Software publications, and none is inferred from
+  journal-wide figures.
 
 ScienceDirect refuses automated requests (HTTP 403). The author therefore saved the Guide for Authors, the
 open-access page and the journal homepage from a normal browser between 17:33 and 17:37 UTC. Elsevier's shop
@@ -24,13 +48,13 @@ Elsevier's Senior Journal Manager for Neurocomputing (`neucom@elsevier.com`) and
 So the fee-free route is the subscription option. The reply did not cover:
 
 - separate submission, page or colour charges, which it did not itemize;
-- page or word limits;
-- when an archive DOI must exist;
-- review timelines;
-- whether presentations are required.
+- page or word limits (answered on 3 November: there are none);
+- when an archive DOI must exist (3 November: the GitHub link can be cited; a dataset DOI's timing was not
+  addressed);
+- review timelines (not answered);
+- whether presentations are required (3 November: no mandatory interview; the review is written).
 
-Those points remain as described below. The capture of 26 October follows unchanged. Where it says "not
-verified", the answer above now applies.
+The capture of 26 October follows unchanged. Where it says "not verified", the answers above now apply.
 
 ## Fee-free OSP route, as captured on 26 October: not verified
 
@@ -93,7 +117,7 @@ Links go to sections of the
 
 | Item | Status | Rule |
 |---|---|---|
-| Article length | Not stated | No word or page limit for articles. The only length limits are the abstract (250 words), highlights (85 characters per bullet) and author biographies (100 words). OSP-specific limits would be in the missing OSP instructions |
+| Article length | No restriction (correspondence, 3 November) | No word or page limit for articles. The only length limits are the abstract (250 words), highlights (85 characters per bullet) and author biographies (100 words). The journal confirmed that there is no word or page restriction |
 | [Abstract](https://www.sciencedirect.com/journal/neurocomputing/publish/guide-for-authors#writing-and-formatting-abstract) | Required | "You are required to provide a concise and factual abstract that does not exceed 250 words." |
 | [Keywords](https://www.sciencedirect.com/journal/neurocomputing/publish/guide-for-authors#writing-and-formatting-keywords) | Required | "You are required to provide 1 to 7 keywords for indexing purposes." |
 | [Section headings](https://www.sciencedirect.com/journal/neurocomputing/publish/guide-for-authors#writing-and-formatting-article-structure) | Required format | "Divide your manuscript into clearly defined and numbered sections." "Do not include the article abstract within section numbering." No particular headings are prescribed, for OSPs or otherwise |
@@ -103,12 +127,12 @@ Links go to sections of the
 | [Data statement](https://www.sciencedirect.com/journal/neurocomputing/publish/guide-for-authors#writing-and-formatting-data-statement) | Required | "you are required to state the availability of any data at submission." |
 | [Software and data citations](https://www.sciencedirect.com/journal/neurocomputing/publish/guide-for-authors#writing-and-formatting-references) | Recommended elements | Software: "preferably a PID … DOIs are preferred … If there is no PID for the software, a URL to the software is the best identifier available." Data references "should include" a "global persistent identifier". No DOI is mandated |
 | [Supplementary material](https://www.sciencedirect.com/journal/neurocomputing/publish/guide-for-authors#writing-and-formatting-supplementary-material) | Encouraged | "We encourage the use of supplementary materials such as applications, images, and sound clips". "Submit all supplementary material at the same time as your manuscript." Files "will appear online exactly as received". No general size limit is given. For [video](https://www.sciencedirect.com/journal/neurocomputing/publish/guide-for-authors#writing-and-formatting-video): "preferred maximum file size of 150 MB per file, 1 GB in total" |
-| The 38-policy bundle | Deposit rule applies | The guide accepts supplementary files and gives them no general size limit. However, research data includes "models", and Option C asks for it to be deposited in a relevant data repository and cited and linked, or for a statement of why it cannot be shared. Supplementary files alone do not meet that rule. No DOI is mandated, and no minimum number of independent users is stated anywhere |
+| The 38-policy bundle | Deposit rule applies | The guide accepts supplementary files and gives them no general size limit. However, research data includes "models", and Option C asks for it to be deposited in a relevant data repository and cited and linked, or for a statement of why it cannot be shared. Supplementary files alone do not meet that rule. No DOI is mandated, and no minimum number of independent users is stated anywhere. The journal confirmed that the GitHub link can be cited under data availability (3 November); 29 of the 38 policies are not in the repository, so the statement lists them as not yet public |
 | [Highlights](https://www.sciencedirect.com/journal/neurocomputing/publish/guide-for-authors#writing-and-formatting-highlights) | Encouraged | "You are encouraged to provide article highlights at submission." 3 to 5 bullets, "each a maximum of 85 characters, including spaces", supplied as a separate editable file with "highlights" in its name |
 | Graphical abstract | Not stated | Not mentioned in the guide. If one is supplied, Elsevier's AI policy says "General-purpose generative AI image tools must not be used to create graphical abstracts" |
 | [CRediT](https://www.sciencedirect.com/journal/neurocomputing/publish/guide-for-authors#writing-and-formatting-article-structure) | Required | "Corresponding authors are required to acknowledge co-author contributions using CRediT (Contributor Roles Taxonomy) roles" |
 | Suggested reviewers | Not stated | Not mentioned. [Peer review](https://www.sciencedirect.com/journal/neurocomputing/publish/guide-for-authors#about-the-journal-peer-review) is "single anonymized", typically with "a minimum of two reviewers" |
-| Interview or presentation | Not stated | The guide mentions neither. Video is optional: "This journal accepts video material" |
+| Interview or presentation | None mandatory (correspondence, 3 November) | The guide mentions neither, and the journal confirmed a written review with revisions, without a mandatory interview. Video is optional: "This journal accepts video material" |
 | [Competing interests](https://www.sciencedirect.com/journal/neurocomputing/publish/guide-for-authors#ethics-and-policies-declaration-of-competing-interests) | Required | "The declarations tool should always be completed." Authors with nothing to declare "should select the option "I have nothing to declare."" The manuscript's placeholder awaits the author |
 | [Funding](https://www.sciencedirect.com/journal/neurocomputing/publish/guide-for-authors#ethics-and-policies-funding-sources) | Required | "Authors must disclose any funding sources". If there was none: "This research did not receive any specific grant from funding agencies in the public, commercial, or not-for-profit sectors." |
 | [Generative AI](https://www.sciencedirect.com/journal/neurocomputing/publish/guide-for-authors#ethics-and-policies-declaration-of-generative-ai-use) | Required when used | "Authors must declare the use of generative AI tools in the manuscript preparation process upon submission of the paper", in a new section before the references. The guide's example statement adds "After using this tool/service, the author(s) reviewed and edited the content as needed"; that sentence fits only if it is true. For research use, [Elsevier's policy](https://www.elsevier.com/about/policies-and-standards/generative-ai-policies-for-journals) ("Policy updated June 2026") asks authors to "disclose the name of the model or tool, the version used, and the developer or manufacturer, in the Methods section". It also says that if authors write or edit code with AI tools "they should declare this in detail in the Methods section". AI tools may not be authors. The identifiers recovered for LunarLab are in [AI_TOOL_VERSIONS.md](AI_TOOL_VERSIONS.md) |
@@ -131,3 +155,10 @@ Links go to sections of the
 | Generative-AI policy | `https://www.elsevier.com/about/policies-and-standards/generative-ai-policies-for-journals` | 17:19:16 |
 | LaTeX instructions and template | `https://www.elsevier.com/latex` (now `…/researcher/author/policies-and-guidelines/latex-instructions`) and the template linked from the guide | 17:40:19–17:40:21 |
 | OSP instructions link | `https://www.elsevier.com/about/content-innovation/original-software-publications` | 301 to `https://www.elsevier.com/about` at 17:18:20 and 17:40:22 |
+
+**Rechecked on 3 November 2026:** the Guide for Authors answered an automated request with HTTP 403, as on
+26 October, so it was not read again and no bot check was circumvented; the captured guide and the journal's
+replies are used instead. Elsevier's generative-AI policy was fetched at 14:54 UTC and still reads "Policy
+updated June 2026" (SHA-256 of the fetched page `6e0ca530…`; `reports/neurocomputing-final-repairs-2026-11-03/`).
+Zenodo's help pages were read the same day: published records' files can be edited by their owner within 45
+days, and a record takes up to 100 files and 50 GB.

@@ -1,0 +1,19 @@
+$ python -m lunarlab reproduce-artifact --artifact D:\LunarLab-final-repairs-2026-11-03\dqn-diagnostic\bundle\study-artifacts\dqn-flawed-hover-bonus\20261015-224318-dqn-hover-bonus-s0-custom-aefc --report reports/windows-reproduce-default-threads.json
+started 2026-11-03T15:13:07Z; OMP_NUM_THREADS and MKL_NUM_THREADS unset
+  [ok] checkpoint.zip matches its recorded SHA-256: f7c78e316136bc66
+  [ok] config.yaml matches its recorded SHA-256: 838879ea52701cea
+  [ok] evaluation.json matches its recorded SHA-256: 8fba460b604d65bb
+  [ok] configuration hash matches the record: 36d33fa9e01e0159
+  [ok] the recorded evaluation used this checkpoint
+  [ok] the recorded evaluation is the final test on the configuration's test seeds: 100 seeds
+  [ok] the recorded evaluation used the configuration's protocol and reward
+  [ok] the recorded episodes are exactly the recorded seeds
+  [ok] the evaluated network holds exactly the checkpoint's weights
+  [ok] every re-evaluated episode matches the record exactly: 100/100 episode summaries; largest original-return difference 0; largest training-return difference 0
+  [ok] no aggregate differs significantly from the record (paired tests, Holm-corrected): mean_original_return 224.1 -> 224.1 (p 1), pad_landing_rate 0.84 -> 0.84 (p 1), timeout_rate 0.04 -> 0.04 (p 1), crash_rate 0.01 -> 0.01 (p 1), out_of_bounds_rate 0 -> 0 (p 1)
+  status: exact (not blocking): all 100 episodes match on the selected summary fields
+EXACT: 20261015-224318-dqn-hover-bonus-s0-custom-aefc, 100 episodes; mean original return recorded 224.0699, reproduced 224.0699; pad landing recorded 84%, reproduced 84%
+  all 100 episodes match on the selected summary fields
+report written to D:\LunarLab-final-repairs-2026-11-03\dqn-diagnostic\reports\windows-reproduce-default-threads.json
+exit=0
+finished 2026-11-03T15:13:36Z

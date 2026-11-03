@@ -1,0 +1,676 @@
+{
+ "kind": "lunarlab.dqn-disagreement-summary",
+ "artifact": "dqn-flawed-hover-bonus/20261015-224318-dqn-hover-bonus-s0-custom-aefc",
+ "derived_from": {
+  "linux-default-threads (run-b; parent interrupted)": "d917eb6e38f9b4df6bee8aa99596f61e6de485fe854cb8962dffef2d517ac6db",
+  "linux-one-thread (single-policy diagnostic)": "27fc11a45fc89a7f1b2f2b3c2a73d552855cd7cb27bd5ba24cf2a228bcb2f5d1",
+  "linux-one-thread (all-38 diagnostic; parent interrupted)": "00a1f67e882fd9ee0b05b131cb2ee6076c83222a7f600edd47786dbc9e6432f7",
+  "windows-default-threads (3 November)": "26ddcc7153b195c3aaae65360f3b3de0c92d5b9fb34b9606bdc6c653fb450f26",
+  "windows-one-thread (3 November)": "48f504ba363fa0a7adfc7b30c547e133899014ea8003f00d78d8842d0587b105"
+ },
+ "note": "Derived on 3 November 2026 from the received Linux reports (assistant-executed) and the Windows replays of this work; the reports themselves are unchanged. The aggregate disagreement remains blocking under the existing within-policy gate; a non-significant screen elsewhere would not establish equivalence.",
+ "executions": {
+  "linux-default-threads (run-b; parent interrupted)": {
+   "status": "aggregate-disagreement",
+   "exit_code": 1,
+   "integrity_ok": true,
+   "platform": "Linux-6.18.57-x86_64-with-glibc2.39",
+   "python": "3.12.14",
+   "torch": "2.14.1+cpu",
+   "recorded_mean_original_return": 224.06994853107503,
+   "reproduced_mean_original_return": 230.24694369083645,
+   "paired_mean_difference": 6.176995159761403,
+   "paired_difference_ci": [
+    1.2978154259522012,
+    12.62374294678863
+   ],
+   "p_value_unadjusted": 0.008899110088991101,
+   "significant_after_holm": true,
+   "recorded_pad_landing_rate": 0.84,
+   "reproduced_pad_landing_rate": 0.88,
+   "episodes_differing": 100,
+   "median_abs_return_difference": 0.038459591637490576,
+   "max_abs_return_difference": 227.67918716702604,
+   "outcome_changes": [
+    {
+     "seed": 20008,
+     "env_outcome": [
+      "at_rest",
+      "at_rest"
+     ],
+     "pad_landing": [
+      true,
+      false
+     ],
+     "recorded_return": 215.673082800153,
+     "reproduced_return": 223.4916020348972
+    },
+    {
+     "seed": 20011,
+     "env_outcome": [
+      "timeout",
+      "at_rest"
+     ],
+     "pad_landing": [
+      false,
+      true
+     ],
+     "recorded_return": 106.84635233121152,
+     "reproduced_return": 232.76479590425672
+    },
+    {
+     "seed": 20022,
+     "env_outcome": [
+      "at_rest",
+      "at_rest"
+     ],
+     "pad_landing": [
+      false,
+      true
+     ],
+     "recorded_return": 202.93742670568935,
+     "reproduced_return": 198.42283198151353
+    },
+    {
+     "seed": 20033,
+     "env_outcome": [
+      "timeout",
+      "at_rest"
+     ],
+     "pad_landing": [
+      false,
+      true
+     ],
+     "recorded_return": 104.0810331091029,
+     "reproduced_return": 220.2692025009793
+    },
+    {
+     "seed": 20060,
+     "env_outcome": [
+      "at_rest",
+      "at_rest"
+     ],
+     "pad_landing": [
+      true,
+      false
+     ],
+     "recorded_return": 185.41608862189355,
+     "reproduced_return": 195.8954942554251
+    },
+    {
+     "seed": 20068,
+     "env_outcome": [
+      "crash",
+      "at_rest"
+     ],
+     "pad_landing": [
+      false,
+      true
+     ],
+     "recorded_return": -27.589109392609743,
+     "reproduced_return": 200.0900777744163
+    },
+    {
+     "seed": 20073,
+     "env_outcome": [
+      "at_rest",
+      "at_rest"
+     ],
+     "pad_landing": [
+      false,
+      true
+     ],
+     "recorded_return": 145.6890737926204,
+     "reproduced_return": 191.62657087912038
+    },
+    {
+     "seed": 20078,
+     "env_outcome": [
+      "at_rest",
+      "at_rest"
+     ],
+     "pad_landing": [
+      false,
+      true
+     ],
+     "recorded_return": 187.00907255614146,
+     "reproduced_return": 219.85593500251693
+    }
+   ],
+   "pad_landings_gained": 6,
+   "pad_landings_lost": 2,
+   "largest_differences": [
+    {
+     "seed": 20068,
+     "abs_return_difference": 227.67918716702604
+    },
+    {
+     "seed": 20011,
+     "abs_return_difference": 125.9184435730452
+    },
+    {
+     "seed": 20033,
+     "abs_return_difference": 116.1881693918764
+    },
+    {
+     "seed": 20073,
+     "abs_return_difference": 45.937497086499974
+    },
+    {
+     "seed": 20090,
+     "abs_return_difference": 34.75440669715036
+    }
+   ]
+  },
+  "linux-one-thread (single-policy diagnostic)": {
+   "status": "aggregate-disagreement",
+   "exit_code": 1,
+   "integrity_ok": true,
+   "platform": "Linux-6.18.57-x86_64-with-glibc2.39",
+   "python": "3.12.14",
+   "torch": "2.14.1+cpu",
+   "recorded_mean_original_return": 224.06994853107503,
+   "reproduced_mean_original_return": 230.24694369083645,
+   "paired_mean_difference": 6.176995159761403,
+   "paired_difference_ci": [
+    1.2978154259522012,
+    12.62374294678863
+   ],
+   "p_value_unadjusted": 0.008899110088991101,
+   "significant_after_holm": true,
+   "recorded_pad_landing_rate": 0.84,
+   "reproduced_pad_landing_rate": 0.88,
+   "episodes_differing": 100,
+   "median_abs_return_difference": 0.038459591637490576,
+   "max_abs_return_difference": 227.67918716702604,
+   "outcome_changes": [
+    {
+     "seed": 20008,
+     "env_outcome": [
+      "at_rest",
+      "at_rest"
+     ],
+     "pad_landing": [
+      true,
+      false
+     ],
+     "recorded_return": 215.673082800153,
+     "reproduced_return": 223.4916020348972
+    },
+    {
+     "seed": 20011,
+     "env_outcome": [
+      "timeout",
+      "at_rest"
+     ],
+     "pad_landing": [
+      false,
+      true
+     ],
+     "recorded_return": 106.84635233121152,
+     "reproduced_return": 232.76479590425672
+    },
+    {
+     "seed": 20022,
+     "env_outcome": [
+      "at_rest",
+      "at_rest"
+     ],
+     "pad_landing": [
+      false,
+      true
+     ],
+     "recorded_return": 202.93742670568935,
+     "reproduced_return": 198.42283198151353
+    },
+    {
+     "seed": 20033,
+     "env_outcome": [
+      "timeout",
+      "at_rest"
+     ],
+     "pad_landing": [
+      false,
+      true
+     ],
+     "recorded_return": 104.0810331091029,
+     "reproduced_return": 220.2692025009793
+    },
+    {
+     "seed": 20060,
+     "env_outcome": [
+      "at_rest",
+      "at_rest"
+     ],
+     "pad_landing": [
+      true,
+      false
+     ],
+     "recorded_return": 185.41608862189355,
+     "reproduced_return": 195.8954942554251
+    },
+    {
+     "seed": 20068,
+     "env_outcome": [
+      "crash",
+      "at_rest"
+     ],
+     "pad_landing": [
+      false,
+      true
+     ],
+     "recorded_return": -27.589109392609743,
+     "reproduced_return": 200.0900777744163
+    },
+    {
+     "seed": 20073,
+     "env_outcome": [
+      "at_rest",
+      "at_rest"
+     ],
+     "pad_landing": [
+      false,
+      true
+     ],
+     "recorded_return": 145.6890737926204,
+     "reproduced_return": 191.62657087912038
+    },
+    {
+     "seed": 20078,
+     "env_outcome": [
+      "at_rest",
+      "at_rest"
+     ],
+     "pad_landing": [
+      false,
+      true
+     ],
+     "recorded_return": 187.00907255614146,
+     "reproduced_return": 219.85593500251693
+    }
+   ],
+   "pad_landings_gained": 6,
+   "pad_landings_lost": 2,
+   "largest_differences": [
+    {
+     "seed": 20068,
+     "abs_return_difference": 227.67918716702604
+    },
+    {
+     "seed": 20011,
+     "abs_return_difference": 125.9184435730452
+    },
+    {
+     "seed": 20033,
+     "abs_return_difference": 116.1881693918764
+    },
+    {
+     "seed": 20073,
+     "abs_return_difference": 45.937497086499974
+    },
+    {
+     "seed": 20090,
+     "abs_return_difference": 34.75440669715036
+    }
+   ]
+  },
+  "linux-one-thread (all-38 diagnostic; parent interrupted)": {
+   "status": "aggregate-disagreement",
+   "exit_code": 1,
+   "integrity_ok": true,
+   "platform": "Linux-6.18.57-x86_64-with-glibc2.39",
+   "python": "3.12.14",
+   "torch": "2.14.1+cpu",
+   "recorded_mean_original_return": 224.06994853107503,
+   "reproduced_mean_original_return": 230.44729895787546,
+   "paired_mean_difference": 6.377350426800416,
+   "paired_difference_ci": [
+    1.5763015911835385,
+    12.768412652090857
+   ],
+   "p_value_unadjusted": 0.0032996700329967,
+   "significant_after_holm": true,
+   "recorded_pad_landing_rate": 0.84,
+   "reproduced_pad_landing_rate": 0.88,
+   "episodes_differing": 100,
+   "median_abs_return_difference": 0.03305805103819637,
+   "max_abs_return_difference": 227.67918716702604,
+   "outcome_changes": [
+    {
+     "seed": 20008,
+     "env_outcome": [
+      "at_rest",
+      "at_rest"
+     ],
+     "pad_landing": [
+      true,
+      false
+     ],
+     "recorded_return": 215.673082800153,
+     "reproduced_return": 223.4916020348972
+    },
+    {
+     "seed": 20011,
+     "env_outcome": [
+      "timeout",
+      "at_rest"
+     ],
+     "pad_landing": [
+      false,
+      true
+     ],
+     "recorded_return": 106.84635233121152,
+     "reproduced_return": 232.76479590425672
+    },
+    {
+     "seed": 20022,
+     "env_outcome": [
+      "at_rest",
+      "at_rest"
+     ],
+     "pad_landing": [
+      false,
+      true
+     ],
+     "recorded_return": 202.93742670568935,
+     "reproduced_return": 198.42283198151353
+    },
+    {
+     "seed": 20033,
+     "env_outcome": [
+      "timeout",
+      "at_rest"
+     ],
+     "pad_landing": [
+      false,
+      true
+     ],
+     "recorded_return": 104.0810331091029,
+     "reproduced_return": 220.2692025009793
+    },
+    {
+     "seed": 20060,
+     "env_outcome": [
+      "at_rest",
+      "at_rest"
+     ],
+     "pad_landing": [
+      true,
+      false
+     ],
+     "recorded_return": 185.41608862189355,
+     "reproduced_return": 195.8954942554251
+    },
+    {
+     "seed": 20068,
+     "env_outcome": [
+      "crash",
+      "at_rest"
+     ],
+     "pad_landing": [
+      false,
+      true
+     ],
+     "recorded_return": -27.589109392609743,
+     "reproduced_return": 200.0900777744163
+    },
+    {
+     "seed": 20073,
+     "env_outcome": [
+      "at_rest",
+      "at_rest"
+     ],
+     "pad_landing": [
+      false,
+      true
+     ],
+     "recorded_return": 145.6890737926204,
+     "reproduced_return": 191.62657087912038
+    },
+    {
+     "seed": 20078,
+     "env_outcome": [
+      "at_rest",
+      "at_rest"
+     ],
+     "pad_landing": [
+      false,
+      true
+     ],
+     "recorded_return": 187.00907255614146,
+     "reproduced_return": 219.85593500251693
+    }
+   ],
+   "pad_landings_gained": 6,
+   "pad_landings_lost": 2,
+   "largest_differences": [
+    {
+     "seed": 20068,
+     "abs_return_difference": 227.67918716702604
+    },
+    {
+     "seed": 20011,
+     "abs_return_difference": 125.9184435730452
+    },
+    {
+     "seed": 20033,
+     "abs_return_difference": 116.1881693918764
+    },
+    {
+     "seed": 20073,
+     "abs_return_difference": 45.937497086499974
+    },
+    {
+     "seed": 20090,
+     "abs_return_difference": 34.75440669715036
+    }
+   ]
+  },
+  "windows-default-threads (3 November)": {
+   "status": "exact",
+   "exit_code": 0,
+   "integrity_ok": true,
+   "platform": "Windows-11-10.0.26300-SP0",
+   "python": "3.12.13",
+   "torch": "2.14.1",
+   "recorded_mean_original_return": 224.06994853107503,
+   "reproduced_mean_original_return": 224.06994853107503,
+   "paired_mean_difference": 0.0,
+   "paired_difference_ci": [
+    0.0,
+    0.0
+   ],
+   "p_value_unadjusted": 1.0,
+   "significant_after_holm": false,
+   "recorded_pad_landing_rate": 0.84,
+   "reproduced_pad_landing_rate": 0.84,
+   "episodes_differing": 0,
+   "median_abs_return_difference": 0.0,
+   "max_abs_return_difference": 0.0,
+   "outcome_changes": [],
+   "pad_landings_gained": 0,
+   "pad_landings_lost": 0,
+   "largest_differences": [
+    {
+     "seed": 20000,
+     "abs_return_difference": 0.0
+    },
+    {
+     "seed": 20001,
+     "abs_return_difference": 0.0
+    },
+    {
+     "seed": 20002,
+     "abs_return_difference": 0.0
+    },
+    {
+     "seed": 20003,
+     "abs_return_difference": 0.0
+    },
+    {
+     "seed": 20004,
+     "abs_return_difference": 0.0
+    }
+   ]
+  },
+  "windows-one-thread (3 November)": {
+   "status": "exact",
+   "exit_code": 0,
+   "integrity_ok": true,
+   "platform": "Windows-11-10.0.26300-SP0",
+   "python": "3.12.13",
+   "torch": "2.14.1",
+   "recorded_mean_original_return": 224.06994853107503,
+   "reproduced_mean_original_return": 224.06994853107503,
+   "paired_mean_difference": 0.0,
+   "paired_difference_ci": [
+    0.0,
+    0.0
+   ],
+   "p_value_unadjusted": 1.0,
+   "significant_after_holm": false,
+   "recorded_pad_landing_rate": 0.84,
+   "reproduced_pad_landing_rate": 0.84,
+   "episodes_differing": 0,
+   "median_abs_return_difference": 0.0,
+   "max_abs_return_difference": 0.0,
+   "outcome_changes": [],
+   "pad_landings_gained": 0,
+   "pad_landings_lost": 0,
+   "largest_differences": [
+    {
+     "seed": 20000,
+     "abs_return_difference": 0.0
+    },
+    {
+     "seed": 20001,
+     "abs_return_difference": 0.0
+    },
+    {
+     "seed": 20002,
+     "abs_return_difference": 0.0
+    },
+    {
+     "seed": 20003,
+     "abs_return_difference": 0.0
+    },
+    {
+     "seed": 20004,
+     "abs_return_difference": 0.0
+    }
+   ]
+  }
+ },
+ "execution_agreement": {
+  "linux-default-threads (run-b; parent interrupted) vs linux-one-thread (single-policy diagnostic)": {
+   "identical_episode_returns": 100,
+   "differing_seeds": []
+  },
+  "linux-default-threads (run-b; parent interrupted) vs linux-one-thread (all-38 diagnostic; parent interrupted)": {
+   "identical_episode_returns": 99,
+   "differing_seeds": [
+    20065
+   ]
+  },
+  "linux-default-threads (run-b; parent interrupted) vs windows-default-threads (3 November)": {
+   "identical_episode_returns": 0,
+   "differing_seeds": [
+    20000,
+    20001,
+    20002,
+    20003,
+    20004,
+    20005,
+    20006,
+    20007,
+    20008,
+    20009
+   ]
+  },
+  "linux-default-threads (run-b; parent interrupted) vs windows-one-thread (3 November)": {
+   "identical_episode_returns": 0,
+   "differing_seeds": [
+    20000,
+    20001,
+    20002,
+    20003,
+    20004,
+    20005,
+    20006,
+    20007,
+    20008,
+    20009
+   ]
+  },
+  "linux-one-thread (single-policy diagnostic) vs linux-one-thread (all-38 diagnostic; parent interrupted)": {
+   "identical_episode_returns": 99,
+   "differing_seeds": [
+    20065
+   ]
+  },
+  "linux-one-thread (single-policy diagnostic) vs windows-default-threads (3 November)": {
+   "identical_episode_returns": 0,
+   "differing_seeds": [
+    20000,
+    20001,
+    20002,
+    20003,
+    20004,
+    20005,
+    20006,
+    20007,
+    20008,
+    20009
+   ]
+  },
+  "linux-one-thread (single-policy diagnostic) vs windows-one-thread (3 November)": {
+   "identical_episode_returns": 0,
+   "differing_seeds": [
+    20000,
+    20001,
+    20002,
+    20003,
+    20004,
+    20005,
+    20006,
+    20007,
+    20008,
+    20009
+   ]
+  },
+  "linux-one-thread (all-38 diagnostic; parent interrupted) vs windows-default-threads (3 November)": {
+   "identical_episode_returns": 0,
+   "differing_seeds": [
+    20000,
+    20001,
+    20002,
+    20003,
+    20004,
+    20005,
+    20006,
+    20007,
+    20008,
+    20009
+   ]
+  },
+  "linux-one-thread (all-38 diagnostic; parent interrupted) vs windows-one-thread (3 November)": {
+   "identical_episode_returns": 0,
+   "differing_seeds": [
+    20000,
+    20001,
+    20002,
+    20003,
+    20004,
+    20005,
+    20006,
+    20007,
+    20008,
+    20009
+   ]
+  },
+  "windows-default-threads (3 November) vs windows-one-thread (3 November)": {
+   "identical_episode_returns": 100,
+   "differing_seeds": []
+  }
+ }
+}

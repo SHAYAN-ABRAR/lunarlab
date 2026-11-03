@@ -1,0 +1,10 @@
+{
+  "evidence": "diagnostic, assistant-executed",
+  "output_directory": "diagnostic-single-thread-all",
+  "environment_changes": {"OMP_NUM_THREADS": "1", "MKL_NUM_THREADS": "1"},
+  "purpose": "Complete the same unmodified validator with all 38 LunarLander replays under explicitly limited numerical-library threading. The default-thread run-b is retained separately. This does not replace run-b or relax its acceptance criteria.",
+  "basis": "The default environment exposes nine PyTorch threads. The first DQN replay took 354.46 seconds of evaluation. A separate one-thread replay took 9.48 seconds and reproduced identical compared episode records, aggregate statistics and the same blocking aggregate-disagreement.",
+  "program_modified": false,
+  "historical_data_modified": false,
+  "benchmark_claim": "These are diagnostic observations during overlapping jobs, not controlled performance estimates."
+}

@@ -125,6 +125,24 @@ def test_third_party_notices_cover_every_locked_package():
     assert frontend <= listed, f"missing from THIRD_PARTY_NOTICES.md: {sorted(frontend - listed)}"
 
 
+def test_redistributed_third_party_files_keep_their_licence_and_are_listed():
+    """The elsarticle class and style are copied into the repository: they keep their own (LPPL) headers and
+    THIRD_PARTY_NOTICES.md lists them, instead of claiming that no third-party source is copied. The source
+    package leaves out ``paper/``, so there only the listing is checked."""
+    spec = importlib.util.spec_from_file_location(
+        "third_party_notices", ROOT / "tools" / "third_party_notices.py"
+    )
+    notices_tool = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(notices_tool)
+    notices = (ROOT / "THIRD_PARTY_NOTICES.md").read_text(encoding="utf-8")
+    assert "## Third-party files redistributed in this repository" in notices
+    assert notices_tool.REDISTRIBUTED
+    for path, _what, licence, header_phrase in notices_tool.REDISTRIBUTED:
+        assert f"| `{path}` |" in notices and licence in notices
+        if (ROOT / path).is_file():
+            assert header_phrase in (ROOT / path).read_text(encoding="utf-8"), path
+
+
 @pytest.mark.parametrize("name", ["bug_report.yml", "feature_request.yml", "reproducibility_report.yml"])
 def test_issue_forms_are_valid_yaml_with_a_body(name):
     form = yaml.safe_load((ROOT / ".github" / "ISSUE_TEMPLATE" / name).read_text(encoding="utf-8"))

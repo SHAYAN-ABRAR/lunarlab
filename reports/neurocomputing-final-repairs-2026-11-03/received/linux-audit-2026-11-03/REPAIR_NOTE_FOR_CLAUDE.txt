@@ -1,0 +1,143 @@
+LunarLab — focused follow-up to the assistant-executed Linux audit
+Prepared 3 November 2026. Read REPORT.md and the raw reports first.
+
+This is a repair/investigation brief, not permission to commit, push, merge, tag,
+deposit, reserve a DOI, contact anyone or submit. Preserve the supplied candidate
+and all historical evidence. No new training is requested.
+
+1. Keep and investigate the blocking DQN Linux replay; do not make the gate pass
+
+Policy:
+  dqn-flawed-hover-bonus/20261015-224318-dqn-hover-bonus-s0-custom-aefc
+
+Preserved default-thread evidence:
+  run-b/reports/lunarlander-20261015-224318-dqn-hover-bonus-s0-custom-aefc.json
+  run-b/logs/lunarlander-20261015-224318-dqn-hover-bonus-s0-custom-aefc.log
+The report has intact integrity, exit 1, status aggregate-disagreement. Mean
+original return changes from 224.06994853107503 to 230.24694369083645. A separately
+labelled one-thread replay in diagnostics/single-thread-dqn repeats the same
+compared episode records. The full diagnostic's report is separate and must not
+be conflated with this first run; small runtime-dependent numerical differences
+between executions are retained as observed.
+
+Reproduce from an untouched, fresh extraction, with Python 3.12 and uv:
+  python source/tools/validate_review_package.py . NEW-EMPTY-OUT --fresh-venv --commands --lunarlander-replays all
+
+The diagnostic used the same command/source with OMP_NUM_THREADS=1 and
+MKL_NUM_THREADS=1. State these settings explicitly. The default B run was
+interrupted and has no final JSON or exit status; do not describe it as complete.
+
+For a focused replay after extracting the historical study ZIP:
+  python -m lunarlab reproduce-artifact --artifact ARTIFACT_DIR --report NEW-REPORT.json
+Use a new empty LUNARLAB_HOME. The candidate source must be installed with its
+locked CPU dependencies on Linux. Do not substitute newly trained weights.
+
+Suggested diagnostic only (not executed as part of this audit):
+  On Windows:
+  python -m lunarlab trace-artifact --artifact ARTIFACT_DIR --seeds 20068,20011,20033 --out NEW-WINDOWS-REFERENCE.npz
+  On Linux:
+  python -m lunarlab trace-artifact --artifact ARTIFACT_DIR --compare NEW-WINDOWS-REFERENCE.npz --report NEW-LINUX-COMPARISON.json
+These seeds were selected because the preserved default run had large return
+differences. They cannot estimate the frequency of divergence. Keep trace files
+new and separate from historical records. Locate the first policy-action versus
+simulator-state difference; do not assert Box2D/compiler causation in advance.
+
+Classification is implemented at source/lunarlab/reproduce.py:424–450. A higher
+mean is still a disagreement. Do not loosen thresholds, change historical
+records or relabel aggregate-disagreement as numerical-difference. The tests
+correct metrics within each policy; this is not a study-wide equivalence claim.
+Disclose the new observation even if no software defect is found.
+
+2. Preserve both installation logs
+
+Fault: source/tools/validate_review_package.py:334–340.
+Both uv pip install commands produce venv-pip-install.log, so the second command
+overwrites the first dependency-install stream. This is already acknowledged in
+the supplied SUMMARY and independently confirmed by inspection and execution.
+
+Use distinct step identifiers, for example venv-create.log,
+venv-install-lock.log and venv-install-source.log. Keep the commands, CPU torch
+selection and dependency pins unchanged. Add a focused regression test that
+executes/stubs both installation steps with distinct sentinel outputs and
+asserts both logs survive. Re-run fresh environment setup and the two requested
+test modules. Do not reconstruct an overwritten historical log.
+
+3. Do not undo the three comparison/validator repairs
+
+The preserved A run passes the v2 comparison: 42 pairs, 40 exact-agreement,
+two platform-numerical-difference, no failure; all three set checks pass.
+NoSuchProcess is a real sandbox telemetry limitation. The frozen originals must
+retain their recorded hashes. For the unmodified-program reproduction, use:
+  python source/tools/validate_review_package.py . NEW-EMPTY-OUT --fresh-venv --commands --unmodified-comparison
+
+Use run-c-one-thread/validation.json and its raw stderr files for the actual
+completed C outcome (OMP_NUM_THREADS=1 and MKL_NUM_THREADS=1). Default-thread
+run-c-final was interrupted before its final report; do not invent its exit.
+Preserve null with an explicit reason when telemetry is unavailable;
+never substitute zero. Do not call missing JSON/checks=None a passing scientific
+comparison. The runner's own exit and its child-process exits are distinct.
+
+4. Narrow verification claims and update publication text
+
+source/paper/neurocomputing/main.tex:198 currently says:
+  "checks that every file a record names is present with its recorded digest"
+Use:
+  "checks distributed dependencies against their recorded digests and verifies
+   the inventory of omitted intermediate checkpoints"
+The 192 named-checkpoint checks include 36 distributed frozen files and 156
+omitted scheduled checkpoints represented by inventory metadata. Align
+paper/neurocomputing/EVIDENCE.md and candidate START_HERE.md. Preserve the 624
+count but explain what is counted.
+
+main.tex:212: replace the stale unmerged statement: PR #3 merged as
+05ca17f7308e4e0d34773371d1abe229ea6fdf0f on 2 November 2026. Keep c9b9384 library,
+954607b validator, a38d07f candidate and each historical experiment identity
+distinct. Explicitly disclose that the modified 32823f3 training tree is not
+fully reconstructed by the retained provenance.
+
+main.tex:195: add the dated Linux result without overwriting the nine-policy
+historical record or implying statistical equivalence. Use the report's full
+diagnostic count/statuses and identify its runtime; do not claim default B ran
+to completion. main.tex:200: distinguish value reproduction from output bytes
+and copied Figure 2 rendering. Figure 2 values were independently re-derived.
+
+After the author confirms AI use, add the explanatory Figure 1 caption's tool,
+version and role; restore the completed declaration immediately before the
+bibliography (after the appendix), and include confirmed CRediT roles. Preserve
+lowercase email, AIUB, self-funding, institutional acknowledgment and exactly:
+  The author declares no competing interests.
+Do not invent author review, roles, identifiers or AI model versions.
+
+5. Correct archive/licensing instructions before any deposit
+
+source/THIRD_PARTY_NOTICES.md:3–6 and source/tools/third_party_notices.py:
+correct the claim that no third-party source is copied. The included
+elsarticle.cls and elsarticle-num.bst retain LPPL 1.3-or-later headers. Preserve
+their terms and avoid blanket MIT claims for archive contents.
+
+source/reports/neurocomputing-final-validation-2026-11-01/archive/:
+  LICENSING_PROPOSAL.md:23: nested source archives contain data/models/text and
+  third-party files; a container-level MIT label must retain those exceptions.
+  Lines 43–44: changing LICENSES.md requires rebuilding inventory, SHA256SUMS
+  and outer ZIP hashes, although scientific bytes remain unchanged.
+  ZENODO_METADATA.md:3–5: distinguish REST metadata wrapper from top-level
+  .zenodo.json; remove _status only in an actual approved route-specific payload.
+  zenodo-metadata.json: keep author licence choices pending. Do not invent a
+  multi-licence string for the legacy API. Update Linux limitations truthfully.
+  DEPOSIT_INSTRUCTIONS.md:4–5: Zenodo currently allows file edits within 45 days;
+  do not present absolute immutability as a service rule. Preserve cited versions
+  as the project's practice. Do not create a DOI or deposit without authorization.
+
+The licence mapper covers 2,178 inventoried files, not all 2,180 archive files;
+state the exclusions of inventory.json and SHA256SUMS or cover them explicitly.
+Author choices on models/data/text/received review material remain pending.
+
+6. Validation after authorized edits
+
+Use focused tests for changed behavior. Build the final candidate only after
+author decisions; verify every checksum and dependency, recompute plots and
+statistics, and retain all replay outcomes. A known Linux limitation must remain
+visible. Compile and inspect the final manuscript after its declarations and
+archive reference change. Supply raw logs, exit codes, exact revision identities
+and the final ZIP's size and SHA-256. Do not claim the previously inspected PDF
+certifies a later rebuild. No acceptance probability is requested.

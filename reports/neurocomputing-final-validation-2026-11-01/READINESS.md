@@ -1,5 +1,10 @@
 # Readiness after the validator repairs (current record)
 
+> **Superseded, 3 November 2026:** the current record is
+> [`../neurocomputing-final-repairs-2026-11-03/READINESS.md`](../neurocomputing-final-repairs-2026-11-03/READINESS.md).
+> Pull request #3 was merged as `05ca17f` on 2 November 2026. The journal's further answer settles the
+> page-limit, interview and data-citation questions listed below.
+
 Written 1 November 2026. This is a record of evidence, not a rating, and it estimates no acceptance. The
 manuscript is a **working draft, not submission-ready**: the archive deposit and the author's declarations
 are outstanding (see "Author decisions").
