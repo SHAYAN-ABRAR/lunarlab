@@ -29,7 +29,7 @@ The two JSON files are drafts beside this document, not active configuration: no
 | Title | LunarLab: software, study records and trained policies for auditable reward-design experiments | |
 | Creator | Abrar, Shayan; affiliation American International University-Bangladesh (AIUB) | Add an ORCID iD only if the author has one; none is assumed |
 | Description | See below | Zenodo accepts simple HTML |
-| Version | 0.1.0 | The software version. The exact source revision is named in the description and in the archive's `REVISIONS.md`: `CANDIDATE.md` of the candidate being deposited gives it |
+| Version | 0.1.0 | The software version. The exact source revision is named in the description and in the archive's `REVISIONS.md`. For the candidate of 3 November it is `c0d9e5d0823167584a7bff37de9661c35a58228c` (`../../neurocomputing-final-repairs-2026-11-03/archive/CANDIDATE.md`), which the REST draft names |
 | Publication date | Set on the day the record is published | Not filled in here |
 | Licences | **To be chosen by the author** (`LICENSING_PROPOSAL.md`; proposed: MIT and CC BY 4.0, with `LICENSES.md` as the file map) | Do not accept Zenodo's pre-selected licence for the whole record |
 | Keywords | reinforcement learning; reward shaping; reward hacking; reproducibility; evaluation; research software; Stable-Baselines3; Gymnasium; LunarLander; CartPole | |

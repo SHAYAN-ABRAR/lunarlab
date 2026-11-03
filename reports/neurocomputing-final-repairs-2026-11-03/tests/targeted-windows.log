@@ -1,0 +1,28 @@
+Targeted tests and lint at c0d9e5d (working tree also holds this folder's uncommitted records), 2026-11-03T15:50:21Z
+Interpreter: uv-managed CPython 3.12.13 run directly (the venv launcher is blocked); PYTHONPATH = a fresh target install of requirements.lock; PYTHONNOUSERSITE=1
+
+$ python -m pytest -q -p no:cacheprovider tests/test_validator_failures.py tests/test_followup_comparison.py tests/test_manuscript_check.py tests/test_project_metadata.py
+........................................................................ [ 61%]
+..............................................                           [100%]
+118 passed in 14.11s
+
+$ ruff check lunarlab tests tools examples paper
+All checks passed!
+$ ruff format --check lunarlab tests tools examples paper
+138 files already formatted
+
+$ python tools/third_party_notices.py --check
+THIRD_PARTY_NOTICES.md is current
+
+$ python paper/neurocomputing/check_manuscript.py --draft
+abstract: 180 words; keywords: 5
+main.tex: 2 AUTHOR TO CONFIRM item(s) awaiting the author
+AI_Disclosure_For_Submission.tex: 3 AUTHOR TO CONFIRM item(s) awaiting the author
+12 cited keys, 17 in references.bib
+OK
+exit=0
+$ python paper/neurocomputing/check_manuscript.py --final   (expected to fail while author items and the draft footer remain)
+PROBLEM: AUTHOR TO CONFIRM items remain for the author: {'main.tex': 2, 'AI_Disclosure_For_Submission.tex': 3}
+PROBLEM: the working-draft footer ('Working draft, not submitted') is still active
+2 problem(s)
+exit=1

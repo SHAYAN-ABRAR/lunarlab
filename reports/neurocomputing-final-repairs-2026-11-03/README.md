@@ -19,6 +19,13 @@ unchanged**, nothing was trained, and nothing was deposited, published or submit
 | [PROGRESS_LOG.md](PROGRESS_LOG.md) | The dated log (UTC): starting state, every step and command |
 | [received/](received/linux-audit-2026-11-03/RECEIVED.md) | The labelled subset of the Linux audit, checked against its own digests |
 | [dqn-diagnostic/](dqn-diagnostic/README.md) | The policy that disagrees on Linux: the received reports summarized; its exact replays and trace on Windows; the pending Linux comparison |
+| [archive/](archive/CANDIDATE.md) | The new archive candidate (`c0d9e5d`): its record, its own documents and `SHA256SUMS`, its licence map, and the build logs. Nothing was deposited |
+| [validation/](validation/README.md) | The candidate's fresh-extraction validation on Windows (every step passed; 38 of 38 replays exact), and three negative checks |
+| [manuscript/](manuscript/VISUAL_REVIEW.md) | The two CI builds of the manuscript: logs, digests and the page-by-page review |
+| [ci/](ci/run-41667323177-c0d9e5d/README.md) | CI of `c0d9e5d`: all six jobs passed; the Linux source archive is byte-identical to the Windows one |
+| [integrity/](integrity/README.md) | The historical evidence compared with the inventory of 27 October: 2,359 of 2,359 unchanged |
+| [tests/](tests/) | The local full suite (708 passed) and the targeted tests, lint and checks |
+| [package/](package/build_review_zip.py) | `build_review_zip.py`, which assembles and seals the review ZIP |
 | [READINESS.md](READINESS.md) | What was repaired and verified, what is pending, the author's decisions |
 
 The validator is [`tools/validate_review_package.py`](../../tools/validate_review_package.py); its regression tests

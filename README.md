@@ -523,6 +523,15 @@ Records: [`reports/neurocomputing-final-validation-2026-11-01/`](reports/neuroco
   author's confirmations marked; a CRediT proposal and draft highlights await the author.
 - **Licensing:** `THIRD_PARTY_NOTICES.md` and its generator now list the copied `elsarticle` files under
   their LPPL. The licence map covers every file of a candidate, and the Zenodo drafts are split by route.
+- **New archive candidate and its validation:** built from `c0d9e5d` (ZIP SHA-256 `8e4889ce…`; not
+  deposited). From a fresh extraction on Windows every validator step passed: 2,695 checksums, 624
+  dependency checks, the plotted values, the 3,800 episodes' statistics, **38 of 38 LunarLander replays
+  `exact`** (the DQN policy included), 18 of 18 CartPole artifacts, and the comparison 42 of 42 in exact
+  agreement with both program sets. Damaged inputs still give named failures, a written report and a
+  nonzero exit.
+- **Tests:** 708 passed locally. CI run [41667323177](https://github.com/SHAYAN-ABRAR/lunarlab/actions/runs/41667323177)
+  passed all six jobs: Linux 704 passed and 4 Windows-only tests skipped; Windows 294 tests on each Python;
+  195 release tests; 15 browser flows. The Linux and Windows source archives are byte-identical.
 - **Journal:** the further answer settles the remaining questions: the GitHub link can be cited, there is
   no word or page restriction, and the review is written. A Zenodo deposit is optional.
 

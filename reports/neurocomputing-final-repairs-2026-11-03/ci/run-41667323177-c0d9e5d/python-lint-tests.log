@@ -1,0 +1,643 @@
+Python · lint + tests	Set up job	﻿2026-11-03T15:46:55.0628223Z Current runner version: '2.338.2'
+Python · lint + tests	Set up job	2026-11-03T15:46:55.0643975Z ##[group]Runner Image Provisioner
+Python · lint + tests	Set up job	2026-11-03T15:46:55.0644482Z Hosted Compute Agent
+Python · lint + tests	Set up job	2026-11-03T15:46:55.0644902Z Version: 20261021.618
+Python · lint + tests	Set up job	2026-11-03T15:46:55.0645261Z Commit: 21505ad2541d5be6135ed84fc33697146cf75b8e
+Python · lint + tests	Set up job	2026-11-03T15:46:55.0645740Z Build Date: 2026-10-21T00:45:21Z
+Python · lint + tests	Set up job	2026-11-03T15:46:55.0646143Z Worker ID: {f2a57f1c-bf9d-440f-98ca-dade61aad5db}
+Python · lint + tests	Set up job	2026-11-03T15:46:55.0646548Z Region: westus3
+Python · lint + tests	Set up job	2026-11-03T15:46:55.0646924Z Cloud: Azure
+Python · lint + tests	Set up job	2026-11-03T15:46:55.0647267Z ##[endgroup]
+Python · lint + tests	Set up job	2026-11-03T15:46:55.0648007Z ##[group]Operating System
+Python · lint + tests	Set up job	2026-11-03T15:46:55.0648364Z Ubuntu
+Python · lint + tests	Set up job	2026-11-03T15:46:55.0648670Z 26.04.1
+Python · lint + tests	Set up job	2026-11-03T15:46:55.0648995Z LTS
+Python · lint + tests	Set up job	2026-11-03T15:46:55.0649294Z ##[endgroup]
+Python · lint + tests	Set up job	2026-11-03T15:46:55.0650125Z ##[group]Runner Image
+Python · lint + tests	Set up job	2026-11-03T15:46:55.0650513Z Image: ubuntu-26.04
+Python · lint + tests	Set up job	2026-11-03T15:46:55.0650844Z Version: 20261025.179.1
+Python · lint + tests	Set up job	2026-11-03T15:46:55.0651489Z Included Software: https://github.com/actions/runner-images/blob/ubuntu26/20261025.179/images/ubuntu/Ubuntu2604-Readme.md
+Python · lint + tests	Set up job	2026-11-03T15:46:55.0652459Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu26%2F20261025.179
+Python · lint + tests	Set up job	2026-11-03T15:46:55.0653041Z ##[endgroup]
+Python · lint + tests	Set up job	2026-11-03T15:46:55.0653671Z ##[group]GITHUB_TOKEN Permissions
+Python · lint + tests	Set up job	2026-11-03T15:46:55.0654904Z Contents: read
+Python · lint + tests	Set up job	2026-11-03T15:46:55.0655240Z Metadata: read
+Python · lint + tests	Set up job	2026-11-03T15:46:55.0655632Z ##[endgroup]
+Python · lint + tests	Set up job	2026-11-03T15:46:55.0656840Z Secret source: Actions
+Python · lint + tests	Set up job	2026-11-03T15:46:55.0657384Z Cache mode: write
+Python · lint + tests	Set up job	2026-11-03T15:46:55.0657847Z Prepare workflow directory
+Python · lint + tests	Set up job	2026-11-03T15:46:55.0884351Z Prepare all required actions
+Python · lint + tests	Set up job	2026-11-03T15:46:55.0913523Z Getting action download info
+Python · lint + tests	Set up job	2026-11-03T15:46:55.4168313Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+Python · lint + tests	Set up job	2026-11-03T15:46:55.5061444Z Download action repository 'astral-sh/setup-uv@v6' (SHA:d0cc045d04ccac9d8b7881df0226f9e82c39688e)
+Python · lint + tests	Set up job	2026-11-03T15:46:56.2647907Z Download action repository 'actions/upload-artifact@v4' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+Python · lint + tests	Set up job	2026-11-03T15:46:56.4543588Z Complete job name: Python · lint + tests
+Python · lint + tests	Run actions/checkout@v4	﻿2026-11-03T15:46:56.5135607Z ##[group]Run actions/checkout@v4
+Python · lint + tests	Run actions/checkout@v4	2026-11-03T15:46:56.5136396Z with:
+Python · lint + tests	Run actions/checkout@v4	2026-11-03T15:46:56.5136909Z   repository: SHAYAN-ABRAR/lunarlab
+Python · lint + tests	Run actions/checkout@v4	2026-11-03T15:46:56.5142160Z   token: ***
+Python · lint + tests	Run actions/checkout@v4	2026-11-03T15:46:56.5142658Z   ssh-strict: true
+Python · lint + tests	Run actions/checkout@v4	2026-11-03T15:46:56.5143175Z   ssh-user: git
+Python · lint + tests	Run actions/checkout@v4	2026-11-03T15:46:56.5143702Z   persist-credentials: true
+Python · lint + tests	Run actions/checkout@v4	2026-11-03T15:46:56.5144284Z   clean: true
+Python · lint + tests	Run actions/checkout@v4	2026-11-03T15:46:56.5144818Z   sparse-checkout-cone-mode: true
+Python · lint + tests	Run actions/checkout@v4	2026-11-03T15:46:56.5145444Z   fetch-depth: 1
+Python · lint + tests	Run actions/checkout@v4	2026-11-03T15:46:56.5145954Z   fetch-tags: false
+Python · lint + tests	Run actions/checkout@v4	2026-11-03T15:46:56.5146484Z   show-progress: true
+Python · lint + tests	Run actions/checkout@v4	2026-11-03T15:46:56.5147021Z   lfs: false
+Python · lint + tests	Run actions/checkout@v4	2026-11-03T15:46:56.5147523Z   submodules: false
+Python · lint + tests	Run actions/checkout@v4	2026-11-03T15:46:56.5148060Z   set-safe-directory: true
+Python · lint + tests	Run actions/checkout@v4	2026-11-03T15:46:56.5148663Z   allow-unsafe-pr-checkout: false
+Python · lint + tests	Run actions/checkout@v4	2026-11-03T15:46:56.5149349Z env:
+Python · lint + tests	Run actions/checkout@v4	2026-11-03T15:46:56.5149913Z   SDL_VIDEODRIVER: dummy
+Python · lint + tests	Run actions/checkout@v4	2026-11-03T15:46:56.5150489Z   SDL_AUDIODRIVER: dummy
+Python · lint + tests	Run actions/checkout@v4	2026-11-03T15:46:56.5151063Z ##[endgroup]
+Python · lint + tests	Run actions/checkout@v4	2026-11-03T15:46:56.6829271Z Syncing repository: SHAYAN-ABRAR/lunarlab
+Python · lint + tests	Run actions/checkout@v4	2026-11-03T15:46:56.6831815Z ##[group]Getting Git version info
+Python · lint + tests	Run actions/checkout@v4	2026-11-03T15:46:56.6833056Z Working directory is '/home/runner/work/lunarlab/lunarlab'
+Python · lint + tests	Run actions/checkout@v4	2026-11-03T15:46:56.6834787Z [command]/usr/bin/git version
+Python · lint + tests	Run actions/checkout@v4	2026-11-03T15:46:56.6835871Z git version 2.56.0
+Python · lint + tests	Run actions/checkout@v4	2026-11-03T15:46:56.6838506Z ##[endgroup]
+Python · lint + tests	Run actions/checkout@v4	2026-11-03T15:46:56.6844125Z Temporarily overriding HOME='/home/runner/work/_temp/d440185a-f226-40c8-90ad-e90e79e97db6' before making global git config changes
+Python · lint + tests	Run actions/checkout@v4	2026-11-03T15:46:56.6845834Z Adding repository directory to the temporary git global config as a safe directory
+Python · lint + tests	Run actions/checkout@v4	2026-11-03T15:46:56.6847571Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/lunarlab/lunarlab
+Python · lint + tests	Run actions/checkout@v4	2026-11-03T15:46:56.6908952Z Deleting the contents of '/home/runner/work/lunarlab/lunarlab'
+Python · lint + tests	Run actions/checkout@v4	2026-11-03T15:46:56.6913656Z ##[group]Initializing the repository
+Python · lint + tests	Run actions/checkout@v4	2026-11-03T15:46:56.6917096Z [command]/usr/bin/git init /home/runner/work/lunarlab/lunarlab
+Python · lint + tests	Run actions/checkout@v4	2026-11-03T15:46:56.6994941Z hint: Using 'master' as the name for the initial branch. This default branch name
+Python · lint + tests	Run actions/checkout@v4	2026-11-03T15:46:56.6996520Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+Python · lint + tests	Run actions/checkout@v4	2026-11-03T15:46:56.6997873Z hint: to use in all of your new repositories, which will suppress this warning,
+Python · lint + tests	Run actions/checkout@v4	2026-11-03T15:46:56.6999765Z hint: call:
+Python · lint + tests	Run actions/checkout@v4	2026-11-03T15:46:56.7000887Z hint:
+Python · lint + tests	Run actions/checkout@v4	2026-11-03T15:46:56.7002103Z hint: 	git config --global init.defaultBranch <name>
+Python · lint + tests	Run actions/checkout@v4	2026-11-03T15:46:56.7003354Z hint:
+Python · lint + tests	Run actions/checkout@v4	2026-11-03T15:46:56.7004479Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+Python · lint + tests	Run actions/checkout@v4	2026-11-03T15:46:56.7006327Z hint: 'development'. The just-created branch can be renamed via this command:
+Python · lint + tests	Run actions/checkout@v4	2026-11-03T15:46:56.7007811Z hint:
+Python · lint + tests	Run actions/checkout@v4	2026-11-03T15:46:56.7008701Z hint: 	git branch -m <name>
+Python · lint + tests	Run actions/checkout@v4	2026-11-03T15:46:56.7009819Z hint:
+Python · lint + tests	Run actions/checkout@v4	2026-11-03T15:46:56.7011021Z hint: Disable this message with "git config set advice.defaultBranchName false"
+Python · lint + tests	Run actions/checkout@v4	2026-11-03T15:46:56.7013007Z Initialized empty Git repository in /home/runner/work/lunarlab/lunarlab/.git/
+Python · lint + tests	Run actions/checkout@v4	2026-11-03T15:46:56.7016656Z [command]/usr/bin/git remote add origin https://github.com/SHAYAN-ABRAR/lunarlab
+Python · lint + tests	Run actions/checkout@v4	2026-11-03T15:46:56.7048395Z ##[endgroup]
+Python · lint + tests	Run actions/checkout@v4	2026-11-03T15:46:56.7050159Z ##[group]Disabling automatic garbage collection
+Python · lint + tests	Run actions/checkout@v4	2026-11-03T15:46:56.7051805Z [command]/usr/bin/git config --local gc.auto 0
+Python · lint + tests	Run actions/checkout@v4	2026-11-03T15:46:56.7076204Z ##[endgroup]
+Python · lint + tests	Run actions/checkout@v4	2026-11-03T15:46:56.7077609Z ##[group]Setting up auth
+Python · lint + tests	Run actions/checkout@v4	2026-11-03T15:46:56.7080750Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Python · lint + tests	Run actions/checkout@v4	2026-11-03T15:46:56.7107257Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Python · lint + tests	Run actions/checkout@v4	2026-11-03T15:46:56.7458655Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Python · lint + tests	Run actions/checkout@v4	2026-11-03T15:46:56.7485669Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Python · lint + tests	Run actions/checkout@v4	2026-11-03T15:46:56.7688456Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Python · lint + tests	Run actions/checkout@v4	2026-11-03T15:46:56.7714780Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Python · lint + tests	Run actions/checkout@v4	2026-11-03T15:46:56.7915430Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+Python · lint + tests	Run actions/checkout@v4	2026-11-03T15:46:56.7945578Z ##[endgroup]
+Python · lint + tests	Run actions/checkout@v4	2026-11-03T15:46:56.7947113Z ##[group]Fetching the repository
+Python · lint + tests	Run actions/checkout@v4	2026-11-03T15:46:56.7953791Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +c0d9e5d0823167584a7bff37de9661c35a58228c:refs/remotes/origin/research/neurocomputing-final-repairs
+Python · lint + tests	Run actions/checkout@v4	2026-11-03T15:47:03.5025673Z From https://github.com/SHAYAN-ABRAR/lunarlab
+Python · lint + tests	Run actions/checkout@v4	2026-11-03T15:47:03.5032990Z  * [new ref]         c0d9e5d0823167584a7bff37de9661c35a58228c -> origin/research/neurocomputing-final-repairs
+Python · lint + tests	Run actions/checkout@v4	2026-11-03T15:47:03.5034722Z ##[endgroup]
+Python · lint + tests	Run actions/checkout@v4	2026-11-03T15:47:03.5035533Z ##[group]Determining the checkout info
+Python · lint + tests	Run actions/checkout@v4	2026-11-03T15:47:03.5036260Z ##[endgroup]
+Python · lint + tests	Run actions/checkout@v4	2026-11-03T15:47:03.5037870Z [command]/usr/bin/git sparse-checkout disable
+Python · lint + tests	Run actions/checkout@v4	2026-11-03T15:47:03.5076998Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+Python · lint + tests	Run actions/checkout@v4	2026-11-03T15:47:03.5102129Z ##[group]Checking out the ref
+Python · lint + tests	Run actions/checkout@v4	2026-11-03T15:47:03.5110465Z [command]/usr/bin/git checkout --progress --force -B research/neurocomputing-final-repairs refs/remotes/origin/research/neurocomputing-final-repairs
+Python · lint + tests	Run actions/checkout@v4	2026-11-03T15:47:03.7212373Z Switched to a new branch 'research/neurocomputing-final-repairs'
+Python · lint + tests	Run actions/checkout@v4	2026-11-03T15:47:03.7214296Z branch 'research/neurocomputing-final-repairs' set up to track 'origin/research/neurocomputing-final-repairs'.
+Python · lint + tests	Run actions/checkout@v4	2026-11-03T15:47:03.7243201Z ##[endgroup]
+Python · lint + tests	Run actions/checkout@v4	2026-11-03T15:47:03.7281828Z [command]/usr/bin/git log -1 --format=%H
+Python · lint + tests	Run actions/checkout@v4	2026-11-03T15:47:03.7302904Z c0d9e5d0823167584a7bff37de9661c35a58228c
+Python · lint + tests	Run astral-sh/setup-uv@v6	﻿2026-11-03T15:47:03.7543443Z ##[group]Run astral-sh/setup-uv@v6
+Python · lint + tests	Run astral-sh/setup-uv@v6	2026-11-03T15:47:03.7543653Z with:
+Python · lint + tests	Run astral-sh/setup-uv@v6	2026-11-03T15:47:03.7543770Z   python-version: 3.12
+Python · lint + tests	Run astral-sh/setup-uv@v6	2026-11-03T15:47:03.7543907Z   activate-environment: false
+Python · lint + tests	Run astral-sh/setup-uv@v6	2026-11-03T15:47:03.7544077Z   working-directory: /home/runner/work/lunarlab/lunarlab
+Python · lint + tests	Run astral-sh/setup-uv@v6	2026-11-03T15:47:03.7544272Z   server-url: https://github.com
+Python · lint + tests	Run astral-sh/setup-uv@v6	2026-11-03T15:47:03.7545631Z   github-token: ***
+Python · lint + tests	Run astral-sh/setup-uv@v6	2026-11-03T15:47:03.7545750Z   enable-cache: auto
+Python · lint + tests	Run astral-sh/setup-uv@v6	2026-11-03T15:47:03.7546042Z   cache-dependency-glob: **/*requirements*.txt
+Python · lint + tests	Run astral-sh/setup-uv@v6	**/*requirements*.in
+Python · lint + tests	Run astral-sh/setup-uv@v6	**/*constraints*.txt
+Python · lint + tests	Run astral-sh/setup-uv@v6	**/*constraints*.in
+Python · lint + tests	Run astral-sh/setup-uv@v6	**/pyproject.toml
+Python · lint + tests	Run astral-sh/setup-uv@v6	**/uv.lock
+Python · lint + tests	Run astral-sh/setup-uv@v6	**/*.py.lock
+Python · lint + tests	Run astral-sh/setup-uv@v6	
+Python · lint + tests	Run astral-sh/setup-uv@v6	2026-11-03T15:47:03.7546375Z   restore-cache: true
+Python · lint + tests	Run astral-sh/setup-uv@v6	2026-11-03T15:47:03.7546494Z   save-cache: true
+Python · lint + tests	Run astral-sh/setup-uv@v6	2026-11-03T15:47:03.7546608Z   prune-cache: true
+Python · lint + tests	Run astral-sh/setup-uv@v6	2026-11-03T15:47:03.7546733Z   ignore-nothing-to-cache: false
+Python · lint + tests	Run astral-sh/setup-uv@v6	2026-11-03T15:47:03.7546873Z   ignore-empty-workdir: false
+Python · lint + tests	Run astral-sh/setup-uv@v6	2026-11-03T15:47:03.7547024Z   add-problem-matchers: true
+Python · lint + tests	Run astral-sh/setup-uv@v6	2026-11-03T15:47:03.7547181Z env:
+Python · lint + tests	Run astral-sh/setup-uv@v6	2026-11-03T15:47:03.7547324Z   SDL_VIDEODRIVER: dummy
+Python · lint + tests	Run astral-sh/setup-uv@v6	2026-11-03T15:47:03.7547476Z   SDL_AUDIODRIVER: dummy
+Python · lint + tests	Run astral-sh/setup-uv@v6	2026-11-03T15:47:03.7547598Z ##[endgroup]
+Python · lint + tests	Run astral-sh/setup-uv@v6	2026-11-03T15:47:03.8633168Z (node:2159) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+Python · lint + tests	Run astral-sh/setup-uv@v6	2026-11-03T15:47:03.8633732Z (Use `node --trace-deprecation ...` to show where the warning was created)
+Python · lint + tests	Run astral-sh/setup-uv@v6	2026-11-03T15:47:03.8699820Z Trying to find version for uv in: /home/runner/work/lunarlab/lunarlab/uv.toml
+Python · lint + tests	Run astral-sh/setup-uv@v6	2026-11-03T15:47:03.8700581Z Could not find file: /home/runner/work/lunarlab/lunarlab/uv.toml
+Python · lint + tests	Run astral-sh/setup-uv@v6	2026-11-03T15:47:03.8701175Z Trying to find version for uv in: /home/runner/work/lunarlab/lunarlab/pyproject.toml
+Python · lint + tests	Run astral-sh/setup-uv@v6	2026-11-03T15:47:03.8716960Z Could not determine uv version from uv.toml or pyproject.toml. Falling back to latest.
+Python · lint + tests	Run astral-sh/setup-uv@v6	2026-11-03T15:47:03.8717995Z Getting latest version from GitHub API...
+Python · lint + tests	Run astral-sh/setup-uv@v6	2026-11-03T15:47:04.2050451Z manifest-file not provided, reading from local file.
+Python · lint + tests	Run astral-sh/setup-uv@v6	2026-11-03T15:47:04.2074573Z manifest-file does not contain version 0.13.7, arch x86_64, platform unknown-linux-gnu. Falling back to GitHub releases.
+Python · lint + tests	Run astral-sh/setup-uv@v6	2026-11-03T15:47:04.2075462Z Downloading uv from "https://github.com/astral-sh/uv/releases/download/0.13.7/uv-x86_64-unknown-linux-gnu.tar.gz" ...
+Python · lint + tests	Run astral-sh/setup-uv@v6	2026-11-03T15:47:04.6232926Z [command]/usr/bin/tar xz --warning=no-unknown-keyword --overwrite -C /home/runner/work/_temp/6e46ad1c-9b0f-45be-bdaf-dcb179fe680c -f /home/runner/work/_temp/5c9b0a1c-f18d-4dd5-97fc-73bab0385c82
+Python · lint + tests	Run astral-sh/setup-uv@v6	2026-11-03T15:47:04.9166680Z Added /home/runner/.local/bin to the path
+Python · lint + tests	Run astral-sh/setup-uv@v6	2026-11-03T15:47:04.9168198Z Added /opt/hostedtoolcache/uv/0.13.7/x86_64 to the path
+Python · lint + tests	Run astral-sh/setup-uv@v6	2026-11-03T15:47:04.9168741Z Set UV_PYTHON to 3.12
+Python · lint + tests	Run astral-sh/setup-uv@v6	2026-11-03T15:47:04.9183607Z Set UV_CACHE_DIR to /home/runner/work/_temp/setup-uv-cache
+Python · lint + tests	Run astral-sh/setup-uv@v6	2026-11-03T15:47:04.9183927Z Successfully installed uv version 0.13.7
+Python · lint + tests	Run astral-sh/setup-uv@v6	2026-11-03T15:47:04.9185202Z Searching files using cache dependency glob: /home/runner/work/lunarlab/lunarlab/**/*requirements*.txt,/home/runner/work/lunarlab/lunarlab/**/*requirements*.in,/home/runner/work/lunarlab/lunarlab/**/*constraints*.txt,/home/runner/work/lunarlab/lunarlab/**/*constraints*.in,/home/runner/work/lunarlab/lunarlab/**/pyproject.toml,/home/runner/work/lunarlab/lunarlab/**/uv.lock,/home/runner/work/lunarlab/lunarlab/**/*.py.lock
+Python · lint + tests	Run astral-sh/setup-uv@v6	2026-11-03T15:47:04.9737350Z /home/runner/work/lunarlab/lunarlab/pyproject.toml
+Python · lint + tests	Run astral-sh/setup-uv@v6	2026-11-03T15:47:05.0963099Z /home/runner/work/lunarlab/lunarlab/requirements.in
+Python · lint + tests	Run astral-sh/setup-uv@v6	2026-11-03T15:47:05.0994509Z Found 2 files to hash.
+Python · lint + tests	Run astral-sh/setup-uv@v6	2026-11-03T15:47:05.1057594Z Trying to restore uv cache from GitHub Actions cache with key: setup-uv-1-x86_64-unknown-linux-gnu-3.12-pruned-1be0913b0a4e07550796023acc1f2601890af255974de00f6df5864f015c147d
+Python · lint + tests	Run astral-sh/setup-uv@v6	2026-11-03T15:47:05.3727927Z Cache hit for: setup-uv-1-x86_64-unknown-linux-gnu-3.12-pruned-1be0913b0a4e07550796023acc1f2601890af255974de00f6df5864f015c147d
+Python · lint + tests	Run astral-sh/setup-uv@v6	2026-11-03T15:47:05.3796443Z (node:2159) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+Python · lint + tests	Run astral-sh/setup-uv@v6	2026-11-03T15:47:06.3842191Z Received 8452521 of 8452521 (100.0%), 10.5 MBs/sec
+Python · lint + tests	Run astral-sh/setup-uv@v6	2026-11-03T15:47:06.3842463Z Cache Size: ~8 MB (8452521 B)
+Python · lint + tests	Run astral-sh/setup-uv@v6	2026-11-03T15:47:06.3855313Z [command]/usr/bin/tar -xf /home/runner/work/_temp/34cd6614-7278-411c-bf21-b88f1c59a9a4/cache.tzst -P -C /home/runner/work/lunarlab/lunarlab --use-compress-program unzstd
+Python · lint + tests	Run astral-sh/setup-uv@v6	2026-11-03T15:47:06.4147356Z Cache restored successfully
+Python · lint + tests	Run astral-sh/setup-uv@v6	2026-11-03T15:47:06.4153902Z uv cache restored from GitHub Actions cache with key: setup-uv-1-x86_64-unknown-linux-gnu-3.12-pruned-1be0913b0a4e07550796023acc1f2601890af255974de00f6df5864f015c147d
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	﻿2026-11-03T15:47:06.4299681Z ##[group]Run uv venv .venv
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:06.4299902Z ^[[36;1muv venv .venv^[[0m
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:06.4300148Z ^[[36;1muv pip install --python .venv/bin/python -r requirements-ci.lock --torch-backend cpu^[[0m
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:06.4300445Z ^[[36;1muv pip install --python .venv/bin/python -e . --no-deps^[[0m
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:06.4328650Z shell: /usr/bin/bash -e {0}
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:06.4328801Z env:
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:06.4328916Z   SDL_VIDEODRIVER: dummy
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:06.4329055Z   SDL_AUDIODRIVER: dummy
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:06.4329181Z   UV_PYTHON: 3.12
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:06.4329328Z   UV_CACHE_DIR: /home/runner/work/_temp/setup-uv-cache
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:06.4329641Z ##[endgroup]
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:06.5867852Z Downloading cpython-3.12.16-linux-x86_64-gnu (download) (32.9MiB)
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:07.0123309Z  Downloaded cpython-3.12.16-linux-x86_64-gnu (download)
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:07.0962621Z Using CPython 3.12.16
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:07.0962903Z Creating virtual environment at: .venv
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:07.0967489Z Activate with: .venv/bin/activate
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:07.4301396Z Resolved 63 packages in 244ms
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:07.4489108Z Downloading numpy (16.0MiB)
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:07.4558237Z Downloading imageio-ffmpeg (28.1MiB)
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:07.4561566Z Downloading pandas (10.3MiB)
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:07.4563449Z Downloading kiwisolver (1.4MiB)
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:07.4564371Z Downloading hypothesis (1.1MiB)
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:07.4565310Z Downloading pydantic-core (2.1MiB)
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:07.4566178Z Downloading sympy (6.0MiB)
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:07.4567101Z Downloading matplotlib (9.4MiB)
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:07.4568025Z Downloading pygments (1.2MiB)
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:07.4569010Z Downloading pillow (6.6MiB)
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:07.4571039Z Downloading sqlalchemy (4.5MiB)
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:07.4572144Z Downloading networkx (2.0MiB)
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:07.4574504Z Downloading fonttools (5.2MiB)
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:07.4577779Z Downloading ruff (9.9MiB)
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:07.4579621Z Downloading box2d (3.5MiB)
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:07.4580736Z Downloading pygame (13.3MiB)
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:07.4608561Z Downloading torch (187.2MiB)
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:07.6101817Z  Downloaded pygments
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:07.6231319Z  Downloaded hypothesis
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:07.6296356Z  Downloaded kiwisolver
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:07.6462228Z  Downloaded pydantic-core
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:07.6580664Z  Downloaded networkx
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:07.7279792Z  Downloaded box2d
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:07.7364770Z  Downloaded sqlalchemy
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:07.7391457Z  Downloaded fonttools
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:07.7498485Z  Downloaded pillow
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:07.8291287Z  Downloaded ruff
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:07.8417164Z  Downloaded matplotlib
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:07.8600873Z  Downloaded sympy
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:07.8913353Z  Downloaded pygame
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:07.9320906Z  Downloaded numpy
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:07.9339763Z  Downloaded pandas
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:07.9802259Z  Downloaded imageio-ffmpeg
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:09.4023948Z  Downloaded torch
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:09.4025478Z Prepared 63 packages in 1.97s
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:09.7036682Z Installed 63 packages in 300ms
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:09.7037071Z  + alembic==1.20.0
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:09.7037290Z  + annotated-doc==0.0.5
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:09.7037519Z  + annotated-types==0.8.0
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:09.7037739Z  + anyio==4.15.1
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:09.7037932Z  + box2d==2.3.10
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:09.7038338Z  + certifi==2026.7.22
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:09.7038656Z  + click==8.5.0
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:09.7038842Z  + cloudpickle==3.1.2
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:09.7039115Z  + colorlog==6.12.0
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:09.7039305Z  + contourpy==1.4.0
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:09.7039596Z  + coverage==7.16.2
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:09.7039771Z  + cycler==0.12.1
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:09.7039974Z  + farama-notifications==0.0.6
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:09.7040191Z  + fastapi==0.143.2
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:09.7040368Z  + filelock==4.2.0
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:09.7040547Z  + fonttools==4.67.0
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:09.7040735Z  + fsspec==2026.9.0
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:09.7040912Z  + gymnasium==1.4.0
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:09.7041088Z  + h11==0.16.0
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:09.7041259Z  + httpcore==1.0.9
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:09.7041439Z  + httpx==0.28.1
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:09.7041791Z  + hypothesis==6.170.1
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:09.7041975Z  + idna==3.20
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:09.7042145Z  + imageio==2.38.1
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:09.7042331Z  + imageio-ffmpeg==0.6.0
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:09.7042526Z  + iniconfig==2.3.1
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:09.7042856Z  + jinja2==3.1.6
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:09.7043090Z  + kiwisolver==1.5.1
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:09.7043338Z  + mako==1.4.3
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:09.7043610Z  + markupsafe==3.0.4
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:09.7043868Z  + matplotlib==3.11.2
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:09.7044183Z  + mpmath==1.3.0
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:09.7044417Z  + networkx==3.7
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:09.7044682Z  + numpy==2.5.4
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:09.7044960Z  + opentelemetry-api==1.45.1
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:09.7045209Z  + optuna==5.0.0
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:09.7045415Z  + packaging==26.3
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:09.7045696Z  + pandas==3.0.6
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:09.7046043Z  + pillow==12.3.0
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:09.7046393Z  + pluggy==1.7.0
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:09.7046690Z  + psutil==7.2.2
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:09.7046992Z  + pydantic==2.14.1
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:09.7047263Z  + pydantic-core==2.50.1
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:09.7047515Z  + pygame==2.6.1
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:09.7047744Z  + pygments==2.21.0
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:09.7048061Z  + pyparsing==3.3.3
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:09.7048279Z  + pytest==9.1.1
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:09.7048486Z  + pytest-cov==7.1.0
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:09.7048712Z  + python-dateutil==2.9.0.post0
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:09.7048934Z  + pyyaml==6.0.3
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:09.7049139Z  + ruff==0.17.1
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:09.7049320Z  + setuptools==84.0.0
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:09.7049594Z  + six==1.17.0
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:09.7049797Z  + sortedcontainers==2.4.0
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:09.7050008Z  + sqlalchemy==2.1.4
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:09.7050216Z  + stable-baselines3==2.9.0
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:09.7050543Z  + starlette==1.8.0
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:09.7050840Z  + sympy==1.14.0
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:09.7051251Z  + torch==2.14.1+cpu
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:09.7051553Z  + tqdm==4.70.1
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:09.7051870Z  + typing-extensions==4.16.0
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:09.7052129Z  + typing-inspection==0.4.4
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:09.7052430Z  + uvicorn==0.54.0
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:10.4146728Z Resolved 1 package in 609ms
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:10.4149244Z    Building lunarlab @ file:///home/runner/work/lunarlab/lunarlab
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:10.5243814Z       Built lunarlab @ file:///home/runner/work/lunarlab/lunarlab
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:10.5280793Z Prepared 1 package in 113ms
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:10.5292552Z Installed 1 package in 1ms
+Python · lint + tests	Install (CPU-only PyTorch, exact versions)	2026-11-03T15:47:10.5292834Z  + lunarlab==0.1.0 (from file:///home/runner/work/lunarlab/lunarlab)
+Python · lint + tests	Ruff (lint and formatting)	﻿2026-11-03T15:47:10.5390195Z ##[group]Run .venv/bin/python -m ruff check lunarlab tests tools examples paper
+Python · lint + tests	Ruff (lint and formatting)	2026-11-03T15:47:10.5390527Z ^[[36;1m.venv/bin/python -m ruff check lunarlab tests tools examples paper^[[0m
+Python · lint + tests	Ruff (lint and formatting)	2026-11-03T15:47:10.5390797Z ^[[36;1m.venv/bin/python -m ruff format --check lunarlab tests tools examples paper^[[0m
+Python · lint + tests	Ruff (lint and formatting)	2026-11-03T15:47:10.5414492Z shell: /usr/bin/bash -e {0}
+Python · lint + tests	Ruff (lint and formatting)	2026-11-03T15:47:10.5414629Z env:
+Python · lint + tests	Ruff (lint and formatting)	2026-11-03T15:47:10.5414744Z   SDL_VIDEODRIVER: dummy
+Python · lint + tests	Ruff (lint and formatting)	2026-11-03T15:47:10.5414875Z   SDL_AUDIODRIVER: dummy
+Python · lint + tests	Ruff (lint and formatting)	2026-11-03T15:47:10.5415004Z   UV_PYTHON: 3.12
+Python · lint + tests	Ruff (lint and formatting)	2026-11-03T15:47:10.5415149Z   UV_CACHE_DIR: /home/runner/work/_temp/setup-uv-cache
+Python · lint + tests	Ruff (lint and formatting)	2026-11-03T15:47:10.5415317Z ##[endgroup]
+Python · lint + tests	Ruff (lint and formatting)	2026-11-03T15:47:10.5844345Z All checks passed!
+Python · lint + tests	Ruff (lint and formatting)	2026-11-03T15:47:10.6240881Z 138 files already formatted
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	﻿2026-11-03T15:47:10.6274728Z ##[group]Run .venv/bin/python -m pytest -q --cov --cov-report=term --cov-report=json:coverage.json --cov-report=html:htmlcov
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:47:10.6275174Z ^[[36;1m.venv/bin/python -m pytest -q --cov --cov-report=term --cov-report=json:coverage.json --cov-report=html:htmlcov^[[0m
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:47:10.6297814Z shell: /usr/bin/bash -e {0}
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:47:10.6297951Z env:
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:47:10.6298065Z   SDL_VIDEODRIVER: dummy
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:47:10.6298196Z   SDL_AUDIODRIVER: dummy
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:47:10.6298326Z   UV_PYTHON: 3.12
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:47:10.6298471Z   UV_CACHE_DIR: /home/runner/work/_temp/setup-uv-cache
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:47:10.6298640Z ##[endgroup]
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:47:25.6279931Z ........................................................................ [ 10%]
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:47:29.7367507Z ........................................................................ [ 20%]
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:47:34.3177610Z ........................................................................ [ 30%]
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:47:35.1918182Z ........................................................................ [ 40%]
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:48:00.8158850Z ........................................................................ [ 50%]
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:48:15.4437464Z ........................................................................ [ 61%]
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:48:55.0448135Z ........................................................................ [ 71%]
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:49:11.2122632Z ........................................................................ [ 81%]
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:50:08.1026763Z ........................................................................ [ 91%]
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:51:03.5906486Z ....................................................s...sss.             [100%]
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:51:03.5908045Z ================================ tests coverage ================================
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:51:03.5908463Z _______________ coverage: platform linux, python 3.12.16-final-0 _______________
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:51:03.5908682Z 
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:51:03.5908817Z Name                               Stmts   Miss Branch BrPart  Cover   Missing
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:51:03.5909188Z ------------------------------------------------------------------------------
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:51:03.5909707Z lunarlab/__init__.py                   1      0      0      0   100%
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:51:03.5910018Z lunarlab/__main__.py                   2      0      0      0   100%
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:51:03.5910330Z lunarlab/audit/__init__.py             6      0      0      0   100%
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:51:03.5910673Z lunarlab/audit/adapters.py            84      3     12      1    94%   185-188
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:51:03.5911052Z lunarlab/audit/contracts.py          116      4     62      2    97%   69, 118-119, 159
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:51:03.5911422Z lunarlab/audit/core.py               168      3     30      3    97%   128, 173, 312
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:51:03.5911768Z lunarlab/audit/evaluate.py            36      1      8      1    95%   79
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:51:03.5912212Z lunarlab/audit/provenance.py         166     17     60      7    89%   104-105, 118, 120, 139, 146, 178, 222-226, 239-242, 293
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:51:03.5912931Z lunarlab/audit/study.py              516     67    160     26    85%   116, 134, 137, 165, 168-169, 180, 183, 186, 189, 197, 199, 208, 221-222, 236, 239, 249->248, 274-276, 339, 378, 440, 494, 524, 551, 600, 604, 643-653, 728, 737-738, 740, 781-818, 906-908, 913, 919, 936-938, 966-968, 1077-1079
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:51:03.5913438Z lunarlab/benchmark.py                 54      1     10      2    95%   89, 91->93
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:51:03.5914289Z lunarlab/cli.py                     1080    355    256     37    62%   30-33, 52, 89-95, 112-115, 120-135, 182, 206-215, 253, 272, 274-276, 284-285, 300-301, 320, 325-346, 368-369, 371, 382->exit, 400, 436-437, 439, 445, 459, 461, 465-469, 470->474, 481-513, 517, 529-544, 548-558, 563-575, 592-599, 630-631, 635-638, 646-678, 709, 714-745, 749-771, 775-801, 805-808, 817-823, 830-831, 835-857, 863-888, 893-907, 921->925, 931, 939-962, 972, 973->975, 976, 989, 994-996, 1007-1023, 1107, 1128, 1151, 1153-1160, 1164-1187, 1191-1203, 1208-1241, 1250-1251, 1288-1302, 1316, 1321, 1326-1337, 1811->1810
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:51:03.5915604Z lunarlab/compare.py                  375     44    156     20    87%   133, 143-154, 193, 195, 256, 262, 272, 295, 299, 310, 397-420, 442-443, 497-500, 502, 519, 570, 608, 618, 635, 786, 788, 790, 792->797, 815
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:51:03.5915986Z lunarlab/config.py                   239      6     64      5    96%   203, 292, 392, 404, 417, 419
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:51:03.5916352Z lunarlab/continuation.py             257     23    104     17    88%   118, 127->129, 169->171, 194, 280-283, 329, 346, 349, 351, 358, 360, 367, 379-380, 382, 384, 393, 398, 427-430, 448
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:51:03.5916702Z lunarlab/db.py                       113      3     24      3    96%   151, 164, 229
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:51:03.5917024Z lunarlab/demo.py                     239     29     74     12    86%   63->62, 92-98, 102-112, 124, 144-145, 147, 149->154, 181, 238, 266, 324-325, 345->342, 366, 370, 376-401
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:51:03.5917358Z lunarlab/divergence.py               125      2     22      3    97%   102->107, 173, 208
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:51:03.5917650Z lunarlab/doctor.py                   129     16     32      8    84%   26-27, 38, 44, 53, 66-67, 78, 84-85, 103, 120, 130, 164-166
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:51:03.5917947Z lunarlab/env.py                      143      8      8      2    93%   54, 242-243, 258, 327-328, 419-420
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:51:03.5918221Z lunarlab/evaluation.py               148      9     28      5    92%   77, 107-108, 310, 332-334, 396, 400
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:51:03.5918503Z lunarlab/experiments.py              103      5     42      6    92%   56, 117, 124, 156, 158, 240->238
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:51:03.5918822Z lunarlab/freeze.py                   165     20     44     11    84%   72, 80, 113, 145, 159-164, 188-196, 199, 246, 292, 294, 315, 317, 321-322
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:51:03.5919101Z lunarlab/hover.py                     30      0     10      0   100%
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:51:03.5919714Z lunarlab/jobs.py                     367     66    132     23    80%   129-130, 145->150, 193->199, 196, 219, 221->223, 234, 240-241, 247->250, 256->268, 276, 286, 301-302, 335, 339, 348, 374, 395, 409-414, 420-421, 460-464, 472-480, 497-498, 517, 531-541, 543-548, 556-602, 604, 614
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:51:03.5920213Z lunarlab/lineage.py                   88     19     28      4    73%   68-70, 127-140, 199-200, 202, 204-206, 229
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:51:03.5920484Z lunarlab/locks.py                     63     12      8      3    76%   31-34, 51, 54-58, 90-93
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:51:03.5920749Z lunarlab/outcomes.py                 133      8     50      4    93%   141-142, 178, 271, 273, 292, 297-298
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:51:03.5921037Z lunarlab/overhead.py                 253      9     54      9    94%   59, 192, 257, 262, 296->299, 437, 467, 501-502, 504
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:51:03.5921320Z lunarlab/parallel.py                  47      0     16      0   100%
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:51:03.5921540Z lunarlab/physics.py                   38      0      4      0   100%
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:51:03.5921794Z lunarlab/play.py                     123     17     28      6    85%   79-80, 83-97, 134, 156-157, 160, 180, 182, 215-216
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:51:03.5922066Z lunarlab/policies.py                  73      1      6      1    97%   101
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:51:03.5922299Z lunarlab/preferences/__init__.py       0      0      0      0   100%
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:51:03.5922610Z lunarlab/preferences/active.py       220     40     58      9    76%   129, 141, 216, 258, 266, 287, 433, 440, 443, 462-464, 469-488, 500-522, 526-544
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:51:03.5922963Z lunarlab/preferences/data.py         186      9     40      5    93%   188-190, 228, 246, 317, 338->336, 362-365
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:51:03.5923245Z lunarlab/preferences/model.py        109      4     24      2    94%   174, 183-185
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:51:03.5923505Z lunarlab/preferences/train.py        131     10     12      1    92%   242, 330-373
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:51:03.5923764Z lunarlab/procs.py                     48      8     16      1    86%   48-49, 63-64, 68-71
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:51:03.5924010Z lunarlab/reclassify.py                42      0     10      1    98%   70->68
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:51:03.5924546Z lunarlab/recording.py                244     25     48     10    88%   102, 121, 132->137, 141, 204, 212-214, 223-225, 229, 252, 256-258, 270, 273-275, 281, 373-375, 425, 494, 497->495
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:51:03.5925005Z lunarlab/report.py                   248     15     98     18    90%   59, 73, 79, 95-96, 113, 151, 171, 186->185, 219->212, 276-279, 300->309, 309->311, 326, 327->329, 329->331, 414-421, 489, 490->492
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:51:03.5925397Z lunarlab/reproduce.py                444      7     86      5    98%   114, 123-124, 780->778, 783, 863, 898->902, 900-901
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:51:03.5925671Z lunarlab/rescoring.py                 60      4     20      3    91%   57, 66, 78-80
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:51:03.5926018Z lunarlab/results.py                  403     41    120     18    88%   50-52, 90, 99->102, 102->104, 148, 154, 167, 177, 207->206, 250, 285, 367-394, 481, 494->496, 526->529, 537->505, 646, 661
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:51:03.5926375Z lunarlab/rewards/__init__.py           3      0      0      0   100%
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:51:03.5926616Z lunarlab/rewards/accounting.py        68      0      6      0   100%
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:51:03.5926857Z lunarlab/rewards/analysis.py          26      3      6      2    84%   19, 28, 93
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:51:03.5927119Z lunarlab/rewards/config.py           101      6     36      6    91%   167, 174, 179, 181, 185, 230
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:51:03.5927381Z lunarlab/rewards/terms.py             28      1     10      1    95%   92
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:51:03.5927618Z lunarlab/rewards/wrapper.py           72      1     16      1    98%   68
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:51:03.5927852Z lunarlab/rl_stats.py                  77      1     20      2    97%   108, 148->157
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:51:03.5928087Z lunarlab/robustness.py                30      0      6      0   100%
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:51:03.5928330Z lunarlab/runs.py                     146     17     50      8    83%   96, 263-272, 296, 300, 304, 310, 313, 315
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:51:03.5928578Z lunarlab/server/__init__.py            0      0      0      0   100%
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:51:03.5929213Z lunarlab/server/api.py               625    111    100     24    79%   238-240, 281-282, 304-305, 315-316, 324-325, 336, 341-343, 360-365, 369, 463-464, 468, 490, 498, 509, 514, 527-533, 552-553, 564-571, 582-583, 600-601, 604, 631, 648-649, 654-655, 667, 689, 706, 732-733, 753-754, 802-804, 850, 930-931, 938, 941, 947-951, 959-962, 964, 984-985, 991-994, 996, 1008-1009, 1042, 1054-1055, 1070-1080, 1090-1101, 1113, 1132-1136
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:51:03.5930017Z lunarlab/server/main.py              121     20     26      4    80%   57-58, 64-65, 89, 107-108, 146-158, 169
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:51:03.5930273Z lunarlab/server/schemas.py           130      0      0      0   100%
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:51:03.5930489Z lunarlab/stats.py                     34      0      6      0   100%
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:51:03.5930775Z lunarlab/storage.py                  248     22     42      7    87%   115, 137-141, 177-183, 193-197, 212-214, 227, 230-231, 356->355, 379->exit
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:51:03.5931088Z lunarlab/sysinfo.py                   68     12     16      4    81%   52-60, 67-69, 113, 115-116
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:51:03.5931540Z lunarlab/training.py                 498     36    122     13    91%   180, 237-243, 347, 389-390, 476, 619, 693, 772->774, 777-781, 784->exit, 842-843, 914, 916-918, 986-987, 1056-1070, 1072->1076
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:51:03.5932021Z lunarlab/tuning.py                   265     19     70     14    90%   138, 140, 149, 209-212, 229, 230->224, 237->239, 280, 336, 374-375, 386->388, 396, 421-424, 479, 482-483
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:51:03.5932349Z ------------------------------------------------------------------------------
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:51:03.5932566Z TOTAL                              10155   1160   2596    380    86%
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:51:03.5932743Z Coverage HTML written to dir htmlcov
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:51:03.5932907Z Coverage JSON written to file coverage.json
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:51:04.1083214Z =========================== short test summary info ============================
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:51:04.1083569Z SKIPPED [1] tests/test_windows.py:154: Windows file-sharing semantics
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:51:04.1084298Z SKIPPED [1] tests/test_windows.py:261: Windows file-sharing semantics
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:51:04.1084535Z SKIPPED [1] tests/test_windows.py:278: Windows file-sharing semantics
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:51:04.1084766Z SKIPPED [1] tests/test_windows.py:297: Windows file-sharing semantics
+Python · lint + tests	Pytest with statement and branch coverage (unit, integration, property-based, end-to-end CLI)	2026-11-03T15:51:04.1084970Z 704 passed, 4 skipped in 232.20s (0:03:52)
+Python · lint + tests	Upload the coverage report	﻿2026-11-03T15:51:05.2851155Z ##[group]Run actions/upload-artifact@v4
+Python · lint + tests	Upload the coverage report	2026-11-03T15:51:05.2851335Z with:
+Python · lint + tests	Upload the coverage report	2026-11-03T15:51:05.2851450Z   name: coverage-linux
+Python · lint + tests	Upload the coverage report	2026-11-03T15:51:05.2851581Z   path: coverage.json
+Python · lint + tests	Upload the coverage report	htmlcov
+Python · lint + tests	Upload the coverage report	
+Python · lint + tests	Upload the coverage report	2026-11-03T15:51:05.2851725Z   retention-days: 30
+Python · lint + tests	Upload the coverage report	2026-11-03T15:51:05.2851851Z   if-no-files-found: warn
+Python · lint + tests	Upload the coverage report	2026-11-03T15:51:05.2851984Z   compression-level: 6
+Python · lint + tests	Upload the coverage report	2026-11-03T15:51:05.2852105Z   overwrite: false
+Python · lint + tests	Upload the coverage report	2026-11-03T15:51:05.2852231Z   include-hidden-files: false
+Python · lint + tests	Upload the coverage report	2026-11-03T15:51:05.2852366Z env:
+Python · lint + tests	Upload the coverage report	2026-11-03T15:51:05.2852475Z   SDL_VIDEODRIVER: dummy
+Python · lint + tests	Upload the coverage report	2026-11-03T15:51:05.2852613Z   SDL_AUDIODRIVER: dummy
+Python · lint + tests	Upload the coverage report	2026-11-03T15:51:05.2852738Z   UV_PYTHON: 3.12
+Python · lint + tests	Upload the coverage report	2026-11-03T15:51:05.2852880Z   UV_CACHE_DIR: /home/runner/work/_temp/setup-uv-cache
+Python · lint + tests	Upload the coverage report	2026-11-03T15:51:05.2853046Z ##[endgroup]
+Python · lint + tests	Upload the coverage report	2026-11-03T15:51:05.3866563Z (node:6447) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+Python · lint + tests	Upload the coverage report	2026-11-03T15:51:05.3867122Z (Use `node --trace-deprecation ...` to show where the warning was created)
+Python · lint + tests	Upload the coverage report	2026-11-03T15:51:05.3964137Z Multiple search paths detected. Calculating the least common ancestor of all paths
+Python · lint + tests	Upload the coverage report	2026-11-03T15:51:05.3965604Z The least common ancestor is /home/runner/work/lunarlab/lunarlab. This will be the root directory of the artifact
+Python · lint + tests	Upload the coverage report	2026-11-03T15:51:05.3966115Z With the provided path, there will be 71 files uploaded
+Python · lint + tests	Upload the coverage report	2026-11-03T15:51:05.3969313Z Artifact name is valid!
+Python · lint + tests	Upload the coverage report	2026-11-03T15:51:05.3969762Z Root directory input is valid!
+Python · lint + tests	Upload the coverage report	2026-11-03T15:51:05.7173915Z Beginning upload of artifact content to blob storage
+Python · lint + tests	Upload the coverage report	2026-11-03T15:51:05.8197026Z (node:6447) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+Python · lint + tests	Upload the coverage report	2026-11-03T15:51:06.3007941Z Uploaded bytes 894414
+Python · lint + tests	Upload the coverage report	2026-11-03T15:51:06.3596699Z Finished uploading artifact content to blob storage!
+Python · lint + tests	Upload the coverage report	2026-11-03T15:51:06.3597366Z SHA256 digest of uploaded artifact zip is f8ec7a5a341928850d9521719c27aa104e9013c6a23eeb9faa61b23a1a6839c1
+Python · lint + tests	Upload the coverage report	2026-11-03T15:51:06.3598911Z Finalizing artifact upload
+Python · lint + tests	Upload the coverage report	2026-11-03T15:51:06.8724814Z Artifact coverage-linux.zip successfully finalized. Artifact ID 13247320653
+Python · lint + tests	Upload the coverage report	2026-11-03T15:51:06.8725402Z Artifact coverage-linux has been successfully uploaded! Final size is 894414 bytes. Artifact ID is 13247320653
+Python · lint + tests	Upload the coverage report	2026-11-03T15:51:06.8729377Z Artifact download URL: https://github.com/SHAYAN-ABRAR/lunarlab/actions/runs/41667323177/artifacts/13247320653
+Python · lint + tests	Generated API reference, license headers and manuscript sources are current	﻿2026-11-03T15:51:06.8856715Z ##[group]Run .venv/bin/python tools/gen_api_docs.py --check
+Python · lint + tests	Generated API reference, license headers and manuscript sources are current	2026-11-03T15:51:06.8856984Z ^[[36;1m.venv/bin/python tools/gen_api_docs.py --check^[[0m
+Python · lint + tests	Generated API reference, license headers and manuscript sources are current	2026-11-03T15:51:06.8857182Z ^[[36;1m.venv/bin/python tools/spdx_headers.py^[[0m
+Python · lint + tests	Generated API reference, license headers and manuscript sources are current	2026-11-03T15:51:06.8857396Z ^[[36;1m.venv/bin/python paper/jmlr-mloss/check_manuscript.py^[[0m
+Python · lint + tests	Generated API reference, license headers and manuscript sources are current	2026-11-03T15:51:06.8881056Z shell: /usr/bin/bash -e {0}
+Python · lint + tests	Generated API reference, license headers and manuscript sources are current	2026-11-03T15:51:06.8881201Z env:
+Python · lint + tests	Generated API reference, license headers and manuscript sources are current	2026-11-03T15:51:06.8881316Z   SDL_VIDEODRIVER: dummy
+Python · lint + tests	Generated API reference, license headers and manuscript sources are current	2026-11-03T15:51:06.8881453Z   SDL_AUDIODRIVER: dummy
+Python · lint + tests	Generated API reference, license headers and manuscript sources are current	2026-11-03T15:51:06.8881580Z   UV_PYTHON: 3.12
+Python · lint + tests	Generated API reference, license headers and manuscript sources are current	2026-11-03T15:51:06.8881727Z   UV_CACHE_DIR: /home/runner/work/_temp/setup-uv-cache
+Python · lint + tests	Generated API reference, license headers and manuscript sources are current	2026-11-03T15:51:06.8881901Z ##[endgroup]
+Python · lint + tests	Generated API reference, license headers and manuscript sources are current	2026-11-03T15:51:07.4786270Z docs/api is current
+Python · lint + tests	Generated API reference, license headers and manuscript sources are current	2026-11-03T15:51:07.6372268Z 0 source file(s) without an SPDX header
+Python · lint + tests	Generated API reference, license headers and manuscript sources are current	2026-11-03T15:51:07.6552024Z abstract: 152 words (limit 200)
+Python · lint + tests	Generated API reference, license headers and manuscript sources are current	2026-11-03T15:51:07.6552478Z running title: 'LunarLab: Auditable Reward-Design Experiments', 45 characters (limit 50)
+Python · lint + tests	Generated API reference, license headers and manuscript sources are current	2026-11-03T15:51:07.6552879Z keywords: 5 (JMLR asks for five)
+Python · lint + tests	Generated API reference, license headers and manuscript sources are current	2026-11-03T15:51:07.6553201Z citations: 11 keys, all in references.bib
+Python · lint + tests	Generated API reference, license headers and manuscript sources are current	2026-11-03T15:51:07.6554131Z bibliography entries not cited (they will not be printed): ['akiba2019optuna', 'amodei2016concrete', 'bradley1952paired', 'christiano2017preferences', 'mnih2015dqn']
+Python · lint + tests	Generated API reference, license headers and manuscript sources are current	2026-11-03T15:51:07.6554797Z body text: about 1170 words (page count needs a LaTeX build)
+Python · lint + tests	Generated API reference, license headers and manuscript sources are current	2026-11-03T15:51:07.6555089Z TODO markers: 2
+Python · lint + tests	Generated API reference, license headers and manuscript sources are current	2026-11-03T15:51:07.6555341Z   - final source revision and public study archive
+Python · lint + tests	Generated API reference, license headers and manuscript sources are current	2026-11-03T15:51:07.6555649Z   - Competing-interest declaration required.
+Python · lint + tests	Reproducibility smoke test (whole pipeline, no web UI)	﻿2026-11-03T15:51:07.6599094Z ##[group]Run .venv/bin/python -m lunarlab reproduce-smoke --training-determinism --report reproduce-smoke-linux.json
+Python · lint + tests	Reproducibility smoke test (whole pipeline, no web UI)	2026-11-03T15:51:07.6599718Z ^[[36;1m.venv/bin/python -m lunarlab reproduce-smoke --training-determinism --report reproduce-smoke-linux.json^[[0m
+Python · lint + tests	Reproducibility smoke test (whole pipeline, no web UI)	2026-11-03T15:51:07.6623133Z shell: /usr/bin/bash -e {0}
+Python · lint + tests	Reproducibility smoke test (whole pipeline, no web UI)	2026-11-03T15:51:07.6623276Z env:
+Python · lint + tests	Reproducibility smoke test (whole pipeline, no web UI)	2026-11-03T15:51:07.6623390Z   SDL_VIDEODRIVER: dummy
+Python · lint + tests	Reproducibility smoke test (whole pipeline, no web UI)	2026-11-03T15:51:07.6623524Z   SDL_AUDIODRIVER: dummy
+Python · lint + tests	Reproducibility smoke test (whole pipeline, no web UI)	2026-11-03T15:51:07.6623668Z   UV_PYTHON: 3.12
+Python · lint + tests	Reproducibility smoke test (whole pipeline, no web UI)	2026-11-03T15:51:07.6623814Z   UV_CACHE_DIR: /home/runner/work/_temp/setup-uv-cache
+Python · lint + tests	Reproducibility smoke test (whole pipeline, no web UI)	2026-11-03T15:51:07.6623992Z ##[endgroup]
+Python · lint + tests	Reproducibility smoke test (whole pipeline, no web UI)	2026-11-03T15:51:10.9726567Z Reproducibility smoke test: PPO, preset potential, 4,096 transitions, seed 0, training twice (isolated temporary home)
+Python · lint + tests	Reproducibility smoke test (whole pipeline, no web UI)	2026-11-03T15:51:10.9727167Z isolated home: /tmp/lunarlab-repro-flf0px4_/home
+Python · lint + tests	Reproducibility smoke test (whole pipeline, no web UI)	2026-11-03T15:51:10.9727513Z   [ok] configuration identity survives a reload: 9574bcb8219ef7f9
+Python · lint + tests	Reproducibility smoke test (whole pipeline, no web UI)	2026-11-03T15:51:10.9727852Z   [ok] reward configuration recorded: 55ba1d4da088b94a
+Python · lint + tests	Reproducibility smoke test (whole pipeline, no web UI)	2026-11-03T15:51:10.9728319Z   [ok] validation and final-test seeds are disjoint and valid: 3 validation, 4 test seeds
+Python · lint + tests	Reproducibility smoke test (whole pipeline, no web UI)	2026-11-03T15:51:10.9728693Z   [ok] training completed: exit code 0
+Python · lint + tests	Reproducibility smoke test (whole pipeline, no web UI)	2026-11-03T15:51:10.9728969Z   [ok] training budget recorded in environment transitions: 4096 transitions (requested 4096, planned 4096)
+Python · lint + tests	Reproducibility smoke test (whole pipeline, no web UI)	2026-11-03T15:51:10.9729287Z   [ok] worker seeds and source revision recorded: worker seeds [1000000, 1000001]
+Python · lint + tests	Reproducibility smoke test (whole pipeline, no web UI)	2026-11-03T15:51:10.9729769Z   [ok] every checkpoint matches its recorded size, SHA-256 and configuration hash: 3 checkpoints
+Python · lint + tests	Reproducibility smoke test (whole pipeline, no web UI)	2026-11-03T15:51:10.9730199Z   [ok] training episodes record original and shaped returns separately (identity holds): 44 episodes, largest identity error 1.0e-05 (CSV rounding bound 3.0e-05)
+Python · lint + tests	Reproducibility smoke test (whole pipeline, no web UI)	2026-11-03T15:51:10.9730634Z   [ok] validation-selected checkpoint reloads (weights only): best_validation-0000000000.zip
+Python · lint + tests	Reproducibility smoke test (whole pipeline, no web UI)	2026-11-03T15:51:10.9730989Z   [ok] validation evaluation uses the original reward and records the shaped return: mean original return -333.47
+Python · lint + tests	Reproducibility smoke test (whole pipeline, no web UI)	2026-11-03T15:51:10.9731348Z   [ok] final test evaluated the frozen copy of the validation-selected checkpoint: 065ce704744127c9
+Python · lint + tests	Reproducibility smoke test (whole pipeline, no web UI)	2026-11-03T15:51:10.9731748Z   [ok] frozen checkpoint is read-only on disk: checkpoints/frozen/065ce704744127c98295e0dc0f35a5e537871ae907088512deb30753ad810ef6.zip
+Python · lint + tests	Reproducibility smoke test (whole pipeline, no web UI)	2026-11-03T15:51:10.9732137Z   [ok] a repeated final-test evaluation matches the saved one exactly: 4/4 episodes identical
+Python · lint + tests	Reproducibility smoke test (whole pipeline, no web UI)	2026-11-03T15:51:10.9732419Z   [ok] exported results re-read identically: sha256 3c12c6c5115047ad
+Python · lint + tests	Reproducibility smoke test (whole pipeline, no web UI)	2026-11-03T15:51:10.9732812Z   [ok] training the same configuration twice gives identical weights and episodes (this machine): same process, same software stack; not a cross-platform guarantee
+Python · lint + tests	Reproducibility smoke test (whole pipeline, no web UI)	2026-11-03T15:51:10.9733172Z PASSED: 15/15 checks in 3.14 s
+Python · lint + tests	Reproducibility smoke test (whole pipeline, no web UI)	2026-11-03T15:51:10.9733343Z report written to reproduce-smoke-linux.json
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	﻿2026-11-03T15:51:11.4070986Z ##[group]Run artifacts="ppo-baseline-s0 ppo-hover-bonus-s0 dqn-baseline-s0"
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:11.4071513Z ^[[36;1martifacts="ppo-baseline-s0 ppo-hover-bonus-s0 dqn-baseline-s0"^[[0m
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:11.4071862Z ^[[36;1m: > reproduce-exit-codes.txt^[[0m
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:11.4072136Z ^[[36;1mreports=""; divergence=""^[[0m
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:11.4072373Z ^[[36;1mfor a in $artifacts; do^[[0m
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:11.4072616Z ^[[36;1m  code=0^[[0m
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:11.4073073Z ^[[36;1m  .venv/bin/python -m lunarlab reproduce-artifact --artifact examples/artifacts/$a --report reproduce-$a-linux.json || code=$?^[[0m
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:11.4073850Z ^[[36;1m  echo "$a $code" >> reproduce-exit-codes.txt^[[0m
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:11.4074165Z ^[[36;1m  reports="$reports reproduce-$a-linux.json"^[[0m
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:11.4074419Z ^[[36;1m  tcode=0^[[0m
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:11.4074744Z ^[[36;1m  .venv/bin/python -m lunarlab trace-artifact --artifact examples/artifacts/$a \^[[0m
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:11.4075359Z ^[[36;1m    --compare reports/jmlr/reproducibility/traces/$a-windows.npz --report divergence-$a-linux.json || tcode=$?^[[0m
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:11.4076030Z ^[[36;1m  if [ "$tcode" -ne 0 ] && [ "$tcode" -ne 3 ]; then echo "trace-artifact failed for $a (exit $tcode)"; exit 1; fi^[[0m
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:11.4076491Z ^[[36;1m  divergence="$divergence divergence-$a-linux.json"^[[0m
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:11.4076776Z ^[[36;1mdone^[[0m
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:11.4077169Z ^[[36;1m.venv/bin/python tools/reproduction_summary.py --platform linux --exit-codes reproduce-exit-codes.txt \^[[0m
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:11.4077667Z ^[[36;1m  --reports $reports --divergence $divergence \^[[0m
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:11.4078079Z ^[[36;1m  --json reproduction-summary-linux.json --markdown "$GITHUB_STEP_SUMMARY"^[[0m
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:11.4110617Z shell: /usr/bin/bash -e {0}
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:11.4110861Z env:
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:11.4111057Z   SDL_VIDEODRIVER: dummy
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:11.4111276Z   SDL_AUDIODRIVER: dummy
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:11.4111482Z   UV_PYTHON: 3.12
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:11.4111728Z   UV_CACHE_DIR: /home/runner/work/_temp/setup-uv-cache
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:11.4112017Z ##[endgroup]
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:15.7161691Z   [ok] checkpoint.zip matches its recorded SHA-256: a3a89f43dd2d10e8
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:15.7162284Z   [ok] config.yaml matches its recorded SHA-256: e40c3f7164c4cae1
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:15.7162705Z   [ok] evaluation.json matches its recorded SHA-256: 8727d75ba2e9875a
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:15.7163107Z   [ok] configuration hash matches the record: 4b544ec6345deaa9
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:15.7163468Z   [ok] the recorded evaluation used this checkpoint
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:15.7163928Z   [ok] the recorded evaluation is the final test on the configuration's test seeds: 100 seeds
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:15.7164745Z   [ok] the recorded evaluation used the configuration's protocol and reward
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:15.7165236Z   [ok] the recorded episodes are exactly the recorded seeds
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:15.7165679Z   [ok] the evaluated network holds exactly the checkpoint's weights
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:15.7166444Z   [FAIL] every re-evaluated episode matches the record exactly: 0/100 episode summaries; largest original-return difference 0.277; largest training-return difference 0.277
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:15.7167674Z   [ok] no aggregate differs significantly from the record (paired tests, Holm-corrected): mean_original_return 265.9 -> 265.9 (p 0.28), pad_landing_rate 0.96 -> 0.96 (p 1), timeout_rate 0 -> 0 (p 1), crash_rate 0.03 -> 0.03 (p 1), out_of_bounds_rate 0 -> 0 (p 1)
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:15.7169146Z   status: numerical-difference (not blocking): 100 of 100 episodes differ; median |return difference| 0.000843, largest 0.277; outcomes agree in 100%, on a different platform (os, torch differ); no compared aggregate differs significantly from the record
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:15.7170546Z NUMERICAL-DIFFERENCE: 20261015-223113-baseline-s0-standard-c5af, 100 episodes; mean original return recorded 265.8558, reproduced 265.8615; pad landing recorded 96%, reproduced 96%
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:15.7171701Z   100 of 100 episodes differ; median |return difference| 0.000843, largest 0.277; outcomes agree in 100%, on a different platform (os, torch differ); no compared aggregate differs significantly from the record
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:15.7172819Z report written to reproduce-ppo-baseline-s0-linux.json
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:17.7886523Z   seed 20000: both; first output difference at step 0 (0 action flips), first open-loop observation difference at step 14; closed loop parts at step 14, return 282.6382 -> 282.6354
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:17.7887549Z   seed 20001: both; first output difference at step 0 (0 action flips), first open-loop observation difference at step 2; closed loop parts at step 2, return 303.9085 -> 303.9013
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:17.7888882Z   seed 20002: both; first output difference at step 0 (0 action flips), first open-loop observation difference at step 12; closed loop parts at step 12, return 272.0115 -> 272.0115
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:17.7889824Z DIFFERENT: 20261015-223113-baseline-s0-standard-c5af against ppo-baseline-s0-windows.npz; sources: both
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:17.7890315Z report written to divergence-ppo-baseline-s0-linux.json
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:29.6298996Z   [ok] checkpoint.zip matches its recorded SHA-256: 0ee843850038ef0f
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:29.6299772Z   [ok] config.yaml matches its recorded SHA-256: a85c668d55127c67
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:29.6300141Z   [ok] evaluation.json matches its recorded SHA-256: e27c425dbe80a7e1
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:29.6300532Z   [ok] configuration hash matches the record: cc202b416a62154c
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:29.6300846Z   [ok] the recorded evaluation used this checkpoint
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:29.6301240Z   [ok] the recorded evaluation is the final test on the configuration's test seeds: 100 seeds
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:29.6301729Z   [ok] the recorded evaluation used the configuration's protocol and reward
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:29.6302093Z   [ok] the recorded episodes are exactly the recorded seeds
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:29.6302446Z   [ok] the evaluated network holds exactly the checkpoint's weights
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:29.6303088Z   [FAIL] every re-evaluated episode matches the record exactly: 0/100 episode summaries; largest original-return difference 11.9; largest training-return difference 126
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:29.6304225Z   [ok] no aggregate differs significantly from the record (paired tests, Holm-corrected): mean_original_return -21.25 -> -20.77 (p 0.28), pad_landing_rate 0 -> 0 (p 1), timeout_rate 1 -> 1 (p 1), crash_rate 0 -> 0 (p 1), out_of_bounds_rate 0 -> 0 (p 1)
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:29.6305499Z   status: numerical-difference (not blocking): 100 of 100 episodes differ; median |return difference| 2.37, largest 11.9; outcomes agree in 100%, on a different platform (os, torch differ); no compared aggregate differs significantly from the record
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:29.6306638Z NUMERICAL-DIFFERENCE: 20261015-223115-hover-bonus-s0-standard-3376, 100 episodes; mean original return recorded -21.2456, reproduced -20.7658; pad landing recorded 0%, reproduced 0%
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:29.6307633Z   100 of 100 episodes differ; median |return difference| 2.37, largest 11.9; outcomes agree in 100%, on a different platform (os, torch differ); no compared aggregate differs significantly from the record
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:29.6308329Z report written to reproduce-ppo-hover-bonus-s0-linux.json
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:32.2274955Z   seed 20000: both; first output difference at step 0 (0 action flips), first open-loop observation difference at step 14; closed loop parts at step 14, return 0.8433 -> -0.0573
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:32.2275623Z   seed 20001: both; first output difference at step 0 (0 action flips), first open-loop observation difference at step 2; closed loop parts at step 2, return -9.3670 -> -7.1040
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:32.2276191Z   seed 20002: both; first output difference at step 0 (0 action flips), first open-loop observation difference at step 24; closed loop parts at step 24, return -17.8024 -> -23.7028
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:32.2276725Z DIFFERENT: 20261015-223115-hover-bonus-s0-standard-3376 against ppo-hover-bonus-s0-windows.npz; sources: both
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:32.2277058Z report written to divergence-ppo-hover-bonus-s0-linux.json
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:36.7269968Z   [ok] checkpoint.zip matches its recorded SHA-256: 8f1438011d97158b
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:36.7270699Z   [ok] config.yaml matches its recorded SHA-256: 199dcc9efbe236ae
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:36.7270942Z   [ok] evaluation.json matches its recorded SHA-256: 008074c0512ab4a3
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:36.7271174Z   [ok] configuration hash matches the record: 70de6039ef5e09c6
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:36.7271380Z   [ok] the recorded evaluation used this checkpoint
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:36.7271635Z   [ok] the recorded evaluation is the final test on the configuration's test seeds: 100 seeds
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:36.7271934Z   [ok] the recorded evaluation used the configuration's protocol and reward
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:36.7272305Z   [ok] the recorded episodes are exactly the recorded seeds
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:36.7272528Z   [ok] the evaluated network holds exactly the checkpoint's weights
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:36.7272936Z   [FAIL] every re-evaluated episode matches the record exactly: 0/100 episode summaries; largest original-return difference 192; largest training-return difference 192
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:36.7273655Z   [ok] no aggregate differs significantly from the record (paired tests, Holm-corrected): mean_original_return 155.4 -> 156.9 (p 0.52), pad_landing_rate 0.29 -> 0.29 (p 1), timeout_rate 0.13 -> 0.12 (p 1), crash_rate 0.28 -> 0.28 (p 1), out_of_bounds_rate 0.01 -> 0.01 (p 1)
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:36.7274499Z   status: numerical-difference (not blocking): 100 of 100 episodes differ; median |return difference| 0.000412, largest 192; outcomes agree in 99%, on a different platform (os, torch differ); no compared aggregate differs significantly from the record
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:36.7275227Z NUMERICAL-DIFFERENCE: 20261015-224317-dqn-baseline-s0-custom-2fe1, 100 episodes; mean original return recorded 155.3644, reproduced 156.8764; pad landing recorded 29%, reproduced 29%
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:36.7275867Z   100 of 100 episodes differ; median |return difference| 0.000412, largest 192; outcomes agree in 99%, on a different platform (os, torch differ); no compared aggregate differs significantly from the record
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:36.7276312Z report written to reproduce-dqn-baseline-s0-linux.json
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:38.6187387Z   seed 20000: both; first output difference at step 0 (0 action flips), first open-loop observation difference at step 15; closed loop parts at step 15, return 271.8304 -> 271.8295
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:38.6188084Z   seed 20001: both; first output difference at step 0 (0 action flips), first open-loop observation difference at step 2; closed loop parts at step 2, return -13.8666 -> -13.8666
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:38.6188666Z   seed 20002: both; first output difference at step 0 (0 action flips), first open-loop observation difference at step 20; closed loop parts at step 20, return -28.4152 -> -28.4149
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:38.6189195Z DIFFERENT: 20261015-224317-dqn-baseline-s0-custom-2fe1 against dqn-baseline-s0-windows.npz; sources: both
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:38.6189650Z report written to divergence-dqn-baseline-s0-linux.json
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:39.0697060Z ## Artifact reproduction on linux
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:39.0697387Z 
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:39.0697793Z | Artifact | Status | Exit | Integrity | Exact summary fields | Outcomes agree | Median / max abs original-return diff | Mean return (recorded -> here) | Pad landing | Aggregates |
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:39.0698228Z |---|---|---:|---|---:|---:|---:|---:|---:|---|
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:39.0698555Z | dqn-baseline-s0 | **numerical-difference** | 3 | ok | 0/100 | 99% | 0.000412 / 192 | 155.36 -> 156.88 | 29% -> 29% | no significant difference |
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:39.0698994Z | ppo-baseline-s0 | **numerical-difference** | 3 | ok | 0/100 | 100% | 0.000843 / 0.277 | 265.86 -> 265.86 | 96% -> 96% | no significant difference |
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:39.0699433Z | ppo-hover-bonus-s0 | **numerical-difference** | 3 | ok | 0/100 | 100% | 2.37 / 11.9 | -21.25 -> -20.77 | 0% -> 0% | no significant difference |
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:39.0699818Z 
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:39.0700121Z Exact matches concern five selected episode-summary fields, not complete trajectories. Non-significant differences do not establish equivalence; no equivalence margins were specified.
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:39.0700681Z 
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:39.0701072Z Tolerated (not failed): dqn-baseline-s0, ppo-baseline-s0, ppo-hover-bonus-s0: exact cross-platform identity is not a supported guarantee (docs/jmlr/REPRODUCIBILITY.md); integrity holds and no aggregate differs significantly from the record.
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:39.0701523Z 
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:39.0701632Z ### Where the trajectories part (against the recorded Windows traces)
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:39.0701781Z 
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:39.0702012Z | Artifact | Seed | Source | First output difference | Action flips | First open-loop obs. difference (size) | Closed loop parts at | abs return diff |
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:39.0702447Z |---|---:|---|---:|---:|---:|---:|---:|
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:39.0702697Z | 20261015-224317-dqn-baseline-s0-custom-2fe1 | 20000 | both | 0 | 0 | 15 (1.49e-08) | 15 | 0.000885 |
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:39.0703036Z | 20261015-224317-dqn-baseline-s0-custom-2fe1 | 20001 | both | 0 | 0 | 2 (5.22e-08) | 2 | 1.71e-05 |
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:39.0703371Z | 20261015-224317-dqn-baseline-s0-custom-2fe1 | 20002 | both | 0 | 0 | 20 (5.96e-08) | 20 | 0.000265 |
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:39.0703698Z | 20261015-223113-baseline-s0-standard-c5af | 20000 | both | 0 | 0 | 14 (4.47e-08) | 14 | 0.0028 |
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:39.0704027Z | 20261015-223113-baseline-s0-standard-c5af | 20001 | both | 0 | 0 | 2 (5.22e-08) | 2 | 0.00718 |
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:39.0704345Z | 20261015-223113-baseline-s0-standard-c5af | 20002 | both | 0 | 0 | 12 (8.94e-08) | 12 | 4.64e-05 |
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:39.0704671Z | 20261015-223115-hover-bonus-s0-standard-3376 | 20000 | both | 0 | 0 | 14 (5.96e-08) | 14 | 0.901 |
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:39.0705002Z | 20261015-223115-hover-bonus-s0-standard-3376 | 20001 | both | 0 | 0 | 2 (5.22e-08) | 2 | 2.26 |
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:39.0705326Z | 20261015-223115-hover-bonus-s0-standard-3376 | 20002 | both | 0 | 0 | 24 (8.94e-08) | 24 | 5.9 |
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:39.0705509Z 
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:39.0705565Z **Problems:** none
+Python · lint + tests	Re-evaluate the supplied artifacts on Linux and locate where trajectories part	2026-11-03T15:51:39.0705644Z 
+Python · lint + tests	Upload the reproducibility reports	﻿2026-11-03T15:51:39.0781474Z ##[group]Run actions/upload-artifact@v4
+Python · lint + tests	Upload the reproducibility reports	2026-11-03T15:51:39.0781649Z with:
+Python · lint + tests	Upload the reproducibility reports	2026-11-03T15:51:39.0781781Z   name: reproducibility-linux
+Python · lint + tests	Upload the reproducibility reports	2026-11-03T15:51:39.0782031Z   path: reproduce-*.json
+Python · lint + tests	Upload the reproducibility reports	divergence-*.json
+Python · lint + tests	Upload the reproducibility reports	reproduction-summary-*.json
+Python · lint + tests	Upload the reproducibility reports	reproduce-exit-codes.txt
+Python · lint + tests	Upload the reproducibility reports	
+Python · lint + tests	Upload the reproducibility reports	2026-11-03T15:51:39.0782294Z   retention-days: 30
+Python · lint + tests	Upload the reproducibility reports	2026-11-03T15:51:39.0782426Z   if-no-files-found: warn
+Python · lint + tests	Upload the reproducibility reports	2026-11-03T15:51:39.0782561Z   compression-level: 6
+Python · lint + tests	Upload the reproducibility reports	2026-11-03T15:51:39.0782694Z   overwrite: false
+Python · lint + tests	Upload the reproducibility reports	2026-11-03T15:51:39.0782824Z   include-hidden-files: false
+Python · lint + tests	Upload the reproducibility reports	2026-11-03T15:51:39.0782958Z env:
+Python · lint + tests	Upload the reproducibility reports	2026-11-03T15:51:39.0783077Z   SDL_VIDEODRIVER: dummy
+Python · lint + tests	Upload the reproducibility reports	2026-11-03T15:51:39.0783218Z   SDL_AUDIODRIVER: dummy
+Python · lint + tests	Upload the reproducibility reports	2026-11-03T15:51:39.0783352Z   UV_PYTHON: 3.12
+Python · lint + tests	Upload the reproducibility reports	2026-11-03T15:51:39.0783499Z   UV_CACHE_DIR: /home/runner/work/_temp/setup-uv-cache
+Python · lint + tests	Upload the reproducibility reports	2026-11-03T15:51:39.0783674Z ##[endgroup]
+Python · lint + tests	Upload the reproducibility reports	2026-11-03T15:51:39.1790743Z (node:6632) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+Python · lint + tests	Upload the reproducibility reports	2026-11-03T15:51:39.1791408Z (Use `node --trace-deprecation ...` to show where the warning was created)
+Python · lint + tests	Upload the reproducibility reports	2026-11-03T15:51:39.1851514Z With the provided path, there will be 9 files uploaded
+Python · lint + tests	Upload the reproducibility reports	2026-11-03T15:51:39.1852003Z Artifact name is valid!
+Python · lint + tests	Upload the reproducibility reports	2026-11-03T15:51:39.1852217Z Root directory input is valid!
+Python · lint + tests	Upload the reproducibility reports	2026-11-03T15:51:39.5259053Z Beginning upload of artifact content to blob storage
+Python · lint + tests	Upload the reproducibility reports	2026-11-03T15:51:39.5454720Z (node:6632) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+Python · lint + tests	Upload the reproducibility reports	2026-11-03T15:51:39.8136535Z Uploaded bytes 41171
+Python · lint + tests	Upload the reproducibility reports	2026-11-03T15:51:39.8726630Z Finished uploading artifact content to blob storage!
+Python · lint + tests	Upload the reproducibility reports	2026-11-03T15:51:39.8727431Z SHA256 digest of uploaded artifact zip is de410a58f1464abd2a445c04c0b3023b3e92fea13fa0a53f021386d2cfdc97db
+Python · lint + tests	Upload the reproducibility reports	2026-11-03T15:51:39.8728352Z Finalizing artifact upload
+Python · lint + tests	Upload the reproducibility reports	2026-11-03T15:51:40.3513209Z Artifact reproducibility-linux.zip successfully finalized. Artifact ID 13247095946
+Python · lint + tests	Upload the reproducibility reports	2026-11-03T15:51:40.3513674Z Artifact reproducibility-linux has been successfully uploaded! Final size is 41171 bytes. Artifact ID is 13247095946
+Python · lint + tests	Upload the reproducibility reports	2026-11-03T15:51:40.3517316Z Artifact download URL: https://github.com/SHAYAN-ABRAR/lunarlab/actions/runs/41667323177/artifacts/13247095946
+Python · lint + tests	Post Run astral-sh/setup-uv@v6	﻿2026-11-03T15:51:40.3679793Z Post job cleanup.
+Python · lint + tests	Post Run astral-sh/setup-uv@v6	2026-11-03T15:51:40.4445840Z Cache hit occurred on key setup-uv-1-x86_64-unknown-linux-gnu-3.12-pruned-1be0913b0a4e07550796023acc1f2601890af255974de00f6df5864f015c147d, not saving cache.
+Python · lint + tests	Post Run astral-sh/setup-uv@v6	2026-11-03T15:51:40.4448852Z (node:6644) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+Python · lint + tests	Post Run astral-sh/setup-uv@v6	2026-11-03T15:51:40.4449959Z (Use `node --trace-deprecation ...` to show where the warning was created)
+Python · lint + tests	Post Run actions/checkout@v4	﻿2026-11-03T15:51:40.4543967Z Post job cleanup.
+Python · lint + tests	Post Run actions/checkout@v4	2026-11-03T15:51:40.5084143Z [command]/usr/bin/git version
+Python · lint + tests	Post Run actions/checkout@v4	2026-11-03T15:51:40.5118030Z git version 2.56.0
+Python · lint + tests	Post Run actions/checkout@v4	2026-11-03T15:51:40.5141564Z Temporarily overriding HOME='/home/runner/work/_temp/f2c76a32-67a7-4049-a60f-04ffea14a30f' before making global git config changes
+Python · lint + tests	Post Run actions/checkout@v4	2026-11-03T15:51:40.5142251Z Adding repository directory to the temporary git global config as a safe directory
+Python · lint + tests	Post Run actions/checkout@v4	2026-11-03T15:51:40.5144900Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/lunarlab/lunarlab
+Python · lint + tests	Post Run actions/checkout@v4	2026-11-03T15:51:40.5174685Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Python · lint + tests	Post Run actions/checkout@v4	2026-11-03T15:51:40.5201368Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Python · lint + tests	Post Run actions/checkout@v4	2026-11-03T15:51:40.5461320Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Python · lint + tests	Post Run actions/checkout@v4	2026-11-03T15:51:40.5481372Z http.https://github.com/.extraheader
+Python · lint + tests	Post Run actions/checkout@v4	2026-11-03T15:51:40.5491909Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+Python · lint + tests	Post Run actions/checkout@v4	2026-11-03T15:51:40.5522055Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Python · lint + tests	Post Run actions/checkout@v4	2026-11-03T15:51:40.5761262Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Python · lint + tests	Post Run actions/checkout@v4	2026-11-03T15:51:40.5789438Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Python · lint + tests	Complete job	﻿2026-11-03T15:51:40.6105323Z Cleaning up orphan processes
+Python · lint + tests	Complete job	2026-11-03T15:51:40.6332430Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/upload-artifact@v4, astral-sh/setup-uv@v6. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

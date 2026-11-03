@@ -1,0 +1,17 @@
+$ <uv>\python\cpython-3.12-windows-x86_64-none\python.exe -m lunarlab reproduce-artifact --artifact <validation-run>\lunarlander-study\study-artifacts\time-penalty-ablation\20261015-223115-time-penalty-s3-standard-f398 --report <validation-run>\reports\lunarlander-20261015-223115-time-penalty-s3-standard-f398.json
+(exit 0, 16.3 s)
+  [ok] checkpoint.zip matches its recorded SHA-256: 7855d4ba189d8f4c
+  [ok] config.yaml matches its recorded SHA-256: 4af7b2c4f821d327
+  [ok] evaluation.json matches its recorded SHA-256: 5038ab91fbfcb636
+  [ok] configuration hash matches the record: b62183464c6a5abb
+  [ok] the recorded evaluation used this checkpoint
+  [ok] the recorded evaluation is the final test on the configuration's test seeds: 100 seeds
+  [ok] the recorded evaluation used the configuration's protocol and reward
+  [ok] the recorded episodes are exactly the recorded seeds
+  [ok] the evaluated network holds exactly the checkpoint's weights
+  [ok] every re-evaluated episode matches the record exactly: 100/100 episode summaries; largest original-return difference 0; largest training-return difference 0
+  [ok] no aggregate differs significantly from the record (paired tests, Holm-corrected): mean_original_return 236.5 -> 236.5 (p 1), pad_landing_rate 0.75 -> 0.75 (p 1), timeout_rate 0.01 -> 0.01 (p 1), crash_rate 0.08 -> 0.08 (p 1), out_of_bounds_rate 0 -> 0 (p 1)
+  status: exact (not blocking): all 100 episodes match on the selected summary fields
+EXACT: 20261015-223115-time-penalty-s3-standard-f398, 100 episodes; mean original return recorded 236.5374, reproduced 236.5374; pad landing recorded 75%, reproduced 75%
+  all 100 episodes match on the selected summary fields
+report written to <validation-run>\reports\lunarlander-20261015-223115-time-penalty-s3-standard-f398.json

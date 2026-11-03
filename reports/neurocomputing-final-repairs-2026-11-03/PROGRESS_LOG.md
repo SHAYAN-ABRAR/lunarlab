@@ -48,3 +48,32 @@ contacting anyone were not authorized, and none was done.
   declaration, the CRediT proposal, the highlights and submission files, the journal requirements and the
   third-party notices. Also the licence map, the archive builder, the Zenodo drafts, the deposit
   instructions, the licensing proposal and the README.
+- **15:39–15:47 — ran the full local test suite.** 708 passed, in 7 min 47 s, on the base interpreter with the
+  fresh target install (`tests/full-suite-windows.log`).
+- **15:40 — committed and pushed `db8f937`.** Pushed `research/neurocomputing-final-repairs`, a normal push
+  with no force; nothing was merged.
+- **15:41–15:44 — read manuscript build 41666276641 (`db8f937`).** Every page was rendered at 120 dpi and read. Two lines ran past
+  the right margin: the availability statement's file names and the CRediT file name.
+- **15:46 — committed and pushed `c0d9e5d`.** The file names are set with `\path`.
+  - Manuscript build 41667322790 has no overfull box. Its pages 1–17 and 20–22 are pixel-identical to the
+    first build's, and pages 18–19 were read again (`manuscript/VISUAL_REVIEW.md`).
+  - CI run 41666276854 on `db8f937` was cancelled by this push.
+- **15:48 — built the new candidate.**
+  - The source archive of `c0d9e5d`: 2,082 files, `c6cbdf69…`, built without `--verify`. CI's Linux build of
+    the same revision is byte-identical.
+  - The archive candidate `LunarLab-archive-candidate-2026-11-03-c0d9e5d`: 2,696 files; ZIP SHA-256
+    `8e4889ce…`, MD5 `2b91a658…`; CRC passed.
+  - Its licence map covers 2,696 of 2,696 files.
+- **15:48–16:20 — validated the candidate.** From a fresh extraction, with `--fresh-target --commands
+  --unmodified-comparison --lunarlander-replays all`, every step passed and the exit status was 0. All 38
+  LunarLander replays were `exact`, all 18 CartPole artifacts, and the comparison was 42 of 42 with both
+  program sets (`validation/`).
+- **15:51–15:53 — ran the negative checks.**
+  - On this machine, `--fresh-venv` stops at the blocked launcher, with both logs and a written report.
+  - The damaged copy's two faults are named, with exit 1.
+  - The follow-up runner refuses the damaged inputs and runs nothing.
+- **Historical evidence:** 2,359 of 2,359 protected files unchanged (`integrity/`).
+- **16:20 — CI run 41667323177 on `c0d9e5d` passed all six jobs.** Linux 704 passed and 4 skipped; Windows
+  294 and 294; 195 release tests; 15 browser flows. Learned-reward replay 41667323024 also passed.
+- **Then — recorded everything here and built the review ZIP** (its record is in `SUMMARY.md` of the ZIP).
+  Nothing was merged, tagged, released, deposited, uploaded or submitted, and no one was contacted.
