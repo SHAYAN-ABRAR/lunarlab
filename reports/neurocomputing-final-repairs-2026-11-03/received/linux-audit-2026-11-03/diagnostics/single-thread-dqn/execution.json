@@ -1,0 +1,23 @@
+{
+  "evidence": "diagnostic, assistant-executed",
+  "purpose": "Check whether limiting numerical-library threads changes the first blocking DQN replay; not a replacement for run-b.",
+  "command": [
+    "/workspace/scratch/1c599345f09c/linux-validation-2026-11-02/run-b/venv/bin/python",
+    "-m",
+    "lunarlab",
+    "reproduce-artifact",
+    "--artifact",
+    "/workspace/scratch/1c599345f09c/linux-validation-2026-11-02/run-b/lunarlander-study/study-artifacts/dqn-flawed-hover-bonus/20261015-224318-dqn-hover-bonus-s0-custom-aefc",
+    "--report",
+    "/workspace/scratch/1c599345f09c/linux-validation-2026-11-02/diagnostics/single-thread-dqn/replay.json"
+  ],
+  "cwd": "/workspace/scratch/1c599345f09c/linux-validation-2026-11-02/run-b/work",
+  "environment_changes": {
+    "OMP_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "LUNARLAB_HOME": "/workspace/scratch/1c599345f09c/linux-validation-2026-11-02/diagnostics/single-thread-dqn/empty-home"
+  },
+  "started_utc": "2026-11-02T15:55:40.360714+00:00",
+  "exit_status": 1,
+  "finished_utc": "2026-11-02T15:55:57.722553+00:00"
+}

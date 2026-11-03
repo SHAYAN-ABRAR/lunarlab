@@ -155,7 +155,9 @@ none of them affected the published results: no number above changed
   and the repairs that followed a review of it are in
   [`reports/neurocomputing-review-repairs-2026-10-28/`](reports/neurocomputing-review-repairs-2026-10-28/README.md).
   The portability repairs, the archive candidate and its validation are in
-  [`reports/neurocomputing-final-validation-2026-11-01/`](reports/neurocomputing-final-validation-2026-11-01/README.md).
+  [`reports/neurocomputing-final-validation-2026-11-01/`](reports/neurocomputing-final-validation-2026-11-01/README.md),
+  and the repairs after a Linux audit of that candidate are in
+  [`reports/neurocomputing-final-repairs-2026-11-03/`](reports/neurocomputing-final-repairs-2026-11-03/README.md).
 
 ## Requirements
 
@@ -311,6 +313,7 @@ reports/jmlr/               coverage, overhead benchmarks, figures and reproduct
 reports/neurocomputing-2026-10-27/   protocols, records and reports of the October 2026 evidence (committed)
 reports/neurocomputing-review-repairs-2026-10-28/   record recovery, defect reproductions, validation (committed)
 reports/neurocomputing-final-validation-2026-11-01/   follow-up comparison set, validator repairs, archive (committed)
+reports/neurocomputing-final-repairs-2026-11-03/   Linux audit, setup-log repair, DQN diagnostic, new candidate (committed)
 ```
 
 Nothing is deleted automatically, with one exception: a DQN run keeps the replay and state files of its two most
@@ -336,7 +339,10 @@ a 64×64 MLP are about 150 KB each; a DQN replay file with the default 50k buffe
   official guide on 26 October 2026. It covers the software article type, which items are required and which
   only encouraged, and the fees. It also records the journal's answer of 30 October 2026: OSPs use the article
   type "Software publication", there is no publication fee under the subscription option, open access is
-  optional and carries a charge, and there is no OSP-specific template. [AI_TOOL_VERSIONS.md](docs/neurocomputing/AI_TOOL_VERSIONS.md) lists the AI tools and model
+  optional and carries a charge, and there is no OSP-specific template. Its further answer, reported on
+  3 November 2026: the GitHub link can be cited under data availability, the repository should stay
+  accessible during review, there is no word or page restriction, and the review is written, without a
+  mandatory interview. [AI_TOOL_VERSIONS.md](docs/neurocomputing/AI_TOOL_VERSIONS.md) lists the AI tools and model
   versions recorded during development.
 - [paper/neurocomputing/](paper/neurocomputing/BUILD.md): the Neurocomputing manuscript, a working draft that has
   not been submitted. CI builds it with pdfLaTeX and BibTeX. `figures/build_figures.py` draws its figures from
@@ -455,16 +461,17 @@ passed):**
   - Windows Python 3.12 and 3.13: 293 targeted tests passed on each;
   - source archive: 194 release tests passed (the Windows build is byte-identical);
   - browser: 15 flows passed.
-- **Package validation:** `tools/validate_review_package.py` checks every file a scientific record names,
-  not only the checksums of the files present. It then recomputes the results and runs the documented
+- **Package validation:** `tools/validate_review_package.py` checks the files a scientific record names, not
+  only the checksums of the files present: each distributed one against its digest, and each CartPole
+  checkpoint that is deliberately not distributed against an inventory of digests. It then recomputes the results and runs the documented
   commands from a fresh extraction.
 
 Records: [`reports/neurocomputing-review-repairs-2026-10-28/`](reports/neurocomputing-review-repairs-2026-10-28/README.md).
 
 **Validator repairs and archive preparation (1 November 2026, branch
-`research/neurocomputing-final-validation`, not merged):**
+`research/neurocomputing-final-validation`, merged through pull request #3 as `05ca17f` on 2 November):**
 
-- **Portability:** an independent verification on Linux found that the comparison programs crashed on
+- **Portability:** an assistant-executed verification on Linux found that the comparison programs crashed on
   unavailable memory telemetry. A versioned follow-up set records that telemetry as unavailable; the hashed
   programs, protocol and results are unchanged. Run directly on Windows, it agrees exactly with the
   historical results in all 42 pairs.
@@ -486,16 +493,58 @@ Records: [`reports/neurocomputing-review-repairs-2026-10-28/`](reports/neurocomp
   - all 38 LunarLander replays and all 18 CartPole artifacts `exact`;
   - the comparison, 42 of 42 pairs in exact agreement, with the follow-up and the unmodified programs.
 
-  On Linux, the full validator has not yet been run.
+  On Linux, the full validator had not yet been run (see the audit of 2 to 3 November below).
 - **Journal:** the journal confirmed on 30 October 2026 that the subscription route carries no publication
   fee.
 
 Records: [`reports/neurocomputing-final-validation-2026-11-01/`](reports/neurocomputing-final-validation-2026-11-01/README.md).
 
+**Repairs after the Linux audit (3 November 2026, branch `research/neurocomputing-final-repairs`):**
+
+- **Linux audit (assistant-executed, 2 to 3 November):** ChatGPT ran the package validator on the archive
+  candidate in its own Linux sandbox. Checksums, the 624 dependency checks, the CartPole analysis, the plotted
+  values and the 3,800 episodes' statistics all passed. In a one-thread diagnostic run whose parent
+  validation was interrupted, all 38 LunarLander replays kept integrity; 37 showed permitted numerical
+  differences, and one DQN hover-bonus policy an **aggregate disagreement** (mean original return 224.07
+  recorded, 230.45 on Linux), which stays blocking. Where its sandbox hid the process, the unmodified
+  comparison programs crashed in 36 of 42 pairs; the follow-up set agreed in 40 and reported the clean
+  control's two replays as permitted platform differences.
+- **The DQN disagreement:** on Windows, the recording platform, the policy replays exactly (100 of 100
+  episodes, with default and with one thread). A trace of its three most-changed episodes is recorded for a
+  Linux comparison, which is still to be run. Nothing was retrained, and no threshold or record was changed.
+- **Validator:** each setup command now keeps its own log and exit status (the lock install's log used to be
+  overwritten). `--fresh-target` installs the lock into a new directory where Windows Application Control
+  blocks virtual-environment launchers, as it does on the author's machine since 3 November. The manuscript
+  check's `--draft` mode lets review builds show marked author items; `--final` refuses them.
+- **Manuscript:** the narrower dependency claim (156 of the 192 named CartPole checkpoints are inventoried,
+  not distributed), the merged status of pull request #3, the Linux findings with the disagreement, values
+  versus image bytes, the licence scope, and an availability statement that lists what is not yet public.
+  The AI declaration is restored before the references and Figure 1's caption names its tool, with the
+  author's confirmations marked; a CRediT proposal and draft highlights await the author.
+- **Licensing:** `THIRD_PARTY_NOTICES.md` and its generator now list the copied `elsarticle` files under
+  their LPPL. The licence map covers every file of a candidate, and the Zenodo drafts are split by route.
+- **New archive candidate and its validation:** built from `c0d9e5d` (ZIP SHA-256 `8e4889ce…`; not
+  deposited). From a fresh extraction on Windows every validator step passed: 2,695 checksums, 624
+  dependency checks, the plotted values, the 3,800 episodes' statistics, **38 of 38 LunarLander replays
+  `exact`** (the DQN policy included), 18 of 18 CartPole artifacts, and the comparison 42 of 42 in exact
+  agreement with both program sets. Damaged inputs still give named failures, a written report and a
+  nonzero exit.
+- **Tests:** 708 passed locally. CI run [41667323177](https://github.com/SHAYAN-ABRAR/lunarlab/actions/runs/41667323177)
+  passed all six jobs: Linux 704 passed and 4 Windows-only tests skipped; Windows 294 tests on each Python;
+  195 release tests; 15 browser flows. The Linux and Windows source archives are byte-identical.
+- **Journal:** the further answer settles the remaining questions: the GitHub link can be cited, there is
+  no word or page restriction, and the review is written. A Zenodo deposit is optional.
+
+Records: [`reports/neurocomputing-final-repairs-2026-11-03/`](reports/neurocomputing-final-repairs-2026-11-03/README.md).
+
 ## License and citation
 
 LunarLab is released under the [MIT License](LICENSE); every source file carries an SPDX license notice.
-Third-party components and their licenses are listed in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). To cite
+Third-party components and their licenses are listed in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+The MIT License covers the source code and documentation. It does not relicense the copied third-party files
+listed there (the `elsarticle` class and style keep their LPPL), and the terms for the trained models,
+records and manuscript text are still to be stated by the author
+([licensing proposal](reports/neurocomputing-final-validation-2026-11-01/archive/LICENSING_PROPOSAL.md)). To cite
 the software, use [CITATION.cff](CITATION.cff) (GitHub's "Cite this repository" reads it).
 
 

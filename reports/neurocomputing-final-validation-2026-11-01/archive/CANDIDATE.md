@@ -1,5 +1,9 @@
 # The archive candidate of 1 November 2026
 
+> **3 November 2026:** this candidate (`a38d07f`) was audited on Linux (assistant-executed;
+> `../../neurocomputing-final-repairs-2026-11-03/received/`). A new candidate, built after the repairs, is
+> recorded in `../../neurocomputing-final-repairs-2026-11-03/archive/`. This record is unchanged.
+
 A local candidate for the public archive. **It has not been uploaded, deposited or published; no DOI exists
 or is reserved.** It stays outside Git, on the author's machine:
 

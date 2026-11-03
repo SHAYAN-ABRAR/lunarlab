@@ -1,0 +1,12 @@
+{
+  "evidence": "assistant-observed execution limitation",
+  "recorded_utc": "2026-11-03T03:26:11Z",
+  "preserved_complete_run": "run-a",
+  "preserved_partial_runs": ["run-b", "run-c", "diagnostic-single-thread-all"],
+  "missing_later_outputs": ["run-c-resumed", "diagnostic-single-thread-all-resumed"],
+  "description": "On resuming this conversation, later run directories and execution sessions were unavailable. Earlier run-a and partial output directories remained. The cause of the missing later files is not established. Summaries of unavailable outputs are not treated as deliverable raw evidence, and validation.json files for interrupted runs are not reconstructed.",
+  "recovery": [
+    "run-c-final: new empty output directory, original requested --unmodified-comparison command and default numerical threading",
+    "diagnostic-full-final: new empty output directory, --lunarlander-replays all with OMP_NUM_THREADS=1 and MKL_NUM_THREADS=1, separately labelled diagnostic"
+  ]
+}

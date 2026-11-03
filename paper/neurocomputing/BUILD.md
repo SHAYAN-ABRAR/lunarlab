@@ -11,7 +11,8 @@ The source uses Elsevier's generic `elsarticle` class in preprint mode. `elsarti
 `elsarticle-num.bst` are unmodified copies from CTAN's official distribution, generated from the vendor
 archive whose SHA-256 is in `IMPORTED_FROM_PACKAGE.sha256`. They remain under their own licence. This class is
 not asserted to be a Neurocomputing OSP-specific template; none was found on the captured official pages, and
-on 30 October 2026 the journal confirmed that none exists.
+on 30 October 2026 the journal confirmed that none exists. The two files are listed, with their LPPL terms, in
+the repository's `THIRD_PARTY_NOTICES.md`; the MIT License does not cover them.
 
 ## Build
 
@@ -24,10 +25,13 @@ pdflatex -interaction=nonstopmode -halt-on-error main.tex
 pdflatex -interaction=nonstopmode -halt-on-error main.tex
 ```
 
-You need `main.tex`, `references.bib`, `elsarticle.cls`, `elsarticle-num.bst` and the figure PDFs under
-`figures/`. `python check_manuscript.py --final` checks the abstract (at most 250 words), the keywords (1 to
-7), the figure digests against `figures/MANIFEST.json`, the citations, the fixed author details and
-declarations, and that no placeholder remains.
+You need `main.tex`, `AI_Disclosure_For_Submission.tex`, `references.bib`, `elsarticle.cls`,
+`elsarticle-num.bst` and the figure PDFs under `figures/`. `python check_manuscript.py --draft` checks the
+abstract (at most 250 words), the keywords (1 to 7), the figure digests against `figures/MANIFEST.json`, the
+citations, the fixed author details and declarations, and that no placeholder remains. It lists every
+"AUTHOR TO CONFIRM" item and accepts them only while the working-draft footer is active; CI and the package
+validator use it. `python check_manuscript.py --final` is the submission check: it also fails on any such
+item and on the footer itself.
 
 On the author's Windows machine, Windows Application Control (Smart App Control) blocks the unsigned Tectonic
 binary, and no signed TeX distribution is installed. It was not bypassed. The PDF is therefore built by CI
@@ -47,24 +51,33 @@ to the text width, so its smallest text prints at 9.03 pt.
 
 ## Before submission
 
-- **AI declaration:** kept separately, at the author's request, in `AI_Disclosure_For_Submission.tex`. It
-  is a draft of 1 November 2026, based on `AI_USE_INVENTORY.md`, with "AUTHOR TO CONFIRM" items. The author
-  completes them, then restores `\input{AI_Disclosure_For_Submission}` immediately before the references.
-  `check_manuscript.py --final` fails while a restored input still holds such an item. The Methods-level
-  account of AI use is in Section 5.3.
-- **Archive:** an archive candidate exists locally, but it has no DOI because nothing is deposited
-  (`reports/neurocomputing-final-validation-2026-11-01/archive/`). Once it is deposited, cite the record
-  in the availability statement.
-- **Article type and fees:** answered on 30 October 2026. The type is "Software publication"; there is no
-  publication fee under the subscription option; open access is optional, with a charge; there is no
-  OSP-specific template. Length limits and archive timing were not addressed (`docs/neurocomputing/README.md`).
-- **CRediT statement:** the guide requires one ("Corresponding authors are required to acknowledge co-author
-  contributions using CRediT roles"). The manuscript has none yet. The roles are the author's to state:
-  `CREDIT_CHECKLIST.md`.
-- **Highlights:** encouraged but optional. Give 3 to 5 bullets of at most 85 characters each, in a separate
-  file.
+Updated 3 November 2026. The submission files and their status are listed in `SUBMISSION_FILES.md`.
+
+- **AI declaration:** restored in the review draft on 3 November 2026, after the appendix and immediately
+  before the references, where Elsevier's policy ("Policy updated June 2026", fetched that day) places it.
+  It states only what `AI_USE_INVENTORY.md` records. Its "AUTHOR TO CONFIRM" items are visible in the PDF: the
+  OpenAI products and models, any other use, whether references were selected or edited, and the sentence on
+  the author's review and oversight, which may stay only when true. The Methods-level account of AI use is
+  in Section 5.3, and Figure 1's caption names the tool, version and role, as the policy asks for an
+  explanatory image.
+- **CRediT statement:** an "AUTHOR TO CONFIRM" item in the manuscript. A proposal, with what the records
+  show for each role, is in `CREDIT_CHECKLIST.md`. Nothing is ticked.
+- **Licences of the models, records and text:** an "AUTHOR TO CONFIRM" item in the availability statement
+  (`reports/neurocomputing-final-validation-2026-11-01/archive/LICENSING_PROPOSAL.md`).
+- **Availability and archive:** the journal confirmed that the GitHub link can be cited under data
+  availability and that the repository should stay accessible to the handling editor during review
+  (`docs/neurocomputing/README.md`). The statement therefore cites the repository and the revisions, and
+  lists what is not yet public. A Zenodo deposit is optional; it is the way to make the 29 local-only
+  LunarLander policies, the CartPole checkpoints and artifacts and the fixture policies downloadable. None
+  is deposited, and no DOI exists.
+- **Journal questions, answered:** "Software publication"; no publication fee under Subscription; open access
+  optional, with a charge; no OSP template (30 October); no word or page restriction; written peer review and
+  revisions, with no mandatory interview (3 November). No further inquiry is needed.
+- **Highlights:** a draft is in `highlights.txt` (3 to 5 bullets, at most 85 characters each), awaiting the
+  author's approval.
 - **Software revision:** the availability statement names the described library revision (`c9b9384`, merged
-  as `98be27a`), the follow-up validator revision (`954607b`, on a review branch) and each experiment's
-  recorded source state. After a merge and a release, cite the released revision.
+  as `98be27a`), the follow-up validator revision (`954607b`, merged as `05ca17f`), the setup-log repair
+  (`298562e`) and each experiment's recorded source state. After a release, cite the released revision.
 - **Working-draft footer:** every page's footer reads "Working draft, not submitted". Remove the `draft` page
-  style from `main.tex` only when the archive, the declarations and the author's approval are complete.
+  style from `main.tex` only when the declarations, the licences and the author's approval are complete;
+  `check_manuscript.py --final` fails until then.

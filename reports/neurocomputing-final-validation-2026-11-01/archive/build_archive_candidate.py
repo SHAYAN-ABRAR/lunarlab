@@ -43,6 +43,7 @@ E = "reports/neurocomputing-2026-10-27"
 STUDY = f"{E}/cartpole-study"
 COMPARISON = f"{E}/workflow-comparison"
 FINAL = "reports/neurocomputing-final-validation-2026-11-01"
+REPAIRS = "reports/neurocomputing-final-repairs-2026-11-03"
 DESCRIBED = "c9b938446d26fd4890ecd7ff7e6099a319586ae8"
 DIGEST_LINE = re.compile(r"^([0-9a-f]{64}) [ *](.+)$")
 REVISIONS = [
@@ -80,6 +81,27 @@ REVISIONS = [
         "98be27ac20b7b35bc82c8ec806edeffe2eee4efb",
         "`main` after the review repairs were merged (pull request #2; CI run 40755305285 passed)",
         "GitHub",
+    ),
+    (
+        "954607b83853d3fbd1018b5992158f1c924ff0d5",
+        "Validator revision: the follow-up comparison set and the repaired package validator (no library change)",
+        f"`source/{FINAL}/`",
+    ),
+    (
+        "a38d07f59f99dee53676b061955d25e8caef3e72",
+        "Source of the archive candidate of 1 November 2026, audited on Linux on 2 to 3 November",
+        f"`source/{FINAL}/archive/CANDIDATE.md`; `source/{REPAIRS}/received/`",
+    ),
+    (
+        "05ca17f7308e4e0d34773371d1abe229ea6fdf0f",
+        "`main` after pull request #3 merged the follow-up validation (2 November 2026; CI run 41471828824 passed)",
+        "GitHub",
+    ),
+    (
+        "298562ee3c86ecf989904e870075d00e8505297e",
+        "Validator revision that keeps every installation log and adds the target-directory install (no library "
+        "change)",
+        f"`source/{REPAIRS}/`",
     ),
 ]
 
@@ -249,8 +271,9 @@ def start_here(rev: str, facts: dict) -> str:
     return f"""# LunarLab: archive candidate for the Neurocomputing software paper
 
 **Status: a local candidate, not a deposit.** It was assembled on {facts["built_utc"]} from revision `{rev}`.
-Nothing has been uploaded or published, and no DOI or other identifier exists or is reserved. The licence of the
-records and model files is not yet chosen (`LICENSES.md`).
+Nothing has been uploaded or published, and no DOI or other identifier exists or is reserved. The source code
+and documentation are MIT-licensed; the licence of the records, model files and manuscript text is not yet
+chosen (`LICENSES.md`).
 
 ## What is here
 
@@ -264,7 +287,7 @@ records and model files is not yet chosen (`LICENSES.md`).
 | `lunarlander-study/` | `LunarLab_38_Policy_Study.zip`: the 38 historical LunarLander policy packages (checkpoint, configuration, recorded 100-episode evaluation, provenance; the six learned-reward packages with their original reward models) and its inventory and digests. `lunarlab-0.1.0-444a4c5-src.tar.gz`: the source it was repaired with. Both byte for byte as recorded in `source/{FINAL}/archive/historical-bundle.sha256` |
 | `REVISIONS.md` | Which revision produced which evidence |
 | `INVENTORY.md`, `inventory.json` | Every file with its size and SHA-256, and the records that name the scientific dependencies |
-| `LICENSES.md` | Licences: MIT for the software; the records and models await the author's choice |
+| `LICENSES.md` | Licences: MIT for the software; LPPL for the two copied LaTeX files; the records, models and manuscript text await the author's choice |
 | `SHA256SUMS` | Every other file |
 
 The evidence sets are distinct and are not interchangeable:
@@ -292,18 +315,24 @@ python source/tools/validate_review_package.py . ../lunarlab-validation \\
 Get-Content SHA256SUMS | ForEach-Object {{ $d, $n = $_ -split ' \\*', 2; if ((Get-FileHash -Algorithm SHA256 $n).Hash.ToLower() -ne $d) {{ "MISMATCH $n" }} }}
 ```
 
+Where application control blocks a virtual environment's launcher (as Windows Application Control does on the
+author's machine since 3 November 2026), use `--fresh-target` instead of `--fresh-venv`: it installs the same
+lock into a new directory for the validating Python 3.12 and runs nothing it would block.
+
 The validator writes `../lunarlab-validation/validation.json`. It exits 0 only if every step passes, and it
 writes its report even when a step fails. Its steps are:
 
 1. **Checksums:** every file here is listed in `SHA256SUMS` with its digest.
-2. **Dependencies:** every file a record names is present with its recorded digest:
+2. **Dependencies:** every distributed file a record names is present with its recorded digest:
    - the CartPole study indexes and analysis inputs, the frozen checkpoints and the exported artifacts;
    - the comparison fixtures and programs, and the follow-up comparison programs;
    - the figure inputs and the learned-reward packages;
    - the historical bundle.
 
-   Every checkpoint a CartPole run record names is either distributed or listed in
-   `INTERMEDIATE_CHECKPOINTS.json` with the same digest.
+   Every checkpoint a CartPole run record names is either distributed with its digest or listed in
+   `INTERMEDIATE_CHECKPOINTS.json` with the same digest: of the {facts["cartpole"]["frozen"] + facts["cartpole"]["intermediate_not_distributed"]} named, the
+   {facts["cartpole"]["frozen"]} frozen checkpoints are distributed and the {facts["cartpole"]["intermediate_not_distributed"]} scheduled ones are inventoried. The inventory
+   records their digests; their bytes are not here, so they cannot be checked.
 3. **CartPole analysis:** it is recomputed from the run records and compared with the committed results. All
    18 runs are checked against the study protocol and the frozen checkpoints.
 4. **Figures:** they are rebuilt, and the plotted values are compared separately from the image bytes.
@@ -312,7 +341,8 @@ writes its report even when a step fails. Its steps are:
    group IQMs are recomputed from the 3,800 recorded episodes, without LunarLab code.
 6. **Replays:** with `--lunarlander-replays all`, each of the 38 policies is replayed from its package. On
    the recording platform (Windows) a replay is expected to be `exact`. Elsewhere the existing
-   `numerical-difference` classification may apply, and the report shows it.
+   `numerical-difference` classification may apply, and the report shows it. An `aggregate-disagreement`
+   fails the step: on Linux, one DQN policy does so (see the limitations below).
 7. **CartPole artifacts:** all 18 are verified and replayed.
 8. **Workflow comparison:**
    - **Version 2:** the follow-up runner `source/{FINAL}/comparison-v2/`, assessed against the historical
@@ -320,15 +350,20 @@ writes its report even when a step fails. Its steps are:
    - **Unmodified:** with `--unmodified-comparison`, also the frozen runner and programs, assessed by the
      same rules.
 
-## Limitations (also in `source/{FINAL}/READINESS.md`)
+## Limitations (also in `source/{REPAIRS}/READINESS.md`)
 
-- **Linux coverage:** on Linux, nine of the 38 LunarLander policies have been replayed in CI: the three
-  example packages and the six learned-reward packages. Bit-identical results across operating systems are
-  not a supported guarantee.
-- **Platforms of this validation:** it has been run on the author's Windows machine. A Linux run of this
-  validator on this candidate has not been done.
+- **Linux coverage:** nine of the 38 LunarLander policies were replayed on Linux in CI (historical). An
+  assistant-executed audit of the previous candidate (`a38d07f`, 2 to 3 November 2026) replayed all 38 on
+  Linux in a diagnostic run limited to one thread, whose parent validation was interrupted before its final
+  report. All 38 kept integrity; 37 showed permitted numerical differences, and one,
+  `dqn-flawed-hover-bonus/20261015-224318-dqn-hover-bonus-s0-custom-aefc`, an aggregate disagreement (mean
+  original return 224.07 recorded, 230.45 on Linux), which remains blocking. On Windows it replays exactly.
+  Its cause is not identified; a Windows trace for the Linux comparison is in `source/{REPAIRS}/dqn-diagnostic/`.
+  Bit-identical results across operating systems are not a supported guarantee.
+- **Platforms of this validation:** it has been run on the author's Windows machine. The full validator has
+  not completed an uninterrupted Linux run with all 38 replays.
 - **Not recomputed or distributed:** bootstrap intervals are not recomputed. The scheduled CartPole
-  checkpoints are not distributed; the inventory lists them.
+  checkpoints are not distributed; the inventory lists them with their digests.
 - **Provenance:** reward-definition provenance does not cover imported modules, module-level data or library
   versions.
 - **Users:** no independent person has yet installed or used LunarLab.
@@ -348,7 +383,7 @@ def revisions(rev: str, facts: dict) -> str:
     lines += [f"| `{r}` | {what} | {where} |" for r, what, where in REVISIONS]
     lines.append(
         f"| `{rev}` | This candidate's source: the library of `c9b9384`, the follow-up comparison programs and the "
-        f"repaired package validator, with the manuscript source | `source/`; `software/{rev[:7]}/` |"
+        f"package validator of `298562e`, with the manuscript source | `source/`; `software/{rev[:7]}/` |"
     )
     lines += [
         "",
@@ -361,12 +396,26 @@ def revisions(rev: str, facts: dict) -> str:
 def licences() -> str:
     return f"""# Licences
 
-- **Software:** the source code, scripts and tools (`source/`, `software/`) are under the MIT License
-  (`source/LICENSE`). Third-party components and their licences are listed in `source/THIRD_PARTY_NOTICES.md`.
+The candidate holds files under different terms. No single label covers it, and a folder's or archive's label
+does not relicense the files inside it.
+
+- **Software:** LunarLab's source code, scripts, tools and documentation are under the MIT License
+  (`source/LICENSE`).
+- **Third-party files:** `source/paper/neurocomputing/elsarticle.cls` and `elsarticle-num.bst` are unmodified
+  copies of Elsevier's `elsarticle` bundle under the LaTeX Project Public License, version 1.3 or later, as
+  their headers state. The installed dependencies keep their own licences. Both are listed in
+  `source/THIRD_PARTY_NOTICES.md`.
+- **Source archives** (`software/`, `lunarlander-study/lunarlab-0.1.0-444a4c5-src.tar.gz`): the code and
+  documentation inside are MIT; the trained models and records inside follow the next item.
 - **Records, results, trained policies and reward models:** **not yet licensed.** The author must choose a
-  licence before any deposit. A proposal, with a file-to-licence map, is in
-  `source/{FINAL}/archive/LICENSING_PROPOSAL.md`. Until a choice is recorded, no licence is granted for these
-  files beyond what the law allows.
+  licence before any deposit.
+- **Manuscript text and the AI-prepared review material** (`source/paper/`, `source/{FINAL}/received/`,
+  `source/{REPAIRS}/received/`): their terms, and whether they belong in a deposit, are the author's decision.
+
+A proposal, with a file-to-licence map, is in `source/{FINAL}/archive/LICENSING_PROPOSAL.md`. Until a choice is
+recorded, no licence is granted for the files without one beyond what the law allows. Changing this file
+changes `inventory.json`, `SHA256SUMS` and the candidate's ZIP digests: rebuild and re-validate the candidate,
+and never reuse an earlier candidate's digests.
 """
 
 

@@ -2,11 +2,14 @@
 # SPDX-License-Identifier: MIT
 """Validate a review or archive package: its checksums, its scientific dependencies and the reproduction of its results.
 
-    python tools/validate_review_package.py PACKAGE OUT [--fresh-venv] [--commands]
+    python tools/validate_review_package.py PACKAGE OUT [--fresh-venv | --fresh-target] [--commands]
         [--unmodified-comparison] [--lunarlander-replays {published,all}]
 
-A checksum manifest only covers the files that happen to be present. This script also checks that every file
-the scientific records *name* is present with its recorded digest, then recomputes from those records.
+A checksum manifest only covers the files that happen to be present. This script also checks the files that the
+scientific records *name*: each distributed one against its recorded digest, and each intermediate CartPole
+checkpoint that an archive candidate deliberately does not distribute against its inventory entry (the
+inventory's digest must equal the run record's; the omitted bytes themselves cannot be checked). It then
+recomputes from those records.
 
 **Package layout** (described in the package's ``SUMMARY.md`` or ``START_HERE.md``):
 
@@ -20,13 +23,15 @@ the scientific records *name* is present with its recorded digest, then recomput
 **Steps** (the report is ``OUT/validation.json``):
 
 1. **Checksums:** every file in ``SHA256SUMS`` is present with its digest, and every file is listed.
-2. **Dependencies:** every file named by these records is present with its recorded digest:
+2. **Dependencies:** every distributed file named by these records is present with its recorded digest:
    - the CartPole study indexes, the analysis inputs and the frozen-checkpoint list;
    - the exported-artifact manifests;
    - the comparison and protocol hash lists, and the follow-up comparison's ``HASHES-v2.sha256``;
    - the figure manifest and the learned-reward packages;
    - in an archive candidate, the historical bundle's recorded digests. Every checkpoint that a CartPole run
-     record names must be either distributed or listed, with the same digest, as not distributed.
+     record names must be either distributed with that digest or listed, with the same digest, as not
+     distributed. Of the 192 named in an archive candidate, the 36 frozen checkpoints are distributed and the
+     156 scheduled ones are inventoried.
 3. **Recomputation:** in a working copy (``OUT/work``), the CartPole analysis is rerun from the run records
    and compared with the committed results. The run records are checked against the study protocol and the
    frozen checkpoints. Every figure is rebuilt, and its plotted values (``*.values.json``) are compared;
@@ -46,7 +51,12 @@ the scientific records *name* is present with its recorded digest, then recomput
    - with ``--unmodified-comparison``, also the frozen runner and programs, assessed by the same rules.
 
    ``--fresh-venv`` first installs the working copy, with its locked dependencies, into a new virtual
-   environment (with uv), so nothing is imported from the machine's own checkout.
+   environment (with uv), so nothing is imported from the machine's own checkout. Each uv command has its own
+   log and exit status in the report: ``logs/venv-create.log``, ``logs/venv-install-lock.log`` and
+   ``logs/venv-install-source.log``. ``--fresh-target`` is for machines whose application control blocks a
+   virtual environment's launcher: it installs the same lock and the working copy into a new directory,
+   ``OUT/site`` (``logs/target-install-lock.log``, ``logs/target-install-source.log``), and runs every command
+   with the validating interpreter, ``PYTHONPATH=OUT/site`` and no user site-packages.
 
 A step that cannot complete is a failure. Its exit status, log and reason are recorded, and a crashed
 comparison program is named with its stderr. Absent, invalid or wrongly typed output never passes.
@@ -60,11 +70,13 @@ from __future__ import annotations
 import argparse
 import contextlib
 import hashlib
+import importlib.metadata
 import importlib.util
 import json
 import os
 import re
 import shutil
+import site
 import stat
 import subprocess
 import sys
@@ -92,6 +104,10 @@ PUBLISHED_REPLAYS = (
         "examples/learned-reward-artifacts/20261015-235939-custom-s0-standard-0274",
     ),
 )
+# The platform's dependency lock: Windows pins PyPI's torch wheel, Linux the CPU-only build.
+LOCK = "requirements.lock" if os.name == "nt" else "requirements-ci.lock"
+# --fresh-venv asks uv for this version; --fresh-target needs the validating interpreter to be it.
+TARGET_PYTHON = (3, 12)
 COMMAND_TIMEOUT = 7200
 COMPARISON_TIMEOUT = 4 * 3600
 TAIL = 1500
@@ -323,28 +339,83 @@ def run(cmd: list[str], cwd: Path, env: dict, log: Path, timeout: float = COMMAN
     return code
 
 
+def setup_steps(out: Path, prefix: str, commands: list[tuple[str, list[str]]]) -> dict:
+    """Run setup commands in order, each with its own log, ``logs/<prefix>-<step>.log``, and exit status.
+
+    The first failure stops the sequence. Until 3 November 2026 both install commands wrote
+    ``venv-pip-install.log``, so the source install's log overwrote the lock install's.
+    """
+    env = dict(os.environ)
+    steps = []
+    for name, cmd in commands:
+        log = out / "logs" / f"{prefix}-{name}.log"
+        code = run(cmd, out, env, log)
+        steps.append({"step": name, "exit": code, "log": f"logs/{log.name}"})
+        if code != 0:
+            return {
+                "ok": False,
+                "problems": [f"environment step {name} failed (exit {code}); see logs/{log.name}"],
+                "steps": steps,
+            }
+    return {"ok": True, "steps": steps}
+
+
+def locked_install(uv: str, python: str, work: Path, extra: list[str]) -> list[tuple[str, list[str]]]:
+    """The two installs: the platform's lock (CPU-only torch on Linux), then the working copy without deps."""
+    return [
+        (
+            "install-lock",
+            [uv, "pip", "install", "--python", python, *extra, "-r", str(work / LOCK)]
+            + ([] if os.name == "nt" else ["--torch-backend", "cpu"]),
+        ),
+        ("install-source", [uv, "pip", "install", "--python", python, *extra, "--no-deps", str(work)]),
+    ]
+
+
 def make_venv(work: Path, out: Path) -> dict:
     venv = out / "venv"
     uv = shutil.which("uv")
     if uv is None:
         return {"ok": False, "problems": ["--fresh-venv needs uv on PATH"]}
     python = venv / ("Scripts/python.exe" if os.name == "nt" else "bin/python")
-    lock = "requirements.lock" if os.name == "nt" else "requirements-ci.lock"
-    env = dict(os.environ)
-    for cmd in (
-        [uv, "venv", "--python", "3.12", str(venv)],
-        [uv, "pip", "install", "--python", str(python), "-r", str(work / lock)]
-        + ([] if os.name == "nt" else ["--torch-backend", "cpu"]),
-        [uv, "pip", "install", "--python", str(python), "--no-deps", str(work)],
-    ):
-        log = out / "logs" / f"venv-{cmd[1]}-{cmd[2]}.log"
-        if run(cmd, out, env, log) != 0:
-            return {
-                "ok": False,
-                "problems": [f"virtual environment step failed: {' '.join(cmd[:4])}"],
-                "log": log.name,
-            }
-    return {"ok": True, "python": str(python), "lock": lock}
+    result = setup_steps(
+        out,
+        "venv",
+        [
+            ("create", [uv, "venv", "--python", ".".join(map(str, TARGET_PYTHON)), str(venv)]),
+            *locked_install(uv, str(python), work, []),
+        ],
+    )
+    return {**result, "lock": LOCK, **({"python": str(python)} if result["ok"] else {})}
+
+
+def make_target(work: Path, out: Path) -> dict:
+    """The lock and the working copy installed into ``OUT/site`` for this interpreter, which runs every command.
+
+    For machines whose application control blocks a virtual environment's launcher: on the author's Windows
+    machine, from 3 November 2026, uv's ``Scripts/python.exe`` fails with "An Application Control policy has
+    blocked this file" (os error 4551). Nothing is unblocked or bypassed; the launcher is not run. The report
+    lists any packages the interpreter has of its own; ``OUT/site`` precedes them on ``sys.path``.
+    """
+    uv = shutil.which("uv")
+    if uv is None:
+        return {"ok": False, "problems": ["--fresh-target needs uv on PATH"]}
+    version = ".".join(map(str, sys.version_info[:3]))
+    if sys.version_info[:2] != TARGET_PYTHON:
+        wanted = ".".join(map(str, TARGET_PYTHON))
+        return {
+            "ok": False,
+            "problems": [f"--fresh-target needs Python {wanted}; this interpreter is {version}"],
+        }
+    target = out / "site"
+    result = setup_steps(out, "target", locked_install(uv, sys.executable, work, ["--target", str(target)]))
+    own = sorted({d.metadata["Name"] for d in importlib.metadata.distributions(path=site.getsitepackages())})
+    result.update(
+        lock=LOCK, interpreter=sys.executable, interpreter_version=version, interpreter_packages=own
+    )
+    if result["ok"]:
+        result.update(python=sys.executable, site=str(target))
+    return result
 
 
 def same_figures(work: Path, pristine: Path) -> dict:
@@ -463,10 +534,14 @@ def lunarlander_statistics(python: str, work: Path, out: Path, env: dict) -> dic
     }
 
 
-def probe_platform(python: str, work: Path, env: dict, out: Path) -> dict:
-    """The validating interpreter's platform record, as the comparison assessment reads it."""
+def probe_platform(python: str, work: Path, env: dict, out: Path, isolated: bool = True) -> dict:
+    """The validating interpreter's platform record, as the comparison assessment reads it.
+
+    ``isolated=False`` (``--fresh-target``) keeps ``PYTHONPATH``, where the packages are; ``-I`` would drop it.
+    """
     log = out / "logs" / "platform.log"
-    code = run([python, "-I", str(work / FOLLOWUP / "assessment.py"), "--platform"], work, env, log)
+    flags = ["-I"] if isolated else []
+    code = run([python, *flags, str(work / FOLLOWUP / "assessment.py"), "--platform"], work, env, log)
     text = log.read_text(encoding="utf-8").splitlines()
     data = None
     for line in reversed(text):
@@ -730,21 +805,23 @@ def validate(a: argparse.Namespace, package: Path, out: Path, report: dict) -> N
         return {"checked": deps.counts, "problems": deps.problems, "ok": not deps.problems}
 
     step(report, "dependencies", dependencies)
-    if a.fresh_venv:
-        env_result = step(report, "environment", make_venv, work, out)
+    if a.fresh_venv or a.fresh_target:
+        env_result = step(report, "environment", make_target if a.fresh_target else make_venv, work, out)
         python = env_result.get("python") if env_result.get("ok") else None
     else:
         python = sys.executable
         report["environment"] = {"ok": True, "python": python, "note": "this interpreter (no --fresh-venv)"}
     env = {k: v for k, v in os.environ.items() if k not in ("PYTHONPATH", "LUNARLAB_HOME")}
     env.update(PYTHONIOENCODING="utf-8", PYTHONPATH="" if a.fresh_venv else str(work))
+    if a.fresh_target:
+        env.update(PYTHONPATH=str(out / "site"), PYTHONNOUSERSITE="1")
     if python is None:
         for name in ("cartpole_records", "figures", *(("lunarlander_statistics",) if has_bundle else ())):
             skipped(report, name, "the environment could not be created")
         if a.commands:
             skipped(report, "commands", "the environment could not be created")
         return
-    platform = step(report, "platform", probe_platform, python, work, env, out)
+    platform = step(report, "platform", probe_platform, python, work, env, out, not a.fresh_target)
 
     def cartpole_records() -> dict:
         code = run(
@@ -768,7 +845,7 @@ def validate(a: argparse.Namespace, package: Path, out: Path, report: dict) -> N
             [python, "paper/neurocomputing/figures/build_figures.py"], work, env, out / "logs" / "figures.log"
         )
         check_code = run(
-            [python, "paper/neurocomputing/check_manuscript.py", "--final"],
+            [python, "paper/neurocomputing/check_manuscript.py", "--draft"],
             work,
             env,
             out / "logs" / "check-manuscript.log",
@@ -816,7 +893,13 @@ def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     ap.add_argument("package", type=Path)
     ap.add_argument("out", type=Path)
-    ap.add_argument("--fresh-venv", action="store_true")
+    fresh = ap.add_mutually_exclusive_group()
+    fresh.add_argument("--fresh-venv", action="store_true")
+    fresh.add_argument(
+        "--fresh-target",
+        action="store_true",
+        help="install into OUT/site for this interpreter, where a virtual environment's launcher is blocked",
+    )
     ap.add_argument("--commands", action="store_true")
     ap.add_argument(
         "--unmodified-comparison",
@@ -843,6 +926,7 @@ def main(argv: list[str] | None = None) -> int:
         "started_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         "options": {
             "fresh_venv": a.fresh_venv,
+            "fresh_target": a.fresh_target,
             "commands": a.commands,
             "unmodified_comparison": a.unmodified_comparison,
             "lunarlander_replays": a.lunarlander_replays if a.commands else None,

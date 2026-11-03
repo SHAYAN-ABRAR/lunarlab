@@ -1,0 +1,123 @@
+# Readiness after the Linux audit (current record)
+
+Written 3 November 2026. This is a record of evidence, not a rating, and it estimates no acceptance or review
+time. The manuscript is a **working draft, not submission-ready**: the author's declarations, licence choices
+and approval are outstanding, and some trained policies are not yet public (see "Author decisions").
+
+## The journal's answers (correspondence with the author, summarized)
+
+| Question | Answer | When |
+|---|---|---|
+| Article type | "Software publication" | 30 October |
+| Fees | No publication fee under Subscription; open access optional, with an APC | 30 October |
+| Template | No OSP-specific template | 30 October |
+| Data availability | The GitHub link can be cited under "Data Availability"; the repository should remain accessible to the handling editor during review | Reported 3 November |
+| Length | No word or page restriction | Reported 3 November |
+| Review | Written peer review and revisions, without a mandatory interview | Reported 3 November |
+
+The earlier blockers on fee-free eligibility, page limits and interviews are **removed**. JMLR's four-page
+rule does not apply to this paper. A DOI is **not** required solely because the earlier plan wanted one:
+Zenodo stays optional, as the way to make the local-only material downloadable. A repository link does not
+publish files that are not in the repository. No further inquiry about these points is needed. No review time
+is promised, and none is inferred from journal-wide figures.
+
+## Revision identities
+
+| Revision | Role |
+|---|---|
+| `c9b9384` | The library the manuscript describes (merged as `98be27a`, pull request #2) |
+| `954607b` | The earlier validator revision (follow-up comparison set, failure handling), merged through pull request #3 as `05ca17f` on 2 November 2026 (CI 41471828824: six jobs passed) |
+| `a38d07f` | The source of the archive candidate audited on Linux |
+| `f9615d1` | The final commit of the earlier review branch |
+| `298562e` | This work's validator revision: separate setup logs, `--fresh-target`, the manuscript check's `--draft` mode. No library change |
+| `db8f937` | The manuscript, licensing and archive-draft corrections, and the first records |
+| `c0d9e5d` | Two overflowing lines fixed: the source of the new archive candidate and of the final manuscript build (41667322790); CI 41667323177 passed all six jobs |
+| The final commit of the branch | The validation, CI and manuscript records, and this file's final form (`PROGRESS_LOG.md`) |
+
+## What the audit established, and what was done
+
+| Audit finding (assistant-executed) | Done here | Status |
+|---|---|---|
+| Both `uv pip install` commands wrote `venv-pip-install.log`; the lock install's log was overwritten | Distinct logs and exit statuses for every setup command (`venv-create`, `venv-install-lock`, `venv-install-source`). Historical logs are unchanged, and the overwritten one is not reconstructed | **Repaired, tested:** both logs survive with distinct sentinel output; a failed install stops and names its log |
+| One DQN policy (`…-aefc`): `aggregate-disagreement` on Linux, 224.07 recorded vs 230.25 and 230.45 | Reproduced on Windows from a new extraction and empty data home: `exact`, 100 of 100 episodes, with default and with one thread. A trace of seeds 20068, 20011 and 20033 was recorded and re-flown identically | **Disclosed** in the manuscript and kept **blocking**. Its cause is not identified. **Pending:** the Linux `--compare` (`dqn-diagnostic/`) |
+| The all-38 Linux replay stage: integrity 38 of 38, 37 permitted numerical differences, one disagreement; its parent run was interrupted | Reported as a diagnostic with its runtime, separately from the nine historical Linux replays | Disclosed. **Pending:** an uninterrupted Linux validator run with all 38 replays |
+| The unmodified comparison crashed in 36 of 42 pairs (`NoSuchProcess`); the follow-up set agreed in 40 pairs and reported two permitted differences | Reported with the correct counts (not "all 42") | Disclosed |
+| The manuscript claimed that every named file is present | Narrowed: 192 named CartPole checkpoints = 36 distributed + 156 inventoried with digests | Corrected in `main.tex`, `EVIDENCE.md`, the validator's docstring and the candidate's `START_HERE.md` |
+| Stale "not merged"; byte identity of figures; licence scope; data availability | Corrected, as the brief listed (`../../paper/neurocomputing/EVIDENCE.md`) | Corrected |
+| `THIRD_PARTY_NOTICES.md` said no third-party source is copied | The notice and its generator list `elsarticle.cls` and `elsarticle-num.bst` under the LPPL 1.3 or later; a test checks the listing and the headers | **Repaired** |
+| The licence map left out `inventory.json` and `SHA256SUMS`; a container was labelled MIT | The map covers every file and labels source archives as mixed. The proposal says that rebuilding changes the digests | **Repaired** (`../neurocomputing-final-validation-2026-11-01/archive/`) |
+| The Zenodo draft mixed the REST and `.zenodo.json` formats, with `_status` and an invalid licence; the instructions said files can never change | Route-specific drafts with no licence, date or marker. The 45-day file-edit rule is quoted; the project's own rule is to make a new version | **Repaired**; licences still the author's decision |
+
+## Evidence status
+
+Labels: **executed** (run in this work), **CI**, **inspected**, **historical**, **assistant-executed** (the
+received audit), **diagnostic**, **pending**.
+
+| Item | Status |
+|---|---|
+| Linux validation of the `a38d07f` candidate | **Assistant-executed** (`received/`): complete runs A (exit 0) and C one-thread (exit 1, on the unmodified comparison); the all-38 replay stage as a diagnostic with an interrupted parent |
+| DQN policy on Windows | **Executed:** `exact` twice; the trace is recorded |
+| DQN trace on Linux | **Pending** |
+| Validator repair | **Executed:** the regression tests (`298562e`). Both setup logs survive in real runs, `target-install-lock.log` and `target-install-source.log`. On this machine `--fresh-venv` stops at `install-lock` and names that step and its log (`validation/`) |
+| Tests | **Executed** on Windows: the full suite, 708 passed (`tests/`). **CI** on `c0d9e5d` (run 41667323177): all six jobs passed; Linux 704 passed and 4 Windows-only skips; Windows 294 on each Python; 195 release tests; 15 browser flows |
+| New archive candidate (`c0d9e5d`) | **Executed:** built locally (`archive/CANDIDATE.md`). ZIP 82,988,733 bytes, SHA-256 `8e4889ce…610f`, MD5 `2b91a658…`. Its licence map covers 2,696 of 2,696 files. Not deposited |
+| Its fresh-extraction validation on Windows | **Executed, every step passed** (`validation/`): 2,695 checksums; 624 dependency checks; values 4 of 4 and bytes 20 of 20; bundle 333; 3,800 episodes recomputed; **38 of 38 replays exact**, including the policy that disagrees on Linux; 18 of 18 CartPole artifacts exact; comparison 42 of 42 in exact agreement, with both the follow-up and the unmodified programs |
+| Negative checks | **Executed:** a damaged copy gives named checksum and dependency failures, a written report and exit 1; the follow-up runner refuses its inputs and runs nothing; the blocked `--fresh-venv` gives a written report, the failed step's log and exit 1 |
+| Historical evidence | **Executed:** 2,359 of 2,359 protected files unchanged, combined digest `7366ba1b…` (`integrity/`) |
+| Manuscript | **CI** builds 41666276641 (`db8f937`: two lines past the margin) and 41667322790 (`c0d9e5d`: fixed). Every page **inspected**: 22 pages, all fonts embedded, no overfull box (`manuscript/VISUAL_REVIEW.md`) |
+| The full validator on Linux, uninterrupted, with all 38 replays | **Pending:** no Linux machine with the bundle is available here, and CI cannot reach the bundle. The command is in the candidate's `START_HERE.md` |
+
+## Limitations that remain
+
+- **The DQN cross-platform disagreement:** `…-aefc` does not reproduce its recorded aggregate on Linux
+  (224.07 recorded; 230.45 and 230.25 in three Linux executions; 8 of 100 outcomes changed). It is exact on
+  Windows. Its cause is not identified, and the Linux trace comparison has not been run. It stays disclosed,
+  and blocking under the replay gate. The other 37 Linux classifications do not establish equivalence.
+- **Linux runs are not fully repeatable:** two Linux executions of that policy differ on one episode (seed
+  20065).
+- **The full validator on Linux:** it has not completed an uninterrupted run with all 38 replays. The audit's
+  all-38 stage was a diagnostic with an interrupted parent.
+- **Provenance:** the LunarLander policies were trained from a modified working tree based on `32823f3`,
+  which is not reconstructed. The reward-definition record does not cover imported modules, module-level data
+  or library versions.
+- **Users:** no independent person has installed, run or reported on LunarLab. The audits are
+  assistant-executed.
+- **Scope:** two environments, designed faults, five seeds per design. The comparison measures neither
+  researcher time nor usability.
+- **This machine:** Windows Application Control blocks virtual-environment launchers and the TeX engine. The
+  PDF is built by CI, and local runs use `--fresh-target`.
+
+## Author decisions (ranked by how much they block submission)
+
+1. **AI declaration:** complete its AUTHOR TO CONFIRM items (`paper/neurocomputing/AI_USE_INVENTORY.md`):
+   - the OpenAI products and models;
+   - any other use;
+   - whether references were selected or edited;
+   - the review-and-responsibility sentence, only if true.
+2. **CRediT roles** (`paper/neurocomputing/CREDIT_CHECKLIST.md`): nothing is ticked; a proposal is there.
+3. **Licences** for the models, records and manuscript text, in the repository and any deposit
+   (`../neurocomputing-final-validation-2026-11-01/archive/LICENSING_PROPOSAL.md`).
+4. **Availability of the local-only material:** 29 LunarLander policies, the CartPole checkpoints and
+   artifacts, and the fixture policies. Either deposit them (optional; `DEPOSIT_INSTRUCTIONS.md`) or keep the
+   statement that they are not yet public.
+5. **Approval:** of the manuscript wording, the highlights (`paper/neurocomputing/highlights.txt`), the
+   cover-letter draft, the biography (not drafted) and the final files; then remove the working-draft
+   footer. `check_manuscript.py --final` must pass.
+6. **Merge:** whether to merge `research/neurocomputing-final-repairs`.
+
+## Technical items (ranked by value; none blocks an author decision)
+
+1. **Run the Linux trace comparison** of `…-aefc` (`dqn-diagnostic/README.md`). It separates policy inference
+   from simulator dynamics for its three most-changed episodes.
+2. **Run the full validator on Linux, uninterrupted**, with all 38 replays, from a fresh extraction of the
+   `c0d9e5d` candidate (`START_HERE.md`). Declare the thread settings, and keep the final JSON whatever its
+   result. The known disagreement is expected to fail the replay step.
+3. Record a trajectory in audit artifacts, so that `audit-artifact verify` can also run S8.
+4. Build the PDF locally if a permitted TeX distribution is installed.
+
+## Public-availability work that needs the author's authorization
+
+- Any deposit (Zenodo or another archive), DOI reservation, upload or release. None was made.
+- Merging `research/neurocomputing-final-repairs` into `main`, or tagging a release.
+- Licence statements for the models, records and text, in the repository or a deposit.
+- Submission to the journal, and any contact with it or with others.

@@ -1,0 +1,3627 @@
+{
+ "runner": "comparison-v2/run_comparison_v2.py",
+ "version": 2,
+ "run_id": "b4aeb4cc832d46e78c3d0a8e70d5d903",
+ "started_utc": "2026-11-03T16:06:53Z",
+ "platform": {
+  "platform": "Windows-11-10.0.26300-SP0",
+  "python": "3.12.13",
+  "packages": {
+   "torch": "2.14.1",
+   "numpy": "2.5.4",
+   "Box2D": "2.3.10",
+   "gymnasium": "1.4.0",
+   "stable-baselines3": "2.9.0"
+  }
+ },
+ "inputs": {
+  "verified": true,
+  "problems": []
+ },
+ "rows": [
+  {
+   "case": "C0-clean",
+   "kind": "control",
+   "targets": [],
+   "expected_verdict": "accepted",
+   "workflow": "W1",
+   "exit_code": 4,
+   "verdict": "unchecked",
+   "replay_status": null,
+   "episodes_executed": 100,
+   "execution_started_before_failure": null,
+   "wall_seconds": 18.271326999994926,
+   "checks": {
+    "S1": {
+     "status": "unsupported",
+     "detail": "SB3 neither records nor verifies a checkpoint digest; PPO.load only validated and loaded the archive"
+    },
+    "S2": {
+     "status": "unsupported",
+     "detail": "no dependency or record files are verified"
+    },
+    "S3": {
+     "status": "unsupported",
+     "detail": "the saved configuration is used for evaluation, not compared with a recorded evaluation"
+    },
+    "S4": {
+     "status": "unsupported",
+     "detail": "seeds are passed to reset(seed=int(seed)); int() converts floats and numeric strings without notice"
+    },
+    "S5": {
+     "status": "unsupported",
+     "detail": "reward parameters are not read: the evaluation uses the original reward only"
+    },
+    "S6": {
+     "status": "unsupported",
+     "detail": "the recorded evaluation is not read"
+    },
+    "S7": {
+     "status": "unsupported",
+     "detail": "the recorded evaluation is not read"
+    },
+    "S8": {
+     "status": "unsupported",
+     "detail": "reward terms are not re-scored"
+    },
+    "S9": {
+     "status": "unsupported",
+     "detail": "no outcome schema is compared"
+    },
+    "S10": {
+     "status": "unsupported",
+     "detail": "results are not compared with the recorded evaluation"
+    }
+   },
+   "raw": "raw/W1/C0-clean/",
+   "telemetry": {
+    "peak_rss_bytes_self": 288874496,
+    "peak_rss_status": "measured: peak_wset"
+   },
+   "result_problems": [],
+   "outcome": "unsupported",
+   "note": "results produced without the specification's checks; no false alarm"
+  },
+  {
+   "case": "C0-clean",
+   "kind": "control",
+   "targets": [],
+   "expected_verdict": "accepted",
+   "workflow": "W2",
+   "exit_code": 0,
+   "verdict": "accepted",
+   "replay_status": "exact",
+   "episodes_executed": 100,
+   "execution_started_before_failure": false,
+   "wall_seconds": 18.249574900022708,
+   "checks": {
+    "S1": {
+     "status": "pass",
+     "detail": "policy 7aa5207e7aeeec75..."
+    },
+    "S2": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S3": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S4": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S5": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S6": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S7": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S8": {
+     "status": "pass",
+     "detail": "largest difference 0"
+    },
+    "S9": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S10": {
+     "status": "pass",
+     "detail": "exact: 0 of 100 episodes differ"
+    }
+   },
+   "raw": "raw/W2/C0-clean/",
+   "telemetry": {
+    "peak_rss_bytes_self": 289439744,
+    "peak_rss_status": "measured: peak_wset"
+   },
+   "result_problems": [],
+   "outcome": "correct",
+   "note": "accepted"
+  },
+  {
+   "case": "C0-clean",
+   "kind": "control",
+   "targets": [],
+   "expected_verdict": "accepted",
+   "workflow": "W3",
+   "exit_code": 0,
+   "verdict": "accepted",
+   "replay_status": "exact",
+   "episodes_executed": 100,
+   "execution_started_before_failure": false,
+   "wall_seconds": 20.107789700035937,
+   "checks": {
+    "S1": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S2": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S3": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S4": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S5": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S6": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S7": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S8": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S9": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S10": {
+     "status": "pass",
+     "detail": "exact: all 100 episodes match on the selected summary fields"
+    }
+   },
+   "raw": "raw/W3/C0-clean/",
+   "telemetry": {
+    "peak_rss_bytes_self": 294363136,
+    "peak_rss_status": "measured: peak_wset"
+   },
+   "result_problems": [],
+   "outcome": "correct",
+   "note": "accepted"
+  },
+  {
+   "case": "C1-numerical-difference",
+   "kind": "control",
+   "targets": [
+    "S10"
+   ],
+   "expected_verdict": "accepted-numerical-difference",
+   "workflow": "W1",
+   "exit_code": 4,
+   "verdict": "unchecked",
+   "replay_status": null,
+   "episodes_executed": 100,
+   "execution_started_before_failure": null,
+   "wall_seconds": 18.27870660001645,
+   "checks": {
+    "S1": {
+     "status": "unsupported",
+     "detail": "SB3 neither records nor verifies a checkpoint digest; PPO.load only validated and loaded the archive"
+    },
+    "S2": {
+     "status": "unsupported",
+     "detail": "no dependency or record files are verified"
+    },
+    "S3": {
+     "status": "unsupported",
+     "detail": "the saved configuration is used for evaluation, not compared with a recorded evaluation"
+    },
+    "S4": {
+     "status": "unsupported",
+     "detail": "seeds are passed to reset(seed=int(seed)); int() converts floats and numeric strings without notice"
+    },
+    "S5": {
+     "status": "unsupported",
+     "detail": "reward parameters are not read: the evaluation uses the original reward only"
+    },
+    "S6": {
+     "status": "unsupported",
+     "detail": "the recorded evaluation is not read"
+    },
+    "S7": {
+     "status": "unsupported",
+     "detail": "the recorded evaluation is not read"
+    },
+    "S8": {
+     "status": "unsupported",
+     "detail": "reward terms are not re-scored"
+    },
+    "S9": {
+     "status": "unsupported",
+     "detail": "no outcome schema is compared"
+    },
+    "S10": {
+     "status": "unsupported",
+     "detail": "results are not compared with the recorded evaluation"
+    }
+   },
+   "raw": "raw/W1/C1-numerical-difference/",
+   "telemetry": {
+    "peak_rss_bytes_self": 288280576,
+    "peak_rss_status": "measured: peak_wset"
+   },
+   "result_problems": [],
+   "outcome": "unsupported",
+   "note": "results produced without the specification's checks; no false alarm"
+  },
+  {
+   "case": "C1-numerical-difference",
+   "kind": "control",
+   "targets": [
+    "S10"
+   ],
+   "expected_verdict": "accepted-numerical-difference",
+   "workflow": "W2",
+   "exit_code": 3,
+   "verdict": "accepted-numerical-difference",
+   "replay_status": "numerical-difference",
+   "episodes_executed": 100,
+   "execution_started_before_failure": false,
+   "wall_seconds": 18.042724300001282,
+   "checks": {
+    "S1": {
+     "status": "pass",
+     "detail": "policy 7aa5207e7aeeec75..."
+    },
+    "S2": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S3": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S4": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S5": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S6": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S7": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S8": {
+     "status": "pass",
+     "detail": "largest difference 0"
+    },
+    "S9": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S10": {
+     "status": "pass",
+     "detail": "numerical-difference: 2 of 100 episodes differ"
+    }
+   },
+   "raw": "raw/W2/C1-numerical-difference/",
+   "telemetry": {
+    "peak_rss_bytes_self": 305938432,
+    "peak_rss_status": "measured: peak_wset"
+   },
+   "result_problems": [],
+   "outcome": "correct",
+   "note": "accepted-numerical-difference"
+  },
+  {
+   "case": "C1-numerical-difference",
+   "kind": "control",
+   "targets": [
+    "S10"
+   ],
+   "expected_verdict": "accepted-numerical-difference",
+   "workflow": "W3",
+   "exit_code": 3,
+   "verdict": "accepted-numerical-difference",
+   "replay_status": "numerical-difference",
+   "episodes_executed": 100,
+   "execution_started_before_failure": false,
+   "wall_seconds": 19.48508579999907,
+   "checks": {
+    "S1": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S2": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S3": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S4": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S5": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S6": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S7": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S8": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S9": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S10": {
+     "status": "pass",
+     "detail": "numerical-difference: 2 of 100 episodes differ; median |return difference| 0, largest 3; outcomes agree in 98%, on a different platform (os differ); no compared aggregate differs significantly from the record"
+    }
+   },
+   "raw": "raw/W3/C1-numerical-difference/",
+   "telemetry": {
+    "peak_rss_bytes_self": 309010432,
+    "peak_rss_status": "measured: peak_wset"
+   },
+   "result_problems": [],
+   "outcome": "correct",
+   "note": "accepted-numerical-difference"
+  },
+  {
+   "case": "F01-checkpoint-swapped",
+   "kind": "fault",
+   "targets": [
+    "S1"
+   ],
+   "expected_verdict": "rejected-before-execution",
+   "workflow": "W1",
+   "exit_code": 4,
+   "verdict": "unchecked",
+   "replay_status": null,
+   "episodes_executed": 100,
+   "execution_started_before_failure": null,
+   "wall_seconds": 18.081580199999735,
+   "checks": {
+    "S1": {
+     "status": "unsupported",
+     "detail": "SB3 neither records nor verifies a checkpoint digest; PPO.load only validated and loaded the archive"
+    },
+    "S2": {
+     "status": "unsupported",
+     "detail": "no dependency or record files are verified"
+    },
+    "S3": {
+     "status": "unsupported",
+     "detail": "the saved configuration is used for evaluation, not compared with a recorded evaluation"
+    },
+    "S4": {
+     "status": "unsupported",
+     "detail": "seeds are passed to reset(seed=int(seed)); int() converts floats and numeric strings without notice"
+    },
+    "S5": {
+     "status": "unsupported",
+     "detail": "reward parameters are not read: the evaluation uses the original reward only"
+    },
+    "S6": {
+     "status": "unsupported",
+     "detail": "the recorded evaluation is not read"
+    },
+    "S7": {
+     "status": "unsupported",
+     "detail": "the recorded evaluation is not read"
+    },
+    "S8": {
+     "status": "unsupported",
+     "detail": "reward terms are not re-scored"
+    },
+    "S9": {
+     "status": "unsupported",
+     "detail": "no outcome schema is compared"
+    },
+    "S10": {
+     "status": "unsupported",
+     "detail": "results are not compared with the recorded evaluation"
+    }
+   },
+   "raw": "raw/W1/F01-checkpoint-swapped/",
+   "telemetry": {
+    "peak_rss_bytes_self": 289222656,
+    "peak_rss_status": "measured: peak_wset"
+   },
+   "result_problems": [],
+   "outcome": "unsupported",
+   "note": "unchecked; 100 episodes executed"
+  },
+  {
+   "case": "F01-checkpoint-swapped",
+   "kind": "fault",
+   "targets": [
+    "S1"
+   ],
+   "expected_verdict": "rejected-before-execution",
+   "workflow": "W2",
+   "exit_code": 1,
+   "verdict": "rejected-before-execution",
+   "replay_status": null,
+   "episodes_executed": 0,
+   "execution_started_before_failure": false,
+   "wall_seconds": 1.5239484999910928,
+   "checks": {
+    "S1": {
+     "status": "fail",
+     "detail": "policy f6ba5af4d87c1147..."
+    },
+    "S2": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S3": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S4": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S5": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S6": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S7": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S8": {
+     "status": "pass",
+     "detail": "largest difference 0"
+    },
+    "S9": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S10": {
+     "status": "not-run",
+     "detail": "an integrity check failed"
+    }
+   },
+   "raw": "raw/W2/F01-checkpoint-swapped/",
+   "telemetry": {
+    "peak_rss_bytes_self": 211578880,
+    "peak_rss_status": "measured: peak_wset"
+   },
+   "result_problems": [],
+   "outcome": "rejected",
+   "note": "rejected-before-execution; targeted {'S1': 'fail'}"
+  },
+  {
+   "case": "F01-checkpoint-swapped",
+   "kind": "fault",
+   "targets": [
+    "S1"
+   ],
+   "expected_verdict": "rejected-before-execution",
+   "workflow": "W3",
+   "exit_code": 1,
+   "verdict": "rejected-before-execution",
+   "replay_status": null,
+   "episodes_executed": 0,
+   "execution_started_before_failure": false,
+   "wall_seconds": 1.43097340001259,
+   "checks": {
+    "S1": {
+     "status": "fail",
+     "detail": "policy.zip has its recorded SHA-256: f6ba5af4d87c1147d7c34e196618cbc80bdac55a0976078394ab567b4a126f73 != 7aa5207e7aeeec758442253f64baabd31e2de6d1a5c69fa0211ce849e9c607d8"
+    },
+    "S2": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S3": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S4": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S5": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S6": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S7": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S8": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S9": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S10": {
+     "status": "not-run",
+     "detail": "an integrity check failed"
+    }
+   },
+   "raw": "raw/W3/F01-checkpoint-swapped/",
+   "telemetry": {
+    "peak_rss_bytes_self": 211173376,
+    "peak_rss_status": "measured: peak_wset"
+   },
+   "result_problems": [],
+   "outcome": "rejected",
+   "note": "rejected-before-execution; targeted {'S1': 'fail'}"
+  },
+  {
+   "case": "F02-recorded-digest-corrupted",
+   "kind": "fault",
+   "targets": [
+    "S1"
+   ],
+   "expected_verdict": "rejected-before-execution",
+   "workflow": "W1",
+   "exit_code": 4,
+   "verdict": "unchecked",
+   "replay_status": null,
+   "episodes_executed": 100,
+   "execution_started_before_failure": null,
+   "wall_seconds": 19.691571499977726,
+   "checks": {
+    "S1": {
+     "status": "unsupported",
+     "detail": "SB3 neither records nor verifies a checkpoint digest; PPO.load only validated and loaded the archive"
+    },
+    "S2": {
+     "status": "unsupported",
+     "detail": "no dependency or record files are verified"
+    },
+    "S3": {
+     "status": "unsupported",
+     "detail": "the saved configuration is used for evaluation, not compared with a recorded evaluation"
+    },
+    "S4": {
+     "status": "unsupported",
+     "detail": "seeds are passed to reset(seed=int(seed)); int() converts floats and numeric strings without notice"
+    },
+    "S5": {
+     "status": "unsupported",
+     "detail": "reward parameters are not read: the evaluation uses the original reward only"
+    },
+    "S6": {
+     "status": "unsupported",
+     "detail": "the recorded evaluation is not read"
+    },
+    "S7": {
+     "status": "unsupported",
+     "detail": "the recorded evaluation is not read"
+    },
+    "S8": {
+     "status": "unsupported",
+     "detail": "reward terms are not re-scored"
+    },
+    "S9": {
+     "status": "unsupported",
+     "detail": "no outcome schema is compared"
+    },
+    "S10": {
+     "status": "unsupported",
+     "detail": "results are not compared with the recorded evaluation"
+    }
+   },
+   "raw": "raw/W1/F02-recorded-digest-corrupted/",
+   "telemetry": {
+    "peak_rss_bytes_self": 288264192,
+    "peak_rss_status": "measured: peak_wset"
+   },
+   "result_problems": [],
+   "outcome": "unsupported",
+   "note": "unchecked; 100 episodes executed"
+  },
+  {
+   "case": "F02-recorded-digest-corrupted",
+   "kind": "fault",
+   "targets": [
+    "S1"
+   ],
+   "expected_verdict": "rejected-before-execution",
+   "workflow": "W2",
+   "exit_code": 1,
+   "verdict": "rejected-before-execution",
+   "replay_status": null,
+   "episodes_executed": 0,
+   "execution_started_before_failure": false,
+   "wall_seconds": 1.545655700028874,
+   "checks": {
+    "S1": {
+     "status": "fail",
+     "detail": "policy 7aa5207e7aeeec75..."
+    },
+    "S2": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S3": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S4": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S5": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S6": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S7": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S8": {
+     "status": "pass",
+     "detail": "largest difference 0"
+    },
+    "S9": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S10": {
+     "status": "not-run",
+     "detail": "an integrity check failed"
+    }
+   },
+   "raw": "raw/W2/F02-recorded-digest-corrupted/",
+   "telemetry": {
+    "peak_rss_bytes_self": 211566592,
+    "peak_rss_status": "measured: peak_wset"
+   },
+   "result_problems": [],
+   "outcome": "rejected",
+   "note": "rejected-before-execution; targeted {'S1': 'fail'}"
+  },
+  {
+   "case": "F02-recorded-digest-corrupted",
+   "kind": "fault",
+   "targets": [
+    "S1"
+   ],
+   "expected_verdict": "rejected-before-execution",
+   "workflow": "W3",
+   "exit_code": 1,
+   "verdict": "rejected-before-execution",
+   "replay_status": null,
+   "episodes_executed": 0,
+   "execution_started_before_failure": false,
+   "wall_seconds": 1.5531291000079364,
+   "checks": {
+    "S1": {
+     "status": "fail",
+     "detail": "policy.zip has its recorded SHA-256: 7aa5207e7aeeec758442253f64baabd31e2de6d1a5c69fa0211ce849e9c607d8 != 7aa5207e7aeeec758442253f64baabd31e2de6d1a5c69fa0211ce849e9c607d0"
+    },
+    "S2": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S3": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S4": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S5": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S6": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S7": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S8": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S9": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S10": {
+     "status": "not-run",
+     "detail": "an integrity check failed"
+    }
+   },
+   "raw": "raw/W3/F02-recorded-digest-corrupted/",
+   "telemetry": {
+    "peak_rss_bytes_self": 211632128,
+    "peak_rss_status": "measured: peak_wset"
+   },
+   "result_problems": [],
+   "outcome": "rejected",
+   "note": "rejected-before-execution; targeted {'S1': 'fail'}"
+  },
+  {
+   "case": "F03-protocol-mismatch",
+   "kind": "fault",
+   "targets": [
+    "S3"
+   ],
+   "expected_verdict": "rejected-before-execution",
+   "workflow": "W1",
+   "exit_code": 4,
+   "verdict": "unchecked",
+   "replay_status": null,
+   "episodes_executed": 100,
+   "execution_started_before_failure": null,
+   "wall_seconds": 19.577594300033525,
+   "checks": {
+    "S1": {
+     "status": "unsupported",
+     "detail": "SB3 neither records nor verifies a checkpoint digest; PPO.load only validated and loaded the archive"
+    },
+    "S2": {
+     "status": "unsupported",
+     "detail": "no dependency or record files are verified"
+    },
+    "S3": {
+     "status": "unsupported",
+     "detail": "the saved configuration is used for evaluation, not compared with a recorded evaluation"
+    },
+    "S4": {
+     "status": "unsupported",
+     "detail": "seeds are passed to reset(seed=int(seed)); int() converts floats and numeric strings without notice"
+    },
+    "S5": {
+     "status": "unsupported",
+     "detail": "reward parameters are not read: the evaluation uses the original reward only"
+    },
+    "S6": {
+     "status": "unsupported",
+     "detail": "the recorded evaluation is not read"
+    },
+    "S7": {
+     "status": "unsupported",
+     "detail": "the recorded evaluation is not read"
+    },
+    "S8": {
+     "status": "unsupported",
+     "detail": "reward terms are not re-scored"
+    },
+    "S9": {
+     "status": "unsupported",
+     "detail": "no outcome schema is compared"
+    },
+    "S10": {
+     "status": "unsupported",
+     "detail": "results are not compared with the recorded evaluation"
+    }
+   },
+   "raw": "raw/W1/F03-protocol-mismatch/",
+   "telemetry": {
+    "peak_rss_bytes_self": 288829440,
+    "peak_rss_status": "measured: peak_wset"
+   },
+   "result_problems": [],
+   "outcome": "unsupported",
+   "note": "unchecked; 100 episodes executed"
+  },
+  {
+   "case": "F03-protocol-mismatch",
+   "kind": "fault",
+   "targets": [
+    "S3"
+   ],
+   "expected_verdict": "rejected-before-execution",
+   "workflow": "W2",
+   "exit_code": 1,
+   "verdict": "rejected-before-execution",
+   "replay_status": null,
+   "episodes_executed": 0,
+   "execution_started_before_failure": false,
+   "wall_seconds": 1.5167671000235714,
+   "checks": {
+    "S1": {
+     "status": "pass",
+     "detail": "policy 7aa5207e7aeeec75..."
+    },
+    "S2": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S3": {
+     "status": "fail",
+     "detail": "recorded environment, gamma or test seeds differ from the case"
+    },
+    "S4": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S5": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S6": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S7": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S8": {
+     "status": "pass",
+     "detail": "largest difference 0"
+    },
+    "S9": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S10": {
+     "status": "not-run",
+     "detail": "an integrity check failed"
+    }
+   },
+   "raw": "raw/W2/F03-protocol-mismatch/",
+   "telemetry": {
+    "peak_rss_bytes_self": 211259392,
+    "peak_rss_status": "measured: peak_wset"
+   },
+   "result_problems": [],
+   "outcome": "rejected",
+   "note": "rejected-before-execution; targeted {'S3': 'fail'}"
+  },
+  {
+   "case": "F03-protocol-mismatch",
+   "kind": "fault",
+   "targets": [
+    "S3"
+   ],
+   "expected_verdict": "rejected-before-execution",
+   "workflow": "W3",
+   "exit_code": 1,
+   "verdict": "rejected-before-execution",
+   "replay_status": null,
+   "episodes_executed": 0,
+   "execution_started_before_failure": false,
+   "wall_seconds": 1.486280600016471,
+   "checks": {
+    "S1": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S2": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S3": {
+     "status": "fail",
+     "detail": "recorded seeds are the case's test seeds"
+    },
+    "S4": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S5": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S6": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S7": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S8": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S9": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S10": {
+     "status": "not-run",
+     "detail": "an integrity check failed"
+    }
+   },
+   "raw": "raw/W3/F03-protocol-mismatch/",
+   "telemetry": {
+    "peak_rss_bytes_self": 210493440,
+    "peak_rss_status": "measured: peak_wset"
+   },
+   "result_problems": [],
+   "outcome": "rejected",
+   "note": "rejected-before-execution; targeted {'S3': 'fail'}"
+  },
+  {
+   "case": "F04-dependency-missing",
+   "kind": "fault",
+   "targets": [
+    "S2"
+   ],
+   "expected_verdict": "rejected-before-execution",
+   "workflow": "W1",
+   "exit_code": 4,
+   "verdict": "unchecked",
+   "replay_status": null,
+   "episodes_executed": 100,
+   "execution_started_before_failure": null,
+   "wall_seconds": 19.754757500020787,
+   "checks": {
+    "S1": {
+     "status": "unsupported",
+     "detail": "SB3 neither records nor verifies a checkpoint digest; PPO.load only validated and loaded the archive"
+    },
+    "S2": {
+     "status": "unsupported",
+     "detail": "no dependency or record files are verified"
+    },
+    "S3": {
+     "status": "unsupported",
+     "detail": "the saved configuration is used for evaluation, not compared with a recorded evaluation"
+    },
+    "S4": {
+     "status": "unsupported",
+     "detail": "seeds are passed to reset(seed=int(seed)); int() converts floats and numeric strings without notice"
+    },
+    "S5": {
+     "status": "unsupported",
+     "detail": "reward parameters are not read: the evaluation uses the original reward only"
+    },
+    "S6": {
+     "status": "unsupported",
+     "detail": "the recorded evaluation is not read"
+    },
+    "S7": {
+     "status": "unsupported",
+     "detail": "the recorded evaluation is not read"
+    },
+    "S8": {
+     "status": "unsupported",
+     "detail": "reward terms are not re-scored"
+    },
+    "S9": {
+     "status": "unsupported",
+     "detail": "no outcome schema is compared"
+    },
+    "S10": {
+     "status": "unsupported",
+     "detail": "results are not compared with the recorded evaluation"
+    }
+   },
+   "raw": "raw/W1/F04-dependency-missing/",
+   "telemetry": {
+    "peak_rss_bytes_self": 288661504,
+    "peak_rss_status": "measured: peak_wset"
+   },
+   "result_problems": [],
+   "outcome": "unsupported",
+   "note": "unchecked; 100 episodes executed"
+  },
+  {
+   "case": "F04-dependency-missing",
+   "kind": "fault",
+   "targets": [
+    "S2"
+   ],
+   "expected_verdict": "rejected-before-execution",
+   "workflow": "W2",
+   "exit_code": 1,
+   "verdict": "rejected-before-execution",
+   "replay_status": null,
+   "episodes_executed": 0,
+   "execution_started_before_failure": false,
+   "wall_seconds": 1.5204143999726512,
+   "checks": {
+    "S1": {
+     "status": "pass",
+     "detail": "policy 7aa5207e7aeeec75..."
+    },
+    "S2": {
+     "status": "fail",
+     "detail": "missing ['reward_parameters.json'], changed []"
+    },
+    "S3": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S4": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S5": {
+     "status": "not-run",
+     "detail": "reward parameters unavailable"
+    },
+    "S6": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S7": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S8": {
+     "status": "not-run",
+     "detail": "trajectory or finite parameters unavailable"
+    },
+    "S9": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S10": {
+     "status": "not-run",
+     "detail": "an integrity check failed"
+    }
+   },
+   "raw": "raw/W2/F04-dependency-missing/",
+   "telemetry": {
+    "peak_rss_bytes_self": 211005440,
+    "peak_rss_status": "measured: peak_wset"
+   },
+   "result_problems": [],
+   "outcome": "rejected",
+   "note": "rejected-before-execution; targeted {'S2': 'fail'}"
+  },
+  {
+   "case": "F04-dependency-missing",
+   "kind": "fault",
+   "targets": [
+    "S2"
+   ],
+   "expected_verdict": "rejected-before-execution",
+   "workflow": "W3",
+   "exit_code": 1,
+   "verdict": "rejected-before-execution",
+   "replay_status": null,
+   "episodes_executed": 0,
+   "execution_started_before_failure": false,
+   "wall_seconds": 1.522980700014159,
+   "checks": {
+    "S1": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S2": {
+     "status": "fail",
+     "detail": "reward_parameters.json is present: missing"
+    },
+    "S3": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S4": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S5": {
+     "status": "not-run",
+     "detail": "reward parameters unavailable"
+    },
+    "S6": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S7": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S8": {
+     "status": "not-run",
+     "detail": "trajectory or reward definition unavailable"
+    },
+    "S9": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S10": {
+     "status": "not-run",
+     "detail": "an integrity check failed"
+    }
+   },
+   "raw": "raw/W3/F04-dependency-missing/",
+   "telemetry": {
+    "peak_rss_bytes_self": 210886656,
+    "peak_rss_status": "measured: peak_wset"
+   },
+   "result_problems": [],
+   "outcome": "rejected",
+   "note": "rejected-before-execution; targeted {'S2': 'fail'}"
+  },
+  {
+   "case": "F05-dependency-changed",
+   "kind": "fault",
+   "targets": [
+    "S2"
+   ],
+   "expected_verdict": "rejected-before-execution",
+   "workflow": "W1",
+   "exit_code": 4,
+   "verdict": "unchecked",
+   "replay_status": null,
+   "episodes_executed": 100,
+   "execution_started_before_failure": null,
+   "wall_seconds": 19.9755055999849,
+   "checks": {
+    "S1": {
+     "status": "unsupported",
+     "detail": "SB3 neither records nor verifies a checkpoint digest; PPO.load only validated and loaded the archive"
+    },
+    "S2": {
+     "status": "unsupported",
+     "detail": "no dependency or record files are verified"
+    },
+    "S3": {
+     "status": "unsupported",
+     "detail": "the saved configuration is used for evaluation, not compared with a recorded evaluation"
+    },
+    "S4": {
+     "status": "unsupported",
+     "detail": "seeds are passed to reset(seed=int(seed)); int() converts floats and numeric strings without notice"
+    },
+    "S5": {
+     "status": "unsupported",
+     "detail": "reward parameters are not read: the evaluation uses the original reward only"
+    },
+    "S6": {
+     "status": "unsupported",
+     "detail": "the recorded evaluation is not read"
+    },
+    "S7": {
+     "status": "unsupported",
+     "detail": "the recorded evaluation is not read"
+    },
+    "S8": {
+     "status": "unsupported",
+     "detail": "reward terms are not re-scored"
+    },
+    "S9": {
+     "status": "unsupported",
+     "detail": "no outcome schema is compared"
+    },
+    "S10": {
+     "status": "unsupported",
+     "detail": "results are not compared with the recorded evaluation"
+    }
+   },
+   "raw": "raw/W1/F05-dependency-changed/",
+   "telemetry": {
+    "peak_rss_bytes_self": 288399360,
+    "peak_rss_status": "measured: peak_wset"
+   },
+   "result_problems": [],
+   "outcome": "unsupported",
+   "note": "unchecked; 100 episodes executed"
+  },
+  {
+   "case": "F05-dependency-changed",
+   "kind": "fault",
+   "targets": [
+    "S2"
+   ],
+   "expected_verdict": "rejected-before-execution",
+   "workflow": "W2",
+   "exit_code": 1,
+   "verdict": "rejected-before-execution",
+   "replay_status": null,
+   "episodes_executed": 0,
+   "execution_started_before_failure": false,
+   "wall_seconds": 1.6173669999698177,
+   "checks": {
+    "S1": {
+     "status": "pass",
+     "detail": "policy 7aa5207e7aeeec75..."
+    },
+    "S2": {
+     "status": "fail",
+     "detail": "missing [], changed ['reward_parameters.json']"
+    },
+    "S3": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S4": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S5": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S6": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S7": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S8": {
+     "status": "fail",
+     "detail": "largest difference 0.034"
+    },
+    "S9": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S10": {
+     "status": "not-run",
+     "detail": "an integrity check failed"
+    }
+   },
+   "raw": "raw/W2/F05-dependency-changed/",
+   "telemetry": {
+    "peak_rss_bytes_self": 211533824,
+    "peak_rss_status": "measured: peak_wset"
+   },
+   "result_problems": [],
+   "outcome": "rejected",
+   "note": "rejected-before-execution; targeted {'S2': 'fail'}"
+  },
+  {
+   "case": "F05-dependency-changed",
+   "kind": "fault",
+   "targets": [
+    "S2"
+   ],
+   "expected_verdict": "rejected-before-execution",
+   "workflow": "W3",
+   "exit_code": 1,
+   "verdict": "rejected-before-execution",
+   "replay_status": null,
+   "episodes_executed": 0,
+   "execution_started_before_failure": false,
+   "wall_seconds": 1.5109616999980062,
+   "checks": {
+    "S1": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S2": {
+     "status": "fail",
+     "detail": "reward_parameters.json has its recorded SHA-256: 78597ffbc9e044c4e9bfcc33d637fb7a61123e92e51c75e751ac4ffe727f87ba != 574450648ab0619f78f3763f50bd79bfee6c814c15b231b797c20b8e1d0ee587"
+    },
+    "S3": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S4": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S5": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S6": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S7": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S8": {
+     "status": "fail",
+     "detail": "recorded per-step values of 'upright_potential' match the re-scored definition: largest difference 0.034"
+    },
+    "S9": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S10": {
+     "status": "not-run",
+     "detail": "an integrity check failed"
+    }
+   },
+   "raw": "raw/W3/F05-dependency-changed/",
+   "telemetry": {
+    "peak_rss_bytes_self": 211214336,
+    "peak_rss_status": "measured: peak_wset"
+   },
+   "result_problems": [],
+   "outcome": "rejected",
+   "note": "rejected-before-execution; targeted {'S2': 'fail'}"
+  },
+  {
+   "case": "F06-coercible-seed",
+   "kind": "fault",
+   "targets": [
+    "S4"
+   ],
+   "expected_verdict": "rejected-before-execution",
+   "workflow": "W1",
+   "exit_code": 4,
+   "verdict": "unchecked",
+   "replay_status": null,
+   "episodes_executed": 100,
+   "execution_started_before_failure": null,
+   "wall_seconds": 19.79024429997662,
+   "checks": {
+    "S1": {
+     "status": "unsupported",
+     "detail": "SB3 neither records nor verifies a checkpoint digest; PPO.load only validated and loaded the archive"
+    },
+    "S2": {
+     "status": "unsupported",
+     "detail": "no dependency or record files are verified"
+    },
+    "S3": {
+     "status": "unsupported",
+     "detail": "the saved configuration is used for evaluation, not compared with a recorded evaluation"
+    },
+    "S4": {
+     "status": "unsupported",
+     "detail": "seeds are passed to reset(seed=int(seed)); int() converts floats and numeric strings without notice"
+    },
+    "S5": {
+     "status": "unsupported",
+     "detail": "reward parameters are not read: the evaluation uses the original reward only"
+    },
+    "S6": {
+     "status": "unsupported",
+     "detail": "the recorded evaluation is not read"
+    },
+    "S7": {
+     "status": "unsupported",
+     "detail": "the recorded evaluation is not read"
+    },
+    "S8": {
+     "status": "unsupported",
+     "detail": "reward terms are not re-scored"
+    },
+    "S9": {
+     "status": "unsupported",
+     "detail": "no outcome schema is compared"
+    },
+    "S10": {
+     "status": "unsupported",
+     "detail": "results are not compared with the recorded evaluation"
+    }
+   },
+   "raw": "raw/W1/F06-coercible-seed/",
+   "telemetry": {
+    "peak_rss_bytes_self": 288542720,
+    "peak_rss_status": "measured: peak_wset"
+   },
+   "result_problems": [],
+   "outcome": "unsupported",
+   "note": "unchecked; 100 episodes executed"
+  },
+  {
+   "case": "F06-coercible-seed",
+   "kind": "fault",
+   "targets": [
+    "S4"
+   ],
+   "expected_verdict": "rejected-before-execution",
+   "workflow": "W2",
+   "exit_code": 1,
+   "verdict": "rejected-before-execution",
+   "replay_status": null,
+   "episodes_executed": 0,
+   "execution_started_before_failure": false,
+   "wall_seconds": 1.5079456000239588,
+   "checks": {
+    "S1": {
+     "status": "pass",
+     "detail": "policy 7aa5207e7aeeec75..."
+    },
+    "S2": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S3": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S4": {
+     "status": "fail",
+     "detail": "test seeds entries are not nonnegative integers: ['210005.0']"
+    },
+    "S5": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S6": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S7": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S8": {
+     "status": "pass",
+     "detail": "largest difference 0"
+    },
+    "S9": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S10": {
+     "status": "not-run",
+     "detail": "an integrity check failed"
+    }
+   },
+   "raw": "raw/W2/F06-coercible-seed/",
+   "telemetry": {
+    "peak_rss_bytes_self": 211587072,
+    "peak_rss_status": "measured: peak_wset"
+   },
+   "result_problems": [],
+   "outcome": "rejected",
+   "note": "rejected-before-execution; targeted {'S4': 'fail'}"
+  },
+  {
+   "case": "F06-coercible-seed",
+   "kind": "fault",
+   "targets": [
+    "S4"
+   ],
+   "expected_verdict": "rejected-before-execution",
+   "workflow": "W3",
+   "exit_code": 1,
+   "verdict": "rejected-before-execution",
+   "replay_status": null,
+   "episodes_executed": 0,
+   "execution_started_before_failure": false,
+   "wall_seconds": 1.7110302000073716,
+   "checks": {
+    "S1": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S2": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S3": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S4": {
+     "status": "fail",
+     "detail": "test seeds must be nonnegative integers: test seeds[5] = 210005.0 (float): not an integer; floats are not converted, even when integral"
+    },
+    "S5": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S6": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S7": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S8": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S9": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S10": {
+     "status": "not-run",
+     "detail": "an integrity check failed"
+    }
+   },
+   "raw": "raw/W3/F06-coercible-seed/",
+   "telemetry": {
+    "peak_rss_bytes_self": 210604032,
+    "peak_rss_status": "measured: peak_wset"
+   },
+   "result_problems": [],
+   "outcome": "rejected",
+   "note": "rejected-before-execution; targeted {'S4': 'fail'}"
+  },
+  {
+   "case": "F07-overlapping-seeds",
+   "kind": "fault",
+   "targets": [
+    "S4"
+   ],
+   "expected_verdict": "rejected-before-execution",
+   "workflow": "W1",
+   "exit_code": 4,
+   "verdict": "unchecked",
+   "replay_status": null,
+   "episodes_executed": 100,
+   "execution_started_before_failure": null,
+   "wall_seconds": 19.928139800031204,
+   "checks": {
+    "S1": {
+     "status": "unsupported",
+     "detail": "SB3 neither records nor verifies a checkpoint digest; PPO.load only validated and loaded the archive"
+    },
+    "S2": {
+     "status": "unsupported",
+     "detail": "no dependency or record files are verified"
+    },
+    "S3": {
+     "status": "unsupported",
+     "detail": "the saved configuration is used for evaluation, not compared with a recorded evaluation"
+    },
+    "S4": {
+     "status": "unsupported",
+     "detail": "seeds are passed to reset(seed=int(seed)); int() converts floats and numeric strings without notice"
+    },
+    "S5": {
+     "status": "unsupported",
+     "detail": "reward parameters are not read: the evaluation uses the original reward only"
+    },
+    "S6": {
+     "status": "unsupported",
+     "detail": "the recorded evaluation is not read"
+    },
+    "S7": {
+     "status": "unsupported",
+     "detail": "the recorded evaluation is not read"
+    },
+    "S8": {
+     "status": "unsupported",
+     "detail": "reward terms are not re-scored"
+    },
+    "S9": {
+     "status": "unsupported",
+     "detail": "no outcome schema is compared"
+    },
+    "S10": {
+     "status": "unsupported",
+     "detail": "results are not compared with the recorded evaluation"
+    }
+   },
+   "raw": "raw/W1/F07-overlapping-seeds/",
+   "telemetry": {
+    "peak_rss_bytes_self": 288493568,
+    "peak_rss_status": "measured: peak_wset"
+   },
+   "result_problems": [],
+   "outcome": "unsupported",
+   "note": "unchecked; 100 episodes executed"
+  },
+  {
+   "case": "F07-overlapping-seeds",
+   "kind": "fault",
+   "targets": [
+    "S4"
+   ],
+   "expected_verdict": "rejected-before-execution",
+   "workflow": "W2",
+   "exit_code": 1,
+   "verdict": "rejected-before-execution",
+   "replay_status": null,
+   "episodes_executed": 0,
+   "execution_started_before_failure": false,
+   "wall_seconds": 1.4836208999622613,
+   "checks": {
+    "S1": {
+     "status": "pass",
+     "detail": "policy 7aa5207e7aeeec75..."
+    },
+    "S2": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S3": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S4": {
+     "status": "fail",
+     "detail": "validation and test seeds overlap: [210000]"
+    },
+    "S5": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S6": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S7": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S8": {
+     "status": "pass",
+     "detail": "largest difference 0"
+    },
+    "S9": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S10": {
+     "status": "not-run",
+     "detail": "an integrity check failed"
+    }
+   },
+   "raw": "raw/W2/F07-overlapping-seeds/",
+   "telemetry": {
+    "peak_rss_bytes_self": 211329024,
+    "peak_rss_status": "measured: peak_wset"
+   },
+   "result_problems": [],
+   "outcome": "rejected",
+   "note": "rejected-before-execution; targeted {'S4': 'fail'}"
+  },
+  {
+   "case": "F07-overlapping-seeds",
+   "kind": "fault",
+   "targets": [
+    "S4"
+   ],
+   "expected_verdict": "rejected-before-execution",
+   "workflow": "W3",
+   "exit_code": 1,
+   "verdict": "rejected-before-execution",
+   "replay_status": null,
+   "episodes_executed": 0,
+   "execution_started_before_failure": false,
+   "wall_seconds": 1.4466021999833174,
+   "checks": {
+    "S1": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S2": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S3": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S4": {
+     "status": "fail",
+     "detail": "validation and test seeds overlap: [210000]"
+    },
+    "S5": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S6": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S7": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S8": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S9": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S10": {
+     "status": "not-run",
+     "detail": "an integrity check failed"
+    }
+   },
+   "raw": "raw/W3/F07-overlapping-seeds/",
+   "telemetry": {
+    "peak_rss_bytes_self": 211238912,
+    "peak_rss_status": "measured: peak_wset"
+   },
+   "result_problems": [],
+   "outcome": "rejected",
+   "note": "rejected-before-execution; targeted {'S4': 'fail'}"
+  },
+  {
+   "case": "F08-nonfinite-parameter",
+   "kind": "fault",
+   "targets": [
+    "S5"
+   ],
+   "expected_verdict": "rejected-before-execution",
+   "workflow": "W1",
+   "exit_code": 4,
+   "verdict": "unchecked",
+   "replay_status": null,
+   "episodes_executed": 100,
+   "execution_started_before_failure": null,
+   "wall_seconds": 19.94480709999334,
+   "checks": {
+    "S1": {
+     "status": "unsupported",
+     "detail": "SB3 neither records nor verifies a checkpoint digest; PPO.load only validated and loaded the archive"
+    },
+    "S2": {
+     "status": "unsupported",
+     "detail": "no dependency or record files are verified"
+    },
+    "S3": {
+     "status": "unsupported",
+     "detail": "the saved configuration is used for evaluation, not compared with a recorded evaluation"
+    },
+    "S4": {
+     "status": "unsupported",
+     "detail": "seeds are passed to reset(seed=int(seed)); int() converts floats and numeric strings without notice"
+    },
+    "S5": {
+     "status": "unsupported",
+     "detail": "reward parameters are not read: the evaluation uses the original reward only"
+    },
+    "S6": {
+     "status": "unsupported",
+     "detail": "the recorded evaluation is not read"
+    },
+    "S7": {
+     "status": "unsupported",
+     "detail": "the recorded evaluation is not read"
+    },
+    "S8": {
+     "status": "unsupported",
+     "detail": "reward terms are not re-scored"
+    },
+    "S9": {
+     "status": "unsupported",
+     "detail": "no outcome schema is compared"
+    },
+    "S10": {
+     "status": "unsupported",
+     "detail": "results are not compared with the recorded evaluation"
+    }
+   },
+   "raw": "raw/W1/F08-nonfinite-parameter/",
+   "telemetry": {
+    "peak_rss_bytes_self": 287916032,
+    "peak_rss_status": "measured: peak_wset"
+   },
+   "result_problems": [],
+   "outcome": "unsupported",
+   "note": "unchecked; 100 episodes executed"
+  },
+  {
+   "case": "F08-nonfinite-parameter",
+   "kind": "fault",
+   "targets": [
+    "S5"
+   ],
+   "expected_verdict": "rejected-before-execution",
+   "workflow": "W2",
+   "exit_code": 1,
+   "verdict": "rejected-before-execution",
+   "replay_status": null,
+   "episodes_executed": 0,
+   "execution_started_before_failure": false,
+   "wall_seconds": 1.6312321999575943,
+   "checks": {
+    "S1": {
+     "status": "pass",
+     "detail": "policy 7aa5207e7aeeec75..."
+    },
+    "S2": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S3": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S4": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S5": {
+     "status": "fail",
+     "detail": "weight 1.0, gamma 0.98, alpha nan"
+    },
+    "S6": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S7": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S8": {
+     "status": "not-run",
+     "detail": "trajectory or finite parameters unavailable"
+    },
+    "S9": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S10": {
+     "status": "not-run",
+     "detail": "an integrity check failed"
+    }
+   },
+   "raw": "raw/W2/F08-nonfinite-parameter/",
+   "telemetry": {
+    "peak_rss_bytes_self": 211742720,
+    "peak_rss_status": "measured: peak_wset"
+   },
+   "result_problems": [],
+   "outcome": "rejected",
+   "note": "rejected-before-execution; targeted {'S5': 'fail'}"
+  },
+  {
+   "case": "F08-nonfinite-parameter",
+   "kind": "fault",
+   "targets": [
+    "S5"
+   ],
+   "expected_verdict": "rejected-before-execution",
+   "workflow": "W3",
+   "exit_code": 1,
+   "verdict": "rejected-before-execution",
+   "replay_status": null,
+   "episodes_executed": 0,
+   "execution_started_before_failure": false,
+   "wall_seconds": 1.4757933999644592,
+   "checks": {
+    "S1": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S2": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S3": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S4": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S5": {
+     "status": "fail",
+     "detail": "reward parameters are finite: potential_shaping term 'upright_potential' alpha must be finite, got nan"
+    },
+    "S6": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S7": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S8": {
+     "status": "not-run",
+     "detail": "trajectory or reward definition unavailable"
+    },
+    "S9": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S10": {
+     "status": "not-run",
+     "detail": "an integrity check failed"
+    }
+   },
+   "raw": "raw/W3/F08-nonfinite-parameter/",
+   "telemetry": {
+    "peak_rss_bytes_self": 211296256,
+    "peak_rss_status": "measured: peak_wset"
+   },
+   "result_problems": [],
+   "outcome": "rejected",
+   "note": "rejected-before-execution; targeted {'S5': 'fail'}"
+  },
+  {
+   "case": "F09-original-channel-absent",
+   "kind": "fault",
+   "targets": [
+    "S6"
+   ],
+   "expected_verdict": "rejected-before-execution",
+   "workflow": "W1",
+   "exit_code": 4,
+   "verdict": "unchecked",
+   "replay_status": null,
+   "episodes_executed": 100,
+   "execution_started_before_failure": null,
+   "wall_seconds": 19.70774550002534,
+   "checks": {
+    "S1": {
+     "status": "unsupported",
+     "detail": "SB3 neither records nor verifies a checkpoint digest; PPO.load only validated and loaded the archive"
+    },
+    "S2": {
+     "status": "unsupported",
+     "detail": "no dependency or record files are verified"
+    },
+    "S3": {
+     "status": "unsupported",
+     "detail": "the saved configuration is used for evaluation, not compared with a recorded evaluation"
+    },
+    "S4": {
+     "status": "unsupported",
+     "detail": "seeds are passed to reset(seed=int(seed)); int() converts floats and numeric strings without notice"
+    },
+    "S5": {
+     "status": "unsupported",
+     "detail": "reward parameters are not read: the evaluation uses the original reward only"
+    },
+    "S6": {
+     "status": "unsupported",
+     "detail": "the recorded evaluation is not read"
+    },
+    "S7": {
+     "status": "unsupported",
+     "detail": "the recorded evaluation is not read"
+    },
+    "S8": {
+     "status": "unsupported",
+     "detail": "reward terms are not re-scored"
+    },
+    "S9": {
+     "status": "unsupported",
+     "detail": "no outcome schema is compared"
+    },
+    "S10": {
+     "status": "unsupported",
+     "detail": "results are not compared with the recorded evaluation"
+    }
+   },
+   "raw": "raw/W1/F09-original-channel-absent/",
+   "telemetry": {
+    "peak_rss_bytes_self": 288403456,
+    "peak_rss_status": "measured: peak_wset"
+   },
+   "result_problems": [],
+   "outcome": "unsupported",
+   "note": "unchecked; 100 episodes executed"
+  },
+  {
+   "case": "F09-original-channel-absent",
+   "kind": "fault",
+   "targets": [
+    "S6"
+   ],
+   "expected_verdict": "rejected-before-execution",
+   "workflow": "W2",
+   "exit_code": 1,
+   "verdict": "rejected-before-execution",
+   "replay_status": null,
+   "episodes_executed": 0,
+   "execution_started_before_failure": false,
+   "wall_seconds": 1.4843447000021115,
+   "checks": {
+    "S1": {
+     "status": "pass",
+     "detail": "policy 7aa5207e7aeeec75..."
+    },
+    "S2": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S3": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S4": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S5": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S6": {
+     "status": "fail",
+     "detail": "episodes [0, 1, 2, 3, 4]"
+    },
+    "S7": {
+     "status": "not-run",
+     "detail": "channels incomplete"
+    },
+    "S8": {
+     "status": "pass",
+     "detail": "largest difference 0"
+    },
+    "S9": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S10": {
+     "status": "not-run",
+     "detail": "an integrity check failed"
+    }
+   },
+   "raw": "raw/W2/F09-original-channel-absent/",
+   "telemetry": {
+    "peak_rss_bytes_self": 211529728,
+    "peak_rss_status": "measured: peak_wset"
+   },
+   "result_problems": [],
+   "outcome": "rejected",
+   "note": "rejected-before-execution; targeted {'S6': 'fail'}"
+  },
+  {
+   "case": "F09-original-channel-absent",
+   "kind": "fault",
+   "targets": [
+    "S6"
+   ],
+   "expected_verdict": "rejected-before-execution",
+   "workflow": "W3",
+   "exit_code": 1,
+   "verdict": "rejected-before-execution",
+   "replay_status": null,
+   "episodes_executed": 0,
+   "execution_started_before_failure": false,
+   "wall_seconds": 1.4331601000158116,
+   "checks": {
+    "S1": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S2": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S3": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S4": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S5": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S6": {
+     "status": "fail",
+     "detail": "every episode records the original and training reward channels: episode 0: no original_return; episode 1: no original_return; episode 2: no original_return; episode 3: no original_return; episode 4: no original_return (and 95 more)"
+    },
+    "S7": {
+     "status": "not-run",
+     "detail": "not checked: the reward channels are incomplete"
+    },
+    "S8": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S9": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S10": {
+     "status": "not-run",
+     "detail": "an integrity check failed"
+    }
+   },
+   "raw": "raw/W3/F09-original-channel-absent/",
+   "telemetry": {
+    "peak_rss_bytes_self": 210604032,
+    "peak_rss_status": "measured: peak_wset"
+   },
+   "result_problems": [],
+   "outcome": "rejected",
+   "note": "rejected-before-execution; targeted {'S6': 'fail'}"
+  },
+  {
+   "case": "F10-inconsistent-totals",
+   "kind": "fault",
+   "targets": [
+    "S7"
+   ],
+   "expected_verdict": "rejected-before-execution",
+   "workflow": "W1",
+   "exit_code": 4,
+   "verdict": "unchecked",
+   "replay_status": null,
+   "episodes_executed": 100,
+   "execution_started_before_failure": null,
+   "wall_seconds": 19.45237889996497,
+   "checks": {
+    "S1": {
+     "status": "unsupported",
+     "detail": "SB3 neither records nor verifies a checkpoint digest; PPO.load only validated and loaded the archive"
+    },
+    "S2": {
+     "status": "unsupported",
+     "detail": "no dependency or record files are verified"
+    },
+    "S3": {
+     "status": "unsupported",
+     "detail": "the saved configuration is used for evaluation, not compared with a recorded evaluation"
+    },
+    "S4": {
+     "status": "unsupported",
+     "detail": "seeds are passed to reset(seed=int(seed)); int() converts floats and numeric strings without notice"
+    },
+    "S5": {
+     "status": "unsupported",
+     "detail": "reward parameters are not read: the evaluation uses the original reward only"
+    },
+    "S6": {
+     "status": "unsupported",
+     "detail": "the recorded evaluation is not read"
+    },
+    "S7": {
+     "status": "unsupported",
+     "detail": "the recorded evaluation is not read"
+    },
+    "S8": {
+     "status": "unsupported",
+     "detail": "reward terms are not re-scored"
+    },
+    "S9": {
+     "status": "unsupported",
+     "detail": "no outcome schema is compared"
+    },
+    "S10": {
+     "status": "unsupported",
+     "detail": "results are not compared with the recorded evaluation"
+    }
+   },
+   "raw": "raw/W1/F10-inconsistent-totals/",
+   "telemetry": {
+    "peak_rss_bytes_self": 288735232,
+    "peak_rss_status": "measured: peak_wset"
+   },
+   "result_problems": [],
+   "outcome": "unsupported",
+   "note": "unchecked; 100 episodes executed"
+  },
+  {
+   "case": "F10-inconsistent-totals",
+   "kind": "fault",
+   "targets": [
+    "S7"
+   ],
+   "expected_verdict": "rejected-before-execution",
+   "workflow": "W2",
+   "exit_code": 1,
+   "verdict": "rejected-before-execution",
+   "replay_status": null,
+   "episodes_executed": 0,
+   "execution_started_before_failure": false,
+   "wall_seconds": 1.5902872000006028,
+   "checks": {
+    "S1": {
+     "status": "pass",
+     "detail": "policy 7aa5207e7aeeec75..."
+    },
+    "S2": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S3": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S4": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S5": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S6": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S7": {
+     "status": "fail",
+     "detail": "episodes [3, 57]"
+    },
+    "S8": {
+     "status": "pass",
+     "detail": "largest difference 0"
+    },
+    "S9": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S10": {
+     "status": "not-run",
+     "detail": "an integrity check failed"
+    }
+   },
+   "raw": "raw/W2/F10-inconsistent-totals/",
+   "telemetry": {
+    "peak_rss_bytes_self": 211292160,
+    "peak_rss_status": "measured: peak_wset"
+   },
+   "result_problems": [],
+   "outcome": "rejected",
+   "note": "rejected-before-execution; targeted {'S7': 'fail'}"
+  },
+  {
+   "case": "F10-inconsistent-totals",
+   "kind": "fault",
+   "targets": [
+    "S7"
+   ],
+   "expected_verdict": "rejected-before-execution",
+   "workflow": "W3",
+   "exit_code": 1,
+   "verdict": "rejected-before-execution",
+   "replay_status": null,
+   "episodes_executed": 0,
+   "execution_started_before_failure": false,
+   "wall_seconds": 1.5074764000019059,
+   "checks": {
+    "S1": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S2": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S3": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S4": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S5": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S6": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S7": {
+     "status": "fail",
+     "detail": "training return = weight x original return + term returns, in every episode: episodes 3; 57"
+    },
+    "S8": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S9": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S10": {
+     "status": "not-run",
+     "detail": "an integrity check failed"
+    }
+   },
+   "raw": "raw/W3/F10-inconsistent-totals/",
+   "telemetry": {
+    "peak_rss_bytes_self": 211156992,
+    "peak_rss_status": "measured: peak_wset"
+   },
+   "result_problems": [],
+   "outcome": "rejected",
+   "note": "rejected-before-execution; targeted {'S7': 'fail'}"
+  },
+  {
+   "case": "F11-potential-at-truncation",
+   "kind": "fault",
+   "targets": [
+    "S8"
+   ],
+   "expected_verdict": "rejected-before-execution",
+   "workflow": "W1",
+   "exit_code": 4,
+   "verdict": "unchecked",
+   "replay_status": null,
+   "episodes_executed": 100,
+   "execution_started_before_failure": null,
+   "wall_seconds": 19.09060109994607,
+   "checks": {
+    "S1": {
+     "status": "unsupported",
+     "detail": "SB3 neither records nor verifies a checkpoint digest; PPO.load only validated and loaded the archive"
+    },
+    "S2": {
+     "status": "unsupported",
+     "detail": "no dependency or record files are verified"
+    },
+    "S3": {
+     "status": "unsupported",
+     "detail": "the saved configuration is used for evaluation, not compared with a recorded evaluation"
+    },
+    "S4": {
+     "status": "unsupported",
+     "detail": "seeds are passed to reset(seed=int(seed)); int() converts floats and numeric strings without notice"
+    },
+    "S5": {
+     "status": "unsupported",
+     "detail": "reward parameters are not read: the evaluation uses the original reward only"
+    },
+    "S6": {
+     "status": "unsupported",
+     "detail": "the recorded evaluation is not read"
+    },
+    "S7": {
+     "status": "unsupported",
+     "detail": "the recorded evaluation is not read"
+    },
+    "S8": {
+     "status": "unsupported",
+     "detail": "reward terms are not re-scored"
+    },
+    "S9": {
+     "status": "unsupported",
+     "detail": "no outcome schema is compared"
+    },
+    "S10": {
+     "status": "unsupported",
+     "detail": "results are not compared with the recorded evaluation"
+    }
+   },
+   "raw": "raw/W1/F11-potential-at-truncation/",
+   "telemetry": {
+    "peak_rss_bytes_self": 288219136,
+    "peak_rss_status": "measured: peak_wset"
+   },
+   "result_problems": [],
+   "outcome": "unsupported",
+   "note": "unchecked; 100 episodes executed"
+  },
+  {
+   "case": "F11-potential-at-truncation",
+   "kind": "fault",
+   "targets": [
+    "S8"
+   ],
+   "expected_verdict": "rejected-before-execution",
+   "workflow": "W2",
+   "exit_code": 1,
+   "verdict": "rejected-before-execution",
+   "replay_status": null,
+   "episodes_executed": 0,
+   "execution_started_before_failure": false,
+   "wall_seconds": 1.4967398000299,
+   "checks": {
+    "S1": {
+     "status": "pass",
+     "detail": "policy 7aa5207e7aeeec75..."
+    },
+    "S2": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S3": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S4": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S5": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S6": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S7": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S8": {
+     "status": "fail",
+     "detail": "largest difference 0.0212"
+    },
+    "S9": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S10": {
+     "status": "not-run",
+     "detail": "an integrity check failed"
+    }
+   },
+   "raw": "raw/W2/F11-potential-at-truncation/",
+   "telemetry": {
+    "peak_rss_bytes_self": 211480576,
+    "peak_rss_status": "measured: peak_wset"
+   },
+   "result_problems": [],
+   "outcome": "rejected",
+   "note": "rejected-before-execution; targeted {'S8': 'fail'}"
+  },
+  {
+   "case": "F11-potential-at-truncation",
+   "kind": "fault",
+   "targets": [
+    "S8"
+   ],
+   "expected_verdict": "rejected-before-execution",
+   "workflow": "W3",
+   "exit_code": 1,
+   "verdict": "rejected-before-execution",
+   "replay_status": null,
+   "episodes_executed": 0,
+   "execution_started_before_failure": false,
+   "wall_seconds": 1.5288400999852456,
+   "checks": {
+    "S1": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S2": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S3": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S4": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S5": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S6": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S7": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S8": {
+     "status": "fail",
+     "detail": "recorded per-step values of 'upright_potential' match the re-scored definition: largest difference 0.0212"
+    },
+    "S9": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S10": {
+     "status": "not-run",
+     "detail": "an integrity check failed"
+    }
+   },
+   "raw": "raw/W3/F11-potential-at-truncation/",
+   "telemetry": {
+    "peak_rss_bytes_self": 211185664,
+    "peak_rss_status": "measured: peak_wset"
+   },
+   "result_problems": [],
+   "outcome": "rejected",
+   "note": "rejected-before-execution; targeted {'S8': 'fail'}"
+  },
+  {
+   "case": "F12-outcome-schema-mismatch",
+   "kind": "fault",
+   "targets": [
+    "S9"
+   ],
+   "expected_verdict": "rejected-before-execution",
+   "workflow": "W1",
+   "exit_code": 4,
+   "verdict": "unchecked",
+   "replay_status": null,
+   "episodes_executed": 100,
+   "execution_started_before_failure": null,
+   "wall_seconds": 19.39343789999839,
+   "checks": {
+    "S1": {
+     "status": "unsupported",
+     "detail": "SB3 neither records nor verifies a checkpoint digest; PPO.load only validated and loaded the archive"
+    },
+    "S2": {
+     "status": "unsupported",
+     "detail": "no dependency or record files are verified"
+    },
+    "S3": {
+     "status": "unsupported",
+     "detail": "the saved configuration is used for evaluation, not compared with a recorded evaluation"
+    },
+    "S4": {
+     "status": "unsupported",
+     "detail": "seeds are passed to reset(seed=int(seed)); int() converts floats and numeric strings without notice"
+    },
+    "S5": {
+     "status": "unsupported",
+     "detail": "reward parameters are not read: the evaluation uses the original reward only"
+    },
+    "S6": {
+     "status": "unsupported",
+     "detail": "the recorded evaluation is not read"
+    },
+    "S7": {
+     "status": "unsupported",
+     "detail": "the recorded evaluation is not read"
+    },
+    "S8": {
+     "status": "unsupported",
+     "detail": "reward terms are not re-scored"
+    },
+    "S9": {
+     "status": "unsupported",
+     "detail": "no outcome schema is compared"
+    },
+    "S10": {
+     "status": "unsupported",
+     "detail": "results are not compared with the recorded evaluation"
+    }
+   },
+   "raw": "raw/W1/F12-outcome-schema-mismatch/",
+   "telemetry": {
+    "peak_rss_bytes_self": 287993856,
+    "peak_rss_status": "measured: peak_wset"
+   },
+   "result_problems": [],
+   "outcome": "unsupported",
+   "note": "unchecked; 100 episodes executed"
+  },
+  {
+   "case": "F12-outcome-schema-mismatch",
+   "kind": "fault",
+   "targets": [
+    "S9"
+   ],
+   "expected_verdict": "rejected-before-execution",
+   "workflow": "W2",
+   "exit_code": 1,
+   "verdict": "rejected-before-execution",
+   "replay_status": null,
+   "episodes_executed": 0,
+   "execution_started_before_failure": false,
+   "wall_seconds": 1.4472878000233322,
+   "checks": {
+    "S1": {
+     "status": "pass",
+     "detail": "policy 7aa5207e7aeeec75..."
+    },
+    "S2": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S3": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S4": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S5": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S6": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S7": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S8": {
+     "status": "pass",
+     "detail": "largest difference 0"
+    },
+    "S9": {
+     "status": "fail",
+     "detail": "outcome schema or recorded labels differ"
+    },
+    "S10": {
+     "status": "not-run",
+     "detail": "an integrity check failed"
+    }
+   },
+   "raw": "raw/W2/F12-outcome-schema-mismatch/",
+   "telemetry": {
+    "peak_rss_bytes_self": 211480576,
+    "peak_rss_status": "measured: peak_wset"
+   },
+   "result_problems": [],
+   "outcome": "rejected",
+   "note": "rejected-before-execution; targeted {'S9': 'fail'}"
+  },
+  {
+   "case": "F12-outcome-schema-mismatch",
+   "kind": "fault",
+   "targets": [
+    "S9"
+   ],
+   "expected_verdict": "rejected-before-execution",
+   "workflow": "W3",
+   "exit_code": 1,
+   "verdict": "rejected-before-execution",
+   "replay_status": null,
+   "episodes_executed": 0,
+   "execution_started_before_failure": false,
+   "wall_seconds": 1.417935400037095,
+   "checks": {
+    "S1": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S2": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S3": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S4": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S5": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S6": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S7": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S8": {
+     "status": "pass",
+     "detail": ""
+    },
+    "S9": {
+     "status": "fail",
+     "detail": "every outcome is one of the adapter's categories: 'success'"
+    },
+    "S10": {
+     "status": "not-run",
+     "detail": "an integrity check failed"
+    }
+   },
+   "raw": "raw/W3/F12-outcome-schema-mismatch/",
+   "telemetry": {
+    "peak_rss_bytes_self": 211173376,
+    "peak_rss_status": "measured: peak_wset"
+   },
+   "result_problems": [],
+   "outcome": "rejected",
+   "note": "rejected-before-execution; targeted {'S9': 'fail'}"
+  }
+ ],
+ "case_platforms": {
+  "C0-clean": {
+   "consistent": true,
+   "comparison": {
+    "recorded": {
+     "os": "Windows",
+     "torch": "2.14.1",
+     "numpy": "2.5.4",
+     "Box2D": "2.3.10",
+     "gymnasium": "1.4.0",
+     "stable-baselines3": "2.9.0"
+    },
+    "current": {
+     "os": "Windows",
+     "torch": "2.14.1",
+     "numpy": "2.5.4",
+     "Box2D": "2.3.10",
+     "gymnasium": "1.4.0",
+     "stable-baselines3": "2.9.0"
+    },
+    "differences": {},
+    "verified_differences": [],
+    "verified_different": false
+   }
+  },
+  "C1-numerical-difference": {
+   "consistent": true,
+   "comparison": {
+    "recorded": {
+     "os": "Linux",
+     "torch": "2.14.1",
+     "numpy": "2.5.4",
+     "Box2D": "2.3.10",
+     "gymnasium": "1.4.0",
+     "stable-baselines3": "2.9.0"
+    },
+    "current": {
+     "os": "Windows",
+     "torch": "2.14.1",
+     "numpy": "2.5.4",
+     "Box2D": "2.3.10",
+     "gymnasium": "1.4.0",
+     "stable-baselines3": "2.9.0"
+    },
+    "differences": {
+     "os": [
+      "Linux",
+      "Windows"
+     ]
+    },
+    "verified_differences": [
+     "os"
+    ],
+    "verified_different": true
+   }
+  },
+  "F01-checkpoint-swapped": {
+   "consistent": true,
+   "comparison": {
+    "recorded": {
+     "os": "Windows",
+     "torch": "2.14.1",
+     "numpy": "2.5.4",
+     "Box2D": "2.3.10",
+     "gymnasium": "1.4.0",
+     "stable-baselines3": "2.9.0"
+    },
+    "current": {
+     "os": "Windows",
+     "torch": "2.14.1",
+     "numpy": "2.5.4",
+     "Box2D": "2.3.10",
+     "gymnasium": "1.4.0",
+     "stable-baselines3": "2.9.0"
+    },
+    "differences": {},
+    "verified_differences": [],
+    "verified_different": false
+   }
+  },
+  "F02-recorded-digest-corrupted": {
+   "consistent": true,
+   "comparison": {
+    "recorded": {
+     "os": "Windows",
+     "torch": "2.14.1",
+     "numpy": "2.5.4",
+     "Box2D": "2.3.10",
+     "gymnasium": "1.4.0",
+     "stable-baselines3": "2.9.0"
+    },
+    "current": {
+     "os": "Windows",
+     "torch": "2.14.1",
+     "numpy": "2.5.4",
+     "Box2D": "2.3.10",
+     "gymnasium": "1.4.0",
+     "stable-baselines3": "2.9.0"
+    },
+    "differences": {},
+    "verified_differences": [],
+    "verified_different": false
+   }
+  },
+  "F03-protocol-mismatch": {
+   "consistent": true,
+   "comparison": {
+    "recorded": {
+     "os": "Windows",
+     "torch": "2.14.1",
+     "numpy": "2.5.4",
+     "Box2D": "2.3.10",
+     "gymnasium": "1.4.0",
+     "stable-baselines3": "2.9.0"
+    },
+    "current": {
+     "os": "Windows",
+     "torch": "2.14.1",
+     "numpy": "2.5.4",
+     "Box2D": "2.3.10",
+     "gymnasium": "1.4.0",
+     "stable-baselines3": "2.9.0"
+    },
+    "differences": {},
+    "verified_differences": [],
+    "verified_different": false
+   }
+  },
+  "F04-dependency-missing": {
+   "consistent": true,
+   "comparison": {
+    "recorded": {
+     "os": "Windows",
+     "torch": "2.14.1",
+     "numpy": "2.5.4",
+     "Box2D": "2.3.10",
+     "gymnasium": "1.4.0",
+     "stable-baselines3": "2.9.0"
+    },
+    "current": {
+     "os": "Windows",
+     "torch": "2.14.1",
+     "numpy": "2.5.4",
+     "Box2D": "2.3.10",
+     "gymnasium": "1.4.0",
+     "stable-baselines3": "2.9.0"
+    },
+    "differences": {},
+    "verified_differences": [],
+    "verified_different": false
+   }
+  },
+  "F05-dependency-changed": {
+   "consistent": true,
+   "comparison": {
+    "recorded": {
+     "os": "Windows",
+     "torch": "2.14.1",
+     "numpy": "2.5.4",
+     "Box2D": "2.3.10",
+     "gymnasium": "1.4.0",
+     "stable-baselines3": "2.9.0"
+    },
+    "current": {
+     "os": "Windows",
+     "torch": "2.14.1",
+     "numpy": "2.5.4",
+     "Box2D": "2.3.10",
+     "gymnasium": "1.4.0",
+     "stable-baselines3": "2.9.0"
+    },
+    "differences": {},
+    "verified_differences": [],
+    "verified_different": false
+   }
+  },
+  "F06-coercible-seed": {
+   "consistent": true,
+   "comparison": {
+    "recorded": {
+     "os": "Windows",
+     "torch": "2.14.1",
+     "numpy": "2.5.4",
+     "Box2D": "2.3.10",
+     "gymnasium": "1.4.0",
+     "stable-baselines3": "2.9.0"
+    },
+    "current": {
+     "os": "Windows",
+     "torch": "2.14.1",
+     "numpy": "2.5.4",
+     "Box2D": "2.3.10",
+     "gymnasium": "1.4.0",
+     "stable-baselines3": "2.9.0"
+    },
+    "differences": {},
+    "verified_differences": [],
+    "verified_different": false
+   }
+  },
+  "F07-overlapping-seeds": {
+   "consistent": true,
+   "comparison": {
+    "recorded": {
+     "os": "Windows",
+     "torch": "2.14.1",
+     "numpy": "2.5.4",
+     "Box2D": "2.3.10",
+     "gymnasium": "1.4.0",
+     "stable-baselines3": "2.9.0"
+    },
+    "current": {
+     "os": "Windows",
+     "torch": "2.14.1",
+     "numpy": "2.5.4",
+     "Box2D": "2.3.10",
+     "gymnasium": "1.4.0",
+     "stable-baselines3": "2.9.0"
+    },
+    "differences": {},
+    "verified_differences": [],
+    "verified_different": false
+   }
+  },
+  "F08-nonfinite-parameter": {
+   "consistent": true,
+   "comparison": {
+    "recorded": {
+     "os": "Windows",
+     "torch": "2.14.1",
+     "numpy": "2.5.4",
+     "Box2D": "2.3.10",
+     "gymnasium": "1.4.0",
+     "stable-baselines3": "2.9.0"
+    },
+    "current": {
+     "os": "Windows",
+     "torch": "2.14.1",
+     "numpy": "2.5.4",
+     "Box2D": "2.3.10",
+     "gymnasium": "1.4.0",
+     "stable-baselines3": "2.9.0"
+    },
+    "differences": {},
+    "verified_differences": [],
+    "verified_different": false
+   }
+  },
+  "F09-original-channel-absent": {
+   "consistent": true,
+   "comparison": {
+    "recorded": {
+     "os": "Windows",
+     "torch": "2.14.1",
+     "numpy": "2.5.4",
+     "Box2D": "2.3.10",
+     "gymnasium": "1.4.0",
+     "stable-baselines3": "2.9.0"
+    },
+    "current": {
+     "os": "Windows",
+     "torch": "2.14.1",
+     "numpy": "2.5.4",
+     "Box2D": "2.3.10",
+     "gymnasium": "1.4.0",
+     "stable-baselines3": "2.9.0"
+    },
+    "differences": {},
+    "verified_differences": [],
+    "verified_different": false
+   }
+  },
+  "F10-inconsistent-totals": {
+   "consistent": true,
+   "comparison": {
+    "recorded": {
+     "os": "Windows",
+     "torch": "2.14.1",
+     "numpy": "2.5.4",
+     "Box2D": "2.3.10",
+     "gymnasium": "1.4.0",
+     "stable-baselines3": "2.9.0"
+    },
+    "current": {
+     "os": "Windows",
+     "torch": "2.14.1",
+     "numpy": "2.5.4",
+     "Box2D": "2.3.10",
+     "gymnasium": "1.4.0",
+     "stable-baselines3": "2.9.0"
+    },
+    "differences": {},
+    "verified_differences": [],
+    "verified_different": false
+   }
+  },
+  "F11-potential-at-truncation": {
+   "consistent": true,
+   "comparison": {
+    "recorded": {
+     "os": "Windows",
+     "torch": "2.14.1",
+     "numpy": "2.5.4",
+     "Box2D": "2.3.10",
+     "gymnasium": "1.4.0",
+     "stable-baselines3": "2.9.0"
+    },
+    "current": {
+     "os": "Windows",
+     "torch": "2.14.1",
+     "numpy": "2.5.4",
+     "Box2D": "2.3.10",
+     "gymnasium": "1.4.0",
+     "stable-baselines3": "2.9.0"
+    },
+    "differences": {},
+    "verified_differences": [],
+    "verified_different": false
+   }
+  },
+  "F12-outcome-schema-mismatch": {
+   "consistent": true,
+   "comparison": {
+    "recorded": {
+     "os": "Windows",
+     "torch": "2.14.1",
+     "numpy": "2.5.4",
+     "Box2D": "2.3.10",
+     "gymnasium": "1.4.0",
+     "stable-baselines3": "2.9.0"
+    },
+    "current": {
+     "os": "Windows",
+     "torch": "2.14.1",
+     "numpy": "2.5.4",
+     "Box2D": "2.3.10",
+     "gymnasium": "1.4.0",
+     "stable-baselines3": "2.9.0"
+    },
+    "differences": {},
+    "verified_differences": [],
+    "verified_different": false
+   }
+  }
+ },
+ "assessment": {
+  "ok": true,
+  "pairs_expected": 42,
+  "pairs_present": 42,
+  "classes": {
+   "exact-agreement": 42
+  },
+  "blocking": [],
+  "platform_differences": [],
+  "set_checks": {
+   "w2_w3_status_agreement": {
+    "ok": true,
+    "cases": 14,
+    "disagreeing_or_missing": []
+   },
+   "faults_rejected_before_execution": {
+    "ok": true,
+    "faults": 12,
+    "not_rejected_before_execution": []
+   },
+   "w1_unchecked": {
+    "ok": true,
+    "cases": 14,
+    "not_unchecked": []
+   }
+  },
+  "problems": [],
+  "rows": [
+   {
+    "workflow": "W1",
+    "case": "C0-clean",
+    "verdict": "unchecked",
+    "exit_code": 4,
+    "literal_rule_outcome": "unsupported",
+    "historical_verdict": "unchecked",
+    "historical_outcome": "unsupported",
+    "class": "exact-agreement",
+    "blocking": false,
+    "reasons": []
+   },
+   {
+    "workflow": "W2",
+    "case": "C0-clean",
+    "verdict": "accepted",
+    "exit_code": 0,
+    "literal_rule_outcome": "correct",
+    "historical_verdict": "accepted",
+    "historical_outcome": "correct",
+    "class": "exact-agreement",
+    "blocking": false,
+    "reasons": []
+   },
+   {
+    "workflow": "W3",
+    "case": "C0-clean",
+    "verdict": "accepted",
+    "exit_code": 0,
+    "literal_rule_outcome": "correct",
+    "historical_verdict": "accepted",
+    "historical_outcome": "correct",
+    "class": "exact-agreement",
+    "blocking": false,
+    "reasons": []
+   },
+   {
+    "workflow": "W1",
+    "case": "C1-numerical-difference",
+    "verdict": "unchecked",
+    "exit_code": 4,
+    "literal_rule_outcome": "unsupported",
+    "historical_verdict": "unchecked",
+    "historical_outcome": "unsupported",
+    "class": "exact-agreement",
+    "blocking": false,
+    "reasons": []
+   },
+   {
+    "workflow": "W2",
+    "case": "C1-numerical-difference",
+    "verdict": "accepted-numerical-difference",
+    "exit_code": 3,
+    "literal_rule_outcome": "correct",
+    "historical_verdict": "accepted-numerical-difference",
+    "historical_outcome": "correct",
+    "class": "exact-agreement",
+    "blocking": false,
+    "reasons": []
+   },
+   {
+    "workflow": "W3",
+    "case": "C1-numerical-difference",
+    "verdict": "accepted-numerical-difference",
+    "exit_code": 3,
+    "literal_rule_outcome": "correct",
+    "historical_verdict": "accepted-numerical-difference",
+    "historical_outcome": "correct",
+    "class": "exact-agreement",
+    "blocking": false,
+    "reasons": []
+   },
+   {
+    "workflow": "W1",
+    "case": "F01-checkpoint-swapped",
+    "verdict": "unchecked",
+    "exit_code": 4,
+    "literal_rule_outcome": "unsupported",
+    "historical_verdict": "unchecked",
+    "historical_outcome": "unsupported",
+    "class": "exact-agreement",
+    "blocking": false,
+    "reasons": []
+   },
+   {
+    "workflow": "W2",
+    "case": "F01-checkpoint-swapped",
+    "verdict": "rejected-before-execution",
+    "exit_code": 1,
+    "literal_rule_outcome": "rejected",
+    "historical_verdict": "rejected-before-execution",
+    "historical_outcome": "rejected",
+    "class": "exact-agreement",
+    "blocking": false,
+    "reasons": []
+   },
+   {
+    "workflow": "W3",
+    "case": "F01-checkpoint-swapped",
+    "verdict": "rejected-before-execution",
+    "exit_code": 1,
+    "literal_rule_outcome": "rejected",
+    "historical_verdict": "rejected-before-execution",
+    "historical_outcome": "rejected",
+    "class": "exact-agreement",
+    "blocking": false,
+    "reasons": []
+   },
+   {
+    "workflow": "W1",
+    "case": "F02-recorded-digest-corrupted",
+    "verdict": "unchecked",
+    "exit_code": 4,
+    "literal_rule_outcome": "unsupported",
+    "historical_verdict": "unchecked",
+    "historical_outcome": "unsupported",
+    "class": "exact-agreement",
+    "blocking": false,
+    "reasons": []
+   },
+   {
+    "workflow": "W2",
+    "case": "F02-recorded-digest-corrupted",
+    "verdict": "rejected-before-execution",
+    "exit_code": 1,
+    "literal_rule_outcome": "rejected",
+    "historical_verdict": "rejected-before-execution",
+    "historical_outcome": "rejected",
+    "class": "exact-agreement",
+    "blocking": false,
+    "reasons": []
+   },
+   {
+    "workflow": "W3",
+    "case": "F02-recorded-digest-corrupted",
+    "verdict": "rejected-before-execution",
+    "exit_code": 1,
+    "literal_rule_outcome": "rejected",
+    "historical_verdict": "rejected-before-execution",
+    "historical_outcome": "rejected",
+    "class": "exact-agreement",
+    "blocking": false,
+    "reasons": []
+   },
+   {
+    "workflow": "W1",
+    "case": "F03-protocol-mismatch",
+    "verdict": "unchecked",
+    "exit_code": 4,
+    "literal_rule_outcome": "unsupported",
+    "historical_verdict": "unchecked",
+    "historical_outcome": "unsupported",
+    "class": "exact-agreement",
+    "blocking": false,
+    "reasons": []
+   },
+   {
+    "workflow": "W2",
+    "case": "F03-protocol-mismatch",
+    "verdict": "rejected-before-execution",
+    "exit_code": 1,
+    "literal_rule_outcome": "rejected",
+    "historical_verdict": "rejected-before-execution",
+    "historical_outcome": "rejected",
+    "class": "exact-agreement",
+    "blocking": false,
+    "reasons": []
+   },
+   {
+    "workflow": "W3",
+    "case": "F03-protocol-mismatch",
+    "verdict": "rejected-before-execution",
+    "exit_code": 1,
+    "literal_rule_outcome": "rejected",
+    "historical_verdict": "rejected-before-execution",
+    "historical_outcome": "rejected",
+    "class": "exact-agreement",
+    "blocking": false,
+    "reasons": []
+   },
+   {
+    "workflow": "W1",
+    "case": "F04-dependency-missing",
+    "verdict": "unchecked",
+    "exit_code": 4,
+    "literal_rule_outcome": "unsupported",
+    "historical_verdict": "unchecked",
+    "historical_outcome": "unsupported",
+    "class": "exact-agreement",
+    "blocking": false,
+    "reasons": []
+   },
+   {
+    "workflow": "W2",
+    "case": "F04-dependency-missing",
+    "verdict": "rejected-before-execution",
+    "exit_code": 1,
+    "literal_rule_outcome": "rejected",
+    "historical_verdict": "rejected-before-execution",
+    "historical_outcome": "rejected",
+    "class": "exact-agreement",
+    "blocking": false,
+    "reasons": []
+   },
+   {
+    "workflow": "W3",
+    "case": "F04-dependency-missing",
+    "verdict": "rejected-before-execution",
+    "exit_code": 1,
+    "literal_rule_outcome": "rejected",
+    "historical_verdict": "rejected-before-execution",
+    "historical_outcome": "rejected",
+    "class": "exact-agreement",
+    "blocking": false,
+    "reasons": []
+   },
+   {
+    "workflow": "W1",
+    "case": "F05-dependency-changed",
+    "verdict": "unchecked",
+    "exit_code": 4,
+    "literal_rule_outcome": "unsupported",
+    "historical_verdict": "unchecked",
+    "historical_outcome": "unsupported",
+    "class": "exact-agreement",
+    "blocking": false,
+    "reasons": []
+   },
+   {
+    "workflow": "W2",
+    "case": "F05-dependency-changed",
+    "verdict": "rejected-before-execution",
+    "exit_code": 1,
+    "literal_rule_outcome": "rejected",
+    "historical_verdict": "rejected-before-execution",
+    "historical_outcome": "rejected",
+    "class": "exact-agreement",
+    "blocking": false,
+    "reasons": []
+   },
+   {
+    "workflow": "W3",
+    "case": "F05-dependency-changed",
+    "verdict": "rejected-before-execution",
+    "exit_code": 1,
+    "literal_rule_outcome": "rejected",
+    "historical_verdict": "rejected-before-execution",
+    "historical_outcome": "rejected",
+    "class": "exact-agreement",
+    "blocking": false,
+    "reasons": []
+   },
+   {
+    "workflow": "W1",
+    "case": "F06-coercible-seed",
+    "verdict": "unchecked",
+    "exit_code": 4,
+    "literal_rule_outcome": "unsupported",
+    "historical_verdict": "unchecked",
+    "historical_outcome": "unsupported",
+    "class": "exact-agreement",
+    "blocking": false,
+    "reasons": []
+   },
+   {
+    "workflow": "W2",
+    "case": "F06-coercible-seed",
+    "verdict": "rejected-before-execution",
+    "exit_code": 1,
+    "literal_rule_outcome": "rejected",
+    "historical_verdict": "rejected-before-execution",
+    "historical_outcome": "rejected",
+    "class": "exact-agreement",
+    "blocking": false,
+    "reasons": []
+   },
+   {
+    "workflow": "W3",
+    "case": "F06-coercible-seed",
+    "verdict": "rejected-before-execution",
+    "exit_code": 1,
+    "literal_rule_outcome": "rejected",
+    "historical_verdict": "rejected-before-execution",
+    "historical_outcome": "rejected",
+    "class": "exact-agreement",
+    "blocking": false,
+    "reasons": []
+   },
+   {
+    "workflow": "W1",
+    "case": "F07-overlapping-seeds",
+    "verdict": "unchecked",
+    "exit_code": 4,
+    "literal_rule_outcome": "unsupported",
+    "historical_verdict": "unchecked",
+    "historical_outcome": "unsupported",
+    "class": "exact-agreement",
+    "blocking": false,
+    "reasons": []
+   },
+   {
+    "workflow": "W2",
+    "case": "F07-overlapping-seeds",
+    "verdict": "rejected-before-execution",
+    "exit_code": 1,
+    "literal_rule_outcome": "rejected",
+    "historical_verdict": "rejected-before-execution",
+    "historical_outcome": "rejected",
+    "class": "exact-agreement",
+    "blocking": false,
+    "reasons": []
+   },
+   {
+    "workflow": "W3",
+    "case": "F07-overlapping-seeds",
+    "verdict": "rejected-before-execution",
+    "exit_code": 1,
+    "literal_rule_outcome": "rejected",
+    "historical_verdict": "rejected-before-execution",
+    "historical_outcome": "rejected",
+    "class": "exact-agreement",
+    "blocking": false,
+    "reasons": []
+   },
+   {
+    "workflow": "W1",
+    "case": "F08-nonfinite-parameter",
+    "verdict": "unchecked",
+    "exit_code": 4,
+    "literal_rule_outcome": "unsupported",
+    "historical_verdict": "unchecked",
+    "historical_outcome": "unsupported",
+    "class": "exact-agreement",
+    "blocking": false,
+    "reasons": []
+   },
+   {
+    "workflow": "W2",
+    "case": "F08-nonfinite-parameter",
+    "verdict": "rejected-before-execution",
+    "exit_code": 1,
+    "literal_rule_outcome": "rejected",
+    "historical_verdict": "rejected-before-execution",
+    "historical_outcome": "rejected",
+    "class": "exact-agreement",
+    "blocking": false,
+    "reasons": []
+   },
+   {
+    "workflow": "W3",
+    "case": "F08-nonfinite-parameter",
+    "verdict": "rejected-before-execution",
+    "exit_code": 1,
+    "literal_rule_outcome": "rejected",
+    "historical_verdict": "rejected-before-execution",
+    "historical_outcome": "rejected",
+    "class": "exact-agreement",
+    "blocking": false,
+    "reasons": []
+   },
+   {
+    "workflow": "W1",
+    "case": "F09-original-channel-absent",
+    "verdict": "unchecked",
+    "exit_code": 4,
+    "literal_rule_outcome": "unsupported",
+    "historical_verdict": "unchecked",
+    "historical_outcome": "unsupported",
+    "class": "exact-agreement",
+    "blocking": false,
+    "reasons": []
+   },
+   {
+    "workflow": "W2",
+    "case": "F09-original-channel-absent",
+    "verdict": "rejected-before-execution",
+    "exit_code": 1,
+    "literal_rule_outcome": "rejected",
+    "historical_verdict": "rejected-before-execution",
+    "historical_outcome": "rejected",
+    "class": "exact-agreement",
+    "blocking": false,
+    "reasons": []
+   },
+   {
+    "workflow": "W3",
+    "case": "F09-original-channel-absent",
+    "verdict": "rejected-before-execution",
+    "exit_code": 1,
+    "literal_rule_outcome": "rejected",
+    "historical_verdict": "rejected-before-execution",
+    "historical_outcome": "rejected",
+    "class": "exact-agreement",
+    "blocking": false,
+    "reasons": []
+   },
+   {
+    "workflow": "W1",
+    "case": "F10-inconsistent-totals",
+    "verdict": "unchecked",
+    "exit_code": 4,
+    "literal_rule_outcome": "unsupported",
+    "historical_verdict": "unchecked",
+    "historical_outcome": "unsupported",
+    "class": "exact-agreement",
+    "blocking": false,
+    "reasons": []
+   },
+   {
+    "workflow": "W2",
+    "case": "F10-inconsistent-totals",
+    "verdict": "rejected-before-execution",
+    "exit_code": 1,
+    "literal_rule_outcome": "rejected",
+    "historical_verdict": "rejected-before-execution",
+    "historical_outcome": "rejected",
+    "class": "exact-agreement",
+    "blocking": false,
+    "reasons": []
+   },
+   {
+    "workflow": "W3",
+    "case": "F10-inconsistent-totals",
+    "verdict": "rejected-before-execution",
+    "exit_code": 1,
+    "literal_rule_outcome": "rejected",
+    "historical_verdict": "rejected-before-execution",
+    "historical_outcome": "rejected",
+    "class": "exact-agreement",
+    "blocking": false,
+    "reasons": []
+   },
+   {
+    "workflow": "W1",
+    "case": "F11-potential-at-truncation",
+    "verdict": "unchecked",
+    "exit_code": 4,
+    "literal_rule_outcome": "unsupported",
+    "historical_verdict": "unchecked",
+    "historical_outcome": "unsupported",
+    "class": "exact-agreement",
+    "blocking": false,
+    "reasons": []
+   },
+   {
+    "workflow": "W2",
+    "case": "F11-potential-at-truncation",
+    "verdict": "rejected-before-execution",
+    "exit_code": 1,
+    "literal_rule_outcome": "rejected",
+    "historical_verdict": "rejected-before-execution",
+    "historical_outcome": "rejected",
+    "class": "exact-agreement",
+    "blocking": false,
+    "reasons": []
+   },
+   {
+    "workflow": "W3",
+    "case": "F11-potential-at-truncation",
+    "verdict": "rejected-before-execution",
+    "exit_code": 1,
+    "literal_rule_outcome": "rejected",
+    "historical_verdict": "rejected-before-execution",
+    "historical_outcome": "rejected",
+    "class": "exact-agreement",
+    "blocking": false,
+    "reasons": []
+   },
+   {
+    "workflow": "W1",
+    "case": "F12-outcome-schema-mismatch",
+    "verdict": "unchecked",
+    "exit_code": 4,
+    "literal_rule_outcome": "unsupported",
+    "historical_verdict": "unchecked",
+    "historical_outcome": "unsupported",
+    "class": "exact-agreement",
+    "blocking": false,
+    "reasons": []
+   },
+   {
+    "workflow": "W2",
+    "case": "F12-outcome-schema-mismatch",
+    "verdict": "rejected-before-execution",
+    "exit_code": 1,
+    "literal_rule_outcome": "rejected",
+    "historical_verdict": "rejected-before-execution",
+    "historical_outcome": "rejected",
+    "class": "exact-agreement",
+    "blocking": false,
+    "reasons": []
+   },
+   {
+    "workflow": "W3",
+    "case": "F12-outcome-schema-mismatch",
+    "verdict": "rejected-before-execution",
+    "exit_code": 1,
+    "literal_rule_outcome": "rejected",
+    "historical_verdict": "rejected-before-execution",
+    "historical_outcome": "rejected",
+    "class": "exact-agreement",
+    "blocking": false,
+    "reasons": []
+   }
+  ]
+ },
+ "finished_utc": "2026-11-03T16:13:17Z"
+}

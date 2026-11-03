@@ -1,0 +1,8 @@
+{
+  "evidence": "diagnostic, assistant-executed",
+  "output_directory": "diagnostic-full-final",
+  "environment_changes": {"OMP_NUM_THREADS": "1", "MKL_NUM_THREADS": "1"},
+  "purpose": "Run the unmodified candidate validator with all 38 LunarLander policies in a fresh environment, retaining a feasible execution time. The default-thread partial run-b is retained separately, including its aggregate-disagreement. No threshold, code, checkpoint or historical result was changed.",
+  "basis": "A preserved single-policy diagnostic reproduced the default-thread DQN failure with identical compared episode records. This does not establish that threading is immaterial to every policy or constitute a controlled performance benchmark.",
+  "qualification": "This is not an unqualified completion of default-environment run B. Its result must be reported with the explicit runtime settings."
+}

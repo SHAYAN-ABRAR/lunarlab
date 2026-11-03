@@ -1,0 +1,8 @@
+{
+  "evidence": "diagnostic, assistant-executed",
+  "output_directory": "run-c-one-thread",
+  "environment_changes": {"OMP_NUM_THREADS":"1", "MKL_NUM_THREADS":"1"},
+  "purpose": "Complete requested validator scope C in a fresh empty output directory and fresh venv with explicit one-thread numerical-library settings. Earlier default-thread C attempts are retained as partial. No program, threshold, result or checkpoint is edited.",
+  "predecessors": "run-c-final stopped after its 20 replay reports, all 42 follow-up pairs and 30 original comparison pairs were written. diagnostic-full-final stopped after all 38 study, two published and 18 CartPole replay reports were written, before its comparison/final report. At 2026-11-03T03:47Z their execution sessions were unavailable and no validation.json or overall exit code could be obtained.",
+  "interpretation": "The full-study diagnostic replay stage is complete; its parent validator is not. This C invocation changes threading, so do not label it an unqualified default-runtime completion."
+}

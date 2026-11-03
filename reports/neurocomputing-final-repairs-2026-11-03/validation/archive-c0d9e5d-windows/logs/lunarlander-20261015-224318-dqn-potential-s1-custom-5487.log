@@ -1,0 +1,17 @@
+$ <uv>\python\cpython-3.12-windows-x86_64-none\python.exe -m lunarlab reproduce-artifact --artifact <validation-run>\lunarlander-study\study-artifacts\dqn-potential-based-shaping\20261015-224318-dqn-potential-s1-custom-5487 --report <validation-run>\reports\lunarlander-20261015-224318-dqn-potential-s1-custom-5487.json
+(exit 0, 14.4 s)
+  [ok] checkpoint.zip matches its recorded SHA-256: cd35cdcd599c39c8
+  [ok] config.yaml matches its recorded SHA-256: 31e5cee17078020b
+  [ok] evaluation.json matches its recorded SHA-256: e95484697dd3807d
+  [ok] configuration hash matches the record: a1d4ec18bbab011a
+  [ok] the recorded evaluation used this checkpoint
+  [ok] the recorded evaluation is the final test on the configuration's test seeds: 100 seeds
+  [ok] the recorded evaluation used the configuration's protocol and reward
+  [ok] the recorded episodes are exactly the recorded seeds
+  [ok] the evaluated network holds exactly the checkpoint's weights
+  [ok] every re-evaluated episode matches the record exactly: 100/100 episode summaries; largest original-return difference 0; largest training-return difference 0
+  [ok] no aggregate differs significantly from the record (paired tests, Holm-corrected): mean_original_return 244.9 -> 244.9 (p 1), pad_landing_rate 0.9 -> 0.9 (p 1), timeout_rate 0.02 -> 0.02 (p 1), crash_rate 0.04 -> 0.04 (p 1), out_of_bounds_rate 0 -> 0 (p 1)
+  status: exact (not blocking): all 100 episodes match on the selected summary fields
+EXACT: 20261015-224318-dqn-potential-s1-custom-5487, 100 episodes; mean original return recorded 244.8558, reproduced 244.8558; pad landing recorded 90%, reproduced 90%
+  all 100 episodes match on the selected summary fields
+report written to <validation-run>\reports\lunarlander-20261015-224318-dqn-potential-s1-custom-5487.json

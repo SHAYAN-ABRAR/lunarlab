@@ -1,5 +1,12 @@
 # Validator repairs, archive preparation and manuscript handoff, 1 November 2026
 
+> **Superseded in part, 3 November 2026.** The branch was merged through pull request #3 as `05ca17f` on
+> 2 November 2026. An assistant-executed Linux audit of the archive candidate followed; its findings, the
+> setup-log repair, the DQN diagnostic and a new candidate are in
+> [`../neurocomputing-final-repairs-2026-11-03/`](../neurocomputing-final-repairs-2026-11-03/README.md). The
+> archive drafts in `archive/` (licensing proposal, Zenodo metadata, deposit instructions, builder and licence
+> map) were revised in place that day; this folder's records are otherwise unchanged.
+
 An independent package verification of 29 October 2026 found three portability faults:
 
 - the comparison programs crashed on unavailable memory telemetry;
