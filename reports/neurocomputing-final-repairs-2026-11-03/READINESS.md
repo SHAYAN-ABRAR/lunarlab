@@ -32,7 +32,8 @@ is promised, and none is inferred from journal-wide figures.
 | `298562e` | This work's validator revision: separate setup logs, `--fresh-target`, the manuscript check's `--draft` mode. No library change |
 | `db8f937` | The manuscript, licensing and archive-draft corrections, and the first records |
 | `c0d9e5d` | Two overflowing lines fixed: the source of the new archive candidate and of the final manuscript build (41667322790); CI 41667323177 passed all six jobs |
-| The final commit of the branch | The validation, CI and manuscript records, and this file's final form (`PROGRESS_LOG.md`) |
+| `f9c2906` | The validation, CI and manuscript records. The author merged it into `main` through pull request #4 as `d575925` (2026-11-03 16:53:43 UTC; CI on the pull request, 41675942076, passed) |
+| `26da5c7` and later | The second round, after the author turned off Windows Application Control. These commits are on the branch, after the merge, and need a new pull request (`PROGRESS_LOG.md`) |
 
 ## What the audit established, and what was done
 
@@ -105,7 +106,8 @@ received audit), **diagnostic**, **pending**.
 5. **Approval:** of the manuscript wording, the highlights (`paper/neurocomputing/highlights.txt`), the
    cover-letter draft, the biography (not drafted) and the final files; then remove the working-draft
    footer. `check_manuscript.py --final` must pass.
-6. **Merge:** whether to merge `research/neurocomputing-final-repairs`.
+6. **Merge:** pull request #4 merged the branch up to `f9c2906`. Whether to merge the second-round commits
+   (`26da5c7` and later) with a new pull request.
 
 ## Technical items (ranked by value; none blocks an author decision)
 

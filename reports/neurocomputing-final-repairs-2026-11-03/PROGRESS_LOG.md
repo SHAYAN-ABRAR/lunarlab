@@ -98,3 +98,7 @@ Linux items stayed pending.
 - **16:51–17:13 — ran the full test suite in the project's own `.venv`: 708 passed.** A first attempt's output
   was lost, because its log was rewritten while it ran; it was run again with a fresh log
   (`tests/full-suite-project-venv.log`).
+- **16:36 and 16:53 — the author merged the branch.** The author opened pull request #4 at 16:36 UTC and
+  merged it at 16:53:43 UTC, at `f9c2906`, as `d575925`. CI on the pull request (41675942076) passed. This
+  round's commits were pushed after the merge, so they need a new pull request; I did not merge or push to
+  `main`.
