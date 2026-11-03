@@ -1,0 +1,17 @@
+$ <validation-run>\venv\Scripts\python.exe -m lunarlab reproduce-artifact --artifact <validation-run>\lunarlander-study\study-artifacts\dqn-flawed-hover-bonus\20261015-224318-dqn-hover-bonus-s1-custom-e122 --report <validation-run>\reports\lunarlander-20261015-224318-dqn-hover-bonus-s1-custom-e122.json
+(exit 0, 9.2 s)
+  [ok] checkpoint.zip matches its recorded SHA-256: 94515a11224e74b5
+  [ok] config.yaml matches its recorded SHA-256: e9aca18c908f6a51
+  [ok] evaluation.json matches its recorded SHA-256: fe9917b016a30419
+  [ok] configuration hash matches the record: 5c5cbbbc969ac6ae
+  [ok] the recorded evaluation used this checkpoint
+  [ok] the recorded evaluation is the final test on the configuration's test seeds: 100 seeds
+  [ok] the recorded evaluation used the configuration's protocol and reward
+  [ok] the recorded episodes are exactly the recorded seeds
+  [ok] the evaluated network holds exactly the checkpoint's weights
+  [ok] every re-evaluated episode matches the record exactly: 100/100 episode summaries; largest original-return difference 0; largest training-return difference 0
+  [ok] no aggregate differs significantly from the record (paired tests, Holm-corrected): mean_original_return 97.17 -> 97.17 (p 1), pad_landing_rate 0.24 -> 0.24 (p 1), timeout_rate 0.31 -> 0.31 (p 1), crash_rate 0.24 -> 0.24 (p 1), out_of_bounds_rate 0.02 -> 0.02 (p 1)
+  status: exact (not blocking): all 100 episodes match on the selected summary fields
+EXACT: 20261015-224318-dqn-hover-bonus-s1-custom-e122, 100 episodes; mean original return recorded 97.1688, reproduced 97.1688; pad landing recorded 24%, reproduced 24%
+  all 100 episodes match on the selected summary fields
+report written to <validation-run>\reports\lunarlander-20261015-224318-dqn-hover-bonus-s1-custom-e122.json

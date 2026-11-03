@@ -510,8 +510,8 @@ Records: [`reports/neurocomputing-final-validation-2026-11-01/`](reports/neuroco
   comparison programs crashed in 36 of 42 pairs; the follow-up set agreed in 40 and reported the clean
   control's two replays as permitted platform differences.
 - **The DQN disagreement:** on Windows, the recording platform, the policy replays exactly (100 of 100
-  episodes, with default and with one thread). A trace of its three most-changed episodes is recorded for a
-  Linux comparison, which is still to be run. Nothing was retrained, and no threshold or record was changed.
+  episodes, with default and with one thread). A Windows trace of its three most-changed episodes is kept;
+  no further Linux run is planned. Nothing was retrained, and no threshold or record was changed.
 - **Validator:** each setup command now keeps its own log and exit status (the lock install's log used to be
   overwritten). `--fresh-target` installs the lock into a new directory where Windows Application Control
   blocks virtual-environment launchers, as it does on the author's machine since 3 November. The manuscript
@@ -528,7 +528,9 @@ Records: [`reports/neurocomputing-final-validation-2026-11-01/`](reports/neuroco
   dependency checks, the plotted values, the 3,800 episodes' statistics, **38 of 38 LunarLander replays
   `exact`** (the DQN policy included), 18 of 18 CartPole artifacts, and the comparison 42 of 42 in exact
   agreement with both program sets. Damaged inputs still give named failures, a written report and a
-  nonzero exit.
+  nonzero exit. Once the author had turned off Windows Application Control, the validation passed again in
+  the documented `--fresh-venv` mode, with all three setup logs. The source archive's `--verify` passed on
+  Windows, and the manuscript also builds locally with Tectonic.
 - **Tests:** 708 passed locally. CI run [41667323177](https://github.com/SHAYAN-ABRAR/lunarlab/actions/runs/41667323177)
   passed all six jobs: Linux 704 passed and 4 Windows-only tests skipped; Windows 294 tests on each Python;
   195 release tests; 15 browser flows. The Linux and Windows source archives are byte-identical.

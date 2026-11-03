@@ -50,3 +50,24 @@ draft footer). Nothing is cut, clipped or overlapping, and no figure label is un
 
 Not checked here: how the pages look in the journal's own production class. The draft uses `elsarticle` in
 preprint mode, which is not the journal's typeset layout.
+
+## Local build with Tectonic (after the author turned off Windows Application Control)
+
+**Executed** later on 3 November 2026. The author turned off Windows Application Control, which had blocked
+the unsigned Tectonic binary, so the manuscript could be built on the author's machine for the first time.
+
+- **Source:** `git archive c0d9e5d paper/neurocomputing`, the same source as CI build 41667322790.
+- **Engine:** Tectonic 0.17.0, a XeTeX engine with its own TeX bundle, which ran BibTeX automatically.
+- **Result:** exit 0 (`local-tectonic-c0d9e5d/build.log`, `main.log`, `main.blg`). The output has 22 pages,
+  as in CI, and all 34 fonts are embedded. Its PDF SHA-256 is `f4cdd11a…44ea`; the PDF itself is not
+  committed.
+
+**Not identical to the CI build.** Under XeTeX, four lines run past the right margin, by 12.0 pt on page 6,
+9.7 pt on page 18, 5.1 pt on page 2 and 1.2 pt on page 21 (`margins.json`, measured against the CI build's
+widest line). The log reports five overfull boxes, at source lines 60, 121 (twice), 217 and 231. These are
+paragraphs that pdfTeX sets within the margin, because `microtype`'s font expansion works only under pdfTeX.
+CI's pdfTeX build, which `BUILD.md` declares, has none. Page 6 was rendered and read: the worst line, in
+Section 2.4, protrudes visibly.
+
+Nothing was changed for this: the source is not tuned for a second engine. If the submission system compiles
+with XeLaTeX, these five paragraphs would need a reflow; with pdfLaTeX they need nothing.

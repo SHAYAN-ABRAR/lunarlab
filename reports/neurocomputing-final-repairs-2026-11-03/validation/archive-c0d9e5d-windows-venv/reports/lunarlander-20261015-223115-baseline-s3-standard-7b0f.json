@@ -1,0 +1,3177 @@
+{
+  "kind": "lunarlab.reproduce-artifact",
+  "schema": 2,
+  "artifact": "20261015-223115-baseline-s3-standard-7b0f",
+  "reproduced_at": "2026-11-03T16:52:50+00:00",
+  "status": "exact",
+  "status_reason": "all 100 episodes match on the selected summary fields",
+  "status_meaning": "all selected episode-summary fields match exactly",
+  "blocking": false,
+  "exit_code": 0,
+  "integrity_ok": true,
+  "software": {
+    "lunarlab": "0.1.0",
+    "git": {
+      "available": false,
+      "reason": "not a git repository"
+    },
+    "python": "3.12.13",
+    "python_implementation": "CPython",
+    "platform": "Windows-11-10.0.26300-SP0",
+    "packages": {
+      "gymnasium": "1.4.0",
+      "Box2D": "2.3.10",
+      "pygame": "2.6.1",
+      "stable-baselines3": "2.9.0",
+      "torch": "2.14.1",
+      "numpy": "2.5.4",
+      "pandas": "3.0.6",
+      "matplotlib": "3.11.2",
+      "imageio": "2.38.1",
+      "imageio-ffmpeg": "0.6.0",
+      "optuna": "5.0.0",
+      "fastapi": "0.143.1",
+      "uvicorn": "0.54.0",
+      "pydantic": "2.14.1",
+      "psutil": "7.2.2",
+      "PyYAML": "6.0.3"
+    }
+  },
+  "hardware": {
+    "platform": "Windows-11-10.0.26300-SP0",
+    "machine": "AMD64",
+    "cpu": "13th Gen Intel(R) Core(TM) i7-13620H",
+    "physical_cores": 10,
+    "logical_cores": 16,
+    "ram_gb": 16.8
+  },
+  "platform": {
+    "basis": "operating system and numerical libraries (torch, numpy, Box2D, gymnasium, stable-baselines3) of artifact.json 'exported_with' versus this machine",
+    "recorded": {
+      "platform": "Windows-11-10.0.26300-SP0",
+      "python": "3.12.13",
+      "os": "Windows",
+      "torch": "2.14.1",
+      "numpy": "2.5.4",
+      "Box2D": "2.3.10",
+      "gymnasium": "1.4.0",
+      "stable-baselines3": "2.9.0"
+    },
+    "reproduced": {
+      "platform": "Windows-11-10.0.26300-SP0",
+      "python": "3.12.13",
+      "os": "Windows",
+      "torch": "2.14.1",
+      "numpy": "2.5.4",
+      "Box2D": "2.3.10",
+      "gymnasium": "1.4.0",
+      "stable-baselines3": "2.9.0"
+    },
+    "differences": {},
+    "same_platform": true
+  },
+  "episodes": 100,
+  "recorded_mean_original_return": 268.3226064523492,
+  "reproduced_mean_original_return": 268.3226064523492,
+  "recorded_pad_landing_rate": 0.99,
+  "reproduced_pad_landing_rate": 0.99,
+  "comparison": {
+    "compared_fields": [
+      "length",
+      "original_return",
+      "training_return",
+      "env_outcome",
+      "pad_landing"
+    ],
+    "exactness_scope": "numeric equality of selected episode-summary fields; not full-trajectory or bitwise identity",
+    "compared": 100,
+    "exact": 100,
+    "within_tolerance": 100,
+    "tolerance": 0.0,
+    "max_abs_return_difference": 0.0,
+    "max_abs_original_return_difference": 0.0,
+    "max_abs_training_return_difference": 0.0,
+    "mismatches": [],
+    "n_mismatches": 0,
+    "missing_seeds": [],
+    "summary": {
+      "n": 100,
+      "agreement": {
+        "bit_identical": 1.0,
+        "length": 1.0,
+        "termination": 1.0,
+        "env_outcome": 1.0,
+        "pad_landing": 1.0,
+        "all_outcome_fields": 1.0
+      },
+      "return_difference": {
+        "mean_abs": 0.0,
+        "median_abs": 0.0,
+        "p90_abs": 0.0,
+        "max_abs": 0.0,
+        "median_relative": 0.0,
+        "n_relative": 100,
+        "relative_floor": 1.0,
+        "episodes_differing": 0,
+        "episodes_above_1": 0,
+        "episodes_above_10": 0
+      }
+    },
+    "episodes": [
+      {
+        "seed": 20000,
+        "exact": true,
+        "recorded_return": 276.7081487403698,
+        "reproduced_return": 276.7081487403698,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 300,
+        "reproduced_length": 300,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20001,
+        "exact": true,
+        "recorded_return": 304.1667866981288,
+        "reproduced_return": 304.1667866981288,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 285,
+        "reproduced_length": 285,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20002,
+        "exact": true,
+        "recorded_return": 253.4937534290177,
+        "reproduced_return": 253.4937534290177,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 267,
+        "reproduced_length": 267,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20003,
+        "exact": true,
+        "recorded_return": 282.2342349975696,
+        "reproduced_return": 282.2342349975696,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 304,
+        "reproduced_length": 304,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20004,
+        "exact": true,
+        "recorded_return": 310.40410480329024,
+        "reproduced_return": 310.40410480329024,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 255,
+        "reproduced_length": 255,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20005,
+        "exact": true,
+        "recorded_return": 222.93798048051198,
+        "reproduced_return": 222.93798048051198,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 275,
+        "reproduced_length": 275,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20006,
+        "exact": true,
+        "recorded_return": 237.91954761971417,
+        "reproduced_return": 237.91954761971417,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 280,
+        "reproduced_length": 280,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20007,
+        "exact": true,
+        "recorded_return": 295.8462183533833,
+        "reproduced_return": 295.8462183533833,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 291,
+        "reproduced_length": 291,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20008,
+        "exact": true,
+        "recorded_return": 266.60283325691,
+        "reproduced_return": 266.60283325691,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 320,
+        "reproduced_length": 320,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20009,
+        "exact": true,
+        "recorded_return": 285.25365437413177,
+        "reproduced_return": 285.25365437413177,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 296,
+        "reproduced_length": 296,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20010,
+        "exact": true,
+        "recorded_return": 255.53847528918715,
+        "reproduced_return": 255.53847528918715,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 262,
+        "reproduced_length": 262,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20011,
+        "exact": true,
+        "recorded_return": 268.3499162774199,
+        "reproduced_return": 268.3499162774199,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 310,
+        "reproduced_length": 310,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20012,
+        "exact": true,
+        "recorded_return": 269.51815277565663,
+        "reproduced_return": 269.51815277565663,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 257,
+        "reproduced_length": 257,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20013,
+        "exact": true,
+        "recorded_return": 266.8239688697563,
+        "reproduced_return": 266.8239688697563,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 280,
+        "reproduced_length": 280,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20014,
+        "exact": true,
+        "recorded_return": 271.8637772771258,
+        "reproduced_return": 271.8637772771258,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 263,
+        "reproduced_length": 263,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20015,
+        "exact": true,
+        "recorded_return": 292.92063650087766,
+        "reproduced_return": 292.92063650087766,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 301,
+        "reproduced_length": 301,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20016,
+        "exact": true,
+        "recorded_return": 306.11131489978675,
+        "reproduced_return": 306.11131489978675,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 277,
+        "reproduced_length": 277,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20017,
+        "exact": true,
+        "recorded_return": 311.4954250477663,
+        "reproduced_return": 311.4954250477663,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 254,
+        "reproduced_length": 254,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20018,
+        "exact": true,
+        "recorded_return": 279.5773273532026,
+        "reproduced_return": 279.5773273532026,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 292,
+        "reproduced_length": 292,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20019,
+        "exact": true,
+        "recorded_return": 245.3381864895576,
+        "reproduced_return": 245.3381864895576,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 304,
+        "reproduced_length": 304,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20020,
+        "exact": true,
+        "recorded_return": 246.89273593758935,
+        "reproduced_return": 246.89273593758935,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 293,
+        "reproduced_length": 293,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20021,
+        "exact": true,
+        "recorded_return": 289.4659753726005,
+        "reproduced_return": 289.4659753726005,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 260,
+        "reproduced_length": 260,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20022,
+        "exact": true,
+        "recorded_return": 284.0642025475604,
+        "reproduced_return": 284.0642025475604,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 303,
+        "reproduced_length": 303,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20023,
+        "exact": true,
+        "recorded_return": 291.47623348473394,
+        "reproduced_return": 291.47623348473394,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 270,
+        "reproduced_length": 270,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20024,
+        "exact": true,
+        "recorded_return": 237.69495522351087,
+        "reproduced_return": 237.69495522351087,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 286,
+        "reproduced_length": 286,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20025,
+        "exact": true,
+        "recorded_return": 251.60448798456457,
+        "reproduced_return": 251.60448798456457,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 268,
+        "reproduced_length": 268,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20026,
+        "exact": true,
+        "recorded_return": 276.81836237938444,
+        "reproduced_return": 276.81836237938444,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 263,
+        "reproduced_length": 263,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20027,
+        "exact": true,
+        "recorded_return": 293.03173876736935,
+        "reproduced_return": 293.03173876736935,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 256,
+        "reproduced_length": 256,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20028,
+        "exact": true,
+        "recorded_return": 292.657300274628,
+        "reproduced_return": 292.657300274628,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 266,
+        "reproduced_length": 266,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20029,
+        "exact": true,
+        "recorded_return": 236.06871679579768,
+        "reproduced_return": 236.06871679579768,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 282,
+        "reproduced_length": 282,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20030,
+        "exact": true,
+        "recorded_return": 275.1639735185178,
+        "reproduced_return": 275.1639735185178,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 344,
+        "reproduced_length": 344,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20031,
+        "exact": true,
+        "recorded_return": 250.99983029659634,
+        "reproduced_return": 250.99983029659634,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 280,
+        "reproduced_length": 280,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20032,
+        "exact": true,
+        "recorded_return": 246.36153926247422,
+        "reproduced_return": 246.36153926247422,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 270,
+        "reproduced_length": 270,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20033,
+        "exact": true,
+        "recorded_return": 255.02661093932335,
+        "reproduced_return": 255.02661093932335,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 300,
+        "reproduced_length": 300,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20034,
+        "exact": true,
+        "recorded_return": 298.8562162910249,
+        "reproduced_return": 298.8562162910249,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 264,
+        "reproduced_length": 264,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20035,
+        "exact": true,
+        "recorded_return": 254.00215655143666,
+        "reproduced_return": 254.00215655143666,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 257,
+        "reproduced_length": 257,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20036,
+        "exact": true,
+        "recorded_return": 285.6048730107003,
+        "reproduced_return": 285.6048730107003,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 270,
+        "reproduced_length": 270,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20037,
+        "exact": true,
+        "recorded_return": 258.062262298027,
+        "reproduced_return": 258.062262298027,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 317,
+        "reproduced_length": 317,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20038,
+        "exact": true,
+        "recorded_return": 254.78228897626127,
+        "reproduced_return": 254.78228897626127,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 285,
+        "reproduced_length": 285,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20039,
+        "exact": true,
+        "recorded_return": 239.19857765200086,
+        "reproduced_return": 239.19857765200086,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 283,
+        "reproduced_length": 283,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20040,
+        "exact": true,
+        "recorded_return": 307.8986950041394,
+        "reproduced_return": 307.8986950041394,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 292,
+        "reproduced_length": 292,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20041,
+        "exact": true,
+        "recorded_return": 259.65402013734615,
+        "reproduced_return": 259.65402013734615,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 268,
+        "reproduced_length": 268,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20042,
+        "exact": true,
+        "recorded_return": 275.4566634629613,
+        "reproduced_return": 275.4566634629613,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 327,
+        "reproduced_length": 327,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20043,
+        "exact": true,
+        "recorded_return": 296.28585727294296,
+        "reproduced_return": 296.28585727294296,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 281,
+        "reproduced_length": 281,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20044,
+        "exact": true,
+        "recorded_return": 297.97847705608785,
+        "reproduced_return": 297.97847705608785,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 267,
+        "reproduced_length": 267,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20045,
+        "exact": true,
+        "recorded_return": 243.73264998837735,
+        "reproduced_return": 243.73264998837735,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 302,
+        "reproduced_length": 302,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20046,
+        "exact": true,
+        "recorded_return": 260.58209377187643,
+        "reproduced_return": 260.58209377187643,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 301,
+        "reproduced_length": 301,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20047,
+        "exact": true,
+        "recorded_return": 260.97163702453923,
+        "reproduced_return": 260.97163702453923,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 323,
+        "reproduced_length": 323,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20048,
+        "exact": true,
+        "recorded_return": 270.7557744746022,
+        "reproduced_return": 270.7557744746022,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 273,
+        "reproduced_length": 273,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20049,
+        "exact": true,
+        "recorded_return": 269.396617053698,
+        "reproduced_return": 269.396617053698,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 342,
+        "reproduced_length": 342,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20050,
+        "exact": true,
+        "recorded_return": 265.6487750386327,
+        "reproduced_return": 265.6487750386327,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 285,
+        "reproduced_length": 285,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20051,
+        "exact": true,
+        "recorded_return": 264.15117164982274,
+        "reproduced_return": 264.15117164982274,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 299,
+        "reproduced_length": 299,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20052,
+        "exact": true,
+        "recorded_return": 307.1936146234234,
+        "reproduced_return": 307.1936146234234,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 298,
+        "reproduced_length": 298,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20053,
+        "exact": true,
+        "recorded_return": 291.72981816810517,
+        "reproduced_return": 291.72981816810517,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 267,
+        "reproduced_length": 267,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20054,
+        "exact": true,
+        "recorded_return": 234.01524360798493,
+        "reproduced_return": 234.01524360798493,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 276,
+        "reproduced_length": 276,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20055,
+        "exact": true,
+        "recorded_return": 303.69103139533104,
+        "reproduced_return": 303.69103139533104,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 269,
+        "reproduced_length": 269,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20056,
+        "exact": true,
+        "recorded_return": 255.8299629424788,
+        "reproduced_return": 255.8299629424788,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 263,
+        "reproduced_length": 263,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20057,
+        "exact": true,
+        "recorded_return": 268.1297779442789,
+        "reproduced_return": 268.1297779442789,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 260,
+        "reproduced_length": 260,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20058,
+        "exact": true,
+        "recorded_return": 267.5700046171902,
+        "reproduced_return": 267.5700046171902,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 278,
+        "reproduced_length": 278,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20059,
+        "exact": true,
+        "recorded_return": 311.36312077509444,
+        "reproduced_return": 311.36312077509444,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 293,
+        "reproduced_length": 293,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20060,
+        "exact": true,
+        "recorded_return": 279.5625712029289,
+        "reproduced_return": 279.5625712029289,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 313,
+        "reproduced_length": 313,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20061,
+        "exact": true,
+        "recorded_return": 235.37211079892072,
+        "reproduced_return": 235.37211079892072,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 280,
+        "reproduced_length": 280,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20062,
+        "exact": true,
+        "recorded_return": 241.62865372225718,
+        "reproduced_return": 241.62865372225718,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 315,
+        "reproduced_length": 315,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20063,
+        "exact": true,
+        "recorded_return": 225.4057503473063,
+        "reproduced_return": 225.4057503473063,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 284,
+        "reproduced_length": 284,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20064,
+        "exact": true,
+        "recorded_return": 271.0183455840174,
+        "reproduced_return": 271.0183455840174,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 323,
+        "reproduced_length": 323,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20065,
+        "exact": true,
+        "recorded_return": 274.2052267899089,
+        "reproduced_return": 274.2052267899089,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 305,
+        "reproduced_length": 305,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20066,
+        "exact": true,
+        "recorded_return": 308.2391394554313,
+        "reproduced_return": 308.2391394554313,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 279,
+        "reproduced_length": 279,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20067,
+        "exact": true,
+        "recorded_return": 286.7474144793697,
+        "reproduced_return": 286.7474144793697,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 269,
+        "reproduced_length": 269,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20068,
+        "exact": true,
+        "recorded_return": 250.3237770767903,
+        "reproduced_return": 250.3237770767903,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 273,
+        "reproduced_length": 273,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20069,
+        "exact": true,
+        "recorded_return": 254.37167511269615,
+        "reproduced_return": 254.37167511269615,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 265,
+        "reproduced_length": 265,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20070,
+        "exact": true,
+        "recorded_return": 278.21475363671647,
+        "reproduced_return": 278.21475363671647,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 297,
+        "reproduced_length": 297,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20071,
+        "exact": true,
+        "recorded_return": 278.57391463072616,
+        "reproduced_return": 278.57391463072616,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 333,
+        "reproduced_length": 333,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20072,
+        "exact": true,
+        "recorded_return": 249.84234965418858,
+        "reproduced_return": 249.84234965418858,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 303,
+        "reproduced_length": 303,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20073,
+        "exact": true,
+        "recorded_return": 277.2695277693574,
+        "reproduced_return": 277.2695277693574,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 305,
+        "reproduced_length": 305,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20074,
+        "exact": true,
+        "recorded_return": 270.01988880773615,
+        "reproduced_return": 270.01988880773615,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 302,
+        "reproduced_length": 302,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20075,
+        "exact": true,
+        "recorded_return": 265.9736418688453,
+        "reproduced_return": 265.9736418688453,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 306,
+        "reproduced_length": 306,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20076,
+        "exact": true,
+        "recorded_return": 253.7752803085025,
+        "reproduced_return": 253.7752803085025,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 290,
+        "reproduced_length": 290,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20077,
+        "exact": true,
+        "recorded_return": 260.59158395036485,
+        "reproduced_return": 260.59158395036485,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 285,
+        "reproduced_length": 285,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20078,
+        "exact": true,
+        "recorded_return": 61.190716220222725,
+        "reproduced_return": 61.190716220222725,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 271,
+        "reproduced_length": 271,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "crash",
+          "crash"
+        ],
+        "pad_landing": [
+          false,
+          false
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20079,
+        "exact": true,
+        "recorded_return": 228.15904601758763,
+        "reproduced_return": 228.15904601758763,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 274,
+        "reproduced_length": 274,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20080,
+        "exact": true,
+        "recorded_return": 304.6295881940848,
+        "reproduced_return": 304.6295881940848,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 269,
+        "reproduced_length": 269,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20081,
+        "exact": true,
+        "recorded_return": 276.74566111630764,
+        "reproduced_return": 276.74566111630764,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 298,
+        "reproduced_length": 298,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20082,
+        "exact": true,
+        "recorded_return": 251.10102853152222,
+        "reproduced_return": 251.10102853152222,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 276,
+        "reproduced_length": 276,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20083,
+        "exact": true,
+        "recorded_return": 309.98403602560364,
+        "reproduced_return": 309.98403602560364,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 262,
+        "reproduced_length": 262,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20084,
+        "exact": true,
+        "recorded_return": 248.8144264393224,
+        "reproduced_return": 248.8144264393224,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 259,
+        "reproduced_length": 259,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20085,
+        "exact": true,
+        "recorded_return": 301.8931281491415,
+        "reproduced_return": 301.8931281491415,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 264,
+        "reproduced_length": 264,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20086,
+        "exact": true,
+        "recorded_return": 288.3958761832043,
+        "reproduced_return": 288.3958761832043,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 300,
+        "reproduced_length": 300,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20087,
+        "exact": true,
+        "recorded_return": 261.26389840557783,
+        "reproduced_return": 261.26389840557783,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 297,
+        "reproduced_length": 297,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20088,
+        "exact": true,
+        "recorded_return": 281.34606948857106,
+        "reproduced_return": 281.34606948857106,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 338,
+        "reproduced_length": 338,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20089,
+        "exact": true,
+        "recorded_return": 238.83129537983166,
+        "reproduced_return": 238.83129537983166,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 279,
+        "reproduced_length": 279,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20090,
+        "exact": true,
+        "recorded_return": 269.20477270972174,
+        "reproduced_return": 269.20477270972174,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 333,
+        "reproduced_length": 333,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20091,
+        "exact": true,
+        "recorded_return": 260.7364240463289,
+        "reproduced_return": 260.7364240463289,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 327,
+        "reproduced_length": 327,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20092,
+        "exact": true,
+        "recorded_return": 303.2568645734367,
+        "reproduced_return": 303.2568645734367,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 299,
+        "reproduced_length": 299,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20093,
+        "exact": true,
+        "recorded_return": 228.1479285663448,
+        "reproduced_return": 228.1479285663448,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 282,
+        "reproduced_length": 282,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20094,
+        "exact": true,
+        "recorded_return": 259.971237861309,
+        "reproduced_return": 259.971237861309,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 280,
+        "reproduced_length": 280,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20095,
+        "exact": true,
+        "recorded_return": 247.2100202299162,
+        "reproduced_return": 247.2100202299162,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 301,
+        "reproduced_length": 301,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20096,
+        "exact": true,
+        "recorded_return": 279.5382943765992,
+        "reproduced_return": 279.5382943765992,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 260,
+        "reproduced_length": 260,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20097,
+        "exact": true,
+        "recorded_return": 253.28599357928437,
+        "reproduced_return": 253.28599357928437,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 296,
+        "reproduced_length": 296,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20098,
+        "exact": true,
+        "recorded_return": 295.11386807476856,
+        "reproduced_return": 295.11386807476856,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 283,
+        "reproduced_length": 283,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      },
+      {
+        "seed": 20099,
+        "exact": true,
+        "recorded_return": 289.33237876379036,
+        "reproduced_return": 289.33237876379036,
+        "abs_return_difference": 0.0,
+        "relative_return_difference": 0.0,
+        "recorded_length": 292,
+        "reproduced_length": 292,
+        "length_agrees": true,
+        "terminated": [
+          true,
+          true
+        ],
+        "truncated": [
+          false,
+          false
+        ],
+        "env_outcome": [
+          "at_rest",
+          "at_rest"
+        ],
+        "pad_landing": [
+          true,
+          true
+        ],
+        "outcome_agrees": true,
+        "final_obs_max_abs_difference": 0.0
+      }
+    ]
+  },
+  "aggregates": {
+    "equivalence_assessed": false,
+    "interpretation": "Non-rejection of paired difference tests does not establish equivalence. No equivalence margins were specified.",
+    "criterion": "no compared aggregate differs significantly in the paired comparison over the same seeds (permutation test for the mean return, exact McNemar tests for rates; Holm, family-wise alpha = 0.05)",
+    "metrics": {
+      "mean_original_return": {
+        "recorded": 268.3226064523492,
+        "reproduced": 268.3226064523492,
+        "recorded_ci": [
+          262.0263700438461,
+          273.78162920251185
+        ],
+        "paired_mean_difference": 0.0,
+        "paired_difference_ci": [
+          0.0,
+          0.0
+        ],
+        "test": "sign-flip permutation test of the paired differences",
+        "p_value": 1.0,
+        "significant": false
+      },
+      "pad_landing_rate": {
+        "recorded": 0.99,
+        "reproduced": 0.99,
+        "recorded_ci": [
+          0.9455138038212947,
+          0.9982325679358592
+        ],
+        "episodes_gained": 0,
+        "episodes_lost": 0,
+        "test": "exact McNemar test",
+        "p_value": 1.0,
+        "significant": false
+      },
+      "timeout_rate": {
+        "recorded": 0.0,
+        "reproduced": 0.0,
+        "recorded_ci": [
+          0.0,
+          0.03699349820698566
+        ],
+        "episodes_gained": 0,
+        "episodes_lost": 0,
+        "test": "exact McNemar test",
+        "p_value": 1.0,
+        "significant": false
+      },
+      "crash_rate": {
+        "recorded": 0.01,
+        "reproduced": 0.01,
+        "recorded_ci": [
+          0.0017674320641406435,
+          0.054486196178705294
+        ],
+        "episodes_gained": 0,
+        "episodes_lost": 0,
+        "test": "exact McNemar test",
+        "p_value": 1.0,
+        "significant": false
+      },
+      "out_of_bounds_rate": {
+        "recorded": 0.0,
+        "reproduced": 0.0,
+        "recorded_ci": [
+          0.0,
+          0.03699349820698566
+        ],
+        "episodes_gained": 0,
+        "episodes_lost": 0,
+        "test": "exact McNemar test",
+        "p_value": 1.0,
+        "significant": false
+      }
+    },
+    "paired_return_difference": {
+      "mean": 0.0,
+      "ci": [
+        0.0,
+        0.0
+      ],
+      "ci_contains_zero": true
+    },
+    "consistent": true
+  },
+  "elapsed_s": 13.68,
+  "checks": [
+    {
+      "check": "checkpoint.zip matches its recorded SHA-256",
+      "ok": true,
+      "detail": "938d967538f58895",
+      "kind": "integrity"
+    },
+    {
+      "check": "config.yaml matches its recorded SHA-256",
+      "ok": true,
+      "detail": "12da0c94cf298dd6",
+      "kind": "integrity"
+    },
+    {
+      "check": "evaluation.json matches its recorded SHA-256",
+      "ok": true,
+      "detail": "79151b5cd1e88901",
+      "kind": "integrity"
+    },
+    {
+      "check": "configuration hash matches the record",
+      "ok": true,
+      "detail": "c4d20c116f2a64c9",
+      "kind": "integrity"
+    },
+    {
+      "check": "the recorded evaluation used this checkpoint",
+      "ok": true,
+      "detail": "",
+      "kind": "integrity"
+    },
+    {
+      "check": "the recorded evaluation is the final test on the configuration's test seeds",
+      "ok": true,
+      "detail": "100 seeds",
+      "kind": "integrity"
+    },
+    {
+      "check": "the recorded evaluation used the configuration's protocol and reward",
+      "ok": true,
+      "detail": "",
+      "kind": "integrity"
+    },
+    {
+      "check": "the recorded episodes are exactly the recorded seeds",
+      "ok": true,
+      "detail": "",
+      "kind": "integrity"
+    },
+    {
+      "check": "the evaluated network holds exactly the checkpoint's weights",
+      "ok": true,
+      "detail": "",
+      "kind": "integrity"
+    },
+    {
+      "check": "every re-evaluated episode matches the record exactly",
+      "ok": true,
+      "detail": "100/100 episode summaries; largest original-return difference 0; largest training-return difference 0",
+      "kind": "reproduction"
+    },
+    {
+      "check": "no aggregate differs significantly from the record (paired tests, Holm-corrected)",
+      "ok": true,
+      "detail": "mean_original_return 268.3 -> 268.3 (p 1), pad_landing_rate 0.99 -> 0.99 (p 1), timeout_rate 0 -> 0 (p 1), crash_rate 0.01 -> 0.01 (p 1), out_of_bounds_rate 0 -> 0 (p 1)",
+      "kind": "conclusion"
+    }
+  ],
+  "ok": true
+}

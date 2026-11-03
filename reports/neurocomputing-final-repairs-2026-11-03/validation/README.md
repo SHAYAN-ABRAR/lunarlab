@@ -1,7 +1,7 @@
 # Validation of the archive candidate of 3 November 2026 (`c0d9e5d`), on Windows
 
-**Executed** on the author's Windows 11 machine. This is the recording platform, so it cannot close the Linux
-task: the full validator has not yet completed an uninterrupted Linux run with all 38 replays.
+**Executed** on the author's Windows 11 machine, the recording platform. It says nothing new about Linux, where
+the evidence is the received assistant-executed audit's (`../received/`); no further Linux run is planned.
 
 ## The run
 
@@ -9,7 +9,7 @@ task: the full validator has not yet completed an uninterrupted Linux run with a
 |---|---|
 | Package | A fresh extraction of `LunarLab-archive-candidate-2026-11-03-c0d9e5d.zip` (SHA-256 `8e4889ce…610f`), extracted into a new, empty directory; `sha256sum -c SHA256SUMS` verified 2,695 of 2,695 entries before the run |
 | Command | `python -I source/tools/validate_review_package.py . <validation-run> --fresh-target --commands --unmodified-comparison --lunarlander-replays all` |
-| Interpreter | uv-managed CPython 3.12.13, run directly. Windows Application Control blocks uv's virtual-environment launcher on this machine (os error 4551), so `--fresh-venv` cannot run here (see the negative check below); nothing was unblocked |
+| Interpreter | uv-managed CPython 3.12.13, run directly. At the time, Windows Application Control blocked uv's virtual-environment launcher on this machine (os error 4551), so `--fresh-venv` could not run (see the negative check below); nothing was bypassed. The author later turned the control off, and the run below repeats the validation with `--fresh-venv` |
 | Environment | A new target directory with `requirements.lock` and the working copy (`logs/target-install-lock.log`, `logs/target-install-source.log`; the interpreter's own packages: `pip` only). `PYTHONNOUSERSITE=1`; every command had an empty `LUNARLAB_HOME` |
 | Threads | `OMP_NUM_THREADS` and `MKL_NUM_THREADS` unset (default); the comparison runners set their programs to one thread, as recorded |
 | Time | 2026-11-03 15:48:54 to 16:19:50 UTC |
@@ -30,6 +30,22 @@ task: the full validator has not yet completed an uninterrupted Linux run with a
 | CartPole artifacts | 18 of 18 verified and `exact` |
 | Follow-up comparison (`comparison-v2`) | 42 of 42 pairs `exact-agreement`; no platform difference, no blocking row; set checks pass (W2/W3 agreement in 14 cases, 12 faults rejected before execution, W1 unchecked) |
 | Unmodified comparison | 42 of 42 pairs `exact-agreement`; set checks pass. On this machine the hashed programs' memory telemetry works, unlike in the audit's sandbox |
+
+## The same validation in the documented `--fresh-venv` mode (executed)
+
+Later on 3 November 2026 the author turned off Windows Application Control, and uv's virtual-environment
+launcher ran again. The validation was then repeated in the mode that `START_HERE.md` documents
+([`archive-c0d9e5d-windows-venv/`](archive-c0d9e5d-windows-venv/validation.json), `console.txt`). It used a
+second, new extraction of the candidate ZIP, taken from the author's Downloads copy: size, SHA-256 and every
+CRC were checked again, and `SHA256SUMS` verified 2,695 of 2,695.
+
+| | |
+|---|---|
+| Command | `python -I source/tools/validate_review_package.py . <validation-run> --fresh-venv --commands --unmodified-comparison --lunarlander-replays all` |
+| Environment | `create`, `install-lock` and `install-source`, each with exit 0 and **its own log** (`logs/venv-create.log`, `logs/venv-install-lock.log`, `logs/venv-install-source.log`): all three survive. Commands run in the new virtual environment |
+| Threads | `OMP_NUM_THREADS` and `MKL_NUM_THREADS` unset |
+| Time | 16:44:15 to 17:14:02 UTC |
+| Result | **Exit 0; every step passed**, with the same results as the `--fresh-target` run: 2,695 checksums; 624 dependency checks; values 4 of 4 and bytes 20 of 20; bundle 333; 3,800 episodes recomputed; both published replays and **38 of 38 LunarLander replays `exact`**, `…-aefc` included; 18 of 18 CartPole artifacts; both comparisons 42 of 42 in exact agreement, with the set checks passing |
 
 ## Negative checks (executed)
 

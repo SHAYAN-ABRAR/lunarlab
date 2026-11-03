@@ -33,12 +33,17 @@ citations, the fixed author details and declarations, and that no placeholder re
 validator use it. `python check_manuscript.py --final` is the submission check: it also fails on any such
 item and on the footer itself.
 
-On the author's Windows machine, Windows Application Control (Smart App Control) blocks the unsigned Tectonic
-binary, and no signed TeX distribution is installed. It was not bypassed. The PDF is therefore built by CI
-instead: `.github/workflows/paper.yml` installs Ubuntu's TeX Live packages, runs the four commands above, and
-fails on undefined references or non-embedded fonts. It records `pdffonts`, `pdfinfo`, the logs and a 100-dpi
-render of every page as the artifact `manuscript`. The build log and page renders of the final revision are kept
-in `reports/neurocomputing-2026-10-27/manuscript/`.
+The reference build is CI's: `.github/workflows/paper.yml` installs Ubuntu's TeX Live packages, runs the four
+commands above, and fails on undefined references or non-embedded fonts. It records `pdffonts`, `pdfinfo`, the
+logs and a 100-dpi render of every page as the artifact `manuscript`. The build logs and page reviews are kept
+in the dated report folders (latest: `reports/neurocomputing-final-repairs-2026-11-03/manuscript/`).
+
+On the author's Windows machine, Windows Application Control (Smart App Control) blocked the unsigned Tectonic
+binary until 3 November 2026, when the author turned it off; it was never bypassed. Since then Tectonic 0.17.0
+(`tectonic main.tex`) builds the PDF locally, 22 pages like CI's. Tectonic uses the XeTeX engine, where
+`microtype`'s font expansion is not available, so four lines run 1 to 12 pt past the right margin
+(`reports/neurocomputing-final-repairs-2026-11-03/manuscript/VISUAL_REVIEW.md`). The pdfTeX build has none:
+use `pdflatex`, or CI, for the PDF that counts.
 
 ## Figures
 
