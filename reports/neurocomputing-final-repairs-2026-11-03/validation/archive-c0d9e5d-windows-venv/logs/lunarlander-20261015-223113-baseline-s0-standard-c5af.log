@@ -1,0 +1,17 @@
+$ <validation-run>\venv\Scripts\python.exe -m lunarlab reproduce-artifact --artifact <validation-run>\lunarlander-study\study-artifacts\original-baseline\20261015-223113-baseline-s0-standard-c5af --report <validation-run>\reports\lunarlander-20261015-223113-baseline-s0-standard-c5af.json
+(exit 0, 18.5 s)
+  [ok] checkpoint.zip matches its recorded SHA-256: a3a89f43dd2d10e8
+  [ok] config.yaml matches its recorded SHA-256: e40c3f7164c4cae1
+  [ok] evaluation.json matches its recorded SHA-256: 8727d75ba2e9875a
+  [ok] configuration hash matches the record: 4b544ec6345deaa9
+  [ok] the recorded evaluation used this checkpoint
+  [ok] the recorded evaluation is the final test on the configuration's test seeds: 100 seeds
+  [ok] the recorded evaluation used the configuration's protocol and reward
+  [ok] the recorded episodes are exactly the recorded seeds
+  [ok] the evaluated network holds exactly the checkpoint's weights
+  [ok] every re-evaluated episode matches the record exactly: 100/100 episode summaries; largest original-return difference 0; largest training-return difference 0
+  [ok] no aggregate differs significantly from the record (paired tests, Holm-corrected): mean_original_return 265.9 -> 265.9 (p 1), pad_landing_rate 0.96 -> 0.96 (p 1), timeout_rate 0 -> 0 (p 1), crash_rate 0.03 -> 0.03 (p 1), out_of_bounds_rate 0 -> 0 (p 1)
+  status: exact (not blocking): all 100 episodes match on the selected summary fields
+EXACT: 20261015-223113-baseline-s0-standard-c5af, 100 episodes; mean original return recorded 265.8558, reproduced 265.8558; pad landing recorded 96%, reproduced 96%
+  all 100 episodes match on the selected summary fields
+report written to <validation-run>\reports\lunarlander-20261015-223113-baseline-s0-standard-c5af.json

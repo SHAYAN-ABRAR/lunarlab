@@ -31,9 +31,15 @@ python reports/neurocomputing-final-validation-2026-11-01/archive/build_archive_
 ```
 
 **The source archive of `c0d9e5d`:** 2,082 files, SHA-256 `c6cbdf69…0648` (`source-archive-c0d9e5d.log`). It was
-built without `--verify`, because that step creates a virtual environment, whose launcher Windows Application
-Control now blocks on this machine. CI's source-archive job on Linux builds, installs and tests the same
-revision (`../ci/`).
+first built without `--verify`, because that step creates a virtual environment, whose launcher Windows
+Application Control blocked on this machine. CI's source-archive job on Linux builds, installs and tests the
+same revision (`../ci/`). After the author turned the control off, `--verify` also ran on Windows
+(`source-archive-c0d9e5d-verify-windows.log`, 16:44 to 16:45 UTC):
+
+- the rebuilt archive is byte-identical (`c6cbdf69…0648`);
+- it installs into a fresh virtual environment;
+- `doctor` reports 10 checks ok, and `reproduce-smoke` passes 14 of 14;
+- 195 release tests pass.
 
 **Digest checks during the build:** the builder checked every copied file against the digest a committed
 record gives it. That covered the 36 frozen checkpoints, the 108 files of the 18 exported artifacts, the 14
@@ -55,4 +61,6 @@ candidate's digests applies to it.
 
 ## Validation
 
-From a fresh extraction of the ZIP on Windows: see [`../validation/README.md`](../validation/README.md).
+From fresh extractions of the ZIP on Windows, in both environment modes (`--fresh-target`, then `--fresh-venv`
+once the author had turned off Windows Application Control), every step passed: see
+[`../validation/README.md`](../validation/README.md).

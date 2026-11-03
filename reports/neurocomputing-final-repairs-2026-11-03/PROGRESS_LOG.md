@@ -77,3 +77,24 @@ contacting anyone were not authorized, and none was done.
   294 and 294; 195 release tests; 15 browser flows. Learned-reward replay 41667323024 also passed.
 - **Then — recorded everything here and built the review ZIP** (its record is in `SUMMARY.md` of the ZIP).
   Nothing was merged, tagged, released, deposited, uploaded or submitted, and no one was contacted.
+
+## Second round: after the author turned off Windows Application Control
+
+The author turned off Windows Application Control and asked for the blocked steps to be tried again. The
+project `.venv` and new uv virtual environments ran again. WSL and Docker are still not installed, so the two
+Linux items stayed pending.
+
+- **16:44–17:14 — repeated the validation in the documented `--fresh-venv` mode.** It used a new extraction of
+  the candidate ZIP from Downloads, whose size, SHA-256, CRCs and 2,695 checksums were verified again. Exit 0,
+  every step passed, with the same results as the `--fresh-target` run. All three setup logs survive
+  (`validation/archive-c0d9e5d-windows-venv/`).
+- **16:44–16:45 — ran `build_source_archive.py --rev c0d9e5d --verify` on Windows.** The archive is
+  byte-identical (`c6cbdf69…`). It installs into a fresh virtual environment, passes `doctor` and 14 of 14 smoke
+  checks, and passes 195 release tests (`archive/source-archive-c0d9e5d-verify-windows.log`).
+- **16:45–16:50 — built the manuscript locally with Tectonic 0.17.0 (XeTeX), for the first time.** Exit 0; 22
+  pages, all fonts embedded. Under XeTeX four lines run 1 to 12 pt past the margin; CI's pdfTeX build has
+  none. Page 6 was read. Nothing was changed for this (`manuscript/local-tectonic-c0d9e5d/`,
+  `VISUAL_REVIEW.md`). `BUILD.md` now describes both builds.
+- **16:51–17:13 — ran the full test suite in the project's own `.venv`: 708 passed.** A first attempt's output
+  was lost, because its log was rewritten while it ran; it was run again with a fresh log
+  (`tests/full-suite-project-venv.log`).

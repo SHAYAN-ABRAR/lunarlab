@@ -58,13 +58,13 @@ received audit), **diagnostic**, **pending**.
 | Linux validation of the `a38d07f` candidate | **Assistant-executed** (`received/`): complete runs A (exit 0) and C one-thread (exit 1, on the unmodified comparison); the all-38 replay stage as a diagnostic with an interrupted parent |
 | DQN policy on Windows | **Executed:** `exact` twice; the trace is recorded |
 | DQN trace on Linux | **Pending** |
-| Validator repair | **Executed:** the regression tests (`298562e`). Both setup logs survive in real runs, `target-install-lock.log` and `target-install-source.log`. On this machine `--fresh-venv` stops at `install-lock` and names that step and its log (`validation/`) |
-| Tests | **Executed** on Windows: the full suite, 708 passed (`tests/`). **CI** on `c0d9e5d` (run 41667323177): all six jobs passed; Linux 704 passed and 4 Windows-only skips; Windows 294 on each Python; 195 release tests; 15 browser flows |
+| Validator repair | **Executed:** the regression tests (`298562e`). In real runs every setup log survives: `target-install-lock` and `target-install-source` in the `--fresh-target` run, and `venv-create`, `venv-install-lock` and `venv-install-source` in the `--fresh-venv` run. While the launcher was blocked, `--fresh-venv` stopped at `install-lock` and named that step and its log (`validation/`) |
+| Tests | **Executed** on Windows: the full suite, 708 passed, both on the base interpreter with a target install and in the project's own `.venv` (`tests/`). **CI** on `c0d9e5d` (run 41667323177) and on `f9c2906` (41673748117): all six jobs passed; Linux 704 passed and 4 Windows-only skips; Windows 294 on each Python; 195 release tests; 15 browser flows |
 | New archive candidate (`c0d9e5d`) | **Executed:** built locally (`archive/CANDIDATE.md`). ZIP 82,988,733 bytes, SHA-256 `8e4889ce…610f`, MD5 `2b91a658…`. Its licence map covers 2,696 of 2,696 files. Not deposited |
-| Its fresh-extraction validation on Windows | **Executed, every step passed** (`validation/`): 2,695 checksums; 624 dependency checks; values 4 of 4 and bytes 20 of 20; bundle 333; 3,800 episodes recomputed; **38 of 38 replays exact**, including the policy that disagrees on Linux; 18 of 18 CartPole artifacts exact; comparison 42 of 42 in exact agreement, with both the follow-up and the unmodified programs |
+| Its fresh-extraction validation on Windows | **Executed twice, every step passed both times** (`validation/`): once with `--fresh-target`, and once with the documented `--fresh-venv`, each from a new extraction. 2,695 checksums; 624 dependency checks; values 4 of 4 and bytes 20 of 20; bundle 333; 3,800 episodes recomputed; **38 of 38 replays exact**, including the policy that disagrees on Linux; 18 of 18 CartPole artifacts exact; comparison 42 of 42 in exact agreement, with both the follow-up and the unmodified programs |
 | Negative checks | **Executed:** a damaged copy gives named checksum and dependency failures, a written report and exit 1; the follow-up runner refuses its inputs and runs nothing; the blocked `--fresh-venv` gives a written report, the failed step's log and exit 1 |
 | Historical evidence | **Executed:** 2,359 of 2,359 protected files unchanged, combined digest `7366ba1b…` (`integrity/`) |
-| Manuscript | **CI** builds 41666276641 (`db8f937`: two lines past the margin) and 41667322790 (`c0d9e5d`: fixed). Every page **inspected**: 22 pages, all fonts embedded, no overfull box (`manuscript/VISUAL_REVIEW.md`) |
+| Manuscript | **CI** builds 41666276641 (`db8f937`: two lines past the margin) and 41667322790 (`c0d9e5d`: fixed). Every page **inspected**: 22 pages, all fonts embedded, no overfull box. **Executed** locally with Tectonic (XeTeX) once Application Control was off: 22 pages, but four lines run 1 to 12 pt past the margin, so the pdfTeX build stays the reference (`manuscript/VISUAL_REVIEW.md`) |
 | The full validator on Linux, uninterrupted, with all 38 replays | **Pending:** no Linux machine with the bundle is available here, and CI cannot reach the bundle. The command is in the candidate's `START_HERE.md` |
 
 ## Limitations that remain
@@ -84,8 +84,10 @@ received audit), **diagnostic**, **pending**.
   assistant-executed.
 - **Scope:** two environments, designed faults, five seeds per design. The comparison measures neither
   researcher time nor usability.
-- **This machine:** Windows Application Control blocks virtual-environment launchers and the TeX engine. The
-  PDF is built by CI, and local runs use `--fresh-target`.
+- **This machine:** on 3 November (found at 14:56 UTC), Windows Application Control blocked virtual-environment
+  launchers and the TeX engine, until the author turned it off later that day. Nothing was bypassed. The
+  blocked steps were then rerun: the `--fresh-venv` validation, the source archive's `--verify`, and a local
+  Tectonic build.
 
 ## Author decisions (ranked by how much they block submission)
 
@@ -113,7 +115,8 @@ received audit), **diagnostic**, **pending**.
    `c0d9e5d` candidate (`START_HERE.md`). Declare the thread settings, and keep the final JSON whatever its
    result. The known disagreement is expected to fail the replay step.
 3. Record a trajectory in audit artifacts, so that `audit-artifact verify` can also run S8.
-4. Build the PDF locally if a permitted TeX distribution is installed.
+4. Optionally, make the five paragraphs that overrun under XeTeX reflow there too, if the submission system
+   compiles with XeLaTeX. With pdfLaTeX, nothing is needed.
 
 ## Public-availability work that needs the author's authorization
 

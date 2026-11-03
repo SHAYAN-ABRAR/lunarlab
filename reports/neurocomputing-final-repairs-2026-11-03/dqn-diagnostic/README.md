@@ -45,6 +45,10 @@ revision's. Each command had its own new, empty `LUNARLAB_HOME`.
 **Why these three seeds:** they had the largest Linux return differences, and each changed outcome. They are
 not a random sample, and they estimate nothing about how often divergence occurs.
 
+The two full validations of the new candidate (`../validation/`) also replay this policy `exact` on Windows.
+The second ran in a fresh virtual environment, after the author turned off Windows Application Control later
+on 3 November.
+
 ## Pending: the Linux comparison
 
 Not run: no Linux machine with the historical bundle is available here. GitHub's Linux CI cannot run it
