@@ -93,3 +93,28 @@ Pages 15–19 changed, because the text reflows after the shortened sentences, a
 - **Pages 18–19:** the availability, CRediT, funding, competing-interest and acknowledgment text is as before.
 
 No line runs past the margin, and no fault was found.
+
+## Build 41689270705 (`67d080f`): model names, CRediT roles
+
+**CI**, **inspected.** At the author's request the AI disclosure names the models, Anthropic's Opus 5.5 and
+OpenAI's GPT-6, and is cut to the policy's minimum. The CRediT statement lists the author's twelve roles, and
+the Acknowledgments add AIUB's faculty.
+
+| Build | Source | PDF SHA-256 | Pages | Overfull boxes | Fonts |
+|---|---|---|---|---|---|
+| [41689270705](https://github.com/SHAYAN-ABRAR/lunarlab/actions/runs/41689270705) | `67d080f` | `2330fb511213f40b4e86ac0697082ad8e02cf3eebb691080ca2a5eb6a1782312` | 22 | 0 | All 34 embedded |
+
+Compared pixel by pixel with build 41686636057: pages 1–3 and 5–15 are identical. Pages 4 and 16–22 changed
+and were read again:
+
+- **Page 4:** Figure 1's caption now ends "a script written with Anthropic's Opus 5.5 model at the author's
+  direction; no image-generation tool was used".
+- **Page 16:** Section 5.3 has one Methods sentence on the two models.
+- **Page 17:** Sections 6 and 7.
+- **Page 18:** the availability statement; the licence terms are its only AUTHOR TO CONFIRM item.
+- **Page 19:** CRediT, with twelve roles; funding; competing interests; Acknowledgments, with the faculty
+  sentence.
+- **Page 20:** Appendix A and the two-sentence AI declaration, immediately before the references.
+- **Pages 21–22:** the references.
+
+No line runs past the margin, and no fault was found. No page names Claude or ChatGPT.
