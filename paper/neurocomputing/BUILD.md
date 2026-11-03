@@ -58,15 +58,15 @@ to the text width, so its smallest text prints at 9.03 pt.
 
 Updated 3 November 2026. The submission files and their status are listed in `SUBMISSION_FILES.md`.
 
-- **AI declaration:** restored in the review draft on 3 November 2026, after the appendix and immediately
-  before the references, where Elsevier's policy ("Policy updated June 2026", fetched that day) places it.
-  It states only what `AI_USE_INVENTORY.md` records. Its "AUTHOR TO CONFIRM" items are visible in the PDF: the
-  OpenAI products and models, any other use, whether references were selected or edited, and the sentence on
-  the author's review and oversight, which may stay only when true. The Methods-level account of AI use is
-  in Section 5.3, and Figure 1's caption names the tool, version and role, as the policy asks for an
-  explanatory image.
-- **CRediT statement:** an "AUTHOR TO CONFIRM" item in the manuscript. A proposal, with what the records
-  show for each role, is in `CREDIT_CHECKLIST.md`. Nothing is ticked.
+- **AI declaration:** a two-sentence declaration after the appendix, immediately before the references, where
+  Elsevier's policy ("Policy updated June 2026", fetched on 3 November) places it. Section 5.3 has one Methods
+  sentence, and Figure 1's caption names the model for the explanatory diagram. At the author's request of 3
+  November, the tools are named by model and developer: Anthropic's Opus 5.5 and OpenAI's GPT-6, the latter
+  as the author gave it. The review-and-responsibility sentence is the author's statement
+  (`AI_USE_INVENTORY.md`).
+- **CRediT statement:** confirmed by the author on 3 November 2026: sole author, twelve roles; Funding
+  acquisition and Supervision are not claimed (`CREDIT_CHECKLIST.md`). AIUB's faculty are thanked for
+  discussions and ideas.
 - **Licences of the models, records and text:** an "AUTHOR TO CONFIRM" item in the availability statement
   (`reports/neurocomputing-final-validation-2026-11-01/archive/LICENSING_PROPOSAL.md`).
 - **Availability and archive:** the journal confirmed that the GitHub link can be cited under data

@@ -1,8 +1,22 @@
 # CRediT statement: checklist and proposal for the author
 
-Prepared on 1 November 2026 and revised on 3 November 2026. **Nothing is ticked, and no role is established
-here.** The roles are the author's to state, from the work the author actually did. The manuscript shows the
-statement as an "AUTHOR TO CONFIRM" item until then.
+Prepared on 1 November 2026 and revised on 3 November 2026.
+
+**Confirmed by the author on 3 November 2026:** "I myself is the sole author as this is my long project and
+solely I have been working in here with the help of my University AIUB and its professors to get various
+ideas and helps." The manuscript's statement now lists the twelve roles below that describe that work.
+Funding acquisition and Supervision are not claimed: the work was self-funded, with no grant, and there
+was no team to supervise. The help of AIUB's faculty with ideas is thanked in the Acknowledgments. AI
+tools hold no roles; their use is disclosed separately.
+
+```latex
+\section*{CRediT authorship contribution statement}
+\textbf{Shayan Abrar:} Conceptualization, Methodology, Software, Validation, Formal analysis, Investigation,
+Resources, Data curation, Writing -- original draft, Writing -- review \& editing, Visualization,
+Project administration.
+```
+
+The checklist below is kept as it was prepared, before the confirmation.
 
 - **What the guide asks:** a CRediT statement ("Corresponding authors are required to acknowledge co-author
   contributions using CRediT (Contributor Roles Taxonomy) roles"; Guide for Authors, captured 26 October 2026).

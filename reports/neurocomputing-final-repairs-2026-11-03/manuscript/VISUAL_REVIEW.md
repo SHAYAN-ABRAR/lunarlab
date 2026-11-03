@@ -71,3 +71,25 @@ Section 2.4, protrudes visibly.
 
 Nothing was changed for this: the source is not tuned for a second engine. If the submission system compiles
 with XeLaTeX, these five paragraphs would need a reflow; with pdfLaTeX they need nothing.
+
+## Build 41686636057 (`7e5a916`): the Linux follow-up dropped
+
+**CI**, **inspected.** The author decided not to pursue further Linux runs, so two clauses that presented them
+as pending were removed: in Section 5.2, the trace "for a Linux comparison that has not yet been run", and in
+Section 6, "the full validator has not yet completed an uninterrupted Linux run". The disclosure of the Linux
+audit and the DQN disagreement is unchanged.
+
+| Build | Source | PDF SHA-256 | Pages | Overfull boxes | Fonts |
+|---|---|---|---|---|---|
+| [41686636057](https://github.com/SHAYAN-ABRAR/lunarlab/actions/runs/41686636057) | `7e5a916` | `dadd4d703b14082e26c532b70493ebf4e151cf21a63efb2b13722dfa33eeaebf` | 22 | 0 | All 34 embedded |
+
+Rendered at 120 dpi and compared pixel by pixel with build 41667322790. Pages 1–14 and 20–22 are identical.
+Pages 15–19 changed, because the text reflows after the shortened sentences, and were read again:
+
+- **Page 15:** Section 5.2 ends "The cause of the Linux difference is not identified, and the 37 permitted
+  differences do not establish equivalence", followed by the PPO sentence.
+- **Pages 16–17:** Section 5.3 and the shortened Section 6, which ends "…does not reproduce its recorded
+  aggregate (Section 5.2)."
+- **Pages 18–19:** the availability, CRediT, funding, competing-interest and acknowledgment text is as before.
+
+No line runs past the margin, and no fault was found.
